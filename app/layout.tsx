@@ -33,46 +33,43 @@ export default function RootLayout({
       <body className={`${inter.className} custom-scrollbar`}>
         <TooltipProvider>
           <QueryClientProvider client={queryClient}>
-            <EnvVariablesProvider>
-              <AuthenticatedContextProvider>
-                <ThemeProvider
-                  attribute="class"
-                  defaultTheme="dark"
-                  enableSystem
-                  disableTransitionOnChange
-                  // storageKey="gennit-theme"
-                >
-                  <ChatProvider>
-                    <FileSystemProvider>
-                      <Suspense
-                        fallback={
-                          <div className="h-screen flex flex-col items-center justify-center">
-                            <Loading />
-                          </div>
-                        }
-                      >
-                        <Wrapper>
-                          {children}</Wrapper>
-                      </Suspense>
-                    </FileSystemProvider>
-                  </ChatProvider>
-                </ThemeProvider>
-                <Toaster />
-              </AuthenticatedContextProvider>
-              <script
-                dangerouslySetInnerHTML={{
-                  __html: `
+            <AuthenticatedContextProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="dark"
+                enableSystem
+                disableTransitionOnChange
+                // storageKey="gennit-theme"
+              >
+                <ChatProvider>
+                  <FileSystemProvider>
+                    <Suspense
+                      fallback={
+                        <div className="h-screen flex flex-col items-center justify-center">
+                          <Loading />
+                        </div>
+                      }
+                    >
+                      <Wrapper>{children}</Wrapper>
+                    </Suspense>
+                  </FileSystemProvider>
+                </ChatProvider>
+              </ThemeProvider>
+              <Toaster />
+            </AuthenticatedContextProvider>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
                   navigator.serviceWorker.register('/sw.js');
                 });
               }
             `,
-                }}
-              />
+              }}
+            />
 
-              <ReactQueryDevtools initialIsOpen={false} />
-            </EnvVariablesProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </TooltipProvider>
       </body>
