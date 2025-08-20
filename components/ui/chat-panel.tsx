@@ -337,7 +337,7 @@ export function ChatPanel({
                         src={
                           message.type === "ai"
                             ? appLogo.src
-                            : user?.userdp || "/user-avatar.png"
+                            : user?.metadata?.userdp || "/user-avatar.png"
                         }
                         alt={message.type}
                         className="rounded-md"
@@ -435,11 +435,11 @@ export function ChatPanel({
                 0 Credit left.
               </div>
               <div className="flex items-center gap-2">
-                <PricingDialog>
+                {/* <PricingDialog>
                   <a className="text-primary dark:text-teal-400 hover:text-primary/80 dark:hover:text-teal-300 transition-colors cursor-pointer">
                     Upgrade
                   </a>
-                </PricingDialog>
+                </PricingDialog> */}
                 <Button
                   variant="ghost"
                   size="icon"

@@ -36,7 +36,7 @@ interface GenerationUIProps {
 }
 
 // File type icons mapping
-const fileIcons: Record<string, JSX.Element> = {
+const fileIcons: Record<string, React.ReactNode> = {
   js: <FileCode className="h-4 w-4 text-yellow-500" />,
   jsx: <FileCode className="h-4 w-4 text-blue-500" />,
   ts: <FileCode className="h-4 w-4 text-blue-600" />,
