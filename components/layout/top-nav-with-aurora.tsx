@@ -17,7 +17,6 @@ import { useTheme } from "next-themes";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, RefObject, useCallback, useRef } from "react";
-import Aurora from "../ui/aurora";
 import { Logo } from "../logo";
 import { useSidebar } from "../ui/sidebar";
 import { cn } from "@/lib/utils";
@@ -32,7 +31,6 @@ export default function TopNavWithAurora({
   const { theme, setTheme } = useTheme();
   const user = useUserContext().user;
   const pathName = usePathname();
-  const RouteToShowAurora = ["/", "/chat"];
   const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const { state } = useSidebar();
@@ -173,20 +171,7 @@ export default function TopNavWithAurora({
           </div>
         </div>
       </header>
-      {/* {RouteToShowAurora.includes(pathName) && (
-        <div
-          className={`transition-opacity duration-700 fixed top-0 left-0 w-full h-screen ease-in-out ${
-            isScrolled ? "opacity-0" : "opacity-100"
-          }`}
-        >
-          <Aurora
-            colorStops={["#d849d0", "#f59307", "#3bc7fc"]}
-            blend={1.0}
-            amplitude={1.0}
-            speed={0.8}
-          />
-        </div>
-      )} */}
+      
     </>
   );
 }
