@@ -156,12 +156,24 @@ export function AppSidebar({
             </div>
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="flex justify-center mb-4 mt-2 w-full">
+          <div
+            className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center shadow-lg hover:bg-cyan-500/90 transition-colors cursor-pointer"
+            onClick={() => setOpen(true)}
+          >
+            <Crown className="w-4 h-4 text-white" strokeWidth={1.5} />
+            {creditPercentage < 20 && (
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full animate-pulse border border-white" />
+            )}
+          </div>
+        </div>
+      )}
 
       <SidebarFooter className="border-t border-border pt-4">
         <NavUser user={user} />
       </SidebarFooter>
-      <SidebarRail className="border-border" />
+      {/* <SidebarRail className="border-border" /> */}
     </Sidebar>
   );
 }
