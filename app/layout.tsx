@@ -13,7 +13,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { FileSystemProvider } from "@/context/FileSystem";
-import { EnvVariablesProvider } from "@/context/env-variables-context";
 import { Suspense } from "react";
 import Loading from "@/utils/Loading";
 const inter = Inter({ subsets: ["latin"] });
