@@ -120,7 +120,7 @@ export function AppSidebar({
                 </div>
               </div>
 
-              {/* Usage Stats */}
+              {/* Usage Stats now */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-white/80">This month</span>
