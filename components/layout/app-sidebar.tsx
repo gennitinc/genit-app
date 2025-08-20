@@ -173,7 +173,7 @@ export function AppSidebar({
       <SidebarFooter className="border-t border-border pt-4">
         <NavUser user={user} />
       </SidebarFooter>
-      {/* <SidebarRail className="border-border" /> */}
+      <SidebarRail className="border-border" />
     </Sidebar>
   );
 }

@@ -37,12 +37,12 @@ export function NavUser({ user }: any) {
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger asChild className="p-0">
             <SidebarMenuButton
               size="lg"
               className="data-[state=open]:bg-background data-[state=open]:text-foreground w-full"
             >
-              <Avatar className="w-8 h-8">
+              <Avatar className="w-8 h-8 px-0">
                 <AvatarImage
                   src={user?.metadata?.userdp}
                   alt={user?.name}
