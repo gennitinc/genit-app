@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -526,8 +528,12 @@ const checklistItems = [
 ];
 
 export default function BrandOnboardingChecklist() {
+  const router = useRouter();
+  const { user } = useUserContext();
   const [completedItems, setCompletedItems] = useState<string[]>([]);
   const [currentDialog, setCurrentDialog] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     brandName: "",
     brandDescription: "",
@@ -548,6 +554,30 @@ export default function BrandOnboardingChecklist() {
   const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
   const [countrySearchOpen, setCountrySearchOpen] = useState(false);
   const [countrySearchValue, setCountrySearchValue] = useState("");
+
+  // Check if user has already completed onboarding
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      if (!user) return;
+
+      try {
+        const response = await fetch("/api/business-profile");
+        if (response.ok) {
+          const { data } = await response.json();
+          if (data?.onboardingCompleted) {
+            router.push("/chat");
+            return;
+          }
+        }
+      } catch (error) {
+        console.error("Error checking onboarding status:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkOnboardingStatus();
+  }, [user, router]);
 
   const handleChannelAuth = async (channelId: string) => {
     setLoading((prev) => ({ ...prev, [channelId]: true }));
@@ -618,10 +648,51 @@ export default function BrandOnboardingChecklist() {
     }
   };
 
-  const handleItemComplete = (itemId: string) => {
+  const handleItemComplete = async (itemId: string) => {
     if (isItemComplete(itemId) && !completedItems.includes(itemId)) {
       setCompletedItems((prev) => [...prev, itemId]);
     }
+
+    // If this is the launch step, save to database and redirect
+    if (itemId === "launch" && isItemComplete(itemId)) {
+      setIsSaving(true);
+      try {
+        // Save business profile data to database
+        const response = await fetch("/api/business-profile", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            businessName: formData.brandName,
+            businessBio: formData.brandDescription,
+            companyWebsite: formData.website,
+            industry: formData.industry,
+            country: formData.country,
+            language: formData.language,
+            primaryGoal: formData.primaryGoal,
+            channels: authenticatedChannels,
+            agentType: formData.agentType,
+            agentName: formData.agentName,
+            agentDescription: formData.agentDescription,
+            onboardingCompleted: true,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to save business profile");
+        }
+
+        // Redirect to chat page
+        router.push("/chat");
+      } catch (error) {
+        console.error("Error saving business profile:", error);
+        // You might want to show an error message to the user here
+      } finally {
+        setIsSaving(false);
+      }
+    }
+
     handleDialogClose(itemId);
   };
 
@@ -642,6 +713,18 @@ export default function BrandOnboardingChecklist() {
 
   const completedCount = completedItems.length;
   const totalCount = checklistItems.length;
+
+  if (isLoading) {
+    return (
+      <section className="bg-BackgroundLight dark:bg-BackgroundDark">
+        <div className="container max-w-none flex h-full w-full flex-col items-center justify-center">
+          <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-500"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-BackgroundLight dark:bg-BackgroundDark">
@@ -773,12 +856,12 @@ export default function BrandOnboardingChecklist() {
 
         <div className="mt-5 max-w-[26rem] w-full space-y-3">
           <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
-            This site is protected by reCAPTCHA and subject to the Klipto{" "}
+            This site is protected by reCAPTCHA and our{" "}
             <a
               href="#"
               className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
             >
-              Privacy
+              Policy
             </a>{" "}
             {/* &{" "}
                 <a
@@ -1428,9 +1511,39 @@ export default function BrandOnboardingChecklist() {
                 onClick={() => handleItemComplete("launch")}
                 className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white"
                 size="lg"
+                disabled={isSaving}
               >
-                Launch AI Workforce
-                <Sparkles className="w-4 h-4 ml-2" />
+                {isSaving ? (
+                  <>
+                    <div className="animate-spin -ml-1 mr-3 h-4 w-4 text-white">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                    </div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    Launch AI Workforce
+                    <Sparkles className="w-4 h-4 ml-2" />
+                  </>
+                )}
               </Button>
             </div>
           </div>

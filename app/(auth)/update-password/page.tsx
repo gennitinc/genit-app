@@ -310,15 +310,22 @@ export function UpdatePasswordComp() {
         </div>
 
         {/* Footer */}
-        <div className="mt-8 max-w-md w-full space-y-3">
+         <div className="mt-5 max-w-[26rem] w-full space-y-3">
           <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
-            This site is protected by reCAPTCHA and subject to our{" "}
+            This site is protected by reCAPTCHA and our{" "}
             <a
               href="#"
               className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
             >
-              Privacy
+              Policy
             </a>{" "}
+            {/* &{" "}
+                <a
+                  href="#"
+                  className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
+                >
+                  Terms of Service
+                </a> */}
           </p>
           <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
             ©2025 Gennit. A product of{" "}
