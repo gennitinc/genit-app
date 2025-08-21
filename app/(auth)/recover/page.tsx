@@ -256,7 +256,7 @@ const Recover = () => {
           </div>
         </div>
 
-        {/* Footer */}
+        {/* Footer  section*/}
         <div className="mt-5 max-w-[26rem] w-full space-y-3">
           <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
             This site is protected by reCAPTCHA and our{" "}
