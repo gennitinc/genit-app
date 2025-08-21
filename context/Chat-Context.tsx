@@ -251,7 +251,7 @@ const updateFileTreeWithNewContent = (
 export function ProjectProvider({ children }: ProjectProviderProps) {
   const router = useRouter();
   const user = useUserContext().user;
-  const userId = String(user?._id);
+  const userId = String(user?.id);
 
   // Socket state
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -280,7 +280,7 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [generations, setGenerations] = useState<GenerationGroup[]>([]);
   const userAvatar =
-    user?.metadata?.userdp ||
+    (user?.metadata as any)?.userdp ||
     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face";
   const userName = user?.username || "User";
   const [isUserPopoverOpen, setIsUserPopoverOpen] = useState(false);

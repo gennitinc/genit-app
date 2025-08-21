@@ -337,7 +337,8 @@ export function ChatPanel({
                         src={
                           message.type === "ai"
                             ? appLogo.src
-                            : user?.metadata?.userdp || "/user-avatar.png"
+                            : (user?.metadata as any)?.userdp ||
+                              "/user-avatar.png"
                         }
                         alt={message.type}
                         className="rounded-md"
