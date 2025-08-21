@@ -94,11 +94,11 @@ export default function TopNavWithAurora({
                 <Button variant="ghost" size="icon" className="rounded-full">
                   <Avatar className="h-8 w-8">
                     <AvatarImage
-                      src={user?.metadata?.userdp}
+                      src={(user?.metadata as any)?.userdp}
                       alt={user?.username}
                       className="object-cover"
                     />
-                    <AvatarFallback>{user?.username[0]}</AvatarFallback>
+                    <AvatarFallback>{user?.username?.[0]}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
@@ -108,10 +108,10 @@ export default function TopNavWithAurora({
                     <Avatar className="h-10 w-10">
                       <AvatarImage
                         className="object-cover"
-                        src={user?.metadata?.userdp}
+                        src={(user?.metadata as any)?.userdp}
                         alt={user?.username}
                       />
-                      <AvatarFallback>{user?.username[0]}</AvatarFallback>
+                      <AvatarFallback>{user?.username?.[0]}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
                       <span className="font-medium">{user?.username}</span>
@@ -171,7 +171,6 @@ export default function TopNavWithAurora({
           </div>
         </div>
       </header>
-      
     </>
   );
 }
