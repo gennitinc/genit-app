@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { RegexType } from "@/types/Authtypes";
 import { useUserContext } from "@/context/AuthenticatedContext";
 
-export function UpdatePasswordComp() {
+function UpdatePasswordComp() {
   const router = useRouter();
   const params = useSearchParams();
   const Token = params.get("token");
@@ -310,22 +310,15 @@ export function UpdatePasswordComp() {
         </div>
 
         {/* Footer */}
-         <div className="mt-5 max-w-[26rem] w-full space-y-3">
+        <div className="mt-8 max-w-md w-full space-y-3">
           <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
-            This site is protected by reCAPTCHA and our{" "}
+            This site is protected by reCAPTCHA and subject to our{" "}
             <a
               href="#"
               className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
             >
-              Policy
+              Privacy
             </a>{" "}
-            {/* &{" "}
-                <a
-                  href="#"
-                  className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
-                >
-                  Terms of Service
-                </a> */}
           </p>
           <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
             ©2025 Gennit. A product of{" "}
