@@ -3,13 +3,12 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/Regex";
-import { apiResponse } from "@/utils/apiResponse";
 import { SnackbarProvider, enqueueSnackbar, closeSnackbar } from "notistack";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import cookie from "js-cookie";
 import { Logo } from "@/components/logo";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
+import { useUserContext } from "@/context/AuthenticatedContext";
 // import withAuth from "@/helper/hoc/withAuth";
 
 const Signup = () => {
@@ -17,6 +16,7 @@ const Signup = () => {
   const [profile, setProfile] = useState<string>("");
   const [provider, setProvider] = useState("");
   const router = useRouter();
+  const { signUp, signInWithProvider } = useUserContext();
 
   const UserDp: Array<string> = [
     "https://enterboxbucket.blob.core.windows.net/programmablefiles/1.png",
@@ -47,9 +47,8 @@ const Signup = () => {
     return newhex;
   }
 
-  const [backgroundColor, setBackgroundColor] = React.useState(
-    getRandomColor()
-  );
+  const [backgroundColor, setBackgroundColor] =
+    React.useState(getRandomColor());
 
   const [Formdata, setFormdata] = React.useState<AuthTypes>({
     username: "",
@@ -113,24 +112,28 @@ const Signup = () => {
 
     setLoading(true);
     try {
-      const response = await apiResponse.post("auth/sign-up", Formdata, {
-        withCredentials: true,
-      });
-      const User = response?.data;
-      console.log("user", User);
-      const userId = User?.user?._id.toString();
-      if (response.status === 200) {
-        enqueueSnackbar("Account Created Successfully", {
+      const { data, error } = await signUp(
+        Formdata.email,
+        Formdata.password || "",
+        Formdata.username || "",
+        Formdata.userdp
+      );
+
+      if (error) {
+        throw error;
+      }
+
+      enqueueSnackbar(
+        "Account Created Successfully! Please check your email to verify your account.",
+        {
           variant: "success",
-          autoHideDuration: 3000,
+          autoHideDuration: 5000,
           anchorOrigin: {
             vertical: "bottom",
             horizontal: "center",
           },
-
           action: (key) => (
             <button onClick={() => closeSnackbar(key)}>
-              {" "}
               <svg
                 width="1em"
                 height="1em"
@@ -149,35 +152,23 @@ const Signup = () => {
               </svg>
             </button>
           ),
-        });
-
-        const longerEXP = 1000 * 60 * 60 * 24 * 30;
-
-        cookie.set("gennituToken", response.data.token, {
-          expires: new Date(Date.now() + longerEXP),
-          // secure: true,
-          // sameSite: "strict",
-        });
-
-        if (typeof window !== "undefined") {
-          window.location.reload();
         }
-      }
+      );
+
+      router.push("/signin");
     } catch (error: any) {
       setLoading(false);
       console.log(error);
 
-      enqueueSnackbar(error?.response?.data.message, {
+      enqueueSnackbar(error?.message || "An error occurred during sign up", {
         variant: "error",
         autoHideDuration: 3000,
         anchorOrigin: {
           vertical: "bottom",
           horizontal: "center",
         },
-
         action: (key) => (
           <button onClick={() => closeSnackbar(key)}>
-            {" "}
             <svg
               width="1em"
               height="1em"
@@ -202,84 +193,28 @@ const Signup = () => {
     }
   };
 
-  const handleGoogleSignUp = async (provider: string, data: any) => {
-    console.log("data", data);
-
-    const Formdata = {
-      email: data.email,
-      username: data.name,
-      userdp: data.picture,
-      password: data.sub + data.email,
-    };
-
-    console.log("formdata", Formdata);
-    if (data.email_verified === true) {
-      try {
-        const response = await apiResponse.post("auth/google", Formdata, {
-          withCredentials: true,
-        });
-        const User = response?.data;
-        console.log("user", User);
-        const userId = User?.user?._id.toString();
-        if (response.status === 200) {
-          enqueueSnackbar("Account Created Successfully", {
-            variant: "success",
-            autoHideDuration: 3000,
-            anchorOrigin: {
-              vertical: "bottom",
-              horizontal: "center",
-            },
-
-            action: (key) => (
-              <button onClick={() => closeSnackbar(key)}>
-                {" "}
-                <svg
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  className=""
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                    stroke="#fff"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            ),
-          });
-
-          const longerEXP = 1000 * 60 * 60 * 24 * 30;
-
-          cookie.set("gennituToken", response.data.token, {
-            expires: new Date(Date.now() + longerEXP),
-            // secure: true,
-            // sameSite: "strict",
-          });
-
-          if (typeof window !== "undefined") {
-            window.location.reload();
-          }
-        }
-      } catch (error: any) {
-        setLoading2(false);
-        console.log(error);
-
-        enqueueSnackbar(error?.response?.data.message, {
+  const handleGoogleSignUp = async () => {
+    setLoading2(true);
+    try {
+      const { data, error } = await signInWithProvider("google");
+      if (error) {
+        throw error;
+      }
+      // The redirect will happen automatically
+    } catch (error: any) {
+      setLoading2(false);
+      console.log(error);
+      enqueueSnackbar(
+        error?.message || "An error occurred during Google sign up",
+        {
           variant: "error",
           autoHideDuration: 3000,
           anchorOrigin: {
             vertical: "bottom",
             horizontal: "center",
           },
-
           action: (key) => (
             <button onClick={() => closeSnackbar(key)}>
-              {" "}
               <svg
                 width="1em"
                 height="1em"
@@ -298,35 +233,28 @@ const Signup = () => {
               </svg>
             </button>
           ),
-        });
-      } finally {
-        setLoading2(false);
-      }
+        }
+      );
+    } finally {
+      setLoading2(false);
     }
   };
 
-  const handleGithubSignUp = async (provider: string, data: any) => {
+  const handleFacebookSignUp = async () => {
     setLoading3(true);
-    console.log("data", data);
-
-    const Formdata = {
-      email: data.email || "", // GitHub might not return an email
-      username: data.name || data.login, // Use login if name is missing
-      userdp: data.avatar_url, // GitHub uses `avatar_url`
-      password: data.id + (data.email || ""), // Use `id` since GitHub does not have `sub`
-    };
-
-    console.log("formdata", Formdata);
     try {
-      const response = await apiResponse.post("auth/github", Formdata, {
-        withCredentials: true,
-      });
-      const User = response?.data;
-      console.log("user", User);
-
-      if (response.status === 200) {
-        enqueueSnackbar("Account Created Successfully", {
-          variant: "success",
+      const { data, error } = await signInWithProvider("facebook");
+      if (error) {
+        throw error;
+      }
+      // The redirect will happen automatically
+    } catch (error: any) {
+      setLoading3(false);
+      console.log(error);
+      enqueueSnackbar(
+        error?.message || "An error occurred during Facebook sign up",
+        {
+          variant: "error",
           autoHideDuration: 3000,
           anchorOrigin: {
             vertical: "bottom",
@@ -351,46 +279,8 @@ const Signup = () => {
               </svg>
             </button>
           ),
-        });
-
-        const longerEXP = 1000 * 60 * 60 * 24 * 30;
-        cookie.set("gennituToken", response.data.token, {
-          expires: new Date(Date.now() + longerEXP),
-        });
-
-        if (typeof window !== "undefined") {
-          window.location.reload();
         }
-      }
-    } catch (error: any) {
-      console.log(error);
-      enqueueSnackbar(error?.response?.data?.message || "An error occurred", {
-        variant: "error",
-        autoHideDuration: 3000,
-        anchorOrigin: {
-          vertical: "bottom",
-          horizontal: "center",
-        },
-        action: (key) => (
-          <button onClick={() => closeSnackbar(key)}>
-            <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                stroke="#fff"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        ),
-      });
+      );
     } finally {
       setLoading3(false);
     }
@@ -433,6 +323,7 @@ const Signup = () => {
               variant="outline"
               className="w-full relative overflow-hidden transition-all hover:border-primary/50 hover:bg-primary/10 dark:bg-primary/10"
               disabled={loading2}
+              onClick={handleGoogleSignUp}
             >
               {loading2 ? (
                 <div className="flex items-center justify-center">
@@ -501,6 +392,7 @@ const Signup = () => {
               variant="outline"
               className="w-full relative overflow-hidden transition-all hover:border-primary/50 hover:bg-primary/10 dark:bg-primary/10"
               disabled={loading3}
+              onClick={handleFacebookSignUp}
             >
               {loading3 ? (
                 <div className="flex items-center justify-center">
@@ -528,7 +420,6 @@ const Signup = () => {
                 </div>
               ) : (
                 <div className="flex items-center justify-center">
-                  
                   <svg
                     className="mr-2 w-4 h-4"
                     xmlns="http://www.w3.org/2000/svg"
@@ -719,7 +610,7 @@ const Signup = () => {
         {/* Footer */}
         <div className="mt-8 max-w-[26rem] w-full space-y-3">
           <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
-            This site is protected by reCAPTCHA and subject to the Klipto{" "}
+            This site is protected by reCAPTCHA and subject to our{" "}
             <a
               href="#"
               className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"

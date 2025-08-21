@@ -95,8 +95,8 @@ export function NavMain() {
                       ? "bg-zinc-800 text-white"
                       : "bg-gray-200 text-black"
                     : theme === "dark"
-                    ? "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-                    : "text-gray-700 hover:bg-gray-100 hover:text-black"
+                      ? "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-black"
                 )}
               >
                 <Link
@@ -143,8 +143,8 @@ export function NavMain() {
                       ? "bg-zinc-800 text-white"
                       : "bg-gray-200 text-black"
                     : theme === "dark"
-                    ? "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-                    : "text-gray-700 hover:bg-gray-100 hover:text-black"
+                      ? "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-black"
                 )}
               >
                 <Link

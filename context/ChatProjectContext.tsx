@@ -93,7 +93,6 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
- 
   const startMessage = useCallback(
     async (content: string): Promise<string> => {
       if (!content || !content.trim()) {

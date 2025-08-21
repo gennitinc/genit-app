@@ -679,8 +679,8 @@ export default function BrandOnboardingChecklist() {
                     completedItems.includes(item.id)
                       ? "border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/20"
                       : canStartItem(item.id)
-                      ? "border-gray-200 dark:border-neutral-700 hover:border-cyan-300 dark:hover:border-cyan-600"
-                      : "border-gray-200 dark:border-neutral-700 opacity-60"
+                        ? "border-gray-200 dark:border-neutral-700 hover:border-cyan-300 dark:hover:border-cyan-600"
+                        : "border-gray-200 dark:border-neutral-700 opacity-60"
                   )}
                 >
                   <div
@@ -1211,10 +1211,10 @@ export default function BrandOnboardingChecklist() {
                       agent.comingSoon
                         ? "cursor-not-allowed opacity-60 border-gray-200 dark:border-neutral-700"
                         : agent.isPro
-                        ? "cursor-pointer border-yellow-300 dark:border-yellow-600 bg-yellow-50/30 dark:bg-yellow-900/10 hover:border-yellow-400"
-                        : formData.agentType === agent.id
-                        ? "cursor-pointer border-cyan-500 bg-cyan-50 dark:bg-cyan-900/20"
-                        : "cursor-pointer border-gray-200 dark:border-neutral-700 hover:border-cyan-300"
+                          ? "cursor-pointer border-yellow-300 dark:border-yellow-600 bg-yellow-50/30 dark:bg-yellow-900/10 hover:border-yellow-400"
+                          : formData.agentType === agent.id
+                            ? "cursor-pointer border-cyan-500 bg-cyan-50 dark:bg-cyan-900/20"
+                            : "cursor-pointer border-gray-200 dark:border-neutral-700 hover:border-cyan-300"
                     )}
                     onClick={() => {
                       if (!agent.comingSoon) {
@@ -1243,8 +1243,8 @@ export default function BrandOnboardingChecklist() {
                           agent.comingSoon
                             ? "text-gray-400 dark:text-gray-500"
                             : agent.isPro
-                            ? "text-yellow-600 dark:text-yellow-400"
-                            : "text-cyan-500"
+                              ? "text-yellow-600 dark:text-yellow-400"
+                              : "text-cyan-500"
                         )}
                       />
                       <div className="flex-1">

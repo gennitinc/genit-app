@@ -2,17 +2,17 @@
 import Link from "next/link";
 import React from "react";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/Regex";
-import { apiResponse } from "@/utils/apiResponse";
 import { enqueueSnackbar, closeSnackbar, SnackbarProvider } from "notistack";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import cookie from "js-cookie";
-import dynamic from "next/dynamic";
 import { Logo } from "@/components/logo";
 import { RegexType, AuthTypes } from "@/types/Authtypes";
+import { useUserContext } from "@/context/AuthenticatedContext";
 
 const Login = () => {
-  // const { fetchCurrentUser } = useUserContext();
+  const { signIn, signInWithProvider } = useUserContext();
+  const router = useRouter();
+
   const [formData, setFormdata] = React.useState<AuthTypes>({
     email: "",
     password: "",
@@ -61,70 +61,58 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await apiResponse.post("/auth/login", formData, {
-        withCredentials: true,
+      const { data, error } = await signIn(
+        formData.email,
+        formData.password || ""
+      );
+
+      if (error) {
+        throw error;
+      }
+
+      enqueueSnackbar("Logged in Successfully", {
+        variant: "success",
+        autoHideDuration: 3000,
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "center",
+        },
+        action: (key) => (
+          <button onClick={() => closeSnackbar(key)}>
+            <svg
+              width="1em"
+              height="1em"
+              viewBox="0 0 24 24"
+              className=""
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
+                stroke="#fff"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        ),
       });
 
-      console.log(response);
-      if (response.status === 200) {
-        enqueueSnackbar("Logged in Successfully", {
-          variant: "success",
-          autoHideDuration: 3000,
-          anchorOrigin: {
-            vertical: "bottom",
-            horizontal: "center",
-          },
-
-          action: (key) => (
-            <button onClick={() => closeSnackbar(key)}>
-              {" "}
-              <svg
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-                className=""
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                  stroke="#fff"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          ),
-        });
-
-        const longerEXP = 1000 * 60 * 60 * 24 * 30;
-
-        cookie.set("gennituToken", response.data.token, {
-          expires: new Date(Date.now() + longerEXP),
-          // secure: true,
-          // sameSite: "strict",
-        });
-
-        if (typeof window !== "undefined") {
-          window.location.reload();
-        }
-      }
+      router.push("/");
     } catch (error: any) {
       setLoading(false);
       console.log(error?.message);
 
-      enqueueSnackbar(error?.response?.data.message, {
+      enqueueSnackbar(error?.message || "An error occurred during sign in", {
         variant: "error",
         autoHideDuration: 3000,
         anchorOrigin: {
           vertical: "bottom",
           horizontal: "center",
         },
-
         action: (key) => (
           <button onClick={() => closeSnackbar(key)}>
-            {" "}
             <svg
               width="1em"
               height="1em"
@@ -149,82 +137,28 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSignIn = async (provider: string, data: any) => {
+  const handleGoogleSignIn = async () => {
     setLoading2(true);
-
-    const Formdata = {
-      email: data.email,
-      username: data.name,
-      userdp: data.picture,
-      password: data.sub + data.email,
-    };
-
-    if (data.email_verified === true) {
-      try {
-        const response = await apiResponse.post("auth/google", Formdata, {
-          withCredentials: true,
-        });
-
-        console.log(response);
-        if (response.status === 200) {
-          enqueueSnackbar("Logged in Successfully", {
-            variant: "success",
-            autoHideDuration: 3000,
-            anchorOrigin: {
-              vertical: "bottom",
-              horizontal: "center",
-            },
-
-            action: (key) => (
-              <button onClick={() => closeSnackbar(key)}>
-                {" "}
-                <svg
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                  className=""
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                    stroke="#fff"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            ),
-          });
-
-          const longerEXP = 1000 * 60 * 60 * 24 * 30;
-
-          cookie.set("gennituToken", response.data.token, {
-            expires: new Date(Date.now() + longerEXP),
-            // secure: true,
-            // sameSite: "strict",
-          });
-
-          if (typeof window !== "undefined") {
-            window.location.reload();
-          }
-        }
-      } catch (error: any) {
-        setLoading2(false);
-        console.log(error?.message);
-
-        enqueueSnackbar(error?.response?.data.message, {
+    try {
+      const { data, error } = await signInWithProvider("google");
+      if (error) {
+        throw error;
+      }
+      // The redirect will happen automatically
+    } catch (error: any) {
+      setLoading2(false);
+      console.log(error?.message);
+      enqueueSnackbar(
+        error?.message || "An error occurred during Google sign in",
+        {
           variant: "error",
           autoHideDuration: 3000,
           anchorOrigin: {
             vertical: "bottom",
             horizontal: "center",
           },
-
           action: (key) => (
             <button onClick={() => closeSnackbar(key)}>
-              {" "}
               <svg
                 width="1em"
                 height="1em"
@@ -243,31 +177,28 @@ const Login = () => {
               </svg>
             </button>
           ),
-        });
-      } finally {
-        setLoading2(false);
-      }
+        }
+      );
+    } finally {
+      setLoading2(false);
     }
   };
-  const handleGithubSignIn = async (provider: string, data: any) => {
+
+  const handleFacebookSignIn = async () => {
     setLoading3(true);
-
-    const Formdata = {
-      email: data.email || "", // GitHub might not return an email
-      username: data.name || data.login, // Use login if name is missing
-      userdp: data.avatar_url, // GitHub uses `avatar_url` instead of `picture`
-      password: data.id + (data.email || ""), // Use `id` since GitHub does not have `sub`
-    };
-
     try {
-      const response = await apiResponse.post("auth/github", Formdata, {
-        withCredentials: true,
-      });
-
-      console.log(response);
-      if (response.status === 200) {
-        enqueueSnackbar("Logged in Successfully", {
-          variant: "success",
+      const { data, error } = await signInWithProvider("facebook");
+      if (error) {
+        throw error;
+      }
+      // The redirect will happen automatically
+    } catch (error: any) {
+      setLoading3(false);
+      console.log(error?.message);
+      enqueueSnackbar(
+        error?.message || "An error occurred during Facebook sign in",
+        {
+          variant: "error",
           autoHideDuration: 3000,
           anchorOrigin: {
             vertical: "bottom",
@@ -279,6 +210,7 @@ const Login = () => {
                 width="1em"
                 height="1em"
                 viewBox="0 0 24 24"
+                className=""
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -292,47 +224,8 @@ const Login = () => {
               </svg>
             </button>
           ),
-        });
-
-        const longerEXP = 1000 * 60 * 60 * 24 * 30;
-
-        cookie.set("gennituToken", response.data.token, {
-          expires: new Date(Date.now() + longerEXP),
-        });
-
-        if (typeof window !== "undefined") {
-          window.location.reload();
         }
-      }
-    } catch (error: any) {
-      console.log(error?.message);
-      enqueueSnackbar(error?.response?.data.message || "An error occurred", {
-        variant: "error",
-        autoHideDuration: 3000,
-        anchorOrigin: {
-          vertical: "bottom",
-          horizontal: "center",
-        },
-        action: (key) => (
-          <button onClick={() => closeSnackbar(key)}>
-            <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                stroke="#fff"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        ),
-      });
+      );
     } finally {
       setLoading3(false);
     }
@@ -374,6 +267,7 @@ const Login = () => {
               variant="outline"
               className="w-full relative overflow-hidden transition-all hover:border-primary/50 hover:bg-primary/10 dark:bg-primary/10"
               disabled={loading2}
+              onClick={handleGoogleSignIn}
             >
               {loading2 ? (
                 <div className="flex items-center justify-center">
@@ -442,6 +336,7 @@ const Login = () => {
               variant="outline"
               className="w-full relative overflow-hidden transition-all hover:border-primary/50 hover:bg-primary/10 dark:bg-primary/10"
               disabled={loading3}
+              onClick={handleFacebookSignIn}
             >
               {loading3 ? (
                 <div className="flex items-center justify-center">
@@ -672,7 +567,7 @@ const Login = () => {
         {/* Footer */}
         <div className="mt-8 max-w-md w-full space-y-3">
           <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
-            This site is protected by reCAPTCHA and subject to the Klipto{" "}
+            This site is protected by reCAPTCHA and subject to our{" "}
             <a
               href="#"
               className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"

@@ -1,39 +1,30 @@
 "use client";
-import React, { useEffect, useState, ReactNode } from "react";
-import { useRouter } from "next/navigation";
-import cookie from "js-cookie";
-import { NetworkStatus } from "@/components/network/NetworkStatus";
-import { useUser, type User } from "@/hooks/use-user";
-import { useQueryClient } from "@tanstack/react-query";
-
-const gennituToken = cookie.get("gennituToken");
-
-enum Plan {
-  Starter = "Starter",
-  Premium = "Premium",
-  Team = "Team",
-  Enterprise = "Enterprise",
-}
-
-export interface Team {
-  projectId: string;
-  role: "Owner" | "Editor" | "Viewer";
-}
-
-interface TeamMember {
-  user: string; // Reference to the user
-  role: "Owner" | "Editor" | "Viewer";
-  // List of possible roles
-}
+import React, { ReactNode } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { Profile } from "@/types/supabase";
 
 interface AuthenticatedContextInt {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  user: Profile | null;
   loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  fetchCurrentUser: () => Promise<void>;
-  isReload: boolean;
-  setIsReload: React.Dispatch<React.SetStateAction<boolean>>;
+  signUp: (
+    email: string,
+    password: string,
+    username: string,
+    userdp?: string
+  ) => Promise<{ data: any; error: any }>;
+  signIn: (
+    email: string,
+    password: string
+  ) => Promise<{ data: any; error: any }>;
+  signInWithProvider: (
+    provider: "google" | "facebook"
+  ) => Promise<{ data: any; error: any }>;
+  signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<{ data: any; error: any }>;
+  updatePassword: (password: string) => Promise<{ data: any; error: any }>;
+  updateProfile: (
+    updates: Partial<Profile>
+  ) => Promise<{ data: any; error: any }>;
 }
 
 const AuthenticatedContext = React.createContext<
@@ -45,73 +36,23 @@ export function AuthenticatedContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isReload, setIsReload] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const queryClient = useQueryClient();
-
-  // Use React Query for user fetching
-  const { data: userData, isLoading, isError, error, refetch } = useUser();
-
-  // Update local state when React Query data changes
-  useEffect(() => {
-    if (userData) {
-      setUser(userData);
-      setLoading(false);
-    } else if (!gennituToken) {
-      setLoading(false);
-    }
-  }, [userData]);
-
-  // Handle loading state
-  useEffect(() => {
-    if (gennituToken) {
-      setLoading(isLoading);
-    } else {
-      setLoading(false);
-    }
-  }, [isLoading]);
-
-  // Handle reload trigger
-  useEffect(() => {
-    if (isReload && gennituToken) {
-      refetch();
-      setIsReload(false);
-    }
-  }, [isReload, refetch]);
-
-  const fetchCurrentUser = async () => {
-    if (gennituToken) {
-      await refetch();
-    }
-  };
+  const auth = useAuth();
 
   return (
     <AuthenticatedContext.Provider
       value={{
-        user,
-        setUser,
-        fetchCurrentUser,
-        loading,
-        setLoading,
-        isReload,
-        setIsReload,
+        user: auth.profile,
+        loading: auth.loading,
+        signUp: auth.signUp,
+        signIn: auth.signIn,
+        signInWithProvider: auth.signInWithProvider,
+        signOut: auth.signOut,
+        resetPassword: auth.resetPassword,
+        updatePassword: auth.updatePassword,
+        updateProfile: auth.updateProfile,
       }}
     >
-      {/* {!user && !gennituToken ? (
-        children
-      ) : isError || (!user && gennituToken) || !gennituToken ? (
-        <NetworkStatus
-          isError={isError}
-          retryFetchUser={fetchCurrentUser}
-          user={user}
-          dataFetched={!!userData}
-          isAuthenticated={!!gennituToken}
-        />
-      ) : ( */}
       {children}
-      {/* )} */}
     </AuthenticatedContext.Provider>
   );
 }

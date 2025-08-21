@@ -3,12 +3,13 @@ import Link from "next/link";
 import React from "react";
 import { Logo } from "@/components/logo";
 import { EMAIL_REGEX } from "@/utils/Regex";
-import { apiResponse } from "@/utils/apiResponse";
 import { SnackbarProvider, enqueueSnackbar, closeSnackbar } from "notistack";
 import { Button } from "@/components/ui/button";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
+import { useUserContext } from "@/context/AuthenticatedContext";
 
 const Recover = () => {
+  const { resetPassword } = useUserContext();
   const [formData, setFormdata] = React.useState<AuthTypes>({
     email: "",
   });
@@ -53,44 +54,14 @@ const Recover = () => {
     setLoading(true);
 
     try {
-      const response = await apiResponse.post("auth/forgot-password", formData);
+      const { data, error } = await resetPassword(formData.email);
 
-      if (response.status === 200) {
-        enqueueSnackbar(`Password reset link has been sent to your email`, {
-          variant: "success",
-          autoHideDuration: 3000,
-          anchorOrigin: {
-            vertical: "bottom",
-            horizontal: "center",
-          },
-          action: (key) => (
-            <button onClick={() => closeSnackbar(key)}>
-              <svg
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                  stroke="#fff"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          ),
-        });
-
-        setFormdata({
-          email: "",
-        });
+      if (error) {
+        throw error;
       }
-    } catch (error: any) {
-      enqueueSnackbar(error?.response?.data.message, {
-        variant: "error",
+
+      enqueueSnackbar(`Password reset link has been sent to your email`, {
+        variant: "success",
         autoHideDuration: 3000,
         anchorOrigin: {
           vertical: "bottom",
@@ -116,6 +87,41 @@ const Recover = () => {
           </button>
         ),
       });
+
+      setFormdata({
+        email: "",
+      });
+    } catch (error: any) {
+      enqueueSnackbar(
+        error?.message || "An error occurred while sending reset email",
+        {
+          variant: "error",
+          autoHideDuration: 3000,
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "center",
+          },
+          action: (key) => (
+            <button onClick={() => closeSnackbar(key)}>
+              <svg
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
+                  stroke="#fff"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          ),
+        }
+      );
     } finally {
       setLoading(false);
     }
@@ -253,13 +259,13 @@ const Recover = () => {
         {/* Footer */}
         <div className="mt-8 max-w-md w-full space-y-3">
           <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
-            This site is protected by reCAPTCHA and subject to the Klipto{" "}
+            This site is protected by reCAPTCHA and subject to our{" "}
             <a
               href="#"
               className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
             >
               Privacy
-            </a>
+            </a>{" "}
           </p>
           <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
             ©2025 Gennit. A product of{" "}
