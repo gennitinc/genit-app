@@ -78,7 +78,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const user = useUserContext().user;
-  const userId = user?._id;
+  const userId = user?.id;
   const [messages, setMessages] = useState<Message[]>([]);
   const [versions, setVersions] = useState<Version[]>([]);
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -209,7 +209,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({
         type: "user",
         content: content.trim(),
         userId,
-        avatar: user?.metadata?.userdp,
+        avatar: (user?.metadata as any)?.userdp,
         sender: user?.username || "User",
         chatId,
         createdAt: new Date().toISOString(),
