@@ -44,7 +44,7 @@ export async function middleware(request: NextRequest) {
     "/profile",
     "/update-password",
   ];
-  const authRoutes = ["/signin", "/signup", "/recover"];
+  const authRoutes = ["/signin", "/signup", "/recover", "/verify-account"];
 
   const isProtectedRoute = protectedRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
@@ -60,9 +60,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  // If user is signed in and the current route is an auth route, redirect to dashboard
-  if (user && isAuthRoute) {
-    return NextResponse.redirect(new URL("/", request.url));
+  // Check if user is email verified
+  const isEmailVerified = user?.email_confirmed_at;
+
+  // If user is not verified and trying to access protected routes, redirect to verify account
+  if (user && !isEmailVerified && isProtectedRoute) {
+    return NextResponse.redirect(new URL("/verify-account", request.url));
+  }
+
+  // If user is signed in and verified, and the current route is an auth route, redirect to chat
+  if (user && isEmailVerified && isAuthRoute) {
+    return NextResponse.redirect(new URL("/chat", request.url));
   }
 
   return supabaseResponse;

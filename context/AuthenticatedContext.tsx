@@ -25,6 +25,7 @@ interface AuthenticatedContextInt {
   updateProfile: (
     updates: Partial<Profile>
   ) => Promise<{ data: any; error: any }>;
+  checkUsernameAvailability: (username: string) => Promise<boolean>;
 }
 
 const AuthenticatedContext = React.createContext<
@@ -41,7 +42,7 @@ export function AuthenticatedContextProvider({
   return (
     <AuthenticatedContext.Provider
       value={{
-        user: auth.profile,
+        user: auth.profile, // Use auth.profile which has emailVerified property
         loading: auth.loading,
         signUp: auth.signUp,
         signIn: auth.signIn,
@@ -50,6 +51,7 @@ export function AuthenticatedContextProvider({
         resetPassword: auth.resetPassword,
         updatePassword: auth.updatePassword,
         updateProfile: auth.updateProfile,
+        checkUsernameAvailability: auth.checkUsernameAvailability,
       }}
     >
       {children}

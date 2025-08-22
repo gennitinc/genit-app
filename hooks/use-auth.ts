@@ -74,54 +74,37 @@ export function useAuth() {
     userdp?: string
   ) => {
     try {
+      console.log("payload", {
+        email,
+        password,
+        username,
+        userdp,
+      });
+
+      // Username uniqueness will be handled by database trigger
+      const finalUsername = username;
+      console.log("Username to use:", finalUsername);
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
-            username,
+            username: finalUsername,
             userdp,
           },
+          emailRedirectTo: `${window.location.origin}/verify-account?pending=true`,
         },
       });
 
       if (error) throw error;
 
       if (data.user) {
-        // Create profile
-        const { error: profileError } = await supabase.from("profiles").insert([
-          {
-            id: data.user.id,
-            email: data.user.email!,
-            username,
-            userdp: userdp || null,
-            userPlan: "Starter",
-            emailVerified: false,
-          },
-        ]);
+        // Profile creation is handled by database trigger
+        console.log("User created successfully:", data.user.id);
 
-        if (profileError) {
-          console.error("Error creating profile:", profileError);
-        }
-
-        // Send verification email
-        try {
-          const verificationUrl = `${window.location.origin}/auth/callback?token=${data.session?.access_token}`;
-          await fetch("/api/send-email", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              type: "verification",
-              email: data.user.email,
-              username: username,
-              verificationUrl: verificationUrl,
-            }),
-          });
-        } catch (emailError) {
-          console.error("Error sending verification email:", emailError);
-        }
+        // Supabase automatically sends verification email
+        // No need to manually send verification email
       }
 
       return { data, error: null };
@@ -238,6 +221,24 @@ export function useAuth() {
     }
   };
 
+  const checkUsernameAvailability = async (username: string) => {
+    try {
+      const response = await fetch("/api/check-username", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username }),
+      });
+
+      const result = await response.json();
+      return result.available;
+    } catch (error) {
+      console.error("Error checking username availability:", error);
+      return false;
+    }
+  };
+
   return {
     user,
     profile,
@@ -250,5 +251,6 @@ export function useAuth() {
     resetPassword,
     updatePassword,
     updateProfile,
+    checkUsernameAvailability,
   };
 }

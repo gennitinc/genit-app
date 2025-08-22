@@ -59,6 +59,7 @@ import {
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import Loading from "@/utils/Loading";
 
 const countries = [
   { code: "AF", name: "Afghanistan", flag: "🇦🇫" },
@@ -529,7 +530,7 @@ const checklistItems = [
 
 export default function BrandOnboardingChecklist() {
   const router = useRouter();
-  const { user } = useUserContext();
+  const { user, loading: authLoading } = useUserContext();
   const [completedItems, setCompletedItems] = useState<string[]>([]);
   const [currentDialog, setCurrentDialog] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -558,13 +559,33 @@ export default function BrandOnboardingChecklist() {
   // Check if user has already completed onboarding
   useEffect(() => {
     const checkOnboardingStatus = async () => {
-      if (!user) return;
+      // If auth is still loading, wait
+      if (authLoading) {
+        console.log("Auth still loading, waiting...");
+        return;
+      }
+
+      if (!user) {
+        console.log("No user found, redirecting to signin");
+        router.push("/signin");
+        return;
+      }
+
+      // Check if user is verified
+      if (!user.emailVerified) {
+        console.log("User not verified, redirecting to verify-account");
+        router.push("/verify-account");
+        return;
+      }
 
       try {
         const response = await fetch("/api/business-profile");
         if (response.ok) {
-          const { data } = await response.json();
-          if (data?.onboardingCompleted) {
+          const result = await response.json();
+          if (result.data?.onboardingCompleted) {
+            console.log(
+              "User has already completed onboarding, redirecting to chat"
+            );
             router.push("/chat");
             return;
           }
@@ -576,8 +597,16 @@ export default function BrandOnboardingChecklist() {
       }
     };
 
+    // Add timeout to prevent infinite loading
+    const timeoutId = setTimeout(() => {
+      console.log("Onboarding check timeout, allowing access");
+      setIsLoading(false);
+    }, 5000); // 5 second timeout
+
     checkOnboardingStatus();
-  }, [user, router]);
+
+    return () => clearTimeout(timeoutId);
+  }, [user, authLoading, router]);
 
   const handleChannelAuth = async (channelId: string) => {
     setLoading((prev) => ({ ...prev, [channelId]: true }));
@@ -716,13 +745,9 @@ export default function BrandOnboardingChecklist() {
 
   if (isLoading) {
     return (
-      <section className="bg-BackgroundLight dark:bg-BackgroundDark">
-        <div className="container max-w-none flex h-full w-full flex-col items-center justify-center">
-          <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-500"></div>
-          </div>
-        </div>
-      </section>
+      <div className="h-screen flex flex-col items-center justify-center">
+        <Loading />
+      </div>
     );
   }
 

@@ -400,7 +400,7 @@ const Login = () => {
           <div className="flex items-center">
             <hr className="flex-grow border-t border-gray-300 dark:border-neutral-800" />
             <span className="px-3 text-sm text-gray-500 dark:text-gray-400">
-              Or sign up with
+              Or sign in with
             </span>
             <hr className="flex-grow border-t border-gray-300 dark:border-neutral-800" />
           </div>

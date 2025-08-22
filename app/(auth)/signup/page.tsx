@@ -16,7 +16,8 @@ const Signup = () => {
   const [profile, setProfile] = useState<string>("");
   const [provider, setProvider] = useState("");
   const router = useRouter();
-  const { signUp, signInWithProvider } = useUserContext();
+  const { signUp, signInWithProvider, checkUsernameAvailability } =
+    useUserContext();
 
   const UserDp: Array<string> = [
     "https://enterboxbucket.blob.core.windows.net/programmablefiles/1.png",
@@ -63,6 +64,15 @@ const Signup = () => {
     email: "",
     password: "",
   });
+  const [usernameStatus, setUsernameStatus] = React.useState<{
+    checking: boolean;
+    available: boolean | null;
+    message: string;
+  }>({
+    checking: false,
+    available: null,
+    message: "",
+  });
 
   const [loading, setLoading] = React.useState<boolean>(false);
   const [loading2, setLoading2] = React.useState<boolean>(false);
@@ -78,13 +88,65 @@ const Signup = () => {
     const userdpvalue = `https://eu.ui-avatars.com/api/?name=${
       Formdata.username
     }&background=${backgroundColor && backgroundColor}&color=ffffff`;
+
     setFormdata({
       ...Formdata,
       username: fullName,
-      userdp: RandomProfile(),
+      userdp: userdpvalue,
       [name]: value,
     });
   };
+
+  // Debounced username availability check
+  const checkUsername = React.useCallback(
+    React.useMemo(() => {
+      let timeoutId: NodeJS.Timeout;
+      return (username: string) => {
+        clearTimeout(timeoutId);
+        if (!username || username.length < 3) {
+          setUsernameStatus({
+            checking: false,
+            available: null,
+            message: "",
+          });
+          return;
+        }
+
+        setUsernameStatus({
+          checking: true,
+          available: null,
+          message: "Checking availability...",
+        });
+
+        timeoutId = setTimeout(async () => {
+          try {
+            const isAvailable = await checkUsernameAvailability(username);
+            setUsernameStatus({
+              checking: false,
+              available: isAvailable,
+              message: isAvailable
+                ? "Username is available!"
+                : "Username is taken. We'll add a unique suffix.",
+            });
+          } catch (error) {
+            setUsernameStatus({
+              checking: false,
+              available: null,
+              message: "Error checking username",
+            });
+          }
+        }, 500);
+      };
+    }, [checkUsernameAvailability]),
+    [checkUsernameAvailability]
+  );
+
+  // Check username when fullName changes
+  React.useEffect(() => {
+    if (fullName) {
+      checkUsername(fullName);
+    }
+  }, [fullName, checkUsername]);
 
   const allfieldvalid = Object.keys(errormsg).every(
     (field) => !errormsg[field as keyof typeof errormsg]
@@ -123,39 +185,36 @@ const Signup = () => {
         throw error;
       }
 
-      enqueueSnackbar(
-        "Account Created Successfully! Please check your email to verify your account.",
-        {
-          variant: "success",
-          autoHideDuration: 5000,
-          anchorOrigin: {
-            vertical: "bottom",
-            horizontal: "center",
-          },
-          action: (key) => (
-            <button onClick={() => closeSnackbar(key)}>
-              <svg
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-                className=""
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                  stroke="#fff"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          ),
-        }
-      );
+      enqueueSnackbar("Account Created Successfully! verify your account.", {
+        variant: "success",
+        autoHideDuration: 5000,
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "center",
+        },
+        action: (key) => (
+          <button onClick={() => closeSnackbar(key)}>
+            <svg
+              width="1em"
+              height="1em"
+              viewBox="0 0 24 24"
+              className=""
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
+                stroke="#fff"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        ),
+      });
 
-      router.push("/signin");
+      router.push("/verify-account");
     } catch (error: any) {
       setLoading(false);
       console.log(error);
@@ -509,6 +568,79 @@ const Signup = () => {
                   </p>
                 )}
               </div>
+
+              {/* Username Display */}
+              {fullName && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-neutral-800 rounded-lg border border-gray-200 dark:border-neutral-700">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Username:
+                      </span>
+                      <span className="text-sm text-gray-900 dark:text-gray-100 font-mono">
+                        {fullName}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      {usernameStatus.checking ? (
+                        <div className="flex items-center space-x-1">
+                          <div className="w-3 h-3 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+                          <span className="text-xs text-gray-500">
+                            Checking...
+                          </span>
+                        </div>
+                      ) : usernameStatus.available === true ? (
+                        <div className="flex items-center space-x-1">
+                          <svg
+                            className="w-4 h-4 text-green-500"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span className="text-xs text-green-600 dark:text-green-400">
+                            Available
+                          </span>
+                        </div>
+                      ) : usernameStatus.available === false ? (
+                        <div className="flex items-center space-x-1">
+                          <svg
+                            className="w-4 h-4 text-orange-500"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span className="text-xs text-orange-600 dark:text-orange-400">
+                            Will add suffix
+                          </span>
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                  {usernameStatus.message && (
+                    <p
+                      className={`text-xs ${
+                        usernameStatus.available === true
+                          ? "text-green-600 dark:text-green-400"
+                          : usernameStatus.available === false
+                            ? "text-orange-600 dark:text-orange-400"
+                            : "text-gray-500 dark:text-gray-400"
+                      }`}
+                    >
+                      {usernameStatus.message}
+                    </p>
+                  )}
+                </div>
+              )}
 
               {/* Password Field */}
               <div>

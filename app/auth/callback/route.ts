@@ -10,6 +10,13 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      // Check if this is a verification callback
+      const type = searchParams.get("type");
+      if (type === "signup") {
+        // Redirect to verify account page for email verification
+        return NextResponse.redirect(`${origin}/verify-account`);
+      }
+
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
