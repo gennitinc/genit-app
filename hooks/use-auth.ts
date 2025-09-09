@@ -93,7 +93,6 @@ export function useAuth() {
             username: finalUsername,
             userdp,
           },
-          emailRedirectTo: `${window.location.origin}/verify-account?pending=true`,
         },
       });
 

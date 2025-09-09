@@ -8,6 +8,12 @@ import {
   HelpCircle,
   BookOpen,
   Palette,
+  Workflow,
+  CardSim,
+  CreditCard,
+  Home,
+  ChevronDown,
+  Bot,
 } from "lucide-react";
 
 import {
@@ -16,6 +22,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -25,19 +37,14 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 
 const navItems = [
   {
-    title: "History",
-    icon: History,
-    href: "/history",
+    title: "Home",
+    icon: Home,
+    href: "/chat",
   },
   {
-    title: "Community",
-    icon: Palette,
-    href: "/community",
-  },
-  {
-    title: "Creators",
-    icon: Users,
-    href: "/creators",
+    title: "AI Brain",
+    icon: Workflow,
+    href: "/workflow",
   },
   {
     title: "Documentation",
@@ -45,9 +52,33 @@ const navItems = [
     href: "/documentation",
   },
   {
-    title: "Upgrade",
-    icon: Sparkles,
-    href: "/upgrade",
+    title: "Billing",
+    icon: CreditCard,
+    href: "/billing",
+  },
+];
+
+// Sample agents data - you can replace this with actual data from your backend
+const availableAgents = [
+  {
+    id: 1,
+    name: "Chat Assistant",
+    href: "/agents/chat",
+  },
+  {
+    id: 2,
+    name: "Code Helper",
+    href: "/agents/code",
+  },
+  {
+    id: 3,
+    name: "Content Writer",
+    href: "/agents/writer",
+  },
+  {
+    id: 4,
+    name: "Data Analyst",
+    href: "/agents/analyst",
   },
 ];
 
@@ -98,38 +129,25 @@ export function NavMain() {
                       ? "text-zinc-400 hover:bg-zinc-800 hover:text-white"
                       : "text-gray-700 hover:bg-gray-100 hover:text-black"
                 )}
+                onClick={handleLinkClick}
               >
-                <Link
-                  href={item.href}
-                  onClick={handleLinkClick}
-                  className="flex items-center w-full text-gray-800 dark:text-gray-100"
-                >
+                <Link href={item.href}>
                   <item.icon
                     className={cn(
-                      "w-4 h-4",
-                      shouldShowCollapsed ? "mr-0" : "mr-2"
+                      "h-4 w-4",
+                      shouldShowCollapsed ? "mx-auto" : "mr-2"
                     )}
                   />
-                  <span
-                    className={cn(
-                      "transition-all duration-200",
-                      shouldShowCollapsed ? "hidden" : "block"
-                    )}
-                  >
-                    {item.title}
-                  </span>
+                  {!shouldShowCollapsed && <span>{item.title}</span>}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
       </SidebarGroup>
+
       <SidebarGroup>
-        <SidebarMenu
-          className={cn(
-            shouldShowCollapsed ? "items-center gap-y-2" : "gap-y-2"
-          )}
-        >
+        <SidebarMenu className={cn(shouldShowCollapsed ? "items-center" : "")}>
           {secondaryNavItems.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
@@ -146,26 +164,16 @@ export function NavMain() {
                       ? "text-zinc-400 hover:bg-zinc-800 hover:text-white"
                       : "text-gray-700 hover:bg-gray-100 hover:text-black"
                 )}
+                onClick={handleLinkClick}
               >
-                <Link
-                  href={item.href}
-                  onClick={handleLinkClick}
-                  className="flex items-center w-full text-gray-800 dark:text-gray-200"
-                >
+                <Link href={item.href}>
                   <item.icon
                     className={cn(
-                      "w-4 h-4",
-                      shouldShowCollapsed ? "mr-0" : "mr-2"
+                      "h-4 w-4",
+                      shouldShowCollapsed ? "mx-auto" : "mr-2"
                     )}
                   />
-                  <span
-                    className={cn(
-                      "transition-all duration-200",
-                      shouldShowCollapsed ? "hidden" : "block"
-                    )}
-                  >
-                    {item.title}
-                  </span>
+                  {!shouldShowCollapsed && <span>{item.title}</span>}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

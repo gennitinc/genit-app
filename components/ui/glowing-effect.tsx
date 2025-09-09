@@ -23,11 +23,11 @@ const GlowingEffect = memo(
     proximity = 0,
     spread = 20,
     variant = "default",
-    glow = false,
+    glow = true,
     className,
     movementDuration = 2,
     borderWidth = 1,
-    disabled = true,
+    disabled = false,
   }: GlowingEffectProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const lastPosition = useRef({ x: 0, y: 0 });

@@ -6,88 +6,60 @@ import { useRef, useEffect, useState } from "react";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useRouter } from "next/navigation";
 import Loading from "@/utils/Loading";
+import withAuth from "@/helper/hoc/withAuth";
+import { shouldRedirectToOnboarding } from "@/utils/onboardingUtils";
 
-export default function ChatPageForAuthenticatedUsers() {
+function ChatPageForAuthenticatedUsers() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { user, loading } = useUserContext();
   const router = useRouter();
   const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(true);
+  const [hasRedirected, setHasRedirected] = useState(false);
 
-  // Global timeout for auth loading
+  // Check onboarding status and redirect if needed
   useEffect(() => {
-    const authTimeout = setTimeout(() => {
-      if (loading) {
-        console.log("Auth loading timeout, redirecting to signin");
-        router.push("/signin");
-      }
-    }, 10000); // 10 second timeout for auth loading
-
-    return () => clearTimeout(authTimeout);
-  }, [loading, router]);
-
-  useEffect(() => {
-    const checkOnboardingStatus = async () => {
-      if (loading) return;
+    const checkOnboardingAndRedirect = async () => {
+      if (loading) return; // Wait for auth to load
 
       if (!user) {
-        console.log("No user found, redirecting to signin");
         router.push("/signin");
         return;
       }
 
-      // Check if user is verified
-      if (!user.emailVerified) {
-        router.push("/verify-account");
-        return;
-      }
+      if (hasRedirected) return; // Prevent multiple redirects
 
       try {
-        const response = await fetch("/api/business-profile");
-        if (response.ok) {
-          const result = await response.json();
-          // Check if user has completed onboarding
-          if (!result.data?.onboardingCompleted) {
-            console.log("User has not completed onboarding, redirecting...");
-            router.push("/onboarding");
-            return;
-          }
-          console.log("User has completed onboarding, allowing access to chat");
-        } else {
-          // If API returns error, assume user needs onboarding
-          console.log("API error, redirecting to onboarding");
+        // Check if user should be redirected to onboarding
+        const needsOnboarding = await shouldRedirectToOnboarding();
+
+        if (needsOnboarding) {
+          // User hasn't completed onboarding, redirect to onboarding
+          console.log(
+            "User hasn't completed onboarding, redirecting to onboarding"
+          );
+          setHasRedirected(true);
           router.push("/onboarding");
-          return;
+        } else {
+          // User has completed onboarding, allow access to chat
+          console.log("User has completed onboarding, allowing access to chat");
+          setIsCheckingOnboarding(false);
         }
       } catch (error) {
         console.error("Error checking onboarding status:", error);
-        // On error, redirect to onboarding as fallback
+        // If there's an error, assume onboarding is needed
+        setHasRedirected(true);
         router.push("/onboarding");
-        return;
       }
-
-      setIsCheckingOnboarding(false);
     };
 
-    // Add timeout to prevent infinite loading
-    const timeoutId = setTimeout(() => {
-      console.log("Onboarding check timeout, redirecting to onboarding");
-      setIsCheckingOnboarding(false);
-      router.push("/onboarding");
-    }, 3000); // 3 second timeout - more aggressive
-
-    checkOnboardingStatus();
-
-    return () => clearTimeout(timeoutId);
-  }, [user, loading, router]);
+    checkOnboardingAndRedirect();
+  }, [user, loading, router, hasRedirected]);
 
   // Show loading while checking onboarding status
-  if (loading || isCheckingOnboarding) {
+  if (isCheckingOnboarding) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center">
+      <div className="flex items-center justify-center h-screen">
         <Loading />
-        <p className="mt-4 text-gray-600 dark:text-gray-400">
-          Checking access...
-        </p>
       </div>
     );
   }
@@ -119,3 +91,5 @@ export default function ChatPageForAuthenticatedUsers() {
     </div>
   );
 }
+
+export default withAuth(ChatPageForAuthenticatedUsers);

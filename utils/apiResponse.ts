@@ -1,8 +1,6 @@
 import axios from "axios";
 import cookie from "js-cookie";
 
-const gennituToken = cookie.get("gennituToken");
-
 //api controller
 export const apiResponse = axios.create({
   baseURL:
@@ -12,9 +10,17 @@ export const apiResponse = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization: "Bearer " + gennituToken,
   },
   withCredentials: true,
+});
+
+// Add request interceptor to dynamically add the token
+apiResponse.interceptors.request.use((config) => {
+  const token = cookie.get("gennituToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export const clientUrl =

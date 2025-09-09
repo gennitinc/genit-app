@@ -1,8 +1,6 @@
 import axios from "axios";
 import cookie from "js-cookie";
 
-const gennituToken = cookie.get("gennituToken");
-
 export const apiResponseFileUpload = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
@@ -11,7 +9,15 @@ export const apiResponseFileUpload = axios.create({
   headers: {
     "Content-Type": "multipart/form-data",
     Accept: "application/json",
-    Authorization: "Bearer " + gennituToken,
   },
   withCredentials: true,
+});
+
+// Add request interceptor to dynamically add the token
+apiResponseFileUpload.interceptors.request.use((config) => {
+  const token = cookie.get("gennituToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });

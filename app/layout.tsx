@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import type React from "react"; // Added import for React
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 import { AuthenticatedContextProvider } from "@/context/AuthenticatedContext";
 import { ChatProvider } from "@/context/ChatProjectContext";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -57,17 +57,6 @@ export default function RootLayout({
               </ThemeProvider>
               <Toaster />
             </AuthenticatedContextProvider>
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js');
-                });
-              }
-            `,
-              }}
-            />
 
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>

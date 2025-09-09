@@ -3,13 +3,20 @@ import Link from "next/link";
 import React from "react";
 import { Logo } from "@/components/logo";
 import { EMAIL_REGEX } from "@/utils/Regex";
-import { SnackbarProvider, enqueueSnackbar, closeSnackbar } from "notistack";
+import { apiResponse } from "@/utils/apiResponse";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
-import { useUserContext } from "@/context/AuthenticatedContext";
+import withAuth from "@/helper/hoc/withAuth";
 
 const Recover = () => {
-  const { resetPassword } = useUserContext();
   const [formData, setFormdata] = React.useState<AuthTypes>({
     email: "",
   });
@@ -54,108 +61,40 @@ const Recover = () => {
     setLoading(true);
 
     try {
-      const { data, error } = await resetPassword(formData.email);
+      const response = await apiResponse.post("auth/forgot-password", formData);
 
-      if (error) {
-        throw error;
+      if (response.status === 200) {
+        toast.success(`Password reset code has been sent to your email`);
+
+        // Redirect to password reset verification page
+        window.location.href = `/reset-password?email=${encodeURIComponent(formData.email)}`;
       }
-
-      enqueueSnackbar(`Password reset link has been sent to your email`, {
-        variant: "success",
-        autoHideDuration: 3000,
-        anchorOrigin: {
-          vertical: "bottom",
-          horizontal: "center",
-        },
-        action: (key) => (
-          <button onClick={() => closeSnackbar(key)}>
-            <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                stroke="#fff"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        ),
-      });
-
-      setFormdata({
-        email: "",
-      });
     } catch (error: any) {
-      enqueueSnackbar(
-        error?.message || "An error occurred while sending reset email",
-        {
-          variant: "error",
-          autoHideDuration: 3000,
-          anchorOrigin: {
-            vertical: "bottom",
-            horizontal: "center",
-          },
-          action: (key) => (
-            <button onClick={() => closeSnackbar(key)}>
-              <svg
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                  stroke="#fff"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          ),
-        }
-      );
+      toast.error(error?.response?.data.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className="bg-BackgroundLight dark:bg-BackgroundDark">
-      <SnackbarProvider
-        autoHideDuration={3000}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      />
-
-      <div className="min-h-screen flex flex-col items-center justify-center bg-BackgroundLight dark:bg-BackgroundDark px-4 py-8 sm:px-6 lg:px-8">
-        {/* Main Recovery Card */}
-        <div className="w-full max-w-[26rem] space-y-2 border border-gray-200 dark:border-neutral-800 py-8 px-6 rounded-xl shadow-sm bg-BackgroundLight2 dark:bg-neutral-900">
-          {/* Logo */}
-          <div className="flex justify-center items-center">
-            <Logo className="w-14 h-14" />
+    <div className="flex flex-col justify-center items-center min-h-[100vh] min-h-[100dvh] overflow-hidden w-full bg-black">
+      <Card className="w-full max-w-md mx-4">
+        <CardHeader className="text-center">
+          <div className="flex justify-center items-center mt-4 gap-2">
+            <Logo />
             <h1 className="text-2xl font-semibold tracking-tight text-foreground">
               Gennit
             </h1>
           </div>
-
-          {/* Header */}
-          <div className="text-center space-y-2 mb-6">
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-              Recover your account
-            </h1>
-            <p className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400">
-              Enter the email address associated with your account and we'll
-              send you instructions to reset your password.
-            </p>
-          </div>
-
+          <CardTitle className="text-2xl font-bold">
+            Recover your account
+          </CardTitle>
+          <CardDescription>
+            Enter the email address associated with your account and we'll send
+            you instructions to reset your password.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
           {/* Form */}
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
@@ -233,7 +172,7 @@ const Recover = () => {
                   Sending...
                 </div>
               ) : (
-                "Send Reset Code"
+                "Send Reset Link"
               )}
             </Button>
           </form>
@@ -254,40 +193,39 @@ const Recover = () => {
               </Link>
             </span>
           </div>
-        </div>
+        </CardContent>
+      </Card>
 
-        {/* Footer  section*/}
-        <div className="mt-5 max-w-[26rem] w-full space-y-3">
-          <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
-            This site is protected by reCAPTCHA and our{" "}
-            <a
-              href="#"
-              className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
-            >
-              Policy
-            </a>{" "}
-            {/* &{" "}
+      <div className="mt-5 max-w-[26rem] w-full space-y-3">
+        <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
+          This site is protected by reCAPTCHA and our{" "}
+          <a
+            href="#"
+            className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
+          >
+            Policy
+          </a>{" "}
+          {/* &{" "}
                 <a
                   href="#"
                   className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
                 >
                   Terms of Service
                 </a> */}
-          </p>
-          <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
-            ©2025 Gennit. A product of{" "}
-            <a
-              className="text-gray-800 dark:text-white font-medium hover:text-blue-600"
-              href="#"
-            >
-              Klipto Inc.
-            </a>{" "}
-            All rights reserved.
-          </p>
-        </div>
+        </p>
+        <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
+          ©2025 Gennit. A product of{" "}
+          <a
+            className="text-gray-800 dark:text-white font-medium hover:text-blue-600"
+            href="#"
+          >
+            Klipto Inc.
+          </a>{" "}
+          All rights reserved.
+        </p>
       </div>
-    </section>
+    </div>
   );
 };
 
-export default Recover;
+export default withAuth(Recover, true);

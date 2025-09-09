@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   metadata JSONB DEFAULT '{}',
   teams JSONB DEFAULT '[]',
   userPlan TEXT DEFAULT 'Starter' CHECK (userPlan IN ('Starter', 'Premium', 'Team', 'Enterprise')),
-  emailVerified BOOLEAN DEFAULT FALSE,
+  emailVerified BOOLEAN DEFAULT TRUE,
   createdAt TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updatedAt TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -124,7 +124,7 @@ BEGIN
     final_username,
     NEW.raw_user_meta_data->>'userdp',
     'Starter',
-    NEW.email_confirmed_at IS NOT NULL,
+    TRUE,
     COALESCE(NEW.raw_user_meta_data, '{}'::jsonb),
     NEW.created_at,
     NEW.updated_at

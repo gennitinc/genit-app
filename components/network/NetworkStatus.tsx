@@ -7,16 +7,10 @@ import { useState, useEffect } from "react";
 
 export function NetworkStatus({
   isError,
-  retryFetchUser,
-  user,
-  dataFetched,
-  isAuthenticated,
+  retryFunction,
 }: {
   isError: boolean;
-  retryFetchUser: () => void;
-  user: any;
-  dataFetched: any;
-  isAuthenticated: boolean;
+  retryFunction: () => void;
 }) {
   const [isOnline, setIsOnline] = useState(true); // Default to true for SSR
   const [wasOffline, setWasOffline] = useState(false);
@@ -37,7 +31,7 @@ export function NetworkStatus({
       // Reset wasOffline state after showing the "back online" message
       setTimeout(() => {
         setWasOffline(false);
-        if (isAuthenticated) retryFetchUser();
+        retryFunction();
       }, 3000);
     };
 
@@ -52,12 +46,12 @@ export function NetworkStatus({
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
-  }, [isAuthenticated, retryFetchUser]);
+  }, [retryFunction]);
 
   const handleRetry = async () => {
     setIsRetrying(true);
     setTimeout(() => {
-      if (isAuthenticated) retryFetchUser();
+      retryFunction();
       setIsRetrying(false);
     }, 2000);
   };
@@ -68,8 +62,7 @@ export function NetworkStatus({
 
   // Determine which state to show
   const showOnlineMessage = isOnline && wasOffline;
-  const showErrorMessage =
-    !showOnlineMessage && (showError || (!isAuthenticated && !isOnline));
+  const showErrorMessage = !showOnlineMessage && (showError || !isOnline);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col items-center justify-center p-4">

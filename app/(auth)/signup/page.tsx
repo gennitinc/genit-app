@@ -3,21 +3,44 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/Regex";
-import { SnackbarProvider, enqueueSnackbar, closeSnackbar } from "notistack";
+import { apiResponse } from "@/utils/apiResponse";
+import { toast } from "sonner";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import cookie from "js-cookie";
 import { Logo } from "@/components/logo";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
-import { useUserContext } from "@/context/AuthenticatedContext";
-// import withAuth from "@/helper/hoc/withAuth";
+import withAuth from "@/helper/hoc/withAuth";
+
+const LoginSocialGoogle = dynamic(
+  () => import("reactjs-social-login").then((mod) => mod.LoginSocialGoogle),
+  {
+    ssr: false,
+  }
+) as React.ComponentType<{
+  client_id: string;
+  redirect_uri: string;
+  scope: string;
+  discoveryDocs: string;
+  access_type: string;
+  onLoginStart: () => boolean;
+  onResolve: ({ provider, data }: any) => void;
+  onReject: (err: any) => void;
+  className: string;
+}>;
 
 const Signup = () => {
   const pathname = usePathname();
   const [profile, setProfile] = useState<string>("");
   const [provider, setProvider] = useState("");
   const router = useRouter();
-  const { signUp, signInWithProvider, checkUsernameAvailability } =
-    useUserContext();
 
   const UserDp: Array<string> = [
     "https://enterboxbucket.blob.core.windows.net/programmablefiles/1.png",
@@ -64,19 +87,11 @@ const Signup = () => {
     email: "",
     password: "",
   });
-  const [usernameStatus, setUsernameStatus] = React.useState<{
-    checking: boolean;
-    available: boolean | null;
-    message: string;
-  }>({
-    checking: false,
-    available: null,
-    message: "",
-  });
 
   const [loading, setLoading] = React.useState<boolean>(false);
   const [loading2, setLoading2] = React.useState<boolean>(false);
   const [loading3, setLoading3] = React.useState<boolean>(false);
+  const [showPassword, setShowPassword] = React.useState<boolean>(false);
 
   const handleInputChange = (Event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = Event.target;
@@ -88,7 +103,6 @@ const Signup = () => {
     const userdpvalue = `https://eu.ui-avatars.com/api/?name=${
       Formdata.username
     }&background=${backgroundColor && backgroundColor}&color=ffffff`;
-
     setFormdata({
       ...Formdata,
       username: fullName,
@@ -96,57 +110,6 @@ const Signup = () => {
       [name]: value,
     });
   };
-
-  // Debounced username availability check
-  const checkUsername = React.useCallback(
-    React.useMemo(() => {
-      let timeoutId: NodeJS.Timeout;
-      return (username: string) => {
-        clearTimeout(timeoutId);
-        if (!username || username.length < 3) {
-          setUsernameStatus({
-            checking: false,
-            available: null,
-            message: "",
-          });
-          return;
-        }
-
-        setUsernameStatus({
-          checking: true,
-          available: null,
-          message: "Checking availability...",
-        });
-
-        timeoutId = setTimeout(async () => {
-          try {
-            const isAvailable = await checkUsernameAvailability(username);
-            setUsernameStatus({
-              checking: false,
-              available: isAvailable,
-              message: isAvailable
-                ? "Username is available!"
-                : "Username is taken. We'll add a unique suffix.",
-            });
-          } catch (error) {
-            setUsernameStatus({
-              checking: false,
-              available: null,
-              message: "Error checking username",
-            });
-          }
-        }, 500);
-      };
-    }, [checkUsernameAvailability]),
-    [checkUsernameAvailability]
-  );
-
-  // Check username when fullName changes
-  React.useEffect(() => {
-    if (fullName) {
-      checkUsername(fullName);
-    }
-  }, [fullName, checkUsername]);
 
   const allfieldvalid = Object.keys(errormsg).every(
     (field) => !errormsg[field as keyof typeof errormsg]
@@ -174,341 +137,200 @@ const Signup = () => {
 
     setLoading(true);
     try {
-      const { data, error } = await signUp(
-        Formdata.email,
-        Formdata.password || "",
-        Formdata.username || "",
-        Formdata.userdp
-      );
-
-      if (error) {
-        throw error;
-      }
-
-      enqueueSnackbar("Account Created Successfully! verify your account.", {
-        variant: "success",
-        autoHideDuration: 5000,
-        anchorOrigin: {
-          vertical: "bottom",
-          horizontal: "center",
-        },
-        action: (key) => (
-          <button onClick={() => closeSnackbar(key)}>
-            <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-              className=""
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                stroke="#fff"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        ),
+      const response = await apiResponse.post("auth/sign-up", Formdata, {
+        withCredentials: true,
       });
+      const User = response?.data;
+      console.log("user", User);
+      const userId = User?.user?._id.toString();
+      if (response.status === 200) {
+        toast.success(
+          "Account Created Successfully! Please check your email to verify your account."
+        );
 
-      router.push("/verify-account");
+        const longerEXP = 1000 * 60 * 60 * 24 * 30;
+
+        cookie.set("gennituToken", response.data.token, {
+          expires: new Date(Date.now() + longerEXP),
+          // secure: true,
+          // sameSite: "strict",
+        });
+
+        // Redirect to verification page with email parameter
+        router.push(
+          `/account/verify?email=${encodeURIComponent(Formdata.email)}`
+        );
+      }
     } catch (error: any) {
       setLoading(false);
       console.log(error);
 
-      enqueueSnackbar(error?.message || "An error occurred during sign up", {
-        variant: "error",
-        autoHideDuration: 3000,
-        anchorOrigin: {
-          vertical: "bottom",
-          horizontal: "center",
-        },
-        action: (key) => (
-          <button onClick={() => closeSnackbar(key)}>
-            <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-              className=""
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                stroke="#fff"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        ),
-      });
+      toast.error(error?.response?.data.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleSignUp = async () => {
-    setLoading2(true);
-    try {
-      const { data, error } = await signInWithProvider("google");
-      if (error) {
-        throw error;
-      }
-      // The redirect will happen automatically
-    } catch (error: any) {
-      setLoading2(false);
-      console.log(error);
-      enqueueSnackbar(
-        error?.message || "An error occurred during Google sign up",
-        {
-          variant: "error",
-          autoHideDuration: 3000,
-          anchorOrigin: {
-            vertical: "bottom",
-            horizontal: "center",
-          },
-          action: (key) => (
-            <button onClick={() => closeSnackbar(key)}>
-              <svg
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-                className=""
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                  stroke="#fff"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          ),
-        }
-      );
-    } finally {
-      setLoading2(false);
-    }
-  };
+  const handleGoogleSignUp = async (provider: string, data: any) => {
+    console.log("data", data);
 
-  const handleFacebookSignUp = async () => {
-    setLoading3(true);
-    try {
-      const { data, error } = await signInWithProvider("facebook");
-      if (error) {
-        throw error;
-      }
-      // The redirect will happen automatically
-    } catch (error: any) {
-      setLoading3(false);
-      console.log(error);
-      enqueueSnackbar(
-        error?.message || "An error occurred during Facebook sign up",
-        {
-          variant: "error",
-          autoHideDuration: 3000,
-          anchorOrigin: {
-            vertical: "bottom",
-            horizontal: "center",
-          },
-          action: (key) => (
-            <button onClick={() => closeSnackbar(key)}>
-              <svg
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                  stroke="#fff"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          ),
+    const Formdata = {
+      email: data.email,
+      username: data.name,
+      userdp: data.picture,
+      password: data.sub + data.email,
+    };
+
+    console.log("formdata", Formdata);
+    if (data.email_verified === true) {
+      try {
+        const response = await apiResponse.post("auth/google", Formdata, {
+          withCredentials: true,
+        });
+        const User = response?.data;
+        console.log("user", User);
+        const userId = User?.user?._id.toString();
+        if (response.status === 200) {
+          toast.success("Account Created Successfully! verify account.");
+
+          const longerEXP = 1000 * 60 * 60 * 24 * 30;
+
+          cookie.set("gennituToken", response.data.token, {
+            expires: new Date(Date.now() + longerEXP),
+            // secure: true,
+            // sameSite: "strict",
+          });
+
+          // Redirect to verification page with email parameter
+          router.push(
+            `/account/verify?email=${encodeURIComponent(Formdata.email)}`
+          );
         }
-      );
-    } finally {
-      setLoading3(false);
+      } catch (error: any) {
+        setLoading2(false);
+        console.log(error);
+
+        toast.error(error?.response?.data.message);
+      } finally {
+        setLoading2(false);
+      }
     }
   };
 
   const onLogout = useCallback(() => {}, []);
 
   return (
-    <section className="bg-BackgroundLight dark:bg-BackgroundDark">
-      <SnackbarProvider
-        autoHideDuration={3000}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      />
-
-      <div className="min-h-screen flex flex-col items-center justify-center bg-BackgroundLight dark:bg-BackgroundDark px-4 py-8 sm:px-6 lg:px-8">
-        {/* Main Sign Up Card */}
-        <div className="w-full max-w-[26rem] space-y-2 border border-gray-200 dark:border-neutral-800 py-8 px-6 rounded-xl shadow-sm bg-BackgroundLight2 dark:bg-neutral-900">
-          {/* Logo */}
-          <div className="flex justify-center items-center">
-            <Logo className="w-14 h-14" />
+    <div className="flex flex-col justify-center items-center min-h-[100vh] min-h-[100dvh] overflow-hidden w-full bg-black">
+      <Card className="w-full max-w-md mx-4">
+        <CardHeader className="text-center">
+          <div className="flex justify-center items-center mt-4 gap-2">
+            <Logo />
             <h1 className="text-2xl font-semibold tracking-tight text-foreground">
               Gennit
             </h1>
           </div>
-
-          {/* Header */}
-          <div className="text-center space-y-2 mb-6">
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-              Create your account
-            </h1>
-            <p className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400">
-              Welcome! Please fill in the details to get started.
-            </p>
-          </div>
-
+          <CardTitle className="text-2xl font-bold">
+            Create your account
+          </CardTitle>
+          <CardDescription>
+            Welcome! Please fill in the details to get started.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
           {/* Social Login Buttons */}
           <div className="space-y-3">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full relative overflow-hidden transition-all hover:border-primary/50 hover:bg-primary/10 dark:bg-primary/10"
-              disabled={loading2}
-              onClick={handleGoogleSignUp}
+            <LoginSocialGoogle
+              {...{
+                client_id: process.env.NEXT_PUBLIC_GG_APP_ID || "",
+                redirect_uri:
+                  typeof window !== "undefined"
+                    ? window.location.origin
+                    : "http://gennit.app" + "/auth/google/callback",
+                scope: "openid profile email",
+                discoveryDocs: "claims_supported",
+                access_type: "online",
+                onLoginStart: () => {
+                  setLoading2(true);
+                  return false;
+                },
+                onResolve: ({ provider, data }: any) => {
+                  handleGoogleSignUp(provider, data);
+                },
+                onReject: (err: any) => {
+                  console.log(err);
+                  setLoading2(false);
+                },
+                className: "w-full",
+              }}
             >
-              {loading2 ? (
-                <div className="flex items-center justify-center">
-                  <svg
-                    className="animate-spin mr-2 h-4 w-4 text-gray-600"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full relative overflow-hidden transition-all hover:border-primary/50 hover:bg-primary/10 dark:bg-primary/10"
+                disabled={loading2}
+              >
+                {loading2 ? (
+                  <div className="flex items-center justify-center">
+                    <svg
+                      className="animate-spin mr-2 h-4 w-4 text-gray-600"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Signing up...
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center">
+                    <svg
                       stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
                       fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Signing up...
-                </div>
-              ) : (
-                <div className="flex items-center justify-center">
-                  <svg
-                    stroke="currentColor"
-                    fill="currentColor"
-                    strokeWidth="0"
-                    version="1.1"
-                    x="0px"
-                    y="0px"
-                    viewBox="0 0 48 48"
-                    enableBackground="new 0 0 48 48"
-                    className="mr-2 w-4 h-4"
-                    height="1em"
-                    width="1em"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill="#FFC107"
-                      d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12	c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24	c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-                    ></path>
-                    <path
-                      fill="#FF3D00"
-                      d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657	C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-                    ></path>
-                    <path
-                      fill="#4CAF50"
-                      d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-                    ></path>
-                    <path
-                      fill="#1976D2"
-                      d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-                    ></path>
-                  </svg>
-                  Continue with Google
-                </div>
-              )}
-            </Button>
-
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full relative overflow-hidden transition-all hover:border-primary/50 hover:bg-primary/10 dark:bg-primary/10"
-              disabled={loading3}
-              onClick={handleFacebookSignUp}
-            >
-              {loading3 ? (
-                <div className="flex items-center justify-center">
-                  <svg
-                    className="animate-spin mr-2 h-4 w-4 text-gray-600"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Signing up...
-                </div>
-              ) : (
-                <div className="flex items-center justify-center">
-                  <svg
-                    className="mr-2 w-4 h-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 36 36"
-                    fill="url(#facebook__a)"
-                    height="40"
-                    width="40"
-                  >
-                    <defs>
-                      <linearGradient
-                        x1="50%"
-                        x2="50%"
-                        y1="97.078%"
-                        y2="0%"
-                        id="facebook__a"
-                      >
-                        <stop offset="0%" stopColor="#0062E0" />
-                        <stop offset="100%" stopColor="#19AFFF" />
-                      </linearGradient>
-                    </defs>
-                    <path d="M15 35.8C6.5 34.3 0 26.9 0 18 0 8.1 8.1 0 18 0s18 8.1 18 18c0 8.9-6.5 16.3-15 17.8l-1-.8h-4l-1 .8z" />
-                    <path
-                      fill="#FFF"
-                      d="m25 23 .8-5H21v-3.5c0-1.4.5-2.5 2.7-2.5H26V7.4c-1.3-.2-2.7-.4-4-.4-4.1 0-7 2.5-7 7v4h-4.5v5H15v12.7c1 .2 2 .3 3 .3s2-.1 3-.3V23h4z"
-                    />
-                  </svg>
-                  Continue with Facebook
-                </div>
-              )}
-            </Button>
+                      strokeWidth="0"
+                      version="1.1"
+                      x="0px"
+                      y="0px"
+                      viewBox="0 0 48 48"
+                      enableBackground="new 0 0 48 48"
+                      className="mr-2 w-4 h-4"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill="#FFC107"
+                        d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12	c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24	c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+                      ></path>
+                      <path
+                        fill="#FF3D00"
+                        d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657	C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+                      ></path>
+                      <path
+                        fill="#4CAF50"
+                        d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+                      ></path>
+                      <path
+                        fill="#1976D2"
+                        d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+                      ></path>
+                    </svg>
+                    Continue with Google
+                  </div>
+                )}
+              </Button>
+            </LoginSocialGoogle>
           </div>
 
           {/* Divider */}
@@ -569,84 +391,11 @@ const Signup = () => {
                 )}
               </div>
 
-              {/* Username Display */}
-              {fullName && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-neutral-800 rounded-lg border border-gray-200 dark:border-neutral-700">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Username:
-                      </span>
-                      <span className="text-sm text-gray-900 dark:text-gray-100 font-mono">
-                        {fullName}
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      {usernameStatus.checking ? (
-                        <div className="flex items-center space-x-1">
-                          <div className="w-3 h-3 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-                          <span className="text-xs text-gray-500">
-                            Checking...
-                          </span>
-                        </div>
-                      ) : usernameStatus.available === true ? (
-                        <div className="flex items-center space-x-1">
-                          <svg
-                            className="w-4 h-4 text-green-500"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span className="text-xs text-green-600 dark:text-green-400">
-                            Available
-                          </span>
-                        </div>
-                      ) : usernameStatus.available === false ? (
-                        <div className="flex items-center space-x-1">
-                          <svg
-                            className="w-4 h-4 text-orange-500"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span className="text-xs text-orange-600 dark:text-orange-400">
-                            Will add suffix
-                          </span>
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                  {usernameStatus.message && (
-                    <p
-                      className={`text-xs ${
-                        usernameStatus.available === true
-                          ? "text-green-600 dark:text-green-400"
-                          : usernameStatus.available === false
-                            ? "text-orange-600 dark:text-orange-400"
-                            : "text-gray-500 dark:text-gray-400"
-                      }`}
-                    >
-                      {usernameStatus.message}
-                    </p>
-                  )}
-                </div>
-              )}
-
               {/* Password Field */}
               <div>
                 <div className="relative">
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     required
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -659,7 +408,7 @@ const Signup = () => {
                       };
                       SignupValidate(regexProps);
                     }}
-                    className="w-full py-3 px-4 pl-11 border border-gray-300 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-800 text-gray-900 dark:text-gray-100 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-colors"
+                    className="w-full py-3 px-4 pl-11 pr-11 border border-gray-300 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-800 text-gray-900 dark:text-gray-100 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-colors"
                     placeholder="Enter password"
                   />
                   <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
@@ -679,6 +428,47 @@ const Signup = () => {
                       <circle cx="16.5" cy="7.5" r=".5" />
                     </svg>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 transition-colors"
+                  >
+                    {showPassword ? (
+                      <svg
+                        className="w-4 h-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={24}
+                        height={24}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                        <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+                        <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+                        <line x1="2" x2="22" y1="2" y2="22" />
+                      </svg>
+                    ) : (
+                      <svg
+                        className="w-4 h-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={24}
+                        height={24}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    )}
+                  </button>
                 </div>
                 {errormsg.password && Formdata.password && (
                   <p className="text-xs text-TextLight2 dark:text-TextDark2 mt-1">
@@ -733,44 +523,43 @@ const Signup = () => {
                 className="font-medium text-TextLight2 dark:text-TextDark2 underline hover:no-underline"
                 prefetch={false}
               >
-                Sign in
+                Log in
               </Link>
             </span>
           </div>
-        </div>
+        </CardContent>
+      </Card>
 
-        {/* Footer */}
-        <div className="mt-5 max-w-[26rem] w-full space-y-3">
-          <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
-            This site is protected by reCAPTCHA and our{" "}
-            <a
-              href="#"
-              className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
-            >
-              Policy
-            </a>{" "}
-            {/* &{" "}
+      <div className="mt-5 max-w-[26rem] w-full space-y-3">
+        <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
+          This site is protected by reCAPTCHA and our{" "}
+          <a
+            href="#"
+            className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
+          >
+            Policy
+          </a>{" "}
+          {/* &{" "}
                 <a
                   href="#"
                   className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
                 >
                   Terms of Service
                 </a> */}
-          </p>
-          <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
-            ©2025 Gennit. A product of{" "}
-            <a
-              className="text-gray-800 dark:text-white font-medium hover:text-blue-600"
-              href="#"
-            >
-              Klipto Inc.
-            </a>{" "}
-            All rights reserved.
-          </p>
-        </div>
+        </p>
+        <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
+          ©2025 Gennit. A product of{" "}
+          <a
+            className="text-gray-800 dark:text-white font-medium hover:text-blue-600"
+            href="#"
+          >
+            Klipto Inc.
+          </a>{" "}
+          All rights reserved.
+        </p>
       </div>
-    </section>
+    </div>
   );
 };
 
-export default Signup;
+export default withAuth(Signup, true);
