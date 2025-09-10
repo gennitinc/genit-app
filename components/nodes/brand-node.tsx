@@ -8,9 +8,9 @@ import { BorderBeam } from "@/components/ui/border-beam";
 
 export const BrandNode = ({ data }: { data: any }) => {
   const { theme } = useTheme();
-  const [lightColor, setLightColor] = useState("#FAFAFA");
+  const [lightColor, setLightColor] = useState("#1064eb");
   useEffect(() => {
-    setLightColor(theme === "dark" ? "#FAFAFA" : "#2c48e3");
+    setLightColor(theme === "dark" ? "#2c48e3" : "#2c48e3");
   }, [theme]);
 
   return (

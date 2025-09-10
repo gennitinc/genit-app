@@ -886,6 +886,64 @@ export default function BrandOnboardingChecklist() {
     setHasRedirected(false);
   }, [user]);
 
+  // Handle social media callback parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const connected = urlParams.get("connected");
+    const success = urlParams.get("success");
+    const error = urlParams.get("error");
+
+    if (connected && (success || error)) {
+      if (success === "true") {
+        // Connection successful
+        const updatedChannels = [...authenticatedChannels];
+        if (!updatedChannels.includes(connected)) {
+          updatedChannels.push(connected);
+          setAuthenticatedChannels(updatedChannels);
+
+          // Save to localStorage
+          if (user) {
+            const localStorageKey = `onboarding_data_${user._id}`;
+            const existingData = localStorage.getItem(localStorageKey);
+            if (existingData) {
+              try {
+                const parsedData = JSON.parse(existingData);
+                parsedData.authenticatedChannels = updatedChannels;
+                parsedData.lastSaved = new Date().toISOString();
+                localStorage.setItem(
+                  localStorageKey,
+                  JSON.stringify(parsedData)
+                );
+              } catch (error) {
+                console.error(
+                  "Error updating channels in localStorage:",
+                  error
+                );
+              }
+            }
+          }
+        }
+
+        toast.success(
+          `${connected.charAt(0).toUpperCase() + connected.slice(1)} account connected successfully!`
+        );
+
+        // Clean up URL parameters
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+      } else if (error) {
+        // Connection failed
+        toast.error(
+          `${connected.charAt(0).toUpperCase() + connected.slice(1)} connection failed: ${decodeURIComponent(error)}`
+        );
+
+        // Clean up URL parameters
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+      }
+    }
+  }, [authenticatedChannels, user]);
+
   const [showRequirementsDialog, setShowRequirementsDialog] = useState<
     string | null
   >(null);
@@ -900,193 +958,43 @@ export default function BrandOnboardingChecklist() {
     setLoading((prev) => ({ ...prev, [channelId]: true }));
 
     try {
-      if (channelId === "youtube") {
-        // YouTube API integration
-        await handleYouTubeAuth();
-      } else {
-        // Simulate authentication process for other platforms
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      }
-
-      const updatedChannels = authenticatedChannels.includes(channelId)
-        ? authenticatedChannels.filter((id) => id !== channelId)
-        : [...authenticatedChannels, channelId];
-
-      setAuthenticatedChannels(updatedChannels);
-
-      // Save updated channels to localStorage
-      if (user) {
-        const localStorageKey = `onboarding_data_${user._id}`;
-        const existingData = localStorage.getItem(localStorageKey);
-        if (existingData) {
-          try {
-            const parsedData = JSON.parse(existingData);
-            parsedData.authenticatedChannels = updatedChannels;
-            parsedData.lastSaved = new Date().toISOString();
-            localStorage.setItem(localStorageKey, JSON.stringify(parsedData));
-          } catch (error) {
-            console.error("Error updating channels in localStorage:", error);
-          }
-        }
-      }
-    } catch (error) {
-      console.error(`Error connecting ${channelId}:`, error);
-      if (channelId === "youtube") {
-        toast.error(
-          "YouTube connection failed. Please check your Google OAuth setup."
-        );
-      } else {
-        toast.error(`Failed to connect ${channelId}. Please try again.`);
-      }
-    } finally {
-      setLoading((prev) => ({ ...prev, [channelId]: false }));
-    }
-  };
-
-  const handleYouTubeAuth = async () => {
-    const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-
-    if (!GOOGLE_CLIENT_ID) {
-      throw new Error(
-        "Google OAuth Client ID not configured. Please set NEXT_PUBLIC_GOOGLE_CLIENT_ID"
-      );
-    }
-
-    try {
-      console.log("Starting YouTube authentication...");
-
-      // Load Google Identity Services
-      if (!(window as any).google) {
-        console.log("Loading Google Identity Services...");
-        await new Promise<void>((resolve, reject) => {
-          const script = document.createElement("script");
-          script.src = "https://accounts.google.com/gsi/client";
-          script.onload = () => {
-            console.log("Google Identity Services loaded successfully");
-            resolve();
-          };
-          script.onerror = (error) => {
-            console.error("Failed to load Google Identity Services:", error);
-            reject(error);
-          };
-          document.head.appendChild(script);
-        });
-      }
-
-      // Initialize Google Identity Services
-      console.log("Initializing Google Identity Services...");
-      const tokenClient = (
-        window as any
-      ).google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
-        scope:
-          "https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtube.readonly",
-        callback: (response: any) => {
-          console.log("Token response:", response);
-        },
-      });
-
-      // Request access token
-      console.log("Requesting access token...");
-      const tokenResponse = await new Promise<any>((resolve, reject) => {
-        tokenClient.callback = (response: any) => {
-          if (response.error) {
-            reject(new Error(response.error));
-          } else {
-            resolve(response);
-          }
-        };
-        tokenClient.requestAccessToken();
-      });
-
-      console.log("Access token received:", tokenResponse);
-
-      // Fetch user's YouTube channels
-      console.log("Fetching YouTube channels...");
+      // All platforms now use server-side authentication
       const response = await fetch(
-        `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&mine=true`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/integration/${channelId}/auth`,
         {
+          method: "GET",
+          credentials: "include",
           headers: {
-            Authorization: `Bearer ${tokenResponse.access_token}`,
+            "Content-Type": "application/json",
           },
         }
       );
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("YouTube API error:", errorText);
-        throw new Error(
-          `Failed to fetch YouTube channels: ${response.status} ${response.statusText}`
-        );
+        throw new Error(`Failed to initiate ${channelId} authentication`);
       }
 
       const data = await response.json();
-      console.log("YouTube API response:", data);
-
-      if (data.items && data.items.length > 0) {
-        console.log("YouTube channels found:", data.items);
-
-        const channelInfo = {
-          channels: data.items,
-          accessToken: tokenResponse.access_token,
-          expiresAt: new Date(Date.now() + tokenResponse.expires_in * 1000),
-        };
-
-        // Store in localStorage for persistence
-        localStorage.setItem("youtube_auth", JSON.stringify(channelInfo));
-        console.log("YouTube authentication completed successfully");
-
-        return channelInfo;
+      if (data.success && data.data.authUrl) {
+        // Redirect to platform OAuth
+        window.location.href = data.data.authUrl;
+        return; // Don't update state here, will be handled by callback
       } else {
-        throw new Error(
-          "No YouTube channels found. Please make sure you have a YouTube channel."
-        );
+        throw new Error("Invalid response from server");
       }
     } catch (error) {
-      console.error("YouTube auth error:", error);
-      throw error;
+      console.error(`Error connecting ${channelId}:`, error);
+      toast.error(
+        `${channelId.charAt(0).toUpperCase() + channelId.slice(1)} connection failed. Please try again.`
+      );
+    } finally {
+      setLoading((prev) => ({ ...prev, [channelId]: false }));
     }
   };
 
-  const handleXAuth = async () => {
-    const X_ACCESS_TOKEN = process.env.NEXT_PUBLIC_X_ACCESS_TOKEN;
-    const X_ACCESS_TOKEN_SECRET = process.env.NEXT_PUBLIC_X_ACCESS_TOKEN_SECRET;
+  // YouTube auth is now handled server-side
 
-    if (!X_ACCESS_TOKEN || !X_ACCESS_TOKEN_SECRET) {
-      throw new Error(
-        "X Access Token and Access Token Secret not configured. Please set NEXT_PUBLIC_X_ACCESS_TOKEN and NEXT_PUBLIC_X_ACCESS_TOKEN_SECRET"
-      );
-    }
-
-    try {
-      console.log("Starting X authentication...");
-      const response = await fetch(
-        "https://api.x.com/1.1/account/verify_credentials.json",
-        {
-          headers: {
-            Authorization: `Bearer ${X_ACCESS_TOKEN}`,
-          },
-        }
-      );
-      const data = await response.json();
-      console.log("X API response:", data);
-
-      const xInfo = {
-        xInfo: data,
-        accessToken: X_ACCESS_TOKEN,
-        accessTokenSecret: X_ACCESS_TOKEN_SECRET,
-      };
-
-      // Store in localStorage for persistence
-      localStorage.setItem("x_auth", JSON.stringify(xInfo));
-      console.log("X authentication completed successfully");
-
-      return xInfo;
-    } catch (error) {
-      console.error("X auth error:", error);
-      throw error;
-    }
-  };
+  // X auth is now handled server-side
 
   // Filter countries based on search
   const filteredCountries = useMemo(() => {
@@ -2596,7 +2504,7 @@ export default function BrandOnboardingChecklist() {
             "Platform Requirements"
           )
         }
-        description="Before connecting your account, please ensure you meet these requirements:"
+        description="Ensure you meet these requirements:"
       >
         {showRequirementsDialog &&
           platformRequirements[
@@ -2604,7 +2512,7 @@ export default function BrandOnboardingChecklist() {
           ] && (
             <div className="space-y-6">
               {/* Requirements */}
-              <div className="space-y-3">
+              {/* <div className="space-y-3">
                 <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100">
                   Requirements:
                 </h4>
@@ -2621,7 +2529,7 @@ export default function BrandOnboardingChecklist() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </div> */}
 
               {/* Steps */}
               <div className="space-y-3">
@@ -2646,7 +2554,7 @@ export default function BrandOnboardingChecklist() {
               </div>
 
               {/* Note */}
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+              {/* <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
                 <p className="text-sm text-yellow-800 dark:text-yellow-200">
                   <strong>Note:</strong>{" "}
                   {
@@ -2655,7 +2563,7 @@ export default function BrandOnboardingChecklist() {
                     ].note
                   }
                 </p>
-              </div>
+              </div> */}
 
               {/* Action Buttons */}
               <div className="flex justify-end gap-2 pt-4">
