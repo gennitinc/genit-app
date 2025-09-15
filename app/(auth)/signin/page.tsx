@@ -56,6 +56,8 @@ const Login = () => {
   const [loading3, setLoading3] = React.useState<boolean>(false);
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
 
+  const router = useRouter();
+
   const handleInputChange = (Event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = Event.target;
 
@@ -109,19 +111,8 @@ const Login = () => {
         // Fetch current user data
         await fetchCurrentUser();
 
-        // Check if user has completed onboarding and redirect appropriately
-        try {
-          const { getOnboardingRedirectPath } = await import(
-            "@/utils/onboardingUtils"
-          );
-          const redirectPath = await getOnboardingRedirectPath();
-          console.log(`Redirecting to: ${redirectPath}`);
-          router.push(redirectPath);
-        } catch (error) {
-          console.error("Error checking onboarding status:", error);
-          // If there's an error, assume onboarding is needed
-          router.push("/onboarding");
-        }
+        // Onboarding removed: redirect authenticated users straight to /chat
+        router.push("/chat");
       }
     } catch (error: any) {
       setLoading(false);
@@ -164,10 +155,8 @@ const Login = () => {
           // Fetch current user data
           await fetchCurrentUser();
 
-          // Check if user has completed onboarding
-          // The user data will be available after fetchCurrentUser completes
-          // We'll handle the redirect in the AuthenticatedContext or main page
-          window.location.href = "/";
+          // Onboarding removed: go straight to chat
+          window.location.href = "/chat";
         }
       } catch (error: any) {
         setLoading2(false);

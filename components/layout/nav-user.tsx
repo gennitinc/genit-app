@@ -29,20 +29,26 @@ import {
 } from "@/components/ui/sidebar";
 
 export function NavUser({ user }: any) {
-  const { isMobile } = useSidebar();
+  const { isMobile, state } = useSidebar();
   const { theme, setTheme } = useTheme();
   console.log("the user", user);
+
+  const isCollapsed = !isMobile && state === "collapsed";
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild className="p-0">
+          <DropdownMenuTrigger asChild className="p-0 m-0">
             <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-background data-[state=open]:text-foreground w-full"
+              size={isCollapsed ? "sm" : "lg"}
+              className={
+                isCollapsed
+                  ? "justify-center !px-2 data-[state=open]:bg-background data-[state=open]:text-foreground w-full"
+                  : "data-[state=open]:bg-background data-[state=open]:text-foreground w-full"
+              }
             >
-              <Avatar className="w-8 h-8 px-0">
+              <Avatar className={isCollapsed ? "w-6 h-6 px-0" : "w-8 h-8 px-0"}>
                 <AvatarImage
                   src={user?.metadata?.userdp}
                   alt={user?.name}
@@ -50,13 +56,19 @@ export function NavUser({ user }: any) {
                 />
                 <AvatarFallback>{user?.username[0]}</AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight ml-2">
-                <span className="truncate font-semibold">{user?.username}</span>
-                <span className="truncate text-xs text-muted-foreground">
-                  {user?.email}
-                </span>
-              </div>
-              <ChevronsUpDown className="w-4 h-4 ml-auto" />
+              {!isCollapsed && (
+                <>
+                  <div className="grid flex-1 text-left text-sm leading-tight ml-2">
+                    <span className="truncate font-semibold">
+                      {user?.username}
+                    </span>
+                    <span className="truncate text-xs text-muted-foreground">
+                      {user?.email}
+                    </span>
+                  </div>
+                  <ChevronsUpDown className="w-4 h-4 ml-auto" />
+                </>
+              )}
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent

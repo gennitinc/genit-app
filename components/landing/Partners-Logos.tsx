@@ -252,7 +252,7 @@ const logos = [
 
 export default function PartnerLogos() {
   return (
-    <section className="bg-background px-4 py-16 md:px-6 lg:px-8">
+    <section className="px-4 py-16 md:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="grid overflow-hidden rounded-xl border border-muted shadow-lg lg:grid-cols-2">
           <div className="flex items-center px-6 py-12 md:px-8 lg:p-16">

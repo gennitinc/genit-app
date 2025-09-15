@@ -56,8 +56,8 @@ const VerifyEmailComp = () => {
         // Fetch updated user data
         await fetchCurrentUser();
 
-        // Redirect to onboarding after successful verification
-        router.push("/onboarding");
+        // Onboarding removed: redirect to the app
+        router.push("/chat");
       }
     } catch (error: any) {
       const errorMessage =

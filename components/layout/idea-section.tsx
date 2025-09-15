@@ -81,32 +81,18 @@ const images = [
 
 export function IdeaSection() {
   const placeholders = [
-    "Create engaging Instagram captions for my fitness brand...",
-    "Generate a week of Twitter content for my tech startup...",
-    "Write a LinkedIn post about our new product launch...",
-    "Create TikTok video ideas for my fashion brand...",
-    "Design social media graphics for my restaurant...",
-    "Plan a 30-day content calendar for my beauty brand...",
-    "Write Facebook ads copy for my e-commerce store...",
-    "Create YouTube video descriptions for my channel...",
-    "Generate Pinterest pin descriptions for my blog...",
-    "Write email newsletter content for my subscribers...",
-    "Create social media bio for my personal brand...",
-    "Generate hashtag strategies for my niche...",
-    "Write customer service responses for social media...",
-    "Create influencer outreach messages...",
-    "Generate social media contest ideas...",
-    "Write product announcement posts...",
-    "Create behind-the-scenes content ideas...",
-    "Generate user-generated content campaigns...",
-    "Write social media crisis management responses...",
-    "Create seasonal marketing campaigns...",
-    "Generate social media analytics reports...",
-    "Write community engagement posts...",
-    "Create brand voice guidelines...",
-    "Generate social media automation workflows...",
-    "Write thought leadership content...",
-    "Create viral content strategies...",
+    "Design a minimalist logo for a wellness brand...",
+    "Create an Instagram carousel about eco-friendly tips...",
+    "Make a bold product promo poster for a new sneaker...",
+    "Design a YouTube thumbnail for a tech review...",
+    "Create a website hero banner for a SaaS startup...",
+    "Design a clean pricing table graphic...",
+    "Make Facebook ad creatives for a summer sale...",
+    "Create a modern business card layout...",
+    "Design an event flyer with a neon vibe...",
+    "Create a LinkedIn banner for a personal brand...",
+    "Design a product mockup for a coffee brand...",
+    "Create an infographic explaining carbon offsets...",
   ];
 
   const {
@@ -428,7 +414,7 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              Your AI Social Media Team
+              Your AI Media Designer
             </motion.h1>
             <motion.p
               className="mt-4 text-center text-gray-600 dark:text-gray-300 max-w-lg"
@@ -447,8 +433,8 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              Create engaging content, manage campaigns, and grow your brand
-              across all social platforms
+              Create stunning graphics, brand assets, and marketing visuals in
+              minutes—no design degree required
             </motion.p>
           </motion.div>
         </div>
@@ -663,7 +649,7 @@ export function IdeaSection() {
                       aria-label="Select files to upload"
                     />
                   </div>
-                  <button
+                  {/* <button
                     type="submit"
                     disabled={isSubmitDisabled}
                     className={`flex items-center justify-center p-0.5 bg-gradient-to-t from-gray-300 via-gray-200 to-gray-100 dark:from-[#292929] dark:via-[#555555] dark:to-[#292929] rounded-[10px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,0.5)] cursor-pointer border-none outline-none transition-all duration-150 active:scale-[0.92] group ${
@@ -688,6 +674,16 @@ export function IdeaSection() {
                         </svg>
                       )}
                     </div>
+                  </button> */}
+                  <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                    <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+                    <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
+                      {isGenerating || isSubmitting ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        "Create"
+                      )}
+                    </span>
                   </button>
                 </div>
               </form>

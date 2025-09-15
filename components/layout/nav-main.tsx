@@ -42,14 +42,14 @@ const navItems = [
     href: "/chat",
   },
   {
-    title: "AI Brain",
-    icon: Workflow,
-    href: "/workflow",
+    title: "Projects",
+    icon: Layout,
+    href: "/projects",
   },
   {
-    title: "Documentation",
-    icon: BookOpen,
-    href: "/documentation",
+    title: "Templates",
+    icon: Palette,
+    href: "/workflow",
   },
   {
     title: "Billing",
@@ -145,7 +145,9 @@ export function NavMain() {
           ))}
         </SidebarMenu>
       </SidebarGroup>
-
+      <div className="px-2">
+        <hr className="flex-grow border-t border-muted/40" />
+      </div>
       <SidebarGroup>
         <SidebarMenu className={cn(shouldShowCollapsed ? "items-center" : "")}>
           {secondaryNavItems.map((item) => (

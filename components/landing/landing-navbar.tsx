@@ -73,6 +73,7 @@ export function LandingNavbar() {
 
   return (
     <header className="bg-transparent w-full backdrop-blur-sm sticky z-30 top-0">
+      
       <nav className="container mx-auto flex h-16 items-center z-50 justify-between px-4">
         <div className="flex items-center z-40 gap-2">
           {/* Replace <img> with <Image> */}
@@ -192,7 +193,7 @@ export function LandingNavbar() {
                       <span className="transition-colors hover:text-foreground/80 text-foreground/60 rex text-xs sm:text-sm font-medium pl-2 pr-4">
                         Search{" "}
                         <span className="hidden xl:inline-block">
-                          Components
+                          Templates
                         </span>
                       </span>
                       <kbd className="pointer-events-none  hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
@@ -275,13 +276,7 @@ export function LandingNavbar() {
                     >
                       Pricing
                     </a>
-                    <a
-                      target="__blank"
-                      className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                      href="/playground"
-                    >
-                      Agents
-                    </a>
+
                     <a
                       target="__blank"
                       className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
@@ -346,7 +341,7 @@ export function LandingNavbar() {
                       <span className="transition-colors hover:text-foreground/80 text-foreground/60 rex text-xs sm:text-sm font-medium pl-2 pr-4">
                         Search{" "}
                         <span className="hidden xl:inline-block">
-                          Components
+                          Templates
                         </span>
                       </span>
                       <kbd className="pointer-events-none  hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">

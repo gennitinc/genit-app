@@ -51,7 +51,7 @@ export function AppSidebar({
     <Sidebar
       collapsible="icon"
       className={cn(
-        "h-full border-border transition-colors duration-300 bg-background",
+        "h-full border-border transition-colors duration-300 bg-white dark:bg-black [&_[data-sidebar=sidebar]]:bg-white dark:[&_[data-sidebar=sidebar]]:bg-black",
         className
       )}
       {...props}

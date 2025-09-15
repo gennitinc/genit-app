@@ -3,7 +3,7 @@
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getOnboardingRedirectPath } from "@/utils/onboardingUtils";
+// Onboarding removed: no onboarding redirect util needed
 import Loading from "@/utils/Loading";
 import { LandingPage } from "@/components/landing/landing-page";
 
@@ -13,7 +13,7 @@ function Page() {
   const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(true);
 
   useEffect(() => {
-    const checkOnboardingAndRedirect = async () => {
+    const checkAuthAndRedirect = async () => {
       // If still loading, wait
       if (loading) return;
 
@@ -23,21 +23,12 @@ function Page() {
         return;
       }
 
-      try {
-        // Get the appropriate redirect path based on onboarding status
-        const redirectPath = await getOnboardingRedirectPath();
-        console.log(`Redirecting to: ${redirectPath}`);
-        router.push(redirectPath);
-      } catch (error) {
-        console.error("Error checking onboarding status:", error);
-        // If there's an error, assume onboarding is needed
-        router.push("/onboarding");
-      } finally {
-        setIsCheckingOnboarding(false);
-      }
+      // Authenticated: redirect to the app
+      router.push("/chat");
+      setIsCheckingOnboarding(false);
     };
 
-    checkOnboardingAndRedirect();
+    checkAuthAndRedirect();
   }, [user, loading, router]);
 
   // Show loading while checking authentication and onboarding status

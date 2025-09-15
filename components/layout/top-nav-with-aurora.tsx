@@ -20,6 +20,7 @@ import { useState, useEffect, RefObject, useCallback, useRef } from "react";
 import { Logo } from "../logo";
 import { useSidebar } from "../ui/sidebar";
 import { cn } from "@/lib/utils";
+import UserPopOver from "../user/userPopOver";
 
 interface TopNavWithAuroraProps {
   scrollContainerRef?: RefObject<HTMLDivElement>;
@@ -89,85 +90,20 @@ export default function TopNavWithAurora({
             </div>
           </div>
           <div className="flex z-20 items-center gap-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage
-                      src={(user?.metadata as any)?.userdp}
-                      alt={user?.username}
-                      className="object-cover"
-                    />
-                    <AvatarFallback>{user?.username?.[0]}</AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex items-center gap-2 pz-2">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage
-                        className="object-cover"
-                        src={(user?.metadata as any)?.userdp}
-                        alt={user?.username}
-                      />
-                      <AvatarFallback>{user?.username?.[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <span className="font-medium">{user?.username}</span>
-                      <span className="text-xs text-zinc-400">
-                        {user?.email}
-                      </span>
-                    </div>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {/* <DropdownMenuGroup>
-                  <PricingDialog>
-                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                      <Sparkles className="mr-2 h-4 w-4" />
-                      <span>Upgrade to Pro</span>
-                    </DropdownMenuItem>
-                  </PricingDialog>
-                </DropdownMenuGroup> */}
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <BadgeCheck className="mr-2 h-4 w-4" />
-                    <span>Account</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    <span>Billing</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Bell className="mr-2 h-4 w-4" />
-                    <span>Notifications</span>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                >
-                  {mounted &&
-                    (theme === "dark" ? (
-                      <>
-                        <Sun className="mr-2 h-4 w-4" />
-                        <span>Switch to light mode</span>
-                      </>
-                    ) : (
-                      <>
-                        <Moon className="mr-2 h-4 w-4" />
-                        <span>Switch to dark mode</span>
-                      </>
-                    ))}
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
+            >
+              {theme === "dark" ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              )}
+            </Button>
+
+            <UserPopOver />
           </div>
         </div>
       </header>

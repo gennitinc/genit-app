@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { getOnboardingRedirectPath } from "@/utils/onboardingUtils";
+// Onboarding removed: no longer import or use onboarding utilities
 import Loading from "@/utils/Loading";
 
 function withAuth(
@@ -18,24 +18,10 @@ function withAuth(
     useEffect(() => {
       const handleAuthAndOnboarding = async () => {
         if (isAuthPage) {
-          // For auth pages: if user exists, check onboarding and redirect appropriately
+          // For auth pages: if user exists, redirect to app (/chat)
           if (!loading && user) {
             setLoading(false);
-
-            if (!skipOnboardingCheck) {
-              try {
-                setIsCheckingOnboarding(true);
-                const redirectPath = await getOnboardingRedirectPath();
-                router.push(redirectPath);
-              } catch (error) {
-                console.error("Error checking onboarding status:", error);
-                router.push("/onboarding");
-              } finally {
-                setIsCheckingOnboarding(false);
-              }
-            } else {
-              router.push("/chat");
-            }
+            router.push("/chat");
             return;
           }
         } else {
