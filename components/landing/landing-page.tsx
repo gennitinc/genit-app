@@ -5,6 +5,7 @@ import { LandingFooter } from "./landing-footer";
 import PartnerLogos from "./Partners-Logos";
 // import Communityproject from "../layout/community-project";
 import { useEffect, useState } from "react";
+import TemplateGrid from "../common/templateGrid";
 
 export function LandingPage() {
   const [showBanner, setShowBanner] = useState<boolean>(true);
@@ -106,6 +107,7 @@ export function LandingPage() {
           <IdeaSection />
         </div>
       </main>
+      <TemplateGrid />
       <PartnerLogos />
       <LandingFooter />
     </div>

@@ -49,7 +49,7 @@ const navItems = [
   {
     title: "Templates",
     icon: Palette,
-    href: "/workflow",
+    href: "/templates",
   },
   {
     title: "Billing",
@@ -58,29 +58,6 @@ const navItems = [
   },
 ];
 
-// Sample agents data - you can replace this with actual data from your backend
-const availableAgents = [
-  {
-    id: 1,
-    name: "Chat Assistant",
-    href: "/agents/chat",
-  },
-  {
-    id: 2,
-    name: "Code Helper",
-    href: "/agents/code",
-  },
-  {
-    id: 3,
-    name: "Content Writer",
-    href: "/agents/writer",
-  },
-  {
-    id: 4,
-    name: "Data Analyst",
-    href: "/agents/analyst",
-  },
-];
 
 const secondaryNavItems = [
   {

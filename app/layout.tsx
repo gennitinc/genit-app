@@ -6,15 +6,14 @@ import "./globals.css";
 import type React from "react"; // Added import for React
 import { Toaster } from "@/components/ui/sonner";
 import { AuthenticatedContextProvider } from "@/context/AuthenticatedContext";
-import { ChatProvider } from "@/context/ChatProjectContext";
 import { ThemeProvider } from "@/components/theme-provider";
 import Wrapper from "@/components/layout/wrapper";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { FileSystemProvider } from "@/context/FileSystem";
 import { Suspense } from "react";
 import Loading from "@/utils/Loading";
+import { ProjectProvider } from "@/context/DesignProject";
 const inter = Inter({ subsets: ["latin"] });
 
 const metadata: Metadata = {
@@ -41,19 +40,18 @@ export default function RootLayout({
                 disableTransitionOnChange
                 // storageKey="gennit-theme"
               >
-                <ChatProvider>
-                  <FileSystemProvider>
-                    <Suspense
-                      fallback={
-                        <div className="h-screen flex flex-col items-center justify-center">
-                          <Loading />
-                        </div>
-                      }
-                    >
-                      <Wrapper>{children}</Wrapper>
-                    </Suspense>
-                  </FileSystemProvider>
-                </ChatProvider>
+                <ProjectProvider>
+                
+                      <Suspense
+                        fallback={
+                          <div className="h-screen flex flex-col items-center justify-center">
+                            <Loading />
+                          </div>
+                        }
+                      >
+                        <Wrapper>{children}</Wrapper>
+                      </Suspense>
+                </ProjectProvider>
               </ThemeProvider>
               <Toaster />
             </AuthenticatedContextProvider>

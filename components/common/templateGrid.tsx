@@ -38,11 +38,11 @@ import { Input } from "@/components/ui/input";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { PricingDialog } from "@/components/common/pricing-dialog";
-import { useProjectContext } from "@/context/Chat-Context";
 import ShinyText from "../ui/shiny-text";
-import { HomeInfoGrid } from "../common/homeInfoGrid";
-import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
+import { HomeInfoGrid } from "./homeInfoGrid";
+import AnimatedTooltipPreview from "./homeAgentsTooltip";
 import { apiResponse } from "@/utils/apiResponse";
+import { useProjectDesign } from "@/context/DesignProject";
 
 type TemplateItem = {
   id: string;
@@ -50,7 +50,7 @@ type TemplateItem = {
   alt?: string;
 };
 
-export default function HomeGrid() {
+export default function TemplateGrid() {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [viewOpen, setViewOpen] = useState<boolean>(false);
@@ -229,8 +229,8 @@ export default function HomeGrid() {
   const {
     attachedFiles,
     setAttachedFiles,
-    isGenerating,
     error,
+    isGenerating,
     clearError,
     resetGenerationState: resetState,
     createProject,
@@ -238,7 +238,7 @@ export default function HomeGrid() {
     setInputValue,
     processFiles,
     removeAttachedFile,
-  } = useProjectContext();
+  } = useProjectDesign();
 
   const [beamPosition, setBeamPosition] = useState({ x: 50, y: 50 });
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
@@ -360,29 +360,47 @@ export default function HomeGrid() {
     [handleFileProcess]
   );
 
-  // Handle form submission
   const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
-      const validationError = validateInput(inputValue, attachedFiles);
-      if (validationError) {
-        setInputError(validationError);
+      // Validate input before proceeding
+      try {
+        const validationError = validateInput?.(inputValue, attachedFiles);
+        if (validationError) {
+          setInputError(validationError);
+          return;
+        }
+      } catch (err) {
+        console.error("Validation error:", err);
+        setInputError("An unexpected validation error occurred.");
         return;
       }
 
+      // Prevent double submissions or when generating
       if (isGenerating || isSubmitting) return;
+
+      // Prevent submitting with no content
+      if (!inputValue.trim() && attachedFiles.length === 0) {
+        setInputError("Please provide a title or attach at least one file.");
+        return;
+      }
 
       setIsSubmitting(true);
       setInputError(null);
 
       try {
         console.log("Creating project with:", { inputValue, attachedFiles });
-        await createProject(inputValue, attachedFiles);
+
+        await createProject(inputValue, undefined, attachedFiles);
+
+        // Clear state after successful submission
+        setInputValue("");
+        setAttachedFiles([]);
       } catch (error: any) {
         console.error("Failed to create project:", error);
         setInputError(
-          error.message || "Failed to create project. Please try again."
+          error?.message || "Failed to create project. Please try again."
         );
       } finally {
         setIsSubmitting(false);
@@ -624,7 +642,7 @@ export default function HomeGrid() {
                         <div className="chat chat-start p-0 m-0 w-full">
                           <div className="chat-bubble text-sm flex flex-row gap-2 items-center text-gray-900">
                             <p className="text-sm text-muted-foreground dark:text-zinc-400">
-                              Your AI team is
+                              Your AI Designer is
                             </p>
                             <ShinyText
                               text="working..."
@@ -652,34 +670,6 @@ export default function HomeGrid() {
                     </div>
                   </div>
 
-                  {/* Error message */}
-                  <AnimatePresence>
-                    {(inputError || new_error) && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="mx-4 mb-2"
-                      >
-                        <div className="flex items-center gap-2 p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
-                          <AlertCircle className="h-4 w-4 text-red-500 flex-shrink-0" />
-                          <span className="text-sm text-red-700 dark:text-red-300">
-                            {inputError || new_error}
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setInputError(null)}
-                            className="h-6 w-6 p-0 ml-auto text-red-500 hover:text-red-700"
-                            aria-label="Dismiss error"
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
                   <form onSubmit={handleSubmit} className="relative">
                     <div className="relative flex">
                       <textarea
@@ -692,7 +682,7 @@ export default function HomeGrid() {
                         placeholder={
                           isGenerating
                             ? ""
-                            : "Tell your AI team what to create...✦"
+                            : "Tell your AI Designer what to create...✦"
                         }
                         disabled={isGenerating || isSubmitting}
                         style={{
@@ -735,7 +725,7 @@ export default function HomeGrid() {
                               </Button>
                             </div>
                             <div className="space-y-1 max-h-32 overflow-y-auto">
-                              {attachedFiles.map((file, index) => (
+                              {attachedFiles.map((file: any, index: any) => (
                                 <motion.div
                                   key={file.fileKey || index}
                                   initial={{ opacity: 0, x: -10 }}
@@ -893,7 +883,7 @@ export default function HomeGrid() {
                         <div className="chat chat-start p-0 m-0 w-full">
                           <div className="chat-bubble text-sm flex flex-row gap-2 items-center text-gray-900">
                             <p className="text-sm text-muted-foreground dark:text-zinc-400">
-                              Your AI team is
+                              Your AI Designer is
                             </p>
                             <ShinyText
                               text="working..."
@@ -921,34 +911,6 @@ export default function HomeGrid() {
                     </div>
                   </div>
 
-                  {/* Error message */}
-                  <AnimatePresence>
-                    {(inputError || new_error) && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="mx-4 mb-2"
-                      >
-                        <div className="flex items-center gap-2 p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
-                          <AlertCircle className="h-4 w-4 text-red-500 flex-shrink-0" />
-                          <span className="text-sm text-red-700 dark:text-red-300">
-                            {inputError || new_error}
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setInputError(null)}
-                            className="h-6 w-6 p-0 ml-auto text-red-500 hover:text-red-700"
-                            aria-label="Dismiss error"
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
                   <form onSubmit={handleSubmit} className="relative">
                     <div className="relative flex">
                       <textarea
@@ -962,7 +924,7 @@ export default function HomeGrid() {
                           isGenerating
                             ? ""
                             : (placeholders?.[0] ??
-                                "Tell your AI team what to create...") + "✦"
+                                "Tell your AI Designer what to create...") + "✦"
                         }
                         disabled={isGenerating || isSubmitting}
                         style={{
@@ -1005,7 +967,7 @@ export default function HomeGrid() {
                               </Button>
                             </div>
                             <div className="space-y-1 max-h-32 overflow-y-auto">
-                              {attachedFiles.map((file, index) => (
+                              {attachedFiles.map((file: any, index: any) => (
                                 <motion.div
                                   key={file.fileKey || index}
                                   initial={{ opacity: 0, x: -10 }}

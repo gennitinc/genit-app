@@ -23,9 +23,9 @@ import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { PricingDialog } from "@/components/common/pricing-dialog";
-import { useProjectContext } from "@/context/Chat-Context";
+import { useProjectDesign } from "@/context/DesignProject";
 import ShinyText from "../ui/shiny-text";
-import HomeGrid from "../common/homeGrid";
+import HomeGrid from "../common/templateGrid";
 import { HomeInfoGrid } from "../common/homeInfoGrid";
 import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
 
@@ -107,7 +107,7 @@ export function IdeaSection() {
     setInputValue,
     processFiles,
     removeAttachedFile,
-  } = useProjectContext();
+  } = useProjectDesign();
 
   const [beamPosition, setBeamPosition] = useState({ x: 50, y: 50 });
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
@@ -257,7 +257,7 @@ export function IdeaSection() {
 
       try {
         console.log("Creating project with:", { inputValue, attachedFiles });
-        await createProject(inputValue, attachedFiles);
+        await createProject(inputValue, undefined, attachedFiles);
       } catch (error: any) {
         console.error("Failed to create project:", error);
         setInputError(
@@ -588,7 +588,7 @@ export function IdeaSection() {
                           </Button>
                         </div>
                         <div className="space-y-1 max-h-32 overflow-y-auto">
-                          {attachedFiles.map((file, index) => (
+                          {attachedFiles.map((file: any, index: any) => (
                             <motion.div
                               key={file.fileKey || index}
                               initial={{ opacity: 0, x: -10 }}
