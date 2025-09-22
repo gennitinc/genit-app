@@ -3,6 +3,9 @@ import { useRouter } from "next/navigation";
 import { useUserContext } from "./AuthenticatedContext";
 import { apiResponse } from "@/utils/apiResponse";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
+import { demoMessages } from "../components/chat/dummyMessage";
 
 // ====== ENUMS ======
 export enum MediaType {
@@ -52,7 +55,7 @@ export interface IGenerationItem {
   type: MediaType;
   url: string;
   status: GenerationStatus;
-  content?: string;
+  text?: string;
 }
 
 export interface IGenerationGroup {
@@ -69,7 +72,7 @@ export interface IMessage {
   id: string;
   role: MessageRole;
   type: "user" | "ai";
-  content: string;
+  text: string;
   analysis?: string;
   totalTime?: number;
   versionId?: string;
@@ -120,17 +123,21 @@ interface IProjectDesignContext {
   setGenerations: React.Dispatch<React.SetStateAction<any[]>>;
 
   isGenerating: boolean;
+  isLoadingProject: boolean;
   clearError: () => void;
   resetGenerationState: () => void;
   createProject: (
     value: string,
-    description?: string,
     attachedFile?: any
-  ) => void;
+  ) => Promise<{ type: boolean; message: string; id?: string }>;
+  fetchProject: (projectId: string) => Promise<{
+    success: boolean;
+    error?: "not_found" | "unauthorized" | "server_error";
+  }>;
 
   toggleGeneration: (id: string) => void;
   retryLoading: (id: string) => void;
-
+  handleLocalStorageDraft: () => void;
   editMessage: (
     messageId: string,
     updatedContent: string,
@@ -148,7 +155,7 @@ interface IProjectDesignContext {
   ) => void;
   handleGenerationItemClick: (generationId: string) => void;
 
-  sendMessage: (
+  generateMessage: (
     messageContent: string,
     files: File[] | null,
     projectId: string
@@ -219,7 +226,10 @@ interface IProjectDesignContext {
 
   clearInput: () => void;
   removeAttachedFile: (index: number) => void;
-
+  messages: any[];
+  sendMessage: any;
+  status: any;
+  setMessages: any;
   error: string | null;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
 }
@@ -236,15 +246,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const router = useRouter();
   const user = useUserContext().user;
   const userId = String(user?._id);
-
-  // Socket state
-  const [socket, setSocket] = useState<null>(null);
   const [currentProjectRoom, setCurrentProjectRoom] = useState<string | null>(
     null
   );
-  const streamMessageIdRef = useRef<string | null>(null);
-  const latestStreamContent = useRef<string>("");
-  const streamUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // General state
   const [isGenerating, setIsGenerating] = useState(false);
@@ -281,6 +285,163 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [streamingFiles] = useState<Set<string>>(new Set());
   const [streamingContent, setStreamingContent] = useState<string>("");
   const [streamingAnalysis, setStreamingAnalysis] = useState<string>("");
+  const [isProcessingDraft, setIsProcessingDraft] = useState(false);
+
+  // Transform project messages to include role and parts for compatibility with useChat
+  const transformMessages = (messages: any[]) => {
+    return (
+      messages?.map((msg) => {
+        // If message already has parts (like demoMessages), use them as-is
+        if (msg.parts && Array.isArray(msg.parts)) {
+          return {
+            ...msg,
+            role: (msg.type === "user" ? "user" : "assistant") as
+              | "user"
+              | "assistant",
+            // Keep existing parts structure
+            parts: msg.parts,
+            // Move attachedFiles to message level for user messages
+            ...(msg.type === "user" &&
+              msg.fileAttachments && {
+                attachedFiles: msg.fileAttachments.map((file: any) => ({
+                  id: file.id || `file-${Date.now()}`,
+                  name: file.name,
+                  type: file.type,
+                  filePath: file.url || file.filePath,
+                  status: "uploaded" as const,
+                })),
+              }),
+          };
+        }
+
+        // Otherwise, transform from project message format (with text at root level)
+        return {
+          ...msg,
+          role: (msg.type === "user" ? "user" : "assistant") as
+            | "user"
+            | "assistant",
+          parts:
+            msg.type === "user"
+              ? [
+                  {
+                    type: "text" as const,
+                    text: msg.text,
+                  },
+                ]
+              : [
+                  { type: "reasoning" as const, text: msg.analysis || "" },
+                  { type: "text" as const, text: msg.text || "" },
+                ],
+          // Move attachedFiles to message level for user messages
+          ...(msg.type === "user" &&
+            msg.fileAttachments && {
+              attachedFiles: msg.fileAttachments.map((file: any) => ({
+                id: file.id || `file-${Date.now()}`,
+                name: file.name,
+                type: file.type,
+                filePath: file.url || file.filePath,
+                status: "uploaded" as const,
+              })),
+            }),
+        };
+      }) || []
+    );
+  };
+
+  const { messages, sendMessage, status, setMessages } = useChat({
+    messages: transformMessages(project?.messages || []),
+    transport: new DefaultChatTransport({
+      api: `/project/generate/${project?._id}`,
+    }),
+  });
+
+  const handleLocalStorageDraft = async () => {
+    // Only process if project is loaded and messages array is empty (new project)
+
+    console.log("hit 1");
+    console.log("id project", project);
+    if (
+      !project ||
+      (project.messages && project.messages.length > 0) ||
+      isProcessingDraft
+    ) {
+      console.log("hit 2");
+      return;
+    }
+
+    console.log("hit 3");
+
+    try {
+      const draftData = localStorage.getItem("newData");
+      if (draftData) {
+        const { prompt, files } = JSON.parse(draftData);
+
+        console.log("check", prompt);
+
+        if (prompt) {
+          setIsProcessingDraft(true);
+
+          // Create user message immediately for engagement
+          const userMessage = {
+            id: `user-${Date.now()}`,
+            role: "user" as const,
+            type: "user",
+            parts: [
+              {
+                type: "text" as const,
+                text: prompt,
+              },
+            ],
+            ...(files &&
+              files.length > 0 && {
+                attachedFiles: files.map((file: any) => ({
+                  id: file.id || `file-${Date.now()}`,
+                  name: file.name,
+                  type: file.type,
+                  filePath:
+                    file.url || file.filePath || URL.createObjectURL(file),
+                  status: "uploaded" as const,
+                })),
+              }),
+            createdAt: new Date(),
+          };
+
+          // Create temporary AI typing message
+          const aiTypingMessage = {
+            id: `ai-typing-${Date.now()}`,
+            role: "assistant" as const,
+            type: "ai",
+            parts: [{ type: "text" as const, text: "" }],
+            createdAt: new Date(),
+            metadata: { isStreaming: true, isTyping: true },
+          };
+
+          // Add both messages to the chat immediately
+          setMessages([userMessage, aiTypingMessage]);
+
+          // Start AI generation - this will replace the typing message with real response
+          await sendMessage(prompt, {
+            body: {
+              mediaType: "image",
+              files: files || [],
+              projectId: project._id,
+            },
+          });
+
+          // Clear localStorage and input state after processing
+          localStorage.removeItem("draftData");
+          clearInput(); // Clear input value and attached files from context
+          setIsProcessingDraft(false);
+        }
+      }
+    } catch (error) {
+      console.error("Error processing localStorage draft:", error);
+      // Clear corrupted localStorage data and input state
+      localStorage.removeItem("draftData");
+      clearInput(); // Clear input value and attached files from context
+      setIsProcessingDraft(false);
+    }
+  };
 
   // ====== Core Handlers ======
   const clearError = () => setError(null);
@@ -292,33 +453,122 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     clearError();
   };
 
-  const createProject = (
-    value: string,
-    description?: string,
-    attachedFile?: any
-  ) => {
-    // const newProject: IDesignProject = {
-    //   _id: Date.now().toString(),
-    //   title,
-    //   description,
-    //   status: ProjectStatus.ACTIVE,
-    //   userId,
-    //   userName,
-    //   collaborators: [],
-    //   messages: [],
-    //   analytics: {
-    //     totalMessages: 0,
-    //     totalGenerations: 0,
-    //     totalFeedback: 0,
-    //     likes: 0,
-    //     dislikes: 0,
-    //     views: 0,
-    //   },
-    //   tags: [],
-    //   createdAt: new Date(),
-    //   updatedAt: new Date(),
-    // };
-    // setProject(newProject);
+  const createProject = async (value: string, attachedFile?: any) => {
+    const newProject = {
+      title: value,
+      status: ProjectStatus.ACTIVE,
+      userId,
+      userName,
+      collaborators: [],
+      messages: [],
+      analytics: {
+        totalMessages: 0,
+        totalGenerations: 0,
+        totalFeedback: 0,
+        likes: 0,
+        dislikes: 0,
+        views: 0,
+      },
+      tags: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    console.log("Creating project...");
+
+    try {
+      const response = await apiResponseFileUpload.post(
+        "/project/create",
+        newProject,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 201) {
+        const data = response.data;
+        setProject(data.data); // Set the project data
+
+        // Store value and attachedFile as a JSON string in localStorage
+        localStorage.setItem(
+          "newData",
+          JSON.stringify({
+            value,
+            attachedFile,
+          })
+        );
+
+        return {
+          type: true,
+          message: data.message || "project created successfully",
+          id: data.data._id, // Use _id from the nested data object
+        };
+      }
+    } catch (error) {
+      console.error("Error creating project:", error);
+      return {
+        type: false,
+        message: "unable to create project",
+      };
+    }
+
+    return {
+      type: false,
+      message: "unexpected error occurred",
+    };
+  };
+
+  const fetchProject = async (
+    projectId: string
+  ): Promise<{
+    success: boolean;
+    error?: "not_found" | "unauthorized" | "server_error";
+  }> => {
+    if (!projectId) {
+      console.error("No project ID provided");
+      return { success: false, error: "not_found" };
+    }
+
+    setIsLoadingProject(true);
+    setError(null);
+
+    try {
+      const response = await apiResponse.get(`/project/${projectId}`, {
+        withCredentials: true,
+      });
+
+      if (response.status === 200 && response.data.success) {
+        setProject(response.data.data);
+        console.log("Project fetched successfully:", response.data.data);
+
+        handleLocalStorageDraft();
+        return { success: true };
+      } else {
+        return { success: false, error: "server_error" };
+      }
+    } catch (error: any) {
+      console.error("Error fetching project:", error);
+
+      // Handle different error types based on response status
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 404) {
+          setError("Project not found");
+          return { success: false, error: "not_found" };
+        } else if (status === 400) {
+          setError("You don't have permission to access this project");
+          return { success: false, error: "unauthorized" };
+        } else {
+          setError("Server error occurred");
+          return { success: false, error: "server_error" };
+        }
+      } else {
+        setError("Network error occurred");
+        return { success: false, error: "server_error" };
+      }
+    } finally {
+      setIsLoadingProject(false);
+    }
   };
 
   const toggleGeneration = (id: string) => {
@@ -342,9 +592,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       setIsGenerating(true);
       await apiResponseFileUpload.put(
-        `/projects/${projectId}/messages/${messageId}`,
+        `/project/${projectId}/messages/${messageId}`,
         {
-          content: updatedContent,
+          text: updatedContent,
           files,
         }
       );
@@ -360,17 +610,26 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const sendMessage = async (
+  const generateMessage = async (
     messageContent: string,
     files: File[] | null,
     projectId: string
   ) => {
     try {
       setIsGenerating(true);
-      await apiResponseFileUpload.post(`/projects/${projectId}/messages`, {
-        content: messageContent,
-        files,
-      });
+
+      const formData = new FormData();
+      formData.append("prompt", messageContent);
+      formData.append("mediaType", "image");
+      files?.forEach((file) => formData.append("files[]", file));
+
+      await apiResponseFileUpload.post(
+        `/project/generate/${projectId}`,
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
     } catch (error) {
       console.error("Error sending message:", error);
       if (error instanceof Error) {
@@ -406,19 +665,94 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // ====== Placeholder UI handlers ======
-  const handleInput = () => {};
-  const handleKeyDown = () => {};
-  const handlePaste = () => {};
-  const processFiles = () => {};
-  const handleFileSelect = () => {};
-  const handleDragEnter = () => {};
-  const handleDragLeave = () => {};
-  const handleDragOver = () => {};
-  const handleDrop = () => {};
+  const handleInput = (event?: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (!event) return;
+    setInputValue(event.target.value);
+  };
+
+  const handleKeyDown = (_event?: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Reserved for future shortcuts
+  };
+
+  const handlePaste = () => {
+    // Reserved: paste handler (e.g., paste images)
+  };
+
+  const processFiles = (files: File[] = []) => {
+    if (!files || files.length === 0) return;
+    const allowedPrefixes = ["image/", "video/"];
+    const maxFileSizeBytes = 10 * 1024 * 1024; // 10MB
+
+    const filtered = files.filter((file) => {
+      const isAllowedType =
+        !!file.type && allowedPrefixes.some((p) => file.type.startsWith(p));
+      const isAllowedSize = file.size <= maxFileSizeBytes;
+      return isAllowedType && isAllowedSize;
+    });
+
+    if (filtered.length === 0) return;
+
+    setAttachedFiles((prev) => [...prev, ...filtered]);
+    setFileLoadingStates((prev) => {
+      const next = { ...prev };
+      filtered.forEach((f, idx) => {
+        const key = (f as any).fileKey || `${f.name}-${Date.now()}-${idx}`;
+        (f as any).fileKey = key;
+        next[key] = false; // not loading by default
+      });
+      return next;
+    });
+  };
+
+  const handleFileSelect = (e?: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e) return;
+    const files = Array.from(e.target.files || []);
+    processFiles(files as File[]);
+    // reset input value so same file can be re-selected
+    e.target.value = "";
+  };
+
+  const handleDragEnter = (e?: React.DragEvent) => {
+    if (!e) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setDragCounter((c) => c + 1);
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e?: React.DragEvent) => {
+    if (!e) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setDragCounter((c) => Math.max(0, c - 1));
+    setIsDragOver((prev) => (dragCounter - 1 <= 0 ? false : prev));
+  };
+
+  const handleDragOver = (e?: React.DragEvent) => {
+    if (!e) return;
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e?: React.DragEvent) => {
+    if (!e) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const files = Array.from(e.dataTransfer?.files || []);
+    processFiles(files as File[]);
+    setDragCounter(0);
+    setIsDragOver(false);
+  };
+
   const scrollToBottom = () => {};
   const autoResize = () => {};
-  const clearInput = () => {};
-  const removeAttachedFile = () => {};
+  const clearInput = () => {
+    setInputValue("");
+    setAttachedFiles([]);
+  };
+  const removeAttachedFile = (index: number) => {
+    setAttachedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
 
   return (
     <ProjectDesignContext.Provider
@@ -428,9 +762,15 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         generations,
         setGenerations,
         isGenerating,
+        isLoadingProject,
         clearError,
+        messages,
+        sendMessage,
+        status,
+        setMessages,
         resetGenerationState,
         createProject,
+        fetchProject,
         toggleGeneration,
         retryLoading,
         editMessage,
@@ -438,7 +778,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         addReaction,
         removeReaction,
         handleGenerationItemClick,
-        sendMessage,
+        generateMessage,
         isLiveMode,
         isMobile,
         isDrawerOpen,
@@ -483,6 +823,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         autoResize,
         clearInput,
         removeAttachedFile,
+        handleLocalStorageDraft,
         error,
         setError,
       }}

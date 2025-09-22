@@ -30,7 +30,6 @@ import {
 } from "@/components/ai-elements/reasoning";
 import { Response } from "@/components/ai-elements/response";
 interface AIMessageProps {
-  content: string;
   message: any;
   analysis?: string;
   totalTime?: number;
@@ -47,8 +46,8 @@ interface AIMessageProps {
 
 export function AIMessage({
   message,
-  content,
-  analysis,
+  // content,
+  // analysis,
   totalTime,
   versionId,
   isStreaming = false,
@@ -64,63 +63,6 @@ export function AIMessage({
   const [displayContent, setDisplayContent] = useState("");
   const [displayAnalysis, setDisplayAnalysis] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-
-  // Enhanced streaming effect for content with real-time updates
-  useEffect(() => {
-    if (isStreaming && streamingContent) {
-      // Use the real streaming content directly
-      setDisplayContent(streamingContent);
-      setIsTyping(true);
-    } else if (isStreaming && content) {
-      // Fallback to typewriter effect if no streaming content
-      setIsTyping(true);
-      setDisplayContent("");
-
-      let currentIndex = 0;
-      const typingInterval = setInterval(() => {
-        if (currentIndex < content.length) {
-          setDisplayContent(content.slice(0, currentIndex + 1));
-          currentIndex++;
-        } else {
-          setIsTyping(false);
-          clearInterval(typingInterval);
-        }
-      }, 15);
-
-      return () => {
-        clearInterval(typingInterval);
-        setIsTyping(false);
-      };
-    } else {
-      setDisplayContent(content);
-      setIsTyping(false);
-    }
-  }, [content, isStreaming, streamingContent]);
-
-  // Enhanced streaming effect for analysis
-  useEffect(() => {
-    if (isStreaming && streamingAnalysis) {
-      // Use the real streaming analysis directly
-      setDisplayAnalysis(streamingAnalysis);
-    } else if (isStreaming && analysis) {
-      setDisplayAnalysis("");
-      let currentIndex = 0;
-      const typingInterval = setInterval(() => {
-        if (currentIndex < analysis.length) {
-          setDisplayAnalysis(analysis.slice(0, currentIndex + 1));
-          currentIndex++;
-        } else {
-          clearInterval(typingInterval);
-        }
-      }, 10);
-
-      return () => {
-        clearInterval(typingInterval);
-      };
-    } else {
-      setDisplayAnalysis(analysis || "");
-    }
-  }, [analysis, isStreaming, streamingAnalysis]);
 
   const formatTime = (ms: number) => {
     if (!ms || ms <= 0) return "";
@@ -166,7 +108,7 @@ export function AIMessage({
                   <Reasoning
                     key={`${message.id}-${i}`}
                     className="w-full"
-                    isStreaming={status === "streaming"}
+                    isStreaming={isStreaming}
                   >
                     <ReasoningTrigger />
                     <ReasoningContent>{part.text}</ReasoningContent>

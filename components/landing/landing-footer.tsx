@@ -100,13 +100,13 @@ export function LandingFooter() {
   return (
     <footer className="relative border-t border-border overflow-hidden transition-colors duration-300">
       {/* Background Pattern */}
-      <div
+      {/* <div
         className="absolute inset-0 z-0 opacity-[0.03]"
         style={{
           backgroundImage:
             "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%239C92AC' fillOpacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
         }}
-      />
+      /> */}
 
       {/* Back to Top Button */}
       <div
@@ -140,10 +140,10 @@ export function LandingFooter() {
         <div className="container mx-auto py-10 px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="max-w-md">
-              <h2 className="text-2xl font-bold text-foreground mb-2">
+              <h2 className="text-xl font-bold text-foreground mb-2">
                 Stay in the loop
               </h2>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Subscribe to our newsletter for the latest updates, exclusive
                 offers, and insights.
               </p>
@@ -171,230 +171,186 @@ export function LandingFooter() {
       </div>
 
       {/* Main Footer Content */}
-      <div className="container mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8 relative z-10">
-        <div
-          className={cn(
-            "grid grid-cols-1 gap-10 lg:grid-cols-9 transition-opacity duration-1000",
-            isLoaded ? "opacity-100" : "opacity-0"
-          )}
-        >
-          {/* Company Info */}
-          <div className="space-y-8 lg:col-span-3">
-            <div className="flex items-center gap-2">
-              <Logo className="w-12 h-12 flex-shrink-0" />
-              <Link href="/" className="mr-6 flex items-center space-x-2">
-                <span className="text-xl font-semibold">Gennit</span>
-              </Link>
-            </div>
-            <p className="text-base text-muted-foreground max-w-md">
-              Making the world a better place through constructing elegant
-              hierarchies and innovative solutions for tomorrow's challenges.
-            </p>
-
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="theme-mode"
-                  checked={theme === "dark"}
-                  onCheckedChange={toggleTheme}
-                />
-                <Label htmlFor="theme-mode" className="cursor-pointer">
-                  {theme === "dark" ? (
-                    <Moon className="h-4 w-4" />
-                  ) : (
-                    <Sun className="h-4 w-4" />
-                  )}
-                </Label>
-              </div>
-
-              <Separator orientation="vertical" className="h-6" />
-
-              <Select defaultValue="en">
-                <SelectTrigger className="w-[110px] h-8 text-xs">
-                  <Globe className="mr-2 h-3.5 w-3.5" />
-                  <SelectValue placeholder="Language" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">English</SelectItem>
-                  {/* <SelectItem value="es">Español</SelectItem>
-                  <SelectItem value="fr">Français</SelectItem>
-                  <SelectItem value="de">Deutsch</SelectItem>
-                  <SelectItem value="ja">日本語</SelectItem> */}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-primary mt-0.5" />
-                <span className="text-sm text-muted-foreground">
-                  123 Innovation Drive, Tech City, TC 10101
-                </span>
-              </div>
-              {/* <div className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-primary" />
-                <span className="text-sm text-muted-foreground">
-                  +1 (555) 123-4567
-                </span>
-              </div> */}
-              <div className="flex items-center space-x-3">
-                <Mail className="h-5 w-5 text-primary" />
-                <span className="text-sm text-muted-foreground">
-                  contact@gennit.com
-                </span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-3 w-full">
-              {[
-                { icon: Facebook, label: "Facebook" },
-                // { icon: Instagram, label: "Instagram" },
-                { icon: Twitter, label: "Twitter" },
-                { icon: Linkedin, label: "LinkedIn" },
-                { icon: Youtube, label: "YouTube" },
-                { icon: Github, label: "GitHub" },
-              ].map((social) => (
-                <TooltipProvider key={social.label}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link
-                        href="#"
-                        className="text-muted-foreground hover:text-primary transition-colors duration-200 p-2.5 rounded-full hover:bg-primary/10 border border-transparent hover:border-primary/20"
-                      >
-                        <span className="sr-only">{social.label}</span>
-                        <social.icon className="h-5 w-5" />
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{social.label}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ))}
-            </div>
+      <footer className="flex flex-wrap justify-center lg:justify-between overflow-hidden gap-10 md:gap-20 py-16 px-6 md:px-16 lg:px-24 xl:px-32 text-[13px] text-muted-foreground bg-white dark:bg-black">
+        <div className="flex flex-wrap items-start gap-10 md:gap-[60px] xl:gap-[140px]">
+          <div className="flex items-center gap-2">
+            <Logo className="w-12 h-12 flex-shrink-0" />
+            <Link href="/" className="mr-6 flex items-center space-x-2">
+              <span className="text-xl font-semibold">Gennit</span>
+            </Link>
           </div>
-
-          {/* Links Sections */}
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:col-span-5 lg:col-start-5 w-full">
-            {/* <div className="space-y-6">
-              <h3 className="text-sm font-semibold text-foreground tracking-wider uppercase">
-                Solutions
-              </h3>
-              <ul className="space-y-4">
-                {[
-                  "Marketing Automation",
-                  "Data Analytics",
-                  "E-Commerce",
-                  "Business Intelligence",
-                  "Content Management",
-                ].map((item) => (
-                  <li key={item}>
-                    <Link
-                      href="#"
-                      className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
-                    >
-                      <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
-                      {item}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div> */}
-            <div className="space-y-6">
-              <h3 className="text-sm font-semibold text-foreground tracking-wider uppercase">
-                Support & Resources
-              </h3>
-              <ul className="space-y-4">
-                <li>
-                  <Link href="/pricing" className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center">
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
-                    Pricing Plans
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/documentation" className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center">
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
-                    Documentation
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/help" className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center">
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
-                    Implementation Guides
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div className="space-y-6">
-              <h3 className="text-sm font-semibold text-foreground tracking-wider uppercase">
-                Company
-              </h3>
-              <ul className="space-y-4">
-                <li>
-                  <Link href="/about" className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center">
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact" className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center">
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
-                    Contact
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/company" className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center">
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
-                    Company
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/features" className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center">
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
-                    Features
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/community" className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center">
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
-                    Market Place
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          <div>
+            <p className="text-foreground font-semibold">Product</p>
+            <ul className="mt-2 space-y-2">
+              <li>
+                <a href="/" className="hover:text-indigo-600 transition">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="/" className="hover:text-indigo-600 transition">
+                  Support
+                </a>
+              </li>
+              <li>
+                <a href="/" className="hover:text-indigo-600 transition">
+                  Pricing
+                </a>
+              </li>
+              <li>
+                <a href="/" className="hover:text-indigo-600 transition">
+                  Affiliate
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-foreground font-semibold">Resources</p>
+            <ul className="mt-2 space-y-2">
+              <li>
+                <a href="/" className="hover:text-indigo-600 transition">
+                  Company
+                </a>
+              </li>
+              <li>
+                <a href="/" className="hover:text-indigo-600 transition">
+                  Blogs
+                </a>
+              </li>
+              <li>
+                <a href="/" className="hover:text-indigo-600 transition">
+                  Community
+                </a>
+              </li>
+              <li>
+                <a href="/" className="hover:text-indigo-600 transition">
+                  Careers
+                  <span className="text-xs text-white bg-indigo-600 rounded-md ml-2 px-2 py-1">
+                    We’re hiring!
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="/" className="hover:text-indigo-600 transition">
+                  About
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-foreground font-semibold">Legal</p>
+            <ul className="mt-2 space-y-2">
+              <li>
+                <a href="/" className="hover:text-indigo-600 transition">
+                  Privacy
+                </a>
+              </li>
+              <li>
+                <a href="/" className="hover:text-indigo-600 transition">
+                  Terms
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-
-        <Separator className="my-10 opacity-30" />
-
-        <div
-          className={cn(
-            "flex flex-col md:flex-row justify-between items-center gap-4 transition-opacity duration-1000",
-            isLoaded ? "opacity-100" : "opacity-0"
-          )}
-        >
-          <p className="text-sm text-muted-foreground">
-            &copy; {currentYear} Gennit, Inc. All rights reserved.
+        <div className="flex flex-col max-md:items-center max-md:text-center gap-2 items-end">
+          <p className="max-w-60">
+            Making every customer feel valued—no matter the size of your
+            audience.
           </p>
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200">
-              Terms of Service
-            </Link>
-            <Link href="/cookies" className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200">
-              Cookie Settings
-            </Link>
-            <Link href="/accessibility" className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200">
-              Accessibility
-            </Link>
-            <Link href="/sitemap" className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200">
-              Sitemap
-            </Link>
+          <div className="flex items-center gap-4 mt-3">
+            <a
+              href="https://dribbble.com/prebuiltui"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={24}
+                height={24}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-dribbble size-5 hover:text-indigo-500"
+                aria-hidden="true"
+              >
+                <circle cx={12} cy={12} r={10} />
+                <path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94" />
+                <path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32" />
+                <path d="M8.56 2.75c4.37 6 6 9.42 8 17.72" />
+              </svg>
+            </a>
+            <a
+              href="https://www.linkedin.com/company/prebuiltui"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={24}
+                height={24}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-linkedin size-5 hover:text-indigo-500"
+                aria-hidden="true"
+              >
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                <rect width={4} height={12} x={2} y={9} />
+                <circle cx={4} cy={4} r={2} />
+              </svg>
+            </a>
+            <a href="https://x.com/prebuiltui" target="_blank" rel="noreferrer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={24}
+                height={24}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-twitter size-5 hover:text-indigo-500"
+                aria-hidden="true"
+              >
+                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+              </svg>
+            </a>
+            <a
+              href="https://www.youtube.com/@prebuiltui"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={24}
+                height={24}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-youtube size-6 hover:text-indigo-500"
+                aria-hidden="true"
+              >
+                <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path>
+                <path d="m10 15 5-3-5-3z" />
+              </svg>
+            </a>
           </div>
+          <p className="mt-3 text-center">
+            © 2025 <Link href="/">Gennit AI</Link>
+          </p>
         </div>
-      </div>
+      </footer>
     </footer>
   );
 }

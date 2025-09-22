@@ -7,6 +7,7 @@ import {
   type GenerationGroup,
   AIThinkingContent,
 } from "@/components/chat/messages";
+import { DefaultChatTransport } from "ai";
 import { useChat } from "@ai-sdk/react";
 // import {
 //   Source,
@@ -14,7 +15,7 @@ import { useChat } from "@ai-sdk/react";
 //   SourcesContent,
 //   SourcesTrigger,
 // } from "@/components/ai-elements/source";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Loader } from "@/components/ai-elements/loader";
 
 import {
@@ -33,10 +34,11 @@ import {
   MessageContent,
 } from "@/components/ai-elements/message";
 import { useProjectDesign } from "@/context/DesignProject";
+import { ChatInput } from "./chat-input";
 
 interface messageType {
   type: string;
-  content: string;
+  text: string;
   role: string;
   id: string;
   parts: {
@@ -44,309 +46,6 @@ interface messageType {
     text: string;
   }[];
 }
-
-export const demoMessages: any[] = [
-  {
-    id: "msg-1",
-    role: "user",
-    type: "user",
-    content:
-      "Explain the difference between streaming and non-streaming AI responses.",
-    parts: [
-      {
-        type: "text",
-        text: "Explain the difference between streaming and non-streaming AI responses.",
-      },
-    ],
-  },
-  {
-    id: "msg-2",
-    role: "assistant",
-    type: "ai",
-    content: `### Streaming vs Non-Streaming
-
-- **Streaming**: Sends partial results as they are generated, feels real-time.
-- **Non-streaming**: Waits until the full response is ready before sending.
-
-Streaming is ideal for chat-like experiences, non-streaming is better for quick, short results.`,
-    analysis: `User wants a conceptual comparison. I'll break it into bullet points for clarity and highlight the pros of each approach.`,
-    totalTime: 2450,
-    versionId: "v1",
-    metadata: { isStreaming: false },
-    parts: [
-      {
-        type: "reasoning",
-        text: "First, I need to define both terms in simple words, then contrast them. I'll use bullet points so it's scannable.",
-      },
-      {
-        type: "text",
-        text: `### Streaming vs Non-Streaming
-
-- **Streaming**: Sends partial results as they are generated, feels real-time.
-- **Non-streaming**: Waits until the full response is ready before sending.
-
-Streaming is ideal for chat-like experiences, non-streaming is better for quick, short results.`,
-      },
-    ],
-    generationGroups: [
-      {
-        id: "v1",
-        title: "Version 1",
-        timestamp: new Date("2024-01-15T10:30:00Z"),
-        isLatest: true,
-        isViewing: false,
-        isCollapsed: false,
-        items: [
-          {
-            id: "v1-item1",
-            name: "streaming-explanation.md",
-            type: "file",
-            filePath: "responses/streaming-explanation.md",
-            language: "markdown",
-            status: "generated",
-            content: `### Streaming vs Non-Streaming
-
-- **Streaming**: Sends partial results as they are generated, feels real-time.
-- **Non-streaming**: Waits until the full response is ready before sending.
-
-Streaming is ideal for chat-like experiences, non-streaming is better for quick, short results.`,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "msg-3",
-    role: "user",
-    type: "user",
-    content: "Write me a friendly email to reschedule a meeting with a client.",
-    parts: [
-      {
-        type: "text",
-        text: "Write me a friendly email to reschedule a meeting with a client.",
-      },
-    ],
-  },
-  {
-    id: "msg-4",
-    role: "assistant",
-    type: "ai",
-    content: `Hi [Client Name],
-
-I hope you're doing well! Something has come up and I'll need to reschedule our meeting. Would next Wednesday at 2 PM work for you?
-
-Thanks for your understanding,  
-[Your Name]`,
-    analysis: `User requested a polite but friendly tone. I'll keep it short, warm, and professional.`,
-    totalTime: 1870,
-    versionId: "v2",
-    metadata: { isStreaming: false },
-    parts: [
-      {
-        type: "reasoning",
-        text: "Decide on a warm greeting, a clear reason for rescheduling without oversharing, and a specific alternative time.",
-      },
-      {
-        type: "text",
-        text: `Hi [Client Name],
-
-I hope you're doing well! Something has come up and I'll need to reschedule our meeting. Would next Wednesday at 2 PM work for you?
-
-Thanks for your understanding,  
-[Your Name]`,
-      },
-    ],
-    generationGroups: [
-      {
-        id: "v2",
-        title: "Version 2",
-        timestamp: new Date("2024-01-15T11:15:00Z"),
-        isLatest: true,
-        isViewing: false,
-        isCollapsed: false,
-        items: [
-          {
-            id: "v2-item1",
-            name: "reschedule-email.txt",
-            type: "file",
-            filePath: "emails/reschedule-email.txt",
-            status: "generated",
-            content: `Hi [Client Name],
-
-I hope you're doing well! Something has come up and I'll need to reschedule our meeting. Would next Wednesday at 2 PM work for you?
-
-Thanks for your understanding,  
-[Your Name]`,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "msg-5",
-    role: "user",
-    type: "user",
-    content: "Give me three slogan ideas for eco-friendly water bottles.",
-    parts: [
-      {
-        type: "text",
-        text: "Give me three slogan ideas for eco-friendly water bottles.",
-      },
-    ],
-  },
-  {
-    id: "msg-6",
-    role: "assistant",
-    type: "ai",
-    content: `1. "Sip Smart, Save the Planet"  
-2. "Hydrate. Reuse. Repeat."  
-3. "Drink Green, Live Clean"`,
-    analysis: `Brainstorming short, catchy, eco-conscious slogans that emphasize sustainability and action.`,
-    totalTime: 940,
-    versionId: "v3",
-    metadata: { isStreaming: false },
-    parts: [
-      {
-        type: "reasoning",
-        text: "Focus on brevity, alliteration, and eco-friendly keywords. Create 3 varied but cohesive options.",
-      },
-      {
-        type: "text",
-        text: `1. "Sip Smart, Save the Planet"  
-2. "Hydrate. Reuse. Repeat."  
-3. "Drink Green, Live Clean"`,
-      },
-    ],
-    generationGroups: [
-      {
-        id: "v3",
-        title: "Version 3",
-        timestamp: new Date("2024-01-15T14:22:00Z"),
-        isLatest: true,
-        isViewing: false,
-        isCollapsed: false,
-        items: [
-          {
-            id: "v3-item1",
-            name: "eco-slogans.txt",
-            type: "file",
-            filePath: "marketing/eco-slogans.txt",
-            status: "generated",
-            content: `1. "Sip Smart, Save the Planet"  
-2. "Hydrate. Reuse. Repeat."  
-3. "Drink Green, Live Clean"`,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "msg-7",
-    role: "user",
-    type: "user",
-    content:
-      "Summarize these team notes:\n- Marketing will finalize designs by Friday\n- Dev team is testing new features\n- Launch date is September 15",
-    parts: [
-      {
-        type: "text",
-        text: "Summarize these team notes:\n- Marketing will finalize designs by Friday\n- Dev team is testing new features\n- Launch date is September 15",
-      },
-    ],
-  },
-  {
-    id: "msg-8",
-    role: "assistant",
-    type: "ai",
-    content: `Marketing is finalizing designs by Friday, development is testing new features, and the product launches on September 15.`,
-    analysis: `The request is a direct summarization. Maintain accuracy, remove bullet formatting, and condense to one sentence.`,
-    totalTime: 640,
-    versionId: "v4",
-    metadata: { isStreaming: false },
-    parts: [
-      {
-        type: "reasoning",
-        text: "Combine all points into a concise sentence while preserving the original meaning and deadlines.",
-      },
-      {
-        type: "text",
-        text: `Marketing is finalizing designs by Friday, development is testing new features, and the product launches on September 15.`,
-      },
-    ],
-    generationGroups: [
-      {
-        id: "v4",
-        title: "Version 4",
-        timestamp: new Date("2024-01-15T16:45:00Z"),
-        isLatest: true,
-        isViewing: false,
-        isCollapsed: false,
-        items: [
-          {
-            id: "v4-item1",
-            name: "team-summary.md",
-            type: "file",
-            filePath: "notes/team-summary.md",
-            language: "markdown",
-            status: "generated",
-            content: `Marketing is finalizing designs by Friday, development is testing new features, and the product launches on September 15.`,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "msg-9",
-    role: "user",
-    type: "user",
-    content: "What's the weather in Lagos right now?",
-    parts: [
-      {
-        type: "text",
-        text: "What's the weather in Lagos right now?",
-      },
-    ],
-  },
-  {
-    id: "msg-10",
-    role: "assistant",
-    type: "ai",
-    content: `It's currently 29°C in Lagos, partly cloudy, with light winds.`,
-    analysis: `User asked for real-time weather. I'm providing a clear, single-sentence update.`,
-    totalTime: 450,
-    versionId: "v5",
-    metadata: { isStreaming: false },
-    parts: [
-      {
-        type: "reasoning",
-        text: "Retrieve current weather data for Lagos, format it in a concise, friendly style.",
-      },
-      {
-        type: "text",
-        text: `It's currently 29°C in Lagos, partly cloudy, with light winds.`,
-      },
-    ],
-    generationGroups: [
-      {
-        id: "v5",
-        title: "Version 5",
-        timestamp: new Date("2024-01-15T18:30:00Z"),
-        isLatest: true,
-        isViewing: false,
-        isCollapsed: false,
-        items: [
-          {
-            id: "v5-item1",
-            name: "lagos-weather.txt",
-            type: "file",
-            filePath: "weather/lagos-weather.txt",
-            status: "generated",
-            content: `It's currently 29°C in Lagos, partly cloudy, with light winds.`,
-          },
-        ],
-      },
-    ],
-  },
-];
 
 export function TextChatContent() {
   const {
@@ -358,42 +57,51 @@ export function TextChatContent() {
     editMessage,
     deleteMessage,
     addReaction,
+    sendMessage,
+    status,
     removeReaction,
     handleGenerationItemClick,
+    handleLocalStorageDraft,
     streamingContent,
     streamingAnalysis,
     project,
     userAvatar,
+    messages,
+    clearInput,
   } = useProjectDesign();
 
-  // Transform project messages to include role and parts for compatibility with demoMessages
-  const transformMessages = (messages: any[]) => {
-    return (
-      messages?.map((msg) => ({
-        ...msg,
-        role: msg.type === "user" ? "user" : "assistant",
-        parts:
-          msg.type === "user"
-            ? [{ type: "text", text: msg.content }]
-            : [
-                { type: "reasoning", text: msg.analysis || "" },
-                { type: "text", text: msg.content || "" },
-              ],
-      })) || []
-    );
-  };
-
-  // Use projectInfo?.messages if available, otherwise fallback to demoMessages
-  const { messages, sendMessage, status } = useChat({
-    messages: transformMessages(demoMessages),
-  });
-  // const { messages, sendMessage, status } = useChat({
-  //   messages: demoMessages,
-  // });
-
+  // Use project messages for real data
   const [reactionStates, setReactionStates] = useState<{
     [key: string]: { liked: boolean; disliked: boolean };
   }>({});
+
+  const [isProcessingDraft, setIsProcessingDraft] = useState(false);
+  const conversationRef = useRef<HTMLDivElement>(null);
+
+  // Handle localStorage draft when messages array is empty (new project)
+  // useEffect(() => {
+  //   handleLocalStorageDraft();
+  // }, [clearInput]);
+
+  // Scroll to bottom when messages are empty or component mounts
+  useEffect(() => {
+    const scrollToBottom = () => {
+      if (conversationRef.current) {
+        conversationRef.current.scrollTop =
+          conversationRef.current.scrollHeight;
+      }
+    };
+
+    console.log("message", messages);
+
+    // Scroll to bottom immediately when component mounts or messages change
+    scrollToBottom();
+
+    // Also scroll to bottom after a short delay to ensure content is rendered
+    const timeoutId = setTimeout(scrollToBottom, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [project]);
 
   // Handle message editing
   const handleEditMessage = async (
@@ -425,7 +133,7 @@ export function TextChatContent() {
     reaction: "like" | "dislike" | "comment"
   ) => {
     try {
-      await addReaction(messageId, reaction);
+      addReaction(messageId, reaction);
       setReactionStates((prev) => ({
         ...prev,
         [messageId]: {
@@ -505,106 +213,173 @@ export function TextChatContent() {
 
   return (
     <div className="space-y-6 pb-4">
-      <Conversation className="px-0 m-0">
-        <ConversationContent className="px-0 m-0 space-y-4 pb-2">
-          {messages?.map((message: any, index: number) => {
-            if (message.type === "user") {
-              return (
-                <UserMessage
-                  key={message.id || index}
-                  content={message.content}
-                  userAvatar={userAvatar}
-                  userName={userName}
-                  imageAttachment={
-                    message.fileAttachments?.find((f: any) =>
-                      f.type?.startsWith("image/")
-                    )?.url
-                  }
-                  fileAttachment={
-                    message.fileAttachments?.find(
-                      (f: any) => !f.type?.startsWith("image/")
-                    )?.url
-                  }
-                  fileName={message.fileAttachments?.[0]?.name}
-                  fileSize={
-                    message.fileAttachments?.[0]?.size
-                      ? `${(
-                          message.fileAttachments[0].size /
-                          (1024 * 1024)
-                        ).toFixed(2)} MB`
-                      : undefined
-                  }
-                  fileType={
-                    message.fileAttachments?.[0]?.type?.split("/")[0] as any
-                  }
-                  onEdit={(newContent: any, files: any) =>
-                    handleEditMessage(message.id, newContent, files)
-                  }
-                  onDelete={() => handleDeleteMessage(message.id)}
-                  onCopy={() => handleCopyMessage(message.content)}
-                />
-              );
-            } else if (message.type === "ai") {
-              const messageReactionState = reactionStates[message.id] || {
-                liked: false,
-                disliked: false,
-              };
-
-              return (
-                <div key={message.id || index} className="space-y-4">
-                  {/* Main AI Message - Only this shows the AI avatar */}
-                  <AIMessage
+      <div ref={conversationRef} className="h-full overflow-auto px-2 md:px-6">
+        <Conversation className="px-0 m-0">
+          <ConversationContent className="px-0 m-0 space-y-4 pb-2">
+            {messages?.map((message: any, index: number) => {
+              if (message.type === "user") {
+                return (
+                  <UserMessage
+                    key={message.id || index}
                     message={message}
-                    content={message.content}
-                    analysis={message.analysis}
-                    totalTime={message.totalTime}
-                    versionId={message.versionId} // NEW: Pass version ID
-                    isStreaming={message.metadata?.isStreaming || false} // NEW: Pass streaming state
-                    streamingContent={
-                      message.metadata?.isStreaming
-                        ? streamingContent
+                    userAvatar={userAvatar}
+                    userName={userName}
+                    imageAttachment={
+                      message.fileAttachments?.find((f: any) =>
+                        f.type?.startsWith("image/")
+                      )?.url
+                    }
+                    fileAttachment={
+                      message.fileAttachments?.find(
+                        (f: any) => !f.type?.startsWith("image/")
+                      )?.url
+                    }
+                    fileName={message.fileAttachments?.[0]?.name}
+                    fileSize={
+                      message.fileAttachments?.[0]?.size
+                        ? `${(
+                            message.fileAttachments[0].size /
+                            (1024 * 1024)
+                          ).toFixed(2)} MB`
                         : undefined
-                    } // Only pass if streaming
-                    streamingAnalysis={
-                      message.metadata?.isStreaming
-                        ? streamingAnalysis
-                        : undefined
-                    } // Only pass if streaming
-                    onCopy={() => handleCopyMessage(message.content)}
-                    onLike={() => handleLikeToggle(message.id)}
-                    onDislike={() => handleDislikeToggle(message.id)}
-                    onReload={() => handleRegenerateMessage(message.id)}
+                    }
+                    fileType={
+                      message.fileAttachments?.[0]?.type?.split("/")[0] as any
+                    }
+                    onEdit={(newContent: any, files: any) =>
+                      handleEditMessage(message.id, newContent, files)
+                    }
+                    onDelete={() => handleDeleteMessage(message.id)}
+                    onCopy={() =>
+                      handleCopyMessage(
+                        message.parts?.find((part: any) => part.type === "text")
+                          ?.text || ""
+                      )
+                    }
                   />
+                );
+              } else if (message.type === "ai") {
+                const messageReactionState = reactionStates[message.id] || {
+                  liked: false,
+                  disliked: false,
+                };
 
-                  {/* Render generation groups - These don't show AI avatar */}
-                  {message.generationGroups?.map((group: GenerationGroup) => (
-                    <VersioningMessage
-                      key={group.id}
-                      generation={group}
-                      onToggle={toggleGeneration}
-                      onRetry={retryLoading}
-                      onCopy={() =>
-                        handleCopyMessage(JSON.stringify(group.items, null, 2))
-                      }
-                      onLike={() => handleLikeToggle(message.id)}
-                      onDislike={() => handleDislikeToggle(message.id)}
-                      onReload={() => handleRegenerateMessage(message.id)}
-                      onItemClick={(item) => handleGenerationItemClick(item.id)}
-                      isGenerating={
-                        isGenerating && message.metadata?.isStreaming
-                      }
-                    />
-                  ))}
+                return (
+                  <div key={message.id || index} className="space-y-4">
+                    {/* Show typing indicator for new projects */}
+                    {message.metadata?.isTyping ? (
+                      <div className="flex items-start space-x-3 p-4">
+                        <div className="flex-shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">
+                              AI
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-1">
+                            <div className="flex space-x-1">
+                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                              <div
+                                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "0.1s" }}
+                              ></div>
+                              <div
+                                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "0.2s" }}
+                              ></div>
+                            </div>
+                            <span className="text-sm text-gray-500 ml-2">
+                              AI is thinking...
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Main AI Message - Only this shows the AI avatar */
+                      <AIMessage
+                        message={message}
+                        totalTime={message.totalTime}
+                        versionId={message.versionId} // NEW: Pass version ID
+                        isStreaming={message.metadata?.isStreaming || false} // NEW: Pass streaming state
+                        streamingContent={
+                          message.metadata?.isStreaming
+                            ? streamingContent
+                            : undefined
+                        } // Only pass if streaming
+                        streamingAnalysis={
+                          message.metadata?.isStreaming
+                            ? streamingAnalysis
+                            : undefined
+                        } // Only pass if streaming
+                        onCopy={() =>
+                          handleCopyMessage(
+                            message.parts?.find(
+                              (part: any) => part.type === "text"
+                            )?.text || ""
+                          )
+                        }
+                        onLike={() => handleLikeToggle(message.id)}
+                        onDislike={() => handleDislikeToggle(message.id)}
+                        onReload={() => handleRegenerateMessage(message.id)}
+                      />
+                    )}
+
+                    {/* Render generation groups - These don't show AI avatar */}
+                    {message.generationGroups?.map((group: GenerationGroup) => (
+                      <VersioningMessage
+                        key={group.id}
+                        generation={group}
+                        onToggle={toggleGeneration}
+                        onRetry={retryLoading}
+                        onCopy={() =>
+                          handleCopyMessage(
+                            JSON.stringify(group.items, null, 2)
+                          )
+                        }
+                        onLike={() => handleLikeToggle(message.id)}
+                        onDislike={() => handleDislikeToggle(message.id)}
+                        onReload={() => handleRegenerateMessage(message.id)}
+                        onItemClick={(item) =>
+                          handleGenerationItemClick(item.id)
+                        }
+                        isGenerating={
+                          isGenerating && message.metadata?.isStreaming
+                        }
+                      />
+                    ))}
+                  </div>
+                );
+              }
+              return null;
+            })}
+
+            {status === "submitted" && <Loader />}
+
+            {/* Ensure chat is positioned at bottom when messages array is empty */}
+            {(!messages || messages.length === 0) && !isProcessingDraft && (
+              <div className="flex-1 min-h-[60vh] flex items-end justify-center">
+                <div className="text-center text-gray-500 dark:text-gray-400 mb-8">
+                  <p className="text-lg font-medium mb-2">
+                    Start a conversation
+                  </p>
+                  <p className="text-sm">
+                    Ask me anything or describe what you'd like to create
+                  </p>
                 </div>
-              );
-            }
-            return null;
-          })}
+              </div>
+            )}
+          </ConversationContent>
+          {/* Rely on browser scroll; hide internal scroll button */}
+        </Conversation>
+      </div>
 
-          {status === "submitted" && <Loader />}
-        </ConversationContent>
-        {/* Rely on browser scroll; hide internal scroll button */}
-      </Conversation>
+      {/* Only show ChatInput when not processing localStorage draft */}
+      {!isProcessingDraft && (
+        <div className="sticky bottom-0 z-30">
+          <ChatInput placeholder="Ask a follow up message..." />
+        </div>
+      )}
     </div>
   );
 }

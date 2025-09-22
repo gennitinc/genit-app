@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import Loading from "@/utils/Loading";
 import { LandingPage } from "@/components/landing/landing-page";
 
+
+
 function Page() {
   const { user, loading } = useUserContext();
   const router = useRouter();
@@ -34,7 +36,7 @@ function Page() {
   // Show loading while checking authentication and onboarding status
   if (loading || isCheckingOnboarding) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen bg-white dark:bg-black">
         <Loading />
       </div>
     );

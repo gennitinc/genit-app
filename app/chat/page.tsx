@@ -4,12 +4,14 @@ import { MainContent } from "@/components/layout/main-content";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { useRef } from "react";
 import withAuth from "@/helper/hoc/withAuth";
+import { Toaster } from "@/components/ui/sonner";
 
 function ChatPageForAuthenticatedUsers() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="flex relative w-full h-screen overflow-hidden bg-white dark:bg-black">
+      <Toaster />
       <AppSidebar />
       <div
         ref={scrollContainerRef}

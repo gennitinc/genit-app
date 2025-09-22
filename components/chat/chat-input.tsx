@@ -53,7 +53,7 @@ export function ChatInput({
     autoResize: contextAutoResize,
     clearInput,
     removeAttachedFile,
-    sendMessage,
+    generateMessage,
     isGenerating,
     project,
     error,
@@ -63,6 +63,42 @@ export function ChatInput({
   const chatContentRef = useRef<HTMLDivElement>(null);
   const inputSectionRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // Restore idea draft (prompt + files) if present
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("gennit_idea_draft");
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as {
+        prompt?: string;
+        files?: { name: string; type: string; size: number; dataUrl: string }[];
+      };
+      if (parsed.prompt) setInputValue(parsed.prompt);
+      if (Array.isArray(parsed.files) && parsed.files.length > 0) {
+        // Reconstruct File objects from data URLs
+        const reconstructed = parsed.files.map((f, idx) => {
+          const arr = f.dataUrl.split(",");
+          const mime =
+            arr[0].match(/:(.*?);/)?.[1] ||
+            f.type ||
+            "application/octet-stream";
+          const bstr = atob(arr[1] || "");
+          let n = bstr.length;
+          const u8arr = new Uint8Array(n);
+          while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+          }
+          const file = new File([u8arr], f.name || `file-${idx}`, {
+            type: mime,
+          });
+          (file as any).fileKey = `${file.name}-${Date.now()}-${idx}`;
+          return file;
+        });
+        setAttachedFiles(reconstructed);
+      }
+      // Clear after restoring so it doesn't keep overwriting
+      localStorage.removeItem("gennit_idea_draft");
+    } catch {}
+  }, [setInputValue, setAttachedFiles]);
 
   // Track if user has manually scrolled up
   const [userScrolledUp, setUserScrolledUp] = useState(false);
@@ -185,9 +221,9 @@ export function ChatInput({
   // }, [checkScrollPosition]);
 
   // FIXED: Handle sending messages with proper project identification
-  const handleSendMessage = async () => {
+  const handlegenerateMessage = async () => {
     if (!inputValue.trim() && attachedFiles.length === 0) return;
-   
+
     if (!project?._id) {
       console.error("No project ID available");
       return;
@@ -195,7 +231,7 @@ export function ChatInput({
 
     try {
       // Use projectId for proper server routing
-      await sendMessage(inputValue, attachedFiles, project._id);
+      await generateMessage(inputValue, attachedFiles, project._id);
 
       // Force scroll to bottom when sending a new message
       setTimeout(() => {
@@ -214,7 +250,7 @@ export function ChatInput({
   ) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      handleSendMessage();
+      handlegenerateMessage();
     }
     handleKeyDown(event);
   };
@@ -409,7 +445,7 @@ export function ChatInput({
                 placeholder={
                   isGenerating
                     ? "AI is generating..."
-                    : ""
+                    : "Enter a follow up prompt"
                 }
                 disabled={isGenerating}
                 className="w-full bg-transparent border-none outline-none text-foreground placeholder-muted-foreground text-sm resize-none overflow-y-auto custom-scrollbar disabled:opacity-50"
@@ -429,7 +465,7 @@ export function ChatInput({
                   variant="ghost"
                   size="sm"
                   className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                  disabled={isGenerating }
+                  disabled={isGenerating}
                 >
                   <Mic className="w-3.5 h-3.5 text-muted-foreground" />
                 </Button>
@@ -439,7 +475,7 @@ export function ChatInput({
                   size="sm"
                   className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
                   onClick={() => fileInputRef.current?.click()}
-                  disabled={isGenerating }
+                  disabled={isGenerating}
                 >
                   <Paperclip className="w-3.5 h-3.5 text-muted-foreground" />
                 </Button>
@@ -448,58 +484,15 @@ export function ChatInput({
                   ref={fileInputRef}
                   type="file"
                   multiple
-                  accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt,.js,.jsx,.ts,.css,.html,.json,.xml,.yaml,.yml"
+                  accept="image/*,video/*"
                   onChange={handleFileSelect}
                   className="hidden"
                 />
-
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                  disabled={isGenerating }
-                >
-                  <svg
-                    width="14"
-                    height="20"
-                    viewBox="0 0 54 80"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clipPath="url(#clip0_912_3)">
-                      <path
-                        d="M13.3333 80.0002C20.6933 80.0002 26.6667 74.0268 26.6667 66.6668V53.3335H13.3333C5.97333 53.3335 0 59.3068 0 66.6668C0 74.0268 5.97333 80.0002 13.3333 80.0002Z"
-                        fill="#0ACF83"
-                      />
-                      <path
-                        d="M0 39.9998C0 32.6398 5.97333 26.6665 13.3333 26.6665H26.6667V53.3332H13.3333C5.97333 53.3332 0 47.3598 0 39.9998Z"
-                        fill="#A259FF"
-                      />
-                      <path
-                        d="M0 13.3333C0 5.97333 5.97333 0 13.3333 0H26.6667V26.6667H13.3333C5.97333 26.6667 0 20.6933 0 13.3333Z"
-                        fill="#F24E1E"
-                      />
-                      <path
-                        d="M26.6667 0H40.0001C47.3601 0 53.3334 5.97333 53.3334 13.3333C53.3334 20.6933 47.3601 26.6667 40.0001 26.6667H26.6667V0Z"
-                        fill="#FF7262"
-                      />
-                      <path
-                        d="M53.3334 39.9998C53.3334 47.3598 47.3601 53.3332 40.0001 53.3332C32.6401 53.3332 26.6667 47.3598 26.6667 39.9998C26.6667 32.6398 32.6401 26.6665 40.0001 26.6665C47.3601 26.6665 53.3334 32.6398 53.3334 39.9998Z"
-                        fill="#1ABCFE"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_912_3">
-                        <rect width="53.3333" height="80" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                </Button>
               </div>
 
               <button
                 type="submit"
-                onClick={handleSendMessage}
+                onClick={handlegenerateMessage}
                 disabled={
                   isGenerating ||
                   (!inputValue.trim() && attachedFiles.length === 0)
@@ -532,8 +525,6 @@ export function ChatInput({
 
           {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/20 rounded-xl -z-10 translate-y-1 blur-sm"></div> */}
         </div>
-
-        
       </div>
     </div>
   );

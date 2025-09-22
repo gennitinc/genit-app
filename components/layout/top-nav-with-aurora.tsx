@@ -76,7 +76,7 @@ export default function TopNavWithAurora({
       {/* blur's shown on some routes cos of a reason, don't change it */}
       <header
         className={cn(
-          "sticky top-0 z-10 transition-all duration-300 bg-transparent",
+          "sticky top-0 z-30 transition-all duration-300 bg-transparent",
           pathName == "/chat" ? "backdrop-blur-sm" : "backdrop-blur-md",
           "h-16 shrink-0 w-full"
         )}

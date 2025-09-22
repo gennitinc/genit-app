@@ -1,15 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { HoverActions } from "@/components/ui/hover-actions";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { MessageEditor, ImagePreviewDialog } from "@/components/chat/messages";
-import { ImageIcon, FileText, File } from "lucide-react";
+import { ImageIcon, FileText, File, Download, Eye } from "lucide-react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import { MessageContainer, MessageContent } from "@/components/chat/messages";
 interface UserMessageProps {
-  content: string;
+  message: any;
   userAvatar?: string;
   userName?: string;
   imageAttachment?: string;
@@ -24,7 +33,7 @@ interface UserMessageProps {
 }
 
 export function UserMessage({
-  content,
+  message,
   userAvatar,
   userName = "User",
   imageAttachment,
@@ -75,7 +84,9 @@ export function UserMessage({
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(content);
+    const textContent =
+      message.parts?.find((part: any) => part.type === "text")?.text || "";
+    navigator.clipboard.writeText(textContent);
     onCopy?.();
 
     setCopied(true);
@@ -146,7 +157,9 @@ export function UserMessage({
         className={className}
       >
         <MessageEditor
-          initialContent={content}
+          initialContent={
+            message.parts?.find((part: any) => part.type === "text")?.text || ""
+          }
           onSave={handleSave}
           onCancel={handleCancel}
           placeholder="Edit your message..."
@@ -175,10 +188,22 @@ export function UserMessage({
           onMouseLeave={() => setIsHovered(false)}
         >
           <MessageContent variant="user">
-            <ReactMarkdown>{content}</ReactMarkdown>
+            <ReactMarkdown>
+              {message.parts?.find((part: any) => part.type === "text")?.text ||
+                ""}
+            </ReactMarkdown>
           </MessageContent>
 
-          {/* Compact File/Image Attachment Preview */}
+          {/* Attached Files from message level */}
+          {message.attachedFiles?.length > 0 && (
+            <div className="mt-3 space-y-2">
+              {message.attachedFiles.map((file: any, index: number) => (
+                <AttachedFilePreview key={file.id || index} file={file} />
+              ))}
+            </div>
+          )}
+
+          {/* Legacy File/Image Attachment Preview (for backward compatibility) */}
           {(imageAttachment || fileAttachment) && (
             <div className="mt-3">
               <div
@@ -261,6 +286,119 @@ export function UserMessage({
           fileSize={fileSize}
         />
       )}
+    </>
+  );
+}
+
+// AttachedFilePreview Component
+function AttachedFilePreview({ file }: { file: any }) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const isImage = file.type?.startsWith("image/");
+  const isVideo = file.type?.startsWith("video/");
+  const fileSize = file.fileSize
+    ? `${(file.fileSize / (1024 * 1024)).toFixed(2)} MB`
+    : "Unknown size";
+
+  const handleDownload = () => {
+    if (file.filePath) {
+      const link = document.createElement("a");
+      link.href = file.filePath;
+      link.download = file.name;
+      link.click();
+    }
+  };
+
+  return (
+    <>
+      <div className="flex items-center gap-3 p-3 bg-background border border-border rounded-lg hover:bg-muted-foreground/5 transition-colors group max-w-md">
+        {/* File thumbnail or icon */}
+        <div className="flex-shrink-0">
+          {isImage ? (
+            <div className="w-12 h-12 rounded-md overflow-hidden bg-muted-foreground/5 border">
+              <Image
+                src={file.filePath || "/placeholder.svg"}
+                alt={file.name}
+                width={48}
+                height={48}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+              />
+            </div>
+          ) : (
+            <div className="w-12 h-12 rounded-md bg-muted-foreground/5 border flex items-center justify-center">
+              {isVideo ? (
+                <FileText className="w-6 h-6 text-muted-foreground" />
+              ) : (
+                <File className="w-6 h-6 text-muted-foreground" />
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* File info */}
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-foreground truncate">
+            {file.name}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {fileSize} • {file.type}
+          </p>
+        </div>
+
+        {/* Action buttons */}
+        <div className="flex items-center gap-1">
+          {(isImage || isVideo) && (
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0"
+                  title="View file"
+                >
+                  <Eye className="w-4 h-4" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+                <DialogHeader className="p-6 pb-0">
+                  <DialogTitle>{file.name}</DialogTitle>
+                </DialogHeader>
+                <div className="p-6 pt-4">
+                  <div className="relative w-full h-[70vh]">
+                    {isImage ? (
+                      <Image
+                        src={file.filePath}
+                        alt={file.name}
+                        fill
+                        className="object-contain"
+                        sizes="100vw"
+                      />
+                    ) : (
+                      <video
+                        src={file.filePath}
+                        controls
+                        className="w-full h-full object-contain rounded-lg"
+                        preload="metadata"
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                    )}
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={handleDownload}
+            title="Download file"
+          >
+            <Download className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
     </>
   );
 }

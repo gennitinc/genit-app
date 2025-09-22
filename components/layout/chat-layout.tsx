@@ -13,18 +13,9 @@ import TopNavWithAurora from "./top-nav-with-aurora";
 import { useRef } from "react";
 
 export function ChatLayout() {
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   return (
-    // <div className="min-h-screen flex flex-col pb-2 px-2 bg-white dark:bg-black">
-    //   <LandingNavbar />
-
-    //   <div className="w-full lg:max-w-[600px] lg:mx-auto">
-    //     <ChatInput>
-    //       <TextChatContent />
-    //     </ChatInput>
-    //   </div>
-    // </div>
     <div className="flex relative w-full h-screen overflow-hidden bg-white dark:bg-black">
       <AppSidebar />
       <div
@@ -37,9 +28,7 @@ export function ChatLayout() {
           }
         />
         <div className="w-full lg:max-w-[600px] lg:mx-auto">
-          <ChatInput>
-            <TextChatContent />
-          </ChatInput>
+          <TextChatContent />
         </div>
       </div>
     </div>

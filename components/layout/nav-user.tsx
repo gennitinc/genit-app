@@ -31,7 +31,6 @@ import {
 export function NavUser({ user }: any) {
   const { isMobile, state } = useSidebar();
   const { theme, setTheme } = useTheme();
-  console.log("the user", user);
 
   const isCollapsed = !isMobile && state === "collapsed";
 

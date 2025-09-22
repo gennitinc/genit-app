@@ -16,7 +16,7 @@ interface ChatPanelProps {
 interface Message {
   id: string
   type: "user" | "assistant"
-  content: string
+  text: string
   timestamp: Date
 }
 
@@ -29,7 +29,7 @@ const sampleMessages: Message[] = [
   {
     id: "1",
     type: "assistant",
-    content:
+    text:
       "Dr. Jo demonstrates two simple breathing techniques to relieve stress and anxiety.\n\nThe first technique is called box breathing or square breathing, used by the military to relax before stressful situations.\n\nBox breathing involves inhaling for four seconds, holding the breath for four seconds, exhaling for four seconds.",
     timestamp: new Date(),
   },
@@ -55,7 +55,7 @@ export function ChatPanel({ workflowContext, currentChat, onChatChange }: ChatPa
     const userMessage: Message = {
       id: Date.now().toString(),
       type: "user",
-      content: inputValue,
+      text: inputValue,
       timestamp: new Date(),
     }
 
@@ -68,7 +68,7 @@ export function ChatPanel({ workflowContext, currentChat, onChatChange }: ChatPa
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
         type: "assistant",
-        content:
+        text:
           "Based on the breathing exercises in your workflow, I can help you understand the techniques better. The box breathing method is particularly effective for stress relief.",
         timestamp: new Date(),
       }
@@ -81,7 +81,7 @@ export function ChatPanel({ workflowContext, currentChat, onChatChange }: ChatPa
     const summaryMessage: Message = {
       id: Date.now().toString(),
       type: "assistant",
-      content:
+      text:
         "**Summary:** The workflow demonstrates breathing techniques for stress relief, focusing on box breathing (4-4-4-4 pattern) and deep breathing exercises. These methods are scientifically proven to activate the parasympathetic nervous system and reduce anxiety.",
       timestamp: new Date(),
     }
@@ -92,7 +92,7 @@ export function ChatPanel({ workflowContext, currentChat, onChatChange }: ChatPa
     const insightMessage: Message = {
       id: Date.now().toString(),
       type: "assistant",
-      content:
+      text:
         "**Key Insights:**\n• Box breathing is used by military for stress management\n• 4-second intervals optimize nervous system response\n• Regular practice improves stress resilience\n• Can be done anywhere without equipment",
       timestamp: new Date(),
     }
@@ -174,7 +174,7 @@ export function ChatPanel({ workflowContext, currentChat, onChatChange }: ChatPa
                     message.type === "user" ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-900"
                   }`}
                 >
-                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                  <p className="text-sm whitespace-pre-wrap">{message.text}</p>
                 </div>
                 {message.type === "user" && (
                   <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center flex-shrink-0">

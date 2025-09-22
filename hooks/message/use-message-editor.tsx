@@ -6,19 +6,19 @@ import { useState, useCallback, useRef, useEffect } from "react";
 
 interface UseMessageEditorProps {
   initialContent: string;
-  onSave: (content: string, files?: File[]) => Promise<void>;
+  onSave: (text: string, files?: File[]) => Promise<void>;
   onCancel: () => void;
 }
 
 interface UseMessageEditorReturn {
   isEditing: boolean;
-  content: string;
+  text: string;
   files: File[];
   isLoading: boolean;
   error: string | null;
   startEditing: () => void;
   cancelEditing: () => void;
-  updateContent: (content: string) => void;
+  updateContent: (text: string) => void;
   addFiles: (newFiles: File[]) => void;
   removeFile: (index: number) => void;
   saveChanges: () => Promise<void>;
@@ -62,7 +62,7 @@ export function useMessageEditor({
   onCancel,
 }: UseMessageEditorProps): UseMessageEditorReturn {
   const [isEditing, setIsEditing] = useState(false);
-  const [content, setContent] = useState(initialContent);
+  const [text, setText] = useState(initialContent);
   const [files, setFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -83,14 +83,14 @@ export function useMessageEditor({
     setIsEditing(true);
     // Convert markdown to plain text for editing
     const plainText = markdownToPlainText(initialContent);
-    setContent(plainText);
+    setText(plainText);
     setFiles([]);
     setError(null);
   }, [initialContent]);
 
   const cancelEditing = useCallback(() => {
     setIsEditing(false);
-    setContent(initialContent);
+    setText(initialContent);
     setFiles([]);
     setError(null);
     onCancel();
@@ -98,9 +98,9 @@ export function useMessageEditor({
 
   const updateContent = useCallback(
     (newContent: string) => {
-      setContent(newContent);
+      setText(newContent);
       setError(null);
-      // Auto-resize after content update
+      // Auto-resize after text update
       setTimeout(autoResize, 0);
     },
     [autoResize]
@@ -115,7 +115,7 @@ export function useMessageEditor({
   }, []);
 
   const saveChanges = useCallback(async () => {
-    if (!content.trim()) {
+    if (!text.trim()) {
       setError("Message cannot be empty");
       return;
     }
@@ -124,7 +124,7 @@ export function useMessageEditor({
     setError(null);
 
     try {
-      await onSave(content, files);
+      await onSave(text, files);
       setIsEditing(false);
       setFiles([]);
     } catch (err) {
@@ -132,7 +132,7 @@ export function useMessageEditor({
     } finally {
       setIsLoading(false);
     }
-  }, [content, files, onSave]);
+  }, [text, files, onSave]);
 
   // Auto-focus and resize textarea when editing starts
   useEffect(() => {
@@ -146,16 +146,16 @@ export function useMessageEditor({
     }
   }, [isEditing, autoResize]);
 
-  // Auto-resize on content change
+  // Auto-resize on text change
   useEffect(() => {
     if (isEditing) {
       autoResize();
     }
-  }, [content, isEditing, autoResize]);
+  }, [text, isEditing, autoResize]);
 
   return {
     isEditing,
-    content,
+    text,
     files,
     isLoading,
     error,
@@ -165,7 +165,7 @@ export function useMessageEditor({
     addFiles,
     removeFile,
     saveChanges,
-    textareaRef,
+    textareaRef: textareaRef as React.RefObject<HTMLTextAreaElement>,
     autoResize,
   };
 }

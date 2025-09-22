@@ -15,6 +15,7 @@ import {
   AlertCircle,
   X,
   XIcon,
+  Mic,
   PaperclipIcon,
   Loader2,
 } from "lucide-react";
@@ -65,72 +66,6 @@ export default function TemplateGrid() {
   const [limit, setLimit] = useState(20);
   const [pins, setPins] = useState([]);
 
-  const fallbackTemplates: TemplateItem[] = useMemo(
-    () => [
-      {
-        id: "t1",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg",
-        alt: "Template 1",
-      },
-      {
-        id: "t2",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg",
-        alt: "Template 2",
-      },
-      {
-        id: "t3",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg",
-        alt: "Template 3",
-      },
-      {
-        id: "t4",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg",
-        alt: "Template 4",
-      },
-      {
-        id: "t5",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg",
-        alt: "Template 5",
-      },
-      {
-        id: "t6",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg",
-        alt: "Template 6",
-      },
-      {
-        id: "t7",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg",
-        alt: "Template 7",
-      },
-      {
-        id: "t8",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg",
-        alt: "Template 8",
-      },
-      {
-        id: "t9",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg",
-        alt: "Template 9",
-      },
-      {
-        id: "t10",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg",
-        alt: "Template 10",
-      },
-      {
-        id: "t11",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg",
-        alt: "Template 11",
-      },
-      {
-        id: "t12",
-        src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg",
-        alt: "Template 12",
-      },
-    ],
-    []
-  );
-
   const fetchPins = async () => {
     setLoading(true);
     setNewError(null);
@@ -158,9 +93,9 @@ export default function TemplateGrid() {
     }
   };
 
-  useEffect(() => {
-    fetchPins();
-  }, []);
+  // useEffect(() => {
+  //   fetchPins();
+  // }, []);
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -185,21 +120,21 @@ export default function TemplateGrid() {
             })
           );
 
-          setTemplates(mapped.length > 0 ? mapped : fallbackTemplates);
+          setTemplates(mapped.length > 0 ? mapped : []);
         } else {
-          setTemplates(fallbackTemplates);
+          setTemplates([]);
         }
       } catch (err: any) {
         console.error("Failed to fetch templates:", err);
         setNewError(err.message || "Failed to load templates.");
-        setTemplates(fallbackTemplates);
+        setTemplates([]);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchTemplates();
-  }, [fallbackTemplates]);
+  }, []);
 
   const onView = (item: TemplateItem) => {
     setSelected(item);
@@ -392,11 +327,16 @@ export default function TemplateGrid() {
       try {
         console.log("Creating project with:", { inputValue, attachedFiles });
 
-        await createProject(inputValue, undefined, attachedFiles);
+        const result = await createProject(inputValue, attachedFiles);
 
-        // Clear state after successful submission
-        setInputValue("");
-        setAttachedFiles([]);
+        if (result.type && result.id) {
+          // Redirect to chat page with project ID
+          router.push(`/chat/${result.id}`);
+        } else {
+          // Clear state after successful submission only if no redirect
+          setInputValue("");
+          setAttachedFiles([]);
+        }
       } catch (error: any) {
         console.error("Failed to create project:", error);
         setInputError(
@@ -510,7 +450,7 @@ export default function TemplateGrid() {
 
   return (
     <motion.div
-      className="mt-8 mb-20"
+      className="mt-8 mb-20 px-4 md:px-6 lg:px-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.8 }}
@@ -765,6 +705,14 @@ export default function TemplateGrid() {
 
                     <div className="flex justify-between items-center p-3">
                       <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                          disabled={isGenerating}
+                        >
+                          <Mic className="w-3.5 h-3.5 text-muted-foreground" />
+                        </Button>
                         <button
                           type="button"
                           className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1007,6 +955,14 @@ export default function TemplateGrid() {
 
                     <div className="flex justify-between items-center p-3">
                       <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                          disabled={isGenerating}
+                        >
+                          <Mic className="w-3.5 h-3.5 text-muted-foreground" />
+                        </Button>
                         <button
                           type="button"
                           className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"

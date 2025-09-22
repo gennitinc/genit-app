@@ -15,6 +15,7 @@ import {
   AlertCircle,
   X,
   XIcon,
+  Mic,
   PaperclipIcon,
   Loader2,
 } from "lucide-react";
@@ -99,9 +100,9 @@ export default function TemplateGridAll() {
     }
   };
 
-  useEffect(() => {
-    fetchPins();
-  }, []);
+  // useEffect(() => {
+  //   fetchPins();
+  // }, []);
 
   // Fetch a page of templates
   const fetchTemplatesPage = useCallback(
@@ -296,22 +297,7 @@ export default function TemplateGridAll() {
     (files: File[]) => {
       const maxFileSize = 10 * 1024 * 1024; // 10MB
       const maxFiles = 10;
-      const allowedTypes = [
-        "image/*",
-        ".pdf",
-        ".txt",
-        ".md",
-        ".js",
-        ".jsx",
-        ".ts",
-        ".tsx",
-        ".css",
-        ".html",
-        ".json",
-        ".xml",
-        ".yaml",
-        ".yml",
-      ];
+      const allowedTypes = ["image/*", "video/*"];
 
       if (attachedFiles.length + files.length > maxFiles) {
         setInputError(`Maximum ${maxFiles} files allowed`);
@@ -378,7 +364,16 @@ export default function TemplateGridAll() {
 
       try {
         console.log("Creating project with:", { inputValue, attachedFiles });
-        await createProject(inputValue, undefined, attachedFiles);
+        const result = await createProject(inputValue, attachedFiles);
+
+        if (result.type && result.id) {
+          // Redirect to chat page with project ID
+          router.push(`/chat/${result.id}`);
+        } else {
+          // Clear state after successful submission only if no redirect
+          setInputValue("");
+          setAttachedFiles([]);
+        }
       } catch (error: any) {
         console.error("Failed to create project:", error);
         setInputError(
@@ -485,7 +480,7 @@ export default function TemplateGridAll() {
 
   return (
     <motion.div
-      className="mt-2c mb-20 px-4 md:px-6 lg:px-8"
+      className="mt-2 mb-20 px-4 md:px-6 lg:px-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.8 }}
@@ -750,6 +745,14 @@ export default function TemplateGridAll() {
 
                     <div className="flex justify-between items-center p-3">
                       <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                          disabled={isGenerating}
+                        >
+                          <Mic className="w-3.5 h-3.5 text-muted-foreground" />
+                        </Button>
                         <button
                           type="button"
                           className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -992,6 +995,14 @@ export default function TemplateGridAll() {
 
                     <div className="flex justify-between items-center p-3">
                       <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                          disabled={isGenerating}
+                        >
+                          <Mic className="w-3.5 h-3.5 text-muted-foreground" />
+                        </Button>
                         <button
                           type="button"
                           className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"

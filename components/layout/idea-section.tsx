@@ -16,7 +16,7 @@ import {
   Sparkles,
   Zap,
   AlertCircle,
-  CheckCircle,
+  Mic,
   Loader2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -130,15 +130,6 @@ export function IdeaSection() {
     delay: 2000,
   });
 
-  // Social media platform icons
-  const socialIcons = [
-    { name: "Instagram", icon: "📸", color: "from-pink-500 to-purple-600" },
-    { name: "Twitter", icon: "🐦", color: "from-blue-400 to-blue-600" },
-    { name: "LinkedIn", icon: "💼", color: "from-blue-600 to-blue-800" },
-    { name: "TikTok", icon: "🎵", color: "from-pink-400 to-red-500" },
-    { name: "YouTube", icon: "📺", color: "from-red-500 to-red-700" },
-  ];
-
   // Input validation
   const validateInput = useCallback((value: string, files: File[]) => {
     if (!value.trim() && files.length === 0) {
@@ -175,22 +166,6 @@ export function IdeaSection() {
     (files: File[]) => {
       const maxFileSize = 10 * 1024 * 1024; // 10MB
       const maxFiles = 10;
-      const allowedTypes = [
-        "image/*",
-        ".pdf",
-        ".txt",
-        ".md",
-        ".js",
-        ".jsx",
-        ".ts",
-        ".tsx",
-        ".css",
-        ".html",
-        ".json",
-        ".xml",
-        ".yaml",
-        ".yml",
-      ];
 
       if (attachedFiles.length + files.length > maxFiles) {
         setInputError(`Maximum ${maxFiles} files allowed`);
@@ -198,6 +173,9 @@ export function IdeaSection() {
       }
 
       const validFiles = files.filter((file) => {
+        const isImageOrVideo =
+          file.type?.startsWith("image/") || file.type?.startsWith("video/");
+        if (!isImageOrVideo) return false;
         if (file.size > maxFileSize) {
           setInputError(`${file.name} is too large (max 10MB)`);
           return false;
@@ -256,8 +234,19 @@ export function IdeaSection() {
       setInputError(null);
 
       try {
-        console.log("Creating project with:", { inputValue, attachedFiles });
-        await createProject(inputValue, undefined, attachedFiles);
+       
+        const res = await createProject(inputValue, attachedFiles as any);
+
+        console.log("Project creation result:", res);
+
+        if (res.type && res.id) {
+          // Redirect to chat page with project ID
+          router.push(`/chat/${res.id}`);
+        } else {
+          // Clear state after successful submission only if no redirect
+          setInputValue("");
+          setAttachedFiles([]);
+        }
       } catch (error: any) {
         console.error("Failed to create project:", error);
         setInputError(
@@ -279,10 +268,8 @@ export function IdeaSection() {
 
   // Handle quick task selection
   const handleQuickTaskSelect = useCallback(
-    (task: string, agent?: string) => {
-      const prompt = agent
-        ? `Create ${task.toLowerCase()} using the ${agent}`
-        : `Create ${task.toLowerCase()}`;
+    (text: string, description?: string) => {
+      const prompt = description ? `${text}: ${description}` : text;
       setInputValue(prompt);
       setInputError(null);
       textareaRef.current?.focus();
@@ -392,7 +379,7 @@ export function IdeaSection() {
           </div> */}
           <AnimatedTooltipPreview />
           <motion.div
-            className="mt-4 mb-6 md:mb-8 lg:mb-12 flex flex-col items-center justify-center"
+            className="mt-2 mb-6 md:mb-8 lg:mb-12 flex flex-col items-center justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -445,6 +432,45 @@ export function IdeaSection() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
+          {/* Mini preview row below credits */}
+          {attachedFiles.length > 0 && (
+            <div className="mx-4 -mt-1 mb-1 flex items-center gap-2 overflow-x-auto custom-scrollbar-horizontal">
+              {attachedFiles.map((file: any, index: number) => (
+                <div
+                  key={(file as any).fileKey || `${file.name}-${index}`}
+                  className="relative w-9 h-9 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex items-center justify-center overflow-hidden flex-shrink-0"
+                  title={file.name}
+                >
+                  {file.type?.startsWith("image/") ? (
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={file.name}
+                      className="w-full h-full object-cover"
+                      onLoad={(e) =>
+                        URL.revokeObjectURL((e.target as HTMLImageElement).src)
+                      }
+                    />
+                  ) : file.type?.startsWith("video/") ? (
+                    <div className="w-full h-full grid place-items-center text-[10px] text-muted-foreground">
+                      🎬
+                    </div>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleFileRemove(index);
+                    }}
+                    aria-label={`Remove ${file.name}`}
+                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-black/60 text-white grid place-items-center text-[10px] hover:bg-red-600"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
           <div
             ref={chatContainerRef}
             className="relative flex bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 dark:from-[#7e7e7e] dark:via-[#363636] dark:to-[#363636] rounded-2xl p-[1.5px] overflow-hidden before:absolute before:content-[''] before:top-[-10px] before:left-[-10px] before:bg-radial-gradient md:before:w-[40vh] before:h-[30px] before:blur-[1px] w-full shadow-lg"
@@ -494,43 +520,54 @@ export function IdeaSection() {
                     open={isPricingDialogOpen}
                     className="text-primary dark:text-teal-400 hover:text-primary/80 dark:hover:text-teal-300 transition-colors cursor-pointer text-sm font-medium"
                   />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6 text-muted-foreground hover:text-foreground dark:text-zinc-400 dark:hover:text-white"
-                    onClick={resetState}
-                    aria-label="Clear input"
-                  >
-                    <XIcon className="h-3.5 w-3.5" />
-                  </Button>
                 </div>
               </div>
 
               {/* Error message */}
               <AnimatePresence>
                 {(inputError || error) && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="mx-4 mb-2"
-                  >
-                    <div className="flex items-center gap-2 p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
-                      <AlertCircle className="h-4 w-4 text-red-500 flex-shrink-0" />
-                      <span className="text-sm text-red-700 dark:text-red-300">
-                        {inputError || error}
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setInputError(null)}
-                        className="h-6 w-6 p-0 ml-auto text-red-500 hover:text-red-700"
-                        aria-label="Dismiss error"
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </motion.div>
+                  // <motion.div
+                  //   initial={{ opacity: 0, height: 0 }}
+                  //   animate={{ opacity: 1, height: "auto" }}
+                  //   exit={{ opacity: 0, height: 0 }}
+                  //   className=""
+                  // >
+                  //   <div className="flex items-center gap-2 p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+                  //     <AlertCircle className="h-4 w-4 text-red-500 flex-shrink-0" />
+                  //     <span className="text-sm text-red-700 dark:text-red-300">
+                  //       {inputError || error}
+                  //     </span>
+                  //     <Button
+                  //       variant="ghost"
+                  //       size="sm"
+                  //       onClick={() => setInputError(null)}
+                  //       className="h-6 w-6 p-0 ml-auto text-red-500 hover:text-red-700"
+                  //       aria-label="Dismiss error"
+                  //     >
+                  //       <X className="h-3 w-3" />
+                  //     </Button>
+                  //   </div>
+                  // </motion.div>
+                  <p className="text-xs text-red-500 font-medium flex items-center mt-2 mx-4">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14px"
+                      height="14px"
+                      fill="currentColor"
+                      className="mr-2"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        d="M256 0C114.833 0 0 114.833 0 256s114.833 256 256 256 256-114.853 256-256S397.167 0 256 0zm0 472.341c-119.275 0-216.341-97.046-216.341-216.341S136.725 39.659 256 39.659c119.295 0 216.341 97.046 216.341 216.341S375.275 472.341 256 472.341z"
+                        data-original="#000000"
+                      />
+                      <path
+                        d="M373.451 166.965c-8.071-7.337-20.623-6.762-27.999 1.348L224.491 301.509 166.053 242.1c-7.714-7.813-20.246-7.932-28.039-.238-7.813 7.674-7.932 20.226-.238 28.039l73.151 74.361a19.804 19.804 0 0 0 14.138 5.929c.119 0 .258 0 .377.02a19.842 19.842 0 0 0 14.297-6.504l135.059-148.722c7.358-8.131 6.763-20.663-1.347-28.02z"
+                        data-original="#000000"
+                      />
+                    </svg>
+                    {inputError || error}
+                  </p>
                 )}
               </AnimatePresence>
 
@@ -562,72 +599,16 @@ export function IdeaSection() {
                   />
                 </div>
 
-                {/* File list */}
-                <AnimatePresence>
-                  {showFileList && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="mx-4 mb-2"
-                    >
-                      <div className="space-y-2 bg-gray-50 dark:bg-gray-900/50 p-3 rounded-md border border-gray-200 dark:border-gray-700">
-                        <div className="flex items-center justify-between">
-                          <p className="text-sm font-medium text-foreground">
-                            Selected Files ({attachedFiles.length})
-                          </p>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setAttachedFiles([])}
-                            disabled={isGenerating}
-                            className="h-6 px-2 text-xs"
-                          >
-                            Clear all
-                          </Button>
-                        </div>
-                        <div className="space-y-1 max-h-32 overflow-y-auto">
-                          {attachedFiles.map((file: any, index: any) => (
-                            <motion.div
-                              key={file.fileKey || index}
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: 10 }}
-                              className="flex items-center justify-between p-2 bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-600"
-                            >
-                              <div className="flex items-center space-x-2 min-w-0 flex-1">
-                                <div className="text-sm font-medium text-foreground truncate">
-                                  {file.name}
-                                </div>
-                                <Badge
-                                  variant="secondary"
-                                  className="text-xs flex-shrink-0"
-                                >
-                                  {formatFileSize(file.size)}
-                                </Badge>
-                              </div>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleFileRemove(index)}
-                                disabled={isGenerating}
-                                className="h-6 w-6 p-0 flex-shrink-0"
-                                aria-label={`Remove ${file.name}`}
-                              >
-                                <X className="h-3 w-3" />
-                              </Button>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
                 <div className="flex justify-between items-center p-3">
                   <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                      disabled={isGenerating}
+                    >
+                      <Mic className="w-3.5 h-3.5 text-muted-foreground" />
+                    </Button>
                     <button
                       type="button"
                       className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -645,7 +626,7 @@ export function IdeaSection() {
                       disabled={isGenerating || isSubmitting}
                       className="hidden"
                       id="file-upload"
-                      accept="image/*,.pdf,.txt,.md,.js,.jsx,.ts,.tsx,.css,.html,.json,.xml,.yaml,.yml"
+                      accept="image/*,video/*"
                       aria-label="Select files to upload"
                     />
                   </div>
@@ -699,35 +680,63 @@ export function IdeaSection() {
         >
           <div>
             <h3 className="text-center text-sm font-medium mb-3 text-muted-foreground dark:text-zinc-400">
-              Quick Social Media Tasks
+              Quick Visual Design Tasks
             </h3>
             <div className="flex flex-wrap justify-center gap-2">
               {[
                 {
-                  text: "Social Media Content",
-                  agent: "Social Media Manager",
+                  text: "Instagram Post",
+                  description: "Square visual with bold headline and CTA.",
                 },
                 {
-                  text: "Customer Support",
-                  agent: "Customer Support",
-                },
-                { text: "Blog Posts", agent: "Content Writer" },
-                { text: "Ad Campaigns", agent: "Ads Manager" },
-                {
-                  text: "Growth Strategy",
-                  agent: "Growth Specialist",
+                  text: "Instagram Carousel",
+                  description:
+                    "5-slide story with consistent typography and colors.",
                 },
                 {
-                  text: "Email Marketing",
-                  agent: "Content Writer",
+                  text: "YouTube Thumbnail",
+                  description:
+                    "High-contrast image with readable title and face focus.",
                 },
                 {
-                  text: "Social Media Strategy",
-                  agent: "Social Media Manager",
+                  text: "Event Flyer",
+                  description:
+                    "Poster highlighting date, venue, and theme with strong hierarchy.",
                 },
                 {
-                  text: "Customer Engagement",
-                  agent: "Customer Support",
+                  text: "Logo Concept",
+                  description:
+                    "Minimal marks exploring shape, type, and negative space.",
+                },
+                {
+                  text: "Product Mockup",
+                  description:
+                    "Photorealistic scene showcasing the product with brand colors.",
+                },
+                {
+                  text: "Website Hero Banner",
+                  description:
+                    "Wide banner with headline, subtext, and call-to-action.",
+                },
+                {
+                  text: "Facebook Ad Creative",
+                  description:
+                    "Visual optimized for conversion with clear benefit and CTA.",
+                },
+                {
+                  text: "LinkedIn Banner",
+                  description:
+                    "Professional header with brand elements and clean layout.",
+                },
+                {
+                  text: "Business Card",
+                  description:
+                    "Two-sided layout with logo, name, role, and contact info.",
+                },
+                {
+                  text: "Pricing Table Graphic",
+                  description:
+                    "3-tier comparison with highlighted recommended plan.",
                 },
               ].map((item, index) => (
                 <motion.button
@@ -736,11 +745,11 @@ export function IdeaSection() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3, delay: 0.7 + index * 0.05 }}
                   className="px-3 py-1.5 bg-gray-100 dark:bg-[#1b1b1b] border border-gray-200 dark:border-[#363636] rounded-[5px] cursor-pointer select-none hover:bg-gray-200 dark:hover:bg-[#2a2a2a] transition-colors text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-                  onClick={() => handleQuickTaskSelect(item.text, item.agent)}
+                  onClick={() =>
+                    handleQuickTaskSelect(item.text, (item as any).description)
+                  }
                   disabled={isGenerating || isSubmitting}
-                  aria-label={`Create ${item.text.toLowerCase()} using ${
-                    item.agent || "AI"
-                  }`}
+                  aria-label={`Create ${item.text.toLowerCase()} — ${(item as any).description || "quick visual task"}`}
                 >
                   {item.text}
                 </motion.button>

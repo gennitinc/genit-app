@@ -6,9 +6,11 @@ import PartnerLogos from "./Partners-Logos";
 // import Communityproject from "../layout/community-project";
 import { useEffect, useState } from "react";
 import TemplateGrid from "../common/templateGrid";
+import { Toaster } from "@/components/ui/sonner";
 
 export function LandingPage() {
   const [showBanner, setShowBanner] = useState<boolean>(true);
+  
 
   useEffect(() => {
     try {
@@ -26,6 +28,7 @@ export function LandingPage() {
 
   return (
     <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
+      <Toaster />
       {showBanner && (
         <div className="relative flex items-center justify-center font-medium py-2 bg-gradient-to-r from-violet-500 via-[#560280] to-[#E0724A] text-sm text-white">
           <p>

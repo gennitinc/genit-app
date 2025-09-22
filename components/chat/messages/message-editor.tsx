@@ -9,7 +9,7 @@ import { useMessageEditor } from "@/hooks/message/use-message-editor";
 
 interface MessageEditorProps {
   initialContent: string;
-  onSave: (content: string, files?: File[]) => Promise<void>;
+  onSave: (text: string, files?: File[]) => Promise<void>;
   onCancel: () => void;
   placeholder?: string;
   className?: string;
@@ -23,7 +23,7 @@ export function MessageEditor({
   className = "",
 }: MessageEditorProps) {
   const {
-    content,
+    text,
     files,
     isLoading,
     error,
@@ -54,7 +54,7 @@ export function MessageEditor({
   };
 
   const handlePaste = (event: React.ClipboardEvent) => {
-    // Allow normal paste behavior, auto-resize will handle the content change
+    // Allow normal paste behavior, auto-resize will handle the text change
     setTimeout(autoResize, 0);
   };
 
@@ -64,7 +64,7 @@ export function MessageEditor({
       <div className="relative">
         <textarea
           ref={textareaRef}
-          value={content}
+          value={text}
           onChange={handleInput}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
@@ -79,12 +79,12 @@ export function MessageEditor({
 
         {/* Character count */}
         <div className="absolute bottom-2 right-2 text-xs text-muted-foreground bg-background px-1 rounded">
-          {content.length} characters
+          {text.length} characters
         </div>
 
         {/* Resize indicator */}
         <div className="absolute bottom-2 left-2 text-xs text-muted-foreground bg-background px-1 rounded">
-          {content.split("\n").length} lines
+          {text.split("\n").length} lines
         </div>
       </div>
 
@@ -138,7 +138,7 @@ export function MessageEditor({
             type="button"
             size="sm"
             onClick={saveChanges}
-            disabled={isLoading || !content.trim()}
+            disabled={isLoading || !text.trim()}
             className="relative bg-gradient-to-b from-muted-foreground/10 to-muted-foreground/20 hover:from-muted-foreground/20 hover:to-muted-foreground/30 text-muted-foreground px-5 py-2.5 rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200 border border-border hover:border-border"
           >
             <div className="absolute inset-0 bg-gradient-to-b from-muted-foreground/10 to-transparent rounded-lg pointer-events-none"></div>

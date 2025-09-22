@@ -13,12 +13,124 @@ import {
   RefreshCw,
   Eye,
   RotateCcw,
+  Download,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Maximize,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MessageActions } from "@/components/chat/messages";
 import ShinyText from "@/components/ui/shiny-text";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import Image from "next/image";
+
+// Desktop Media Viewer Component
+const DesktopMediaViewer = ({
+  children,
+  title,
+  mediaType,
+  src,
+}: {
+  children: React.ReactNode;
+  title: string;
+  mediaType: "image" | "video";
+  src: string;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="max-w-2xl max-h-fit p-0 m-0">
+        <div className="relative w-full h-[60vh]">
+          {mediaType === "image" ? (
+            <Image
+              src={src}
+              alt={title}
+              fill
+              className="object-contain"
+              sizes="100vw"
+            />
+          ) : (
+            <video
+              src={src}
+              controls
+              className="w-full h-full object-contain rounded-lg"
+              preload="metadata"
+            >
+              Your browser does not support the video tag.
+            </video>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// Mobile/Tablet Media Viewer Component
+const MobileMediaViewer = ({
+  children,
+  title,
+  mediaType,
+  src,
+}: {
+  children: React.ReactNode;
+  title: string;
+  mediaType: "image" | "video";
+  src: string;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Drawer open={isOpen} onOpenChange={setIsOpen}>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
+      <DrawerContent className="max-h-[85vh]">
+        <DrawerHeader>
+          <DrawerTitle>{title}</DrawerTitle>
+        </DrawerHeader>
+        <div className="px-4 pb-4">
+          <div className="relative w-full h-[60vh]">
+            {mediaType === "image" ? (
+              <Image
+                src={src}
+                alt={title}
+                fill
+                className="object-contain"
+                sizes="100vw"
+              />
+            ) : (
+              <video
+                src={src}
+                controls
+                className="w-full h-full object-contain rounded-lg"
+                preload="metadata"
+              >
+                Your browser does not support the video tag.
+              </video>
+            )}
+          </div>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+};
 
 interface GenerationItem {
   id: string;
@@ -264,76 +376,85 @@ export function VersioningMessage({
         {index < generation.items.length - 1 && (
           <div className="absolute left-[11px] sm:left-[15px] top-[22px] w-0.5 h-6 bg-muted-foreground/10 z-0"></div>
         )}
-        <div className="flex items-center gap-2 sm:gap-3 px-1.5 py-1 rounded-md relative z-10 hover:bg-muted/50 transition-colors group">
-          <div className="flex-shrink-0">
-            <div
-              className={cn(
-                "w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-2 shadow-sm relative z-20",
-                getStatusColor(item.status)
-              )}
-            >
-              {getStatusIcon(item.status)}
-            </div>
-          </div>
+        <div className="flex items-center gap-2 sm:gap-3 px-1.5 py-1 rounded-md relative z-10 transition-colors group">
           <div className="flex-1 min-w-0">
             {(() => {
               const src = getItemSrc(item);
               if (isImageItem(item) && src) {
                 return (
-                  <div
-                    className="flex items-center gap-3 cursor-pointer"
-                    onClick={() => onItemClick?.(item)}
-                  >
-                    <img
-                      src={src}
-                      alt={item.name}
-                      className="w-24 h-24 rounded-md object-cover border border-border"
-                    />
-                    <div className="min-w-0">
-                      <p className="text-xs sm:text-sm font-medium text-foreground truncate">
-                        {item.status === "generating" ? (
-                          <ShinyText
-                            text={item.name}
-                            speed={3}
-                            className="text-xs sm:text-sm font-medium"
-                          />
-                        ) : (
-                          item.name
-                        )}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        image • {formatTimestamp(item.timestamp)}
-                      </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p
+                          className="text-xs sm:text-sm font-medium text-foreground truncate cursor-pointer hover:underline transition-all duration-200"
+                          onClick={() => onItemClick?.(item)}
+                        >
+                          {item.status === "generating" ? (
+                            <ShinyText
+                              text={item.name}
+                              speed={3}
+                              className="text-xs sm:text-sm font-medium"
+                            />
+                          ) : (
+                            item.name
+                          )}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {item.type} • {formatTimestamp(item.timestamp)}
+                        </p>
+                      </div>
+                    </div>
+                    {/* Full Image Display */}
+                    <div className="w-full max-w-2xl mx-auto">
+                      <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden bg-muted">
+                        <Image
+                          src={src}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      </div>
                     </div>
                   </div>
                 );
               }
               if (isVideoItem(item) && src) {
                 return (
-                  <div
-                    className="flex items-center gap-3 cursor-pointer"
-                    onClick={() => onItemClick?.(item)}
-                  >
-                    <video
-                      src={src}
-                      className="w-28 h-20 rounded-md border border-border object-cover"
-                      controls
-                    />
-                    <div className="min-w-0">
-                      <p className="text-xs sm:text-sm font-medium text-foreground truncate">
-                        {item.status === "generating" ? (
-                          <ShinyText
-                            text={item.name}
-                            speed={3}
-                            className="text-xs sm:text-sm font-medium"
-                          />
-                        ) : (
-                          item.name
-                        )}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        video • {formatTimestamp(item.timestamp)}
-                      </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p
+                          className="text-xs sm:text-sm font-medium text-foreground truncate cursor-pointer hover:underline transition-all duration-200"
+                          onClick={() => onItemClick?.(item)}
+                        >
+                          {item.status === "generating" ? (
+                            <ShinyText
+                              text={item.name}
+                              speed={3}
+                              className="text-xs sm:text-sm font-medium"
+                            />
+                          ) : (
+                            item.name
+                          )}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {item.type} • {formatTimestamp(item.timestamp)}
+                        </p>
+                      </div>
+                    </div>
+                    {/* Full Video Display */}
+                    <div className="w-full max-w-2xl mx-auto">
+                      <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden bg-muted">
+                        <video
+                          src={src}
+                          controls
+                          className="w-full h-full object-cover"
+                          preload="metadata"
+                        >
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
                     </div>
                   </div>
                 );
@@ -361,32 +482,6 @@ export function VersioningMessage({
               );
             })()}
           </div>
-          <div className="flex-shrink-0">
-            {item.status === "generating" ? (
-              <ShinyText
-                text="generating"
-                speed={3}
-                className="text-xs font-medium capitalize text-blue-500"
-              />
-            ) : (
-              <Badge
-                variant="secondary"
-                className={cn(
-                  "text-xs capitalize",
-                  item.status === "generated" &&
-                    "bg-green-500/10 text-green-600 border-green-500/20",
-                  item.status === "edited" &&
-                    "bg-blue-500/10 text-blue-600 border-blue-500/20",
-                  item.status === "error" &&
-                    "bg-red-500/10 text-red-600 border-red-500/20",
-                  item.status === "stopped" &&
-                    "bg-orange-500/10 text-orange-600 border-orange-500/20"
-                )}
-              >
-                {item.status}
-              </Badge>
-            )}
-          </div>
         </div>
       </div>
     ));
@@ -409,7 +504,7 @@ export function VersioningMessage({
             >
               <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
             </div>
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 flex-1 flex gap-2 items-center justify-between">
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="font-medium text-foreground text-xs sm:text-sm truncate">
                   {isGenerating ? (
@@ -436,34 +531,80 @@ export function VersioningMessage({
           </div>
 
           <div className="flex items-center gap-1 flex-shrink-0">
-            {/* Actions for the generation */}
+            {/* Media Action Buttons - Show for image/video items */}
+            {generation.items.some(
+              (item) => isImageItem(item) || isVideoItem(item)
+            ) && (
+              <div className="flex items-center gap-1 mr-2">
+                {generation.items.map((item) => {
+                  const src = getItemSrc(item);
+                  if (!src || (!isImageItem(item) && !isVideoItem(item)))
+                    return null;
 
+                  return (
+                    <div key={item.id} className="flex items-center gap-1">
+                      {/* Desktop View Button */}
+                      <DesktopMediaViewer
+                        title={item.name}
+                        mediaType={isImageItem(item) ? "image" : "video"}
+                        src={src}
+                      >
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0 hover:bg-muted transition-colors hidden md:flex"
+                          title={`View ${item.name}`}
+                        >
+                          {isImageItem(item) ? (
+                            <Maximize className="w-3 h-3 text-muted-foreground" />
+                          ) : (
+                            <Play className="w-3 h-3 text-muted-foreground" />
+                          )}
+                        </Button>
+                      </DesktopMediaViewer>
+
+                      {/* Mobile/Tablet View Button */}
+                      <MobileMediaViewer
+                        title={item.name}
+                        mediaType={isImageItem(item) ? "image" : "video"}
+                        src={src}
+                      >
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0 hover:bg-muted transition-colors md:hidden"
+                          title={`View ${item.name}`}
+                        >
+                          {isImageItem(item) ? (
+                            <Maximize className="w-3 h-3 text-muted-foreground" />
+                          ) : (
+                            <Play className="w-3 h-3 text-muted-foreground" />
+                          )}
+                        </Button>
+                      </MobileMediaViewer>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0 hover:bg-muted transition-colors mb-0.5"
+                        title={`Download ${item.name}`}
+                        onClick={() => {
+                          const link = document.createElement("a");
+                          link.href = src;
+                          link.download = item.name;
+                          link.click();
+                        }}
+                      >
+                        <Download className="w-3 h-3 text-muted-foreground" />
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Actions for the generation */}
             {/* View and Restore Icons - Side by Side */}
             <div className="flex items-center gap-0.5">
-              {/* View Icon */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleView}
-                className={cn(
-                  "h-6 w-6 p-0 hover:bg-muted transition-colors",
-                  generation.isViewing &&
-                    "bg-blue-500/10 text-blue-600 hover:bg-blue-500/20"
-                )}
-                title={
-                  generation.isViewing ? "Currently viewing" : "View generation"
-                }
-              >
-                <Eye
-                  className={cn(
-                    "w-3 h-3",
-                    generation.isViewing
-                      ? "text-blue-600"
-                      : "text-muted-foreground"
-                  )}
-                />
-              </Button>
-
               {/* Restore/Revert Icon - Only show if not latest and not currently viewing */}
               {!generation.isLatest && !generation.isViewing && (
                 <Button
