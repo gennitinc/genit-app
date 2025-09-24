@@ -420,14 +420,15 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           setMessages([userMessage, aiTypingMessage]);
 
           // Start AI generation - this will replace the typing message with real response
-          await sendMessage(prompt, {
-            body: {
-              mediaType: "image",
-              files: files || [],
-              projectId: project._id,
-            },
-          });
+          // await sendMessage(prompt, {
+          //   body: {
+          //     mediaType: "image",
+          //     files: files || [],
+          //     projectId: project._id,
+          //   },
+          // });
 
+          generateMessage(prompt, files, project._id);
           // Clear localStorage and input state after processing
           localStorage.removeItem("draftData");
           clearInput(); // Clear input value and attached files from context
@@ -621,7 +622,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       const formData = new FormData();
       formData.append("prompt", messageContent);
       formData.append("mediaType", "image");
-      files?.forEach((file) => formData.append("files[]", file));
+      files?.forEach((file) => formData.append("files", file));
+
+      console.log("formData", formData);
 
       await apiResponseFileUpload.post(
         `/project/generate/${projectId}`,
