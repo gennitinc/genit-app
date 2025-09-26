@@ -64,41 +64,41 @@ export function ChatInput({
   const inputSectionRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   // Restore idea draft (prompt + files) if present
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem("gennit_idea_draft");
-      if (!raw) return;
-      const parsed = JSON.parse(raw) as {
-        prompt?: string;
-        files?: { name: string; type: string; size: number; dataUrl: string }[];
-      };
-      if (parsed.prompt) setInputValue(parsed.prompt);
-      if (Array.isArray(parsed.files) && parsed.files.length > 0) {
-        // Reconstruct File objects from data URLs
-        const reconstructed = parsed.files.map((f, idx) => {
-          const arr = f.dataUrl.split(",");
-          const mime =
-            arr[0].match(/:(.*?);/)?.[1] ||
-            f.type ||
-            "application/octet-stream";
-          const bstr = atob(arr[1] || "");
-          let n = bstr.length;
-          const u8arr = new Uint8Array(n);
-          while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-          }
-          const file = new File([u8arr], f.name || `file-${idx}`, {
-            type: mime,
-          });
-          (file as any).fileKey = `${file.name}-${Date.now()}-${idx}`;
-          return file;
-        });
-        setAttachedFiles(reconstructed);
-      }
-      // Clear after restoring so it doesn't keep overwriting
-      localStorage.removeItem("gennit_idea_draft");
-    } catch {}
-  }, [setInputValue, setAttachedFiles]);
+  // useEffect(() => {
+  //   try {
+  //     const raw = localStorage.getItem("gennit_idea_draft");
+  //     if (!raw) return;
+  //     const parsed = JSON.parse(raw) as {
+  //       prompt?: string;
+  //       files?: { name: string; type: string; size: number; dataUrl: string }[];
+  //     };
+  //     if (parsed.prompt) setInputValue(parsed.prompt);
+  //     if (Array.isArray(parsed.files) && parsed.files.length > 0) {
+  //       // Reconstruct File objects from data URLs
+  //       const reconstructed = parsed.files.map((f, idx) => {
+  //         const arr = f.dataUrl.split(",");
+  //         const mime =
+  //           arr[0].match(/:(.*?);/)?.[1] ||
+  //           f.type ||
+  //           "application/octet-stream";
+  //         const bstr = atob(arr[1] || "");
+  //         let n = bstr.length;
+  //         const u8arr = new Uint8Array(n);
+  //         while (n--) {
+  //           u8arr[n] = bstr.charCodeAt(n);
+  //         }
+  //         const file = new File([u8arr], f.name || `file-${idx}`, {
+  //           type: mime,
+  //         });
+  //         (file as any).fileKey = `${file.name}-${Date.now()}-${idx}`;
+  //         return file;
+  //       });
+  //       setAttachedFiles(reconstructed);
+  //     }
+  //     // Clear after restoring so it doesn't keep overwriting
+  //     localStorage.removeItem("gennit_idea_draft");
+  //   } catch {}
+  // }, [setInputValue, setAttachedFiles]);
 
   // Track if user has manually scrolled up
   const [userScrolledUp, setUserScrolledUp] = useState(false);

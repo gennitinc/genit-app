@@ -1,5 +1,3 @@
-
-
 interface ShinyTextProps {
   text: string
   disabled?: boolean

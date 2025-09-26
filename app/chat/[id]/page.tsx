@@ -13,24 +13,31 @@ const ChatIdPage = () => {
   const projectId = params.id as string;
 
   useEffect(() => {
-
     if (!projectId) {
       router.push("/chat");
+      return;
     }
 
-    fetchProject(projectId);
-   
-  }, [projectId, ]);
+    let didRun = false;
+    const run = async () => {
+      if (didRun) return;
+      didRun = true;
+      await fetchProject(projectId);
+    };
+    run();
 
-  if (isLoadingProject ) {
+    return () => {
+      didRun = true;
+    };
+  }, [projectId]);
+
+  if (isLoadingProject) {
     return (
       <div className="flex items-center justify-center h-screen bg-white dark:bg-black">
         <Loading />
       </div>
     );
   }
-
-  
 
   return (
     <div>

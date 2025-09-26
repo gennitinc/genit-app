@@ -78,11 +78,6 @@ export function TextChatContent() {
   const [isProcessingDraft, setIsProcessingDraft] = useState(false);
   const conversationRef = useRef<HTMLDivElement>(null);
 
-  // Handle localStorage draft when messages array is empty (new project)
-  // useEffect(() => {
-  //   handleLocalStorageDraft();
-  // }, [clearInput]);
-
   // Scroll to bottom when messages are empty or component mounts
   useEffect(() => {
     const scrollToBottom = () => {
@@ -91,9 +86,6 @@ export function TextChatContent() {
           conversationRef.current.scrollHeight;
       }
     };
-
-    console.log("message", messages);
-
     // Scroll to bottom immediately when component mounts or messages change
     scrollToBottom();
 

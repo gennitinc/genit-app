@@ -242,6 +242,8 @@ export function IdeaSection() {
         if (res.type && res.id) {
           // Redirect to chat page with project ID
           router.push(`/chat/${res.id}`);
+          setIsSubmitting(false);
+          setInputValue("");
         } else {
           // Clear state after successful submission only if no redirect
           setInputValue("");
@@ -499,7 +501,7 @@ export function IdeaSection() {
                     50 AI Credits left
                   </div>
                 )}
-                {isGenerating && (
+                {/* {isGenerating && (
                   <div className="flex items-start">
                     <div className="chat chat-start p-0 m-0 w-full">
                       <div className="chat-bubble text-sm flex flex-row gap-2 items-center text-gray-900">
@@ -514,7 +516,7 @@ export function IdeaSection() {
                       </div>
                     </div>
                   </div>
-                )}
+                )} */}
                 <div className="flex items-center gap-2">
                   <PricingDialog
                     open={isPricingDialogOpen}
