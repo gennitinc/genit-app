@@ -32,7 +32,7 @@ function markdownToPlainText(markdown: string): string {
     markdown
       // Remove headers
       .replace(/^#{1,6}\s+/gm, "")
-      // Remove bold/italic
+      // Remove bold/italic new
       .replace(/\*\*([^*]+)\*\*/g, "$1")
       .replace(/\*([^*]+)\*/g, "$1")
       .replace(/__([^_]+)__/g, "$1")
