@@ -90,10 +90,10 @@ export default function Contact1() {
           <div className="w-full pb-10 md:space-y-10 md:pb-0">
             <div className="space-y-6 md:max-w-[40rem]">
               <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                Get in touch
+                You are one form away
               </div>
               <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">
-                Transform Your Workflow Today
+                Get in touch
               </h1>
               <div className="text-muted-foreground md:text-base lg:text-lg lg:leading-7">
                 Experience a personalized demonstration of our cutting-edge
@@ -213,13 +213,13 @@ export default function Contact1() {
             </div>
           </div>
           <div className="flex w-full justify-center lg:mt-2.5">
-            <Card className="relative flex w-full min-w-80 max-w-[30rem] flex-col items-center overflow-visible border-primary/10 bg-background/80 shadow-lg backdrop-blur-sm md:min-w-96">
+            <Card className="relative flex w-full min-w-80 max-w-[32rem] flex-col items-center overflow-visible border-primary/10 bg-background/80 shadow-lg backdrop-blur-sm md:min-w-96">
               <CardHeader className="pb-2 pt-6">
                 <div className="flex flex-col items-center space-y-1.5 text-center">
                   <div className="mb-2 flex size-12 items-center justify-center rounded-full bg-primary/10">
                     <Calendar className="size-6 text-primary" />
                   </div>
-                  <h2 className="text-2xl font-semibold">Schedule Your Demo</h2>
+                  <h2 className="text-2xl font-semibold">Lets talk</h2>
                   <p className="text-sm text-muted-foreground">
                     Fill out the form below and we'll be in touch shortly
                   </p>
@@ -246,7 +246,7 @@ export default function Contact1() {
                         )}
                       />
 
-                      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 w-full">
                         <FormField
                           control={form.control}
                           name="company"
@@ -272,11 +272,11 @@ export default function Contact1() {
                                 defaultValue={field.value}
                               >
                                 <FormControl>
-                                  <SelectTrigger>
+                                  <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select size" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent>
+                                <SelectContent className="w-full">
                                   <SelectItem value="1-10">
                                     1-10 employees
                                   </SelectItem>
@@ -303,7 +303,7 @@ export default function Contact1() {
                         />
                       </div>
 
-                      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 w-full">
                         <FormField
                           control={form.control}
                           name="email"
@@ -340,40 +340,85 @@ export default function Contact1() {
                         />
                       </div>
 
-                      <FormField
-                        control={form.control}
-                        name="country"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Country</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select your country" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="us">
-                                  United States
-                                </SelectItem>
-                                <SelectItem value="uk">
-                                  United Kingdom
-                                </SelectItem>
-                                <SelectItem value="ca">Canada</SelectItem>
-                                <SelectItem value="au">Australia</SelectItem>
-                                <SelectItem value="de">Germany</SelectItem>
-                                <SelectItem value="fr">France</SelectItem>
-                                <SelectItem value="jp">Japan</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 w-full">
+                        <FormField
+                          control={form.control}
+                          name="country"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Country</FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select your country" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="us">
+                                    United States
+                                  </SelectItem>
+                                  <SelectItem value="uk">
+                                    United Kingdom
+                                  </SelectItem>
+                                  <SelectItem value="ca">Canada</SelectItem>
+                                  <SelectItem value="au">Australia</SelectItem>
+                                  <SelectItem value="de">Germany</SelectItem>
+                                  <SelectItem value="fr">France</SelectItem>
+                                  <SelectItem value="jp">Japan</SelectItem>
+                                  <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="referral"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                How did you hear about us?{" "}
+                                {/* <span className="text-muted-foreground">
+                                  (Optional)
+                                </span> */}
+                              </FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select source" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="w-full">
+                                  <SelectItem value="search">
+                                    Search Engine
+                                  </SelectItem>
+                                  <SelectItem value="social">
+                                    Social Media
+                                  </SelectItem>
+                                  <SelectItem value="friend">
+                                    Friend/Colleague
+                                  </SelectItem>
+                                  <SelectItem value="conference">
+                                    Conference/Event
+                                  </SelectItem>
+                                  <SelectItem value="advertisement">
+                                    Advertisement
+                                  </SelectItem>
+                                  <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
 
                       <FormField
                         control={form.control}
@@ -393,50 +438,6 @@ export default function Contact1() {
                                 {...field}
                               />
                             </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="referral"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>
-                              How did you hear about us?{" "}
-                              <span className="text-muted-foreground">
-                                (Optional)
-                              </span>
-                            </FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select source" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="search">
-                                  Search Engine
-                                </SelectItem>
-                                <SelectItem value="social">
-                                  Social Media
-                                </SelectItem>
-                                <SelectItem value="friend">
-                                  Friend/Colleague
-                                </SelectItem>
-                                <SelectItem value="conference">
-                                  Conference/Event
-                                </SelectItem>
-                                <SelectItem value="advertisement">
-                                  Advertisement
-                                </SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
