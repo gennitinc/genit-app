@@ -30,7 +30,7 @@ export function LandingPage() {
     <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
       <Toaster />
       {showBanner && (
-        <div className="relative flex items-center justify-center font-medium py-2 bg-gradient-to-r from-violet-500 via-[#560280] to-[#E0724A] text-sm text-white">
+        <div className="relative flex items-center px-2 justify-start md:items-center md:justify-center font-medium py-2 bg-gradient-to-r from-violet-500 via-[#560280] to-[#E0724A] text-sm text-white">
           <p>
             Exclusive Price Drop! Hurry, 🎉{" "}
             <span className="underline underline-offset-2 text-sm">
