@@ -314,7 +314,7 @@ function Page() {
       <div className="sticky top-0 z-40">
         <LandingNavbar />
       </div>
-      <>
+      <div className="hidden lg:block">
         {/* <h1 className="text-3xl font-semibold text-center mx-auto">
           Powerful Features
         </h1>
@@ -363,7 +363,7 @@ function Page() {
             </p>
           </div>
         </div>
-      </>
+      </div>
 
       <section className="flex flex-col md:flex-row items-center justify-center gap-10 max-md:px-4 mt-10 mb-20">
         <div className="text-sm text-neutral-400 lg:max-w-[60%]">

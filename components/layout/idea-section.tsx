@@ -234,16 +234,17 @@ export function IdeaSection() {
       setInputError(null);
 
       try {
-       
         const res = await createProject(inputValue, attachedFiles as any);
 
         console.log("Project creation result:", res);
 
         if (res.type && res.id) {
-          // Redirect to chat page with project ID
-          router.push(`/chat/${res.id}`);
+          // Clear state before redirect
           setIsSubmitting(false);
           setInputValue("");
+          setAttachedFiles([]);
+          // Redirect to chat page with project ID
+          router.push(`/chat/${res.id}`);
         } else {
           // Clear state after successful submission only if no redirect
           setInputValue("");
@@ -403,7 +404,7 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              Your AI Media Designer
+              Your AI Graphics Designer
             </motion.h1>
             <motion.p
               className="mt-4 text-center text-gray-600 dark:text-gray-300 max-w-lg"

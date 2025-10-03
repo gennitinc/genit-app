@@ -41,6 +41,7 @@ interface AIMessageProps {
   onReload?: () => void;
   onLike?: () => void;
   onDislike?: () => void;
+  generation: any;
   className?: string;
 }
 
@@ -48,6 +49,7 @@ export function AIMessage({
   message,
   // content,
   // analysis,
+  generation,
   totalTime,
   versionId,
   isStreaming = false,

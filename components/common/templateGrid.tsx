@@ -144,6 +144,8 @@ export default function TemplateGrid() {
   const onEdit = (item: TemplateItem) => {
     setSelected(item);
     setEditOpen(true);
+    // Add the template URL to selectedFiles when user clicks edit
+    setSelectedFiles((prev) => [...prev, item.src]);
   };
 
   const placeholders = [
@@ -164,6 +166,8 @@ export default function TemplateGrid() {
   const {
     attachedFiles,
     setAttachedFiles,
+    selectedFiles,
+    setSelectedFiles,
     error,
     isGenerating,
     clearError,
@@ -325,17 +329,31 @@ export default function TemplateGrid() {
       setInputError(null);
 
       try {
-        console.log("Creating project with:", { inputValue, attachedFiles });
+        console.log("Creating project with:", {
+          inputValue,
+          attachedFiles,
+          selectedFiles,
+        });
 
-        const result = await createProject(inputValue, attachedFiles);
+        const result = await createProject(
+          inputValue,
+          attachedFiles,
+          selectedFiles
+        );
 
         if (result.type && result.id) {
+          // Clear state before redirect
+          setIsSubmitting(false);
+          setInputValue("");
+          setAttachedFiles([]);
+          setSelectedFiles([]);
           // Redirect to chat page with project ID
           router.push(`/chat/${result.id}`);
         } else {
           // Clear state after successful submission only if no redirect
           setInputValue("");
           setAttachedFiles([]);
+          setSelectedFiles([]);
         }
       } catch (error: any) {
         console.error("Failed to create project:", error);
@@ -349,6 +367,7 @@ export default function TemplateGrid() {
     [
       inputValue,
       attachedFiles,
+      selectedFiles,
       isGenerating,
       isSubmitting,
       validateInput,

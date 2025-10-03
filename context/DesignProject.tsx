@@ -4,6 +4,7 @@ import React, {
   useState,
   useRef,
   useCallback,
+  useEffect,
 } from "react";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "./AuthenticatedContext";
@@ -76,7 +77,6 @@ export interface IMessage {
   id: string;
   role: MessageRole;
   type: "user" | "ai";
-  text: string;
   analysis?: string;
   totalTime?: number;
   versionId?: string;
@@ -131,7 +131,8 @@ interface IProjectDesignContext {
   resetGenerationState: () => void;
   createProject: (
     value: string,
-    attachedFile?: any
+    attachedFile?: any,
+    selectedFiles?: string[]
   ) => Promise<{ type: boolean; message: string; id?: string }>;
   fetchProject: (projectId: string) => Promise<{
     success: boolean;
@@ -161,7 +162,8 @@ interface IProjectDesignContext {
   generateMessage: (
     messageContent: string,
     files: File[] | null,
-    projectId: string
+    projectId: string,
+    selectedFiles?: string[]
   ) => Promise<void>;
 
   isLiveMode: boolean;
@@ -193,6 +195,9 @@ interface IProjectDesignContext {
 
   attachedFiles: any[];
   setAttachedFiles: React.Dispatch<React.SetStateAction<any[]>>;
+
+  selectedFiles: string[];
+  setSelectedFiles: React.Dispatch<React.SetStateAction<string[]>>;
 
   fileLoadingStates: { [key: string]: boolean };
   setFileLoadingStates: React.Dispatch<
@@ -275,6 +280,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [attachedFiles, setAttachedFiles] = useState<any[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [fileLoadingStates, setFileLoadingStates] = useState<{
     [key: string]: boolean;
   }>({});
@@ -286,6 +292,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [streamingAnalysis, setStreamingAnalysis] = useState<string>("");
   const [isProcessingDraft, setIsProcessingDraft] = useState(false);
   const hasProcessedDraftRef = useRef(false);
+  const [messages, setMessages] = useState<any[]>([]);
 
   const transformMessages = (messages: any[]) => {
     return (
@@ -293,9 +300,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         if (msg.parts && Array.isArray(msg.parts)) {
           return {
             ...msg,
+            // Normalize role and type
             role: (msg.type === "user" ? "user" : "assistant") as
               | "user"
               | "assistant",
+            type: msg.type === "user" ? "user" : "ai",
             parts: msg.parts,
             ...(msg.type === "user" &&
               msg.fileAttachments && {
@@ -312,9 +321,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
         return {
           ...msg,
+          // Normalize role and type
           role: (msg.type === "user" ? "user" : "assistant") as
             | "user"
             | "assistant",
+          type: msg.type === "user" ? "user" : "ai",
           parts:
             msg.type === "user"
               ? [
@@ -342,12 +353,14 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
-  const { messages, sendMessage, status, setMessages } = useChat({
-    messages: transformMessages(project?.messages || []),
-    transport: new DefaultChatTransport({
-      api: `/project/generate/${project?._id}`,
-    }),
-  });
+  const sendMessage = () => {};
+
+  // const { messages, sendMessage, status, setMessages } = useChat({
+  //   messages: transformMessages(project?.messages || []),
+  //   transport: new DefaultChatTransport({
+  //     api: `/project/generate/${project?._id}`,
+  //   }),
+  // });
 
   const handleLocalStorageDraft = async (project: IDesignProject) => {
     console.log("hitting 1");
@@ -375,13 +388,14 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       const parsed = JSON.parse(draft);
       const prompt = parsed.prompt;
       const attachedFile = parsed.files;
+      const selectedFiles = parsed.selectedFiles || [];
 
       if (!prompt) {
         localStorage.removeItem("newData");
         return;
       }
 
-      await generateMessage(prompt, attachedFile, project._id);
+      await generateMessage(prompt, attachedFile, project._id, selectedFiles);
     } catch (error) {
       console.error("Error processing localStorage draft:", error);
       localStorage.removeItem("newData");
@@ -400,7 +414,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     clearError();
   };
 
-  const createProject = async (value: string, attachedFile?: any) => {
+  const createProject = async (
+    value: string,
+    attachedFile?: any,
+    selectedFiles?: string[]
+  ) => {
     const newProject = {
       title: value,
       status: ProjectStatus.ACTIVE,
@@ -439,6 +457,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           JSON.stringify({
             prompt: value,
             files: attachedFile ? [attachedFile] : [],
+            selectedFiles: selectedFiles || [],
           })
         );
 
@@ -484,6 +503,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
         if (response.status === 200 && response.data.success) {
           setProject(response.data.data);
+          setMessages(transformMessages(response.data.data?.messages || []));
+
           console.log("Project fetched successfully:", response.data.data);
 
           handleLocalStorageDraft(response.data.data);
@@ -560,7 +581,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const generateMessage = async (
     messageContent: string,
     files: File[] | null,
-    projectId: string
+    projectId: string,
+    selectedFiles?: string[]
   ) => {
     try {
       setIsGenerating(true);
@@ -569,6 +591,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       formData.append("prompt", messageContent);
       formData.append("mediaType", "image");
       files?.forEach((file) => formData.append("files", file));
+
+      // Add selected files if provided
+      if (selectedFiles && selectedFiles.length > 0) {
+        formData.append("selectedFiles", JSON.stringify(selectedFiles));
+      }
+
+      console.log("form D", messageContent, files, selectedFiles);
 
       await apiResponseFileUpload.post(
         `/project/generate/${projectId}`,
@@ -742,6 +771,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setInputValue,
         attachedFiles,
         setAttachedFiles,
+        selectedFiles,
+        setSelectedFiles,
         fileLoadingStates,
         setFileLoadingStates,
         isDragOver,
