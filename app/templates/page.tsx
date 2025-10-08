@@ -9,6 +9,7 @@ import { IdeaSection } from "@/components/layout/idea-section";
 import {motion} from "framer-motion"
 import { useEffect, useState } from "react";
 
+//images
 const images = [
   "https://img.freepik.com/free-photo/smiley-woman-outdoors-city_23-2148774316.jpg?ga=GA1.1.1557987898.1750353078&semt=ais_hybrid&w=740",
   "https://img.freepik.com/free-photo/freedom-concept-with-hiker-mountain_23-2148107064.jpg?ga=GA1.1.1557987898.1750353078&semt=ais_hybrid&w=740",
