@@ -265,7 +265,7 @@ export function TextChatContent() {
                     {/* Render generation groups - These don't show AI avatar */}
                     {message.generationGroups?.map((group: GenerationGroup) => (
                       <VersioningMessage
-                        key={group.id}
+                        key={group._id}
                         generation={group}
                         onToggle={toggleGeneration}
                         onRetry={retryLoading}
@@ -277,12 +277,12 @@ export function TextChatContent() {
                         onLike={() => handleLikeToggle(message.id)}
                         onDislike={() => handleDislikeToggle(message.id)}
                         onReload={() => handleRegenerateMessage(message.id)}
-                        onItemClick={(item) =>
-                          handleGenerationItemClick(item.id)
-                        }
-                        isGenerating={
-                          isGenerating && message.metadata?.isStreaming
-                        }
+                        // onItemClick={(item) =>
+                        //   handleGenerationItemClick(item.id)
+                        // }
+                        // isGenerating={
+                        //   isGenerating && message.metadata?.isStreaming
+                        // }
                       />
                     ))}
                   </div>
