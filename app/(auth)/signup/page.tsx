@@ -220,7 +220,7 @@ const Signup = () => {
   const onLogout = useCallback(() => {}, []);
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-[100vh] min-h-[100dvh] overflow-hidden w-full bg-black">
+    <div className="flex flex-col justify-center items-center min-h-[100vh] overflow-hidden w-full bg-black">
       <Card className="w-full max-w-md mx-4">
         <CardHeader className="text-center">
           <div className="flex justify-center items-center mt-4 gap-2">
@@ -236,9 +236,9 @@ const Signup = () => {
             Welcome! Please fill in the details to get started.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-2">
           {/* Social Login Buttons */}
-          <div className="space-y-3">
+          <div className="space-y-1">
             <LoginSocialGoogle
               {...{
                 client_id: process.env.NEXT_PUBLIC_GG_APP_ID || "",
@@ -343,7 +343,7 @@ const Signup = () => {
           </div>
 
           {/* Form */}
-          <form className="space-y-4" onSubmit={HandleSubmit}>
+          <form className="space-y-4 mt-5" onSubmit={HandleSubmit}>
             <div className="space-y-4">
               {/* Email Field */}
               <div>

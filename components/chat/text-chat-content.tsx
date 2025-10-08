@@ -260,12 +260,69 @@ export function TextChatContent() {
                 return (
                   <div key={message.id || index} className="space-y-4">
                     {/* Show typing indicator for new projects */}
-                    
+                    {message.metadata?.isTyping ? (
+                      <div className="flex items-start space-x-3 p-4">
+                        <div className="flex-shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">
+                              AI
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-1">
+                            <div className="flex space-x-1">
+                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                              <div
+                                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "0.1s" }}
+                              ></div>
+                              <div
+                                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "0.2s" }}
+                              ></div>
+                            </div>
+                            <span className="text-sm text-gray-500 ml-2">
+                              AI is thinking...
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Main AI Message - Only this shows the AI avatar */
+                      <AIMessage
+                        message={message}
+                        totalTime={message.totalTime}
+                        versionId={message.versionId} // NEW: Pass version ID
+                        isStreaming={message.metadata?.isStreaming || false} // NEW: Pass streaming state
+                        streamingContent={
+                          message.metadata?.isStreaming
+                            ? streamingContent
+                            : undefined
+                        } // Only pass if streaming
+                        streamingAnalysis={
+                          message.metadata?.isStreaming
+                            ? streamingAnalysis
+                            : undefined
+                        } // Only pass if streaming
+                        onCopy={() =>
+                          handleCopyMessage(
+                            message.parts?.find(
+                              (part: any) => part.type === "text"
+                            )?.text || ""
+                          )
+                        }
+                        onLike={() => handleLikeToggle(message.id)}
+                        onDislike={() => handleDislikeToggle(message.id)}
+                        onReload={() => handleRegenerateMessage(message.id)}
+                        generation={message.generationGroups}
+                      />
+                    )}
 
                     {/* Render generation groups - These don't show AI avatar */}
                     {message.generationGroups?.map((group: GenerationGroup) => (
                       <VersioningMessage
-                        key={group.id}
+                        key={group._id}
                         generation={group}
                         onToggle={toggleGeneration}
                         onRetry={retryLoading}
@@ -277,12 +334,12 @@ export function TextChatContent() {
                         onLike={() => handleLikeToggle(message.id)}
                         onDislike={() => handleDislikeToggle(message.id)}
                         onReload={() => handleRegenerateMessage(message.id)}
-                        onItemClick={(item) =>
-                          handleGenerationItemClick(item.id)
-                        }
-                        isGenerating={
-                          isGenerating && message.metadata?.isStreaming
-                        }
+                        // onItemClick={(item) =>
+                        //   handleGenerationItemClick(item.id)
+                        // }
+                        // isGenerating={
+                        //   isGenerating && message.metadata?.isStreaming
+                        // }
                       />
                     ))}
                   </div>

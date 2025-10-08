@@ -401,7 +401,7 @@ export function LandingNavbar() {
                       <a
                         className="outline-hidden relative items-center border justify-center select-none rounded-2xl disabled:cursor-not-allowed disabled:opacity-70 transition ease-in-out duration-200 bg-transparent border-transparent text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-4 focus-visible:ring-gray-a2 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold hidden lg:flex"
                         data-state="closed"
-                        href="/login"
+                        href="/signin"
                       >
                         Sign in
                       </a>
@@ -448,7 +448,7 @@ export function LandingNavbar() {
                       <a
                         className="outline-hidden relative items-center border justify-center select-none rounded-2xl disabled:cursor-not-allowed disabled:opacity-70 transition ease-in-out duration-200 bg-transparent border-transparent text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-4 focus-visible:ring-gray-a2 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold hidden lg:flex"
                         data-state="closed"
-                        href="/login"
+                        href="/signin"
                       >
                         Sign in
                       </a>
@@ -506,7 +506,7 @@ export function LandingNavbar() {
                       asChild
                       className="justify-start text-foreground"
                     >
-                      <Link href="/login">Log in</Link>
+                      <Link href="/signin">Sign in</Link>
                     </Button>
                     <Button
                       asChild

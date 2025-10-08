@@ -97,7 +97,7 @@ export function AIMessage({
       }
       className={className}
     >
-      <MessageContent variant="ai">
+      <MessageContent variant="ai" className="bg-transparent">
         <div className="space-y-4">
           {message?.parts?.map((part: any, i: number) => {
             switch (part.type) {

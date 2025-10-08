@@ -8,238 +8,17 @@ import React, {
 } from "react";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "./AuthenticatedContext";
-import { apiResponse } from "@/utils/apiResponse";
+import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { demoMessages } from "../components/chat/dummyMessage";
-
-export enum MediaType {
-  IMAGE = "image",
-  VIDEO = "video",
-}
-
-export enum GenerationStatus {
-  PENDING = "pending",
-  GENERATING = "generating",
-  GENERATED = "generated",
-  FAILED = "failed",
-  CANCELLED = "cancelled",
-}
-
-export enum ProjectStatus {
-  ACTIVE = "active",
-  ARCHIVED = "archived",
-  DELETED = "deleted",
-}
-
-export enum MessageRole {
-  USER = "user",
-  ASSISTANT = "assistant",
-}
-
-export interface IMessagePart {
-  type: "text" | "media";
-  text?: string;
-  url?: string;
-  mediaType?: MediaType;
-}
-
-export interface IFeedback {
-  id: string;
-  userId?: string;
-  userName?: string;
-  type: "like" | "dislike" | "comment";
-  comment?: string;
-  timestamp: Date;
-}
-
-export interface IGenerationItem {
-  id: string;
-  name: string;
-  type: MediaType;
-  url: string;
-  status: GenerationStatus;
-  text?: string;
-}
-
-export interface IGenerationGroup {
-  id: string;
-  title: string;
-  timestamp: Date;
-  isLatest: boolean;
-  isViewing: boolean;
-  isCollapsed: boolean;
-  items: IGenerationItem[];
-}
-
-export interface IMessage {
-  id: string;
-  role: MessageRole;
-  type: "user" | "ai";
-  analysis?: string;
-  totalTime?: number;
-  versionId?: string;
-  metadata?: Record<string, any>;
-  parts: IMessagePart[];
-  generationGroups?: IGenerationGroup[];
-  createdAt: Date;
-}
-
-export interface IProjectAnalytics {
-  totalMessages: number;
-  totalGenerations: number;
-  totalFeedback: number;
-  likes: number;
-  dislikes: number;
-  views: number;
-}
-
-export interface ICollaborator {
-  userId: string;
-  userName: string;
-  role: "owner" | "editor" | "viewer";
-  joinedAt: Date;
-  lastActiveAt?: Date;
-}
-
-export interface IDesignProject {
-  _id: string;
-  title: string;
-  description?: string;
-  status: ProjectStatus;
-  userId: string;
-  userName: string;
-  collaborators: ICollaborator[];
-  messages: IMessage[];
-  analytics: IProjectAnalytics;
-  tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface IProjectDesignContext {
-  project: IDesignProject | null;
-  setProject: React.Dispatch<React.SetStateAction<IDesignProject | null>>;
-
-  generations: any[];
-  setGenerations: React.Dispatch<React.SetStateAction<any[]>>;
-
-  isGenerating: boolean;
-  isLoadingProject: boolean;
-  clearError: () => void;
-  resetGenerationState: () => void;
-  createProject: (
-    value: string,
-    attachedFile?: any,
-    selectedFiles?: string[]
-  ) => Promise<{ type: boolean; message: string; id?: string }>;
-  fetchProject: (projectId: string) => Promise<{
-    success: boolean;
-    error?: "not_found" | "unauthorized" | "server_error";
-  }>;
-
-  toggleGeneration: (id: string) => void;
-  retryLoading: (id: string) => void;
-  handleLocalStorageDraft: (project: IDesignProject) => void;
-  editMessage: (
-    messageId: string,
-    updatedContent: string,
-    files: File[] | null,
-    projectId: string
-  ) => Promise<void>;
-  deleteMessage: (messageId: string) => void;
-  addReaction: (
-    messageId: string,
-    type: "like" | "dislike" | "comment"
-  ) => void;
-  removeReaction: (
-    messageId: string,
-    type: "like" | "dislike" | "comment"
-  ) => void;
-  handleGenerationItemClick: (generationId: string) => void;
-
-  generateMessage: (
-    messageContent: string,
-    files: File[] | null,
-    projectId: string,
-    selectedFiles?: string[]
-  ) => Promise<void>;
-
-  isLiveMode: boolean;
-  isMobile: boolean;
-  isDrawerOpen: boolean;
-
-  userAvatar: string;
-  userName: string;
-
-  isUserPopoverOpen: boolean;
-  setIsUserPopoverOpen: (open: boolean) => void;
-
-  selectedTheme: string;
-  setSelectedTheme: (theme: string) => void;
-
-  isVisibilityDialogOpen: boolean;
-  setIsVisibilityDialogOpen: (open: boolean) => void;
-
-  chatVisibility: string;
-  setChatVisibility: (visibility: string) => void;
-
-  isMobileMenuOpen: boolean;
-  setIsMobileMenuOpen: (open: boolean) => void;
-
-  setIsMobile: (isMobile: boolean) => void;
-
-  inputValue: string;
-  setInputValue: (value: string) => void;
-
-  attachedFiles: any[];
-  setAttachedFiles: React.Dispatch<React.SetStateAction<any[]>>;
-
-  selectedFiles: string[];
-  setSelectedFiles: React.Dispatch<React.SetStateAction<string[]>>;
-
-  fileLoadingStates: { [key: string]: boolean };
-  setFileLoadingStates: React.Dispatch<
-    React.SetStateAction<{ [key: string]: boolean }>
-  >;
-
-  isDragOver: boolean;
-  setIsDragOver: (isDragOver: boolean) => void;
-
-  dragCounter: number;
-  setDragCounter: (counter: number) => void;
-
-  showScrollButton: boolean;
-  setShowScrollButton: (show: boolean) => void;
-
-  streamingFiles: Set<string>;
-  streamingContent: string;
-  streamingAnalysis: string;
-
-  handleInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleKeyDown: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
-  handlePaste: () => void;
-
-  processFiles: (files: File[]) => void;
-  handleFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDragEnter: (e: React.DragEvent) => void;
-  handleDragLeave: (e: React.DragEvent) => void;
-  handleDragOver: (e: React.DragEvent) => void;
-  handleDrop: (e: React.DragEvent) => void;
-
-  scrollToBottom: () => void;
-  autoResize: () => void;
-
-  clearInput: () => void;
-  removeAttachedFile: (index: number) => void;
-  messages: any[];
-  sendMessage: any;
-  status: any;
-  setMessages: any;
-  error: string | null;
-  setError: React.Dispatch<React.SetStateAction<string | null>>;
-}
+import { io } from "socket.io-client";
+import {
+  IProjectDesignContext,
+  IDesignProject,
+  ProjectStatus,
+} from "@/types/ProjectTypes";
 
 const ProjectDesignContext = createContext<IProjectDesignContext | undefined>(
   undefined
@@ -293,6 +72,17 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isProcessingDraft, setIsProcessingDraft] = useState(false);
   const hasProcessedDraftRef = useRef(false);
   const [messages, setMessages] = useState<any[]>([]);
+
+  useEffect(() => {
+    const socket = io(`${serverUrlSocket}`);
+    socket.on("connect", () => {
+      console.log("Socket connected");
+
+      socket.on("newMessage", (message: any) => {
+        console.log("New message received", message);
+      });
+    });
+  }, []);
 
   const transformMessages = (messages: any[]) => {
     return (
@@ -354,13 +144,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const sendMessage = () => {};
-
-  // const { messages, sendMessage, status, setMessages } = useChat({
-  //   messages: transformMessages(project?.messages || []),
-  //   transport: new DefaultChatTransport({
-  //     api: `/project/generate/${project?._id}`,
-  //   }),
-  // });
 
   const handleLocalStorageDraft = async (project: IDesignProject) => {
     console.log("hitting 1");
@@ -504,6 +287,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         if (response.status === 200 && response.data.success) {
           setProject(response.data.data);
           setMessages(transformMessages(response.data.data?.messages || []));
+          // setMessages(transformMessages(demoMessages || []));
 
           console.log("Project fetched successfully:", response.data.data);
 

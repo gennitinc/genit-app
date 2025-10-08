@@ -182,9 +182,9 @@ const Login = () => {
           <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
           <CardDescription>Sign in to continue using Gennit</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-2">
           {/* Social Login Buttons */}
-          <div className="space-y-3">
+          <div className="space-y-1">
             <LoginSocialGoogle
               {...{
                 client_id: process.env.NEXT_PUBLIC_GG_APP_ID || "",
@@ -289,7 +289,7 @@ const Login = () => {
           </div>
 
           {/* Form */}
-          <form className="space-y-4" onSubmit={HandleSubmit}>
+          <form className="space-y-4 mt-5" onSubmit={HandleSubmit}>
             <div className="space-y-4">
               {/* Email Field */}
               <div>
