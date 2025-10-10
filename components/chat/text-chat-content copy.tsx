@@ -57,7 +57,6 @@ export function TextChatContent() {
     editMessage,
     deleteMessage,
     addReaction,
-    sendMessage,
     status,
     removeReaction,
     handleGenerationItemClick,

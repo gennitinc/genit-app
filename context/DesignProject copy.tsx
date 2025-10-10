@@ -154,7 +154,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
-  const sendMessage = () => {};
 
   const handleLocalStorageDraft = async (project: IDesignProject) => {
     console.log("hitting 1");
@@ -560,7 +559,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         isLoadingProject,
         clearError,
         messages,
-        sendMessage,
         status,
         setMessages,
         resetGenerationState,

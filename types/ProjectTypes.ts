@@ -218,7 +218,6 @@ export interface IProjectDesignContext {
   clearInput: () => void;
   removeAttachedFile: (index: number) => void;
   messages: any[];
-  sendMessage: any;
   status: any;
   setMessages: any;
   error: string | null;

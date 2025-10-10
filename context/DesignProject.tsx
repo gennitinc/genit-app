@@ -73,28 +73,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const hasProcessedDraftRef = useRef(false);
   const [messages, setMessages] = useState<any[]>([]);
 
-  useEffect(() => {
-    const socket = io(`${serverUrlSocket}`);
-    socket.on("connect", () => {
-      console.log("Socket connected");
-
-      socket.on("newMessage", (projectData: any) => {
-        console.log("New message received", projectData);
-
-        // Update the project with the latest data from server
-        if (projectData && projectData.messages) {
-          setProject(projectData);
-          setMessages(transformMessages(projectData.messages));
-        }
-      });
-    });
-
-    // Cleanup function to disconnect socket when component unmounts
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
+ 
   const transformMessages = (messages: any[]) => {
     return (
       messages?.map((msg) => {
@@ -154,7 +133,30 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
-  const sendMessage = () => {};
+   useEffect(() => {
+     const socket = io(`${serverUrlSocket}`);
+     socket.on("connect", () => {
+       console.log("Socket connected");
+
+       socket.on("newMessage", (projectData: any) => {
+         console.log("New message received", projectData);
+
+         // Update the project with the latest data from server
+         if (projectData && projectData.messages) {
+           setProject(projectData);
+           setMessages(transformMessages(projectData.messages));
+         }
+       });
+     });
+
+     // Cleanup function to disconnect socket when component unmounts
+     return () => {
+       socket.disconnect();
+     };
+   }, []);
+
+
+
 
   const handleLocalStorageDraft = async (project: IDesignProject) => {
     console.log("hitting 1");
@@ -637,7 +639,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         isLoadingProject,
         clearError,
         messages,
-        sendMessage,
         status,
         setMessages,
         resetGenerationState,
