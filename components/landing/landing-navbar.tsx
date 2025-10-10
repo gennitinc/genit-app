@@ -91,17 +91,15 @@ export function LandingNavbar() {
     <>
       <header className="bg-transparent w-full backdrop-blur-sm sticky z-30 top-0">
         <nav className="container mx-auto flex h-16 items-center z-50 justify-between px-4">
-          <div className="flex items-center z-40 gap-2">
-            {/* Replace <img> with <Image> */}
+          {/* Replace <img> with <Image> */}
+          <Link href="/" className="flex items-center z-40 gap-2">
             <Logo className="w-12 h-12 flex-shrink-0" />
-            <Link href="/" className="mr-6 flex items-center space-x-2">
-              <span
-                className={`text-xl font-semibold transition-colors duration-300 text-foreground`}
-              >
-                Gennit
-              </span>
-            </Link>
-          </div>
+            <span
+              className={`text-xl font-semibold transition-colors duration-300 text-foreground`}
+            >
+              Gennit
+            </span>
+          </Link>
 
           {/* Desktop Navigation */}
           {/* <div className="hidden items-center gap-8 md:flex">
@@ -127,9 +125,9 @@ export function LandingNavbar() {
                       <a
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/playground"
+                        href="/insprations"
                       >
-                        Knowledge Base
+                        Inspiration
                       </a>
                       <a
                         target="__blank"
@@ -212,7 +210,7 @@ export function LandingNavbar() {
                         <span className="transition-colors hover:text-foreground/80 text-foreground/60 rex text-xs sm:text-sm font-medium pl-2 pr-4">
                           Search{" "}
                           <span className="hidden xl:inline-block">
-                            Templates
+                            Inspirations
                           </span>
                         </span>
                         <kbd className="pointer-events-none  hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">

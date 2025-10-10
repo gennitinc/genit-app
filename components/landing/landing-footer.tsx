@@ -171,14 +171,17 @@ export function LandingFooter() {
       </div>
 
       {/* Main Footer Content */}
-      <footer className="flex flex-wrap justify-center lg:justify-between overflow-hidden gap-10 md:gap-20 py-16 px-6 md:px-16 lg:px-24 xl:px-32 text-[13px] text-muted-foreground bg-white dark:bg-black">
+      <footer className="flex flex-wrap justify-center lg:justify-between overflow-hidden gap-10 md:gap-20 py-16 px-2 md:px-10 lg:px-16 xl:px-24 text-[13px] text-muted-foreground bg-white dark:bg-black">
         <div className="flex flex-wrap items-start gap-10 md:gap-[60px] xl:gap-[140px]">
-          <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center z-40 gap-2">
             <Logo className="w-12 h-12 flex-shrink-0" />
-            <Link href="/" className="mr-6 flex items-center space-x-2">
-              <span className="text-xl font-semibold">Gennit</span>
-            </Link>
-          </div>
+            <span
+              className={`text-xl font-semibold transition-colors duration-300 text-foreground`}
+            >
+              Gennit
+            </span>
+          </Link>
+
           <div>
             <p className="text-foreground font-semibold">Product</p>
             <ul className="mt-2 space-y-2">

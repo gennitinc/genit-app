@@ -135,9 +135,9 @@ export function Navbar() {
             <a
               target="__blank"
               className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-              href="/playground"
+              href="/inspirations"
             >
-              Knowledge Base
+              Inspirations
             </a>
             <a
               target="__blank"
