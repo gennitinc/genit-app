@@ -47,9 +47,9 @@ const navItems = [
     href: "/projects",
   },
   {
-    title: "Templates",
+    title: "Inspirations",
     icon: Palette,
-    href: "/templates",
+    href: "/inspirations",
   },
   {
     title: "Billing",

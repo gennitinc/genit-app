@@ -125,8 +125,8 @@ export default function TemplateGrid() {
           setTemplates([]);
         }
       } catch (err: any) {
-        console.error("Failed to fetch templates:", err);
-        setNewError(err.message || "Failed to load templates.");
+        console.error("Failed to fetch inspirations:", err);
+        setNewError(err.message || "Failed to load inspirations.");
         setTemplates([]);
       } finally {
         setIsLoading(false);
@@ -456,10 +456,10 @@ export default function TemplateGrid() {
 
   const Header = (
     <div className="mt-8 mb-4 flex items-center justify-between">
-      <h2 className="text-base font-semibold text-foreground">Templates</h2>
+      <h2 className="text-base font-semibold text-foreground">Inspirations</h2>
       <button
         className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
-        onClick={() => router.push("/templates")}
+        onClick={() => router.push("/inspirations")}
       >
         View all
         <ArrowRight className="h-4 w-4" />

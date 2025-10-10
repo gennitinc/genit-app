@@ -51,9 +51,9 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Company", href: "/company" },
-  { name: "Marketplace", href: "/marketplace" },
+  { name: "Inspirations", href: "/inspirations" },
   { name: "Features", href: "/features" },
-  { name: "Team", href: "/team" },
+  { name: "Suggest", href: "/suggest" },
   { name: "Contact", href: "/contact" },
 ];
 
@@ -540,7 +540,7 @@ export function LandingNavbar() {
         <Drawer open={isSearchOpen} onOpenChange={setIsSearchOpen}>
           <DrawerContent className="h-[85vh]">
             <DrawerHeader className="px-4 py-2 border-b">
-              <DrawerTitle>Search Templates</DrawerTitle>
+              <DrawerTitle>Search Inspirations</DrawerTitle>
             </DrawerHeader>
             <div className="px-4 py-4">
               <CategoryAndSearch />
@@ -551,7 +551,7 @@ export function LandingNavbar() {
         <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
           <DialogContent className="max-w-2xl p-0 overflow-hidden">
             <DialogHeader className="px-4 py-3 border-b">
-              <DialogTitle>Search Templates</DialogTitle>
+              <DialogTitle>Search Inspirations</DialogTitle>
             </DialogHeader>
             <div className="px-4 py-4">
               <CategoryAndSearch />

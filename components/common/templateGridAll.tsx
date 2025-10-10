@@ -152,8 +152,8 @@ export default function TemplateGridAll() {
           setHasNextPage(false);
         }
       } catch (err: any) {
-        console.error("Failed to fetch templates:", err);
-        setNewError(err.message || "Failed to load templates.");
+        console.error("Failed to fetch inspirations:", err);
+        setNewError(err.message || "Failed to load inspirations.");
         if (!append) setTemplates([]);
         setHasNextPage(false);
       } finally {

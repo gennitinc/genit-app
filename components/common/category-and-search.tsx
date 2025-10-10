@@ -43,7 +43,7 @@ export default function CategoryAndSearch() {
                   handleSearch();
                 }
               }}
-              placeholder="Search templates, tools, and components..."
+              placeholder="Search Inspirations, tools, and components..."
               className="w-full pr-16 py-6 text-base rounded-full bg-background/80 backdrop-blur-sm border-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-sm transition-all duration-200 group-focus-within:shadow-md"
               onChange={(e) => setSearchQuery(e.target.value)}
               value={searchQuery}

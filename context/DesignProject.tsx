@@ -78,10 +78,21 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     socket.on("connect", () => {
       console.log("Socket connected");
 
-      socket.on("newMessage", (message: any) => {
-        console.log("New message received", message);
+      socket.on("newMessage", (projectData: any) => {
+        console.log("New message received", projectData);
+
+        // Update the project with the latest data from server
+        if (projectData && projectData.messages) {
+          setProject(projectData);
+          setMessages(transformMessages(projectData.messages));
+        }
       });
     });
+
+    // Cleanup function to disconnect socket when component unmounts
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const transformMessages = (messages: any[]) => {
@@ -366,37 +377,142 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     messageContent: string,
     files: File[] | null,
     projectId: string,
-    selectedFiles?: string[]
+    selectedFiles?: string[] // e.g., ["https://example.com/image1.png", "video.mp4"]
   ) => {
     try {
       setIsGenerating(true);
 
+      const now = Date.now();
+      const generateId = () =>
+        `file-${now}-${Math.random().toString(36).substr(2, 9)}`;
+
+      // Build attachedFiles array from BOTH sources
+      const attachedFiles: {
+        id: string;
+        name: string;
+        type: string;
+        filePath: string;
+        status: "uploaded";
+      }[] = [];
+
+      // 1. Handle raw File uploads (from input[type="file"]) or plain objects from storage
+      const blobFilesToUpload: File[] = [];
+      if (files && files.length > 0) {
+        for (const file of files as any[]) {
+          const isBlob = typeof window !== "undefined" && file instanceof Blob;
+
+          if (isBlob) {
+            // Safe to create preview URL
+            attachedFiles.push({
+              id: generateId(),
+              name: (file as File).name || "file",
+              type: (file as File).type || "application/octet-stream",
+              filePath: URL.createObjectURL(file as File),
+              status: "uploaded",
+            });
+            blobFilesToUpload.push(file as File);
+          } else if (file && (file.filePath || file.url)) {
+            // Non-Blob item coming from persisted storage; treat as reference
+            const name =
+              file.name ||
+              String(file.filePath || file.url)
+                .split("/")
+                .pop() ||
+              "file";
+            const type = file.type || "application/octet-stream";
+            attachedFiles.push({
+              id: generateId(),
+              name,
+              type,
+              filePath: file.filePath || file.url,
+              status: "uploaded",
+            });
+          }
+        }
+      }
+
+      // 2. Handle selectedFiles (pre-uploaded file paths or URLs)
+      if (selectedFiles && selectedFiles.length > 0) {
+        for (const filePath of selectedFiles) {
+          // Infer name from URL/path
+          const name = filePath.split("/").pop() || "selected-file";
+          // Guess MIME type from extension (basic)
+          const ext = name.split(".").pop()?.toLowerCase();
+          let type = "application/octet-stream";
+          if (ext) {
+            if (["png", "jpg", "jpeg", "gif", "webp"].includes(ext))
+              type = `image/${ext}`;
+            else if (["mp4", "mov", "avi", "mkv"].includes(ext))
+              type = `video/${ext}`;
+            else if (ext === "pdf") type = "application/pdf";
+          }
+
+          attachedFiles.push({
+            id: generateId(),
+            name,
+            type,
+            filePath, // direct URL or path
+            status: "uploaded",
+          });
+        }
+      }
+
+      // Create user message in demoMessages format
+      const userMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const userMessage = {
+        id: userMessageId,
+        role: "user" as const,
+        type: "user" as const,
+        parts: [
+          {
+            type: "text" as const,
+            text: messageContent,
+          },
+        ],
+        // Use fileAttachments so transformMessages can normalize to attachedFiles
+        fileAttachments: attachedFiles.length > 0 ? attachedFiles : undefined,
+        createdAt: new Date(),
+      };
+
+      // Transform and add to UI immediately
+      const transformedUserMessage = transformMessages([userMessage])[0];
+      setMessages((prev) => [...prev, transformedUserMessage]);
+
+      // Prepare FormData for backend
       const formData = new FormData();
       formData.append("prompt", messageContent);
+      formData.append("projectId", projectId);
+      // Required by backend validation
       formData.append("mediaType", "image");
-      files?.forEach((file) => formData.append("files", file));
 
-      // Add selected files if provided
+      // Append only real Blob/File objects for upload
+      if (blobFilesToUpload.length > 0) {
+        blobFilesToUpload.forEach((file) => {
+          formData.append("files", file);
+        });
+      }
+
+      // Append selected file paths (already stored, just reference them)
       if (selectedFiles && selectedFiles.length > 0) {
         formData.append("selectedFiles", JSON.stringify(selectedFiles));
       }
 
-      console.log("form D", messageContent, files, selectedFiles);
-
+      // Call backend
       await apiResponseFileUpload.post(
         `/project/generate/${projectId}`,
         formData,
         {
           withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data", // axios usually sets this automatically
+          },
         }
       );
     } catch (error) {
       console.error("Error sending message:", error);
-      if (error instanceof Error) {
-        setError(error.message || "Failed to send message");
-      } else {
-        setError("Failed to send message");
-      }
+      setError(
+        error instanceof Error ? error.message : "Failed to send message"
+      );
     } finally {
       setIsGenerating(false);
     }

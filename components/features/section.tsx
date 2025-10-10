@@ -51,7 +51,7 @@ export function FeaturesSection() {
     {
       title: "Market Place",
       description:
-        "A marketplace to discover and share code and templates.",
+        "Inspirations to discover design ideas.",
       icon: <IconShoppingBagCheck />,
     },
     {
