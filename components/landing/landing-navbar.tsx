@@ -122,28 +122,28 @@ export function LandingNavbar() {
                   <div className="flex items-center gap-2 sm:gap-2">
                     {/* Main user avatar with popover */}
                     <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
-                      <a
+                      <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/insprations"
                       >
                         Inspiration
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/playground"
                       >
                         Pricing
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/playground"
+                        href={user ? "/history" : "/signin"}
                       >
-                        Projects
-                      </a>
-                      <a
+                        History
+                      </Link>
+                      <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="https://discord.gg/ftZbQvCdN7"
@@ -165,8 +165,8 @@ export function LandingNavbar() {
                           <path d="M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3" />
                           <path d="M7 16.5c3.5 1 6.5 1 10 0" />
                         </svg>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 text-sm font-medium transition-colors"
                         href="https://twitter.com/mannupaaji"
@@ -186,7 +186,7 @@ export function LandingNavbar() {
                           <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
                           <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
                         </svg>
-                      </a>
+                      </Link>
 
                       <button
                         onClick={() => setIsSearchOpen(true)}
@@ -289,22 +289,22 @@ export function LandingNavbar() {
                   <div className="flex items-center gap-2 sm:gap-2">
                     {/* Main user avatar with popover */}
                     <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
-                      <a
+                      <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/playground"
                       >
                         Knowledge Base
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/playground"
                       >
                         Pricing
-                      </a>
+                      </Link>
 
-                      <a
+                      <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="https://discord.gg/ftZbQvCdN7"
@@ -326,8 +326,8 @@ export function LandingNavbar() {
                           <path d="M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3" />
                           <path d="M7 16.5c3.5 1 6.5 1 10 0" />
                         </svg>
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 text-sm font-medium transition-colors"
                         href="https://twitter.com/mannupaaji"
@@ -347,7 +347,7 @@ export function LandingNavbar() {
                           <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
                           <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
                         </svg>
-                      </a>
+                      </Link>
 
                       <button
                         onClick={() => setIsSearchOpen(true)}
@@ -396,19 +396,19 @@ export function LandingNavbar() {
                     </Button>
 
                     <div className="flex gap-4">
-                      <a
+                      <Link
                         className="outline-hidden relative items-center border justify-center select-none rounded-2xl disabled:cursor-not-allowed disabled:opacity-70 transition ease-in-out duration-200 bg-transparent border-transparent text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-4 focus-visible:ring-gray-a2 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold hidden lg:flex"
                         data-state="closed"
                         href="/signin"
                       >
                         Sign in
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         className='outline-hidden relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out text-white border-[2px] border-white/5 backdrop-blur-[25px] bg-origin-border bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] shadow-sm not-disabled:hover:bg-white/90 not-disabled:hover:text-black not-disabled:hover:shadow-button transition-all duration-200 disabled:opacity-30 disabled:text-white/50 focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden focus-visible:bg-white/90 focus-visible:text-black after:absolute after:w-[calc(100%+4px)] after:h-[calc(100%+4px)] after:top-[-2px] after:left-[-2px] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat after:pointer-events-none text-sm h-10 gap-0 px-4 font-semibold'
                         href="/signup"
                       >
                         Get Started
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -443,19 +443,19 @@ export function LandingNavbar() {
 
                     {/* User Avatar - Mobile */}
                     <div className="flex gap-4">
-                      <a
+                      <Link
                         className="outline-hidden relative items-center border justify-center select-none rounded-2xl disabled:cursor-not-allowed disabled:opacity-70 transition ease-in-out duration-200 bg-transparent border-transparent text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-4 focus-visible:ring-gray-a2 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold hidden lg:flex"
                         data-state="closed"
                         href="/signin"
                       >
                         Sign in
-                      </a>
-                      <a
+                      </Link>
+                      <Link
                         className='outline-hidden relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out text-white border-[2px] border-white/5 backdrop-blur-[25px] bg-origin-border bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] shadow-sm not-disabled:hover:bg-white/90 not-disabled:hover:text-black not-disabled:hover:shadow-button transition-all duration-200 disabled:opacity-30 disabled:text-white/50 focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden focus-visible:bg-white/90 focus-visible:text-black after:absolute after:w-[calc(100%+4px)] after:h-[calc(100%+4px)] after:top-[-2px] after:left-[-2px] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat after:pointer-events-none text-sm h-10 gap-0 px-4 font-semibold'
                         href="/signup"
                       >
                         Get Started
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 )}

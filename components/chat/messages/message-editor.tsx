@@ -4,7 +4,7 @@ import type React from "react";
 
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/chat/messages";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Loader } from "lucide-react";
 import { useMessageEditor } from "@/hooks/message/use-message-editor";
 
 interface MessageEditorProps {
@@ -145,7 +145,7 @@ export function MessageEditor({
             <div className="relative flex items-center gap-2">
               {isLoading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader className="w-4 h-4 animate-spin" />
                   <span className="font-medium">Saving...</span>
                 </>
               ) : (

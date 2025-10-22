@@ -14,6 +14,7 @@ import {
   Home,
   ChevronDown,
   Bot,
+  WandSparklesIcon,
 } from "lucide-react";
 
 import {
@@ -37,14 +38,14 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 
 const navItems = [
   {
-    title: "Home",
-    icon: Home,
+    title: "Create",
+    icon: WandSparklesIcon,
     href: "/chat",
   },
   {
-    title: "Projects",
-    icon: Layout,
-    href: "/projects",
+    title: "History",
+    icon: History,
+    href: "/chat/history",
   },
   {
     title: "Inspirations",
@@ -54,21 +55,20 @@ const navItems = [
   {
     title: "Billing",
     icon: CreditCard,
-    href: "/billing",
+    href: "/user/settings?tab=billing",
   },
 ];
-
 
 const secondaryNavItems = [
   {
     title: "Settings",
     icon: Settings,
-    href: "/settings",
+    href: "/user/settings",
   },
   {
     title: "Help",
     icon: HelpCircle,
-    href: "/help",
+    href: "/contact",
   },
 ];
 

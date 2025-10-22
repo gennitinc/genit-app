@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { Loader2, Search, X } from "lucide-react";
+import { Loader, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUrlState } from "@/hooks/use-url-state";
@@ -70,7 +70,7 @@ export default function CategoryAndSearch() {
               onClick={handleSearch}
             >
               {searchLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader className="h-4 w-4 animate-spin" />
               ) : (
                 <Search className="h-4 w-4" />
               )}

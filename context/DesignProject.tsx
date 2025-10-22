@@ -142,10 +142,14 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
          console.log("New message received", projectData);
 
          // Update the project with the latest data from server
-         if (projectData && projectData.messages) {
-           setProject(projectData);
-           setMessages(transformMessages(projectData.messages));
-         }
+        //  if (
+        //    projectData &&
+        //    Array.isArray(projectData.messages) &&
+        //    projectData.messages.length > 0
+        //  ) {
+        //    setProject(projectData);
+        //    setMessages(transformMessages(projectData.messages));
+        //  }
        });
      });
 

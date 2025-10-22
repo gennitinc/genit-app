@@ -8,7 +8,7 @@ import {
   Edit,
   ChevronRight,
   Square,
-  Loader2,
+  Loader,
   Circle,
   RefreshCw,
   Eye,
@@ -111,7 +111,7 @@ export function VersioningMessage({
       stopped: <Square className="w-2.5 h-2.5 text-orange-500" />,
       error: <AlertTriangle className="w-2.5 h-2.5 text-red-500" />,
       generating: (
-        <Loader2 className="w-2.5 h-2.5 text-blue-500 animate-spin" />
+        <Loader className="w-2.5 h-2.5 text-blue-500 animate-spin" />
       ),
     };
     return (
@@ -169,7 +169,7 @@ export function VersioningMessage({
         <div className="flex items-center gap-2 sm:gap-3 px-1.5 py-2 rounded-md relative z-10">
           <div className="flex-shrink-0">
             <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-blue-500/20 flex items-center justify-center border-2 border-blue-500/50 shadow-sm relative z-20">
-              <Loader2 className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-blue-500 animate-spin" />
+              <Loader className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-blue-500 animate-spin" />
             </div>
           </div>
           <div className="flex-1 min-w-0">

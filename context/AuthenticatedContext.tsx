@@ -59,6 +59,13 @@ export interface User {
     icon: string;
     userid: string | undefined;
   };
+  preferences?: {
+    theme: "light" | "dark" | "system";
+    emailNotifications: boolean;
+    marketingEmails: boolean;
+    twoFactorAuth: boolean;
+    loginNotifications: boolean;
+  };
   onboarding?: {
     _id: string;
     onboardingCompleted: boolean;
@@ -90,6 +97,9 @@ interface AuthenticatedContextInt {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   fetchCurrentUser: () => Promise<void>;
+  updateUserPreferences: (
+    preferences: Partial<User["preferences"]>
+  ) => Promise<void>;
   setIsKlipAiVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isKlipAiVisible: boolean;
   setIsBotOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -167,6 +177,33 @@ export function AuthenticatedContextProvider({
     }
   };
 
+  const updateUserPreferences = async (
+    preferences: Partial<User["preferences"]>
+  ) => {
+    if (!user) return;
+
+    try {
+      const response = await apiResponse.put("/user/preferences", preferences);
+
+      if (response.status === 200) {
+        // Update local user state with new preferences
+        setuser((prevUser) => {
+          if (!prevUser) return prevUser;
+          return {
+            ...prevUser,
+            preferences: {
+              ...prevUser.preferences,
+              ...preferences,
+            },
+          };
+        });
+      }
+    } catch (error) {
+      console.error("Failed to update user preferences:", error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     if (uToken) fetchCurrentUser();
     else setLoading(false); // No need to fetch if there's no token
@@ -182,6 +219,7 @@ export function AuthenticatedContextProvider({
         user,
         setuser,
         fetchCurrentUser,
+        updateUserPreferences,
         isKlipAiVisible,
         setIsKlipAiVisible,
         loading,

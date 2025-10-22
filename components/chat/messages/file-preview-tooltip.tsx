@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
-import { Loader2, FileText, AlertCircle, Play, Volume2 } from "lucide-react";
+import { Loader, FileText, AlertCircle, Play, Volume2 } from "lucide-react";
 import { useFilePreview } from "@/hooks/message/use-file-preview";
 
 interface FilePreviewTooltipProps {
@@ -45,7 +45,7 @@ export function FilePreviewTooltip({
     if (isLoading) {
       return (
         <div className="flex items-center justify-center p-4">
-          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+          <Loader className="w-6 h-6 animate-spin text-muted-foreground" />
           <span className="ml-2 text-sm text-muted-foreground">
             Loading preview...
           </span>
