@@ -48,14 +48,6 @@ import {
 import CategoryAndSearch from "@/components/common/category-and-search";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
-const navigation = [
-  { name: "Home", href: "/" },
-  { name: "Company", href: "/company" },
-  { name: "Inspirations", href: "/inspirations" },
-  { name: "Features", href: "/features" },
-  { name: "Suggest", href: "/suggest" },
-  { name: "Contact", href: "/contact" },
-];
 
 export function LandingNavbar() {
   const { theme, setTheme } = useTheme();
@@ -72,6 +64,15 @@ export function LandingNavbar() {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
+
+  const navigation = [
+    { name: "Home", href: "/" },
+    { name: "Company", href: "/company" },
+    { name: "Inspirations", href: "/inspirations" },
+    { name: "Features", href: "/features" },
+    { name: "History", href: user ? "/history" : "/signin"},
+    { name: "Contact", href: "/contact" },
+  ];
 
   useEffect(() => {
     setMounted(true);

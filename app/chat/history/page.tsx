@@ -183,7 +183,7 @@ function ChatHistoryPage() {
   };
 
   return (
-    <div className="flex relative w-full h-screen overflow-hidden bg-background">
+    <div className="flex relative w-full h-screen overflow-hidden bg-white dark:bg-black">
       <Toaster />
       <AppSidebar />
       <div
@@ -226,7 +226,7 @@ function ChatHistoryPage() {
             <div className="space-y-2">
               {loading ? (
                 <div className="text-center py-16">
-                  <Loader className="animate-spin rounded-full h-8 w-8 mx-auto mb-3"/>
+                  <Loader className="animate-spin rounded-full h-8 w-8 mx-auto mb-3" />
                   <h3 className="text-sm font-medium text-foreground mb-1">
                     Loading conversations...
                   </h3>
