@@ -194,7 +194,7 @@ export function AuthenticatedContextProvider({
             preferences: {
               ...prevUser.preferences,
               ...preferences,
-            },
+            } as User["preferences"],
           };
         });
       }
