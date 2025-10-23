@@ -27,7 +27,7 @@ export default function About2() {
           <h1 className="font-display effect-font-styling text-[3rem] md:text-[3.5rem] tracking-tighter leading-[120%] effect-font-gradient mt-4 text-center text-balance">
             Terms of Service
           </h1>
-          <p className="text-sm leading-[1.6] text-gray-9 font-normal mt-2 text-center">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400 text-sm leading-[1.6] text-gray-9 font-normal mt-2 text-center">
             Last update: <time dateTime="2025-08-01">August 1st, 2025</time>
           </p>
         </div>
@@ -60,7 +60,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               These Terms of Service (
               <strong className="font-semibold text-slate-12">
                 "Terms", "Terms of Service"
@@ -110,14 +110,14 @@ export default function About2() {
               <strong className="font-semibold text-slate-12">"Service"</strong>
               ).
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               By (a) purchasing access to the service through an online ordering
               process that references this agreement, (b) signing up for a free
               plan for the service through a screen that references this
               agreement, or (c) clicking a box indicating acceptance, customer
               agrees to be bound by the Agreement.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               If you do not agree with or cannot comply with this Agreement,
               then you may not use the Service, so please read carefully.
             </p>
@@ -148,7 +148,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               By creating an Account on our Service, you agree to subscribe to
               newsletters, marketing or promotional materials and other
               information we may send. However, you may opt out of receiving
@@ -182,7 +182,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               If you wish to purchase any product or service made available
               through Service (
               <strong className="font-semibold text-slate-12">
@@ -193,25 +193,25 @@ export default function About2() {
               the expiration date of your credit card, your billing address, and
               your shipping information.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               You represent and warrant that: (i) you have the legal right to
               use any credit card(s) or other payment method(s) in connection
               with any Purchase; and that (ii) the information you supply to us
               is true, correct and complete.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               We may employ the use of third party services for the purpose of
               facilitating payment and the completion of Purchases. By
               submitting your information, you grant us the right to provide the
               information to these third parties subject to our Privacy Policy.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               We reserve the right to refuse or cancel your order at any time
               for reasons including but not limited to: product or service
               availability, errors in the description or price of the product or
               service, error in your order or other reasons.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               We reserve the right to refuse or cancel your order if fraud or an
               unauthorized or illegal transaction is suspected.
             </p>
@@ -245,7 +245,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Any contests, sweepstakes or other promotions (collectively,
               "Promotions") made available through Service may be governed by
               rules that are separate from these Terms of Service. If you
@@ -280,21 +280,21 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Some parts of Service are billed on a subscription basis
               ("Subscription(s)"). You will be billed in advance on a recurring
               and periodic basis ("Billing Cycle"). Billing cycles are set
               either on a monthly or annual basis, depending on the type of
               subscription plan you select when purchasing a Subscription.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               At the end of each Billing Cycle, your Subscription will
               automatically renew under the exact same conditions unless you
               cancel it or Plus Five Five, Inc. cancels it. You may cancel your
               Subscription renewal either through your online account management
               page or by contacting Plus Five Five, Inc. customer support team.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               A valid payment method, including credit card, is required to
               process the payment for your subscription. You shall provide Plus
               Five Five, Inc. with accurate and complete billing information
@@ -304,7 +304,7 @@ export default function About2() {
               charge all Subscription fees incurred through your account to any
               such payment instruments.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Should automatic billing fail to occur for any reason, Plus Five
               Five, Inc. will issue an electronic invoice indicating that you
               must proceed manually, within a certain deadline date, with the
@@ -338,7 +338,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Plus Five Five, Inc. may, at its sole discretion, offer a
               Subscription with a free trial for a limited period of time (
               <strong className="font-semibold text-slate-12">
@@ -346,11 +346,11 @@ export default function About2() {
               </strong>
               )
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               You may be required to enter your billing information in order to
               sign up for Free Trial.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               If you do enter your billing information when signing up for Free
               Trial, you will not be charged by Plus Five Five, Inc. until Free
               Trial has expired. On the last day of Free Trial period, unless
@@ -358,7 +358,7 @@ export default function About2() {
               the applicable Subscription fees for the type of Subscription you
               have selected.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               At any time and without notice, Plus Five Five, Inc. reserves the
               right to (i) modify Terms of Service of Free Trial offer, or (ii)
               cancel such Free Trial offer.
@@ -390,19 +390,19 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Plus Five Five, Inc., in its sole discretion and at any time, may
               modify Subscription fees for the Subscriptions. Any Subscription
               fee change will become effective at the end of the then-current
               Billing Cycle.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Plus Five Five, Inc. will provide you with a reasonable prior
               notice of any change in Subscription fees to give you an
               opportunity to terminate your Subscription before such change
               becomes effective.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Your continued use of Service after Subscription fee change comes
               into effect constitutes your agreement to pay the modified
               Subscription fee amount.
@@ -434,7 +434,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Except when required by law, paid Subscription fees are
               non-refundable.
             </p>
@@ -465,14 +465,14 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Our Service allows you to post, link, store, share and otherwise
               make available certain information, text, graphics, videos, or
               other material ("Content"). You are responsible for Content that
               you post on or through Service, including its legality,
               reliability, and appropriateness.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               By posting Content on or through Service, You represent and
               warrant that: (i) Content is yours (you own it) and/or you have
               the right to use it and the right to grant us the rights and
@@ -482,7 +482,7 @@ export default function About2() {
               rights of any person or entity. We reserve the right to terminate
               the account of anyone found to be infringing on a copyright.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               You retain any and all of your rights to any Content you submit,
               post or display on or through Service and you are responsible for
               protecting those rights. We take no responsibility and assume no
@@ -493,7 +493,7 @@ export default function About2() {
               the right for us to make your Content available to other users of
               Service without your approval.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Plus Five Five, Inc. has the right but not the obligation to
               monitor and edit all Content provided by users.
             </p>
@@ -524,11 +524,11 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               You may use Service only for lawful purposes and in accordance
               with Terms. You agree not to use Service for:
             </p>
-            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-slate-11">
+            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-slate-11 text-sm text-neutral-600 dark:text-neutral-400">
               <li>
                 <strong className="font-semibold text-slate-12">
                   Spamming
@@ -560,10 +560,10 @@ export default function About2() {
                 any illegal activities.
               </li>
             </ol>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Additionally, you agree not to:
             </p>
-            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-slate-11">
+            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-slate-11 text-sm text-neutral-600 dark:text-neutral-400">
               <li>
                 Use Service in any manner that could disable, overburden,
                 damage, or impair Service or interfere with any other party’s
@@ -585,7 +585,7 @@ export default function About2() {
                 denial-of-service attack.
               </li>
             </ol>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               If you become aware of any violations, please report it to us
               immediately by contacting{" "}
               <a
@@ -623,7 +623,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               We may use third-party Service Providers to monitor and analyze
               the use of our Service.
             </p>
@@ -654,7 +654,7 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Google Analytics is a web analytics service offered by Google that
               tracks and reports website traffic. Google uses the data collected
               to track and monitor the use of our Service. This data is shared
@@ -662,7 +662,7 @@ export default function About2() {
               contextualise and personalise the ads of its own advertising
               network.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               For more information on the privacy practices of Google, please
               visit the Google Privacy Terms web page:{" "}
               <a
@@ -674,7 +674,7 @@ export default function About2() {
                 https://policies.google.com/privacy?hl=en
               </a>
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               We also encourage you to review the Google's policy for
               safeguarding your data:{" "}
               <a
@@ -714,10 +714,10 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Mixpanel is provided by Mixpanel Inc.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               You can prevent Mixpanel from using your information for analytics
               purposes by opting-out. To opt-out of Mixpanel service, please
               visit this page:{" "}
@@ -730,7 +730,7 @@ export default function About2() {
                 https://mixpanel.com/optout/
               </a>
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               For more information on what type of information Mixpanel
               collects, please visit the Terms of Use page of Mixpanel:{" "}
               <a
@@ -769,7 +769,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Service is intended only for access and use by individuals at
               least eighteen (18) years old. By accessing or using any of
               Company, you warrant and represent that you are at least eighteen
@@ -805,14 +805,14 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               When you create an account with us, you guarantee that you are
               above the age of 18, and that the information you provide us is
               accurate, complete, and current at all times. Inaccurate,
               incomplete, or obsolete information may result in the immediate
               termination of your account on Service.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               You are responsible for maintaining the confidentiality of your
               account and password, including but not limited to the restriction
               of access to your computer and/or account. You agree to accept
@@ -822,14 +822,14 @@ export default function About2() {
               immediately upon becoming aware of any breach of security or
               unauthorized use of your account.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               You may not use as a username the name of another person or entity
               or that is not lawfully available for use, a name or trademark
               that is subject to any rights of another person or entity other
               than you, without appropriate authorization. You may not use as a
               username any name that is offensive, vulgar or obscene.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               We reserve the right to refuse service, terminate accounts, remove
               or edit content, or cancel orders in our sole discretion.
             </p>
@@ -860,7 +860,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Service and its original content (excluding Content provided by
               users), features and functionality are and will remain the
               exclusive property of Plus Five Five, Inc. and its licensors.
@@ -896,13 +896,13 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               We respect the intellectual property rights of others. It is our
               policy to respond to any claim that Content posted on Service
               infringes on the copyright or other intellectual property rights
               ("Infringement") of any person or entity.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               If you are a copyright owner, or authorized on behalf of one, and
               you believe that the copyrighted work has been copied in a way
               that constitutes copyright infringement, please submit your claim
@@ -918,7 +918,7 @@ export default function About2() {
               detailed below, under "DMCA Notice and Procedure for Copyright
               Infringement Claims"
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               You may be held accountable for damages (including costs and
               attorneys' fees) for misrepresentation or bad-faith claims on the
               infringement of any Content found on and/or through Service on
@@ -954,13 +954,13 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               You may submit a notification pursuant to the Digital Millennium
               Copyright Act (DMCA) by providing our Copyright Agent with the
               following information in writing (see 17 U.S.C 512(c)(3) for
               further detail):
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               an electronic or physical signature of the person authorized to
               act on behalf of the owner of the copyright's interest; a
               description of the copyrighted work that you claim has been
@@ -1010,7 +1010,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               You may provide us either directly at{" "}
               <a
                 className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
@@ -1062,24 +1062,24 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Our Service may contain links to third party web sites or services
               that are not owned or controlled by Plus Five Five, Inc.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Plus Five Five, Inc. has no control over, and assumes no
               responsibility for the content, privacy policies, or practices of
               any third party web sites or services. We do not warrant the
               offerings of any of these entities/individuals or their websites.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               YOU ACKNOWLEDGE AND AGREE THAT PLUS FIVE FIVE, INC. SHALL NOT BE
               RESPONSIBLE OR LIABLE, DIRECTLY OR INDIRECTLY, FOR ANY DAMAGE OR
               LOSS CAUSED OR ALLEGED TO BE CAUSED BY OR IN CONNECTION WITH USE
               OF OR RELIANCE ON ANY SUCH CONTENT, GOODS OR SERVICES AVAILABLE ON
               OR THROUGH ANY SUCH THIRD PARTY WEB SITES OR SERVICES.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               WE STRONGLY ADVISE YOU TO READ THE TERMS OF SERVICE AND PRIVACY
               POLICIES OF ANY THIRD PARTY WEB SITES OR SERVICES THAT YOU VISIT.
             </p>
@@ -1110,7 +1110,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               THESE SERVICES ARE PROVIDED BY COMPANY ON AN "AS IS" AND "AS
               AVAILABLE" BASIS. COMPANY MAKES NO REPRESENTATIONS OR WARRANTIES
               OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE OPERATION OF THEIR
@@ -1119,7 +1119,7 @@ export default function About2() {
               THEIR CONTENT, AND ANY SERVICES OR ITEMS OBTAINED FROM US IS AT
               YOUR SOLE RISK.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               NEITHER COMPANY NOR ANY PERSON ASSOCIATED WITH COMPANY MAKES ANY
               WARRANTY OR REPRESENTATION WITH RESPECT TO THE COMPLETENESS,
               SECURITY, RELIABILITY, QUALITY, ACCURACY, OR AVAILABILITY OF THE
@@ -1133,13 +1133,13 @@ export default function About2() {
               OBTAINED THROUGH THE SERVICES WILL OTHERWISE MEET YOUR NEEDS OR
               EXPECTATIONS.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               COMPANY HEREBY DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER
               EXPRESS OR IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING BUT NOT
               LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, NON-INFRINGEMENT,
               AND FITNESS FOR PARTICULAR PURPOSE.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               THE FOREGOING DOES NOT AFFECT ANY WARRANTIES WHICH CANNOT BE
               EXCLUDED OR LIMITED UNDER APPLICABLE LAW.
             </p>
@@ -1170,7 +1170,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               EXCEPT AS PROHIBITED BY LAW, YOU WILL HOLD US AND OUR OFFICERS,
               DIRECTORS, EMPLOYEES, AND AGENTS HARMLESS FOR ANY INDIRECT,
               PUNITIVE, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGE, HOWEVER IT
@@ -1218,17 +1218,17 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               We may terminate or suspend your account and bar access to Service
               immediately, without prior notice or liability, under our sole
               discretion, for any reason whatsoever and without limitation,
               including but not limited to a breach of Terms.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               If you wish to terminate your account, you may simply discontinue
               using Service.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               All provisions of Terms which by their nature should survive
               termination shall survive termination, including, without
               limitation, ownership provisions, warranty disclaimers, indemnity
@@ -1261,12 +1261,12 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               These Terms shall be governed and construed in accordance with the
               laws of State of California without regard to its conflict of law
               provisions.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Our failure to enforce any right or provision of these Terms will
               not be considered a waiver of those rights. If any provision of
               these Terms is held to be invalid or unenforceable by a court, the
@@ -1302,7 +1302,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               We reserve the right to withdraw or amend our Service, and any
               service or material we provide via Service, in our sole discretion
               without notice. We will not be liable if for any reason all or any
@@ -1337,18 +1337,18 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               We may amend Terms at any time by posting the amended terms on
               this site. It is your responsibility to review these Terms
               periodically.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Your continued use of the Service following the posting of revised
               Terms means that you accept and agree to the changes. You are
               expected to check this page frequently so you are aware of any
               changes, as they are binding on you.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               By continuing to access or use our Service after any revisions
               become effective, you agree to be bound by the revised terms. If
               you do not agree to the new terms, you are no longer authorized to
@@ -1381,14 +1381,14 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               No waiver by Company of any term or condition set forth in Terms
               shall be deemed a further or continuing waiver of such term or
               condition or a waiver of any other term or condition, and any
               failure of Company to assert a right or provision under Terms
               shall not constitute a waiver of such right or provision.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               If any provision of Terms is held by a court or other tribunal of
               competent jurisdiction to be invalid, illegal or unenforceable for
               any reason, such provision shall be eliminated or limited to the
@@ -1422,13 +1422,13 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               By entering into this agreement, the Customer hereby grants the
               Company the non-exclusive, royalty-free right to use the
               Customer's logo for the sole purpose of promoting and referencing
               the Customer as a client of the Company.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Company may use the Customer's logo on its website, marketing
               materials, case studies, and other promotional content. Company
               agrees to use the Customer's logo in a professional manner and in
@@ -1464,7 +1464,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               The Service may only be used in accordance with the Acceptable Use
               Policy found at{" "}
               <a
@@ -1504,7 +1504,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               BY USING SERVICE OR OTHER SERVICES PROVIDED BY US, YOU ACKNOWLEDGE
               THAT YOU HAVE READ THESE TERMS OF SERVICE AND AGREE TO BE BOUND BY
               THEM
@@ -1536,7 +1536,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Please send your feedback, comments, requests for technical
               support: By email:{" "}
               <a

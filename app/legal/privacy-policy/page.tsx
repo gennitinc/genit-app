@@ -28,8 +28,8 @@ export default function About2() {
           <h1 className="font-display effect-font-styling text-[3rem] md:text-[3.5rem] tracking-tighter leading-[120%] effect-font-gradient mt-4 text-center text-balance">
             Privacy Policy
           </h1>
-          <p className="text-sm leading-[1.6] text-gray-9 font-normal mt-2 text-center">
-            Last update: <time dateTime="2024-07-13">July 13th, 2024</time>
+          <p className="text-sm text-foregroundtext-sm leading-[1.6] text-gray-9 font-normal mt-2 text-center">
+            Last update: <time dateTime="2024-07-13">October 23th, 2025</time>
           </p>
         </div>
         <div className="content mx-auto max-w-4xl">
@@ -42,7 +42,7 @@ export default function About2() {
                 1. Introduction
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -61,10 +61,10 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Welcome to Plus Five Five, Inc.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">
                 Plus Five Five, Inc. (“us”, “we”, or “our”)
               </strong>{" "}
@@ -72,7 +72,7 @@ export default function About2() {
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://gennit.online"
               >
                 https://gennit.online
@@ -81,12 +81,12 @@ export default function About2() {
               <strong className="font-semibold text-slate-12">“Service”</strong>
               ).
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Our Privacy Policy governs your visit to{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://gennit.online"
               >
                 https://gennit.online
@@ -94,14 +94,14 @@ export default function About2() {
               , and explains how we collect, safeguard and disclose information
               that results from your use of our Service.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We use your data to provide and improve Service. By using Service,
               you agree to the collection and use of information in accordance
               with this policy. Unless otherwise defined in this Privacy Policy,
               the terms used in this Privacy Policy have the same meanings as in
               our Terms and Conditions.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Our Terms and Conditions (
               <strong className="font-semibold text-slate-12">“Terms”</strong>)
               govern all use of our Service and together with the Privacy Policy
@@ -119,7 +119,7 @@ export default function About2() {
                 2. Definitions
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -138,20 +138,20 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">SERVICE</strong>{" "}
               means the{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://gennit.online"
               >
                 https://gennit.online
               </a>{" "}
               website operated by Plus Five Five, Inc.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">
                 PERSONAL DATA
               </strong>{" "}
@@ -159,7 +159,7 @@ export default function About2() {
               those data (or from those and other information either in our
               possession or likely to come into our possession).
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">
                 USAGE DATA
               </strong>{" "}
@@ -167,11 +167,11 @@ export default function About2() {
               Service or from Service infrastructure itself (for example, the
               duration of a page visit).
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">COOKIES</strong>{" "}
               are small files stored on your device (computer or mobile device).
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">
                 DATA CONTROLLER
               </strong>{" "}
@@ -181,7 +181,7 @@ export default function About2() {
               processed. For the purpose of this Privacy Policy, we are a Data
               Controller of your data.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">
                 DATA PROCESSORS (OR SERVICE PROVIDERS)
               </strong>{" "}
@@ -189,13 +189,13 @@ export default function About2() {
               of the Data Controller. We may use the services of various Service
               Providers in order to process your data more effectively.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">
                 DATA SUBJECT
               </strong>{" "}
               is any living individual who is the subject of Personal Data.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">THE USER</strong>{" "}
               is the individual using our Service. The User corresponds to the
               Data Subject, who is the subject of Personal Data.
@@ -208,7 +208,7 @@ export default function About2() {
                 3. Information Collection and Use
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -227,7 +227,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We collect several different types of information for various
               purposes to provide and improve our Service to you.
             </p>
@@ -239,7 +239,7 @@ export default function About2() {
                 4. Types of Data Collected
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -266,7 +266,7 @@ export default function About2() {
                 Personal Data
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -285,13 +285,13 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               While using our Service, we may ask you to provide us with certain
               personally identifiable information that can be used to contact or
               identify you (“Personal Data”). Personally identifiable
               information may include, but is not limited to:
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Email address First name and last name Address, State, Province,
               ZIP/Postal code, City Cookies and Usage Data We may use your
               Personal Data to contact you with newsletters, marketing or
@@ -307,7 +307,7 @@ export default function About2() {
                 Usage Data
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -326,19 +326,19 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We may also collect information that your browser sends whenever
               you visit our Service or when you access Service by or through a
               mobile device (“Usage Data”).
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               This Usage Data may include information such as your computer's
               Internet Protocol address (e.g. IP address), browser type, browser
               version, the pages of our Service that you visit, the time and
               date of your visit, the time spent on those pages, unique device
               identifiers and other diagnostic data.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               When you access Service with a mobile device, this Usage Data may
               include information such as the type of mobile device you use,
               your mobile device unique ID, the IP address of your mobile
@@ -354,7 +354,7 @@ export default function About2() {
                 5. Use of Data
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -373,10 +373,10 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Plus Five Five, Inc. uses the collected data for various purposes:
             </p>
-            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-slate-11">
+            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-sm text-neutral-600 dark:text-neutral-400">
               <li>to notify you about changes to our Service;</li>
               <li>
                 to allow you to participate in interactive features of our
@@ -420,7 +420,7 @@ export default function About2() {
                 6. Retention of Data
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -439,7 +439,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We will retain your Personal Data only for as long as is necessary
               for the purposes set out in this Privacy Policy. We will retain
               and use your Personal Data to the extent necessary to comply with
@@ -447,7 +447,7 @@ export default function About2() {
               your data to comply with applicable laws), resolve disputes, and
               enforce our legal agreements and policies.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We will also retain Usage Data for internal analysis purposes.
               Usage Data is generally retained for a shorter period, except when
               this data is used to strengthen the security or to improve the
@@ -462,7 +462,7 @@ export default function About2() {
                 7. Transfer of Data
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -481,22 +481,22 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Your information, including Personal Data, may be transferred to –
               and maintained on – computers located outside of your state,
               province, country or other governmental jurisdiction where the
               data protection laws may differ from those of your jurisdiction.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               If you are located outside United States and choose to provide
               information to us, please note that we transfer the data,
               including Personal Data, to United States and process it there.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Your consent to this Privacy Policy followed by your submission of
               such information represents your agreement to that transfer.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Plus Five Five, Inc. will take all the steps reasonably necessary
               to ensure that your data is treated securely and in accordance
               with this Privacy Policy and no transfer of your Personal Data
@@ -512,7 +512,7 @@ export default function About2() {
                 8. Disclosure of Data
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -531,7 +531,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We may disclose personal information that we collect, or you
               provide:
             </p>
@@ -543,7 +543,7 @@ export default function About2() {
                 Disclosure for Law Enforcement.
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -562,7 +562,7 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Under certain circumstances, we may be required to disclose your
               Personal Data if required to do so by law or in response to valid
               requests by public authorities.
@@ -578,7 +578,7 @@ export default function About2() {
                 Other cases. We may disclose your information also:
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -597,7 +597,7 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-slate-11">
+            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-sm text-neutral-600 dark:text-neutral-400">
               <li>
                 to contractors, service providers, and other third parties we
                 use to support our business;
@@ -613,7 +613,7 @@ export default function About2() {
                 9. Security of Data
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -632,7 +632,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               The security of your data is important to us but remember that no
               method of transmission over the Internet or method of electronic
               storage is 100% secure. While we strive to use commercially
@@ -651,7 +651,7 @@ export default function About2() {
                 Regulation (GDPR)
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -670,40 +670,40 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               If you are a resident of the European Union (EU) and European
               Economic Area (EEA), you have certain data protection rights,
               covered by GDPR. – See more at:{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://eur-lex.europa.eu/eli/reg/2016/679/oj"
               >
                 https://eur-lex.europa.eu/eli/reg/2016/679/oj
               </a>
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We aim to take reasonable steps to allow you to correct, amend,
               delete, or limit the use of your Personal Data.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               If you wish to be informed what Personal Data we hold about you
               and if you want it to be removed from our systems, please email us
               at{" "}
               <a
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="mailto:support@gennit.online"
               >
                 support@gennit.online
               </a>
               .
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               In certain circumstances, you have the following data protection
               rights:
             </p>
-            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-slate-11">
+            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5">
               <li>
                 the right to access, update or to delete the information we have
                 on you;
@@ -732,12 +732,12 @@ export default function About2() {
                 to process your personal information;
               </li>
             </ol>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Please note that we may ask you to verify your identity before
               responding to such requests. Please note, we may not able to
               provide Service without some necessary data.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               You have the right to complain to a Data Protection Authority
               about our collection and use of your Personal Data. For more
               information, please contact your local data protection authority
@@ -755,7 +755,7 @@ export default function About2() {
                 Protection Act (CalOPPA)
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -774,7 +774,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               CalOPPA is the first state law in the nation to require commercial
               websites and online services to post a privacy policy. The law’s
               reach stretches well beyond California to require a person or
@@ -787,16 +787,16 @@ export default function About2() {
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://consumercal.org/about-cfc/cfc-education-foundation/california-online-privacy-protection-act-caloppa-3/"
               >
                 https://consumercal.org/about-cfc/cfc-education-foundation/california-online-privacy-protection-act-caloppa-3/
               </a>
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               According to CalOPPA we agree to the following:
             </p>
-            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-slate-11">
+            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-sm text-neutral-600 dark:text-neutral-400">
               <li>users can visit our site anonymously;</li>
               <li>
                 our Privacy Policy link includes the word “Privacy”, and can
@@ -811,7 +811,7 @@ export default function About2() {
                 users are able to change their personal information by emailing
                 us at{" "}
                 <a
-                  className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                  className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                   href="mailto:support@gennit.online"
                 >
                   support@gennit.online
@@ -819,16 +819,16 @@ export default function About2() {
                 .
               </li>
             </ol>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Our Policy on “Do Not Track” Signals:
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We honor Do Not Track signals and do not track, plant cookies, or
               use advertising when a Do Not Track browser mechanism is in place.
               Do Not Track is a preference you can set in your web browser to
               inform websites that you do not want to be tracked.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               You can enable or disable Do Not Track by visiting the Preferences
               or Settings page of your web browser.
             </p>
@@ -844,7 +844,7 @@ export default function About2() {
                 Privacy Act (CCPA)
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -863,7 +863,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               If you are a California resident, you are entitled to learn what
               data we collect about you, ask to delete your data and not to sell
               (share) it. To exercise your data protection rights, you can make
@@ -880,7 +880,7 @@ export default function About2() {
                 a) What personal information we have about you.
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -899,10 +899,10 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               If you make this request, we will return to you
             </p>
-            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-slate-11">
+            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-sm text-neutral-600 dark:text-neutral-400">
               <li>
                 The categories of personal information we have collected about
                 you.
@@ -935,7 +935,7 @@ export default function About2() {
                 other company we shared it with.
               </li>
             </ol>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Please note, you are entitled to ask us to provide you with this
               information up to two times in a rolling twelve-month period. When
               you make this request, the information provided may be limited to
@@ -953,7 +953,7 @@ export default function About2() {
                 b) To delete your personal information.
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -972,7 +972,7 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               If you make this request, we will delete the personal information
               we hold about you as of the date of your request from our records
               and direct any service providers to do the same. In some cases,
@@ -992,7 +992,7 @@ export default function About2() {
                 c) To stop selling your personal information
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1011,12 +1011,12 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We don't sell or rent your personal information to any third
               parties for any purpose. You are the only owner of your Personal
               Data and can request disclosure or deletion at any time.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Please note, if you ask us to delete or stop selling your data, it
               may impact your experience with us, and you may not be able to
               participate in certain programs or membership services which
@@ -1024,20 +1024,20 @@ export default function About2() {
               no circumstances, we will discriminate against you for exercising
               your rights.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               To exercise your California data protection rights described
               above, please send your request(s) by one of the following means:
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               By email:{" "}
               <a
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="mailto:support@gennit.online"
               >
                 support@gennit.online
               </a>
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Your data protection rights, described above, are covered by the
               CCPA, short for the California Consumer Privacy Act. To find out
               more, visit the official California Legislative Information
@@ -1051,7 +1051,7 @@ export default function About2() {
                 13. Service Providers
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1070,13 +1070,13 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We may employ third party companies and individuals to facilitate
               our Service (“Service Providers”), provide Service on our behalf,
               perform Service-related services or assist us in analysing how our
               Service is used.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               These third parties have access to your Personal Data only to
               perform these tasks on our behalf and are obligated not to
               disclose or use it for any other purpose.
@@ -1089,7 +1089,7 @@ export default function About2() {
                 14. Analytics
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1108,7 +1108,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We may use third-party Service Providers to monitor and analyze
               the use of our Service.
             </p>
@@ -1120,7 +1120,7 @@ export default function About2() {
                 Google Analytics
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1139,7 +1139,7 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Google Analytics is a web analytics service offered by Google that
               tracks and reports website traffic. Google uses the data collected
               to track and monitor the use of our Service. This data is shared
@@ -1147,25 +1147,25 @@ export default function About2() {
               contextualise and personalise the ads of its own advertising
               network.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               For more information on the privacy practices of Google, please
               visit the Google Privacy Terms web page:{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://policies.google.com/privacy?hl=en"
               >
                 https://policies.google.com/privacy?hl=en
               </a>
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We also encourage you to review the Google's policy for
               safeguarding your data:{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://support.google.com/analytics/answer/6004245"
               >
                 https://support.google.com/analytics/answer/6004245
@@ -1180,7 +1180,7 @@ export default function About2() {
                 Mixpanel
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1199,23 +1199,23 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Mixpanel is provided by Mixpanel Inc.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               You can prevent Mixpanel from using your information for analytics
               purposes by opting-out. To opt-out of Mixpanel service, please
               visit this page:{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://mixpanel.com/optout/"
               >
                 https://mixpanel.com/optout/
               </a>
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               For more information on what type of information Mixpanel
               collects, please visit the Terms of Use page of Mixpanel:
               https://mixpanel.com/terms/
@@ -1228,7 +1228,7 @@ export default function About2() {
                 Segment.io
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1247,13 +1247,13 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Segment.io is a web traffic analysis tool. You can read the
               Privacy Policy for Segment.io here:{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://segment.com/legal/privacy/"
               >
                 https://segment.com/legal/privacy/
@@ -1268,7 +1268,7 @@ export default function About2() {
                 15. CI/CD tools
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1287,7 +1287,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We may use third-party Service Providers to automate the
               development process of our Service.
             </p>
@@ -1299,7 +1299,7 @@ export default function About2() {
                 CircleCI
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1318,22 +1318,22 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               CircleCI is provided by Circle Internet Services, Inc.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               CircleCI is Continuous Integration, a development practice which
               is being used by software teams allowing them to build, test and
               deploy applications easier and quicker on multiple platforms.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               For more information on what data Circle CI collects for what
               purpose and how the protection of the data is ensured, please
               visit Circle CI Privacy Policy page:{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://circleci.com/privacy/"
               >
                 https://circleci.com/privacy/
@@ -1348,7 +1348,7 @@ export default function About2() {
                 16. Payments
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1367,12 +1367,12 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We may provide paid products and/or services within Service. In
               that case, we use third-party services for payment processing
               (e.g. payment processors).
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We will not store or collect your payment card details. That
               information is provided directly to our third-party payment
               processors whose use of your personal information is governed by
@@ -1382,7 +1382,7 @@ export default function About2() {
               American Express and Discover. PCI-DSS requirements help ensure
               the secure handling of payment information.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               The payment processors we work with are:
             </p>
             <h3
@@ -1393,7 +1393,7 @@ export default function About2() {
                 Stripe
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1412,12 +1412,12 @@ export default function About2() {
                 </span>
               </a>
             </h3>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Their Privacy Policy can be viewed at:{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://stripe.com/us/privacy"
               >
                 https://stripe.com/us/privacy
@@ -1431,7 +1431,7 @@ export default function About2() {
                 17. Links to Other Sites
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1450,13 +1450,13 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Our Service may contain links to other sites that are not operated
               by us. If you click a third party link, you will be directed to
               that third party's site. We strongly advise you to review the
               Privacy Policy of every site you visit.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We have no control over and assume no responsibility for the
               content, privacy policies or practices of any third party sites or
               services.
@@ -1469,7 +1469,7 @@ export default function About2() {
                 18. Children's Privacy
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1488,7 +1488,7 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Our Services are not intended for use by children under the age of
               18 (
               <strong className="font-semibold text-slate-12">“Child”</strong>{" "}
@@ -1498,7 +1498,7 @@ export default function About2() {
               </strong>
               ).
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We do not knowingly collect personally identifiable information
               from Children under 18. If you become aware that a Child has
               provided us with Personal Data, please contact us. If we become
@@ -1514,7 +1514,7 @@ export default function About2() {
                 19. Changes to This Privacy Policy
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1533,16 +1533,16 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We may update our Privacy Policy from time to time. We will notify
               you of any changes by posting the new Privacy Policy on this page.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We will let you know via email and/or a prominent notice on our
               Service, prior to the change becoming effective and update
               “effective date” at the top of this Privacy Policy.
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               You are advised to review this Privacy Policy periodically for any
               changes. Changes to this Privacy Policy are effective when they
               are posted on this page.
@@ -1555,7 +1555,7 @@ export default function About2() {
                 20. Contact Us
                 <span
                   aria-hidden="true"
-                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle text-slate-11 opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
+                  className="invisible ml-2 inline-block h-4 w-4 -translate-x-1/2 align-middle opacity-0 [transition:opacity_300ms_cubic-bezier(.36,.66,.6,1),transform_240ms_cubic-bezier(.36,.66,.6,1),visibility_300ms] group-hover:visible group-hover:translate-x-0 group-hover:opacity-100"
                 >
                   <svg
                     width={15}
@@ -1574,14 +1574,14 @@ export default function About2() {
                 </span>
               </a>
             </h2>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               If you have any questions about this Privacy Policy, please
               contact us:
             </p>
-            <p className="leading-7 text-slate-11 my-5 text-pretty">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               By email:{" "}
               <a
-                className="border-b-[.0375rem] border-solid border-slate-11 font-medium text-slate-11 transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
+                className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="mailto:support@gennit.online"
               >
                 support@gennit.online
