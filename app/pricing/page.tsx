@@ -97,7 +97,7 @@ export default function Pricing() {
         }
       `}</style>
       <LandingNavbar />
-      <section className="relative py-24 md:py-32">
+      <section className="relative py-24 md:py-32 ">
         <div className="w-full md:max-w-5xl md:mx-auto p-2 md:p-4">
           <div className="text-center animate-fadeInUp">
             <h2 className="text-foreground text-2xl font-bold mb-4 animate-pulse">
@@ -167,11 +167,11 @@ export default function Pricing() {
             {/* End Switch */}
           </>
 
-          <div className="flex flex-wrap items-center justify-center w-full gap-6">
+          <div className="flex flex-wrap items-center justify-center w-full  gap-6">
             {plans.map((plan, index) => (
               <div
                 key={plan.name}
-                className={`w-72 text-center p-6 rounded-lg transition-all duration-500 transform hover:scale-105 hover:shadow-xl ${
+                className={`w-full md:w-72 text-center p-6 rounded-lg transition-all duration-500 transform hover:scale-105 hover:shadow-xl ${
                   plan.popular
                     ? "bg-gradient-to-r from-cyan-400 to-blue-500 relative text-white border border-primary/30 pb-14"
                     : "bg-card text-foreground border border-border hover:border-primary/50"
