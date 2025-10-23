@@ -703,7 +703,7 @@ export default function About2() {
               In certain circumstances, you have the following data protection
               rights:
             </p>
-            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5">
+            <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-sm text-neutral-600 dark:text-neutral-400">
               <li>
                 the right to access, update or to delete the information we have
                 on you;
