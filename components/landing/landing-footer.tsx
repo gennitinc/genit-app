@@ -331,7 +331,7 @@ export function LandingFooter() {
             Rights Reserved.
           </p>
           <div className="flex items-center gap-4 mt-4 sm:mt-0">
-            <span className="text-xs">Powered by AI</span>
+            <span className="text-xs">Powered by Klipto Inc</span>
             <div className="flex items-center gap-1">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span className="text-xs">Online</span>
