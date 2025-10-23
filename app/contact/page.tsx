@@ -59,7 +59,7 @@ const formSchema = z.object({
 // Define the type for the form data
 type FormData = z.infer<typeof formSchema>;
 
-export default function Contact1() {
+export default function Contact() {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -89,13 +89,13 @@ export default function Contact1() {
         <div className="grid w-full grid-cols-1 gap-x-32 overflow-hidden lg:grid-cols-2 px-4 md:px-8 lg:px-16">
           <div className="w-full pb-10 md:space-y-10 md:pb-0">
             <div className="space-y-6 md:max-w-[40rem]">
-              <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+              {/* <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
                 You are one form away
-              </div>
+              </div> */}
               <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">
                 Get in touch
               </h1>
-              <div className="text-muted-foreground md:text-base lg:text-lg lg:leading-7">
+              <div className="text-muted-foreground md:text-base lg:leading-7">
                 Experience a personalized demonstration of our cutting-edge
                 platform. Discover how we can streamline your processes, boost
                 productivity, and drive innovation in your business.
@@ -182,9 +182,9 @@ export default function Contact1() {
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <p className="text-lg font-semibold">
+                  {/* <p className="text-lg font-semibold">
                     Trusted by industry leaders:
-                  </p>
+                  </p> */}
                   {/* <div className="grid grid-cols-3 gap-6">
                     <Image
                       src="/placeholder.svg"
@@ -214,7 +214,7 @@ export default function Contact1() {
           </div>
           <div className="flex w-full justify-center lg:mt-2.5">
             <Card className="relative flex w-full min-w-80 max-w-[32rem] flex-col items-center overflow-visible border-primary/10 bg-background/80 shadow-lg backdrop-blur-sm md:min-w-96">
-              <CardHeader className="pb-2 pt-6">
+              {/* <CardHeader className="pb-2 pt-6">
                 <div className="flex flex-col items-center space-y-1.5 text-center">
                   <div className="mb-2 flex size-12 items-center justify-center rounded-full bg-primary/10">
                     <Calendar className="size-6 text-primary" />
@@ -224,7 +224,7 @@ export default function Contact1() {
                     Fill out the form below and we'll be in touch shortly
                   </p>
                 </div>
-              </CardHeader>
+              </CardHeader> */}
               <CardContent className="w-full px-4 py-6 lg:px-8">
                 <Form {...form}>
                   <form

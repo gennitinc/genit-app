@@ -145,7 +145,10 @@ export function NavMain() {
                 )}
                 onClick={handleLinkClick}
               >
-                <Link href={item.href}>
+                <Link
+                  href={item.href}
+                  {...(item.href === "/contact" ? { target: "_blank" } : {})}
+                >
                   <item.icon
                     className={cn(
                       "h-4 w-4",
