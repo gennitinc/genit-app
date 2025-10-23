@@ -70,7 +70,7 @@ export function LandingNavbar() {
     { name: "Company", href: "/company" },
     { name: "Inspirations", href: "/inspirations" },
     { name: user? "Billing" : "Pricing" , href: user ? "/user/settings?tab=billing" : "/pricing" },
-    { name: "History", href: user ? "/history" : "/signin" },
+    { name: "History", href: user ? "/chat/history" : "/signin" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -124,28 +124,28 @@ export function LandingNavbar() {
                     {/* Main user avatar with popover */}
                     <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
                       <Link
-                        target="__blank"
+                        target=""
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/insprations"
                       >
-                        Inspiration
+                        Inspirations
                       </Link>
                       <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/playground"
+                        href={user ? "/user/settings?tab=billing" : "/pricing"}
                       >
-                        Pricing
+                        {user ? "Billing" : "Pricing"}
                       </Link>
                       <Link
-                        target="__blank"
+                        target=""
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href={user ? "/history" : "/signin"}
+                        href={user ? "/chat/history" : "/signin"}
                       >
                         History
                       </Link>
                       <Link
-                        target="__blank"
+                        target="k"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="https://discord.gg/ftZbQvCdN7"
                       >
@@ -293,16 +293,16 @@ export function LandingNavbar() {
                       <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/playground"
+                        href="/inspirations"
                       >
-                        Knowledge Base
+                        Inspirations
                       </Link>
                       <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/playground"
+                        href={user ? "/user/settings?tab=billing" : "/pricing"}
                       >
-                        Pricing
+                        {user ? "Billing" : "Pricing"}
                       </Link>
 
                       <Link
