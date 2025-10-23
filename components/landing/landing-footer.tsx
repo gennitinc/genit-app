@@ -190,7 +190,7 @@ export function LandingFooter() {
                 Gennit
               </span>
             </Link>
-            <p className="text-muted-foreground max-w-60 mb-6">
+            <p className="text-muted-foreground w-full md:max-w-60 mb-6">
               Create stunning promotional graphics with AI-powered design tools.
               Transform your ideas into professional visuals in seconds.
             </p>
