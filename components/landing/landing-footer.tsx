@@ -38,6 +38,8 @@ import {
   Github,
   Globe,
   ChevronRight,
+  Monitor,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -49,6 +51,13 @@ export function LandingFooter() {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const { theme, setTheme } = useTheme();
+  const [selected, setSelected] = useState("en");
+
+  const languages = [
+    { code: "en", label: "English", flag: "🇺🇸" },
+    { code: "es", label: "Spanish", flag: "🇪🇸" },
+    { code: "fr", label: "French", flag: "🇫🇷" },
+  ];
 
   // For demo purposes - in a real app, this would be connected to your theme provider
   const toggleTheme = () => {
@@ -171,7 +180,7 @@ export function LandingFooter() {
       </div> */}
 
       {/* Main Footer Content */}
-      <footer className="px-6 md:px-16 lg:px-24 xl:px-32 w-full text-sm bg-background border-t border-border pt-10">
+      <footer className="px-2 md:px-12 lg:px-20 xl:px-24 w-full text-sm bg-background border-t border-border pt-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="sm:col-span-2 lg:col-span-1">
@@ -232,6 +241,69 @@ export function LandingFooter() {
                   <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
                 </svg>
               </a>
+            </div>
+
+            <div className="mt-14 flex flex-col items-start md:flex-row gap-2 md:gap-6 md:items-center">
+              <div className="flex items-center gap-4 mb-2 ">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Theme
+                </span>
+                <div className="flex gap-1 p-1 bg-muted rounded-lg">
+                  <button
+                    className="p-1.5 hover:bg-accent hover:shadow-sm rounded transition-all duration-200"
+                    onClick={() => setTheme("light")}
+                  >
+                    <Sun className="h-3.5 w-3.5 text-muted-foreground" />
+                  </button>
+                  <button
+                    className="p-1.5 hover:bg-accent hover:shadow-sm rounded transition-all duration-200"
+                    onClick={() => setTheme("dark")}
+                  >
+                    <Moon className="h-3.5 w-3.5 text-muted-foreground" />
+                  </button>
+                  <button
+                    className="p-1.5 bg-accent shadow-sm rounded"
+                    onClick={() => setTheme("system")}
+                  >
+                    <Monitor className="h-3.5 w-3.5 text-primary" />
+                  </button>
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-4 mb-2">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Language
+                </span>
+
+                <Select
+                  value={selected}
+                  onValueChange={(value) => setSelected(value)}
+                  disabled
+                >
+                  <SelectTrigger className="w-fit text-sm bg-background border border-border rounded-md px-2 py-1 text-foreground">
+                    <SelectValue placeholder="Select language">
+                      <div className="flex items-center gap-2 w-fit">
+                        <span>
+                          {languages.find((l) => l.code === selected)?.flag}
+                        </span>
+                        <span>
+                          {languages.find((l) => l.code === selected)?.label}
+                        </span>
+                      </div>
+                    </SelectValue>
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    {languages.map((lang) => (
+                      <SelectItem key={lang.code} value={lang.code}>
+                        <div className="flex items-center gap-2">
+                          <span>{lang.flag}</span>
+                          <span>{lang.label}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 

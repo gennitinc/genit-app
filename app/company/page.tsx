@@ -32,19 +32,19 @@ export default function About2() {
           <div className="grid gap-12 md:grid-cols-2">
             <div className="flex flex-col justify-center space-y-6">
               <div className="inline-block w-max rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-                Follow Our Journey
+                The Gennit Story
               </div>
               <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-                Crafting Digital{" "}
+                AI‑Powered {" "}
                 <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Excellence
+                  Design
                 </span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-xl">
-                Founded on innovation and driven by results, we've been
-                transforming ideas into powerful applications since 2008. Our
-                unique approach combines deep industry expertise with
-                cutting-edge solutions.
+                Gennit helps anyone create stunning promotional fliers and
+                social graphics in seconds. Turn ideas into production‑ready
+                visuals with AI prompts, smart templates, brand kits, and
+                one‑click exports.
               </p>
               {/* <div className="flex flex-col gap-4 sm:flex-row pt-2">
                 <Button
@@ -112,37 +112,37 @@ export default function About2() {
         <div className="px-4 lg:px-10">
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <div className="inline-block w-max rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mx-auto mb-4">
-              Our Core Principles
+              Our Design Principles
             </div>
             <h2 className="mb-4 text-3xl font-bold md:text-4xl">
               Our Mission & Values
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              We're guided by a commitment to excellence, integrity, and
-              continuous innovation. Our mission is to empower organizations
-              with technology that drives meaningful change.
+              We make great design accessible. Our mission is to empower
+              creators, marketers, and businesses to produce on‑brand,
+              high‑impact graphics with AI—fast, consistent, and beautiful.
             </p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
             {[
               {
+                icon: Sparkles,
+                title: "AI at the Core",
+                description:
+                  "Intelligent prompts, layout suggestions, and auto‑branding deliver pro results with less effort.",
+              },
+              {
+                icon: Layers,
+                title: "On‑Brand by Default",
+                description:
+                  "Brand kits, reusable components, and smart templates keep every graphic consistent across teams.",
+              },
+              {
                 icon: Globe,
-                title: "Global Perspective",
+                title: "Built for Speed",
                 description:
-                  "We bring worldwide insights to local challenges, creating solutions that work across borders and cultures.",
-              },
-              {
-                icon: Award,
-                title: "Excellence in Delivery",
-                description:
-                  "Every project is executed with precision, care, and an unwavering commitment to exceeding expectations.",
-              },
-              {
-                icon: Clock,
-                title: "Future-Focused",
-                description:
-                  "We anticipate tomorrow's challenges and build solutions that stand the test of time and technological change.",
+                  "Create, iterate, and export in minutes with optimized workflows and one‑click publishing.",
               },
             ].map((value, index) => (
               <div
@@ -165,15 +165,15 @@ export default function About2() {
         <div className="px-4 lg:px-10">
           <div className="mb-16 text-center">
             <div className="inline-block w-max rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
-              Idea to App in Seconds
+              Idea to Graphic in Seconds
             </div>
             <h2 className="text-3xl font-bold md:text-4xl mb-4">
-              Supercharge Your <span className="text-primary">Development</span>
+              Supercharge Your <span className="text-primary">Design</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              Our platform empowers developers and businesses to transform ideas
-              into fully-functional applications with unprecedented speed and
-              efficiency
+              Our platform empowers teams to turn ideas into on‑brand
+              graphics—fliers, social posts, banners, ads—using AI prompts,
+              smart templates, and one‑click exports.
             </p>
           </div>
 
@@ -181,21 +181,21 @@ export default function About2() {
             {[
               {
                 icon: Sparkles,
-                title: "AI-Powered Development",
+                title: "AI Design Co‑Pilot",
                 description:
-                  "Leverage advanced AI to generate code, design interfaces, and solve complex problems in seconds.",
+                  "Generate layouts, typography, and color suggestions tailored to your brand and message.",
               },
               {
                 icon: Zap,
-                title: "Instant Deployment",
+                title: "Fast Exports",
                 description:
-                  "Deploy your applications with a single click to our global infrastructure for maximum performance.",
+                  "Export to PNG, JPG, SVG, and PDF—optimized for social, print, and ads in one click.",
               },
               {
                 icon: Layers,
-                title: "Full-Stack Solutions",
+                title: "Smart Templates",
                 description:
-                  "Build complete applications with frontend, backend, and database components seamlessly integrated.",
+                  "Save time with curated templates for promos, events, product launches, and more.",
               },
             ].map((feature, index) => (
               <div
