@@ -66,7 +66,7 @@ export function LandingNavbar() {
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
 
   const navigation = [
-    { name: "Home", href: "/" },
+    { name: "Create", href: "/" },
     { name: "Company", href: "/company" },
     { name: "Inspirations", href: "/inspirations" },
     { name: user? "Billing" : "Pricing" , href: user ? "/user/settings?tab=billing" : "/pricing" },
