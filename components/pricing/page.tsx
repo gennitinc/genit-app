@@ -133,7 +133,7 @@ export default function PricingComponent() {
               key={plan.name}
               className={`w-[95%] sm:w-72 text-center p-6 rounded-lg transition-all duration-500 transform hover:scale-105 hover:shadow-xl ${
                 plan.popular
-                  ? "bg-gradient-to-r from-cyan-400 to-blue-500 relative text-white border border-primary/30 pb-14"
+                  ? "bg-gradient-to-r from-blue-700 via-blue-800 to-gray-900 relative text-white border border-primary/30 pb-14"
                   : "bg-card text-foreground border border-border hover:border-primary/50"
               }`}
               style={{
