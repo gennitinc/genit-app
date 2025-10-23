@@ -190,7 +190,7 @@ export function LandingFooter() {
                 Gennit
               </span>
             </Link>
-            <p className="text-muted-foreground w-full md:max-w-60 mb-6">
+            <p className="text-muted-foreground w-full md:max-w-[60vw] lg:max-w-60 mb-6">
               Create stunning promotional graphics with AI-powered design tools.
               Transform your ideas into professional visuals in seconds.
             </p>
@@ -243,7 +243,7 @@ export function LandingFooter() {
               </a>
             </div>
 
-            <div className="mt-14 flex flex-col items-start md:flex-row gap-2 md:gap-6 md:items-center">
+            <div className="mt-14 flex flex-col items-start sm:flex-row gap-2 md:gap-6 md:items-center">
               <div className="flex items-center gap-4 mb-2 ">
                 <span className="text-sm font-medium text-muted-foreground">
                   Theme
