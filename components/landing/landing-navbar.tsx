@@ -69,8 +69,8 @@ export function LandingNavbar() {
     { name: "Home", href: "/" },
     { name: "Company", href: "/company" },
     { name: "Inspirations", href: "/inspirations" },
-    { name: "Features", href: "/features" },
-    { name: "History", href: user ? "/history" : "/signin"},
+    { name: user? "Billing" : "Pricing" , href: user ? "/user/settings?tab=billing" : "/pricing" },
+    { name: "History", href: user ? "/history" : "/signin" },
     { name: "Contact", href: "/contact" },
   ];
 
