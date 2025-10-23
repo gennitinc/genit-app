@@ -136,7 +136,7 @@ export function LandingFooter() {
       </div>
 
       {/* Newsletter Banner */}
-      <div className="relative z-10 bg-background backdrop-blur-sm border-b border-primary/1">
+      {/* <div className="relative z-10 bg-background backdrop-blur-sm border-b border-primary/1">
         <div className="container mx-auto py-10 px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="max-w-md">
@@ -168,190 +168,175 @@ export function LandingFooter() {
             </form>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Footer Content */}
-      <footer className="flex flex-wrap justify-center lg:justify-between overflow-hidden gap-10 md:gap-20 py-16 px-2 md:px-10 lg:px-16 xl:px-24 text-[13px] text-muted-foreground bg-white dark:bg-black">
-        <div className="flex flex-wrap items-start gap-10 md:gap-[60px] xl:gap-[140px]">
-          <Link href="/" className="flex items-center z-40 gap-2">
-            <Logo className="w-12 h-12 flex-shrink-0" />
-            <span
-              className={`text-xl font-semibold transition-colors duration-300 text-foreground`}
-            >
-              Gennit
-            </span>
-          </Link>
+      <footer className="px-6 md:px-16 lg:px-24 xl:px-32 w-full text-sm bg-background border-t border-border pt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Brand Section */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <Link href="/" className="flex items-center z-40 gap-2 mb-4">
+              <Logo className="w-12 h-12 flex-shrink-0" />
+              <span className="text-xl font-semibold transition-colors duration-300 text-foreground">
+                Gennit
+              </span>
+            </Link>
+            <p className="text-muted-foreground max-w-60 mb-6">
+              Create stunning promotional graphics with AI-powered design tools.
+              Transform your ideas into professional visuals in seconds.
+            </p>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://discord.gg/ftZbQvCdN7"
+                target="_blank"
+                rel="noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={24}
+                  height={24}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-5"
+                >
+                  <path d="M8 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
+                  <path d="M14 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
+                  <path d="M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3" />
+                  <path d="M7 16.5c3.5 1 6.5 1 10 0" />
+                </svg>
+              </a>
+              <a
+                href="https://twitter.com/mannupaaji"
+                target="_blank"
+                rel="noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={24}
+                  height={24}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-5"
+                >
+                  <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
+                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+                </svg>
+              </a>
+            </div>
+          </div>
 
+          {/* Navigation Links */}
           <div>
-            <p className="text-foreground font-semibold">Product</p>
-            <ul className="mt-2 space-y-2">
-              <li>
-                <a href="/" className="hover:text-indigo-600 transition">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="/" className="hover:text-indigo-600 transition">
-                  Support
-                </a>
-              </li>
-              <li>
-                <a href="/" className="hover:text-indigo-600 transition">
-                  Pricing
-                </a>
-              </li>
-              <li>
-                <a href="/" className="hover:text-indigo-600 transition">
-                  Affiliate
-                </a>
-              </li>
-            </ul>
+            <h3 className="font-semibold mb-4 text-foreground">Platform</h3>
+            <div className="flex flex-col space-y-3">
+              <Link
+                href="/"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                href="/inspirations"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Inspirations
+              </Link>
+              <Link
+                href="/pricing"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Pricing
+              </Link>
+              <Link
+                href="/contact"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Contact
+              </Link>
+            </div>
           </div>
+
+          {/* Company Links */}
           <div>
-            <p className="text-foreground font-semibold">Resources</p>
-            <ul className="mt-2 space-y-2">
-              <li>
-                <a href="/" className="hover:text-indigo-600 transition">
-                  Company
-                </a>
-              </li>
-              <li>
-                <a href="/" className="hover:text-indigo-600 transition">
-                  Blogs
-                </a>
-              </li>
-              <li>
-                <a href="/" className="hover:text-indigo-600 transition">
-                  Community
-                </a>
-              </li>
-              <li>
-                <a href="/" className="hover:text-indigo-600 transition">
-                  Careers
-                  <span className="text-xs text-white bg-indigo-600 rounded-md ml-2 px-2 py-1">
-                    We’re hiring!
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href="/" className="hover:text-indigo-600 transition">
-                  About
-                </a>
-              </li>
-            </ul>
+            <h3 className="font-semibold mb-4 text-foreground">Company</h3>
+            <div className="flex flex-col space-y-3">
+              <Link
+                href="/company"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                About Us
+              </Link>
+              <Link
+                href="/legal/privacy-policy"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/legal/terms-of-service"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Terms of Service
+              </Link>
+              <Link
+                href="/contact"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Support
+              </Link>
+            </div>
           </div>
+
+          {/* Newsletter Section */}
           <div>
-            <p className="text-foreground font-semibold">Legal</p>
-            <ul className="mt-2 space-y-2">
-              <li>
-                <a href="/" className="hover:text-indigo-600 transition">
-                  Privacy
-                </a>
-              </li>
-              <li>
-                <a href="/" className="hover:text-indigo-600 transition">
-                  Terms
-                </a>
-              </li>
-            </ul>
+            <h3 className="font-semibold mb-4 text-foreground">Stay Updated</h3>
+            <div className="space-y-4">
+              <p className="text-muted-foreground text-sm">
+                Get the latest AI design tips and updates delivered to your
+                inbox.
+              </p>
+              <form onSubmit={handleSubscribe} className="space-y-3">
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  className="w-full"
+                />
+                <Button type="submit" size="sm" className="w-full">
+                  Subscribe
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
-        <div className="flex flex-col max-md:items-center max-md:text-center gap-2 items-end">
-          <p className="max-w-60">
-            Making every customer feel valued—no matter the size of your
-            audience.
+
+        <Separator className="my-8" />
+
+        <div className="flex flex-col sm:flex-row justify-between items-center py-4 text-muted-foreground">
+          <p className="text-sm">
+            Copyright {currentYear} ©{" "}
+            <span className="text-foreground font-medium">Gennit</span> All
+            Rights Reserved.
           </p>
-          <div className="flex items-center gap-4 mt-3">
-            <a
-              href="https://dribbble.com/prebuiltui"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={24}
-                height={24}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-dribbble size-5 hover:text-indigo-500"
-                aria-hidden="true"
-              >
-                <circle cx={12} cy={12} r={10} />
-                <path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94" />
-                <path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32" />
-                <path d="M8.56 2.75c4.37 6 6 9.42 8 17.72" />
-              </svg>
-            </a>
-            <a
-              href="https://www.linkedin.com/company/prebuiltui"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={24}
-                height={24}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-linkedin size-5 hover:text-indigo-500"
-                aria-hidden="true"
-              >
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                <rect width={4} height={12} x={2} y={9} />
-                <circle cx={4} cy={4} r={2} />
-              </svg>
-            </a>
-            <a href="https://x.com/prebuiltui" target="_blank" rel="noreferrer">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={24}
-                height={24}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-twitter size-5 hover:text-indigo-500"
-                aria-hidden="true"
-              >
-                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
-              </svg>
-            </a>
-            <a
-              href="https://www.youtube.com/@prebuiltui"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={24}
-                height={24}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-youtube size-6 hover:text-indigo-500"
-                aria-hidden="true"
-              >
-                <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path>
-                <path d="m10 15 5-3-5-3z" />
-              </svg>
-            </a>
+          <div className="flex items-center gap-4 mt-4 sm:mt-0">
+            <span className="text-xs">Powered by AI</span>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-xs">Online</span>
+            </div>
           </div>
-          <p className="mt-3 text-center">
-            © 2025 <Link href="/">Gennit AI</Link>
-          </p>
         </div>
       </footer>
     </footer>
