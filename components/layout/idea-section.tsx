@@ -18,6 +18,7 @@ import {
   AlertCircle,
   Mic,
   Loader2,
+  WandSparklesIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/AuthenticatedContext";
@@ -665,7 +666,10 @@ export function IdeaSection() {
                       {isGenerating || isSubmitting ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
                       ) : (
-                        "Create"
+                        <div className="flex flex-row items-center gap-2">
+                          <WandSparklesIcon className="w-3 h-3" />
+                          Create
+                        </div>
                       )}
                     </span>
                   </button>
