@@ -26,7 +26,7 @@ export default function PricingComponent() {
     {
       name: "Pro",
       monthlyPrice: 19,
-      yearlyPrice: 190,
+      yearlyPrice: 120,
       features: [
         "100 AI-generated graphics per month",
         "Premium templates library",
@@ -41,7 +41,7 @@ export default function PricingComponent() {
     {
       name: "Enterprise",
       monthlyPrice: 25,
-      yearlyPrice: 250,
+      yearlyPrice: 190,
       features: [
         "Unlimited AI-generated graphics",
         "Full templates library",
@@ -118,7 +118,7 @@ export default function PricingComponent() {
                     />
                   </svg>
                   <span className="mt-3 inline-block whitespace-nowrap text-[11px] leading-5 font-semibold uppercase bg-blue-600 text-white rounded-full py-1 px-2.5">
-                    Save up to 10%
+                    Save up to 30%
                   </span>
                 </span>
               </span>
