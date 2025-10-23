@@ -98,16 +98,16 @@ export default function Pricing() {
       `}</style>
       <LandingNavbar />
       <section className="relative py-24 md:py-32">
-        <div className="max-w-5xl mx-auto p-4">
+        <div className="w-full md:max-w-5xl md:mx-auto p-2 md:p-4">
           <div className="text-center animate-fadeInUp">
             <h2 className="text-foreground text-2xl font-bold mb-4 animate-pulse">
               Choose Your Plan
             </h2>
             <p
-              className="text-muted-foreground text-lg animate-fadeInUp"
+              className="text-muted-foreground text-sm md:text-lg animate-fadeInUp"
               style={{ animationDelay: "0.2s" }}
             >
-              Create stunning promotional graphics with AI-powered design tools
+              Flexible pricing options designed for you.
             </p>
           </div>
           <>
@@ -141,7 +141,7 @@ export default function Pricing() {
                 className="relative text-sm text-gray-800 dark:text-neutral-200"
               >
                 Annually
-                <span className="absolute -top-10 start-auto -end-28">
+                <span className="absolute -top-10 start-auto -end-10 md:-end-28">
                   <span className="flex items-center">
                     <svg
                       className="w-14 h-8 -me-6"
@@ -167,7 +167,7 @@ export default function Pricing() {
             {/* End Switch */}
           </>
 
-          <div className="flex flex-wrap items-center justify-center gap-6">
+          <div className="flex flex-wrap items-center justify-center w-full gap-6">
             {plans.map((plan, index) => (
               <div
                 key={plan.name}
