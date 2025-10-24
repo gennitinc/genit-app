@@ -60,9 +60,13 @@ export default function PricingComponent() {
     <section className="relative py-24 md:py-32 ">
       <div className="w-full md:max-w-5xl md:mx-auto p-2 md:p-4">
         <div className="text-center animate-fadeInUp">
-          <h2 className="text-foreground text-2xl font-bold mb-4 animate-pulse">
-            Choose Your Plan
-          </h2>
+          
+          <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl">
+            Choose Your {" "}
+            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+               Plan
+            </span>
+          </h1>
           <p
             className="text-muted-foreground text-sm md:text-lg animate-fadeInUp"
             style={{ animationDelay: "0.2s" }}

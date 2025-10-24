@@ -24,8 +24,12 @@ export default function About2() {
       <LandingNavbar />
       <div className="mx-auto w-full max-w-5xl px-6 md:max-w-7xl space-y-8 py-16">
         <div>
-          <h1 className="font-display effect-font-styling text-[3rem] md:text-[3.5rem] tracking-tighter leading-[120%] effect-font-gradient mt-4 text-center text-balance">
-            Terms of Service
+          
+          <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl">
+            Terms of{" "}
+            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Service
+            </span>
           </h1>
           <p className="text-sm text-neutral-600 dark:text-neutral-400 text-sm leading-[1.6] text-gray-9 font-normal mt-2 text-center">
             Last update: <time dateTime="2025-08-01">August 1st, 2025</time>

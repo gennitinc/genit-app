@@ -92,8 +92,12 @@ export default function Contact() {
               {/* <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
                 You are one form away
               </div> */}
-              <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">
-                Get in touch
+
+              <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl">
+                Get in{" "}
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  touch
+                </span>
               </h1>
               <div className="text-muted-foreground md:text-base lg:leading-7">
                 Experience a personalized demonstration of our cutting-edge

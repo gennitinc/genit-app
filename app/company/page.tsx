@@ -33,9 +33,9 @@ export default function About2() {
             <div className="space-y-5 md:space-y-8">
               <div className="space-y-3">
                 <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl">
-                  AI‑Powered{" "}
+                  AI‑Design{" "}
                   <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    Design
+                    Company
                   </span>
                 </h1>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
