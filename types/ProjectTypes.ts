@@ -108,7 +108,8 @@ export interface IProjectDesignContext {
 
   generations: any[];
   setGenerations: React.Dispatch<React.SetStateAction<any[]>>;
-
+  isTyping: boolean;
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
   isGenerating: boolean;
   isLoadingProject: boolean;
   clearError: () => void;

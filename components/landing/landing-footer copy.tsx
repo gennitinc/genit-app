@@ -341,11 +341,11 @@ export function LandingFooter() {
               <ul className="space-y-4">
                 <li>
                   <Link
-                    href="/about"
+                    href="/company"
                     className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
                   >
                     <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
-                    About Us
+                    Company
                   </Link>
                 </li>
                 <li>

@@ -346,7 +346,7 @@ export function LandingFooter() {
                 href="/company"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                About Us
+                Company
               </Link>
               <Link
                 href="/legal/privacy-policy"
@@ -404,10 +404,10 @@ export function LandingFooter() {
           </p>
           <div className="flex items-center gap-4 mt-4 sm:mt-0">
             <span className="text-xs">Powered by Klipto Inc</span>
-            {/* <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span className="text-xs">Online</span>
-            </div> */}
+            </div>
           </div>
         </div>
       </footer>

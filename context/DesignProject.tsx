@@ -34,7 +34,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentProjectRoom, setCurrentProjectRoom] = useState<string | null>(
     null
   );
-
   const [isGenerating, setIsGenerating] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [currentStep, setCurrentStep] = useState("");
@@ -43,7 +42,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [error, setError] = useState<string | null>(null);
   const [deploymentUrl, setDeploymentUrl] = useState<string | null>(null);
   const [isLoadingProject, setIsLoadingProject] = useState(false);
-
+  const [isTyping, setIsTyping] = useState(true);
   const [isLiveMode, setIsLiveMode] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -73,7 +72,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const hasProcessedDraftRef = useRef(false);
   const [messages, setMessages] = useState<any[]>([]);
 
- 
   const transformMessages = (messages: any[]) => {
     return (
       messages?.map((msg) => {
@@ -133,34 +131,32 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
-   useEffect(() => {
-     const socket = io(`${serverUrlSocket}`);
-     socket.on("connect", () => {
-       console.log("Socket connected");
+  useEffect(() => {
+    const socket = io(`${serverUrlSocket}`);
+    socket.on("connect", () => {
+      console.log("Socket connected");
 
-       socket.on("newMessage", (projectData: any) => {
-         console.log("New message received", projectData);
+      socket.on("newMessage", (projectData: any) => {
+        console.log("New message received", projectData);
 
-         // Update the project with the latest data from server
-        //  if (
-        //    projectData &&
-        //    Array.isArray(projectData.messages) &&
-        //    projectData.messages.length > 0
-        //  ) {
-        //    setProject(projectData);
-        //    setMessages(transformMessages(projectData.messages));
-        //  }
-       });
-     });
+        //Update the project with the latest data from server
+        if (
+          projectData &&
+          Array.isArray(projectData.messages) &&
+          projectData.messages.length > 0
+        ) {
+          setProject(projectData);
+          setMessages(transformMessages(projectData.messages));
+          setIsTyping(false); // Reset typing indicator when new message is received
+        }
+      });
+    });
 
-     // Cleanup function to disconnect socket when component unmounts
-     return () => {
-       socket.disconnect();
-     };
-   }, []);
-
-
-
+    // Cleanup function to disconnect socket when component unmounts
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   const handleLocalStorageDraft = async (project: IDesignProject) => {
     console.log("hitting 1");
@@ -196,6 +192,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       }
 
       await generateMessage(prompt, attachedFile, project._id, selectedFiles);
+      setIsTyping(true);
     } catch (error) {
       console.error("Error processing localStorage draft:", error);
       localStorage.removeItem("newData");
@@ -303,12 +300,18 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
         if (response.status === 200 && response.data.success) {
           setProject(response.data.data);
-          setMessages(transformMessages(response.data.data?.messages || []));
+
+          console.log("bare m", response.data.data);
+          if (response.data.data?.messages.length >= 1) {
+            console.log("transf m", messages);
+            setMessages(transformMessages(response.data.data?.messages || []));
+          } else {
+            handleLocalStorageDraft(response.data.data);
+            console.log("Project fetched successfully:", response.data.data);
+          }
+
           // setMessages(transformMessages(demoMessages || []));
 
-          console.log("Project fetched successfully:", response.data.data);
-
-          handleLocalStorageDraft(response.data.data);
           return { success: true };
         } else {
           return { success: false, error: "server_error" };
@@ -376,6 +379,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     } finally {
       setIsGenerating(false);
+      setIsTyping(false);
     }
   };
 
@@ -521,6 +525,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       );
     } finally {
       setIsGenerating(false);
+      setIsTyping(false);
     }
   };
 
@@ -657,6 +662,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         handleGenerationItemClick,
         generateMessage,
         isLiveMode,
+        isTyping,
+        setIsTyping,
         isMobile,
         isDrawerOpen,
         userAvatar,
