@@ -24,19 +24,19 @@ export default function About2() {
       <LandingNavbar />
 
       <div className="mx-auto w-full max-w-5xl px-6 md:max-w-7xl space-y-8 py-16">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl">
-            Privacy{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Policy
-            </span>
-          </h1>
-          <p className="text-sm text-foregroundtext-sm leading-[1.6] text-gray-9 font-normal mt-2 text-center">
-            Last update: <time dateTime="2024-07-13">October 23th, 2025</time>
-          </p>
-        </div>
         <div className="content mx-auto max-w-4xl">
           <div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl">
+                Privacy{" "}
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Policy
+                </span>
+              </h1>
+              <p className=" text-neutral-600 dark:text-neutral-400 text-sm leading-[1.6] text-gray-9 font-normal mt-2 text-start">
+                Last update: <time dateTime="2025-08-01">August 1st, 2025</time>
+              </p>
+            </div>
             <h2
               id="1-introduction"
               className="group relative mb-2 mt-12 scroll-mt-20 font-semibold text-white text-2xl"
@@ -65,11 +65,11 @@ export default function About2() {
               </a>
             </h2>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
-              Welcome to Plus Five Five, Inc.
+              Welcome to Gennit - Your AI-Powered Media Design Platform.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">
-                Plus Five Five, Inc. (“us”, “we”, or “our”)
+                Plus Five Five, Inc. ("us", "we", or "our")
               </strong>{" "}
               operates{" "}
               <a
@@ -81,8 +81,10 @@ export default function About2() {
                 https://gennit.online
               </a>{" "}
               (hereinafter referred to as{" "}
-              <strong className="font-semibold text-slate-12">“Service”</strong>
-              ).
+              <strong className="font-semibold text-slate-12">"Service"</strong>
+              ), an AI-powered media design platform that enables users to
+              create, edit, and manage various forms of digital media content
+              including graphics, videos, animations, and interactive designs.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               Our Privacy Policy governs your visit to{" "}
@@ -95,7 +97,7 @@ export default function About2() {
                 https://gennit.online
               </a>
               , and explains how we collect, safeguard and disclose information
-              that results from your use of our Service.
+              that results from your use of our AI media design Service.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               We use your data to provide and improve Service. By using Service,

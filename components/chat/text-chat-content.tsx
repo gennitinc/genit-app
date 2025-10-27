@@ -253,31 +253,31 @@ export function TextChatContent() {
                 );
               } else if (isTyping === true) {
                 return (
-                  <div className="flex items-start space-x-3 p-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                        <span className="text-white text-sm font-bold">AI</span>
-                      </div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-1">
-                        <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                          <div
-                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                            style={{ animationDelay: "0.1s" }}
-                          ></div>
-                          <div
-                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                            style={{ animationDelay: "0.2s" }}
-                          ></div>
-                        </div>
-                        <span className="text-sm text-gray-500 ml-2">
-                          AI is thinking...
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                 <div className="flex items-start space-x-3 p-4">
+                   <div className="flex-shrink-0">
+                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                       <span className="text-white text-sm font-bold">AI</span>
+                     </div>
+                   </div>
+                   <div className="flex-1 min-w-0">
+                     <div className="flex items-center space-x-1">
+                       <div className="flex space-x-1">
+                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                         <div
+                           className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                           style={{ animationDelay: "0.1s" }}
+                         ></div>
+                         <div
+                           className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                           style={{ animationDelay: "0.2s" }}
+                         ></div>
+                       </div>
+                       <span className="text-sm text-gray-500 ml-2">
+                         AI is thinking...
+                       </span>
+                     </div>
+                   </div>
+                 </div>
                 );
               } else if (message.type === "ai") {
                 const messageReactionState = reactionStates[message.id] || {
@@ -288,7 +288,7 @@ export function TextChatContent() {
                 return (
                   <div key={message.id || index} className="space-y-4">
                     {/* Show typing indicator for new projects */}
-
+                    
                     <AIMessage
                       message={message}
                       totalTime={message.totalTime}

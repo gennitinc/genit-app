@@ -23,20 +23,19 @@ export default function About2() {
     <div className="dark:bg-black bg-white">
       <LandingNavbar />
       <div className="mx-auto w-full max-w-5xl px-6 md:max-w-7xl space-y-8 py-16">
-        <div>
-          
-          <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl">
-            Terms of{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Service
-            </span>
-          </h1>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 text-sm leading-[1.6] text-gray-9 font-normal mt-2 text-center">
-            Last update: <time dateTime="2025-08-01">August 1st, 2025</time>
-          </p>
-        </div>
         <div className="content mx-auto max-w-4xl">
           <div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl">
+                Terms of{" "}
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Service
+                </span>
+              </h1>
+              <p className=" text-neutral-600 dark:text-neutral-400 text-sm leading-[1.6] text-gray-9 font-normal mt-2 text-start">
+                Last update: <time dateTime="2025-08-01">August 1st, 2025</time>
+              </p>
+            </div>
             <h2
               id="1-introduction"
               className="group relative mb-2 mt-12 scroll-mt-20 font-semibold text-white text-2xl"
@@ -96,7 +95,8 @@ export default function About2() {
               <strong className="font-semibold text-slate-12">
                 Plus Five Five, Inc. ("Company", "We", "Our", "Us")
               </strong>{" "}
-              and you (
+              , the operator of Gennit, an AI-powered media design platform, and
+              you (
               <strong className="font-semibold text-slate-12">"You"</strong> or
               the{" "}
               <strong className="font-semibold text-slate-12">"User"</strong>).
@@ -470,32 +470,36 @@ export default function About2() {
               </a>
             </h2>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
-              Our Service allows you to post, link, store, share and otherwise
-              make available certain information, text, graphics, videos, or
-              other material ("Content"). You are responsible for Content that
-              you post on or through Service, including its legality,
-              reliability, and appropriateness.
+              Our AI-powered media design Service allows you to create, post,
+              link, store, share and otherwise make available certain
+              information, text, graphics, videos, animations, interactive
+              designs, or other digital media content ("Content"). You are
+              responsible for Content that you create, post, or upload on or
+              through our Service, including its legality, reliability, and
+              appropriateness.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
-              By posting Content on or through Service, You represent and
-              warrant that: (i) Content is yours (you own it) and/or you have
-              the right to use it and the right to grant us the rights and
-              license as provided in these Terms, and (ii) that the posting of
-              your Content on or through Service does not violate the privacy
-              rights, publicity rights, copyrights, contract rights or any other
-              rights of any person or entity. We reserve the right to terminate
-              the account of anyone found to be infringing on a copyright.
+              By creating, posting, or uploading Content on or through our
+              AI-powered Service, You represent and warrant that: (i) Content is
+              yours (you own it) and/or you have the right to use it and the
+              right to grant us the rights and license as provided in these
+              Terms, and (ii) that the creation, posting, or uploading of your
+              Content on or through Service does not violate the privacy rights,
+              publicity rights, copyrights, contract rights or any other rights
+              of any person or entity. We reserve the right to terminate the
+              account of anyone found to be infringing on a copyright.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
-              You retain any and all of your rights to any Content you submit,
-              post or display on or through Service and you are responsible for
-              protecting those rights. We take no responsibility and assume no
-              liability for Content you or any third party posts on or through
-              Service. However, by posting Content using Service you grant us
-              the right and license to use such Content for purposes of making
-              Service available for other users. This license does not include
-              the right for us to make your Content available to other users of
-              Service without your approval.
+              You retain any and all of your rights to any Content you create,
+              submit, post or display on or through our AI-powered Service and
+              you are responsible for protecting those rights. We take no
+              responsibility and assume no liability for Content you or any
+              third party creates, posts, or uploads on or through Service.
+              However, by creating or posting Content using our AI-powered
+              Service you grant us the right and license to use such Content for
+              purposes of making Service available for other users. This license
+              does not include the right for us to make your Content available
+              to other users of Service without your approval.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Plus Five Five, Inc. has the right but not the obligation to
@@ -529,39 +533,43 @@ export default function About2() {
               </a>
             </h2>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
-              You may use Service only for lawful purposes and in accordance
-              with Terms. You agree not to use Service for:
+              You may use our AI-powered media design Service only for lawful
+              purposes and in accordance with Terms. You agree not to use
+              Service for:
             </p>
             <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-slate-11 text-sm text-neutral-600 dark:text-neutral-400">
               <li>
                 <strong className="font-semibold text-slate-12">
-                  Spamming
+                  Misleading AI-Generated Content
                 </strong>
-                : You are prohibited from sending unsolicited messages without
-                prior consent.
+                : You are prohibited from creating or distributing AI-generated
+                content that is designed to mislead, deceive, or impersonate
+                real people or entities.
               </li>
               <li>
                 <strong className="font-semibold text-slate-12">
-                  Phishing
+                  Copyright Infringement
                 </strong>
-                : You are prohibited from sending fraudulent emails that attempt
-                to steal information.
+                : You are prohibited from using our AI tools to create content
+                that infringes on copyrighted material without proper
+                authorization.
               </li>
               <li>
                 <strong className="font-semibold text-slate-12">
                   Malicious Content
                 </strong>
-                : You are prohibited from distributing any content that contains
-                malware, viruses or other harmful code. Harassment: You are
-                prohibited from using our email service to harass, intimidate,
+                : You are prohibited from creating or distributing any content
+                that contains malware, viruses, or other harmful code, or using
+                our AI tools to create content intended to harass, intimidate,
                 or threaten any individual or group.
               </li>
               <li>
                 <strong className="font-semibold text-slate-12">
                   Illegal Activities
                 </strong>
-                : You are prohibited from using our email service to engage in
-                any illegal activities.
+                : You are prohibited from using our AI-powered media design
+                Service to engage in any illegal activities or create content
+                that violates applicable laws.
               </li>
             </ol>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
@@ -569,14 +577,15 @@ export default function About2() {
             </p>
             <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-slate-11 text-sm text-neutral-600 dark:text-neutral-400">
               <li>
-                Use Service in any manner that could disable, overburden,
-                damage, or impair Service or interfere with any other party’s
-                use of Service, including their ability to engage in real time
-                activities through Service.
+                Use our AI-powered Service in any manner that could disable,
+                overburden, damage, or impair Service or interfere with any
+                other party's use of Service, including their ability to create
+                and manage media content.
               </li>
               <li>
                 Introduce any viruses, trojan horses, worms, logic bombs, or
-                other material which is malicious or technologically harmful.
+                other material which is malicious or technologically harmful
+                through our platform.
               </li>
               <li>
                 Attempt to gain unauthorized access to, interfere with, damage,

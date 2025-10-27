@@ -5,66 +5,115 @@ import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { apiResponse } from "@/utils/apiResponse";
+
+const plans = [
+  {
+    name: "Basic",
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+    productIds: {
+      monthly: null,
+      yearly: null,
+    },
+    features: [
+      "10 AI-generated graphics per month",
+      "Basic templates library",
+      "Standard image formats (PNG, JPG)",
+      "Community support",
+      "Basic design tools",
+    ],
+    popular: false,
+  },
+  {
+    name: "Pro",
+    monthlyPrice: 19,
+    yearlyPrice: 120,
+    productIds: {
+      monthly: "1e641980-d7f2-4a21-8c8f-7af81795bcf0",
+      yearly: "c1897be5-2126-4cc7-aac4-e769250780f3",
+    },
+    features: [
+      "100 AI-generated graphics per month",
+      "Premium templates library",
+      "All image formats (PNG, JPG, SVG, PDF)",
+      "Priority support",
+      "Advanced design tools",
+      "Brand kit management",
+      "Social media templates",
+    ],
+    popular: true,
+  },
+  {
+    name: "Enterprise",
+    monthlyPrice: 25,
+    yearlyPrice: 190,
+    productIds: {
+      monthly: "f60b7ec7-26f1-4311-87ca-03fcaab02dc0",
+      yearly: "4952b33d-2654-44f7-9645-bdac62b008c3",
+    },
+    features: [
+      "Unlimited AI-generated graphics",
+      "Full templates library",
+      "All image formats + vector files",
+      "Dedicated support",
+      "Advanced design tools",
+      "Team collaboration",
+      "Custom brand assets",
+      "White-label options",
+    ],
+    popular: false,
+  },
+];
 
 export default function PricingComponent() {
   const [isYearly, setIsYearly] = useState(false);
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
-  const plans = [
-    {
-      name: "Basic",
-      monthlyPrice: 0,
-      yearlyPrice: 0,
-      features: [
-        "10 AI-generated graphics per month",
-        "Basic templates library",
-        "Standard image formats (PNG, JPG)",
-        "Community support",
-        "Basic design tools",
-      ],
-      popular: false,
-    },
-    {
-      name: "Pro",
-      monthlyPrice: 19,
-      yearlyPrice: 120,
-      features: [
-        "100 AI-generated graphics per month",
-        "Premium templates library",
-        "All image formats (PNG, JPG, SVG, PDF)",
-        "Priority support",
-        "Advanced design tools",
-        "Brand kit management",
-        "Social media templates",
-      ],
-      popular: true,
-    },
-    {
-      name: "Enterprise",
-      monthlyPrice: 25,
-      yearlyPrice: 190,
-      features: [
-        "Unlimited AI-generated graphics",
-        "Full templates library",
-        "All image formats + vector files",
-        "Dedicated support",
-        "Advanced design tools",
-        "Team collaboration",
-        "Custom brand assets",
-        "White-label options",
-      ],
-      popular: false,
-    },
-  ];
+  const handleCheckout = async (plan: any) => {
+    if (plan.monthlyPrice === 0) {
+      // Handle free plan - redirect to signup or dashboard
+      window.location.href = "/auth/signup";
+      return;
+    }
+
+    setLoadingPlan(plan.name);
+
+    try {
+      const billing = isYearly ? "yearly" : "monthly";
+      const productId = plan.productIds[billing];
+
+      const response = await apiResponse.post(
+        "/payment/sub/create",
+        {
+          productId: productId,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response.data && response.data.checkoutUrl) {
+        // Redirect to Polar checkout
+        window.location.href = response.data.checkoutUrl;
+      } else {
+        console.error("Checkout failed - no checkout URL received");
+      }
+    } catch (error) {
+      console.error("Error initiating checkout:", error);
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
 
   return (
     <section className="relative py-24 md:py-32 ">
       <div className="w-full md:max-w-5xl md:mx-auto p-2 md:p-4">
         <div className="text-center animate-fadeInUp">
-          
           <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl">
-            Choose Your {" "}
+            Choose Your{" "}
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-               Plan
+              Plan
             </span>
           </h1>
           <p
@@ -219,7 +268,9 @@ export default function PricingComponent() {
 
               <button
                 type="button"
-                className={`text-sm w-full py-2 rounded font-medium mt-7 transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
+                onClick={() => handleCheckout(plan)}
+                disabled={loadingPlan === plan.name}
+                className={`text-sm w-full py-2 rounded font-medium mt-7 transition-all duration-300 transform hover:scale-105 hover:shadow-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:transform-none ${
                   plan.popular
                     ? "bg-primary text-primary-foreground hover:bg-primary/90"
                     : plan.monthlyPrice === 0
@@ -227,7 +278,16 @@ export default function PricingComponent() {
                       : "bg-primary text-primary-foreground hover:bg-primary/90"
                 }`}
               >
-                {plan.monthlyPrice === 0 ? "Get Started Free" : "Get Started"}
+                {loadingPlan === plan.name ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Processing...
+                  </div>
+                ) : plan.monthlyPrice === 0 ? (
+                  "Get Started Free"
+                ) : (
+                  "Get Started"
+                )}
               </button>
             </div>
           ))}
