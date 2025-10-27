@@ -1173,7 +1173,7 @@ export default function About2() {
                 className="border-b-[.0375rem] border-solid border-slate-11 font-medium transition-colors duration-200 ease-in-out hover:text-slate-12 hover:border-slate-12"
                 href="https://support.google.com/analytics/answer/6004245"
               >
-                https://support.google.com/analytics/answer/6004245
+                https://support.google.com/analytics
               </a>
               .
             </p>
