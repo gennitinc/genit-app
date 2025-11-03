@@ -67,7 +67,9 @@ export function TextChatContent() {
     isTyping,
     userAvatar,
     messages,
+    setMessages,
     clearInput,
+    setShowScrollButton,
   } = useProjectDesign();
 
   // Use project messages for real data
@@ -77,24 +79,54 @@ export function TextChatContent() {
 
   const [isProcessingDraft, setIsProcessingDraft] = useState(false);
   const conversationRef = useRef<HTMLDivElement>(null);
+  const [isAtBottom, setIsAtBottom] = useState(true);
 
-  // Scroll to bottom when messages are empty or component mounts
+  // Attach scroll listener to toggle scroll-to-bottom button visibility
   useEffect(() => {
-    const scrollToBottom = () => {
-      if (conversationRef.current) {
-        conversationRef.current.scrollTop =
-          conversationRef.current.scrollHeight;
-      }
+    const el = conversationRef.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      const distanceFromBottom =
+        el.scrollHeight - el.scrollTop - el.clientHeight;
+      const atBottom = distanceFromBottom <= 2;
+      setIsAtBottom(atBottom);
+      // Hide the bouncing icon when at bottom
+      setShowScrollButton(!atBottom);
     };
-    // Scroll to bottom immediately when component mounts or messages change
-    scrollToBottom();
 
-    console.log("P messages", messages);
-    // Also scroll to bottom after a short delay to ensure content is rendered
-    const timeoutId = setTimeout(scrollToBottom, 100);
+    el.addEventListener("scroll", onScroll, { passive: true });
+    // Initialize state
+    onScroll();
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [setShowScrollButton]);
 
-    return () => clearTimeout(timeoutId);
-  }, [messages]);
+  // Auto-scroll to bottom when new messages or streaming chunks arrive
+  useEffect(() => {
+    const el = conversationRef.current;
+    if (!el) return;
+    // Always scroll to bottom on new content per requirement
+    el.scrollTop = el.scrollHeight;
+    setIsAtBottom(true);
+    setShowScrollButton(false);
+  }, [messages, streamingContent, setShowScrollButton]);
+
+  // Listen for global scroll-to-bottom events (triggered from ChatInput button)
+  useEffect(() => {
+    const handler = () => {
+      const el = conversationRef.current;
+      if (!el) return;
+      el.scrollTop = el.scrollHeight;
+      setIsAtBottom(true);
+      setShowScrollButton(false);
+    };
+    window.addEventListener("scroll-chat-to-bottom", handler as EventListener);
+    return () =>
+      window.removeEventListener(
+        "scroll-chat-to-bottom",
+        handler as EventListener
+      );
+  }, [setShowScrollButton]);
 
   // Handle message editing
   const handleEditMessage = async (
@@ -251,34 +283,6 @@ export function TextChatContent() {
                     }
                   />
                 );
-              } else if (isTyping === true) {
-                return (
-                 <div className="flex items-start space-x-3 p-4">
-                   <div className="flex-shrink-0">
-                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                       <span className="text-white text-sm font-bold">AI</span>
-                     </div>
-                   </div>
-                   <div className="flex-1 min-w-0">
-                     <div className="flex items-center space-x-1">
-                       <div className="flex space-x-1">
-                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                         <div
-                           className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                           style={{ animationDelay: "0.1s" }}
-                         ></div>
-                         <div
-                           className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                           style={{ animationDelay: "0.2s" }}
-                         ></div>
-                       </div>
-                       <span className="text-sm text-gray-500 ml-2">
-                         AI is thinking...
-                       </span>
-                     </div>
-                   </div>
-                 </div>
-                );
               } else if (message.type === "ai") {
                 const messageReactionState = reactionStates[message.id] || {
                   liked: false,
@@ -288,7 +292,7 @@ export function TextChatContent() {
                 return (
                   <div key={message.id || index} className="space-y-4">
                     {/* Show typing indicator for new projects */}
-                    
+
                     <AIMessage
                       message={message}
                       totalTime={message.totalTime}
@@ -320,9 +324,30 @@ export function TextChatContent() {
                     {/* Render generation groups - These don't show AI avatar */}
                     {message.generationGroups?.map((group: GenerationGroup) => (
                       <VersioningMessage
-                        key={group._id}
+                        key={group._id || group.id}
                         generation={group}
-                        onToggle={toggleGeneration}
+                        onToggle={(groupId: string) => {
+                          // Update the message's generationGroups in messages state
+                          setMessages((prev: any[]) =>
+                            prev.map((msg: any) => {
+                              if (
+                                msg.id === message.id &&
+                                msg.generationGroups
+                              ) {
+                                return {
+                                  ...msg,
+                                  generationGroups: msg.generationGroups.map(
+                                    (g: GenerationGroup) =>
+                                      g._id === groupId || g.id === groupId
+                                        ? { ...g, isCollapsed: !g.isCollapsed }
+                                        : g
+                                  ),
+                                };
+                              }
+                              return msg;
+                            })
+                          );
+                        }}
                         onRetry={retryLoading}
                         onCopy={() =>
                           handleCopyMessage(
@@ -348,19 +373,47 @@ export function TextChatContent() {
 
             {status === "submitted" && <Loader />}
 
+            {/* Realtime typing: render streaming content if present; otherwise, show thinking indicator */}
+            {isTyping &&
+              (streamingContent && streamingContent.length > 0 ? (
+                <AIMessage
+                  message={{
+                    id: "streaming-temp",
+                    role: "assistant",
+                    type: "ai",
+                    parts: [
+                      { type: "reasoning", text: streamingAnalysis || "" },
+                      { type: "text", text: streamingContent },
+                    ],
+                  }}
+                  generation={{ id: "streaming" }}
+                  isStreaming
+                  streamingContent={streamingContent}
+                  streamingAnalysis={streamingAnalysis}
+                />
+              ) : (
+                (!messages ||
+                  messages.length === 0 ||
+                  messages[messages.length - 1]?.type !== "ai") && (
+                  <AIThinkingContent />
+                )
+              ))}
+
             {/* Ensure chat is positioned at bottom when messages array is empty */}
-            {(!messages || messages.length === 0) && !isProcessingDraft && (
-              <div className="flex-1 min-h-[60vh] flex items-end justify-center">
-                <div className="text-center text-gray-500 dark:text-gray-400 mb-8">
-                  <p className="text-lg font-medium mb-2">
-                    Start a conversation
-                  </p>
-                  <p className="text-sm">
-                    Ask me anything or describe what you'd like to create
-                  </p>
+            {(!messages || messages.length === 0) &&
+              !isProcessingDraft &&
+              !isTyping && (
+                <div className="flex-1 min-h-[60vh] flex items-end justify-center">
+                  <div className="text-center text-gray-500 dark:text-gray-400 mb-8">
+                    <p className="text-lg font-medium mb-2">
+                      Start a conversation
+                    </p>
+                    <p className="text-sm">
+                      Ask me anything or describe what you'd like to create
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </ConversationContent>
           {/* Rely on browser scroll; hide internal scroll button */}
         </Conversation>

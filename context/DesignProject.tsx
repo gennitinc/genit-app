@@ -42,7 +42,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [error, setError] = useState<string | null>(null);
   const [deploymentUrl, setDeploymentUrl] = useState<string | null>(null);
   const [isLoadingProject, setIsLoadingProject] = useState(false);
-  const [isTyping, setIsTyping] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
   const [isLiveMode, setIsLiveMode] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -72,31 +72,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const hasProcessedDraftRef = useRef(false);
   const [messages, setMessages] = useState<any[]>([]);
 
-  const transformMessages = (messages: any[]) => {
-    return (
-      messages?.map((msg) => {
-        if (msg.parts && Array.isArray(msg.parts)) {
-          return {
-            ...msg,
-            // Normalize role and type
-            role: (msg.type === "user" ? "user" : "assistant") as
-              | "user"
-              | "assistant",
-            type: msg.type === "user" ? "user" : "ai",
-            parts: msg.parts,
-            ...(msg.type === "user" &&
-              msg.fileAttachments && {
-                attachedFiles: msg.fileAttachments.map((file: any) => ({
-                  id: file.id || `file-${Date.now()}`,
-                  name: file.name,
-                  type: file.type,
-                  filePath: file.url || file.filePath,
-                  status: "uploaded" as const,
-                })),
-              }),
-          };
-        }
+  const transformMessages = useCallback((messages: any[]) => {
+    if (!messages || !Array.isArray(messages)) {
+      return [];
+    }
 
+    return messages.map((msg) => {
+      if (msg.parts && Array.isArray(msg.parts)) {
         return {
           ...msg,
           // Normalize role and type
@@ -104,18 +86,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             | "user"
             | "assistant",
           type: msg.type === "user" ? "user" : "ai",
-          parts:
-            msg.type === "user"
-              ? [
-                  {
-                    type: "text" as const,
-                    text: msg.text,
-                  },
-                ]
-              : [
-                  { type: "reasoning" as const, text: msg.analysis || "" },
-                  { type: "text" as const, text: msg.text || "" },
-                ],
+          parts: msg.parts,
           ...(msg.type === "user" &&
             msg.fileAttachments && {
               attachedFiles: msg.fileAttachments.map((file: any) => ({
@@ -127,80 +98,149 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
               })),
             }),
         };
-      }) || []
-    );
-  };
+      }
+
+      return {
+        ...msg,
+        // Normalize role and type
+        role: (msg.type === "user" ? "user" : "assistant") as
+          | "user"
+          | "assistant",
+        type: msg.type === "user" ? "user" : "ai",
+        parts:
+          msg.type === "user"
+            ? [
+                {
+                  type: "text" as const,
+                  text: msg.text,
+                },
+              ]
+            : [
+                { type: "reasoning" as const, text: msg.analysis || "" },
+                { type: "text" as const, text: msg.text || "" },
+              ],
+        ...(msg.type === "user" &&
+          msg.fileAttachments && {
+            attachedFiles: msg.fileAttachments.map((file: any) => ({
+              id: file.id || `file-${Date.now()}`,
+              name: file.name,
+              type: file.type,
+              filePath: file.url || file.filePath,
+              status: "uploaded" as const,
+            })),
+          }),
+      };
+    });
+  }, []);
 
   useEffect(() => {
     const socket = io(`${serverUrlSocket}`);
-    socket.on("connect", () => {
+
+    const handleConnect = () => {
       console.log("Socket connected");
+    };
 
-      socket.on("newMessage", (projectData: any) => {
-        console.log("New message received", projectData);
+    const handleNewMessage = (projectData: any) => {
+      console.log("New message received", projectData);
 
-        //Update the project with the latest data from server
+      // Update the project with the latest data from server
+      if (projectData && Array.isArray(projectData.messages)) {
+        setProject(projectData);
+        setMessages(transformMessages(projectData.messages));
+        // Reset typing/streaming when final message arrives
+        setStreamingContent("");
+        setStreamingAnalysis("");
+        setIsTyping(false);
+      }
+    };
+
+    const handleTyping = (data: any) => {
+      // Optionally gate by projectId if provided
+      try {
+        const incomingProjectId = data?.projectId || data?.project_id;
         if (
-          projectData &&
-          Array.isArray(projectData.messages) &&
-          projectData.messages.length > 0
+          incomingProjectId &&
+          project?._id &&
+          incomingProjectId !== project._id
         ) {
-          setProject(projectData);
-          setMessages(transformMessages(projectData.messages));
-          setIsTyping(false); // Reset typing indicator when new message is received
+          return;
         }
-      });
-    });
+        const partialText = data?.text ?? data?.content ?? "";
+        const partialAnalysis = data?.analysis ?? "";
+        if (typeof partialText === "string") {
+          setStreamingContent(partialText);
+        }
+        if (typeof partialAnalysis === "string") {
+          setStreamingAnalysis(partialAnalysis);
+        }
+        setIsTyping(true);
+      } catch (e) {
+        console.error("Error handling typing event", e);
+      }
+    };
+
+    // Set up listeners (works whether already connected or not)
+    socket.on("connect", handleConnect);
+    socket.on("newMessage", handleNewMessage);
+    socket.on("typing", handleTyping);
 
     // Cleanup function to disconnect socket when component unmounts
     return () => {
+      socket.off("connect", handleConnect);
+      socket.off("newMessage", handleNewMessage);
+      socket.off("typing", handleTyping);
       socket.disconnect();
     };
-  }, []);
+  }, [transformMessages, project?._id]);
 
-  const handleLocalStorageDraft = async (project: IDesignProject) => {
-    console.log("hitting 1");
-    if (
-      !project ||
-      project.messages.length > 0 ||
-      isProcessingDraft ||
-      hasProcessedDraftRef.current
-    ) {
-      console.log("hitting 2");
-      return;
-    }
-
-    console.log("hit local");
-    const draft = localStorage.getItem("newData");
-
-    console.log("local 3");
-    if (!draft) return;
-
-    console.log("local 4", draft);
-
-    try {
-      setIsProcessingDraft(true);
-      hasProcessedDraftRef.current = true;
-      const parsed = JSON.parse(draft);
-      const prompt = parsed.prompt;
-      const attachedFile = parsed.files;
-      const selectedFiles = parsed.selectedFiles || [];
-
-      if (!prompt) {
-        localStorage.removeItem("newData");
+  const handleLocalStorageDraft = useCallback(
+    async (project: IDesignProject) => {
+      console.log("hitting 1");
+      if (
+        !project ||
+        project.messages.length > 0 ||
+        isProcessingDraft ||
+        hasProcessedDraftRef.current
+      ) {
+        console.log("hitting 2");
         return;
       }
 
-      await generateMessage(prompt, attachedFile, project._id, selectedFiles);
-      setIsTyping(true);
-    } catch (error) {
-      console.error("Error processing localStorage draft:", error);
-      localStorage.removeItem("newData");
-    } finally {
-      setIsProcessingDraft(false);
-      clearInput();
-    }
-  };
+      console.log("hit local");
+      const draft = localStorage.getItem("newData");
+
+      console.log("local 3");
+      if (!draft) return;
+
+      console.log("local 4", draft);
+
+      try {
+        setIsProcessingDraft(true);
+        hasProcessedDraftRef.current = true;
+        const parsed = JSON.parse(draft);
+        const prompt = parsed.prompt;
+        const attachedFile = parsed.files;
+        const selectedFiles = parsed.selectedFiles || [];
+
+        if (!prompt) {
+          localStorage.removeItem("newData");
+          return;
+        }
+
+        // Show typing indicator while processing the initial draft
+        setIsTyping(true);
+        await generateMessage(prompt, attachedFile, project._id, selectedFiles);
+      } catch (error) {
+        console.error("Error processing localStorage draft:", error);
+        localStorage.removeItem("newData");
+      } finally {
+        setIsProcessingDraft(false);
+        clearInput();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [isProcessingDraft]
+  );
 
   const clearError = () => setError(null);
 
@@ -290,6 +330,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         return { success: false, error: "not_found" };
       }
 
+      // Reset draft processing flags when fetching a new project
+      hasProcessedDraftRef.current = false;
+      setIsProcessingDraft(false);
+
       setIsLoadingProject(true);
       setError(null);
 
@@ -299,18 +343,38 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         });
 
         if (response.status === 200 && response.data.success) {
-          setProject(response.data.data);
+          const projectData = response.data.data;
+          // Reset UI state before applying new project's messages to avoid mixing chats
+          setStreamingContent("");
+          setStreamingAnalysis("");
+          setIsTyping(false);
+          setMessages([]);
+          setProject(projectData);
 
-          console.log("bare m", response.data.data);
-          if (response.data.data?.messages.length >= 1) {
-            console.log("transf m", messages);
-            setMessages(transformMessages(response.data.data?.messages || []));
+          console.log("bare m", projectData);
+
+          // Always set messages if they exist, even if empty array
+          if (Array.isArray(projectData?.messages)) {
+            // Only handle localStorage draft if there are no messages
+            if (projectData.messages.length >= 1) {
+              const transformedMessages = transformMessages(
+                projectData.messages || []
+              );
+              console.log("transf m", transformedMessages);
+              setMessages(transformedMessages);
+              // Set isTyping to false when messages are loaded (whether empty or not)
+              setIsTyping(false);
+            } else {
+              handleLocalStorageDraft(projectData);
+            }
           } else {
-            handleLocalStorageDraft(response.data.data);
-            console.log("Project fetched successfully:", response.data.data);
+            // If messages property doesn't exist or isn't an array, initialize empty
+            setMessages([]);
+            setIsTyping(false);
+            handleLocalStorageDraft(projectData);
           }
 
-          // setMessages(transformMessages(demoMessages || []));
+          console.log("Project fetched successfully:", projectData);
 
           return { success: true };
         } else {
@@ -340,7 +404,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsLoadingProject(false);
       }
     },
-    []
+    [transformMessages, handleLocalStorageDraft]
   );
 
   const toggleGeneration = (id: string) => {
@@ -391,6 +455,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     try {
       setIsGenerating(true);
+      // Show typing while awaiting AI response
+      setIsTyping(true);
 
       const now = Date.now();
       const generateId = () =>

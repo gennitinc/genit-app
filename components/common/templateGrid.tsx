@@ -44,6 +44,7 @@ import { HomeInfoGrid } from "./homeInfoGrid";
 import AnimatedTooltipPreview from "./homeAgentsTooltip";
 import { apiResponse } from "@/utils/apiResponse";
 import { useProjectDesign } from "@/context/DesignProject";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type TemplateItem = {
   id: string;
@@ -477,9 +478,20 @@ export default function TemplateGrid() {
       {Header}
       <div className="columns-2 md:columns-4 gap-4 [column-fill:_balance]">
         {isLoading && templates.length === 0 && (
-          <div className="col-span-full text-sm text-muted-foreground">
-            Loading templates…
-          </div>
+          <>
+            {[
+              220, 280, 200, 260, 240, 300, 210, 250,
+              230, 270, 190, 310,
+            ].map((h, idx) => (
+              <div
+                key={`skeleton-${idx}`}
+                className="mb-4 inline-block w-full align-top"
+                style={{ breakInside: "avoid" }}
+              >
+                <Skeleton className="w-full rounded-lg bg-muted/70" style={{ height: h }} />
+              </div>
+            ))}
+          </>
         )}
         {templates.map((t) => (
           <div
@@ -553,7 +565,7 @@ export default function TemplateGrid() {
         <Dialog open={editOpen} onOpenChange={setEditOpen}>
           <DialogContent className="max-w-3xl h-[80vh] p-0 flex flex-col">
             <DialogHeader className="px-4 py-3 border-b">
-              <DialogTitle>Edit Template</DialogTitle>
+              <DialogTitle>Recreate</DialogTitle>
             </DialogHeader>
             <div className="">
               <img
@@ -802,7 +814,7 @@ export default function TemplateGrid() {
         <Drawer open={editOpen} onOpenChange={setEditOpen}>
           <DrawerContent className="h-[85vh]">
             <DrawerHeader className="">
-              <DrawerTitle>Edit Template</DrawerTitle>
+              <DrawerTitle>Recreate</DrawerTitle>
             </DrawerHeader>
             <div className="px-4">
               <img

@@ -310,7 +310,7 @@ export function LandingFooter() {
           {/* Navigation Links */}
           <div>
             <h3 className="font-semibold mb-4 text-foreground">Platform</h3>
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col space-y-3 w-fit">
               <Link
                 href="/"
                 className="text-muted-foreground hover:text-foreground transition-colors"
@@ -341,7 +341,7 @@ export function LandingFooter() {
           {/* Company Links */}
           <div>
             <h3 className="font-semibold mb-4 text-foreground">Company</h3>
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col space-y-3 w-fit">
               <Link
                 href="/company"
                 className="text-muted-foreground hover:text-foreground transition-colors"

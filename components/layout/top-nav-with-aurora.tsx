@@ -36,6 +36,7 @@ export default function TopNavWithAurora({
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const { state } = useSidebar();
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const scrollTargetRef = useRef<HTMLElement | Window | null>(null);
 
   // Optimized scroll handler with throttling
   const handleScroll = useCallback(() => {
@@ -53,17 +54,38 @@ export default function TopNavWithAurora({
   }, [scrollContainerRef]);
 
   useEffect(() => {
+    // Get the current scroll target
     const scrollTarget = scrollContainerRef?.current || window;
+    
+    // Clean up previous listener if target changed
+    if (scrollTargetRef.current && scrollTargetRef.current !== scrollTarget) {
+      scrollTargetRef.current.removeEventListener("scroll", handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = null;
+      }
+    }
+
+    // Store the current target
+    scrollTargetRef.current = scrollTarget;
+
+    // Add the listener
     scrollTarget.addEventListener("scroll", handleScroll, { passive: true });
 
     // Set initial state
     handleScroll();
 
     return () => {
+      // Clear any pending timeout
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = null;
       }
-      scrollTarget.removeEventListener("scroll", handleScroll);
+      // Remove listener from the stored target
+      if (scrollTargetRef.current) {
+        scrollTargetRef.current.removeEventListener("scroll", handleScroll);
+        scrollTargetRef.current = null;
+      }
     };
   }, [scrollContainerRef, handleScroll]);
 

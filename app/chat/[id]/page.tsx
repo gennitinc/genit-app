@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useParams, useRouter } from "next/navigation";
 import Loading from "@/utils/Loading";
+import withAuth from "@/helper/hoc/withAuth";
 
 const ChatIdPage = () => {
   const { fetchProject, isLoadingProject, error } = useProjectDesign();
@@ -47,4 +48,5 @@ const ChatIdPage = () => {
   );
 };
 
-export default ChatIdPage;
+export default withAuth(ChatIdPage);
+

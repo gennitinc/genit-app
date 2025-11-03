@@ -307,7 +307,8 @@ export function ChatInput({
         >
           <button
             onClick={() => {
-              scrollToBottom();
+              // Dispatch a global event so the conversation container scrolls
+              window.dispatchEvent(new Event("scroll-chat-to-bottom"));
               setUserScrolledUp(false);
               setIsNearBottom(true);
             }}
