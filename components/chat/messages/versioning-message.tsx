@@ -299,9 +299,9 @@ export function VersioningMessage({
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  {/* <p className="text-xs sm:text-sm font-medium text-foreground truncate">
+                  <p className="text-xs sm:text-sm font-medium text-foreground truncate">
                     {item.name}
-                  </p> */}
+                  </p>
                   <div className="flex items-center gap-1 mt-0.5">
                     <ImageIcon className="w-3 h-3 text-muted-foreground" />
                     <p className="text-xs text-muted-foreground">
@@ -324,9 +324,9 @@ export function VersioningMessage({
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
-                  {/* <p className="text-xs sm:text-sm font-medium text-foreground truncate">
+                  <p className="text-xs sm:text-sm font-medium text-foreground truncate">
                     {item.name}
-                  </p> */}
+                  </p>
                   <div className="flex items-center gap-1 mt-0.5">
                     <Video className="w-3 h-3 text-muted-foreground" />
                     <p className="text-xs text-muted-foreground">

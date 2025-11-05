@@ -263,8 +263,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       userId,
       userName,
       collaborators: [],
-      messages: [],
-      designType: designTypeId || null,
+      messages: [], 
+      category: designTypeId || null,
       analytics: {
         totalMessages: 0,
         totalGenerations: 0,

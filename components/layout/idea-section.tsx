@@ -417,7 +417,7 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              AI Graphics Designer
+              AI Media Designer
             </motion.h1>
             <motion.p
               className="mt-4 text-center text-gray-600 dark:text-gray-300 max-w-lg"
