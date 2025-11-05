@@ -32,7 +32,7 @@ const ITEMS: DesignTypeItem[] = [
   },
   {
     id: "youtube_thumbnail",
-    label: "Y-thumbnail",
+    label: "Youtube thumbnail",
     icon: <Youtube className="w-5 h-5 text-white" />,
     bg: "bg-gradient-to-br from-[#a855f7] to-[#6366f1]",
   },
@@ -86,11 +86,11 @@ const DesignType: React.FC<Props> = ({ onSelect, className = "" }) => {
         opts={{ align: "start", loop: true }}
         className="w-full max-w-4xl mx-auto select-none"
       >
-        <CarouselContent className="-ml-4">
+        <CarouselContent className="-ml-3">
           {ITEMS.map((item) => (
             <CarouselItem
               key={item.id}
-              className="pl-3 basis-1/4 sm:basis-1/5 md:basis-1/5 lg:basis-1/7"
+              className="pl-3 basis-1/3 sm:basis-1/4 md:basis-1/5 lg:basis-1/6"
             >
               <button
                 type="button"
@@ -98,20 +98,20 @@ const DesignType: React.FC<Props> = ({ onSelect, className = "" }) => {
                 className="group flex flex-col items-center gap-3 focus:outline-none"
               >
                 <div
-                  className={`w-12 h-12 md:w-16 md:h-16 rounded-full ${item.bg} grid place-items-center shadow-md transition-transform duration-200 group-active:scale-95`}
+                  className={`w-14 h-14 md:w-16 md:h-16 rounded-full ${item.bg} grid place-items-center shadow-md transition-transform duration-200 group-active:scale-95`}
                 >
-                  <div className="w-12 h-12 md:w-14 md:h-14 bg-white/15 rounded-2xl grid place-items-center">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/15 rounded-2xl grid place-items-center">
                     {item.icon}
                   </div>
                 </div>
-                <span className="text-xs md:text-sm font-semibold text-foreground/90 text-center">
+                <span className="text-xs md:text-sm font-semibold text-foreground/90 text-center leading-tight">
                   {item.label}
                 </span>
               </button>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <div className="flex items-center justify-center gap-2 mt-3">
+        <div className="hidden lg:flex items-center justify-center gap-2 mt-4">
           <CarouselPrevious className="h-8 w-8" />
           <CarouselNext className="h-8 w-8" />
         </div>
