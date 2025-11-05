@@ -369,6 +369,39 @@ export function LandingFooter() {
             </div>
           </div>
 
+          <div>
+            <h3 className="font-semibold mb-4 text-foreground">Use Cases</h3>
+            <div className="flex flex-col space-y-3 w-fit">
+              <div className="text-muted-foreground hover:text-foreground transition-colors">
+                Design Flier
+              </div>
+              <div className="text-muted-foreground hover:text-foreground transition-colors">
+                YT thumbnail
+              </div>
+              <div className="text-muted-foreground hover:text-foreground transition-colors">
+                Design Poster
+              </div>
+              <div className="text-muted-foreground hover:text-foreground transition-colors">
+                Instagram post
+              </div>
+              <div className="text-muted-foreground hover:text-foreground transition-colors">
+                Facebook post
+              </div>
+              <div className="text-muted-foreground hover:text-foreground transition-colors">
+                Design Banner
+              </div>
+              <div className="text-muted-foreground hover:text-foreground transition-colors">
+                Facebook cover
+              </div>
+              <div className="text-muted-foreground hover:text-foreground transition-colors">
+                Design Logo
+              </div>
+              <div className="text-muted-foreground hover:text-foreground transition-colors">
+                Presentations - coming soon
+              </div>
+            </div>
+          </div>
+
           {/* Newsletter Section */}
           <div>
             <h3 className="font-semibold mb-4 text-foreground">Stay Updated</h3>

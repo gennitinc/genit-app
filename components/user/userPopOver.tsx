@@ -29,6 +29,7 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { useRouter } from "next/navigation";
 import cookie from "js-cookie";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 
 const UserPopOver = () => {
     const { user } = useUserContext();
@@ -166,9 +167,11 @@ const UserPopOver = () => {
                 </span>
               </div>
             </div>
-            <button className="text-xs text-primary hover:text-primary/80 font-medium mt-2 hover:underline transition-colors">
+            <Link href="/pricing" target="_blank">
+            <button className="text-xs text-primary hover:text-primary/80 font-medium mt-2 hover:underline transition-colors cursor-pointer">
               Buy more credits →
             </button>
+            </Link>
           </div>
           {/* Menu Items */}
           <div className="space-y-0.5 mb-2">

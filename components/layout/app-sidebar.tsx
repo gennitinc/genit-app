@@ -115,7 +115,7 @@ export function AppSidebar({
                     <div className="text-xs font-semibold text-white">
                       Pro Plan
                     </div>
-                    <div className="text-xs text-white/70">API Credits</div>
+                    <div className="text-xs text-white/70">Design Credits</div>
                   </div>
                 </div>
               </div>
