@@ -32,7 +32,7 @@ const ITEMS: DesignTypeItem[] = [
   },
   {
     id: "youtube_thumbnail",
-    label: "YouTube thumbnail",
+    label: "Y-thumbnail",
     icon: <Youtube className="w-5 h-5 text-white" />,
     bg: "bg-gradient-to-br from-[#a855f7] to-[#6366f1]",
   },
@@ -90,7 +90,7 @@ const DesignType: React.FC<Props> = ({ onSelect, className = "" }) => {
           {ITEMS.map((item) => (
             <CarouselItem
               key={item.id}
-              className="pl-3 basis-1/6 sm:basis-1/6 md:basis-1/6 lg:basis-1/7"
+              className="pl-3 basis-1/4 sm:basis-1/5 md:basis-1/5 lg:basis-1/7"
             >
               <button
                 type="button"
