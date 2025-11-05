@@ -117,6 +117,9 @@ export function IdeaSection() {
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
   const [inputError, setInputError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedDesignTypeId, setSelectedDesignTypeId] = useState<
+    string | null
+  >(null);
   const [showFileList, setShowFileList] = useState(false);
   const [imageRotations] = useState(() =>
     images.map(() => Math.random() * 20 - 10)
@@ -238,7 +241,12 @@ export function IdeaSection() {
       setInputError(null);
 
       try {
-        const res = await createProject(inputValue, attachedFiles as any);
+        const res = await createProject(
+          inputValue,
+          attachedFiles as any,
+          undefined,
+          selectedDesignTypeId || undefined
+        );
 
         console.log("Project creation result:", res);
 
@@ -247,6 +255,7 @@ export function IdeaSection() {
           setIsSubmitting(false);
           setInputValue("");
           setAttachedFiles([]);
+          setSelectedDesignTypeId(null);
           // Redirect to chat page with project ID
           router.push(`/chat/${res.id}`);
         } else {
@@ -636,17 +645,6 @@ export function IdeaSection() {
                       accept="image/*,video/*"
                       aria-label="Select files to upload"
                     />
-
-                    <div className="flex flex-row gap-1 items-center ml-3">
-                      <button
-                        type="button"
-                        className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                        aria-label="Flier"
-                      >
-                        fliers
-                        <Settings2 className="h-4 w-4" />
-                      </button>
-                    </div>
                   </div>
                   {/* <button
                     type="submit"
@@ -704,6 +702,7 @@ export function IdeaSection() {
               Quick Visual Design Types
             </h3>
             <DesignType
+              selectedId={selectedDesignTypeId}
               onSelect={(id) => {
                 // Optional: seed prompt based on selection
                 const map: Record<string, string> = {
@@ -716,6 +715,7 @@ export function IdeaSection() {
                 if (text) {
                   setInputValue(text);
                 }
+                setSelectedDesignTypeId((prev) => (prev === id ? null : id));
               }}
               className="px-2"
             />

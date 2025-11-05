@@ -254,7 +254,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const createProject = async (
     value: string,
     attachedFile?: any,
-    selectedFiles?: string[]
+    selectedFiles?: string[],
+    designTypeId?: string
   ) => {
     const newProject = {
       title: value,
@@ -263,6 +264,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       userName,
       collaborators: [],
       messages: [],
+      designType: designTypeId || null,
       analytics: {
         totalMessages: 0,
         totalGenerations: 0,
@@ -295,6 +297,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             prompt: value,
             files: attachedFile ? [attachedFile] : [],
             selectedFiles: selectedFiles || [],
+            designType: designTypeId || null,
           })
         );
 

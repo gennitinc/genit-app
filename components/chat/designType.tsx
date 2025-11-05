@@ -76,15 +76,20 @@ const ITEMS: DesignTypeItem[] = [
 
 interface Props {
   onSelect?: (id: string) => void;
+  selectedId?: string | null;
   className?: string;
 }
 
-const DesignType: React.FC<Props> = ({ onSelect, className = "" }) => {
+const DesignType: React.FC<Props> = ({
+  onSelect,
+  selectedId,
+  className = "",
+}) => {
   return (
-    <div className={`w-full ${className}`}>
+    <div className={`w-full relative ${className}`}>
       <Carousel
         opts={{ align: "start", loop: true }}
-        className="w-full max-w-4xl mx-auto select-none"
+        className="w-full max-w-4xl mx-auto select-none px-2 sm:px-3 md:px-4"
       >
         <CarouselContent className="-ml-3">
           {ITEMS.map((item) => (
@@ -97,12 +102,19 @@ const DesignType: React.FC<Props> = ({ onSelect, className = "" }) => {
                 onClick={() => onSelect?.(item.id)}
                 className="group flex flex-col items-center gap-3 focus:outline-none"
               >
-                <div
-                  className={`w-14 h-14 md:w-16 md:h-16 rounded-full ${item.bg} grid place-items-center shadow-md transition-transform duration-200 group-active:scale-95`}
-                >
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/15 rounded-2xl grid place-items-center">
-                    {item.icon}
+                <div className="relative">
+                  <div
+                    className={`w-14 h-14 md:w-16 md:h-16 rounded-full ${item.bg} grid place-items-center shadow-md transition-transform duration-200 group-active:scale-95`}
+                  >
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-white/15 rounded-2xl grid place-items-center">
+                      {item.icon}
+                    </div>
                   </div>
+                  {selectedId === item.id && (
+                    <span className="absolute -top-1 -right-1 inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] shadow">
+                      ✓
+                    </span>
+                  )}
                 </div>
                 <span className="text-xs md:text-sm font-semibold text-foreground/90 text-center leading-tight">
                   {item.label}
@@ -116,6 +128,9 @@ const DesignType: React.FC<Props> = ({ onSelect, className = "" }) => {
           <CarouselNext className="h-8 w-8" />
         </div>
       </Carousel>
+      {/* Edge gradients for scroll hint on mobile/tablet */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-6 sm:w-8 md:w-10 bg-gradient-to-r from-background to-transparent rounded-l-lg lg:hidden" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-6 sm:w-8 md:w-10 bg-gradient-to-l from-background to-transparent rounded-r-lg lg:hidden" />
     </div>
   );
 };

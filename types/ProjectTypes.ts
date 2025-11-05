@@ -117,7 +117,8 @@ export interface IProjectDesignContext {
   createProject: (
     value: string,
     attachedFile?: any,
-    selectedFiles?: string[]
+    selectedFiles?: string[],
+    designTypeId?: string
   ) => Promise<{ type: boolean; message: string; id?: string }>;
   fetchProject: (projectId: string) => Promise<{
     success: boolean;
