@@ -26,19 +26,19 @@ type DesignTypeItem = {
 const ITEMS: DesignTypeItem[] = [
   {
     id: "flier",
-    label: "Flier",
+    label: "Design Flier",
     icon: <FileText className="w-5 h-5 text-white" />,
     bg: "bg-gradient-to-br from-[#ef4444] to-[#f97316]",
   },
   {
     id: "youtube_thumbnail",
-    label: "Youtube thumbnail",
+    label: "YT thumbnail",
     icon: <Youtube className="w-5 h-5 text-white" />,
     bg: "bg-gradient-to-br from-[#a855f7] to-[#6366f1]",
   },
   {
     id: "poster",
-    label: "Poster",
+    label: "Design Poster",
     icon: <ImageIcon className="w-5 h-5 text-white" />,
     bg: "bg-gradient-to-br from-[#10b981] to-[#06b6d4]",
   },
@@ -62,13 +62,13 @@ const ITEMS: DesignTypeItem[] = [
   },
   {
     id: "banner",
-    label: "Banner",
+    label: "Design Banner",
     icon: <Layout className="w-5 h-5 text-white" />,
     bg: "bg-gradient-to-br from-[#f59e0b] to-[#f97316]",
   },
   {
     id: "logo",
-    label: "Logo",
+    label: "Design Logo",
     icon: <Type className="w-5 h-5 text-white" />,
     bg: "bg-gradient-to-br from-[#14b8a6] to-[#22c55e]",
   },
