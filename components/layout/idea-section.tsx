@@ -19,12 +19,15 @@ import {
   Mic,
   Loader2,
   WandSparklesIcon,
+  Settings,
+  Settings2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { useProjectDesign } from "@/context/DesignProject";
+import DesignType from "../chat/designType";
 import ShinyText from "../ui/shiny-text";
 import HomeGrid from "../common/templateGrid";
 import { HomeInfoGrid } from "../common/homeInfoGrid";
@@ -633,6 +636,17 @@ export function IdeaSection() {
                       accept="image/*,video/*"
                       aria-label="Select files to upload"
                     />
+
+                    <div className="flex flex-row gap-1 items-center ml-3">
+                      <button
+                        type="button"
+                        className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Flier"
+                      >
+                        fliers
+                        <Settings2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                   {/* <button
                     type="submit"
@@ -686,82 +700,25 @@ export function IdeaSection() {
           transition={{ duration: 0.5, delay: 0.6 }}
         >
           <div>
-            <h3 className="text-center text-sm font-medium mb-3 text-muted-foreground dark:text-zinc-400">
-              Quick Visual Design Tasks
+            <h3 className="text-center text-sm font-medium mb-4 text-muted-foreground dark:text-zinc-400">
+              Quick Visual Design Types
             </h3>
-            <div className="flex flex-wrap justify-center gap-2">
-              {[
-                {
-                  text: "Instagram Post",
-                  description: "Square visual with bold headline and CTA.",
-                },
-                {
-                  text: "Instagram Carousel",
-                  description:
-                    "5-slide story with consistent typography and colors.",
-                },
-                {
-                  text: "YouTube Thumbnail",
-                  description:
-                    "High-contrast image with readable title and face focus.",
-                },
-                {
-                  text: "Event Flyer",
-                  description:
-                    "Poster highlighting date, venue, and theme with strong hierarchy.",
-                },
-                {
-                  text: "Logo Concept",
-                  description:
-                    "Minimal marks exploring shape, type, and negative space.",
-                },
-                {
-                  text: "Product Mockup",
-                  description:
-                    "Photorealistic scene showcasing the product with brand colors.",
-                },
-                {
-                  text: "Website Hero Banner",
-                  description:
-                    "Wide banner with headline, subtext, and call-to-action.",
-                },
-                {
-                  text: "Facebook Ad Creative",
-                  description:
-                    "Visual optimized for conversion with clear benefit and CTA.",
-                },
-                {
-                  text: "LinkedIn Banner",
-                  description:
-                    "Professional header with brand elements and clean layout.",
-                },
-                {
-                  text: "Business Card",
-                  description:
-                    "Two-sided layout with logo, name, role, and contact info.",
-                },
-                {
-                  text: "Pricing Table Graphic",
-                  description:
-                    "3-tier comparison with highlighted recommended plan.",
-                },
-              ].map((item, index) => (
-                <motion.button
-                  key={item.text}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: 0.7 + index * 0.05 }}
-                  className="px-3 py-1.5 bg-gray-100 dark:bg-[#1b1b1b] border border-gray-200 dark:border-[#363636] rounded-[5px] cursor-pointer select-none hover:bg-gray-200 dark:hover:bg-[#2a2a2a] transition-colors text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-                  onClick={() =>
-                    handleQuickTaskSelect(item.text, (item as any).description)
-                  }
-                  disabled={isGenerating || isSubmitting}
-                  aria-label={`Create ${item.text.toLowerCase()} — ${(item as any).description || "quick visual task"}`}
-                >
-                  {item.text}
-                </motion.button>
-              ))}
-            </div>
+            <DesignType
+              onSelect={(id) => {
+                // Optional: seed prompt based on selection
+                const map: Record<string, string> = {
+                  social: "Create a social media post about ...",
+                  video: "Storyboard a 10s video intro about ...",
+                  photo: "Retouch a product photo: ...",
+                  gallery: "Create a gallery collage for ...",
+                };
+                const text = map[id] || "";
+                if (text) {
+                  setInputValue(text);
+                }
+              }}
+              className="px-2"
+            />
           </div>
         </motion.div>
       </div>
