@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { AnimatedTooltip } from "../ui/animated-tooltip";
+import { useUserContext } from "@/context/AuthenticatedContext";
 const people = [
   {
     id: 1,
@@ -47,8 +48,10 @@ const people = [
 ];
 
 export default function AnimatedTooltipPreview() {
+
+  const {user} = useUserContext(); 
   return (
-    <div className="flex flex-row items-center justify-center mb-2 w-full mt-10">
+    <div className={`flex flex-row items-center justify-center mb-2 w-full ${user ? "mt-5" : "mt-10"}`}>
       <AnimatedTooltip items={people} />
     </div>
   );

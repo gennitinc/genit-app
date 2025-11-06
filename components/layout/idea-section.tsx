@@ -364,35 +364,7 @@ export function IdeaSection() {
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
-          {/* <div className="flex justify-center items-center">
-            {images.map((image, idx) => (
-              <motion.div
-                key={"images" + idx}
-                style={{
-                  rotate: imageRotations[idx],
-                }}
-                whileHover={{
-                  scale: 1.1,
-                  rotate: 0,
-                  zIndex: 100,
-                }}
-                whileTap={{
-                  scale: 1.1,
-                  rotate: 0,
-                  zIndex: 100,
-                }}
-                className="rounded-xl -mr-4 mt-4 p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-neutral-100 shrink-0 overflow-hidden"
-              >
-                <img
-                  src={image}
-                  alt="User avatars"
-                  width="500"
-                  height="500"
-                  className="rounded-lg h-12 w-12 md:h-16 md:w-16 object-cover shrink-0"
-                />
-              </motion.div>
-            ))}
-          </div> */}
+          
           <AnimatedTooltipPreview />
           <motion.div
             className="mt-2 mb-6 md:mb-8 lg:mb-12 flex flex-col items-center justify-center"

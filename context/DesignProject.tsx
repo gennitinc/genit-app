@@ -146,7 +146,16 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       // Update the project with the latest data from server
       if (projectData && Array.isArray(projectData.messages)) {
         setProject(projectData);
-        setMessages(transformMessages(projectData.messages));
+        // Merge server messages with any optimistic local messages
+        const serverMessages = transformMessages(projectData.messages);
+        setMessages((prev) => {
+          // Keep optimistic messages that aren't yet in server response
+          const serverIds = new Set(
+            serverMessages.map((m: any) => m.id || m._id)
+          );
+          const stillOptimistic = prev.filter((m: any) => !serverIds.has(m.id));
+          return [...stillOptimistic, ...serverMessages];
+        });
         // Reset typing/streaming when final message arrives
         setStreamingContent("");
         setStreamingAnalysis("");
@@ -154,8 +163,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     };
 
-    const handleTyping = (data: any) => {
-      // Optionally gate by projectId if provided
+    const handleTextStart = (data: any) => {
       try {
         const incomingProjectId = data?.projectId || data?.project_id;
         if (
@@ -165,30 +173,67 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         ) {
           return;
         }
-        const partialText = data?.text ?? data?.content ?? "";
-        const partialAnalysis = data?.analysis ?? "";
-        if (typeof partialText === "string") {
-          setStreamingContent(partialText);
+        // Clear previous streaming content and start fresh
+        setStreamingContent("");
+        setStreamingAnalysis("");
+        setIsTyping(true);
+      } catch (e) {
+        console.error("Error handling textStart event", e);
+      }
+    };
+
+    const handleTextDelta = (data: any) => {
+      // Handle streaming text deltas from server
+      try {
+        const incomingProjectId = data?.projectId || data?.project_id;
+        if (
+          incomingProjectId &&
+          project?._id &&
+          incomingProjectId !== project._id
+        ) {
+          return;
         }
-        if (typeof partialAnalysis === "string") {
-          setStreamingAnalysis(partialAnalysis);
+        const delta = data?.delta || "";
+        if (typeof delta === "string" && delta.length > 0) {
+          setStreamingContent((prev) => prev + delta);
         }
         setIsTyping(true);
       } catch (e) {
-        console.error("Error handling typing event", e);
+        console.error("Error handling textDelta event", e);
+      }
+    };
+
+    const handleTextCompleted = (data: any) => {
+      try {
+        const incomingProjectId = data?.projectId || data?.project_id;
+        if (
+          incomingProjectId &&
+          project?._id &&
+          incomingProjectId !== project._id
+        ) {
+          return;
+        }
+        // Final text is in data.text, but we'll wait for newMessage event for full project state
+        // Keep typing true until newMessage arrives
+      } catch (e) {
+        console.error("Error handling textCompleted event", e);
       }
     };
 
     // Set up listeners (works whether already connected or not)
     socket.on("connect", handleConnect);
     socket.on("newMessage", handleNewMessage);
-    socket.on("typing", handleTyping);
+    socket.on("textStart", handleTextStart);
+    socket.on("textDelta", handleTextDelta);
+    socket.on("textCompleted", handleTextCompleted);
 
     // Cleanup function to disconnect socket when component unmounts
     return () => {
       socket.off("connect", handleConnect);
       socket.off("newMessage", handleNewMessage);
-      socket.off("typing", handleTyping);
+      socket.off("textStart", handleTextStart);
+      socket.off("textDelta", handleTextDelta);
+      socket.off("textCompleted", handleTextCompleted);
       socket.disconnect();
     };
   }, [transformMessages, project?._id]);
@@ -263,7 +308,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       userId,
       userName,
       collaborators: [],
-      messages: [], 
+      messages: [],
       category: designTypeId || null,
       analytics: {
         totalMessages: 0,
