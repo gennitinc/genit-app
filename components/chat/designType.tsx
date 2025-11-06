@@ -31,10 +31,10 @@ const ITEMS: DesignTypeItem[] = [
     bg: "bg-gradient-to-br from-[#ef4444] to-[#f97316]",
   },
   {
-    id: "youtube_thumbnail",
-    label: "YT thumbnail",
-    icon: <Youtube className="w-5 h-5 text-white" />,
-    bg: "bg-gradient-to-br from-[#a855f7] to-[#6366f1]",
+    id: "instagram_post",
+    label: "Instagram post",
+    icon: <Camera className="w-5 h-5 text-white" />,
+    bg: "bg-gradient-to-br from-[#ec4899] to-[#f43f5e]",
   },
   {
     id: "poster",
@@ -43,10 +43,10 @@ const ITEMS: DesignTypeItem[] = [
     bg: "bg-gradient-to-br from-[#10b981] to-[#06b6d4]",
   },
   {
-    id: "instagram_post",
-    label: "Instagram post",
-    icon: <Camera className="w-5 h-5 text-white" />,
-    bg: "bg-gradient-to-br from-[#ec4899] to-[#f43f5e]",
+    id: "youtube_thumbnail",
+    label: "YT thumbnail",
+    icon: <Youtube className="w-5 h-5 text-white" />,
+    bg: "bg-gradient-to-br from-[#a855f7] to-[#6366f1]",
   },
   {
     id: "facebook_post",

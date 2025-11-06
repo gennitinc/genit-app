@@ -19,6 +19,8 @@ const ChatIdPage = () => {
       return;
     }
 
+    console.log("p-id", projectId)
+
     let didRun = false;
     const run = async () => {
       if (didRun) return;

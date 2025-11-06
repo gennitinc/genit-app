@@ -157,33 +157,18 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
   const { orientation } = useCarousel()
 
   return (
-    // <div
-    //   role="group"
-    //   aria-roledescription="slide"
-    //   data-slot="carousel-item"
-    //   className={cn(
-    //     "min-w-0 shrink-0 grow-0 basis-full",
-    //     orientation === "horizontal" ? "pl-4" : "pt-4",
-    //     className
-    //   )}
-    //   {...props}
-    // />
     <div
       role="group"
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        "min-w-0 shrink-0 grow-0",
-        // 👇 Sneak peek effect
-        orientation === "horizontal"
-          ? "basis-[85%] sm:basis-[90%] pl-4" // only 85–90% width on mobile
-          : "pt-4",
-        "transition-all duration-300",
+        "min-w-0 shrink-0 grow-0 basis-full",
+        orientation === "horizontal" ? "pl-4" : "pt-4",
         className
       )}
       {...props}
     />
-  );
+  )
 }
 
 function CarouselPrevious({

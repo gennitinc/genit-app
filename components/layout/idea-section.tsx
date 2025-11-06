@@ -119,7 +119,7 @@ export function IdeaSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedDesignTypeId, setSelectedDesignTypeId] = useState<
     string | null
-  >(null);
+  >("generic_design");
   const [showFileList, setShowFileList] = useState(false);
   const [imageRotations] = useState(() =>
     images.map(() => Math.random() * 20 - 10)

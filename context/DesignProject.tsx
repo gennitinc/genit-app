@@ -71,6 +71,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isProcessingDraft, setIsProcessingDraft] = useState(false);
   const hasProcessedDraftRef = useRef(false);
   const [messages, setMessages] = useState<any[]>([]);
+  const lastFetchedProjectIdRef = useRef<string | null>(null);
 
   const transformMessages = useCallback((messages: any[]) => {
     if (!messages || !Array.isArray(messages)) {
@@ -143,17 +144,60 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     const handleNewMessage = (projectData: any) => {
       console.log("New message received", projectData);
 
+      // Ignore messages from other projects
+      const incomingProjectId = projectData?._id || projectData?.id;
+      if (
+        project?._id &&
+        incomingProjectId &&
+        incomingProjectId !== project._id
+      ) {
+        return;
+      }
+
       // Update the project with the latest data from server
       if (projectData && Array.isArray(projectData.messages)) {
         setProject(projectData);
         // Merge server messages with any optimistic local messages
         const serverMessages = transformMessages(projectData.messages);
         setMessages((prev) => {
-          // Keep optimistic messages that aren't yet in server response
+          // Create sets for both ID formats from server messages
           const serverIds = new Set(
-            serverMessages.map((m: any) => m.id || m._id)
+            serverMessages.map((m: any) => String(m.id || m._id))
           );
-          const stillOptimistic = prev.filter((m: any) => !serverIds.has(m.id));
+
+          // Track server message content for duplicate detection
+          const serverUserTexts = new Set<string>();
+          const serverAiKeys = new Set<string>();
+          serverMessages.forEach((m: any) => {
+            const text =
+              m.parts?.find((p: any) => p.type === "text")?.text?.trim() || "";
+            if (m.type === "user" && text) serverUserTexts.add(text);
+            if (m.type === "ai") {
+              if (text) serverAiKeys.add(text);
+              const g = m.generationGroups?.[0]?.id || "";
+              if (g) serverAiKeys.add(g);
+            }
+          });
+
+          // Drop optimistic that are now confirmed by server
+          const stillOptimistic = prev.filter((m: any) => {
+            const id = String(m.id || m._id || "");
+            if (serverIds.has(id)) return false;
+            const text =
+              m.parts?.find((p: any) => p.type === "text")?.text?.trim() || "";
+            if (m.type === "user" && text && serverUserTexts.has(text))
+              return false;
+            if (m.type === "ai") {
+              const g = m.generationGroups?.[0]?.id || "";
+              if (
+                (text && serverAiKeys.has(text)) ||
+                (g && serverAiKeys.has(g))
+              )
+                return false;
+            }
+            return true;
+          });
+
           return [...stillOptimistic, ...serverMessages];
         });
         // Reset typing/streaming when final message arrives
@@ -275,6 +319,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         // Show typing indicator while processing the initial draft
         setIsTyping(true);
         await generateMessage(prompt, attachedFile, project._id, selectedFiles);
+        // Remove draft after successful generation
+        localStorage.removeItem("newData");
       } catch (error) {
         console.error("Error processing localStorage draft:", error);
         localStorage.removeItem("newData");
@@ -334,7 +380,12 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (response.status === 201) {
         const data = response.data;
-        setProject(data.data);
+        setProject(data.project);
+
+
+        const projectId = data.project._id.toString();
+        
+        console.log("pcreated", data.project)
 
         localStorage.setItem(
           "newData",
@@ -349,7 +400,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         return {
           type: true,
           message: data.message || "project created successfully",
-          id: data.data._id,
+          id: projectId,
         };
       }
     } catch (error) {
@@ -390,34 +441,79 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           withCredentials: true,
         });
 
-        if (response.status === 200 && response.data.success) {
-          const projectData = response.data.data;
-          // Reset UI state before applying new project's messages to avoid mixing chats
-          setStreamingContent("");
-          setStreamingAnalysis("");
-          setIsTyping(false);
-          setMessages([]);
+        
+        
+        if (response.status == 200) {
+          
+          console.log("suc", response.data.project);
+
+          const projectData = response.data.project;
+
+          // If switching to a different project, reset UI message state first
+          if (lastFetchedProjectIdRef.current !== projectData._id) {
+            lastFetchedProjectIdRef.current = projectData._id;
+            setMessages([]);
+            setStreamingContent("");
+            setStreamingAnalysis("");
+            setIsTyping(false);
+          }
+
           setProject(projectData);
 
           console.log("bare m", projectData);
 
-          // Always set messages if they exist, even if empty array
+          // If server has messages, merge with any existing optimistic ones
           if (Array.isArray(projectData?.messages)) {
-            // Only handle localStorage draft if there are no messages
             if (projectData.messages.length >= 1) {
-              const transformedMessages = transformMessages(
+              const serverMessages = transformMessages(
                 projectData.messages || []
               );
-              console.log("transf m", transformedMessages);
-              setMessages(transformedMessages);
-              // Set isTyping to false when messages are loaded (whether empty or not)
+              setMessages((prev: any[]) => {
+                const serverIds = new Set(
+                  serverMessages.map((m: any) => String(m.id || m._id))
+                );
+                const serverUserTexts = new Set<string>();
+                const serverAiKeys = new Set<string>();
+                serverMessages.forEach((m: any) => {
+                  const text =
+                    m.parts
+                      ?.find((p: any) => p.type === "text")
+                      ?.text?.trim() || "";
+                  if (m.type === "user" && text) serverUserTexts.add(text);
+                  if (m.type === "ai") {
+                    if (text) serverAiKeys.add(text);
+                    const g = m.generationGroups?.[0]?.id || "";
+                    if (g) serverAiKeys.add(g);
+                  }
+                });
+                const optimistic = prev.filter((m: any) => {
+                  const id = String(m.id || m._id || "");
+                  if (serverIds.has(id)) return false;
+                  const text =
+                    m.parts
+                      ?.find((p: any) => p.type === "text")
+                      ?.text?.trim() || "";
+                  if (m.type === "user" && text && serverUserTexts.has(text))
+                    return false;
+                  if (m.type === "ai") {
+                    const g = m.generationGroups?.[0]?.id || "";
+                    if (
+                      (text && serverAiKeys.has(text)) ||
+                      (g && serverAiKeys.has(g))
+                    )
+                      return false;
+                  }
+                  return true;
+                });
+                return [...optimistic, ...serverMessages];
+              });
               setIsTyping(false);
             } else {
+              // No server messages yet — keep optimistic UI and kick off draft processing
               handleLocalStorageDraft(projectData);
             }
           } else {
-            // If messages property doesn't exist or isn't an array, initialize empty
-            setMessages([]);
+            // Unknown messages shape — keep current optimistic state and process draft
             setIsTyping(false);
             handleLocalStorageDraft(projectData);
           }
