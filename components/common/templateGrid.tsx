@@ -45,6 +45,7 @@ import AnimatedTooltipPreview from "./homeAgentsTooltip";
 import { apiResponse } from "@/utils/apiResponse";
 import { useProjectDesign } from "@/context/DesignProject";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AIThinkingContent } from "../chat/messages";
 
 type TemplateItem = {
   id: string;
@@ -699,23 +700,8 @@ export default function TemplateGrid() {
                         50 AI Credits left
                       </div>
                     )}
-                    {isGenerating && (
-                      <div className="flex items-start">
-                        <div className="chat chat-start p-0 m-0 w-full">
-                          <div className="chat-bubble text-sm flex flex-row gap-2 items-center text-gray-900">
-                            <p className="text-sm text-muted-foreground dark:text-zinc-400">
-                              Your AI Designer is
-                            </p>
-                            <ShinyText
-                              text="working..."
-                              speed={2}
-                              className="text-sm font-medium text-muted-foreground"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    <div className="flex items-center gap-2">
+                    {isGenerating && <AIThinkingContent />}
+                    {/* <div className="flex items-center gap-2">
                       <PricingDialog
                         open={isPricingDialogOpen}
                         className="text-primary dark:text-teal-400 hover:text-primary/80 dark:hover:text-teal-300 transition-colors cursor-pointer text-sm font-medium"
@@ -729,7 +715,7 @@ export default function TemplateGrid() {
                       >
                         <XIcon className="h-3.5 w-3.5" />
                       </Button>
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="relative">
@@ -755,7 +741,7 @@ export default function TemplateGrid() {
                               minHeight: "40px",
                               maxHeight: "300px",
                             }}
-                            className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
+                            className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
                             aria-label="Enter your prompt"
                             aria-describedby={
                               inputError ? "input-error" : undefined
@@ -860,7 +846,7 @@ export default function TemplateGrid() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <div className="absolute top-[-10] left-2">
+              <div className="absolute top-[-50] left-2">
                 <div className="relative">
                   {/* File Attachments */}
                   {attachedFiles.length > 0 && (
@@ -920,7 +906,7 @@ export default function TemplateGrid() {
                             </div>
                             <button
                               onClick={() => handleFileRemove(index)}
-                              className="absolute -top-1 -right-1 w-4 h-4 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs"
+                              className="absolute -top-1 -right-1 w-4 h-4 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-100 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity text-xs"
                               disabled={isGenerating}
                               aria-label={`Remove ${file.name}`}
                             >
@@ -983,23 +969,9 @@ export default function TemplateGrid() {
                         50 AI Credits left
                       </div>
                     )}
-                    {isGenerating && (
-                      <div className="flex items-start">
-                        <div className="chat chat-start p-0 m-0 w-full">
-                          <div className="chat-bubble text-sm flex flex-row gap-2 items-center text-gray-900">
-                            <p className="text-sm text-muted-foreground dark:text-zinc-400">
-                              Your AI Designer is
-                            </p>
-                            <ShinyText
-                              text="working..."
-                              speed={2}
-                              className="text-sm font-medium text-muted-foreground"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    <div className="flex items-center gap-2">
+                    {isGenerating && <AIThinkingContent />}
+                    
+                    {/* <div className="flex items-center gap-2">
                       <PricingDialog
                         open={isPricingDialogOpen}
                         className="text-primary dark:text-teal-400 hover:text-primary/80 dark:hover:text-teal-300 transition-colors cursor-pointer text-sm font-medium"
@@ -1013,7 +985,7 @@ export default function TemplateGrid() {
                       >
                         <XIcon className="h-3.5 w-3.5" />
                       </Button>
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="relative">
@@ -1041,7 +1013,7 @@ export default function TemplateGrid() {
                               minHeight: "40px",
                               maxHeight: "300px",
                             }}
-                            className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
+                            className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
                             aria-label="Enter your prompt"
                             aria-describedby={
                               inputError ? "input-error" : undefined
