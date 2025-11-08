@@ -537,7 +537,7 @@ export default function TemplateGridAll() {
               alt={t.alt || "Template"}
             />
             <div className="pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:opacity-100 group-hover:bg-black/30" />
-            <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-100 lg:opacity- transition-opacity group-hover:opacity-100">
+            <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-100 lg:opacity-0 transition-opacity group-hover:opacity-100">
               <Button
                 size="icon"
                 variant="secondary"
