@@ -119,8 +119,8 @@ function ChatHistoryPage() {
 
       const response = await apiResponse.get("/project/myprojects");
 
-      if (response.data.success) {
-        setProjects(response.data.data || []);
+      if (response.status == 200) {
+        setProjects(response.data.projects || []);
       } else {
         setError("Failed to fetch projects");
       }
@@ -215,9 +215,7 @@ function ChatHistoryPage() {
                 disabled={loading}
                 className="gap-2"
               >
-                <RefreshCw
-                  className={`h-3 w-3 ${loading ? "" : ""}`}
-                />
+                <RefreshCw className={`h-3 w-3 ${loading ? "" : ""}`} />
                 Refresh
               </Button>
             </div>

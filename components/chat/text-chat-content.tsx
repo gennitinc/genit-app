@@ -238,7 +238,7 @@ export function TextChatContent() {
 
   return (
     <div className="flex flex-col h-full">
-      <div ref={conversationRef} className="flex-1 px-2 md:px-6">
+      <div ref={conversationRef} className="flex-1 px-2 md:px-6 overflow-y-auto">
         <Conversation className="px-0 m-0">
           <ConversationContent className="px-0 m-0 space-y-4 pb-2">
             {messages?.map((message: any, index: number) => {
@@ -414,6 +414,7 @@ export function TextChatContent() {
                   </div>
                 </div>
               )}
+          
           </ConversationContent>
           {/* Rely on browser scroll; hide internal scroll button */}
         </Conversation>

@@ -284,30 +284,24 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const handleLocalStorageDraft = useCallback(
     async (project: IDesignProject) => {
-      console.log("hitting 1");
       if (
         !project ||
         project.messages.length > 0 ||
         isProcessingDraft ||
         hasProcessedDraftRef.current
       ) {
-        console.log("hitting 2");
         return;
       }
-
-      console.log("hit local");
       const draft = localStorage.getItem("newData");
 
-      console.log("local 3");
       if (!draft) return;
-
-      console.log("local 4", draft);
 
       try {
         setIsProcessingDraft(true);
         hasProcessedDraftRef.current = true;
         const parsed = JSON.parse(draft);
         const prompt = parsed.prompt;
+
         const attachedFile = parsed.files;
         const selectedFiles = parsed.selectedFiles || [];
 
@@ -320,10 +314,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsTyping(true);
         await generateMessage(prompt, attachedFile, project._id, selectedFiles);
         // Remove draft after successful generation
-        localStorage.removeItem("newData");
+        // localStorage.removeItem("newData");
       } catch (error) {
         console.error("Error processing localStorage draft:", error);
-        localStorage.removeItem("newData");
+        // localStorage.removeItem("newData");
       } finally {
         setIsProcessingDraft(false);
         clearInput();
@@ -382,10 +376,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         const data = response.data;
         setProject(data.project);
 
-
         const projectId = data.project._id.toString();
-        
-        console.log("pcreated", data.project)
+
+        console.log("pcreated", data.project);
 
         localStorage.setItem(
           "newData",
@@ -441,10 +434,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           withCredentials: true,
         });
 
-        
-        
         if (response.status == 200) {
-          
           console.log("suc", response.data.project);
 
           const projectData = response.data.project;
@@ -459,8 +449,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           }
 
           setProject(projectData);
-
-          console.log("bare m", projectData);
 
           // If server has messages, merge with any existing optimistic ones
           if (Array.isArray(projectData?.messages)) {
@@ -599,14 +587,15 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   ) => {
     try {
       setIsGenerating(true);
-      // Show typing while awaiting AI response
       setIsTyping(true);
+
+      console.log("⚡ Generating message...");
 
       const now = Date.now();
       const generateId = () =>
         `file-${now}-${Math.random().toString(36).substr(2, 9)}`;
 
-      // Build attachedFiles array from BOTH sources
+      // Array to hold all attached file metadata
       const attachedFiles: {
         id: string;
         name: string;
@@ -615,14 +604,15 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         status: "uploaded";
       }[] = [];
 
-      // 1. Handle raw File uploads (from input[type="file"]) or plain objects from storage
+      // Holds real File/Blob objects for upload
       const blobFilesToUpload: File[] = [];
+
+      // --- 1. Handle raw File uploads from input[type="file"] ---
       if (files && files.length > 0) {
         for (const file of files as any[]) {
           const isBlob = typeof window !== "undefined" && file instanceof Blob;
 
           if (isBlob) {
-            // Safe to create preview URL
             attachedFiles.push({
               id: generateId(),
               name: (file as File).name || "file",
@@ -632,7 +622,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             });
             blobFilesToUpload.push(file as File);
           } else if (file && (file.filePath || file.url)) {
-            // Non-Blob item coming from persisted storage; treat as reference
             const name =
               file.name ||
               String(file.filePath || file.url)
@@ -651,34 +640,38 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         }
       }
 
-      // 2. Handle selectedFiles (pre-uploaded file paths or URLs)
+      // --- 2. Handle selectedFiles (pre-stored URLs) ---
       if (selectedFiles && selectedFiles.length > 0) {
         for (const filePath of selectedFiles) {
-          // Infer name from URL/path
           const name = filePath.split("/").pop() || "selected-file";
-          // Guess MIME type from extension (basic)
           const ext = name.split(".").pop()?.toLowerCase();
           let type = "application/octet-stream";
+
           if (ext) {
-            if (["png", "jpg", "jpeg", "gif", "webp"].includes(ext))
-              type = `image/${ext}`;
-            else if (["mp4", "mov", "avi", "mkv"].includes(ext))
+            if (["png", "jpg", "jpeg", "gif", "webp"].includes(ext)) {
+              type = `image/${ext === "jpg" ? "jpeg" : ext}`;
+            } else if (["mp4", "mov", "avi", "mkv"].includes(ext)) {
               type = `video/${ext}`;
-            else if (ext === "pdf") type = "application/pdf";
+            } else if (ext === "pdf") {
+              type = "application/pdf";
+            }
           }
 
           attachedFiles.push({
             id: generateId(),
             name,
             type,
-            filePath, // direct URL or path
+            filePath,
             status: "uploaded",
           });
         }
       }
 
-      // Create user message in demoMessages format
-      const userMessageId = `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      // --- 3. Create user message object ---
+      const userMessageId = `msg-${Date.now()}-${Math.random()
+        .toString(36)
+        .substr(2, 9)}`;
+
       const userMessage = {
         id: userMessageId,
         role: "user" as const,
@@ -689,47 +682,67 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             text: messageContent,
           },
         ],
-        // Use fileAttachments so transformMessages can normalize to attachedFiles
         fileAttachments: attachedFiles.length > 0 ? attachedFiles : undefined,
         createdAt: new Date(),
       };
 
-      // Transform and add to UI immediately
+      // Update UI immediately
       const transformedUserMessage = transformMessages([userMessage])[0];
       setMessages((prev) => [...prev, transformedUserMessage]);
 
-      // Prepare FormData for backend
+      // --- 4. Build FormData for backend upload ---
       const formData = new FormData();
       formData.append("prompt", messageContent);
-      formData.append("projectId", projectId);
-      // Required by backend validation
       formData.append("mediaType", "image");
 
-      // Append only real Blob/File objects for upload
+      // Append actual binary files
       if (blobFilesToUpload.length > 0) {
         blobFilesToUpload.forEach((file) => {
-          formData.append("files", file);
+          if (file instanceof Blob) {
+            formData.append("files", file); // backend must expect `files`
+          }
         });
       }
 
-      // Append selected file paths (already stored, just reference them)
+      // Append selected file URLs (references) as JSON string
       if (selectedFiles && selectedFiles.length > 0) {
         formData.append("selectedFiles", JSON.stringify(selectedFiles));
       }
 
-      // Call backend
-      await apiResponseFileUpload.post(
+      // Debugging — see what's really inside FormData
+      console.group("📦 FormData Content");
+      console.log("Files to upload:", blobFilesToUpload.length);
+      console.log("Selected files:", selectedFiles?.length || 0);
+      for (const [key, value] of formData.entries()) {
+        // Fix: Use typeof for correct instanceof check in TS
+        if (
+          (typeof File !== "undefined" && value instanceof File) ||
+          (typeof Blob !== "undefined" && value instanceof Blob)
+        ) {
+          console.log(
+            key,
+            `[File: ${(value as File).name}, size: ${(value as File).size}]`
+          );
+        } else {
+          console.log(key, value);
+        }
+      }
+      console.groupEnd();
+
+      // --- 5. Send to backend ---
+      // DO NOT set Content-Type header manually - axios will set it with boundary
+      const response = await apiResponseFileUpload.post(
         `/project/generate/${projectId}`,
         formData,
         {
           withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data", // axios usually sets this automatically
-          },
+          // Remove manual Content-Type header - let axios set it automatically with boundary
         }
       );
+
+      console.log("✅ Server response:", response.data);
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("❌ Error sending message:", error);
       setError(
         error instanceof Error ? error.message : "Failed to send message"
       );
@@ -837,7 +850,12 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsDragOver(false);
   };
 
-  const scrollToBottom = () => {};
+  const scrollToBottom = () => {
+    // Dispatch event to trigger scroll in chat component
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("scroll-chat-to-bottom"));
+    }
+  };
   const autoResize = () => {};
   const clearInput = () => {
     setInputValue("");

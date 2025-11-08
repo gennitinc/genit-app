@@ -250,7 +250,6 @@ export default function TemplateGridAll() {
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
   const [inputError, setInputError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showFileList, setShowFileList] = useState(false);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -465,10 +464,6 @@ export default function TemplateGridAll() {
     return () => clearInterval(interval);
   }, []);
 
-  // Show file list when files are attached
-  useEffect(() => {
-    setShowFileList(attachedFiles.length > 0);
-  }, [attachedFiles.length]);
 
   // Clear error when input changes
   useEffect(() => {
@@ -511,18 +506,20 @@ export default function TemplateGridAll() {
       <div className="columns-2 md:columns-4 gap-4 [column-fill:_balance]">
         {isLoading && templates.length === 0 && (
           <>
-            {[
-              220, 280, 200, 260, 240, 300, 210, 250,
-              230, 270, 190, 310,
-            ].map((h, idx) => (
-              <div
-                key={`skeleton-${idx}`}
-                className="mb-4 inline-block w-full align-top"
-                style={{ breakInside: "avoid" }}
-              >
-                <Skeleton className="w-full rounded-lg bg-muted/70" style={{ height: h }} />
-              </div>
-            ))}
+            {[220, 280, 200, 260, 240, 300, 210, 250, 230, 270, 190, 310].map(
+              (h, idx) => (
+                <div
+                  key={`skeleton-${idx}`}
+                  className="mb-4 inline-block w-full align-top"
+                  style={{ breakInside: "avoid" }}
+                >
+                  <Skeleton
+                    className="w-full rounded-lg bg-muted/70"
+                    style={{ height: h }}
+                  />
+                </div>
+              )
+            )}
           </>
         )}
         {templates.map((t) => (
@@ -537,7 +534,7 @@ export default function TemplateGridAll() {
               alt={t.alt || "Template"}
             />
             <div className="pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:opacity-100 group-hover:bg-black/30" />
-            <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+            <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-100 lg:opacity- transition-opacity group-hover:opacity-100">
               <Button
                 size="icon"
                 variant="secondary"
@@ -620,6 +617,101 @@ export default function TemplateGridAll() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
+              <div className="absolute top-[-50] left-2">
+                <div className="relative">
+                  {/* File Attachments */}
+                  {attachedFiles.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal">
+                      {attachedFiles.map((file: any, index: number) => {
+                        const fileKey = file.fileKey || `${file.name}-${index}`;
+                        return (
+                          <div
+                            key={fileKey}
+                            className="relative group bg-muted-foreground/5 border border-border rounded-lg p-2 flex items-center gap-2 hover:bg-background/50 transition-colors max-w-[200px]"
+                          >
+                            <div className="w-8 h-8 bg-background border border-border rounded flex items-center justify-center flex-shrink-0 relative">
+                              {file.type && file.type.startsWith("image/") ? (
+                                <img
+                                  src={
+                                    URL.createObjectURL(file) ||
+                                    "/placeholder.svg"
+                                  }
+                                  alt={file.name}
+                                  className="w-full h-full object-cover rounded"
+                                  onLoad={(e) =>
+                                    URL.revokeObjectURL(
+                                      (e.target as HTMLImageElement).src
+                                    )
+                                  }
+                                />
+                              ) : file.type &&
+                                file.type.startsWith("video/") ? (
+                                <div className="w-full h-full grid place-items-center text-[10px] text-muted-foreground">
+                                  🎬
+                                </div>
+                              ) : (
+                                <svg
+                                  className="w-4 h-4 text-muted-foreground"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                  />
+                                </svg>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-medium truncate text-foreground">
+                                {file.name && file.name.length > 15
+                                  ? `${file.name.substring(0, 15)}...`
+                                  : file.name || "Unknown file"}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {formatFileSize(file.size)}
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => handleFileRemove(index)}
+                              className="absolute -top-1 -right-1 w-4 h-4 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs"
+                              disabled={isGenerating}
+                              aria-label={`Remove ${file.name}`}
+                            >
+                              &times;
+                            </button>
+                            {file.type && file.type.startsWith("image/") && (
+                              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                                <div className="bg-background border border-border rounded-lg shadow-lg p-2">
+                                  <img
+                                    src={
+                                      URL.createObjectURL(file) ||
+                                      "/placeholder.svg"
+                                    }
+                                    alt={file.name}
+                                    className="max-w-[200px] max-h-[150px] object-contain rounded"
+                                    onLoad={(e) =>
+                                      URL.revokeObjectURL(
+                                        (e.target as HTMLImageElement).src
+                                      )
+                                    }
+                                  />
+                                  <div className="mt-1 text-xs text-muted-foreground text-center">
+                                    {file.name} • {formatFileSize(file.size)}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
               <div
                 ref={chatContainerRef}
                 className="relative flex bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 dark:from-[#7e7e7e] dark:via-[#363636] dark:to-[#363636] rounded-2xl p-[1.5px] overflow-hidden before:absolute before:content-[''] before:top-[-10px] before:left-[-10px] before:bg-radial-gradient md:before:w-[40vh] before:h-[30px] before:blur-[1px] w-full shadow-lg"
@@ -681,131 +773,69 @@ export default function TemplateGridAll() {
                     </div>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="relative">
-                    <div className="relative flex">
-                      <textarea
-                        ref={textareaRef}
-                        id="chat_bot"
-                        name="chat_bot"
-                        value={isGenerating ? "" : inputValue}
-                        onChange={handleInputChange}
-                        onKeyDown={handleKeyPress}
-                        placeholder={
-                          isGenerating
-                            ? ""
-                            : "Tell your AI Designer what to create...✦"
-                        }
-                        disabled={isGenerating || isSubmitting}
-                        style={{
-                          lineHeight: "1.5",
-                          fontFamily: "inherit",
-                          minHeight: "40px",
-                          maxHeight: "300px",
-                        }}
-                        className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
-                        aria-label="Enter your prompt"
-                        aria-describedby={
-                          inputError ? "input-error" : undefined
-                        }
-                      />
-                    </div>
+                  <div className="relative">
+                    <form onSubmit={handleSubmit} className="relative">
+                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300">
+                        <div className="flex-1 relative">
+                          <textarea
+                            ref={textareaRef}
+                            id="chat_bot"
+                            name="chat_bot"
+                            value={isGenerating ? "" : inputValue}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyPress}
+                            placeholder={
+                              isGenerating
+                                ? ""
+                                : "Tell your AI Designer what to create...✦"
+                            }
+                            disabled={isGenerating || isSubmitting}
+                            style={{
+                              lineHeight: "1.5",
+                              fontFamily: "inherit",
+                              minHeight: "40px",
+                              maxHeight: "300px",
+                            }}
+                            className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
+                            aria-label="Enter your prompt"
+                            aria-describedby={
+                              inputError ? "input-error" : undefined
+                            }
+                          />
+                        </div>
 
-                    {/* File list */}
-                    <AnimatePresence>
-                      {showFileList && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mx-4 mb-2"
-                        >
-                          <div className="space-y-2 bg-gray-50 dark:bg-gray-900/50 p-3 rounded-md border border-gray-200 dark:border-gray-700">
-                            <div className="flex items-center justify-between">
-                              <p className="text-sm font-medium text-foreground">
-                                Selected Files ({attachedFiles.length})
-                              </p>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setAttachedFiles([])}
-                                disabled={isGenerating}
-                                className="h-6 px-2 text-xs"
-                              >
-                                Clear all
-                              </Button>
-                            </div>
-                            <div className="space-y-1 max-h-32 overflow-y-auto">
-                              {attachedFiles.map((file: any, index: any) => (
-                                <motion.div
-                                  key={file.fileKey || index}
-                                  initial={{ opacity: 0, x: -10 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  exit={{ opacity: 0, x: 10 }}
-                                  className="flex items-center justify-between p-2 bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-600"
-                                >
-                                  <div className="flex items-center space-x-2 min-w-0 flex-1">
-                                    <div className="text-sm font-medium text-foreground truncate">
-                                      {file.name}
-                                    </div>
-                                    <Badge
-                                      variant="secondary"
-                                      className="text-xs flex-shrink-0"
-                                    >
-                                      {formatFileSize(file.size)}
-                                    </Badge>
-                                  </div>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleFileRemove(index)}
-                                    disabled={isGenerating}
-                                    className="h-6 w-6 p-0 flex-shrink-0"
-                                    aria-label={`Remove ${file.name}`}
-                                  >
-                                    <X className="h-3 w-3" />
-                                  </Button>
-                                </motion.div>
-                              ))}
-                            </div>
+                        <div className="flex justify-between items-center">
+                          <div className="flex gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                              disabled={isGenerating}
+                            >
+                              <Mic className="w-3.5 h-3.5 text-muted-foreground" />
+                            </Button>
+                            <button
+                              type="button"
+                              className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={() => fileInputRef.current?.click()}
+                              disabled={isGenerating || isSubmitting}
+                              aria-label="Attach files"
+                            >
+                              <PaperclipIcon className="h-4 w-4" />
+                            </button>
+                            <Input
+                              ref={fileInputRef}
+                              type="file"
+                              multiple
+                              onChange={handleFileInputChange}
+                              disabled={isGenerating || isSubmitting}
+                              className="hidden"
+                              id="file-upload"
+                              accept="image/*,.pdf,.txt,.md,.js,.jsx,.ts,.tsx,.css,.html,.json,.xml,.yaml,.yml"
+                              aria-label="Select files to upload"
+                            />
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    <div className="flex justify-between items-center p-3">
-                      <div className="flex gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                          disabled={isGenerating}
-                        >
-                          <Mic className="w-3.5 h-3.5 text-muted-foreground" />
-                        </Button>
-                        <button
-                          type="button"
-                          className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                          onClick={() => fileInputRef.current?.click()}
-                          disabled={isGenerating || isSubmitting}
-                          aria-label="Attach files"
-                        >
-                          <PaperclipIcon className="h-4 w-4" />
-                        </button>
-                        <Input
-                          ref={fileInputRef}
-                          type="file"
-                          multiple
-                          onChange={handleFileInputChange}
-                          disabled={isGenerating || isSubmitting}
-                          className="hidden"
-                          id="file-upload"
-                          accept="image/*,.pdf,.txt,.md,.js,.jsx,.ts,.tsx,.css,.html,.json,.xml,.yaml,.yml"
-                          aria-label="Select files to upload"
-                        />
-                      </div>
-                      {/* <button
+                          {/* <button
                     type="submit"
                     disabled={isSubmitDisabled}
                     className={`flex items-center justify-center p-0.5 bg-gradient-to-t from-gray-300 via-gray-200 to-gray-100 dark:from-[#292929] dark:via-[#555555] dark:to-[#292929] rounded-[10px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,0.5)] cursor-pointer border-none outline-none transition-all duration-150 active:scale-[0.92] group ${
@@ -831,18 +861,20 @@ export default function TemplateGridAll() {
                       )}
                     </div>
                   </button> */}
-                      <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-                        <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                        <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
-                          {isGenerating || isSubmitting ? (
-                            <Loader className="w-5 h-5 animate-spin" />
-                          ) : (
-                            "Create"
-                          )}
-                        </span>
-                      </button>
-                    </div>
-                  </form>
+                          <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+                            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
+                              {isGenerating || isSubmitting ? (
+                                <Loader className="w-5 h-5 animate-spin" />
+                              ) : (
+                                "Create"
+                              )}
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -864,11 +896,106 @@ export default function TemplateGridAll() {
               />
             </div>
             <motion.div
-              className="flex flex-col relative w-full"
+              className="flex flex-col w-full relative"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
+              <div className="absolute top-[-10] left-2">
+                <div className="relative">
+                  {/* File Attachments */}
+                  {attachedFiles.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal">
+                      {attachedFiles.map((file: any, index: number) => {
+                        const fileKey = file.fileKey || `${file.name}-${index}`;
+                        return (
+                          <div
+                            key={fileKey}
+                            className="relative group bg-muted-foreground/5 border border-border rounded-lg p-2 flex items-center gap-2 hover:bg-background/50 transition-colors max-w-[200px]"
+                          >
+                            <div className="w-8 h-8 bg-background border border-border rounded flex items-center justify-center flex-shrink-0 relative">
+                              {file.type && file.type.startsWith("image/") ? (
+                                <img
+                                  src={
+                                    URL.createObjectURL(file) ||
+                                    "/placeholder.svg"
+                                  }
+                                  alt={file.name}
+                                  className="w-full h-full object-cover rounded"
+                                  onLoad={(e) =>
+                                    URL.revokeObjectURL(
+                                      (e.target as HTMLImageElement).src
+                                    )
+                                  }
+                                />
+                              ) : file.type &&
+                                file.type.startsWith("video/") ? (
+                                <div className="w-full h-full grid place-items-center text-[10px] text-muted-foreground">
+                                  🎬
+                                </div>
+                              ) : (
+                                <svg
+                                  className="w-4 h-4 text-muted-foreground"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                  />
+                                </svg>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-medium truncate text-foreground">
+                                {file.name && file.name.length > 15
+                                  ? `${file.name.substring(0, 15)}...`
+                                  : file.name || "Unknown file"}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {formatFileSize(file.size)}
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => handleFileRemove(index)}
+                              className="absolute -top-1 -right-1 w-4 h-4 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs"
+                              disabled={isGenerating}
+                              aria-label={`Remove ${file.name}`}
+                            >
+                              &times;
+                            </button>
+                            {file.type && file.type.startsWith("image/") && (
+                              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                                <div className="bg-background border border-border rounded-lg shadow-lg p-2">
+                                  <img
+                                    src={
+                                      URL.createObjectURL(file) ||
+                                      "/placeholder.svg"
+                                    }
+                                    alt={file.name}
+                                    className="max-w-[200px] max-h-[150px] object-contain rounded"
+                                    onLoad={(e) =>
+                                      URL.revokeObjectURL(
+                                        (e.target as HTMLImageElement).src
+                                      )
+                                    }
+                                  />
+                                  <div className="mt-1 text-xs text-muted-foreground text-center">
+                                    {file.name} • {formatFileSize(file.size)}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
               <div
                 ref={chatContainerRef}
                 className="relative flex bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 dark:from-[#7e7e7e] dark:via-[#363636] dark:to-[#363636] rounded-2xl p-[1.5px] overflow-hidden before:absolute before:content-[''] before:top-[-10px] before:left-[-10px] before:bg-radial-gradient md:before:w-[40vh] before:h-[30px] before:blur-[1px] w-full shadow-lg"
@@ -930,132 +1057,71 @@ export default function TemplateGridAll() {
                     </div>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="relative">
-                    <div className="relative flex">
-                      <textarea
-                        ref={textareaRef}
-                        id="chat_bot"
-                        name="chat_bot"
-                        value={isGenerating ? "" : inputValue}
-                        onChange={handleInputChange}
-                        onKeyDown={handleKeyPress}
-                        placeholder={
-                          isGenerating
-                            ? ""
-                            : (placeholders?.[0] ??
-                                "Tell your AI Designer what to create...") + "✦"
-                        }
-                        disabled={isGenerating || isSubmitting}
-                        style={{
-                          lineHeight: "1.5",
-                          fontFamily: "inherit",
-                          minHeight: "40px",
-                          maxHeight: "300px",
-                        }}
-                        className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
-                        aria-label="Enter your prompt"
-                        aria-describedby={
-                          inputError ? "input-error" : undefined
-                        }
-                      />
-                    </div>
+                  <div className="relative">
+                    <form onSubmit={handleSubmit} className="relative">
+                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300">
+                        <div className="flex-1 relative">
+                          <textarea
+                            ref={textareaRef}
+                            id="chat_bot"
+                            name="chat_bot"
+                            value={isGenerating ? "" : inputValue}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyPress}
+                            placeholder={
+                              isGenerating
+                                ? ""
+                                : (placeholders?.[0] ??
+                                    "Tell your AI Designer what to create...") +
+                                  "✦"
+                            }
+                            disabled={isGenerating || isSubmitting}
+                            style={{
+                              lineHeight: "1.5",
+                              fontFamily: "inherit",
+                              minHeight: "40px",
+                              maxHeight: "300px",
+                            }}
+                            className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
+                            aria-label="Enter your prompt"
+                            aria-describedby={
+                              inputError ? "input-error" : undefined
+                            }
+                          />
+                        </div>
 
-                    {/* File list */}
-                    <AnimatePresence>
-                      {showFileList && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mx-4 mb-2"
-                        >
-                          <div className="space-y-2 bg-gray-50 dark:bg-gray-900/50 p-3 rounded-md border border-gray-200 dark:border-gray-700">
-                            <div className="flex items-center justify-between">
-                              <p className="text-sm font-medium text-foreground">
-                                Selected Files ({attachedFiles.length})
-                              </p>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setAttachedFiles([])}
-                                disabled={isGenerating}
-                                className="h-6 px-2 text-xs"
-                              >
-                                Clear all
-                              </Button>
-                            </div>
-                            <div className="space-y-1 max-h-32 overflow-y-auto">
-                              {attachedFiles.map((file: any, index: any) => (
-                                <motion.div
-                                  key={file.fileKey || index}
-                                  initial={{ opacity: 0, x: -10 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  exit={{ opacity: 0, x: 10 }}
-                                  className="flex items-center justify-between p-2 bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-600"
-                                >
-                                  <div className="flex items-center space-x-2 min-w-0 flex-1">
-                                    <div className="text-sm font-medium text-foreground truncate">
-                                      {file.name}
-                                    </div>
-                                    <Badge
-                                      variant="secondary"
-                                      className="text-xs flex-shrink-0"
-                                    >
-                                      {formatFileSize(file.size)}
-                                    </Badge>
-                                  </div>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleFileRemove(index)}
-                                    disabled={isGenerating}
-                                    className="h-6 w-6 p-0 flex-shrink-0"
-                                    aria-label={`Remove ${file.name}`}
-                                  >
-                                    <X className="h-3 w-3" />
-                                  </Button>
-                                </motion.div>
-                              ))}
-                            </div>
+                        <div className="flex justify-between items-center">
+                          <div className="flex gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                              disabled={isGenerating}
+                            >
+                              <Mic className="w-3.5 h-3.5 text-muted-foreground" />
+                            </Button>
+                            <button
+                              type="button"
+                              className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={() => fileInputRef.current?.click()}
+                              disabled={isGenerating || isSubmitting}
+                              aria-label="Attach files"
+                            >
+                              <PaperclipIcon className="h-4 w-4" />
+                            </button>
+                            <Input
+                              ref={fileInputRef}
+                              type="file"
+                              multiple
+                              onChange={handleFileInputChange}
+                              disabled={isGenerating || isSubmitting}
+                              className="hidden"
+                              id="file-upload"
+                              accept="image/*,.pdf,.txt,.md,.js,.jsx,.ts,.tsx,.css,.html,.json,.xml,.yaml,.yml"
+                              aria-label="Select files to upload"
+                            />
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    <div className="flex justify-between items-center p-3">
-                      <div className="flex gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                          disabled={isGenerating}
-                        >
-                          <Mic className="w-3.5 h-3.5 text-muted-foreground" />
-                        </Button>
-                        <button
-                          type="button"
-                          className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                          onClick={() => fileInputRef.current?.click()}
-                          disabled={isGenerating || isSubmitting}
-                          aria-label="Attach files"
-                        >
-                          <PaperclipIcon className="h-4 w-4" />
-                        </button>
-                        <Input
-                          ref={fileInputRef}
-                          type="file"
-                          multiple
-                          onChange={handleFileInputChange}
-                          disabled={isGenerating || isSubmitting}
-                          className="hidden"
-                          id="file-upload"
-                          accept="image/*,.pdf,.txt,.md,.js,.jsx,.ts,.tsx,.css,.html,.json,.xml,.yaml,.yml"
-                          aria-label="Select files to upload"
-                        />
-                      </div>
-                      {/* <button
+                          {/* <button
                     type="submit"
                     disabled={isSubmitDisabled}
                     className={`flex items-center justify-center p-0.5 bg-gradient-to-t from-gray-300 via-gray-200 to-gray-100 dark:from-[#292929] dark:via-[#555555] dark:to-[#292929] rounded-[10px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,0.5)] cursor-pointer border-none outline-none transition-all duration-150 active:scale-[0.92] group ${
@@ -1081,18 +1147,20 @@ export default function TemplateGridAll() {
                       )}
                     </div>
                   </button> */}
-                      <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-                        <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                        <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
-                          {isGenerating || isSubmitting ? (
-                            <Loader className="w-5 h-5 animate-spin" />
-                          ) : (
-                            "Create"
-                          )}
-                        </span>
-                      </button>
-                    </div>
-                  </form>
+                          <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+                            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
+                              {isGenerating || isSubmitting ? (
+                                <Loader className="w-5 h-5 animate-spin" />
+                              ) : (
+                                "Create"
+                              )}
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
             </motion.div>

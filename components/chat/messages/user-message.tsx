@@ -359,29 +359,25 @@ function AttachedFilePreview({ file }: { file: any }) {
                   <Eye className="w-4 h-4" />
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-4xl max-h-[90vh] p-0">
-                <DialogHeader className="p-6 pb-0">
-                  <DialogTitle>{file.name}</DialogTitle>
-                </DialogHeader>
-                <div className="p-6 pt-4">
-                  <div className="relative w-full h-[70vh]">
+              <DialogContent className="w-fit p-0">
+                <div className="">
+                  <div className="relative w-auto h-auto">
                     {isImage ? (
                       <Image
                         src={file.filePath}
                         alt={file.name}
-                        fill
-                        className="object-contain"
+                        width={0}
+                        height={0}
                         sizes="100vw"
+                        className="h-auto max-h-[90vh] w-auto max-w-[90vw] object-contain rounded-md"
+                        unoptimized
                       />
                     ) : (
                       <video
                         src={file.filePath}
                         controls
-                        className="w-full h-full object-contain rounded-lg"
-                        preload="metadata"
-                      >
-                        Your browser does not support the video tag.
-                      </video>
+                        className="max-h-[90vh] max-w-[90vw] object-contain rounded-md"
+                      />
                     )}
                   </div>
                 </div>

@@ -7,8 +7,8 @@ export const apiResponseFileUpload = axios.create({
       ? process.env.NEXT_PUBLIC_LIVE_URL
       : process.env.NEXT_PUBLIC_LOCAL_URL,
   headers: {
-    "Content-Type": "multipart/form-data",
     Accept: "application/json",
+    // DO NOT set Content-Type for multipart/form-data - axios will set it automatically with boundary
   },
   withCredentials: true,
 });

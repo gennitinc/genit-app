@@ -419,16 +419,7 @@ export function VersioningMessage({
           </div>
         </div>
 
-        {/* Mobile actions - shown at bottom on small screens */}
-        {/* <div className="sm:hidden border-t border-border p-2 bg-muted/10">
-          <MessageActions
-            onCopy={onCopy}
-            onReload={onReload}
-            onLike={onLike}
-            onDislike={onDislike}
-            className="flex justify-center"
-          />
-        </div> */}
+        
       </div>
     </div>
   );
