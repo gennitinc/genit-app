@@ -212,8 +212,11 @@ export default function TemplateGridAll() {
   const onEdit = (item: TemplateItem) => {
     setSelected(item);
     setEditOpen(true);
-    // Add the template URL to selectedFiles when user clicks edit
-    setSelectedFiles((prev) => [...prev, item.src]);
+
+    // Add the template URL to selectedFiles only if it's not already included
+    setSelectedFiles((prev) =>
+      prev.includes(item.src) ? prev : [item.src]
+    );
   };
 
   const placeholders = [
@@ -464,7 +467,6 @@ export default function TemplateGridAll() {
 
     return () => clearInterval(interval);
   }, []);
-
 
   // Clear error when input changes
   useEffect(() => {
@@ -741,7 +743,14 @@ export default function TemplateGridAll() {
                         50 AI Credits left
                       </div>
                     )}
-                    {isGenerating && <AIThinkingContent />}
+                    {isGenerating && (
+                      <ShinyText
+                        text="Thinking..."
+                        disabled={false}
+                        speed={3}
+                        className="custom-class"
+                      />
+                    )}
                     {/* <div className="flex items-center gap-2">
                       <PricingDialog
                         open={isPricingDialogOpen}
@@ -1010,7 +1019,14 @@ export default function TemplateGridAll() {
                         50 AI Credits left
                       </div>
                     )}
-                    {isGenerating && <AIThinkingContent />}
+                    {isGenerating && (
+                      <ShinyText
+                        text="Thinking..."
+                        disabled={false}
+                        speed={3}
+                        className="custom-class"
+                      />
+                    )}
 
                     {/* <div className="flex items-center gap-2">
                       <PricingDialog
@@ -1139,7 +1155,6 @@ export default function TemplateGridAll() {
           </DrawerContent>
         </Drawer>
       )}
-      
     </motion.div>
   );
 }

@@ -134,12 +134,91 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   }, []);
 
+  const dataURLtoFile = (dataUrl: string, filename: string) => {
+    const [header, base64] = dataUrl.split(",");
+    const mimeMatch = header.match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : "application/octet-stream";
+
+    const byteString = atob(base64);
+    const u8arr = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++)
+      u8arr[i] = byteString.charCodeAt(i);
+
+    return new File([u8arr], filename, { type: mime });
+  };
+
   useEffect(() => {
     const socket = io(`${serverUrlSocket}`);
 
     const handleConnect = () => {
       console.log("Socket connected");
     };
+
+    // const handleNewMessage = (projectData: any) => {
+    //   console.log("New message received", projectData);
+
+    //   // Ignore messages from other projects
+    //   const incomingProjectId = projectData?._id || projectData?.id;
+    //   if (
+    //     project?._id &&
+    //     incomingProjectId &&
+    //     incomingProjectId !== project._id
+    //   ) {
+    //     return;
+    //   }
+
+    //   // Update the project with the latest data from server
+    //   if (projectData && Array.isArray(projectData.messages)) {
+    //     setProject(projectData);
+    //     // Merge server messages with any optimistic local messages
+    //     const serverMessages = transformMessages(projectData.messages);
+    //     setMessages((prev) => {
+    //       // Create sets for both ID formats from server messages
+    //       const serverIds = new Set(
+    //         serverMessages.map((m: any) => String(m.id || m._id))
+    //       );
+
+    //       // Track server message content for duplicate detection
+    //       const serverUserTexts = new Set<string>();
+    //       const serverAiKeys = new Set<string>();
+    //       serverMessages.forEach((m: any) => {
+    //         const text =
+    //           m.parts?.find((p: any) => p.type === "text")?.text?.trim() || "";
+    //         if (m.type === "user" && text) serverUserTexts.add(text);
+    //         if (m.type === "ai") {
+    //           if (text) serverAiKeys.add(text);
+    //           const g = m.generationGroups?.[0]?.id || "";
+    //           if (g) serverAiKeys.add(g);
+    //         }
+    //       });
+
+    //       // Drop optimistic that are now confirmed by server
+    //       const stillOptimistic = prev.filter((m: any) => {
+    //         const id = String(m.id || m._id || "");
+    //         if (serverIds.has(id)) return false;
+    //         const text =
+    //           m.parts?.find((p: any) => p.type === "text")?.text?.trim() || "";
+    //         if (m.type === "user" && text && serverUserTexts.has(text))
+    //           return false;
+    //         if (m.type === "ai") {
+    //           const g = m.generationGroups?.[0]?.id || "";
+    //           if (
+    //             (text && serverAiKeys.has(text)) ||
+    //             (g && serverAiKeys.has(g))
+    //           )
+    //             return false;
+    //         }
+    //         return true;
+    //       });
+
+    //       return [...stillOptimistic, ...serverMessages];
+    //     });
+    //     // Reset typing/streaming when final message arrives
+    //     setStreamingContent("");
+    //     setStreamingAnalysis("");
+    //     setIsTyping(false);
+    //   }
+    // };
 
     const handleNewMessage = (projectData: any) => {
       console.log("New message received", projectData);
@@ -154,52 +233,17 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
-      // Update the project with the latest data from server
       if (projectData && Array.isArray(projectData.messages)) {
         setProject(projectData);
-        // Merge server messages with any optimistic local messages
+
         const serverMessages = transformMessages(projectData.messages);
-        setMessages((prev) => {
-          // Create sets for both ID formats from server messages
-          const serverIds = new Set(
-            serverMessages.map((m: any) => String(m.id || m._id))
-          );
 
-          // Track server message content for duplicate detection
-          const serverUserTexts = new Set<string>();
-          const serverAiKeys = new Set<string>();
-          serverMessages.forEach((m: any) => {
-            const text =
-              m.parts?.find((p: any) => p.type === "text")?.text?.trim() || "";
-            if (m.type === "user" && text) serverUserTexts.add(text);
-            if (m.type === "ai") {
-              if (text) serverAiKeys.add(text);
-              const g = m.generationGroups?.[0]?.id || "";
-              if (g) serverAiKeys.add(g);
-            }
-          });
-
-          // Drop optimistic that are now confirmed by server
-          const stillOptimistic = prev.filter((m: any) => {
-            const id = String(m.id || m._id || "");
-            if (serverIds.has(id)) return false;
-            const text =
-              m.parts?.find((p: any) => p.type === "text")?.text?.trim() || "";
-            if (m.type === "user" && text && serverUserTexts.has(text))
-              return false;
-            if (m.type === "ai") {
-              const g = m.generationGroups?.[0]?.id || "";
-              if (
-                (text && serverAiKeys.has(text)) ||
-                (g && serverAiKeys.has(g))
-              )
-                return false;
-            }
-            return true;
-          });
-
-          return [...stillOptimistic, ...serverMessages];
+        setMessages(() => {
+          // Remove any local/demo messages (isOptimistic)
+          // If you didn't set isOptimistic, you can filter by text instead
+          return serverMessages;
         });
+
         // Reset typing/streaming when final message arrives
         setStreamingContent("");
         setStreamingAnalysis("");
@@ -296,13 +340,14 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (!draft) return;
 
+      console.log("new d", draft);
       try {
         setIsProcessingDraft(true);
         hasProcessedDraftRef.current = true;
         const parsed = JSON.parse(draft);
         const prompt = parsed.prompt;
 
-        const attachedFile = parsed.files;
+        const filesFromStorage = parsed.files || [];
         const selectedFiles = parsed.selectedFiles || [];
 
         if (!prompt) {
@@ -310,21 +355,54 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           return;
         }
 
+        // Convert data URLs back to File objects
+        let restoredFiles: File[] = [];
+
+        if (filesFromStorage.length > 0) {
+          try {
+            const newData = JSON.parse(draft);
+
+            // handle single or nested arrays safely
+            const fileArray = Array.isArray(newData.files?.[0])
+              ? newData.files.flat()
+              : newData.files || [];
+
+            restoredFiles = fileArray
+              .filter((f: any) => f.dataUrl) // skip invalid entries
+              .map((f: any) => dataURLtoFile(f.dataUrl, f.name || "file"));
+          } catch (err) {
+            console.error("Error restoring files:", err);
+          }
+        }
+
+        console.log("rest", restoredFiles);
+
+        // Set restored files to attachedFiles state so they show in the UI
+        if (restoredFiles.length > 0) {
+          setAttachedFiles(restoredFiles);
+        }
+
         // Show typing indicator while processing the initial draft
         setIsTyping(true);
-        await generateMessage(prompt, attachedFile, project._id, selectedFiles);
+        // Pass restored File objects to generateMessage
+        await generateMessage(
+          prompt,
+          restoredFiles.length > 0 ? restoredFiles : null,
+          project._id,
+          selectedFiles
+        );
         // Remove draft after successful generation
-        // localStorage.removeItem("newData");
+        localStorage.removeItem("newData");
       } catch (error) {
         console.error("Error processing localStorage draft:", error);
-        // localStorage.removeItem("newData");
+        localStorage.removeItem("newData");
       } finally {
         setIsProcessingDraft(false);
         clearInput();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [isProcessingDraft]
+    [isProcessingDraft, setAttachedFiles]
   );
 
   const clearError = () => setError(null);
@@ -380,13 +458,46 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
         console.log("pcreated", data.project);
 
+        const filesArray = Array.isArray(attachedFiles)
+          ? attachedFiles
+          : attachedFiles
+            ? [attachedFiles]
+            : [];
+
+        // Convert File objects to data URLs for localStorage storage
+        const filesForStorage = await Promise.all(
+          filesArray.map(
+            (file: File) =>
+              new Promise<{
+                name: string;
+                type: string;
+                size: number;
+                dataUrl: string;
+              }>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                  resolve({
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    dataUrl: reader.result as string,
+                  });
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+              })
+          )
+        );
+
+        // 🧠 Save all data in localStorage
         localStorage.setItem(
           "newData",
           JSON.stringify({
             prompt: value,
-            files: attachedFile ? [attachedFile] : [],
+            files: filesForStorage,
             selectedFiles: selectedFiles || [],
             designType: designTypeId || null,
+            projectId,
           })
         );
 
@@ -856,6 +967,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       window.dispatchEvent(new Event("scroll-chat-to-bottom"));
     }
   };
+
   const autoResize = () => {};
   const clearInput = () => {
     setInputValue("");

@@ -533,7 +533,12 @@ export function IdeaSection() {
                   </div>
                 )}
                 {isGenerating && (
-                  <AIThinkingContent />
+                   <ShinyText
+          text="Thinking..."
+          disabled={false}
+          speed={3}
+          className="custom-class"
+        />
                 )}
                 {/* <div className="flex items-center gap-2">
                   <PricingDialog
