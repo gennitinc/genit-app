@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Globe, CheckCircle, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
 
 const logos = [
   {
@@ -163,6 +164,8 @@ const logos = [
 ];
 
 export default function PartnerLogos() {
+
+  const router = useRouter();
   return (
     <section className="px-4 py-16 md:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -183,13 +186,17 @@ export default function PartnerLogos() {
                 tools for your needs.
               </p>
               <div className="flex flex-col gap-4 sm:flex-row">
-                <Button className="group flex items-center transition-all duration-300 hover:pr-4 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                <Button className="group flex items-center transition-all duration-300 hover:pr-4 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer"
+                  onClick={() => {
+                  router.push("/contact")
+                }}>
                   Become a partner
                   <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Button>
                 <Button
                   variant="outline"
-                  className="group flex items-center gap-2"
+                  className="group flex items-center gap-2 cursor-not-allowed"
+                  disabled={true}
                 >
                   <CheckCircle className="size-4" />
                   View case studies

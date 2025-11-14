@@ -235,7 +235,7 @@ export function UserMessage({
                 {/* File info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium text-muted-foreground truncate">
+                    <p className="text-sm font-medium text-muted-foreground truncate w-10 text-ellipsis">
                       {truncateFileName(fileName)}
                     </p>
                   </div>
@@ -337,7 +337,7 @@ function AttachedFilePreview({ file }: { file: any }) {
 
         {/* File info */}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-foreground truncate">
+          <p className="text-sm font-medium text-foreground truncate w-10 text-ellipsis">
             {file.name}
           </p>
           <p className="text-xs text-muted-foreground">

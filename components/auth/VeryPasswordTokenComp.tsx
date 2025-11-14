@@ -99,7 +99,7 @@ export function VerifyPasswordTokenComp() {
             {/* Footer */}
             <div className="mt-8 space-y-3">
               <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
-                This site is protected by reCAPTCHA and subject to the Klipto{" "}
+                This site is protected by reCAPTCHA and subject to the Klip{" "}
                 <a
                   href="#"
                   className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
@@ -120,7 +120,7 @@ export function VerifyPasswordTokenComp() {
                   className="text-gray-800 dark:text-white font-medium hover:text-blue-600"
                   href="#"
                 >
-                  Klipto Inc.
+                  Klip Inc.
                 </a>{" "}
                 All rights reserved.
               </p>
@@ -179,7 +179,7 @@ export function VerifyPasswordTokenComp() {
                   className="text-gray-800 dark:text-white font-medium hover:text-blue-600"
                   href="#"
                 >
-                  Klipto Inc.
+                  Klip Inc.
                 </a>{" "}
                 All rights reserved.
               </p>

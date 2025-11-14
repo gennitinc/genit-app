@@ -286,7 +286,7 @@ const ResetPassword = () => {
               className="text-gray-800 dark:text-white font-medium hover:text-blue-600"
               href="#"
             >
-              Klipto Inc.
+              Klip Inc.
             </a>{" "}
             All rights reserved.
           </p>
