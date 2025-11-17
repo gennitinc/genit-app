@@ -41,16 +41,15 @@ export default function RootLayout({
                 // storageKey="gennit-theme"
               >
                 <ProjectProvider>
-                
-                      <Suspense
-                        fallback={
-                          <div className="h-screen flex flex-col items-center justify-center">
-                            <Loading />
-                          </div>
-                        }
-                      >
-                        <Wrapper>{children}</Wrapper>
-                      </Suspense>
+                  <Suspense
+                    fallback={
+                      <div className="h-screen flex flex-col items-center justify-center">
+                        <Loading />
+                      </div>
+                    }
+                  >
+                    <Wrapper>{children}</Wrapper>
+                  </Suspense>
                 </ProjectProvider>
               </ThemeProvider>
               <Toaster />

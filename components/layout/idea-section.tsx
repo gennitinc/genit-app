@@ -596,7 +596,9 @@ export function IdeaSection() {
                 )}
               </AnimatePresence>
 
-              <form onSubmit={handleSubmit} className="relative">
+              <form onSubmit={user ? handleSubmit : () => {
+                router.push("/signin")
+              }} className="relative">
                 <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300">
                   <div className="flex-1 relative">
                     <textarea

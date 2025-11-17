@@ -156,7 +156,7 @@ const logos = [
         />
       </svg>
     ),
-    name: "Amazon Web S..",
+    name: "Amazon Cloud",
     alt: "AWS",
     url: "https://aws.amazon.com/",
     description: "Service Platform",
