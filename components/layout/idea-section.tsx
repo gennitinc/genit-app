@@ -103,6 +103,7 @@ export function IdeaSection() {
   const {
     attachedFiles,
     setAttachedFiles,
+    clearInput,
     isGenerating,
     error,
     clearError,
@@ -256,18 +257,12 @@ export function IdeaSection() {
 
         console.log("Project creation result:", res);
 
+        clearInput();
+        setSelectedDesignTypeId(null);
+
         if (res.type && res.id) {
-          // Clear state before redirect
-          setIsSubmitting(false);
-          setInputValue("");
-          setAttachedFiles([]);
-          setSelectedDesignTypeId(null);
           // Redirect to chat page with project ID
           router.push(`/chat/${res.id}`);
-        } else {
-          // Clear state after successful submission only if no redirect
-          setInputValue("");
-          setAttachedFiles([]);
         }
       } catch (error: any) {
         console.error("Failed to create project:", error);

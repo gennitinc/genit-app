@@ -233,6 +233,8 @@ export function ChatInput({
       // Use projectId for proper server routing
       await generateMessage(inputValue, attachedFiles, project._id);
 
+      clearInput();
+
       // Force scroll to bottom when sending a new message
       setTimeout(() => {
         scrollToBottom();

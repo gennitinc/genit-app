@@ -3,13 +3,12 @@ import {
   User as UserIcon,
   CreditCard,
   Shield,
-  Bell,
   Palette,
   ChevronRight,
   Check,
   Edit3,
   Save,
-  X,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +26,8 @@ import { Separator } from "@/components/ui/separator";
 import { useUserContext, User } from "@/context/AuthenticatedContext";
 import { useTheme } from "next-themes";
 import { useToast } from "@/hooks/use-toast";
+import AccountActionModal from "@/components/user/account-action-modal";
+import { useAccountActions } from "@/hooks/use-account-actions";
 
 const SettingsHome = () => {
   const [activeTab, setActiveTab] = useState("account");
@@ -34,6 +35,10 @@ const SettingsHome = () => {
   const { user, updateUserPreferences } = useUserContext();
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
+  const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { signOut, deleteAccount, isSigningOut, isDeletingAccount } =
+    useAccountActions();
 
   // Check for billing tab in URL params
   useEffect(() => {
@@ -413,6 +418,35 @@ const SettingsHome = () => {
 
                 <Card>
                   <CardHeader>
+                    <CardTitle>Sign out</CardTitle>
+                    <CardDescription>
+                      End your current session on this device
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <p className="text-sm text-muted-foreground">
+                      Signing out will require you to log back in to continue
+                      using Gennit.
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsSignOutModalOpen(true)}
+                      disabled={isSigningOut}
+                    >
+                      {isSigningOut ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Signing out...
+                        </>
+                      ) : (
+                        "Sign out"
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
                     <CardTitle>Danger Zone</CardTitle>
                     <CardDescription>
                       Irreversible and destructive actions
@@ -428,8 +462,20 @@ const SettingsHome = () => {
                           Once you delete your account, there is no going back.
                           Please be certain.
                         </p>
-                        <Button variant="destructive" size="sm">
-                          Delete Account
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => setIsDeleteModalOpen(true)}
+                          disabled={isDeletingAccount}
+                        >
+                          {isDeletingAccount ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Deleting...
+                            </>
+                          ) : (
+                            "Delete Account"
+                          )}
                         </Button>
                       </div>
                     </div>
@@ -525,6 +571,25 @@ const SettingsHome = () => {
           </div>
         </div>
       </div>
+      <AccountActionModal
+        open={isSignOutModalOpen}
+        onClose={() => setIsSignOutModalOpen(false)}
+        onConfirm={signOut}
+        loading={isSigningOut}
+        title="Sign out?"
+        description="You'll need to enter your credentials the next time you want to use Gennit."
+        confirmLabel="Sign out"
+      />
+      <AccountActionModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={deleteAccount}
+        loading={isDeletingAccount}
+        title="Delete account"
+        description="This action removes all of your projects, assets, and history. This cannot be undone."
+        confirmLabel="Delete account"
+        variant="destructive"
+      />
     </div>
   );
 };

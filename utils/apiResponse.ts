@@ -25,8 +25,8 @@ apiResponse.interceptors.request.use((config) => {
 
 export const clientUrl =
   process.env.NODE_ENV === "production"
-    ? "https://gennit-client.vercel.app/"
-    : "http://localhost:3000/";
+    ? process.env.NEXT_PUBLIC_CLIENT_LIVE_URL
+    : process.env.NEXT_PUBLIC_CLIENT_URL;
 
 export const serverUrlSocket =  process.env.NODE_ENV === "production"
     ? process.env.NEXT_PUBLIC_LIVE_SOCKET_URL

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   BadgeCheck,
   Bell,
@@ -27,12 +28,20 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import AccountActionModal from "@/components/user/account-action-modal";
+import { useAccountActions } from "@/hooks/use-account-actions";
 
 export function NavUser({ user }: any) {
   const { isMobile, state } = useSidebar();
   const { theme, setTheme } = useTheme();
+  const { signOut, isSigningOut } = useAccountActions();
+  const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
 
   const isCollapsed = !isMobile && state === "collapsed";
+
+  const handleSignOutConfirm = async () => {
+    await signOut();
+  };
 
   return (
     <SidebarMenu>
@@ -104,10 +113,10 @@ export function NavUser({ user }: any) {
                 <CreditCard className="mr-2 h-4 w-4" />
                 Billing
               </DropdownMenuItem>
-              <DropdownMenuItem className="focus:bg-accent focus:text-accent-foreground">
+              {/* <DropdownMenuItem className="focus:bg-accent focus:text-accent-foreground">
                 <Bell className="mr-2 h-4 w-4" />
                 Notifications
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator className="bg-border" />
             <DropdownMenuItem
@@ -126,13 +135,28 @@ export function NavUser({ user }: any) {
                 </>
               )}
             </DropdownMenuItem>
-            <DropdownMenuItem className="focus:bg-accent focus:text-accent-foreground">
+            <DropdownMenuItem
+              className="focus:bg-accent focus:text-accent-foreground"
+              onSelect={(event) => {
+                event.preventDefault();
+                setIsSignOutModalOpen(true);
+              }}
+            >
               <LogOut className="mr-2 h-4 w-4" />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+      <AccountActionModal
+        open={isSignOutModalOpen}
+        onClose={() => setIsSignOutModalOpen(false)}
+        onConfirm={handleSignOutConfirm}
+        loading={isSigningOut}
+        title="Sign out?"
+        description="You'll be signed out of your session on this device."
+        confirmLabel="Sign out"
+      />
     </SidebarMenu>
   );
 }

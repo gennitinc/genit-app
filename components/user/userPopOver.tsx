@@ -23,23 +23,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import appLogo from "@/resources/images/gennit.svg";
-import Image from "next/image";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { useRouter } from "next/navigation";
-import cookie from "js-cookie";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import AccountActionModal from "@/components/user/account-action-modal";
+import { useAccountActions } from "@/hooks/use-account-actions";
 
 const UserPopOver = () => {
-    const { user } = useUserContext();
+  const { user } = useUserContext();
   const { theme, setTheme } = useTheme();
-  const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
   const [isUserPopoverOpen, setIsUserPopoverOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [projectTitle, setProjectTitle] = useState("Untitled Project");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const { signOut, isSigningOut } = useAccountActions();
+  const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -49,11 +48,6 @@ const UserPopOver = () => {
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
-
-  const handleSignOut = () => {
-    cookie.remove("gennituToken");
-    router.push("/signin");
-  };
 
   const handleTitleSave = () => {
     setIsEditingTitle(false);
@@ -69,7 +63,7 @@ const UserPopOver = () => {
       setProjectTitle("Untitled Project"); // Reset to original
     }
   };
-    
+
   return (
     <Popover open={isUserPopoverOpen} onOpenChange={setIsUserPopoverOpen}>
       <PopoverTrigger asChild>
@@ -168,36 +162,42 @@ const UserPopOver = () => {
               </div>
             </div>
             <Link href="/pricing" target="_blank">
-            <button className="text-xs text-primary hover:text-primary/80 font-medium mt-2 hover:underline transition-colors cursor-pointer">
-              Buy more credits →
-            </button>
+              <button className="text-xs text-primary hover:text-primary/80 font-medium mt-2 hover:underline transition-colors cursor-pointer">
+                Buy more credits →
+              </button>
             </Link>
           </div>
           {/* Menu Items */}
           <div className="space-y-0.5 mb-2">
             {[
-              { icon: Settings, label: "Settings" },
-              { icon: User, label: "Profile" },
-              { icon: CreditCard, label: "Pricing" },
-              { icon: Book, label: "Documentation" },
-              { icon: Users, label: "Community" },
-              { icon: MessageSquare, label: "Feedback" },
-            ].map(({ icon: Icon, label }) => (
-              <button
+              { icon: Settings, label: "Settings", href: "/user/settings" },
+              {
+                icon: User,
+                label: "Profile",
+                href: "/user/settings?tab=account",
+              },
+              { icon: CreditCard, label: "Pricing", href: "/pricing" },
+              { icon: Book, label: "Documentation", href: "/documentation" },
+              { icon: Users, label: "Community", href: "/community" },
+              { icon: MessageSquare, label: "Feedback", href: "/contact" },
+            ].map(({ icon: Icon, label, href }) => (
+              <Link
                 key={label}
+                href={href}
                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg transition-all duration-200 group"
+                onClick={() => setIsUserPopoverOpen(false)}
               >
                 <Icon className="h-4 w-4 text-muted-foreground group-hover:text-accent-foreground transition-colors" />
                 <span className="group-hover:translate-x-0.5 transition-transform duration-200 text-sm">
                   {label}
                 </span>
-              </button>
+              </Link>
             ))}
           </div>
           {/* Sign Out */}
           <div className="pt-1 border-t border-border">
             <button
-              onClick={handleSignOut}
+              onClick={() => setIsSignOutModalOpen(true)}
               className="w-full flex items-center gap-3 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 hover:text-destructive rounded-lg transition-all duration-200 group"
             >
               <LogOut className="h-4 w-4 group-hover:translate-x-0.5 transition-transform duration-200" />
@@ -206,8 +206,20 @@ const UserPopOver = () => {
           </div>
         </div>
       </PopoverContent>
+      <AccountActionModal
+        open={isSignOutModalOpen}
+        onClose={() => setIsSignOutModalOpen(false)}
+        onConfirm={async () => {
+          setIsUserPopoverOpen(false);
+          await signOut();
+        }}
+        loading={isSigningOut}
+        title="Ready to sign out?"
+        description="You'll need to sign back in to continue working on your projects."
+        confirmLabel="Sign out"
+      />
     </Popover>
   );
-}
+};
 
 export default UserPopOver;

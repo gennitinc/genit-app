@@ -972,6 +972,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const clearInput = () => {
     setInputValue("");
     setAttachedFiles([]);
+    setSelectedFiles([]);
   };
   const removeAttachedFile = (index: number) => {
     setAttachedFiles((prev) => prev.filter((_, i) => i !== index));

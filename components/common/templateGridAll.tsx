@@ -237,6 +237,7 @@ export default function TemplateGridAll() {
     setAttachedFiles,
     selectedFiles,
     setSelectedFiles,
+    clearInput,
     error,
     isGenerating,
     clearError,
@@ -386,19 +387,11 @@ export default function TemplateGridAll() {
           selectedFiles
         );
 
+        clearInput();
+
         if (result.type && result.id) {
-          // Clear state before redirect
-          setIsSubmitting(false);
-          setInputValue("");
-          setAttachedFiles([]);
-          setSelectedFiles([]);
           // Redirect to chat page with project ID
           router.push(`/chat/${result.id}`);
-        } else {
-          // Clear state after successful submission only if no redirect
-          setInputValue("");
-          setAttachedFiles([]);
-          setSelectedFiles([]);
         }
       } catch (error: any) {
         console.error("Failed to create project:", error);
