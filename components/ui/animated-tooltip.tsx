@@ -91,9 +91,9 @@ export const AnimatedTooltip = ({
                 <div className="relative z-30 text-base font-bold text-white">
                   {item.name}
                 </div>
-                {item.designation && (
+                {/* {item.designation && (
                   <div className="text-xs text-white">{item.designation}</div>
-                )}
+                )} */}
               </motion.div>
             )}
           </AnimatePresence>
