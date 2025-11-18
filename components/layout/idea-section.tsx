@@ -229,6 +229,12 @@ export function IdeaSection() {
     async (e: React.FormEvent) => {
       e.preventDefault();
 
+      // Check if user is authenticated
+      if (!user) {
+        router.push("/signin");
+        return;
+      }
+
       const validationError = validateInput(inputValue, attachedFiles);
       if (validationError) {
         setInputError(validationError);
@@ -279,6 +285,8 @@ export function IdeaSection() {
       isSubmitting,
       validateInput,
       createProject,
+      user,
+      router,
     ]
   );
 
@@ -533,12 +541,12 @@ export function IdeaSection() {
                   </div>
                 )}
                 {isGenerating && (
-                   <ShinyText
-          text="Thinking..."
-          disabled={false}
-          speed={3}
-          className="custom-class"
-        />
+                  <ShinyText
+                    text="Thinking..."
+                    disabled={false}
+                    speed={3}
+                    className="custom-class"
+                  />
                 )}
                 {/* <div className="flex items-center gap-2">
                   <PricingDialog
@@ -596,9 +604,17 @@ export function IdeaSection() {
                 )}
               </AnimatePresence>
 
-              <form onSubmit={user ? handleSubmit : () => {
-                router.push("/signin")
-              }} className="relative">
+              <form
+                onSubmit={
+                  user
+                    ? handleSubmit
+                    : (e) => {
+                        e.preventDefault();
+                        router.push("/signin");
+                      }
+                }
+                className="relative"
+              >
                 <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300">
                   <div className="flex-1 relative">
                     <textarea

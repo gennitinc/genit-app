@@ -148,9 +148,7 @@ export default function TemplateGrid() {
     setEditOpen(true);
 
     // Add the template URL to selectedFiles only if it's not already included
-    setSelectedFiles((prev) =>
-      prev.includes(item.src) ? prev : [item.src]
-    );
+    setSelectedFiles((prev) => (prev.includes(item.src) ? prev : [item.src]));
   };
 
   const placeholders = [
@@ -307,6 +305,12 @@ export default function TemplateGrid() {
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
+      // Check if user is authenticated
+      if (!user) {
+        router.push("/signin");
+        return;
+      }
+
       // Validate input before proceeding
       try {
         const validationError = validateInput?.(inputValue, attachedFiles);
@@ -376,6 +380,8 @@ export default function TemplateGrid() {
       isSubmitting,
       validateInput,
       createProject,
+      user,
+      router,
     ]
   );
 
@@ -729,7 +735,17 @@ export default function TemplateGrid() {
                   </div>
 
                   <div className="relative">
-                    <form onSubmit={handleSubmit} className="relative">
+                    <form
+                      onSubmit={
+                        user
+                          ? handleSubmit
+                          : (e) => {
+                              e.preventDefault();
+                              router.push("/signin");
+                            }
+                      }
+                      className="relative"
+                    >
                       <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300">
                         <div className="flex-1 relative">
                           <textarea
