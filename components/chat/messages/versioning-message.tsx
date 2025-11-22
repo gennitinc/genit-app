@@ -13,6 +13,7 @@ import {
   RefreshCw,
   Eye,
   RotateCcw,
+  Download,
   Image as ImageIcon,
   Video,
   File,
@@ -180,6 +181,35 @@ export function VersioningMessage({
     }
   };
 
+  const handleDownload = async (file: { filePath?: string; name?: string }) => {
+    try {
+      if (!file || !file.filePath) return;
+
+      const response = await fetch(file.filePath, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to download file");
+      }
+
+      const blob = await response.blob();
+
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = blobUrl;
+      link.download = file.name || "download";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error("DOWNLOAD ERROR:", err);
+    }
+  };
+
   const renderGenerationContent = () => {
     if (generation.isLoading) {
       return (
@@ -305,7 +335,7 @@ export function VersioningMessage({
                   <div className="flex items-center gap-1 mt-0.5">
                     <ImageIcon className="w-3 h-3 text-muted-foreground" />
                     <p className="text-xs text-muted-foreground">
-                      Image • {fileExt} • 
+                      Image • {fileExt} •
                     </p>
                   </div>
                 </div>
@@ -330,7 +360,7 @@ export function VersioningMessage({
                   <div className="flex items-center gap-1 mt-0.5">
                     <Video className="w-3 h-3 text-muted-foreground" />
                     <p className="text-xs text-muted-foreground">
-                      Video • {fileExt} • 
+                      Video • {fileExt} •
                     </p>
                   </div>
                 </div>
@@ -347,7 +377,7 @@ export function VersioningMessage({
                   <div className="flex items-center gap-1 mt-0.5">
                     <File className="w-3 h-3 text-muted-foreground" />
                     <p className="text-xs text-muted-foreground">
-                      {item.type || "File"} • 
+                      {item.type || "File"} •
                     </p>
                   </div>
                 </div>
@@ -393,6 +423,25 @@ export function VersioningMessage({
                   {generation.title}
                 </h3>
                 <div className="flex flex-row items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0 mr-4"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Prefer an explicit item from the generation items.
+                      const repItem =
+                        generation.items?.[0] || generation.items?.slice(-1)[0];
+                      if (!repItem) return;
+                      handleDownload({
+                        filePath: repItem.url || repItem.filePath,
+                        name: repItem.name,
+                      });
+                    }}
+                    title="Download file"
+                  >
+                    <Download className="w-4 h-4" />
+                  </Button>
                   {generation.isLatest && (
                     <Badge className="text-xs px-1.5 py-0.5 bg-green-500/10 text-green-600 border-green-500/20 flex-shrink-0">
                       Latest
@@ -418,8 +467,6 @@ export function VersioningMessage({
             {renderGenerationContent()}
           </div>
         </div>
-
-        
       </div>
     </div>
   );

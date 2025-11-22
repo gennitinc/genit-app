@@ -43,6 +43,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [deploymentUrl, setDeploymentUrl] = useState<string | null>(null);
   const [isLoadingProject, setIsLoadingProject] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [generatingForMessageId, setGeneratingForMessageId] = useState<
+    string | null
+  >(null);
   const [isLiveMode, setIsLiveMode] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -248,6 +252,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setStreamingContent("");
         setStreamingAnalysis("");
         setIsTyping(false);
+        // If server sent a new message, stop any image-generating skeleton
+        setIsGeneratingImage(false);
+        setGeneratingForMessageId(null);
       }
     };
 
@@ -308,12 +315,42 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     };
 
+    const handleGeneratingImage = (data: any) => {
+      try {
+        const incomingProjectId = data?.projectId || data?.project_id;
+        if (
+          incomingProjectId &&
+          project?._id &&
+          incomingProjectId !== project._id
+        ) {
+          return;
+        }
+        // Try to attach the skeleton to the most recent user message
+        setIsGeneratingImage(true);
+        try {
+          const lastUserMessage = [...messages]
+            .reverse()
+            .find((m: any) => m?.type === "user");
+          if (lastUserMessage && lastUserMessage.id) {
+            setGeneratingForMessageId(String(lastUserMessage.id));
+          } else {
+            setGeneratingForMessageId(null);
+          }
+        } catch (err) {
+          setGeneratingForMessageId(null);
+        }
+      } catch (e) {
+        console.error("Error handling generatingimage event", e);
+      }
+    };
+
     // Set up listeners (works whether already connected or not)
     socket.on("connect", handleConnect);
     socket.on("newMessage", handleNewMessage);
     socket.on("textStart", handleTextStart);
     socket.on("textDelta", handleTextDelta);
     socket.on("textCompleted", handleTextCompleted);
+    socket.on("generatingimage", handleGeneratingImage);
 
     // Cleanup function to disconnect socket when component unmounts
     return () => {
@@ -322,6 +359,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       socket.off("textStart", handleTextStart);
       socket.off("textDelta", handleTextDelta);
       socket.off("textCompleted", handleTextCompleted);
+      socket.off("generatingimage", handleGeneratingImage);
       socket.disconnect();
     };
   }, [transformMessages, project?._id]);
@@ -1027,6 +1065,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         selectedFiles,
         setSelectedFiles,
         fileLoadingStates,
+        isGeneratingImage,
+        generatingForMessageId,
         setFileLoadingStates,
         isDragOver,
         setIsDragOver,

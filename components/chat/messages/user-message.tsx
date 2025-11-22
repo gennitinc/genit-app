@@ -300,12 +300,32 @@ function AttachedFilePreview({ file }: { file: any }) {
     ? `${(file.fileSize / (1024 * 1024)).toFixed(2)} MB`
     : "Unknown size";
 
-  const handleDownload = () => {
-    if (file.filePath) {
+  const handleDownload = async () => {
+    try {
+      if (!file.filePath) return;
+
+      const response = await fetch(file.filePath, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to download file");
+      }
+
+      const blob = await response.blob();
+
+      const blobUrl = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.href = file.filePath;
-      link.download = file.name;
+
+      link.href = blobUrl;
+      link.download = file.name || "download";
+      document.body.appendChild(link);
       link.click();
+      link.remove();
+
+      URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error("DOWNLOAD ERROR:", err);
     }
   };
 

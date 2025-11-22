@@ -164,7 +164,7 @@ export interface IProjectDesignContext {
 
   selectedTheme: string;
   setSelectedTheme: (theme: string) => void;
-
+  generatingForMessageId: string | null;
   isVisibilityDialogOpen: boolean;
   setIsVisibilityDialogOpen: (open: boolean) => void;
 
@@ -202,7 +202,7 @@ export interface IProjectDesignContext {
   streamingFiles: Set<string>;
   streamingContent: string;
   streamingAnalysis: string;
-
+  isGeneratingImage: boolean;
   handleInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   handleKeyDown: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
   handlePaste: () => void;
