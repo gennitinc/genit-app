@@ -196,29 +196,7 @@ export function ChatInput({
     checkScrollPosition,
   ]);
 
-  // Add scroll event listener to chat content area
-  // useEffect(() => {
-  //   const chatContentElement = chatContentRef.current;
-  //   if (chatContentElement) {
-  //     let scrollTimeout: NodeJS.Timeout;
-  //     const handleScroll = () => {
-  //       clearTimeout(scrollTimeout);
-  //       scrollTimeout = setTimeout(() => {
-  //         checkScrollPosition();
-  //       }, 50);
-  //     };
 
-  //     chatContentElement.addEventListener("scroll", handleScroll, {
-  //       passive: true,
-  //     });
-  //     checkScrollPosition();
-
-  //     return () => {
-  //       chatContentElement.removeEventListener("scroll", handleScroll);
-  //       clearTimeout(scrollTimeout);
-  //     };
-  //   }
-  // }, [checkScrollPosition]);
 
   // FIXED: Handle sending messages with proper project identification
   const handlegenerateMessage = async () => {
