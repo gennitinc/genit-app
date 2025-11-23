@@ -401,29 +401,6 @@ export function TextChatContent() {
         </Conversation>
       </div>
 
-      {showButton && (
-        <button
-          onClick={() => doScrollToBottom({ behavior: "smooth" })}
-          aria-label="Scroll to bottom"
-          className="fixed right-6 bottom-20 z-50 p-2 rounded-full shadow-lg bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6 text-gray-700 dark:text-gray-200"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-      )}
-
       <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur">
         <ChatInput placeholder="Ask a follow up message..." />
       </div>

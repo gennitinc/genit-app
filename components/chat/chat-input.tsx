@@ -196,7 +196,29 @@ export function ChatInput({
     checkScrollPosition,
   ]);
 
+  // Add scroll event listener to chat content area
+  // useEffect(() => {
+  //   const chatContentElement = chatContentRef.current;
+  //   if (chatContentElement) {
+  //     let scrollTimeout: NodeJS.Timeout;
+  //     const handleScroll = () => {
+  //       clearTimeout(scrollTimeout);
+  //       scrollTimeout = setTimeout(() => {
+  //         checkScrollPosition();
+  //       }, 50);
+  //     };
 
+  //     chatContentElement.addEventListener("scroll", handleScroll, {
+  //       passive: true,
+  //     });
+  //     checkScrollPosition();
+
+  //     return () => {
+  //       chatContentElement.removeEventListener("scroll", handleScroll);
+  //       clearTimeout(scrollTimeout);
+  //     };
+  //   }
+  // }, [checkScrollPosition]);
 
   // FIXED: Handle sending messages with proper project identification
   const handlegenerateMessage = async () => {
@@ -280,7 +302,7 @@ export function ChatInput({
         onDrop={handleDrop}
       >
         {/* Scroll to Bottom Button */}
-        {/* <div
+        <div
           className={`absolute left-1/2 transform -translate-x-1/2 -top-12 z-20 transition-opacity duration-300 ${
             showScrollButton ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
@@ -301,7 +323,7 @@ export function ChatInput({
           >
             <ChevronDown className="w-5 h-5 text-muted-foreground" />
           </button>
-        </div> */}
+        </div>
 
         <div className="relative">
           {/* File Attachments or Drag Drop Zone */}
