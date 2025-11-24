@@ -19,7 +19,7 @@ const ChatIdPage = () => {
       return;
     }
 
-    console.log("p-id", projectId)
+    console.log("p-id", projectId);
 
     let didRun = false;
     const run = async () => {
@@ -51,4 +51,3 @@ const ChatIdPage = () => {
 };
 
 export default withAuth(ChatIdPage);
-
