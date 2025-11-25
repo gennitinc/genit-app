@@ -1,6 +1,6 @@
 "use client";
 
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -8,44 +8,44 @@ import { useEffect, useState } from "react";
 import Loading from "@/utils/Loading";
 import { LandingPage } from "@/components/landing/landing-page";
 
-export const metadata: Metadata = {
-  title:
-    "Gennit AI – Create AI-Powered Media Designs | Graphics, Videos & Animations",
-  description:
-    "Gennit AI transforms media creation with intelligent design tools. Generate stunning graphics, videos, animations, and brand assets in minutes—no design skills needed.",
-  keywords: [
-    "AI media design",
-    "AI graphics generator",
-    "video creation",
-    "animation software",
-    "brand design tools",
-    "marketing content creation",
-    "design automation",
-    "AI-powered design",
-    "media generation",
-    "creative tools",
-  ],
-  openGraph: {
-    title: "Gennit AI – Create AI-Powered Media Designs",
-    description:
-      "Generate stunning graphics, videos, animations, and brand assets with AI. No design skills required.",
-    type: "website",
-    url: "https://www.gennit.online",
-    images: [
-      {
-        url: "https://www.gennit.online/opengraph-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Gennit AI Media Design Platform",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Gennit AI – Create AI-Powered Media Designs",
-    description: "Generate stunning graphics, videos, and animations with AI",
-  },
-};
+// export const metadata: Metadata = {
+//   title:
+//     "Gennit AI – Create AI-Powered Media Designs | Graphics, Videos & Animations",
+//   description:
+//     "Gennit AI transforms media creation with intelligent design tools. Generate stunning graphics, videos, animations, and brand assets in minutes—no design skills needed.",
+//   keywords: [
+//     "AI media design",
+//     "AI graphics generator",
+//     "video creation",
+//     "animation software",
+//     "brand design tools",
+//     "marketing content creation",
+//     "design automation",
+//     "AI-powered design",
+//     "media generation",
+//     "creative tools",
+//   ],
+//   openGraph: {
+//     title: "Gennit AI – Create AI-Powered Media Designs",
+//     description:
+//       "Generate stunning graphics, videos, animations, and brand assets with AI. No design skills required.",
+//     type: "website",
+//     url: "https://www.gennit.online",
+//     images: [
+//       {
+//         url: "https://www.gennit.online/opengraph-image.png",
+//         width: 1200,
+//         height: 630,
+//         alt: "Gennit AI Media Design Platform",
+//       },
+//     ],
+//   },
+//   twitter: {
+//     card: "summary_large_image",
+//     title: "Gennit AI – Create AI-Powered Media Designs",
+//     description: "Generate stunning graphics, videos, and animations with AI",
+//   },
+// };
 
 function Page() {
   const { user, loading } = useUserContext();
