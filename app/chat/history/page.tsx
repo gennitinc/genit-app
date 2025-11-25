@@ -314,7 +314,7 @@ function ChatHistoryPage() {
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
-                          <ChevronRight className="h-3 w-3 text-muted-foreground opacity-100 group-hover:opacity-100 transition-opacity" />
+                          <ChevronRight className="h-4 w-4 text-muted-foreground opacity-100 group-hover:opacity-100 transition-opacity" />
                         </div>
                       </div>
                     </CardContent>
