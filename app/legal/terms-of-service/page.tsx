@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import {
   ArrowUpRight,
@@ -17,6 +18,16 @@ import { Button } from "@/components/ui/button";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { HoverVideoPlayer } from "@/components/features/hover-video-player";
+
+export const metadata: Metadata = {
+  title: "Terms of Service – Gennit AI",
+  description:
+    "Read Gennit AI's terms of service to understand the terms and conditions governing your use of our platform.",
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default function About2() {
   return (

@@ -1,4 +1,5 @@
 "use client";
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
@@ -18,6 +19,16 @@ import cookie from "js-cookie";
 import { Logo } from "@/components/logo";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
 import withAuth from "@/helper/hoc/withAuth";
+
+export const metadata: Metadata = {
+  title: "Sign Up – Gennit AI",
+  description:
+    "Create your Gennit AI account and start creating stunning AI-powered media designs.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 const LoginSocialGoogle = dynamic(
   () => import("reactjs-social-login").then((mod) => mod.LoginSocialGoogle),

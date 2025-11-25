@@ -1,5 +1,6 @@
 "use client";
 
+import type { Metadata } from "next";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +40,34 @@ import * as z from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+
+export const metadata: Metadata = {
+  title: "Contact Us – Gennit AI | Get in Touch",
+  description:
+    "Get in touch with Gennit AI. Fill out our contact form and our team will reach out to provide personalized assistance and answers to your questions.",
+  keywords: [
+    "contact us",
+    "support",
+    "sales inquiry",
+    "demo request",
+    "partnership",
+    "business inquiry",
+  ],
+  openGraph: {
+    title: "Contact Us – Gennit AI",
+    description:
+      "Reach out to Gennit AI for support, sales, or partnership inquiries",
+    url: "https://www.gennit.online/contact",
+    images: [
+      {
+        url: "https://www.gennit.online/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Gennit AI Contact",
+      },
+    ],
+  },
+};
 
 // Define the schema for form validation
 const formSchema = z.object({

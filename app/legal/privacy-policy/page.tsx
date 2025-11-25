@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import {
   ArrowUpRight,
@@ -17,6 +18,16 @@ import { Button } from "@/components/ui/button";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { HoverVideoPlayer } from "@/components/features/hover-video-player";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy – Gennit AI",
+  description:
+    "Read Gennit AI's privacy policy to understand how we collect, use, and protect your personal data.",
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default function About2() {
   return (

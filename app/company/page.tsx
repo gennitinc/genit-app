@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import {
   ArrowUpRight,
@@ -17,6 +18,36 @@ import { Button } from "@/components/ui/button";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { HoverVideoPlayer } from "@/components/features/hover-video-player";
+
+export const metadata: Metadata = {
+  title: "About Gennit – AI Media Design Company",
+  description:
+    "Learn about Gennit AI, the company revolutionizing media design with AI-powered solutions. Our mission is to democratize professional design for everyone.",
+  keywords: [
+    "about gennit",
+    "company",
+    "mission",
+    "vision",
+    "AI media design company",
+    "team",
+    "media creation tools",
+  ],
+  openGraph: {
+    title: "About Gennit – AI Media Design Company",
+    description:
+      "Discover Gennit's mission to revolutionize media design through AI-powered solutions.",
+    url: "https://www.gennit.online/company",
+    type: "website",
+    images: [
+      {
+        url: "https://www.gennit.online/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Gennit AI Company",
+      },
+    ],
+  },
+};
 
 export default function About2() {
   return (
