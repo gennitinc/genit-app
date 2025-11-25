@@ -1,4 +1,4 @@
-"use client";
+
 import type { Metadata } from "next";
 import withAuth from "@/helper/hoc/withAuth";
 import { SignupComp } from "@/components/auth/Signup";

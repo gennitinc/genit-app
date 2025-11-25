@@ -1,8 +1,5 @@
-"use client";
-
 import LandingContact from "@/components/landing/landing-contact";
 import type { Metadata } from "next";
-
 
 export const metadata: Metadata = {
   title: "Contact Us – Gennit AI | Get in Touch",
@@ -35,7 +32,5 @@ export const metadata: Metadata = {
 // Define the schema for form validation
 
 export default function Contact() {
-  
-
   return <LandingContact />;
 }

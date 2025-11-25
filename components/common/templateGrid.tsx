@@ -1,3 +1,4 @@
+"use client"
 import { cn } from "@/lib/utils";
 import React, { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
