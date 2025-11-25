@@ -14,7 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
-import withAuth from "@/helper/hoc/withAuth";
 
 export const RecoverComp = () => {
   const [formData, setFormdata] = React.useState<AuthTypes>({

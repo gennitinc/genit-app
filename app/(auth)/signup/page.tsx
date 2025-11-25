@@ -1,8 +1,5 @@
-
+import SignupClient from "@/components/auth/SignupClient";
 import type { Metadata } from "next";
-import withAuth from "@/helper/hoc/withAuth";
-import { SignupComp } from "@/components/auth/Signup";
-
 export const metadata: Metadata = {
   title: "Sign Up – Gennit AI",
   description:
@@ -14,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const Signup = () => {
-  return <SignupComp />;
+  return <SignupClient />;
 };
 
-export default withAuth(Signup, true);
+export default Signup;

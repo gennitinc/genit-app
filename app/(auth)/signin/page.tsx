@@ -1,5 +1,4 @@
-import { LoginComp } from "@/components/auth/Login";
-import withAuth from "@/helper/hoc/withAuth";
+import SigninClient from "@/components/auth/SigninClient";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const Login = () => {
-  return <LoginComp />;
+  return <SigninClient />;
 };
 
-export default withAuth(Login, true);
+export default Login;

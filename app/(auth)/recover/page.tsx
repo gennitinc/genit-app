@@ -1,8 +1,5 @@
-
-import withAuth from "@/helper/hoc/withAuth";
-import { RecoverComp } from "@/components/auth/Recover";
+import RecoverClient from "@/components/auth/RecoverClient";
 import { Metadata } from "next";
-
 export const metadata: Metadata = {
   title: "Account recovery – Gennit AI",
   description: "Recover your Gennit AI account and access your projects.",
@@ -12,9 +9,8 @@ export const metadata: Metadata = {
   },
 };
 
-
 const Recover = () => {
-  return <RecoverComp />;
+  return <RecoverClient />;
 };
 
-export default withAuth(Recover, true);
+export default Recover;
