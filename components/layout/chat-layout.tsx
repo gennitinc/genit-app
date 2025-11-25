@@ -16,7 +16,7 @@ export function ChatLayout() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="flex relative w-full h-[100vh] overflow-hidden bg-white dark:bg-black">
+    <div className="flex relative w-full h-fit lg:h-[100vh] overflow-hidden bg-white dark:bg-black">
       <AppSidebar />
       <div
         ref={scrollContainerRef}
