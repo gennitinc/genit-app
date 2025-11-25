@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import type { Metadata } from "next";
 import Banner from "@/components/common/banner";
 import TemplateGridAll from "@/components/common/templateGridAll";
