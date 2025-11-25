@@ -241,19 +241,6 @@ export default function TemplateGrid() {
       const maxFiles = 10;
       const allowedTypes = [
         "image/*",
-        ".pdf",
-        ".txt",
-        ".md",
-        ".js",
-        ".jsx",
-        ".ts",
-        ".tsx",
-        ".css",
-        ".html",
-        ".json",
-        ".xml",
-        ".yaml",
-        ".yml",
       ];
 
       if (attachedFiles.length + files.length > maxFiles) {

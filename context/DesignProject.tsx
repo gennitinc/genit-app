@@ -158,72 +158,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       console.log("Socket connected");
     };
 
-    // const handleNewMessage = (projectData: any) => {
-    //   console.log("New message received", projectData);
-
-    //   // Ignore messages from other projects
-    //   const incomingProjectId = projectData?._id || projectData?.id;
-    //   if (
-    //     project?._id &&
-    //     incomingProjectId &&
-    //     incomingProjectId !== project._id
-    //   ) {
-    //     return;
-    //   }
-
-    //   // Update the project with the latest data from server
-    //   if (projectData && Array.isArray(projectData.messages)) {
-    //     setProject(projectData);
-    //     // Merge server messages with any optimistic local messages
-    //     const serverMessages = transformMessages(projectData.messages);
-    //     setMessages((prev) => {
-    //       // Create sets for both ID formats from server messages
-    //       const serverIds = new Set(
-    //         serverMessages.map((m: any) => String(m.id || m._id))
-    //       );
-
-    //       // Track server message content for duplicate detection
-    //       const serverUserTexts = new Set<string>();
-    //       const serverAiKeys = new Set<string>();
-    //       serverMessages.forEach((m: any) => {
-    //         const text =
-    //           m.parts?.find((p: any) => p.type === "text")?.text?.trim() || "";
-    //         if (m.type === "user" && text) serverUserTexts.add(text);
-    //         if (m.type === "ai") {
-    //           if (text) serverAiKeys.add(text);
-    //           const g = m.generationGroups?.[0]?.id || "";
-    //           if (g) serverAiKeys.add(g);
-    //         }
-    //       });
-
-    //       // Drop optimistic that are now confirmed by server
-    //       const stillOptimistic = prev.filter((m: any) => {
-    //         const id = String(m.id || m._id || "");
-    //         if (serverIds.has(id)) return false;
-    //         const text =
-    //           m.parts?.find((p: any) => p.type === "text")?.text?.trim() || "";
-    //         if (m.type === "user" && text && serverUserTexts.has(text))
-    //           return false;
-    //         if (m.type === "ai") {
-    //           const g = m.generationGroups?.[0]?.id || "";
-    //           if (
-    //             (text && serverAiKeys.has(text)) ||
-    //             (g && serverAiKeys.has(g))
-    //           )
-    //             return false;
-    //         }
-    //         return true;
-    //       });
-
-    //       return [...stillOptimistic, ...serverMessages];
-    //     });
-    //     // Reset typing/streaming when final message arrives
-    //     setStreamingContent("");
-    //     setStreamingAnalysis("");
-    //     setIsTyping(false);
-    //   }
-    // };
-
     const handleNewMessage = (projectData: any) => {
       console.log("New message received", projectData);
 
@@ -458,6 +392,16 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     selectedFiles?: string[],
     designTypeId?: string
   ) => {
+
+    let category;
+
+    if (selectedFiles && selectedFiles?.length >= 1) {
+      category = "auto";
+    }
+    else {
+      category = designTypeId;
+    }
+
     const newProject = {
       title: value,
       status: ProjectStatus.ACTIVE,
@@ -465,7 +409,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       userName,
       collaborators: [],
       messages: [],
-      category: designTypeId || null,
+      category: category,
       analytics: {
         totalMessages: 0,
         totalGenerations: 0,
