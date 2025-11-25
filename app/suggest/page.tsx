@@ -1,6 +1,6 @@
 "use client";
 
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 import { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -30,32 +30,32 @@ import { AlertCircle, CheckCircle2, Upload } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 
-export const metadata: Metadata = {
-  title: "Support & Suggestions – Gennit AI",
-  description:
-    "Submit support tickets or feature suggestions to the Gennit AI team. We value your feedback and are here to help.",
-  keywords: [
-    "support",
-    "suggestions",
-    "feedback",
-    "bug report",
-    "feature request",
-    "help",
-  ],
-  openGraph: {
-    title: "Support & Suggestions – Gennit AI",
-    description: "Submit support tickets and feature suggestions to Gennit AI",
-    url: "https://www.gennit.online/suggest",
-    images: [
-      {
-        url: "https://www.gennit.online/opengraph-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Gennit AI Support",
-      },
-    ],
-  },
-};
+// export const metadata: Metadata = {
+//   title: "Support & Suggestions – Gennit AI",
+//   description:
+//     "Submit support tickets or feature suggestions to the Gennit AI team. We value your feedback and are here to help.",
+//   keywords: [
+//     "support",
+//     "suggestions",
+//     "feedback",
+//     "bug report",
+//     "feature request",
+//     "help",
+//   ],
+//   openGraph: {
+//     title: "Support & Suggestions – Gennit AI",
+//     description: "Submit support tickets and feature suggestions to Gennit AI",
+//     url: "https://www.gennit.online/suggest",
+//     images: [
+//       {
+//         url: "https://www.gennit.online/opengraph-image.png",
+//         width: 1200,
+//         height: 630,
+//         alt: "Gennit AI Support",
+//       },
+//     ],
+//   },
+// };
 
 function Page() {
   // Support form state
