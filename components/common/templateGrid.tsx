@@ -819,7 +819,7 @@ export default function TemplateGrid() {
                               {isGenerating || isSubmitting ? (
                                 <Loader className="w-5 h-5 animate-spin" />
                               ) : (
-                                "Create"
+                                "Recreate"
                               )}
                             </span>
                           </button>
@@ -1107,7 +1107,7 @@ export default function TemplateGrid() {
                               {isGenerating || isSubmitting ? (
                                 <Loader className="w-5 h-5 animate-spin" />
                               ) : (
-                                "Create"
+                                "Recreate"
                               )}
                             </span>
                           </button>
