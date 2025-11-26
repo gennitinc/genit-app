@@ -269,7 +269,7 @@ export function ChatInput({
 
   return (
     <div className={`h-full flex flex-col bg-transparent  ${className}`}>
-      <style jsx>{`
+      {/* <style jsx>{`
         @keyframes gentle-bounce {
           0%,
           20%,
@@ -285,7 +285,7 @@ export function ChatInput({
             transform: translateY(-1px);
           }
         }
-      `}</style>
+      `}</style> */}
 
       {/* Chat Content Area with hover-only scrollbar */}
       <div className="flex-1 p-4 overflow-y-auto custom-scrollbar">
