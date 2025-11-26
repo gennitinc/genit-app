@@ -225,7 +225,7 @@ export function TextChatContent() {
 
   return (
     <div className="flex flex-col h-full">
-      <div ref={localConversationRef} className="flex-1 px-2 md:px-6">
+      {/* <div ref={localConversationRef} className="flex-1 px-2 md:px-6">
         <Conversation className="px-0 m-0">
           <ConversationContent className="px-0 m-0 space-y-4 pb-2">
             {messages?.map((message: any, index: number) => {
@@ -399,7 +399,7 @@ export function TextChatContent() {
             )}
           </ConversationContent>
         </Conversation>
-      </div>
+      </div> */}
 
       <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur">
         <ChatInput placeholder="Ask a follow up message..." />
