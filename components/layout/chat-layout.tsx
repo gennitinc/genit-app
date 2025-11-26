@@ -22,11 +22,11 @@ export function ChatLayout() {
         ref={scrollContainerRef}
         className="flex-1 flex flex-col h-screen overflow-auto will-change-scroll scroll-container"
       >
-        <TopNavWithAurora
+        {/* <TopNavWithAurora
           scrollContainerRef={
             scrollContainerRef as React.RefObject<HTMLDivElement>
           }
-        />
+        /> */}
         <div className="w-full lg:max-w-[600px] lg:mx-auto h-full flex flex-col">
           <TextChatContent />
         </div>
