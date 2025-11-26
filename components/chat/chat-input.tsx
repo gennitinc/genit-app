@@ -455,8 +455,8 @@ export function ChatInput({
                 style={{
                   lineHeight: "1.5",
                   fontFamily: "inherit",
-                  minHeight: "clamp(36px, 4vw, 40px)",
-                  maxHeight: "clamp(120px, 50vh, 300px)",
+                  minHeight: "40px",
+                  maxHeight: "300px",
                 }}
                 rows={1}
               />
