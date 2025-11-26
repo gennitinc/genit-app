@@ -224,8 +224,11 @@ export function TextChatContent() {
   };
 
   return (
-    <div className="flex flex-col">
-      <div ref={localConversationRef} className="flex-1 px-2 md:px-6">
+    <div className="flex flex-col h-full overflow-hidden">
+      <div
+        ref={localConversationRef}
+        className="flex-1 min-h-0 px-2 md:px-6 overflow-y-auto"
+      >
         <Conversation className="px-0 m-0">
           <ConversationContent className="px-0 m-0 space-y-4 pb-2">
             {messages?.map((message: any, index: number) => {
@@ -401,7 +404,7 @@ export function TextChatContent() {
         </Conversation>
       </div>
 
-      <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur">
+      <div className="flex-shrink-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur border-t border-border">
         <ChatInput placeholder="Ask a follow up message..." />
       </div>
     </div>
