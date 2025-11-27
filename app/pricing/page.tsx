@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { LandingFooter } from "@/components/landing/landing-footer";
