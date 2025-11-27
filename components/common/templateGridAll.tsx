@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { cn } from "@/lib/utils";
 import React, { useEffect, useMemo, useState } from "react";
@@ -739,9 +739,39 @@ export default function TemplateGridAll() {
                   {/* Credit info and typing indicator */}
                   <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2">
                     {!isGenerating && (
-                      <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                        <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
-                        50 AI Credits left
+                      <div className="flex items-center gap-3 justify-between w-full">
+                        <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
+                          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2" />
+                          {user ? (
+                            `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
+                          ) : (
+                            <span className="ml-2 text-xs text-muted-foreground">
+                              100 free credit
+                            </span>
+                          )}
+                        </div>
+
+                        {user && (user?.creditsRemaining ?? 0) === 0 && (
+                          <div>
+                            {(user?.userPlan as any) === "Basic" ? (
+                              <span
+                                className="cursor-pointer"
+                                onClick={() => router.push("/pricing")}
+                              >
+                                Upgrade
+                              </span>
+                            ) : (
+                              <span
+                                className="cursor-pointer"
+                                onClick={() =>
+                                  router.push("/user/settings?tab=billing")
+                                }
+                              >
+                                Buy Credits
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     )}
                     {isGenerating && (
@@ -1025,9 +1055,39 @@ export default function TemplateGridAll() {
                   {/* Credit info and typing indicator */}
                   <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2">
                     {!isGenerating && (
-                      <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                        <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
-                        50 AI Credits left
+                      <div className="flex items-center gap-1 justify-between w-full">
+                        <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
+                          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2" />
+                          {user ? (
+                            `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
+                          ) : (
+                            <span className="ml-2 text-xs text-muted-foreground">
+                              100 free credit
+                            </span>
+                          )}
+                        </div>
+
+                        {user && (user?.creditsRemaining ?? 0) === 0 && (
+                          <div>
+                            {(user?.userPlan as any) === "Basic" ? (
+                              <span
+                                className="cursor-pointer"
+                                onClick={() => router.push("/pricing")}
+                              >
+                                Upgrade
+                              </span>
+                            ) : (
+                              <span
+                                className="cursor-pointer"
+                                onClick={() =>
+                                  router.push("/user/settings?tab=billing")
+                                }
+                              >
+                                Buy Credits
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     )}
                     {isGenerating && (

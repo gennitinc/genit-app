@@ -405,8 +405,8 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              Create photo manipulations, stunning graphics, brand assets, and marketing visuals in
-              minutes—no design degree required
+              Create photo manipulations, stunning graphics, brand assets, and
+              marketing visuals in minutes—no design degree required
             </motion.p>
           </motion.div>
         </div>
@@ -530,9 +530,40 @@ export function IdeaSection() {
               {/* Credit info and typing indicator */}
               <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2">
                 {!isGenerating && (
-                  <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
-                    50 AI Credits left
+                  <div className="flex items-center gap-1 justify-between w-full">
+                    <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
+                      <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2" />
+                      {user ? (
+                        `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
+                      ) : (
+                        <span className="ml-2 text-xs text-muted-foreground">
+                          100 free credit
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Conditional CTA when credits are zero */}
+                    {user && (user?.creditsRemaining ?? 0) === 0 && (
+                      <div>
+                        {String(user?.userPlan) === "Basic" ? (
+                          <span
+                          className="cursor-pointer"
+                            onClick={() => router.push("/pricing")}
+                          >
+                            Upgrade
+                          </span>
+                        ) : (
+                          <span
+                          
+                            onClick={() =>
+                              router.push("/user/settings?tab=billing")
+                            }
+                          >
+                            Buy Credits
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
                 {isGenerating && (
@@ -543,39 +574,11 @@ export function IdeaSection() {
                     className="custom-class"
                   />
                 )}
-                {/* <div className="flex items-center gap-2">
-                  <PricingDialog
-                    open={isPricingDialogOpen}
-                    className="text-primary dark:text-teal-400 hover:text-primary/80 dark:hover:text-teal-300 transition-colors cursor-pointer text-sm font-medium"
-                  />
-                </div> */}
               </div>
 
               {/* Error message */}
               <AnimatePresence>
                 {(inputError || error) && (
-                  // <motion.div
-                  //   initial={{ opacity: 0, height: 0 }}
-                  //   animate={{ opacity: 1, height: "auto" }}
-                  //   exit={{ opacity: 0, height: 0 }}
-                  //   className=""
-                  // >
-                  //   <div className="flex items-center gap-2 p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
-                  //     <AlertCircle className="h-4 w-4 text-red-500 flex-shrink-0" />
-                  //     <span className="text-sm text-red-700 dark:text-red-300">
-                  //       {inputError || error}
-                  //     </span>
-                  //     <Button
-                  //       variant="ghost"
-                  //       size="sm"
-                  //       onClick={() => setInputError(null)}
-                  //       className="h-6 w-6 p-0 ml-auto text-red-500 hover:text-red-700"
-                  //       aria-label="Dismiss error"
-                  //     >
-                  //       <X className="h-3 w-3" />
-                  //     </Button>
-                  //   </div>
-                  // </motion.div>
                   <p className="text-xs text-red-500 font-medium flex items-center mt-2 mx-4">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
