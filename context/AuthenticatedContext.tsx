@@ -54,6 +54,8 @@ export interface User {
     ];
   };
   userPlan: Plan;
+  creditsRemaining?: number;
+  creditsUsed?: number;
   status: {
     label: string;
     icon: string;

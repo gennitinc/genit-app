@@ -40,12 +40,17 @@ export function AppSidebar({
   const { state, isMobile, setOpen } = useSidebar();
   const { theme } = useTheme();
   const user = useUserContext().user;
-  const creditPercentage = 100;
-  const usedCredits = 100;
-  const totalCredits = 100;
-  const currentCredits = 100;
   const { setUrlState } = useUrlState();
   const isTablet = useMediaQuery("(max-width: 1024px)");
+
+  // Calculate credit stats from user data
+  const creditsRemaining = user?.creditsRemaining || 0;
+  const creditsUsed = user?.creditsUsed || 0;
+  const totalCredits = creditsRemaining + creditsUsed || 100;
+  const creditPercentage =
+    totalCredits > 0 ? (creditsRemaining / totalCredits) * 100 : 100;
+  const usedCreditsDisplay = totalCredits > 0 ? creditsUsed : 0;
+  const currentCredits = creditsRemaining;
 
   return (
     <Sidebar
@@ -85,10 +90,7 @@ export function AppSidebar({
         <div className="mx-2 mb-4">
           <div className="relative bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl p-3 text-white overflow-hidden shadow-lg cursor-pointer hover:from-cyan-600/90 hover:to-blue-600/90 transition-all">
             {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-white rounded-full -translate-y-12 translate-x-12" />
-              <div className="absolute bottom-0 left-0 w-16 h-16 bg-white rounded-full translate-y-8 -translate-x-8" />
-            </div>
+            
 
             {/* Subtle Grid Pattern */}
             <div className="absolute inset-0 opacity-5">
@@ -125,7 +127,7 @@ export function AppSidebar({
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-white/80">This month</span>
                   <span className="text-xs font-semibold text-white">
-                    {usedCredits.toLocaleString()} /{" "}
+                    {usedCreditsDisplay.toLocaleString()} /{" "}
                     {totalCredits.toLocaleString()}
                   </span>
                 </div>
@@ -135,9 +137,9 @@ export function AppSidebar({
                   <div className="w-full bg-white/20 rounded-full h-1.5 backdrop-blur-sm border border-white/10">
                     <div
                       className="bg-gradient-to-r from-cyan-500 to-blue-500 h-1.5 rounded-full transition-all duration-500 relative overflow-hidden shadow-sm"
-                      style={{ width: `${100 - creditPercentage}%` }}
+                      style={{ width: `${creditPercentage}%` }}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
+                    
                     </div>
                   </div>
                 </div>
@@ -149,7 +151,7 @@ export function AppSidebar({
                   </div>
                   <div className="flex items-center gap-1 text-white/70">
                     <Sparkles className="w-3 h-3" strokeWidth={1.5} />
-                    <span>Pro</span>
+                    <span>{user?.userPlan || "Basic"}</span>
                   </div>
                 </div>
               </div>
@@ -163,9 +165,7 @@ export function AppSidebar({
             onClick={() => setOpen(true)}
           >
             <Crown className="w-4 h-4 text-white" strokeWidth={1.5} />
-            {creditPercentage < 20 && (
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full animate-pulse border border-white" />
-            )}
+            
           </div>
         </div>
       )}

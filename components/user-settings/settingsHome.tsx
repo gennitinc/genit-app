@@ -28,17 +28,34 @@ import { useTheme } from "next-themes";
 import { useToast } from "@/hooks/use-toast";
 import AccountActionModal from "@/components/user/account-action-modal";
 import { useAccountActions } from "@/hooks/use-account-actions";
+import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
+import { apiResponse } from "@/utils/apiResponse";
 
 const SettingsHome = () => {
   const [activeTab, setActiveTab] = useState("account");
   const [isEditing, setIsEditing] = useState(false);
-  const { user, updateUserPreferences } = useUserContext();
+  const { user, updateUserPreferences, fetchCurrentUser } = useUserContext();
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { signOut, deleteAccount, isSigningOut, isDeletingAccount } =
     useAccountActions();
+  const [isTopUpOpen, setIsTopUpOpen] = useState(false);
+  const [billingHistory, setBillingHistory] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchBilling = async () => {
+      try {
+        const resp = await apiResponse.get("/payment/billing-history");
+        setBillingHistory(resp.data?.billingHistory || []);
+      } catch (e) {
+        console.warn("Could not fetch billing history", e);
+      }
+    };
+
+    if (activeTab === "billing") fetchBilling();
+  }, [activeTab]);
 
   // Check for billing tab in URL params
   useEffect(() => {
@@ -108,6 +125,17 @@ const SettingsHome = () => {
           <div className="lg:col-span-1">
             <Card className="sticky top-8">
               <CardContent className="p-0">
+                <div className="p-4 border-b border-border">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Credits</p>
+                      <p className="font-semibold">{user?.creditsRemaining ?? 0}</p>
+                    </div>
+                    <div>
+                      <Button size="sm" variant="ghost" onClick={() => setIsTopUpOpen(true)}>Top up</Button>
+                    </div>
+                  </div>
+                </div>
                 <nav className="space-y-1 p-4">
                   {settingsTabs.map((tab) => {
                     const Icon = tab.icon;
@@ -311,6 +339,11 @@ const SettingsHome = () => {
                           Update
                         </Button>
                       </div>
+                      <div className="mt-4">
+                        <Button onClick={() => setIsTopUpOpen(true)}>
+                          Top up credits
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -324,27 +357,57 @@ const SettingsHome = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {[1, 2, 3].map((item) => (
-                        <div
-                          key={item}
-                          className="flex items-center justify-between p-4 border rounded-lg"
-                        >
-                          <div>
-                            <p className="font-medium">
-                              Invoice #{12345 + item}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              Dec {15 + item}, 2023
-                            </p>
+                      {billingHistory.length === 0 ? (
+                        <p className="text-sm text-muted-foreground">
+                          No billing history yet.
+                        </p>
+                      ) : (
+                        billingHistory.map((rec: any) => (
+                          <div
+                            key={rec._id || rec.invoiceId || rec.providerId}
+                            className="flex items-center justify-between p-4 border rounded-lg"
+                          >
+                            <div>
+                              <p className="font-medium">
+                                {rec.invoiceNumber
+                                  ? `Invoice #${rec.invoiceNumber}`
+                                  : rec.description || rec.type}
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                {rec.billingPeriodStart
+                                  ? new Date(
+                                      rec.billingPeriodStart
+                                    ).toLocaleDateString()
+                                  : new Date(
+                                      rec.createdAt
+                                    ).toLocaleDateString()}
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <span className="font-semibold">
+                                {rec.amount
+                                  ? `$${rec.amount.toFixed ? rec.amount.toFixed(2) : rec.amount}`
+                                  : "—"}
+                              </span>
+                              {rec.invoicePdfUrl ? (
+                                <a
+                                  href={rec.invoicePdfUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  <Button variant="outline" size="sm">
+                                    View invoice
+                                  </Button>
+                                </a>
+                              ) : (
+                                <Button variant="outline" size="sm">
+                                  View
+                                </Button>
+                              )}
+                            </div>
                           </div>
-                          <div className="flex items-center gap-4">
-                            <span className="font-semibold">$29.00</span>
-                            <Button variant="outline" size="sm">
-                              Download PDF
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
+                        ))
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -589,6 +652,11 @@ const SettingsHome = () => {
         description="This action removes all of your projects, assets, and history. This cannot be undone."
         confirmLabel="Delete account"
         variant="destructive"
+      />
+      <CreditTopUpModal
+        open={isTopUpOpen}
+        onClose={() => setIsTopUpOpen(false)}
+        onSuccess={() => {}}
       />
     </div>
   );

@@ -8,7 +8,6 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { IdeaSection } from "@/components/layout/idea-section";
 // import Communityproject from "../layout/community-project";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 
 export const metadata: Metadata = {
   title: "Inspirations – Gennit AI | Browse Design Templates & Ideas",

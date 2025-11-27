@@ -27,6 +27,7 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import AccountActionModal from "@/components/user/account-action-modal";
+import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
 import { useAccountActions } from "@/hooks/use-account-actions";
 
 const UserPopOver = () => {
@@ -39,6 +40,7 @@ const UserPopOver = () => {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const { signOut, isSigningOut } = useAccountActions();
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
+  const [isTopUpOpen, setIsTopUpOpen] = useState(false);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -151,13 +153,15 @@ const UserPopOver = () => {
             </div>
             <div className="space-y-1 text-xs">
               <div className="flex justify-between text-muted-foreground">
-                <span>Monthly</span>
-                <span className="font-medium text-foreground">N/A</span>
+                <span>Available</span>
+                <span className="font-medium text-foreground">
+                  {user?.creditsRemaining ?? 0}
+                </span>
               </div>
               <div className="flex justify-between text-muted-foreground">
-                <span>Purchased</span>
+                <span>Used</span>
                 <span className="font-medium text-green-600 dark:text-green-400">
-                  N/A
+                  {user?.creditsUsed ?? 0}
                 </span>
               </div>
             </div>
@@ -166,6 +170,14 @@ const UserPopOver = () => {
                 Buy more credits →
               </button>
             </Link>
+            <div className="mt-2">
+              <button
+                onClick={() => setIsTopUpOpen(true)}
+                className="text-xs text-foreground font-medium underline"
+              >
+                Top up credits
+              </button>
+            </div>
           </div>
           {/* Menu Items */}
           <div className="space-y-0.5 mb-2">
@@ -217,6 +229,11 @@ const UserPopOver = () => {
         title="Ready to sign out?"
         description="You'll need to sign back in to continue working on your projects."
         confirmLabel="Sign out"
+      />
+      <CreditTopUpModal
+        open={isTopUpOpen}
+        onClose={() => setIsTopUpOpen(false)}
+        onSuccess={() => {}}
       />
     </Popover>
   );

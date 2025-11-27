@@ -5,6 +5,7 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { useRef } from "react";
 import withAuth from "@/helper/hoc/withAuth";
+import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import {
   Clock,
@@ -27,64 +28,10 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { apiResponse } from "@/utils/apiResponse";
 import { useRouter } from "next/navigation";
 import { RefreshCw } from "lucide-react";
+import AccountActionModal from "@/components/user/account-action-modal";
+import { ProjectActionModal } from "@/components/user/project-action-moda";
 
-// Simplified dummy data for chat history
-// const dummyChatHistory = [
-//   {
-//     id: "1",
-//     title: "React Component Design Discussion",
-//     lastMessage:
-//       "Can you help me optimize this component for better performance?",
-//     timestamp: "2 hours ago",
-//     messageCount: 12,
-//     type: "conversation",
-//   },
-//   {
-//     id: "2",
-//     title: "API Integration Help",
-//     lastMessage: "The authentication is working perfectly now, thanks!",
-//     timestamp: "1 day ago",
-//     messageCount: 8,
-//     type: "conversation",
-//   },
-//   {
-//     id: "3",
-//     title: "Database Schema Design",
-//     lastMessage:
-//       "Let me create a comprehensive schema for your e-commerce platform",
-//     timestamp: "2 days ago",
-//     messageCount: 15,
-//     type: "conversation",
-//   },
-//   {
-//     id: "4",
-//     title: "Code Review Session",
-//     lastMessage: "The refactoring looks great! Much cleaner code structure.",
-//     timestamp: "3 days ago",
-//     messageCount: 6,
-//     type: "conversation",
-//   },
-//   {
-//     id: "5",
-//     title: "Deployment Strategy",
-//     lastMessage:
-//       "Here's the step-by-step deployment guide for your application",
-//     timestamp: "1 week ago",
-//     messageCount: 20,
-//     type: "conversation",
-//   },
-//   {
-//     id: "6",
-//     title: "UI/UX Design Feedback",
-//     lastMessage:
-//       "The new design system looks amazing! Great work on the consistency.",
-//     timestamp: "1 week ago",
-//     messageCount: 9,
-//     type: "conversation",
-//   },
-// ];
 
-// Define the project interface based on the API response
 interface Project {
   _id: string;
   title: string;
@@ -111,6 +58,9 @@ function ChatHistoryPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeletingProject, setIsDeletingProject] = useState(false);
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
 
   const fetchAllProjects = async () => {
     try {
@@ -180,6 +130,24 @@ function ChatHistoryPage() {
   const handleDeleteProject = async (projectId: string) => {
     // TODO: Implement delete functionality
     console.log("Delete project:", projectId);
+    setIsDeletingProject(true);
+
+    try {
+      
+      const response = await apiResponse.delete(`/project/${projectId}`);
+
+      if (response.status == 200) {
+        setIsDeletingProject(false);
+        setActiveProject(null);
+        toast("Operation Completed", {
+          description: "project and resources has been deleted successfully",
+        });
+        setIsDeleteModalOpen(false)
+      } else {
+      }
+    } catch (error) {
+      
+    }
   };
 
   return (
@@ -298,6 +266,8 @@ function ChatHistoryPage() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem
+                                disabled={true}
+                                className="cursor-not-allowed"
                                 onClick={() =>
                                   handleArchiveProject(project._id)
                                 }
@@ -307,7 +277,12 @@ function ChatHistoryPage() {
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 className="text-destructive"
-                                onClick={() => handleDeleteProject(project._id)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setIsDeleteModalOpen(true);
+                                  setActiveProject(project);
+                                  // handleDeleteProject(project._id);
+                                }}
                               >
                                 <Trash2 className="h-3 w-3 mr-2" />
                                 Delete
@@ -325,6 +300,18 @@ function ChatHistoryPage() {
           </div>
         </div>
       </div>
+      <ProjectActionModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={() => {
+          handleDeleteProject(String(activeProject?._id));
+        }}
+        loading={isDeletingProject}
+        title="Project account"
+        description="This action will removes this project, assets, and history. This cannot be undone."
+        confirmLabel="Delete Project"
+        variant="destructive"
+      />
     </div>
   );
 }

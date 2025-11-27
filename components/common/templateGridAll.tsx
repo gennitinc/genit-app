@@ -104,9 +104,9 @@ export default function TemplateGridAll() {
     }
   };
 
-  useEffect(() => {
-    fetchPins();
-  }, []);
+  // useEffect(() => {
+  //   fetchPins();
+  // }, []);
 
   // Fetch a page of templates
   const fetchTemplatesPage = useCallback(
