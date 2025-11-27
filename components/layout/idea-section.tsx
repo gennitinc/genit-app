@@ -537,7 +537,7 @@ export function IdeaSection() {
                         `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                       ) : (
                         <span className="ml-2 text-xs text-muted-foreground">
-                          100 free credit
+                          Get a 100 free credit
                         </span>
                       )}
                     </div>
@@ -547,14 +547,13 @@ export function IdeaSection() {
                       <div>
                         {String(user?.userPlan) === "Basic" ? (
                           <span
-                          className="cursor-pointer"
+                            className="cursor-pointer"
                             onClick={() => router.push("/pricing")}
                           >
                             Upgrade
                           </span>
                         ) : (
                           <span
-                          
                             onClick={() =>
                               router.push("/user/settings?tab=billing")
                             }
