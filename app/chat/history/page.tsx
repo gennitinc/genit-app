@@ -151,7 +151,7 @@ function ChatHistoryPage() {
   };
 
   return (
-    <div className="flex relative w-full h-screen overflow-hidden bg-white dark:bg-black">
+    <div className="flex relative w-full h-[100dvh] overflow-hidden bg-white dark:bg-black">
       <Toaster />
       <AppSidebar />
       <div
