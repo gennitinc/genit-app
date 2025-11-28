@@ -27,7 +27,7 @@ export function ChatLayout() {
             scrollContainerRef as React.RefObject<HTMLDivElement>
           }
         />
-        <div className="w-full lg:max-w-[600px] lg:mx-auto h-full flex flex-col">
+        <div className="w-full lg:max-w-[600px] lg:mx-auto min-h-[85vh] h-full flex flex-col">
           <TextChatContent />
         </div>
       </div>
