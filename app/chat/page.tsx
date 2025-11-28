@@ -39,8 +39,8 @@ function ChatPageForAuthenticatedUsers() {
       <Toaster />
       <AppSidebar />
 
-      <div className="flex flex-col w-full h-full">
-        <TopNavWithAurora/>
+      <div className="flex flex-col w-full h-screen overflow-hidden">
+        <TopNavWithAurora />
 
         <div
           ref={scrollContainerRef}
