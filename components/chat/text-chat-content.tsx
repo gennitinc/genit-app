@@ -401,7 +401,7 @@ export function TextChatContent() {
         </Conversation>
       </div>
 
-      <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur">
+      <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur absolute">
         <ChatInput placeholder="Ask a follow up message..." />
       </div>
     </div>
