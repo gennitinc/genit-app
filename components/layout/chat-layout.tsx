@@ -20,14 +20,14 @@ export function ChatLayout() {
       <AppSidebar />
       <div
         ref={scrollContainerRef}
-        className="flex-1 flex flex-col h-[100dvh] overflow-auto will-change-scroll scroll-container relative"
+        className="relative flex-1 flex flex-col h-[100dvh] overflow-auto will-change-scroll scroll-container bg-blue-500"
       >
         <TopNavWithAurora
           scrollContainerRef={
             scrollContainerRef as React.RefObject<HTMLDivElement>
           }
         />
-        <div className="w-full lg:max-w-[600px] lg:mx-auto h-full flex flex-col">
+        <div className="w-full lg:max-w-[600px] lg:mx-auto h-full flex flex-col bg-red-500">
           <TextChatContent />
           <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur">
             <ChatInput placeholder="Ask a follow up message..." />

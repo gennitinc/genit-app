@@ -224,7 +224,7 @@ export function TextChatContent() {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-green-500 h-full">
       <div ref={localConversationRef} className="flex-1 px-2 md:px-6">
         <Conversation className="px-0 m-0">
           <ConversationContent className="px-0 m-0 space-y-4 pb-2">
@@ -386,7 +386,7 @@ export function TextChatContent() {
               ))}
 
             {(!messages || messages.length === 0) && !isTyping && (
-              <div className="flex-1 min-h-[60vh] flex items-end justify-center">
+              <div className="flex-1 mt-32 flex items-end justify-center">
                 <div className="text-center text-gray-500 dark:text-gray-400 mb-8">
                   <p className="text-lg font-medium mb-2">
                     Start a conversation
