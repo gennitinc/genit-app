@@ -29,6 +29,7 @@ import Link from "next/link";
 import AccountActionModal from "@/components/user/account-action-modal";
 import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
 import { useAccountActions } from "@/hooks/use-account-actions";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const UserPopOver = () => {
   const { user } = useUserContext();
@@ -69,17 +70,14 @@ const UserPopOver = () => {
   return (
     <Popover open={isUserPopoverOpen} onOpenChange={setIsUserPopoverOpen}>
       <PopoverTrigger asChild>
-        <button className="relative group">
-          <img
-            src={
-              user?.userdp ||
-              "/placeholder.svg?height=40&width=40&query=User avatar"
-            }
-            alt="User avatar"
-            className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border-2 border-border shadow-sm object-cover hover:border-primary/50 transition-all duration-200 cursor-pointer"
+        <Avatar className={isMobile ? "w-6 h-6 px-0" : "w-8 h-8 px-0"}>
+          <AvatarImage
+            src={user?.userdp}
+            alt={user?.username}
+            className="object-cover"
           />
-          <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-400 border-2 border-background rounded-full"></div>
-        </button>
+          <AvatarFallback>{user?.username[0]}</AvatarFallback>
+        </Avatar>
       </PopoverTrigger>
       <PopoverContent
         className="w-64 p-0 bg-background/95 backdrop-blur-sm border border-border shadow-xl rounded-xl"

@@ -89,8 +89,8 @@ export function NavUser({ user }: any) {
               <div className="flex items-center gap-2 pz-2">
                 <Avatar className="h-10 w-10">
                   <AvatarImage
-                    src={user?.metadata?.userdp}
-                    alt={user?.name}
+                    src={user?.userdp}
+                    alt={user?.username}
                     className="object-cover"
                   />
                   <AvatarFallback>{user?.username[0]}</AvatarFallback>
