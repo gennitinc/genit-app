@@ -4,6 +4,7 @@ import type React from "react";
 import { Paperclip, Mic, ChevronDown, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRef, useEffect, useCallback, useState } from "react";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 
 const models = [
@@ -63,6 +64,9 @@ export function ChatInput({
   const chatContentRef = useRef<HTMLDivElement>(null);
   const inputSectionRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { user } = useUserContext();
+
+  const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 10;
   // Restore idea draft (prompt + files) if present
   // useEffect(() => {
   //   try {
@@ -325,7 +329,14 @@ export function ChatInput({
           </button>
         </div>
 
-        <div className="relative">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!hasEnoughCredits) return;
+            handlegenerateMessage();
+          }}
+          className="relative"
+        >
           {/* File Attachments or Drag Drop Zone */}
           {isDragOver ? (
             <div className="mb-3">
@@ -495,14 +506,15 @@ export function ChatInput({
 
               <button
                 type="submit"
-                onClick={handlegenerateMessage}
                 disabled={
                   isGenerating ||
-                  (!inputValue.trim() && attachedFiles.length === 0)
+                  (!inputValue.trim() && attachedFiles.length === 0) ||
+                  !hasEnoughCredits
                 }
                 className={`flex items-center justify-center p-0.5 bg-gradient-to-t from-gray-300 via-gray-200 to-gray-100 dark:from-[#292929] dark:via-[#555555] dark:to-[#292929] rounded-[10px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,0.5)] cursor-pointer border-none outline-none transition-all duration-150 active:scale-[0.92] group ${
                   isGenerating ||
-                  (!inputValue.trim() && attachedFiles.length === 0)
+                  (!inputValue.trim() && attachedFiles.length === 0) ||
+                  !hasEnoughCredits
                     ? "opacity-50 cursor-not-allowed"
                     : "hover:shadow-md"
                 }`}
@@ -523,11 +535,15 @@ export function ChatInput({
                   )}
                 </div>
               </button>
+              {!hasEnoughCredits && (
+                <div className="text-xs text-red-500 mt-1">
+                  You need more than 10 credits to send a message.
+                </div>
+              )}
             </div>
           </div>
-
-          {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/20 rounded-xl -z-10 translate-y-1 blur-sm"></div> */}
-        </div>
+        </form>
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/20 rounded-xl -z-10 translate-y-1 blur-sm"></div> */}
       </div>
     </div>
   );
