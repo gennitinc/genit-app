@@ -386,7 +386,7 @@ export function TextChatContent() {
               ))}
 
             {(!messages || messages.length === 0) && !isTyping && (
-              <div className="flex-1 flex items-end justify-center">
+              <div className="flex-1 min-h-[60vh] flex items-end justify-center">
                 <div className="text-center text-gray-500 dark:text-gray-400 mb-8">
                   <p className="text-lg font-medium mb-2">
                     Start a conversation
@@ -401,7 +401,9 @@ export function TextChatContent() {
         </Conversation>
       </div>
 
-      
+      <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur">
+        <ChatInput placeholder="Ask a follow up message..." />
+      </div>
     </div>
   );
 }
