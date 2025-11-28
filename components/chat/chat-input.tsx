@@ -270,11 +270,20 @@ export function ChatInput({
         });
       // dispatch a global event to ensure conversation scrolls if needed
       window.dispatchEvent(new Event("scroll-chat-to-bottom"));
+      try {
+        const h = inputSectionRef.current?.offsetHeight || 0;
+        window.dispatchEvent(
+          new CustomEvent("chat-input-focused", { detail: { height: h } })
+        );
+      } catch {}
     }, 50);
   };
 
   const handleBlur = () => {
     setIsInputFocused(false);
+    try {
+      window.dispatchEvent(new Event("chat-input-blur"));
+    } catch {}
   };
 
   // Autofocus on mobile/tablet to prioritize the input on first render

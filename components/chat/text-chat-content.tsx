@@ -439,6 +439,10 @@ export function TextChatContent() {
                 </div>
               </div>
             )}
+            {/* Spacer to prevent last messages being hidden under a fixed input */}
+            {inputSpacerHeight > 0 && (
+              <div aria-hidden style={{ height: inputSpacerHeight }} />
+            )}
           </ConversationContent>
         </Conversation>
       </div>
