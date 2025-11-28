@@ -483,7 +483,7 @@ export function LandingNavbar() {
           </div>
 
           {/* Mobile Navigation */}
-           {/* <UserPopOver /> */}
+          {/* <UserPopOver /> */}
           <Sheet>
             <SheetTrigger asChild className="md:hidden">
               <Button variant="ghost" size="icon" className="z-50">
