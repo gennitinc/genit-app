@@ -46,6 +46,7 @@ export function TextChatContent() {
 
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [showButton, setShowButton] = useState(false);
+  const [inputSpacerHeight, setInputSpacerHeight] = useState(0);
 
   const previousMessagesLengthRef = useRef(messages?.length || 0);
   const firstRenderRef = useRef(true);
@@ -133,6 +134,47 @@ export function TextChatContent() {
       }
     };
   }, [onScroll, doScrollToBottom]);
+
+  // Listen for chat input focus/blur events so we can add a spacer
+  useEffect(() => {
+    const handleFocus = (e: Event) => {
+      const custom = e as CustomEvent<{ height: number }>;
+      const h =
+        custom?.detail?.height ||
+        (localConversationRef.current
+          ? localConversationRef.current.offsetHeight * 0
+          : 0);
+      setInputSpacerHeight(h);
+
+      // apply paddingBottom to whichever element is acting as the scroll container
+      const target = scrollElRef.current || localConversationRef.current;
+      if (target) {
+        (target as HTMLElement).style.paddingBottom = `${h}px`;
+      }
+    };
+
+    const handleBlur = () => {
+      setInputSpacerHeight(0);
+      const target = scrollElRef.current || localConversationRef.current;
+      if (target) {
+        (target as HTMLElement).style.paddingBottom = "";
+      }
+    };
+
+    window.addEventListener("chat-input-focused", handleFocus as EventListener);
+    window.addEventListener("chat-input-blur", handleBlur as EventListener);
+
+    return () => {
+      window.removeEventListener(
+        "chat-input-focused",
+        handleFocus as EventListener
+      );
+      window.removeEventListener(
+        "chat-input-blur",
+        handleBlur as EventListener
+      );
+    };
+  }, []);
 
   useEffect(() => {
     const el = scrollElRef.current;

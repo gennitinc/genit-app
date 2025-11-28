@@ -279,18 +279,23 @@ export function ChatInput({
 
   // Autofocus on mobile/tablet to prioritize the input on first render
   useEffect(() => {
-    try {
-      if (typeof window === "undefined") return;
-      const isMobileOrTablet = window.matchMedia("(max-width: 1024px)").matches;
-      if (isMobileOrTablet && textareaRef.current) {
-        // small delay to ensure layout settled and keyboard will appear on focus
-        setTimeout(() => {
+    if (typeof window === "undefined") return;
+
+    const isMobileOrTablet = window.matchMedia("(max-width: 1024px)").matches;
+    if (isMobileOrTablet && textareaRef.current) {
+      // small delay to ensure layout settled and keyboard will appear on focus
+      setTimeout(() => {
+        try {
           textareaRef.current?.focus();
-          // ensure pinned mode
           setIsInputFocused(true);
-        }, 250);
-      }
-    } catch {}
+          const h = inputSectionRef.current?.offsetHeight || 0;
+          window.dispatchEvent(
+            new CustomEvent("chat-input-focused", { detail: { height: h } })
+          );
+        } catch {}
+      }, 250);
+    }
+
     // run once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
