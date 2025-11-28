@@ -20,7 +20,7 @@ export function ChatLayout() {
       <AppSidebar />
       <div
         ref={scrollContainerRef}
-        className="flex-1 flex flex-col h-full lg:h-screen overflow-auto will-change-scroll scroll-container relative"
+        className="flex-1 flex flex-col h-[100dvh] overflow-auto will-change-scroll scroll-container relative"
       >
         <TopNavWithAurora
           scrollContainerRef={
