@@ -63,7 +63,6 @@ export function ChatInput({
   const chatContentRef = useRef<HTMLDivElement>(null);
   const inputSectionRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isInputFocused, setIsInputFocused] = useState(false);
   // Restore idea draft (prompt + files) if present
   // useEffect(() => {
   //   try {
@@ -258,57 +257,6 @@ export function ChatInput({
     handleKeyDown(event);
   };
 
-  // Focus handlers: when user focuses the textarea, pin the input to viewport bottom
-  const handleFocus = () => {
-    setIsInputFocused(true);
-    // ensure textarea is visible above mobile keyboard
-    setTimeout(() => {
-      if (textareaRef.current)
-        textareaRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-        });
-      // dispatch a global event to ensure conversation scrolls if needed
-      window.dispatchEvent(new Event("scroll-chat-to-bottom"));
-      try {
-        const h = inputSectionRef.current?.offsetHeight || 0;
-        window.dispatchEvent(
-          new CustomEvent("chat-input-focused", { detail: { height: h } })
-        );
-      } catch {}
-    }, 50);
-  };
-
-  const handleBlur = () => {
-    setIsInputFocused(false);
-    try {
-      window.dispatchEvent(new Event("chat-input-blur"));
-    } catch {}
-  };
-
-  // Autofocus on mobile/tablet to prioritize the input on first render
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const isMobileOrTablet = window.matchMedia("(max-width: 1024px)").matches;
-    if (isMobileOrTablet && textareaRef.current) {
-      // small delay to ensure layout settled and keyboard will appear on focus
-      setTimeout(() => {
-        try {
-          textareaRef.current?.focus();
-          setIsInputFocused(true);
-          const h = inputSectionRef.current?.offsetHeight || 0;
-          window.dispatchEvent(
-            new CustomEvent("chat-input-focused", { detail: { height: h } })
-          );
-        } catch {}
-      }, 250);
-    }
-
-    // run once
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
@@ -320,7 +268,7 @@ export function ChatInput({
   };
 
   return (
-    <div className={`flex flex-col bg-transparent ${className}`}>
+    <div className={`h-full flex flex-col bg-transparent  ${className}`}>
       {/* <style jsx>{`
         @keyframes gentle-bounce {
           0%,
@@ -347,24 +295,11 @@ export function ChatInput({
       {/* Bottom Input Area - with drag and drop handlers */}
       <div
         ref={inputSectionRef}
-        className="p-2 backdrop-blur-sm z-30"
+        className="sticky bottom-0 p-2 backdrop-blur-sm z-10"
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        style={
-          isInputFocused
-            ? {
-                position: "fixed",
-                left: 0,
-                right: 0,
-                bottom: "env(safe-area-inset-bottom, 0)",
-                padding: "0.5rem",
-                zIndex: 60,
-                backdropFilter: "blur(6px)",
-              }
-            : { position: "sticky", bottom: 0 }
-        }
       >
         {/* Scroll to Bottom Button */}
         <div
@@ -509,12 +444,6 @@ export function ChatInput({
                 value={inputValue}
                 onChange={handleInput}
                 onKeyDown={handleEnhancedKeyDown}
-                onFocus={() => {
-                  handleFocus();
-                }}
-                onBlur={() => {
-                  handleBlur();
-                }}
                 onPaste={handlePaste}
                 placeholder={
                   isGenerating
@@ -530,9 +459,6 @@ export function ChatInput({
                   maxHeight: "300px",
                 }}
                 rows={1}
-                // Autofocus on mobile/tablet to prioritize the input
-                // We handle programmatic focus in an effect below
-                autoFocus={false}
               />
             </div>
 

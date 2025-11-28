@@ -46,7 +46,6 @@ export function TextChatContent() {
 
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [showButton, setShowButton] = useState(false);
-  const [inputSpacerHeight, setInputSpacerHeight] = useState(0);
 
   const previousMessagesLengthRef = useRef(messages?.length || 0);
   const firstRenderRef = useRef(true);
@@ -134,47 +133,6 @@ export function TextChatContent() {
       }
     };
   }, [onScroll, doScrollToBottom]);
-
-  // Listen for chat input focus/blur events so we can add a spacer
-  useEffect(() => {
-    const handleFocus = (e: Event) => {
-      const custom = e as CustomEvent<{ height: number }>;
-      const h =
-        custom?.detail?.height ||
-        (localConversationRef.current
-          ? localConversationRef.current.offsetHeight * 0
-          : 0);
-      setInputSpacerHeight(h);
-
-      // apply paddingBottom to whichever element is acting as the scroll container
-      const target = scrollElRef.current || localConversationRef.current;
-      if (target) {
-        (target as HTMLElement).style.paddingBottom = `${h}px`;
-      }
-    };
-
-    const handleBlur = () => {
-      setInputSpacerHeight(0);
-      const target = scrollElRef.current || localConversationRef.current;
-      if (target) {
-        (target as HTMLElement).style.paddingBottom = "";
-      }
-    };
-
-    window.addEventListener("chat-input-focused", handleFocus as EventListener);
-    window.addEventListener("chat-input-blur", handleBlur as EventListener);
-
-    return () => {
-      window.removeEventListener(
-        "chat-input-focused",
-        handleFocus as EventListener
-      );
-      window.removeEventListener(
-        "chat-input-blur",
-        handleBlur as EventListener
-      );
-    };
-  }, []);
 
   useEffect(() => {
     const el = scrollElRef.current;
@@ -266,10 +224,10 @@ export function TextChatContent() {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-green-500">
+    <div className="flex flex-col">
       <div ref={localConversationRef} className="flex-1 px-2 md:px-6">
         <Conversation className="px-0 m-0">
-          <ConversationContent className="px-0 m-0 space-y-4 pb-2">
+          <ConversationContent className="px-0 m-0 space-y-4 pb-2 min-h-[70dvh]">
             {messages?.map((message: any, index: number) => {
               if (message.type === "user") {
                 const imageAttachment = message.fileAttachments?.find(
@@ -439,17 +397,13 @@ export function TextChatContent() {
                 </div>
               </div>
             )}
-            {/* Spacer to prevent last messages being hidden under a fixed input */}
-            {inputSpacerHeight > 0 && (
-              <div aria-hidden style={{ height: inputSpacerHeight }} />
-            )}
           </ConversationContent>
         </Conversation>
       </div>
 
-      {/* <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur">
+      <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur">
         <ChatInput placeholder="Ask a follow up message..." />
-      </div> */}
+      </div>
     </div>
   );
 }
