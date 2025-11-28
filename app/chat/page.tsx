@@ -10,7 +10,7 @@ function ChatPageForAuthenticatedUsers() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="flex relative w-full h-screen overflow-hidden bg-white dark:bg-black">
+    <div className="flex relative w-full h-screen bg-white dark:bg-black">
       <Toaster />
       <AppSidebar />
       <div
@@ -18,9 +18,9 @@ function ChatPageForAuthenticatedUsers() {
         className="flex-1 flex flex-col overflow-auto will-change-scroll scroll-container"
       >
         <TopNavWithAurora
-          scrollContainerRef={
-            scrollContainerRef as React.RefObject<HTMLDivElement>
-          }
+          // scrollContainerRef={
+          //   scrollContainerRef as React.RefObject<HTMLDivElement>
+          // }
         />
         <div
           id="main-content"
