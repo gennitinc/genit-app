@@ -535,11 +535,7 @@ export function ChatInput({
                   )}
                 </div>
               </button>
-              {!hasEnoughCredits && (
-                <div className="text-xs text-red-500 mt-1">
-                  You need more than 10 credits to send a message.
-                </div>
-              )}
+              
             </div>
           </div>
         </form>
