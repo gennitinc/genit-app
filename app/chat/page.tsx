@@ -10,7 +10,7 @@ function ChatPageForAuthenticatedUsers() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="flex relative w-full h-screen bg-white dark:bg-black">
+    <div className="flex relative w-full h-screen overflow-hidden bg-white dark:bg-black">
       <Toaster />
       <AppSidebar />
       <div
