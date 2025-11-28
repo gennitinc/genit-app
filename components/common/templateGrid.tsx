@@ -314,7 +314,7 @@ export default function TemplateGrid() {
       // Prevent double submissions or when generating
       if (isGenerating || isSubmitting) return;
 
-      // Prevent submitting with no content
+      // Prevent submitting with no content new
       if (!inputValue.trim() && attachedFiles.length === 0) {
         setInputError("Please provide a title or attach at least one file.");
         return;
