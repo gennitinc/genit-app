@@ -67,6 +67,18 @@ export function ChatInput({
   const { user } = useUserContext();
 
   const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 10;
+  const validateInput = useCallback((value: string, files: File[]) => {
+    if (!value.trim() && files.length === 0) {
+      return "Please enter a prompt or attach files";
+    }
+    if (value.trim().length < 10) {
+      return "Please provide a more detailed prompt (at least 10 characters)";
+    }
+    if (value.trim().length > 5000) {
+      return "Prompt is too long (maximum 5000 characters)";
+    }
+    return null;
+  }, []);
   // Restore idea draft (prompt + files) if present
   // useEffect(() => {
   //   try {
@@ -226,7 +238,14 @@ export function ChatInput({
 
   // FIXED: Handle sending messages with proper project identification
   const handlegenerateMessage = async () => {
-    if (!inputValue.trim() && attachedFiles.length === 0) return;
+    const validationError = validateInput(
+      inputValue,
+      attachedFiles as unknown as File[]
+    );
+    if (validationError) {
+      console.error("Validation error:", validationError);
+      return;
+    }
 
     if (!project?._id) {
       console.error("No project ID available");
@@ -332,6 +351,14 @@ export function ChatInput({
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            const validationError = validateInput(
+              inputValue,
+              attachedFiles as unknown as File[]
+            );
+            if (validationError) {
+              console.error("Validation error:", validationError);
+              return;
+            }
             if (!hasEnoughCredits) return;
             handlegenerateMessage();
           }}
@@ -535,7 +562,6 @@ export function ChatInput({
                   )}
                 </div>
               </button>
-              
             </div>
           </div>
         </form>

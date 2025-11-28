@@ -146,7 +146,7 @@ export function IdeaSection() {
     if (value.trim().length < 10) {
       return "Please provide a more detailed prompt (at least 10 characters)";
     }
-    if (value.trim().length > 2000) {
+    if (value.trim().length > 5000) {
       return "Prompt is too long (maximum 2000 characters)";
     }
     return null;

@@ -203,7 +203,7 @@ export default function TemplateGrid() {
     { name: "YouTube", icon: "📺", color: "from-red-500 to-red-700" },
   ];
 
-  // Input validation
+  // Input validation (same rules as idea-section)
   const validateInput = useCallback((value: string, files: File[]) => {
     if (!value.trim() && files.length === 0) {
       return "Please enter a prompt or attach files";
@@ -211,8 +211,8 @@ export default function TemplateGrid() {
     if (value.trim().length < 10) {
       return "Please provide a more detailed prompt (at least 10 characters)";
     }
-    if (value.trim().length > 2000) {
-      return "Prompt is too long (maximum 2000 characters)";
+    if (value.trim().length > 5000) {
+      return "Prompt is too long (maximum 5000 characters)";
     }
     return null;
   }, []);
