@@ -5,6 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { apiResponse } from "@/utils/apiResponse";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 export default function CreditTopUpModal({
   open,
@@ -47,20 +54,24 @@ export default function CreditTopUpModal({
     }
   };
 
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="bg-background rounded-lg p-6 z-10 w-full max-w-md">
-        <h3 className="text-lg font-semibold mb-2">Top up credits</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Enter the amount you want to purchase.
-        </p>
-        <div className="space-y-3">
+    <Dialog open={open} onOpenChange={(val) => !val && onClose()}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Top up credits</DialogTitle>
+          <DialogDescription>
+            Enter the USD amount you want to purchase and proceed to checkout.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-3 mt-4">
           <div>
             <Label>Amount (USD)</Label>
-            <Input value={amount} onChange={(e) => setAmount(e.target.value)} />
+            <Input
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="e.g. 10"
+            />
           </div>
           <div className="flex justify-end gap-2 mt-4">
             <Button variant="ghost" onClick={onClose} disabled={loading}>
@@ -71,7 +82,7 @@ export default function CreditTopUpModal({
             </Button>
           </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
