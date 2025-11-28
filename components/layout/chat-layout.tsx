@@ -29,6 +29,9 @@ export function ChatLayout() {
         />
         <div className="w-full lg:max-w-[600px] lg:mx-auto h-full flex flex-col">
           <TextChatContent />
+          <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur">
+            <ChatInput placeholder="Ask a follow up message..." />
+          </div>
         </div>
       </div>
     </div>
