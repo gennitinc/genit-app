@@ -532,7 +532,7 @@ export function IdeaSection() {
                 {!isGenerating && (
                   <div className="flex items-center gap-1 justify-between w-full">
                     <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                      <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2" />
+                      <Zap className="inline-block w-3 h-3  text-emerald-500 mr-2" />
                       {user ? (
                         `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                       ) : (
