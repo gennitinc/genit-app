@@ -321,7 +321,7 @@ const SettingsHome = () => {
                     </div>
                     <Separator />
                     <div className="space-y-4">
-                      <h4 className="font-semibold">Payment Method</h4>
+                      {/* <h4 className="font-semibold">Payment Method</h4>
                       <div className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-6 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
@@ -338,7 +338,7 @@ const SettingsHome = () => {
                           <Edit3 className="h-4 w-4 mr-2" />
                           Update
                         </Button>
-                      </div>
+                      </div> */}
                       <div className="mt-4">
                         <Button onClick={() => setIsTopUpOpen(true)}>
                           Top up credits
