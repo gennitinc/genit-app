@@ -440,6 +440,7 @@ export function ChatInput({
                     </div>
                     {!isLoading && (
                       <button
+                        type="button"
                         onClick={() => removeAttachedFile(index)}
                         className="absolute -top-1 -right-1 w-4 h-4 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs"
                       >
@@ -503,6 +504,7 @@ export function ChatInput({
             <div className="flex items-center gap-2 justify-between">
               <div className="flex items-center gap-2 justify-start">
                 <Button
+                  type="button"
                   variant="ghost"
                   size="sm"
                   className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
@@ -512,6 +514,7 @@ export function ChatInput({
                 </Button>
 
                 <Button
+                  type="button"
                   variant="ghost"
                   size="sm"
                   className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
