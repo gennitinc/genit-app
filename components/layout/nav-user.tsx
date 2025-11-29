@@ -58,8 +58,8 @@ export function NavUser({ user }: any) {
             >
               <Avatar className={isCollapsed ? "w-6 h-6 px-0" : "w-8 h-8 px-0"}>
                 <AvatarImage
-                  src={user?.metadata?.userdp}
-                  alt={user?.name}
+                  src={user?.userdp}
+                  alt={user?.username}
                   className="object-cover"
                 />
                 <AvatarFallback>{user?.username[0]}</AvatarFallback>
