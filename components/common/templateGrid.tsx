@@ -316,7 +316,7 @@ export default function TemplateGrid() {
 
       // Prevent submitting with no content new
       if (!inputValue.trim() && attachedFiles.length === 0) {
-        setInputError("Please provide a title or attach at least one file.");
+        setInputError("provide a prompt or attach at least one file.");
         return;
       }
 
