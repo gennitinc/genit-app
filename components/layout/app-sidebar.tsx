@@ -46,9 +46,9 @@ export function AppSidebar({
   // Calculate credit stats from user data
   const creditsRemaining = user?.creditsRemaining || 0;
   const creditsUsed = user?.creditsUsed || 0;
-  const totalCredits = creditsRemaining + creditsUsed || 100;
+  const totalCredits = creditsRemaining + creditsUsed || 20;
   const creditPercentage =
-    totalCredits > 0 ? (creditsRemaining / totalCredits) * 100 : 100;
+    totalCredits > 0 ? (creditsRemaining / totalCredits) * 100 : 20;
   const usedCreditsDisplay = totalCredits > 0 ? creditsUsed : 0;
   const currentCredits = creditsRemaining;
 

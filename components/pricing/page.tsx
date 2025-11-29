@@ -7,7 +7,7 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { apiResponse } from "@/utils/apiResponse";
 
-const plans = [
+const plansDev = [
   {
     name: "Basic",
     monthlyPrice: 0,
@@ -65,6 +65,66 @@ const plans = [
     popular: false,
   },
 ];
+const plansProd = [
+  {
+    name: "Basic",
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+    productIds: {
+      monthly: null,
+      yearly: null,
+    },
+    features: [
+      "10 AI-generated graphics per month",
+      "Basic templates library",
+      "Standard image formats (PNG, JPG)",
+      "Community support",
+      "Basic design tools",
+    ],
+    popular: false,
+  },
+  {
+    name: "Pro",
+    monthlyPrice: 19,
+    yearlyPrice: 120,
+    productIds: {
+      monthly: "e6020f20-000e-4ca4-b9f2-69e1168cf5aa",
+      yearly: "ade34b2b-4e67-4d93-bd15-ef0ca62d7f8d",
+    },
+    features: [
+      "100 AI-generated graphics per month",
+      "Premium templates library",
+      "All image formats (PNG, JPG, SVG, PDF)",
+      "Priority support",
+      "Advanced design tools",
+      "Brand kit management",
+      "Social media templates",
+    ],
+    popular: true,
+  },
+  {
+    name: "Enterprise",
+    monthlyPrice: 25,
+    yearlyPrice: 190,
+    productIds: {
+      monthly: "b70d97f1-7633-4139-abb3-e1d19abd8729",
+      yearly: "b4c7e616-e50e-4b34-9c07-55be1a485f53",
+    },
+    features: [
+      "Unlimited AI-generated graphics",
+      "Full templates library",
+      "All image formats + vector files",
+      "Dedicated support",
+      "Advanced design tools",
+      "Team collaboration",
+      "Custom brand assets",
+      "White-label options",
+    ],
+    popular: false,
+  },
+];
+
+const plans = process.env.NODE_ENV == "production" ? plansProd : plansDev;
 
 export default function PricingComponent() {
   const [isYearly, setIsYearly] = useState(false);
