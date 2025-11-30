@@ -918,11 +918,11 @@ export default function TemplateGridAll() {
                               )}
                             </span>
                           </button>
-                          {!hasEnoughCredits && (
+                          {/* {!hasEnoughCredits && (
                             <div className="text-xs text-red-500 mt-2">
                               You need more than 10 credits to recreate.
                             </div>
-                          )}
+                          )} */}
                         </div>
                       </div>
                     </form>
@@ -1249,11 +1249,11 @@ export default function TemplateGridAll() {
                               )}
                             </span>
                           </button>
-                          {!hasEnoughCredits && (
+                          {/* {!hasEnoughCredits && (
                             <div className="text-xs text-red-500 mt-2">
                               You need more than 10 credits to recreate.
                             </div>
-                          )}
+                          )} */}
                         </div>
                       </div>
                     </form>
