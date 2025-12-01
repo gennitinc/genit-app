@@ -86,14 +86,14 @@ const UserPopOver = () => {
         <div className="p-4">
           {/* User Email */}
           <div className="pb-2 mb-2 flex flex-row items-center gap-2 border-b border-border">
-            <img
-              src={
-                user?.userdp ||
-                "/placeholder.svg?height=40&width=40&query=User avatar"
-              }
-              alt="User avatar"
-              className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border-2 border-border shadow-sm object-cover"
-            />
+            <Avatar className={isMobile ? "w-6 h-6 px-0" : "w-8 h-8 px-0"}>
+              <AvatarImage
+                src={user?.userdp}
+                alt={user?.username}
+                className="object-cover"
+              />
+              <AvatarFallback>{user?.username[0]}</AvatarFallback>
+            </Avatar>
             <p className="text-sm font-medium text-foreground">
               {user?.username || "Loading..."}
             </p>
