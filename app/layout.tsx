@@ -15,6 +15,7 @@ import { Suspense } from "react";
 import Loading from "@/utils/Loading";
 import { ProjectProvider } from "@/context/DesignProject";
 const inter = Inter({ subsets: ["latin"] });
+import { Analytics } from "@vercel/analytics/next";
 
 const metadata: Metadata = {
   title:
@@ -155,6 +156,7 @@ export default function RootLayout({
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </TooltipProvider>
+        <Analytics />
       </body>
     </html>
   );
