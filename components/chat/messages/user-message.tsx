@@ -404,7 +404,7 @@ function AttachedFilePreview({ file }: { file: any }) {
               </DialogContent>
             </Dialog>
           )}
-          <Button
+          {/* <Button
             variant="ghost"
             size="sm"
             className="h-8 w-8 p-0"
@@ -412,7 +412,7 @@ function AttachedFilePreview({ file }: { file: any }) {
             title="Download file"
           >
             <Download className="w-4 h-4" />
-          </Button>
+          </Button> */}
         </div>
       </div>
     </>

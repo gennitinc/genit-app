@@ -309,7 +309,7 @@ const SettingsHome = () => {
                           <Badge variant="secondary">Active</Badge>
                         </div>
                       </div>
-                      <div className="space-y-2">
+                      {/* <div className="space-y-2">
                         <Label>Next Billing Date</Label>
                         <div className="p-4 border rounded-lg">
                           <p className="font-semibold">January 15, 2024</p>
@@ -317,7 +317,7 @@ const SettingsHome = () => {
                             Auto-renewal enabled
                           </p>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                     <Separator />
                     <div className="space-y-4">
