@@ -220,7 +220,7 @@ export function LandingFooter() {
                 </svg>
               </a>
               <a
-                href="https://twitter.com/mannupaaji"
+                href="https://twitter.com/gennit_ai"
                 target="_blank"
                 rel="noreferrer"
                 className="text-muted-foreground hover:text-primary transition-colors"
