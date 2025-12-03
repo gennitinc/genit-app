@@ -129,10 +129,19 @@ const SettingsHome = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-muted-foreground">Credits</p>
-                      <p className="font-semibold">{user?.creditsRemaining ?? 0}</p>
+                      <p className="font-semibold">
+                        {user?.creditsRemaining ?? 0}
+                      </p>
                     </div>
                     <div>
-                      <Button size="sm" variant="ghost" onClick={() => setIsTopUpOpen(true)}>Top up</Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        // onClick={() => setIsTopUpOpen(true)}
+                        className="cursor-not-allowed"
+                      >
+                        Top up
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -340,7 +349,10 @@ const SettingsHome = () => {
                         </Button>
                       </div> */}
                       <div className="mt-4">
-                        <Button onClick={() => setIsTopUpOpen(true)}>
+                        <Button
+                          // onClick={() => setIsTopUpOpen(true)}
+                          className="cursor-not-allowed"
+                        >
                           Top up credits
                         </Button>
                       </div>

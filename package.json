@@ -11,6 +11,7 @@
   "dependencies": {
     "@ai-sdk/openai": "^2.0.31",
     "@ai-sdk/react": "^2.0.45",
+    "@heyo.so/js": "^1.1.2",
     "@hookform/resolvers": "^5.2.1",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.4",

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 // Onboarding removed: no onboarding redirect util needed
 import Loading from "@/utils/Loading";
 import { LandingPage } from "@/components/landing/landing-page";
+import HEYO from '@heyo.so/js';
 
 // export const metadata: Metadata = {
 //   title:
@@ -60,6 +61,9 @@ function Page() {
       // If no user, show landing page (no redirect needed)
       if (!user) {
         setIsCheckingOnboarding(false);
+        HEYO.init({
+          projectId: "692eb61c3ad627090e630762",
+        });
         return;
       }
 
