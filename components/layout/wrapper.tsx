@@ -15,13 +15,19 @@ function Wrapper({ children }: { children: React.ReactNode }) {
 
   const pathName = usePathname();
 
-  useEffect(() => {
-    if (pathName != "/chat" && pathName !== "/chat/") {
-      HEYO.init({
-        projectId: "692eb61c3ad627090e630762",
-      });
-    }
-  }, [pathName]);
+useEffect(() => {
+  const isChatRoute =
+    pathName === "/chat" ||
+    pathName === "/chat/history" ||
+    pathName === "/user/settings" ||
+    pathName.startsWith("/chat/"); // ✅ catches /chat/123, /chat/abc, etc
+
+  if (!isChatRoute) {
+    HEYO.init({
+      projectId: "692eb61c3ad627090e630762",
+    });
+  }
+}, [pathName]);
 
   return (
     <SidebarProvider defaultOpen={false}>
