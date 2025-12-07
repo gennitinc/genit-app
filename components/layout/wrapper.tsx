@@ -16,7 +16,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
         <div className="h-full w-full custom-scrollbar">
           {children}
 
-          {/* {preview && <ProjectPreview />} */}
+          {/* {preview && <ProjectPreview new />} */}
           <PricingDialog open={!!checkout} />
         </div>
       </SidebarProvider>
