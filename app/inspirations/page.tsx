@@ -97,23 +97,25 @@ export default function TemplatePage() {
         </div>
       </div>
 
-      <main className="flex-grow relative bg-background">
-        <div className="absolute inset-0 -z-10 size-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_80%_at_50%_50%,#000_40%,transparent_100%)]"></div>
-        <div className="w-full mx-auto px-4 sm:px-6 py-8 mt-20">
-          <div className="space-y-4 flex flex-col ml-2 md:mx-4 lg:mx-8">
-            <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl max-w-xl">
-              Browse variety of inspirations,{" "}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                fliers and ideas
-              </span>
-            </h1>
-            {/* <p className="text-base md:text-lg text-center max-w-xl text-muted-foreground leading-relaxed">
+      <div className="x-2 md:px-12 lg:px-20 xl:px-24">
+        <main className="flex-grow relative bg-background">
+          <div className="absolute inset-0 -z-10 size-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_80%_at_50%_50%,#000_40%,transparent_100%)]"></div>
+          <div className="w-full mx-auto px-4 sm:px-6 py-8 mt-20">
+            <div className="space-y-4 flex flex-col ml-2 md:mx-4 lg:mx-8">
+              <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl max-w-xl">
+                Browse variety of inspirations,{" "}
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  fliers and ideas
+                </span>
+              </h1>
+              {/* <p className="text-base md:text-lg text-center max-w-xl text-muted-foreground leading-relaxed">
               {description}
             </p> */}
+            </div>
           </div>
-        </div>
-      </main>
-      <TemplateGridAll />
+        </main>
+        <TemplateGridAll />
+      </div>
       <LandingFooter />
     </div>
   );
