@@ -39,7 +39,7 @@ import * as z from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
-
+import Link from "next/link";
 
 // Define the schema for form validation
 const formSchema = z.object({
@@ -84,28 +84,27 @@ export default function LandingContact() {
   return (
     <div>
       <LandingNavbar />
-      <section className="relative py-24 md:py-32">
+      <section className="relative py-24 md:py-32 px-2 md:px-12 lg:px-20 xl:px-24">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-background"></div>
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_200px,hsl(var(--primary)/20%),transparent_80%)]"></div>
         <div className="grid w-full grid-cols-1 gap-x-32 overflow-hidden lg:grid-cols-2 px-4 md:px-8 lg:px-16">
           <div className="w-full pb-10 md:space-y-10 md:pb-0">
             <div className="space-y-6 md:max-w-[40rem]">
-              {/* <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                You are one form away
-              </div> */}
-
               <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl">
-                Get in{" "}
+                Ready. Set.{" "}
                 <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  touch
+                  Design
                 </span>
               </h1>
+
               <div className="text-muted-foreground md:text-base lg:leading-7">
-                Experience a personalized demonstration of our cutting-edge
-                platform. Discover how we can streamline your processes, boost
-                productivity, and drive innovation in your business.
+                Gennit is your AI-powered media designer. Create stunning
+                flyers, logos, posters, and social media graphics in seconds —
+                no design skills or complicated software required. Just describe
+                what you want and let AI do the work.
               </div>
             </div>
+
             <div className="hidden md:block">
               <div className="space-y-16 pb-20 lg:pb-0">
                 <div className="space-y-8">
@@ -115,7 +114,7 @@ export default function LandingContact() {
                         <Star className="size-5" />
                       </div>
                       <div className="text-lg font-semibold">
-                        4.9/5 Average Rating
+                        Loved by creators & businesses
                       </div>
                     </div>
                     <div className="flex space-x-2">
@@ -127,109 +126,63 @@ export default function LandingContact() {
                       ))}
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Based on 1000+ customer reviews
+                      Trusted by early users worldwide
                     </p>
                   </div>
+
                   <div className="space-y-4">
                     <p className="text-lg font-semibold">
-                      Why choose our solution?
+                      Why creators choose Gennit
                     </p>
+
                     <div className="grid gap-3">
                       <div className="flex items-center space-x-3">
                         <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
                           <Check className="size-3.5 text-primary" />
                         </div>
                         <p className="text-sm">
-                          Boost productivity by up to 40%
+                          Create flyers, logos & social media designs in seconds
                         </p>
                       </div>
+
                       <div className="flex items-center space-x-3">
                         <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
                           <Check className="size-3.5 text-primary" />
                         </div>
                         <p className="text-sm">
-                          Seamless integration with your existing tools
+                          Thousands of design inspirations built-in
                         </p>
                       </div>
+
                       <div className="flex items-center space-x-3">
                         <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
                           <Check className="size-3.5 text-primary" />
                         </div>
                         <p className="text-sm">
-                          24/7 expert support and guidance
+                          No design skills or experience needed
                         </p>
                       </div>
+
                       <div className="flex items-center space-x-3">
                         <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
                           <Check className="size-3.5 text-primary" />
                         </div>
                         <p className="text-sm">
-                          Customizable workflows for your specific needs
-                        </p>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
-                          <Check className="size-3.5 text-primary" />
-                        </div>
-                        <p className="text-sm">
-                          Advanced analytics and reporting capabilities
-                        </p>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
-                          <Check className="size-3.5 text-primary" />
-                        </div>
-                        <p className="text-sm">
-                          Enterprise-grade security and compliance
+                          Perfect for businesses, creators & marketers
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
+
                 <div className="space-y-4">
-                  {/* <p className="text-lg font-semibold">
-                    Trusted by industry leaders:
-                  </p> */}
-                  {/* <div className="grid grid-cols-3 gap-6">
-                    <Image
-                      src="/placeholder.svg"
-                      alt="TechCorp logo"
-                      width={120}
-                      height={40}
-                      className="h-10 opacity-70 transition-opacity hover:opacity-100"
-                    />
-                    <Image
-                      src="/placeholder.svg"
-                      alt="InnovateCo logo"
-                      width={120}
-                      height={40}
-                      className="h-10 opacity-70 transition-opacity hover:opacity-100"
-                    />
-                    <Image
-                      src="/placeholder.svg"
-                      alt="FutureTech logo"
-                      width={120}
-                      height={40}
-                      className="h-10 opacity-70 transition-opacity hover:opacity-100"
-                    />
-                  </div> */}
+                  {/* Optional future logos / partners section */}
                 </div>
               </div>
             </div>
           </div>
           <div className="flex w-full justify-center lg:mt-2.5">
-            <Card className="relative flex w-full min-w-80 max-w-[32rem] flex-col items-center overflow-visible border-primary/10 bg-background/80 shadow-lg backdrop-blur-sm md:min-w-96">
-              {/* <CardHeader className="pb-2 pt-6">
-                <div className="flex flex-col items-center space-y-1.5 text-center">
-                  <div className="mb-2 flex size-12 items-center justify-center rounded-full bg-primary/10">
-                    <Calendar className="size-6 text-primary" />
-                  </div>
-                  <h2 className="text-2xl font-semibold">Lets talk</h2>
-                  <p className="text-sm text-muted-foreground">
-                    Fill out the form below and we'll be in touch shortly
-                  </p>
-                </div>
-              </CardHeader> */}
+            <Card className="relative flex w-full min-w-80 max-w-[32rem] flex-col items-center overflow-visible border-primary/10 bg-background/80 shadow-lg backdrop-blur-sm h-fit">
               <CardContent className="w-full px-4 py-6 lg:px-8">
                 <Form {...form}>
                   <form
@@ -254,71 +207,14 @@ export default function LandingContact() {
                       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 w-full">
                         <FormField
                           control={form.control}
-                          name="company"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Company</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Your Company" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="companySize"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Company size</FormLabel>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select size" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent className="w-full">
-                                  <SelectItem value="1-10">
-                                    1-10 employees
-                                  </SelectItem>
-                                  <SelectItem value="11-50">
-                                    11-50 employees
-                                  </SelectItem>
-                                  <SelectItem value="51-200">
-                                    51-200 employees
-                                  </SelectItem>
-                                  <SelectItem value="201-500">
-                                    201-500 employees
-                                  </SelectItem>
-                                  <SelectItem value="501-1000">
-                                    501-1000 employees
-                                  </SelectItem>
-                                  <SelectItem value="1000+">
-                                    1000+ employees
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 w-full">
-                        <FormField
-                          control={form.control}
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Business email</FormLabel>
+                              <FormLabel>Email</FormLabel>
                               <FormControl>
                                 <Input
                                   type="email"
-                                  placeholder="you@yourcompany.com"
+                                  placeholder="you@xyz.com"
                                   {...field}
                                 />
                               </FormControl>
@@ -449,23 +345,33 @@ export default function LandingContact() {
                       />
                     </div>
 
-                    <CardFooter className="flex w-full flex-col justify-end space-y-3 p-0 pt-2">
+                    <CardFooter className="flex w-full flex-col justify-end space-y-3 p-0 pt-4">
                       <Button
                         type="submit"
-                        className="w-full group flex items-center transition-all duration-300 hover:pr-4 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2"
+                        className="w-full group flex items-center justify-center gap-2 transition-all duration-300 text-white bg-gradient-to-r from-primary to-accent hover:opacity-90 focus:ring-4 focus:outline-none font-semibold rounded-lg px-5 py-3 text-center"
                         size="lg"
                       >
-                        Let's talk <ArrowRight className="ml-2 size-4" />
+                        Lets Talk
+                        <ArrowRight className="size-4 transition-all group-hover:translate-x-1" />
                       </Button>
-                      <div className="text-xs text-muted-foreground">
-                        By submitting this form, you agree to our{" "}
-                        <a href="#" className="text-primary hover:underline">
-                          terms of service
-                        </a>{" "}
+
+                      <div className="text-center text-xs text-muted-foreground">
+                        By continuing, you agree to our{" "}
+                        <Link
+                          href="/legal/terms-of-service"
+                          target="_blank"
+                          className="text-primary hover:underline"
+                        >
+                          Terms
+                        </Link>{" "}
                         and{" "}
-                        <a href="#" className="text-primary hover:underline">
-                          privacy policy
-                        </a>
+                        <Link
+                          href="/legal/privacy-policy"
+                          target="_blank"
+                          className="text-primary hover:underline"
+                        >
+                          Privacy Policy
+                        </Link>
                         .
                       </div>
                     </CardFooter>

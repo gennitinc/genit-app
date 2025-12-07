@@ -14,11 +14,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import cookie from "js-cookie";
+import cookie from "@/node_modules/@types/js-cookie";
 import { Logo } from "@/components/logo";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
 import withAuth from "@/helper/hoc/withAuth";
-
 
 const LoginSocialGoogle = dynamic(
   () => import("reactjs-social-login").then((mod) => mod.LoginSocialGoogle),
@@ -562,5 +561,3 @@ export const SignupComp = () => {
     </div>
   );
 };
-
-

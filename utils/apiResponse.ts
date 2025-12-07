@@ -1,5 +1,5 @@
 import axios from "axios";
-import cookie from "js-cookie";
+import cookie from "@/node_modules/@types/js-cookie";
 
 //api controller
 export const apiResponse = axios.create({
@@ -28,7 +28,7 @@ export const clientUrl =
     ? process.env.NEXT_PUBLIC_CLIENT_LIVE_URL
     : process.env.NEXT_PUBLIC_CLIENT_URL;
 
-export const serverUrlSocket =  process.env.NODE_ENV === "production"
+export const serverUrlSocket =
+  process.env.NODE_ENV === "production"
     ? process.env.NEXT_PUBLIC_LIVE_SOCKET_URL
     : process.env.NEXT_PUBLIC_LOCAL_SOCKET_URL;
-

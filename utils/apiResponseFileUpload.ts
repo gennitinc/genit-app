@@ -1,5 +1,5 @@
 import axios from "axios";
-import cookie from "js-cookie";
+import cookie from "@/node_modules/@types/js-cookie";
 
 export const apiResponseFileUpload = axios.create({
   baseURL:
