@@ -16,7 +16,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   const pathName = usePathname();
 
   useEffect(() => {
-    if (pathName != "/chat/") {
+    if (pathName != "/chat") {
       HEYO.init({
         projectId: "692eb61c3ad627090e630762",
       });
