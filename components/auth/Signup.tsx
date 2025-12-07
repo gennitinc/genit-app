@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import cookie from "@/node_modules/@types/js-cookie";
+import cookie from "js-cookie";
 import { Logo } from "@/components/logo";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
 import withAuth from "@/helper/hoc/withAuth";

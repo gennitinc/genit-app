@@ -1,5 +1,5 @@
 import axios from "axios";
-import cookie from "@/node_modules/@types/js-cookie";
+import cookie from "js-cookie";
 
 //api controller
 export const apiResponse = axios.create({

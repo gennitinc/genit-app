@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import cookie from "@/node_modules/@types/js-cookie";
+import cookie from "js-cookie";
 import dynamic from "next/dynamic";
 import { Logo } from "@/components/logo";
 import { RegexType, AuthTypes } from "@/types/Authtypes";

@@ -27,7 +27,7 @@ import appLogo from "@/resources/images/gennit.svg";
 import Image from "next/image";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useRouter } from "next/navigation";
-import cookie from "@/node_modules/@types/js-cookie";
+import cookie from "js-cookie";
 import { useTheme } from "next-themes";
 import UserPopOver from "./user/userPopOver";
 

@@ -5,7 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Loading from "@/utils/Loading";
 
-import cookie from "@/node_modules/@types/js-cookie";
+import cookie from "js-cookie";
 import { apiResponse } from "@/utils/apiResponse";
 import { NetworkStatus } from "@/components/network/NetworkStatus";
 

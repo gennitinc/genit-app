@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import cookie from "@/node_modules/@types/js-cookie";
+import cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { apiResponse } from "@/utils/apiResponse";
