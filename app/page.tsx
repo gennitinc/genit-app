@@ -61,9 +61,7 @@ function Page() {
       // If no user, show landing page (no redirect needed)
       if (!user) {
         setIsCheckingOnboarding(false);
-        HEYO.init({
-          projectId: "692eb61c3ad627090e630762",
-        });
+       
         return;
       }
 
