@@ -12,8 +12,9 @@ export function MainContent() {
       <IdeaSection />
 
       {/* AI Team Features */}
-      <div className="md:px-12 lg:px-20 xl:px-24"></div>
-      <TemplateGrid />
+      <div className="md:px-12 lg:px-20 xl:px-24">
+        <TemplateGrid />
+      </div>
 
       {/* <HomeInfoGrid /> */}
     </div>
