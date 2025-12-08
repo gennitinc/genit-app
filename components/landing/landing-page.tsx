@@ -67,7 +67,9 @@ export function LandingPage() {
           <IdeaSection />
         </div>
       </main>
-      <TemplateGrid />
+      <div className="lg:px-20 xl:px-24">
+        <TemplateGrid />
+      </div>
       <PartnerLogos />
       <LandingFooter />
     </div>
