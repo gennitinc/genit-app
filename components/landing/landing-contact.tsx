@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -39,20 +39,19 @@ import * as z from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import emailjs from "@emailjs/browser";
 import Link from "next/link";
+import { apiResponse } from "@/utils/apiResponse";
+import { toast } from "sonner";
 
 // Define the schema for form validation
 const formSchema = z.object({
   fullName: z
     .string()
     .min(2, { message: "Name must be at least 2 characters" }),
-  company: z.string().min(1, { message: "Company name is required" }),
   phone: z.string().min(6, { message: "Please enter a valid phone number" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
   country: z.string().min(1, { message: "Please select your country" }),
-  companySize: z
-    .string()
-    .min(1, { message: "Please select your company size" }),
   message: z.string().optional(),
   referral: z.string().optional(),
 });
@@ -61,24 +60,78 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function LandingContact() {
+  const [loading, setLoading] = useState(false);
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: "",
-      company: "",
       phone: "",
       email: "",
       country: "",
-      companySize: "",
       message: "",
       referral: "",
     },
   });
 
+  // const client = new SMTPClient({
+  //   user: "user",
+  //   password: "password",
+  //   host: "smtp.your-email.com",
+  //   ssl: true,
+  // });
+
   // Apply the FormData type to the onSubmit function
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    // Show success message or redirect
+
+  const onSubmit = async (data: FormData) => {
+    setLoading(true);
+
+    console.log("clicked", data);
+
+    try {
+      const response = await apiResponse.post(
+        "/user/contact",
+        {
+          email: data.email,
+          subject: "Gennit contact request",
+          message: `
+  <div style="font-family: Arial, sans-serif; padding: 20px; background: #f7f7f7;">
+    <div style="max-width: 500px; margin: auto; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
+      
+      <h2 style="color: #333; margin-bottom: 10px;">New Contact Form Submission</h2>
+      <p style="color: #555; font-size: 14px; margin-top: 0;">You have received a new message from your website contact form.</p>
+
+      <div style="margin-top: 20px;">
+        <p style="margin: 8px 0;"><strong>Name:</strong> ${data.fullName}</p>
+        <p style="margin: 8px 0;"><strong>Phone:</strong> ${data.phone}</p>
+        <p style="margin: 8px 0;"><strong>Email:</strong> ${data.email}</p>
+        <p style="margin: 8px 0;"><strong>Country:</strong> ${data.country}</p>
+        <p style="margin: 8px 0;"><strong>Referral:</strong> ${data.referral}</p>
+
+        <div style="margin-top: 20px; padding: 15px; background: #f1f1f1; border-radius: 8px;">
+          <p style="margin: 0;"><strong>Message:</strong></p>
+          <p style="white-space: pre-wrap; margin-top: 5px;">${data.message}</p>
+        </div>
+      </div>
+
+      <p style="margin-top: 30px; font-size: 12px; color: #888; text-align: center;">
+        Gennit Inc • ${new Date().toLocaleString()}
+      </p>
+    </div>
+  </div>`,
+        },
+        { withCredentials: true }
+      );
+
+      if(response.status == 200){
+        toast.success("Form submitted successfully");
+      }
+      console.log("✅ Email sent:");
+      setLoading(false);
+      form.reset();
+    } catch (error) {
+      console.error("❌ Email failed:", error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -351,8 +404,37 @@ export default function LandingContact() {
                         className="w-full group flex items-center justify-center gap-2 transition-all duration-300 text-white bg-gradient-to-r from-primary to-accent hover:opacity-90 focus:ring-4 focus:outline-none font-semibold rounded-lg px-5 py-3 text-center"
                         size="lg"
                       >
-                        Lets Talk
-                        <ArrowRight className="size-4 transition-all group-hover:translate-x-1" />
+                        {loading ? (
+                          <div className="flex items-center justify-center">
+                            <svg
+                              className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                            Sending...
+                          </div>
+                        ) : (
+                          <div className="flex flex-row gap-2 items-center">
+                            {" "}
+                            Lets Talk
+                            <ArrowRight className="size-4 transition-all group-hover:translate-x-1" />
+                          </div>
+                        )}
                       </Button>
 
                       <div className="text-center text-xs text-muted-foreground">
