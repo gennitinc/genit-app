@@ -133,7 +133,7 @@ export default function PricingComponent() {
   const handleCheckout = async (plan: any) => {
     if (plan.monthlyPrice === 0) {
       // Handle free plan - redirect to signup or dashboard
-      window.location.href = "/auth/signup";
+      window.location.href = "/signup";
       return;
     }
 

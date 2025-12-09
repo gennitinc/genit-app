@@ -94,7 +94,7 @@ export default function LandingContact() {
           email: data.email,
           subject: "Gennit contact request",
           message: `
-  <div style="font-family: Arial, sans-serif; padding: 20px; background: #f7f7f7;">
+  <div style="font-family: Arial, sans-serif;">
     <div style="max-width: 500px; margin: auto; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
       
       <h2 style="color: #333; margin-bottom: 10px;">New Contact Form Submission</h2>
