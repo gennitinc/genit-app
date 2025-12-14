@@ -5,7 +5,7 @@ import { useUrlState } from "@/hooks/use-url-state";
 import { SidebarProvider } from "../ui/sidebar";
 import { PricingDialog } from "../common/pricing-dialog";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import HEYO from "@heyo.so/js";
 
 function Wrapper({ children }: { children: React.ReactNode }) {
@@ -14,20 +14,62 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   const checkout = getUrlState().getValue("checkout");
 
   const pathName = usePathname();
+  const heyoInitialized = useRef(false);
 
-useEffect(() => {
-  const isChatRoute =
-    pathName === "/chat" ||
-    pathName === "/chat/history" ||
-    pathName === "/user/settings" ||
-    pathName.startsWith("/chat/"); // ✅ catches /chat/123, /chat/abc, etc
+  useEffect(() => {
+    // Whitelist: Only show HEYO on these public/marketing pages
+    const allowedRoutes = [
+      "/", // Landing page
+      "/pricing",
+      "/company",
+      "/contact",
+      "/inspirations",
+      "/suggest",
+      "/legal/privacy-policy",
+      "/legal/terms-of-service",
+    ];
 
-  if (!isChatRoute) {
-    HEYO.init({
-      projectId: "692eb61c3ad627090e630762",
-    });
-  }
-}, [pathName]);
+    const shouldShowHEYO = allowedRoutes.includes(pathName);
+
+    // Only initialize HEYO on whitelisted routes
+    if (shouldShowHEYO) {
+      if (!heyoInitialized.current) {
+        try {
+          HEYO.init({
+            projectId: "692eb61c3ad627090e630762",
+          });
+          heyoInitialized.current = true;
+        } catch (error) {
+          console.error("Failed to initialize HEYO:", error);
+        }
+      }
+    } else {
+      // Cleanup: Try to destroy/remove HEYO when navigating away
+      if (heyoInitialized.current) {
+        try {
+          // Check if HEYO has a destroy method
+          if (typeof (HEYO as any).destroy === "function") {
+            (HEYO as any).destroy();
+          }
+          // Also try to remove the HEYO widget from DOM
+          const heyoWidget = document.querySelector("[data-heyo-widget]");
+          if (heyoWidget) {
+            heyoWidget.remove();
+          }
+          // Remove any HEYO-related elements
+          const heyoElements = document.querySelectorAll(
+            '[id*="heyo"], [class*="heyo"], [data-heyo]'
+          );
+          heyoElements.forEach((el) => el.remove());
+          heyoInitialized.current = false;
+        } catch (error) {
+          console.error("Failed to cleanup HEYO:", error);
+          // Reset state even if cleanup fails
+          heyoInitialized.current = false;
+        }
+      }
+    }
+  }, [pathName]);
 
   return (
     <SidebarProvider defaultOpen={false}>

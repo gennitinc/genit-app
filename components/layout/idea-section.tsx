@@ -33,6 +33,7 @@ import HomeGrid from "../common/templateGrid";
 import { HomeInfoGrid } from "../common/homeInfoGrid";
 import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
 import { AIThinkingContent } from "../chat/messages";
+import { useToast } from "@/hooks/use-toast";
 
 interface TypewriterEffectProps {
   words: string[];
@@ -131,6 +132,7 @@ export function IdeaSection() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const user = useUserContext().user;
+  const { toast } = useToast();
 
   const placeholderText = useTypewriterEffect({
     words: placeholders,
@@ -233,6 +235,17 @@ export function IdeaSection() {
       // Check if user is authenticated
       if (!user) {
         router.push("/signin");
+        return;
+      }
+
+      // Check for low credits
+      const creditsRemaining = user?.creditsRemaining ?? 0;
+      if (creditsRemaining <= 10) {
+        toast({
+          title: "Low Credits",
+          description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? 's' : ''} remaining. Please top up to continue creating.`,
+          variant: "destructive",
+        });
         return;
       }
 

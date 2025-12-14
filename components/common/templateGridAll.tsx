@@ -49,6 +49,7 @@ import CategoryAndSearch from "@/components/common/category-and-search";
 import { useProjectDesign } from "@/context/DesignProject";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AIThinkingContent } from "../chat/messages";
+import { useToast } from "@/hooks/use-toast";
 
 type TemplateItem = {
   id: string;
@@ -260,6 +261,7 @@ export default function TemplateGridAll() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const user = useUserContext().user;
+  const { toast } = useToast();
 
   // Social media platform icons
   const socialIcons = [
@@ -363,6 +365,17 @@ export default function TemplateGridAll() {
       // Check if user is authenticated
       if (!user) {
         router.push("/signin");
+        return;
+      }
+
+      // Check for low credits
+      const creditsRemaining = user?.creditsRemaining ?? 0;
+      if (creditsRemaining <= 10) {
+        toast({
+          title: "Low Credits",
+          description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? 's' : ''} remaining. Please top up to continue creating.`,
+          variant: "destructive",
+        });
         return;
       }
 

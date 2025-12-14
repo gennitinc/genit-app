@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useRef, useEffect, useCallback, useState } from "react";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
+import { useToast } from "@/hooks/use-toast";
 
 const models = [
   {
@@ -65,6 +66,7 @@ export function ChatInput({
   const inputSectionRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useUserContext();
+  const { toast } = useToast();
 
   const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 10;
   const validateInput = useCallback((value: string, files: File[]) => {
@@ -238,6 +240,17 @@ export function ChatInput({
 
   // FIXED: Handle sending messages with proper project identification
   const handlegenerateMessage = async () => {
+    // Check for low credits
+    const creditsRemaining = user?.creditsRemaining ?? 0;
+    if (creditsRemaining <= 10) {
+      toast({
+        title: "Low Credits",
+        description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? 's' : ''} remaining. Please top up to continue creating.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     const validationError = validateInput(
       inputValue,
       attachedFiles as unknown as File[]
@@ -351,6 +364,16 @@ export function ChatInput({
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            // Check for low credits
+            const creditsRemaining = user?.creditsRemaining ?? 0;
+            if (creditsRemaining <= 10) {
+              toast({
+                title: "Low Credits",
+                description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? 's' : ''} remaining. Please top up to continue creating.`,
+                variant: "destructive",
+              });
+              return;
+            }
             const validationError = validateInput(
               inputValue,
               attachedFiles as unknown as File[]
@@ -359,7 +382,6 @@ export function ChatInput({
               console.error("Validation error:", validationError);
               return;
             }
-            if (!hasEnoughCredits) return;
             handlegenerateMessage();
           }}
           className="relative"

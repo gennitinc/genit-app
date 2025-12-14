@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 // Onboarding removed: no onboarding redirect util needed
 import Loading from "@/utils/Loading";
 import { LandingPage } from "@/components/landing/landing-page";
-import HEYO from '@heyo.so/js';
 
 // export const metadata: Metadata = {
 //   title:
