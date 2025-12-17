@@ -299,11 +299,7 @@ export function IdeaSection() {
         }
       } catch (error: any) {
         console.error("Failed to generate outline:", error);
-        toast.error("Error", {
-          description:
-            error.response?.data?.message ||
-            "Failed to generate presentation outline. Please try again.",
-        });
+         toast("Failed to generate presentation outline.");
         // Fallback: create a simple outline
         setPresentationOutline([
           {
@@ -368,9 +364,9 @@ export function IdeaSection() {
         (item) => item.id === selectedDesignTypeId
       );
       if (selectedItem && (selectedItem as any).comingSoon) {
-        toast("Coming Soon", {
-          description: `${selectedItem.label} is coming soon. Please select another design type.`,
-        });
+        toast(
+          `${selectedItem.label} is coming soon.`
+        );
         return;
       }
 
@@ -1653,9 +1649,7 @@ export function IdeaSection() {
             <Button
               onClick={async () => {
                 if (presentationOutline.length === 0) {
-                  toast.error("Error", {
-                    description: "Please add at least one slide",
-                  });
+                   toast("Please add at least one slide");
                   return;
                 }
 
@@ -1697,11 +1691,7 @@ export function IdeaSection() {
                   }
                 } catch (error: any) {
                   console.error("Failed to create presentation:", error);
-                  toast.error("Error", {
-                    description:
-                      error.response?.data?.message ||
-                      "Failed to create presentation. Please try again.",
-                  });
+                  toast("Failed to create presentation. Please try again.");
                 } finally {
                   setIsSubmitting(false);
                 }
