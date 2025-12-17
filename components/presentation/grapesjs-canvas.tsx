@@ -234,7 +234,6 @@ export function GrapesJSCanvas({
       height: "100%",
       width: "100%",
       fromElement: true, // Allow components from HTML
-      allowScripts: 1,
       storageManager: false, // We'll handle storage ourselves
       plugins: [
         gjsPresetWebpage,
@@ -247,7 +246,6 @@ export function GrapesJSCanvas({
         pluginStyleBg,
         styleFilter,
         pluginStyleGradient,
-        MaterialIcon,
       ],
       pluginsOpts: {
         gjsPresetWebpage: {},
