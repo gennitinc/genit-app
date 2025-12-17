@@ -51,7 +51,12 @@ export async function exportToPPTX(
           y: block.position.y,
           w: block.position.width,
           h: block.position.height,
-          fontSize: block.style?.fontSize || 24,
+          fontSize:
+            typeof block.style?.fontSize === "number"
+              ? block.style.fontSize
+              : typeof block.style?.fontSize === "string"
+                ? Number.parseFloat(block.style.fontSize) || 24
+                : 24,
           bold: true,
           color: block.style?.color || "363636",
         });
@@ -61,7 +66,12 @@ export async function exportToPPTX(
           y: block.position.y,
           w: block.position.width,
           h: block.position.height,
-          fontSize: block.style?.fontSize || 14,
+          fontSize:
+            typeof block.style?.fontSize === "number"
+              ? block.style.fontSize
+              : typeof block.style?.fontSize === "string"
+                ? Number.parseFloat(block.style.fontSize) || 14
+                : 14,
           color: block.style?.color || "363636",
         });
       } else if (block.type === "list") {
@@ -82,7 +92,12 @@ export async function exportToPPTX(
           w: block.position.width,
           h: block.position.height,
           bullet: true,
-          fontSize: block.style?.fontSize || 14,
+          fontSize:
+            typeof block.style?.fontSize === "number"
+              ? block.style.fontSize
+              : typeof block.style?.fontSize === "string"
+                ? Number.parseFloat(block.style.fontSize) || 14
+                : 14,
           color: block.style?.color || "363636",
         });
       }
