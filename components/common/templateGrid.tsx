@@ -67,7 +67,6 @@ export default function TemplateGrid() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [new_error, setNewError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [query, setQuery] = useState("fliers");
   const [limit, setLimit] = useState(20);
   const [pins, setPins] = useState([]);
 

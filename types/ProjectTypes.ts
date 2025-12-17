@@ -118,7 +118,9 @@ export interface IProjectDesignContext {
     value: string,
     attachedFile?: any,
     selectedFiles?: string[],
-    designTypeId?: string
+    designTypeId?: string,
+    orientation?: string | null,
+    customSize?: { width: string; height: string } | null
   ) => Promise<{ type: boolean; message: string; id?: string }>;
   fetchProject: (projectId: string) => Promise<{
     success: boolean;
