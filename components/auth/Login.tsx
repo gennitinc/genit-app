@@ -111,8 +111,20 @@ export const LoginComp = () => {
         // Fetch current user data
         await fetchCurrentUser();
 
-        // Onboarding removed: redirect authenticated users straight to /chat
-        router.push("/chat");
+        // Check verification and onboarding status, redirect accordingly
+        const userData = await apiResponse.get("/user/active-user");
+        const currentUser = userData.data.user;
+
+        if (!currentUser.emailVerified) {
+          // Not verified - redirect to verification
+          router.push(`/account/verify?email=${encodeURIComponent(currentUser.email)}`);
+        } else if (!currentUser.onboarding?.onboardingCompleted) {
+          // Verified but not onboarded - redirect to onboarding
+          router.push("/onboarding");
+        } else {
+          // Verified and onboarded - go to chat
+          router.push("/chat");
+        }
       }
     } catch (error: any) {
       setLoading(false);
@@ -142,7 +154,15 @@ export const LoginComp = () => {
 
         console.log(response);
         if (response.status === 200) {
-          toast.success("Logged in Successfully");
+          // Check if it's a new sign-up or existing sign-in based on response message
+          const isNewUser = response.data.message?.includes("created") || 
+                           response.data.message?.includes("Account created");
+          
+          toast.success(
+            isNewUser 
+              ? "Account Created Successfully!" 
+              : "Logged in Successfully"
+          );
 
           const longerEXP = 1000 * 60 * 60 * 24 * 30;
 
@@ -155,8 +175,22 @@ export const LoginComp = () => {
           // Fetch current user data
           await fetchCurrentUser();
 
-          // Onboarding removed: go straight to chat
-          window.location.href = "/chat";
+          // Check verification and onboarding status, redirect accordingly
+          const userData = await apiResponse.get("/user/active-user");
+          const currentUser = userData.data.user;
+
+          if (!currentUser.emailVerified) {
+            // Not verified - redirect to verification
+            router.push(
+              `/account/verify?email=${encodeURIComponent(currentUser.email)}`
+            );
+          } else if (!currentUser.onboarding?.onboardingCompleted) {
+            // Verified but not onboarded - redirect to onboarding
+            router.push("/onboarding");
+          } else {
+            // Verified and onboarded - go to chat
+            router.push("/chat");
+          }
         }
       } catch (error: any) {
         setLoading2(false);

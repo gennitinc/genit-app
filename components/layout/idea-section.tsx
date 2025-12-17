@@ -5,6 +5,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   X,
   PaperclipIcon,
@@ -21,19 +22,36 @@ import {
   WandSparklesIcon,
   Settings,
   Settings2,
+  Camera,
+  Video,
+  Image as ImageIcon,
+  FileText,
+  Youtube,
+  Layout,
+  Type,
+  Presentation,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { useProjectDesign } from "@/context/DesignProject";
-import DesignType from "../chat/designType";
 import ShinyText from "../ui/shiny-text";
 import HomeGrid from "../common/templateGrid";
 import { HomeInfoGrid } from "../common/homeInfoGrid";
 import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
 import { AIThinkingContent } from "../chat/messages";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerFooter,
+} from "@/components/ui/drawer";
+import { apiResponse } from "@/utils/apiResponse";
+import { GripVertical, Plus, Trash2 } from "lucide-react";
 
 interface TypewriterEffectProps {
   words: string[];
@@ -81,7 +99,7 @@ const images = [
   "https://img.freepik.com/free-photo/smiley-woman-outdoors-city_23-2148774316.jpg?ga=GA1.1.1557987898.1750353078&semt=ais_hybrid&w=740",
   "https://img.freepik.com/free-photo/freedom-concept-with-hiker-mountain_23-2148107064.jpg?ga=GA1.1.1557987898.1750353078&semt=ais_hybrid&w=740",
   "https://img.freepik.com/free-vector/woman-doodle-drawing-sketch-illustration-vector_53876-118.jpg?ga=GA1.1.1557987898.1750353078&semt=ais_hybrid&w=740",
-  "https://img.freepik.com/free-photo/young-hispanic-man-with-beard-wearing-red-t-shirt-blue-background-looking-side-relax-profile-pose-with-natural-face-with-confident-smile_839833-2174.jpg?ga=GA1.1.1557987898.1750353078&w=740",
+  "https://img.freepik.com/free-photo/young-hispanic-man-with-beard-wearing-red-t-shirt-neutral-background-looking-side-relax-profile-pose-with-natural-face-with-confident-smile_839833-2174.jpg?ga=GA1.1.1557987898.1750353078&w=740",
   "https://img.freepik.com/free-photo/smiling-man_1098-15443.jpg?ga=GA1.1.1557987898.1750353078&w=740",
 ];
 
@@ -120,9 +138,36 @@ export function IdeaSection() {
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
   const [inputError, setInputError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedDesignTypeId, setSelectedDesignTypeId] = useState<
-    string | null
-  >("generic_design");
+  const [selectedDesignTypeId, setSelectedDesignTypeId] =
+    useState<string>("generic_design");
+  const [selectedOrientation, setSelectedOrientation] = useState<string | null>(
+    null
+  );
+  const [customSize, setCustomSize] = useState<{
+    width: string;
+    height: string;
+  }>({ width: "", height: "" });
+  const [showOrientationSelection, setShowOrientationSelection] =
+    useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isPresentationDrawerOpen, setIsPresentationDrawerOpen] =
+    useState(false);
+  const [presentationOutline, setPresentationOutline] = useState<
+    Array<{ title: string; content: string[]; id: string }>
+  >([]);
+  const [isGeneratingOutline, setIsGeneratingOutline] = useState(false);
+  const [textAmount, setTextAmount] = useState<
+    "minimal" | "concise" | "detailed" | "extensive"
+  >("concise");
+  const [selectedTheme, setSelectedTheme] = useState<string>("bubble-gum");
+  const [imageStyle, setImageStyle] = useState<
+    "illustration" | "photorealistic" | "abstract" | "3d" | "line-art"
+  >("illustration");
+  const [extraKeywords, setExtraKeywords] = useState<string>("");
+  const [inputContainerDimensions, setInputContainerDimensions] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
   const [imageRotations] = useState(() =>
     images.map(() => Math.random() * 20 - 10)
   );
@@ -130,9 +175,10 @@ export function IdeaSection() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const inputContainerRef = useRef<HTMLDivElement>(null);
+  const innerContainerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const user = useUserContext().user;
-  const { toast } = useToast();
 
   const placeholderText = useTypewriterEffect({
     words: placeholders,
@@ -227,6 +273,65 @@ export function IdeaSection() {
     [handleFileProcess]
   );
 
+  // Generate presentation outline using AI
+  const generatePresentationOutline = useCallback(
+    async (prompt: string) => {
+      setIsGeneratingOutline(true);
+      try {
+        const response = await apiResponse.post(
+          "/presentation/generate-outline",
+          { prompt },
+          { withCredentials: true }
+        );
+
+        if (response.data && response.data.outline) {
+          const outline = response.data.outline.map(
+            (slide: any, index: number) => ({
+              id: `slide-${index + 1}`,
+              title: slide.title || `Slide ${index + 1}`,
+              content: slide.content || slide.bulletPoints || [],
+            })
+          );
+          setPresentationOutline(outline);
+          setIsPresentationDrawerOpen(true);
+        } else {
+          throw new Error("Invalid response format");
+        }
+      } catch (error: any) {
+        console.error("Failed to generate outline:", error);
+        toast({
+          title: "Error",
+          description:
+            error.response?.data?.message ||
+            "Failed to generate presentation outline. Please try again.",
+          variant: "destructive",
+        });
+        // Fallback: create a simple outline
+        setPresentationOutline([
+          {
+            id: "slide-1",
+            title: "Introduction",
+            content: ["Introduction to the topic"],
+          },
+          {
+            id: "slide-2",
+            title: "Main Content",
+            content: ["Key points and details"],
+          },
+          {
+            id: "slide-3",
+            title: "Conclusion",
+            content: ["Summary and next steps"],
+          },
+        ]);
+        setIsPresentationDrawerOpen(true);
+      } finally {
+        setIsGeneratingOutline(false);
+      }
+    },
+    [toast]
+  );
+
   // Handle form submission
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -241,10 +346,15 @@ export function IdeaSection() {
       // Check for low credits
       const creditsRemaining = user?.creditsRemaining ?? 0;
       if (creditsRemaining <= 10) {
-        toast({
-          title: "Low Credits",
-          description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? 's' : ''} remaining. Please top up to continue creating.`,
-          variant: "destructive",
+        const isBasic = String(user?.userPlan) === "Basic";
+        toast.error(`Low Credits`, {
+          description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? "s" : ""} remaining. Please top up to continue creating.`,
+          action: {
+            label: isBasic ? "Upgrade" : "Buy Credits",
+            onClick: () => {
+              router.push(isBasic ? "/pricing" : "/user/settings?tab=billing");
+            },
+          },
         });
         return;
       }
@@ -255,7 +365,29 @@ export function IdeaSection() {
         return;
       }
 
+      // Check if selected design type is coming soon
+      const selectedItem = designTypeItems.find(
+        (item) => item.id === selectedDesignTypeId
+      );
+      if (selectedItem && (selectedItem as any).comingSoon) {
+        toast({
+          title: "Coming Soon",
+          description: `${selectedItem.label} is coming soon. Please select another design type.`,
+          variant: "default",
+        });
+        return;
+      }
+
       if (isGenerating || isSubmitting) return;
+
+      // Handle presentation projects differently
+      if (selectedDesignTypeId === "presentation") {
+        setIsSubmitting(true);
+        setInputError(null);
+        await generatePresentationOutline(inputValue);
+        setIsSubmitting(false);
+        return;
+      }
 
       setIsSubmitting(true);
       setInputError(null);
@@ -265,13 +397,18 @@ export function IdeaSection() {
           inputValue,
           attachedFiles as any,
           undefined,
-          selectedDesignTypeId || undefined
+          selectedDesignTypeId || undefined,
+          selectedOrientation || undefined,
+          customSize.width && customSize.height ? customSize : undefined
         );
 
         console.log("Project creation result:", res);
 
         clearInput();
-        setSelectedDesignTypeId(null);
+        setSelectedDesignTypeId("generic_design");
+        setSelectedOrientation(null);
+        setShowOrientationSelection(false);
+        setCustomSize({ width: "", height: "" });
 
         if (res.type && res.id) {
           // Redirect to chat page with project ID
@@ -295,6 +432,9 @@ export function IdeaSection() {
       createProject,
       user,
       router,
+      selectedDesignTypeId,
+      generatePresentationOutline,
+      toast,
     ]
   );
 
@@ -348,6 +488,19 @@ export function IdeaSection() {
     return () => clearInterval(interval);
   }, []);
 
+  // Update inner container dimensions when settings open (covers credit info + input)
+  useEffect(() => {
+    if (isSettingsOpen && innerContainerRef.current) {
+      const rect = innerContainerRef.current.getBoundingClientRect();
+      setInputContainerDimensions({
+        width: rect.width,
+        height: rect.height,
+      });
+    } else {
+      setInputContainerDimensions(null);
+    }
+  }, [isSettingsOpen]);
+
   // Clear error when input changes
   useEffect(() => {
     if (error) {
@@ -369,6 +522,137 @@ export function IdeaSection() {
     isGenerating ||
     isSubmitting ||
     (!inputValue.trim() && attachedFiles.length === 0);
+
+  // Design type items with clean design (no gradients)
+  const designTypeItems = [
+    {
+      id: "flier",
+      label: "Flier",
+      icon: FileText,
+    },
+    {
+      id: "instagram_post",
+      label: "Instagram",
+      icon: Camera,
+    },
+    {
+      id: "poster",
+      label: "Poster",
+      icon: ImageIcon,
+    },
+    {
+      id: "youtube_thumbnail",
+      label: "YouTube Thumbnail",
+      icon: Youtube,
+    },
+    {
+      id: "facebook_post",
+      label: "Facebook Post",
+      icon: Layout,
+    },
+    {
+      id: "facebook_cover",
+      label: "Facebook Cover",
+      icon: Layout,
+    },
+    {
+      id: "banner",
+      label: "Banner",
+      icon: Layout,
+    },
+    {
+      id: "logo",
+      label: "Logo",
+      icon: Type,
+    },
+    {
+      id: "video",
+      label: "Video",
+      icon: Video,
+      comingSoon: true,
+    },
+    {
+      id: "presentation",
+      label: "Presentation",
+      icon: Presentation,
+      comingSoon: true,
+    },
+    {
+      id: "generic_design",
+      label: "Generic Design",
+      icon: Sparkles,
+    },
+  ];
+
+  const selectedDesignType = designTypeItems.find(
+    (item) => item.id === selectedDesignTypeId
+  );
+
+  // Orientation options for different design types
+  const getOrientationOptions = (designTypeId: string | null) => {
+    if (!designTypeId) return [];
+
+    const options: { id: string; label: string; dimensions?: string }[] = [];
+
+    switch (designTypeId) {
+      case "video":
+        options.push(
+          { id: "reels", label: "Reels", dimensions: "9:16" },
+          { id: "video", label: "Video", dimensions: "16:9" },
+          { id: "square", label: "Square", dimensions: "1:1" },
+          { id: "story", label: "Story", dimensions: "9:16" }
+        );
+        break;
+      case "instagram_post":
+        options.push(
+          { id: "square", label: "Square", dimensions: "1:1" },
+          { id: "portrait", label: "Portrait", dimensions: "4:5" },
+          { id: "landscape", label: "Landscape", dimensions: "1.91:1" }
+        );
+        break;
+      case "youtube_thumbnail":
+        options.push({ id: "standard", label: "Standard", dimensions: "16:9" });
+        break;
+      case "facebook_post":
+      case "facebook_cover":
+        options.push(
+          { id: "landscape", label: "Landscape", dimensions: "16:9" },
+          { id: "square", label: "Square", dimensions: "1:1" }
+        );
+        break;
+      case "poster":
+      case "banner":
+        options.push(
+          { id: "portrait", label: "Portrait", dimensions: "2:3" },
+          { id: "landscape", label: "Landscape", dimensions: "3:2" },
+          { id: "square", label: "Square", dimensions: "1:1" }
+        );
+        break;
+      case "presentation":
+        options.push(
+          { id: "standard", label: "Standard", dimensions: "16:9" },
+          { id: "widescreen", label: "Widescreen", dimensions: "16:10" },
+          { id: "square", label: "Square", dimensions: "1:1" }
+        );
+        break;
+      case "flier":
+        options.push(
+          { id: "portrait", label: "Portrait", dimensions: "8.5:11" },
+          { id: "landscape", label: "Landscape", dimensions: "11:8.5" }
+        );
+        break;
+      default:
+        options.push(
+          { id: "portrait", label: "Portrait", dimensions: "2:3" },
+          { id: "landscape", label: "Landscape", dimensions: "3:2" },
+          { id: "square", label: "Square", dimensions: "1:1" }
+        );
+    }
+
+    return options;
+  };
+
+  const orientationOptions = getOrientationOptions(selectedDesignTypeId);
 
   return (
     <div className="">
@@ -528,7 +812,7 @@ export function IdeaSection() {
           >
             {/* Animated beam with smoother transitions */}
             <motion.div
-              className="absolute w-full md:w-40 h-40 rounded-full bg-blue-400/20 dark:bg-blue-500/20 blur-3xl pointer-events-none z-0"
+              className="absolute w-full md:w-40 h-40 rounded-full bg-neutral-400/20 dark:bg-neutral-500/20 blur-3xl pointer-events-none z-0"
               animate={{
                 left: `${beamPosition.x}%`,
                 top: `${beamPosition.y}%`,
@@ -539,7 +823,10 @@ export function IdeaSection() {
               }}
               style={{ transform: "translate(-50%, -50%)" }}
             />
-            <div className="flex flex-col bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-[15px] w-full overflow-hidden z-10 shadow-inner">
+            <div
+              ref={innerContainerRef}
+              className="flex flex-col bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-[15px] w-full overflow-hidden z-10 shadow-inner relative"
+            >
               {/* Credit info and typing indicator */}
               <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2">
                 {!isGenerating && (
@@ -625,7 +912,10 @@ export function IdeaSection() {
                 }
                 className="relative"
               >
-                <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300">
+                <div
+                  ref={inputContainerRef}
+                  className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-neutral-500/20 focus-within:border-neutral-300"
+                >
                   <div className="flex-1 relative">
                     <textarea
                       ref={textareaRef}
@@ -640,29 +930,21 @@ export function IdeaSection() {
                           : placeholderText + "✦" ||
                             "Tell your AI team what to create...✦"
                       }
-                      disabled={isGenerating || isSubmitting}
+                      disabled={isGenerating || isSubmitting || isSettingsOpen}
                       style={{
                         lineHeight: "1.5",
                         fontFamily: "inherit",
-                        minHeight: "40px",
+                        minHeight: "20px",
                         maxHeight: "300px",
                       }}
-                      className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
+                      className="bg-transparent rounded-2xl border-none w-full min-h-[40px] text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
                       aria-label="Enter your prompt"
                       aria-describedby={inputError ? "input-error" : undefined}
                     />
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <div className="flex gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                        disabled={isGenerating}
-                      >
-                        <Mic className="w-3.5 h-3.5 text-muted-foreground" />
-                      </Button>
+                    <div className="flex gap-2 items-center flex-wrap">
                       <button
                         type="button"
                         className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -683,33 +965,55 @@ export function IdeaSection() {
                         accept="image/*,video/*"
                         aria-label="Select files to upload"
                       />
-                    </div>
-                    {/* <button
-                    type="submit"
-                    disabled={isSubmitDisabled}
-                    className={`flex items-center justify-center p-0.5 bg-gradient-to-t from-gray-300 via-gray-200 to-gray-100 dark:from-[#292929] dark:via-[#555555] dark:to-[#292929] rounded-[10px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,0.5)] cursor-pointer border-none outline-none transition-all duration-150 active:scale-[0.92] group ${
-                      isSubmitDisabled
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:shadow-md"
-                    }`}
-                    aria-label="Submit prompt"
-                  >
-                    <div className="w-[34px] h-[34px] flex items-center justify-center bg-gray-100/50 dark:bg-black/10 rounded-[10px] backdrop-blur-[3px] text-gray-500 dark:text-[#8b8b8b] group-hover:text-gray-700 dark:group-hover:text-white transition-colors">
-                      {isGenerating || isSubmitting ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        <svg
-                          viewBox="0 0 512 512"
-                          className="w-5 h-5 transition-all duration-300"
+
+                      {selectedDesignType && (
+                        <Badge
+                          variant="secondary"
+                          className="text-xs px-2 py-0.5 h-6 font-medium flex items-center gap-1.5 bg-neutral-50 dark:bg-neutral-950/30 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-800 cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-900/50 transition-colors"
+                          onClick={() => {
+                            setIsSettingsOpen(true);
+                            setShowOrientationSelection(false);
+                          }}
                         >
-                          <path
-                            fill="currentColor"
-                            d="M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05"
-                          />
-                        </svg>
+                          <selectedDesignType.icon className="w-3 h-3" />
+                          {selectedDesignType.label}
+                          {selectedOrientation &&
+                            selectedOrientation !== "custom" && (
+                              <span className="text-muted-foreground">
+                                •{" "}
+                                {
+                                  getOrientationOptions(
+                                    selectedDesignTypeId
+                                  ).find(
+                                    (opt) => opt.id === selectedOrientation
+                                  )?.label
+                                }
+                              </span>
+                            )}
+                          {selectedOrientation === "custom" &&
+                            customSize.width &&
+                            customSize.height && (
+                              <span className="text-muted-foreground">
+                                • {customSize.width}×{customSize.height}
+                              </span>
+                            )}
+                        </Badge>
                       )}
+
+                      <button
+                        type="button"
+                        className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        onClick={() => {
+                          setIsSettingsOpen(!isSettingsOpen);
+                          setShowOrientationSelection(true);
+                        }}
+                        disabled={isGenerating || isSubmitting}
+                        aria-label="Settings"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </button>
                     </div>
-                  </button> */}
+
                     <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
                       <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
                       <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
@@ -726,41 +1030,708 @@ export function IdeaSection() {
                   </div>
                 </div>
               </form>
+
+              {/* Settings Overlay - covers credit info + input area */}
+              <AnimatePresence>
+                {isSettingsOpen && inputContainerDimensions && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute inset-0 z-50 bg-white/95 dark:bg-black/95 backdrop-blur-sm rounded-[15px] border border-border shadow-xl"
+                    style={{
+                      width: inputContainerDimensions.width,
+                      height: inputContainerDimensions.height,
+                    }}
+                  >
+                    <div className="flex flex-col h-full p-4">
+                      {/* Header */}
+                      <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-sm font-semibold text-foreground">
+                            Advanced Settings
+                          </h3>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsSettingsOpen(false);
+                            setShowOrientationSelection(false);
+                          }}
+                          className="flex items-center justify-center w-6 h-6 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+                          aria-label="Close settings"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+
+                      {/* Design Type Selection or Orientation Selection */}
+                      <div className="flex-1 overflow-y-auto">
+                        {!showOrientationSelection ? (
+                          <div className="space-y-0.5">
+                            {designTypeItems.map((item) => {
+                              const IconComponent = item.icon;
+                              const isSelected =
+                                selectedDesignTypeId === item.id;
+                              const isComingSoon = (item as any).comingSoon;
+                              return (
+                                <button
+                                  key={item.id}
+                                  type="button"
+                                  onClick={() => {
+                                    if (isComingSoon) return;
+                                    setSelectedDesignTypeId(item.id);
+                                    setSelectedOrientation(null);
+                                    setShowOrientationSelection(true);
+                                  }}
+                                  disabled={isComingSoon}
+                                  className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors ${
+                                    isComingSoon
+                                      ? "opacity-50 cursor-not-allowed"
+                                      : isSelected
+                                        ? "text-foreground"
+                                        : "text-muted-foreground hover:text-foreground"
+                                  }`}
+                                >
+                                  <Checkbox
+                                    checked={isSelected}
+                                    disabled={isComingSoon}
+                                    className="flex-shrink-0"
+                                    onCheckedChange={() => {}}
+                                  />
+                                  <IconComponent
+                                    className={`w-4 h-4 flex-shrink-0 ${
+                                      isComingSoon
+                                        ? "text-muted-foreground/50"
+                                        : isSelected
+                                          ? "text-foreground"
+                                          : "text-muted-foreground"
+                                    }`}
+                                  />
+                                  <span className="text-sm font-normal flex-1">
+                                    {item.label}
+                                  </span>
+                                  {isComingSoon && (
+                                    <Badge
+                                      variant="secondary"
+                                      className="text-xs px-2 py-0.5 bg-muted text-muted-foreground"
+                                    >
+                                      Coming Soon
+                                    </Badge>
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            {/* Back button */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowOrientationSelection(false);
+                              }}
+                              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-2"
+                            >
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15 19l-7-7 7-7"
+                                />
+                              </svg>
+                              Change Design Type
+                            </button>
+                            <div className="text-xs text-muted-foreground mb-3 px-3">
+                              {selectedDesignType?.label} Settings
+                            </div>
+
+                            {/* Orientation Options */}
+                            <div className="space-y-0.5">
+                              {orientationOptions.length > 0 && (
+                                <>
+                                  <p className="text-xs text-muted-foreground mb-2 px-3">
+                                    Select orientation
+                                  </p>
+                                  {orientationOptions.map((option) => (
+                                    <button
+                                      key={option.id}
+                                      type="button"
+                                      onClick={() => {
+                                        setSelectedOrientation(option.id);
+                                        setIsSettingsOpen(false);
+                                        setShowOrientationSelection(false);
+                                      }}
+                                      className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-colors ${
+                                        selectedOrientation === option.id
+                                          ? "text-foreground"
+                                          : "text-muted-foreground hover:text-foreground"
+                                      }`}
+                                    >
+                                      <div className="flex items-center gap-3">
+                                        <Checkbox
+                                          checked={
+                                            selectedOrientation === option.id
+                                          }
+                                          className="flex-shrink-0"
+                                          onCheckedChange={() => {}}
+                                        />
+                                        <span className="text-sm font-normal">
+                                          {option.label}
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center gap-2">
+                                        {option.dimensions && (
+                                          <span className="text-xs text-muted-foreground">
+                                            {option.dimensions}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </button>
+                                  ))}
+                                </>
+                              )}
+
+                              {/* Custom Size Option */}
+                              <div
+                                className={`${orientationOptions.length > 0 ? "pt-2 border-t border-border mt-2" : ""}`}
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedOrientation("custom");
+                                  }}
+                                  className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-colors ${
+                                    selectedOrientation === "custom"
+                                      ? "text-foreground"
+                                      : "text-muted-foreground hover:text-foreground"
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <Checkbox
+                                      checked={selectedOrientation === "custom"}
+                                      className="flex-shrink-0"
+                                      onCheckedChange={() => {}}
+                                    />
+                                    <span className="text-sm font-normal">
+                                      Custom Size
+                                    </span>
+                                  </div>
+                                </button>
+
+                                {selectedOrientation === "custom" && (
+                                  <div className="px-3 py-3 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <Input
+                                        type="number"
+                                        placeholder="px width"
+                                        value={customSize.width}
+                                        onChange={(e) =>
+                                          setCustomSize((prev) => ({
+                                            ...prev,
+                                            width: e.target.value,
+                                          }))
+                                        }
+                                        className="h-8 text-sm"
+                                        min="1"
+                                      />
+                                      <span className="text-xs text-muted-foreground">
+                                        ×
+                                      </span>
+                                      <Input
+                                        type="number"
+                                        placeholder="px height"
+                                        value={customSize.height}
+                                        onChange={(e) =>
+                                          setCustomSize((prev) => ({
+                                            ...prev,
+                                            height: e.target.value,
+                                          }))
+                                        }
+                                        className="h-8 text-sm"
+                                        min="1"
+                                      />
+                                    </div>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        if (
+                                          customSize.width &&
+                                          customSize.height
+                                        ) {
+                                          setIsSettingsOpen(false);
+                                          setShowOrientationSelection(false);
+                                        }
+                                      }}
+                                      className="w-full text-xs px-3 py-1.5 bg-foreground text-background rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                                      disabled={
+                                        !customSize.width || !customSize.height
+                                      }
+                                    >
+                                      Apply
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </motion.div>
-
-        <motion.div
-          className="space-y-4 mt-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          <div>
-            <h3 className="text-center text-sm font-medium mb-4 text-muted-foreground dark:text-zinc-400">
-              Quick Visual Design Types
-            </h3>
-            <DesignType
-              selectedId={selectedDesignTypeId}
-              onSelect={(id) => {
-                // Optional: seed prompt based on selection
-                const map: Record<string, string> = {
-                  social: "Create a social media post about ...",
-                  video: "Storyboard a 10s video intro about ...",
-                  photo: "Retouch a product photo: ...",
-                  gallery: "Create a gallery collage for ...",
-                };
-                const text = map[id] || "";
-                if (text) {
-                  setInputValue(text);
-                }
-                setSelectedDesignTypeId((prev) => (prev === id ? null : id));
-              }}
-              className="px-2"
-            />
-          </div>
-        </motion.div>
       </div>
+
+      {/* Presentation Organization Drawer */}
+      <Drawer
+        open={isPresentationDrawerOpen}
+        onOpenChange={setIsPresentationDrawerOpen}
+      >
+        <DrawerContent className="max-h-[90vh] lg:px-82">
+          <DrawerHeader>
+            <DrawerTitle>Organize Your Presentation</DrawerTitle>
+            <DrawerDescription>
+              Review and modify your presentation structure before generating
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="overflow-y-auto px-4 pb-4 space-y-4">
+            {isGeneratingOutline ? (
+              <div className="flex flex-col items-center justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-muted-foreground mb-4" />
+                <p className="text-sm text-muted-foreground">
+                  Generating presentation outline...
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {presentationOutline.map((slide, index) => (
+                  <div
+                    key={slide.id}
+                    className="border border-border rounded-lg p-4 bg-muted/30"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex items-center gap-2 flex-shrink-0 pt-1">
+                        <GripVertical className="w-4 h-4 text-muted-foreground cursor-move" />
+                        <span className="text-xs font-medium text-muted-foreground w-8">
+                          {index + 1}
+                        </span>
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <Input
+                          value={slide.title}
+                          onChange={(e) => {
+                            const newOutline = [...presentationOutline];
+                            newOutline[index].title = e.target.value;
+                            setPresentationOutline(newOutline);
+                          }}
+                          className="font-medium"
+                          placeholder="Slide title"
+                        />
+                        <div className="space-y-1">
+                          {slide.content.map((point, pointIndex) => (
+                            <div
+                              key={pointIndex}
+                              className="flex items-center gap-2"
+                            >
+                              <span className="text-muted-foreground text-xs">
+                                •
+                              </span>
+                              <Input
+                                value={point}
+                                onChange={(e) => {
+                                  const newOutline = [...presentationOutline];
+                                  newOutline[index].content[pointIndex] =
+                                    e.target.value;
+                                  setPresentationOutline(newOutline);
+                                }}
+                                className="text-sm"
+                                placeholder="Bullet point"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newOutline = [...presentationOutline];
+                                  newOutline[index].content.splice(
+                                    pointIndex,
+                                    1
+                                  );
+                                  setPresentationOutline(newOutline);
+                                }}
+                                className="text-muted-foreground hover:text-destructive transition-colors"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newOutline = [...presentationOutline];
+                              newOutline[index].content.push("");
+                              setPresentationOutline(newOutline);
+                            }}
+                            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mt-2"
+                          >
+                            <Plus className="w-4 h-4" />
+                            Add bullet point
+                          </button>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newOutline = presentationOutline.filter(
+                            (_, i) => i !== index
+                          );
+                          setPresentationOutline(newOutline);
+                        }}
+                        className="text-muted-foreground hover:text-destructive transition-colors flex-shrink-0"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPresentationOutline([
+                      ...presentationOutline,
+                      {
+                        id: `slide-${presentationOutline.length + 1}`,
+                        title: "",
+                        content: [""],
+                      },
+                    ]);
+                  }}
+                  className="w-full border-2 border-dashed border-border rounded-lg p-4 flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Slide
+                </button>
+
+                {/* Customization Sections */}
+                <div className="pt-6 border-t border-border space-y-6">
+                  {/* Text Content Section */}
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="text-sm font-semibold mb-1">
+                        Text Content
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        Amount of text per card
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[
+                        { id: "minimal", label: "Minimal", lines: 1 },
+                        { id: "concise", label: "Concise", lines: 2 },
+                        { id: "detailed", label: "Detailed", lines: 3 },
+                        { id: "extensive", label: "Extensive", lines: 4 },
+                      ].map((option) => (
+                        <button
+                          key={option.id}
+                          type="button"
+                          onClick={() =>
+                            setTextAmount(
+                              option.id as
+                                | "minimal"
+                                | "concise"
+                                | "detailed"
+                                | "extensive"
+                            )
+                          }
+                          className={`flex flex-col items-center gap-2 p-3 rounded-lg border transition-all ${
+                            textAmount === option.id
+                              ? "border-foreground bg-foreground/5"
+                              : "border-border hover:border-foreground/50"
+                          }`}
+                        >
+                          <div className="flex flex-col gap-0.5">
+                            {Array.from({ length: option.lines }).map(
+                              (_, i) => (
+                                <div
+                                  key={i}
+                                  className={`h-1 rounded ${
+                                    textAmount === option.id
+                                      ? "bg-foreground w-8"
+                                      : "bg-muted-foreground w-6"
+                                  }`}
+                                />
+                              )
+                            )}
+                          </div>
+                          <span className="text-xs font-medium">
+                            {option.label}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Theme Selection */}
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="text-sm font-semibold mb-1">Visuals</h3>
+                      <p className="text-xs text-muted-foreground">Theme</p>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        {
+                          id: "bubble-gum",
+                          label: "Bubble Gum",
+                          bg: "bg-pink-900",
+                          text: "text-pink-300",
+                        },
+                        {
+                          id: "blueberry",
+                          label: "Blueberry",
+                          bg: "bg-purple-900",
+                          text: "text-purple-300",
+                        },
+                        {
+                          id: "onyx",
+                          label: "Onyx",
+                          bg: "bg-gray-900",
+                          text: "text-gray-300",
+                        },
+                        {
+                          id: "electric",
+                          label: "Electric",
+                          bg: "bg-blue-900",
+                          text: "text-blue-300",
+                        },
+                        {
+                          id: "moss-mist",
+                          label: "Moss & Mist",
+                          bg: "bg-green-900",
+                          text: "text-green-300",
+                        },
+                        {
+                          id: "wine",
+                          label: "Wine",
+                          bg: "bg-red-900",
+                          text: "text-red-300",
+                        },
+                      ].map((theme) => (
+                        <button
+                          key={theme.id}
+                          type="button"
+                          onClick={() => setSelectedTheme(theme.id)}
+                          className={`relative p-3 rounded-lg border-2 transition-all ${
+                            selectedTheme === theme.id
+                              ? "border-foreground"
+                              : "border-border hover:border-foreground/50"
+                          }`}
+                        >
+                          <div
+                            className={`${theme.bg} rounded p-2 space-y-1 min-h-[60px]`}
+                          >
+                            <div
+                              className={`${theme.text} text-xs font-medium`}
+                            >
+                              Title
+                            </div>
+                            <div className="text-white text-xs">
+                              Body & <span className={theme.text}>link</span>
+                            </div>
+                          </div>
+                          <span className="text-xs font-medium mt-2 block text-center">
+                            {theme.label}
+                          </span>
+                          {selectedTheme === theme.id && (
+                            <div className="absolute -top-1 -right-1 w-5 h-5 bg-foreground rounded-full flex items-center justify-center">
+                              <svg
+                                className="w-3 h-3 text-background"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={3}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            </div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Image Style Selection */}
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="text-sm font-semibold mb-1">
+                        Image art style
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { id: "illustration", label: "Illustration" },
+                        { id: "photorealistic", label: "Photorealistic" },
+                        { id: "abstract", label: "Abstract" },
+                        { id: "3d", label: "3D" },
+                        { id: "line-art", label: "Line Art" },
+                      ].map((style) => (
+                        <button
+                          key={style.id}
+                          type="button"
+                          onClick={() =>
+                            setImageStyle(
+                              style.id as
+                                | "illustration"
+                                | "photorealistic"
+                                | "abstract"
+                                | "3d"
+                                | "line-art"
+                            )
+                          }
+                          className={`flex items-center justify-center gap-2 p-3 rounded-lg border transition-all ${
+                            imageStyle === style.id
+                              ? "border-foreground bg-foreground/5"
+                              : "border-border hover:border-foreground/50"
+                          }`}
+                        >
+                          <span className="text-sm font-medium">
+                            {style.label}
+                          </span>
+                          {imageStyle === style.id && (
+                            <div className="w-4 h-4 rounded-full bg-foreground flex items-center justify-center">
+                              <svg
+                                className="w-2.5 h-2.5 text-background"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={3}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            </div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Extra Keywords */}
+                  <div className="space-y-2">
+                    <div>
+                      <h3 className="text-sm font-semibold mb-1">
+                        Add extra keywords
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        Optional: Add keywords to maintain consistency in image
+                        style
+                      </p>
+                    </div>
+                    <Input
+                      value={extraKeywords}
+                      onChange={(e) => setExtraKeywords(e.target.value)}
+                      placeholder="e.g. minimalism, colorful"
+                      className="text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          <DrawerFooter>
+            <Button
+              onClick={async () => {
+                if (presentationOutline.length === 0) {
+                  toast({
+                    title: "Error",
+                    description: "Please add at least one slide",
+                    variant: "destructive",
+                  });
+                  return;
+                }
+
+                setIsSubmitting(true);
+                try {
+                  // Create presentation project
+                  const presentationData = {
+                    title: inputValue,
+                    type: "presentation",
+                    outline: presentationOutline,
+                    orientation: selectedOrientation,
+                    customSize:
+                      customSize.width && customSize.height ? customSize : null,
+                    textAmount,
+                    theme: selectedTheme,
+                    imageStyle,
+                    extraKeywords: extraKeywords.trim() || undefined,
+                  };
+
+                  const response = await apiResponse.post(
+                    "/presentation/create",
+                    presentationData,
+                    { withCredentials: true }
+                  );
+
+                  if (response.data && response.data.project) {
+                    clearInput();
+                    setSelectedDesignTypeId("generic_design");
+                    setSelectedOrientation(null);
+                    setShowOrientationSelection(false);
+                    setCustomSize({ width: "", height: "" });
+                    setPresentationOutline([]);
+                    setIsPresentationDrawerOpen(false);
+
+                    // Navigate to presentation studio
+                    router.push(
+                      `/presentation/${response.data.project._id || response.data.project.id}/studio`
+                    );
+                  }
+                } catch (error: any) {
+                  console.error("Failed to create presentation:", error);
+                  toast({
+                    title: "Error",
+                    description:
+                      error.response?.data?.message ||
+                      "Failed to create presentation. Please try again.",
+                    variant: "destructive",
+                  });
+                } finally {
+                  setIsSubmitting(false);
+                }
+              }}
+              className="w-full"
+              disabled={isSubmitting || presentationOutline.length === 0}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                <>
+                  <WandSparklesIcon className="w-4 h-4 mr-2" />
+                  Generate Presentation
+                </>
+              )}
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

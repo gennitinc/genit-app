@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useUserContext } from "@/context/AuthenticatedContext";
-// Onboarding removed: no longer import or use onboarding utilities
 import Loading from "@/utils/Loading";
 
 function withAuth(
@@ -13,31 +12,67 @@ function withAuth(
   return function Hoc(props: any) {
     const { user, loading, setLoading } = useUserContext();
     const router = useRouter();
-    const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(false);
+    const pathname = usePathname();
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
     useEffect(() => {
       const handleAuthAndOnboarding = async () => {
+        if (loading) {
+          return; // Wait for auth to finish loading
+        }
+
         if (isAuthPage) {
-          // For auth pages: if user exists, redirect to app (/chat)
-          if (!loading && user) {
-            setLoading(false);
-            router.push("/chat");
-            return;
+          // For auth pages (signin, signup, etc.): if user exists and is verified, redirect based on onboarding status
+          if (user) {
+            if (!user.emailVerified) {
+              // Not verified - stay on auth page
+              setIsCheckingAuth(false);
+              return;
+            } else if (!user.onboarding?.onboardingCompleted) {
+              // Verified but not onboarded - redirect to onboarding
+              router.push("/onboarding");
+              return;
+            } else {
+              // Verified and onboarded - redirect to chat
+              router.push("/chat");
+              return;
+            }
           }
+          // No user - allow access to auth page
+          setIsCheckingAuth(false);
         } else {
-          // For protected pages: if no user, redirect to /signin
-          if (!loading && !user) {
-            setLoading(false);
+          // For protected pages: check authentication and onboarding
+          if (!user) {
+            // No user - redirect to signin
             router.push("/signin");
             return;
           }
+
+          // User exists - check verification and onboarding
+          if (!user.emailVerified) {
+            // Not verified - redirect to verification
+            router.push(`/account/verify?email=${encodeURIComponent(user.email)}`);
+            return;
+          }
+
+          if (!skipOnboardingCheck && !user.onboarding?.onboardingCompleted) {
+            // Verified but not onboarded - redirect to onboarding
+            // Exception: if already on onboarding page, allow access
+            if (pathname !== "/onboarding") {
+              router.push("/onboarding");
+              return;
+            }
+          }
+
+          // User is verified and (onboarded or skipOnboardingCheck is true) - allow access
+          setIsCheckingAuth(false);
         }
       };
 
       handleAuthAndOnboarding();
-    }, [loading, user, router, setLoading, isAuthPage, skipOnboardingCheck]);
+    }, [loading, user, router, setLoading, isAuthPage, skipOnboardingCheck, pathname]);
 
-    if (loading || isCheckingOnboarding) {
+    if (loading || isCheckingAuth) {
       return (
         <div className="flex justify-center items-center min-h-[100dvh] overflow-hidden w-full bg-black">
           <Loading />
@@ -46,14 +81,19 @@ function withAuth(
     }
 
     if (isAuthPage) {
-      // For auth pages: render if no user
-      if (!loading && !user) {
+      // For auth pages: render if no user or user not verified
+      if (!loading && (!user || !user.emailVerified)) {
         setLoading(false);
         return <Component {...props} />;
       }
     } else {
-      // For protected pages: render if user exists
-      if (!loading && user) {
+      // For protected pages: render if user exists, is verified, and (onboarded or skipOnboardingCheck)
+      if (
+        !loading &&
+        user &&
+        user.emailVerified &&
+        (skipOnboardingCheck || user.onboarding?.onboardingCompleted || pathname === "/onboarding")
+      ) {
         setLoading(false);
         return <Component {...props} />;
       }

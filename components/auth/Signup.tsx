@@ -6,6 +6,7 @@ import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/Regex";
 import { apiResponse } from "@/utils/apiResponse";
 import { toast } from "sonner";
 import { useRouter, usePathname } from "next/navigation";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -41,6 +42,7 @@ export const SignupComp = () => {
   const [profile, setProfile] = useState<string>("");
   const [provider, setProvider] = useState("");
   const router = useRouter();
+  const { fetchCurrentUser } = useUserContext();
 
   const UserDp: Array<string> = [
     "https://enterboxbucket.blob.core.windows.net/programmablefiles/1.png",
@@ -156,10 +158,25 @@ export const SignupComp = () => {
           // sameSite: "strict",
         });
 
-        // Redirect to verification page with email parameter
-        router.push(
-          `/account/verify?email=${encodeURIComponent(Formdata.email)}`
-        );
+        // Fetch current user data to check verification and onboarding status
+        await fetchCurrentUser();
+
+        // Check verification and onboarding status, redirect accordingly
+        const userData = await apiResponse.get("/user/active-user");
+        const currentUser = userData.data.user;
+
+        if (!currentUser.emailVerified) {
+          // Not verified - redirect to verification
+          router.push(
+            `/account/verify?email=${encodeURIComponent(currentUser.email)}`
+          );
+        } else if (!currentUser.onboarding?.onboardingCompleted) {
+          // Verified but not onboarded - redirect to onboarding
+          router.push("/onboarding");
+        } else {
+          // Verified and onboarded - go to chat
+          router.push("/chat");
+        }
       }
     } catch (error: any) {
       setLoading(false);
@@ -191,7 +208,7 @@ export const SignupComp = () => {
         console.log("user", User);
         const userId = User?.user?._id.toString();
         if (response.status === 200) {
-          toast.success("Account Created Successfully! verify account.");
+          toast.success("Account Created Successfully!");
 
           const longerEXP = 1000 * 60 * 60 * 24 * 30;
 
@@ -201,10 +218,25 @@ export const SignupComp = () => {
             // sameSite: "strict",
           });
 
-          // Redirect to verification page with email parameter
-          router.push(
-            `/account/verify?email=${encodeURIComponent(Formdata.email)}`
-          );
+          // Fetch current user data to check verification and onboarding status
+          await fetchCurrentUser();
+
+          // Check verification and onboarding status, redirect accordingly
+          const userData = await apiResponse.get("/user/active-user");
+          const currentUser = userData.data.user;
+
+          if (!currentUser.emailVerified) {
+            // Not verified - redirect to verification
+            router.push(
+              `/account/verify?email=${encodeURIComponent(currentUser.email)}`
+            );
+          } else if (!currentUser.onboarding?.onboardingCompleted) {
+            // Verified but not onboarded - redirect to onboarding
+            router.push("/onboarding");
+          } else {
+            // Verified and onboarded - go to chat
+            router.push("/chat");
+          }
         }
       } catch (error: any) {
         setLoading2(false);

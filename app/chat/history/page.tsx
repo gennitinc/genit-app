@@ -123,30 +123,57 @@ function ChatHistoryPage() {
 
   // Handle project actions
   const handleArchiveProject = async (projectId: string) => {
-    // TODO: Implement archive functionality
-    console.log("Archive project:", projectId);
+    try {
+      const response = await apiResponse.patch(
+        `/project/${projectId}/archive`,
+        { archive: true },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        // Update the projects array by removing the archived project
+        setProjects((prevProjects) =>
+          prevProjects.filter((project) => project._id !== projectId)
+        );
+        toast.success("Project archived successfully");
+      } else {
+        toast.error("Failed to archive project");
+      }
+    } catch (error: any) {
+      console.error("Error archiving project:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to archive project"
+      );
+    }
   };
 
   const handleDeleteProject = async (projectId: string) => {
-    // TODO: Implement delete functionality
-    console.log("Delete project:", projectId);
     setIsDeletingProject(true);
 
     try {
-      
       const response = await apiResponse.delete(`/project/${projectId}`);
 
       if (response.status == 200) {
+        // Update the projects array by removing the deleted project
+        setProjects((prevProjects) =>
+          prevProjects.filter((project) => project._id !== projectId)
+        );
         setIsDeletingProject(false);
         setActiveProject(null);
         toast("Operation Completed", {
           description: "project and resources has been deleted successfully",
         });
-        setIsDeleteModalOpen(false)
+        setIsDeleteModalOpen(false);
       } else {
+        setIsDeletingProject(false);
+        toast.error("Failed to delete project");
       }
-    } catch (error) {
-      
+    } catch (error: any) {
+      console.error("Error deleting project:", error);
+      setIsDeletingProject(false);
+      toast.error(
+        error.response?.data?.message || "Failed to delete project"
+      );
     }
   };
 
@@ -266,11 +293,10 @@ function ChatHistoryPage() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem
-                                disabled={true}
-                                className="cursor-not-allowed"
-                                onClick={() =>
-                                  handleArchiveProject(project._id)
-                                }
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleArchiveProject(project._id);
+                                }}
                               >
                                 <Archive className="h-3 w-3 mr-2" />
                                 Archive

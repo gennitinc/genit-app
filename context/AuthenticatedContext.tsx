@@ -79,10 +79,10 @@ export interface User {
     language?: string;
     companyWebsite?: string;
     primaryGoal?: string;
-    channels?: string[];
-    agentType?: string;
-    agentName?: string;
-    agentDescription?: string;
+    channels?: string[]; // Legacy format
+    socialMediaUrls?: { platform: string; url: string }[];
+    primaryColor?: string;
+    secondaryColor?: string;
   };
 }
 

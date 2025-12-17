@@ -47,12 +47,13 @@ import { apiResponse } from "@/utils/apiResponse";
 import { useProjectDesign } from "@/context/DesignProject";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AIThinkingContent } from "../chat/messages";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 type TemplateItem = {
   id: string;
   src: string;
   alt?: string;
+  category?: string;
 };
 
 export default function TemplateGrid() {
@@ -75,9 +76,48 @@ export default function TemplateGrid() {
     setNewError(null);
 
     try {
-      // 👇 Fetch from your Express backend
+      // List of categories to randomize with their corresponding search queries
+      const categoryQueries: Record<string, string[]> = {
+        instagram_post: [
+          "instagram post design",
+          "instagram template",
+          "social media post",
+        ],
+        poster: ["poster design", "event poster", "creative poster"],
+        youtube_thumbnail: [
+          "youtube thumbnail",
+          "video thumbnail",
+          "youtube banner",
+        ],
+        facebook_post: [
+          "facebook post design",
+          "facebook template",
+          "social media design",
+        ],
+        facebook_cover: ["facebook cover", "facebook banner", "cover photo"],
+        banner: ["banner design", "web banner", "advertisement banner"],
+        logo: ["logo design", "brand logo", "company logo"],
+        generic_design: [
+          "graphic design",
+          "creative design",
+          "design template",
+        ],
+      };
+
+      // Get all categories
+      const categories = Object.keys(categoryQueries);
+
+      // Randomize category
+      const randomCategory =
+        categories[Math.floor(Math.random() * categories.length)];
+
+      // Get random query for the selected category
+      const queries = categoryQueries[randomCategory];
+      const randomQuery = queries[Math.floor(Math.random() * queries.length)];
+
+      // 👇 Fetch from your Express backend with randomized query and category
       const res = await apiResponse.get(
-        "/templates/scrape/pins/search?q=fliers&limit=12",
+        `/templates/scrape/pins/search?q=${encodeURIComponent(randomQuery)}&limit=12&category=${randomCategory}`,
         {
           withCredentials: true,
         }
@@ -97,9 +137,9 @@ export default function TemplateGrid() {
     }
   };
 
-  // useEffect(() => {
-  //   fetchPins();
-  // }, []);
+  useEffect(() => {
+    fetchPins();
+  }, []);
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -121,6 +161,7 @@ export default function TemplateGrid() {
               id: template._id || template.assetId,
               src: template.mediaUrl,
               alt: template.alt || template.title || "Template",
+              category: template.category,
             })
           );
 
@@ -194,7 +235,6 @@ export default function TemplateGrid() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const user = useUserContext().user;
-  const { toast } = useToast();
 
   // Social media platform icons
   const socialIcons = [
@@ -303,10 +343,15 @@ export default function TemplateGrid() {
       // Check for low credits
       const creditsRemaining = user?.creditsRemaining ?? 0;
       if (creditsRemaining <= 10) {
-        toast({
-          title: "Low Credits",
-          description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? 's' : ''} remaining. Please top up to continue creating.`,
-          variant: "destructive",
+        const isBasic = String(user?.userPlan) === "Basic";
+        toast.error(`Low Credits`, {
+          description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? "s" : ""} remaining. Please top up to continue creating.`,
+          action: {
+            label: isBasic ? "Upgrade" : "Buy Credits",
+            onClick: () => {
+              router.push(isBasic ? "/pricing" : "/user/settings?tab=billing");
+            },
+          },
         });
         return;
       }
@@ -500,30 +545,43 @@ export default function TemplateGrid() {
             className="group relative mb-4 inline-block w-full align-top"
             style={{ breakInside: "avoid" }}
           >
-            <img
-              className="h-auto max-w-full rounded-lg object-cover"
-              src={t.src}
-              alt={t.alt || "Template"}
-            />
-            <div className="pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:opacity-100 group-hover:bg-black/30" />
-            <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-100 lg:opacity-0 transition-opacity group-hover:opacity-100">
-              <Button
-                size="icon"
-                variant="secondary"
-                onClick={() => onView(t)}
-                className="pointer-events-auto rounded-full h-9 w-9 p-0"
-                aria-label="View template"
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
-              <Button
-                size="icon"
-                onClick={() => onEdit(t)}
-                className="pointer-events-auto rounded-full h-9 w-9 p-0"
-                aria-label="Edit template"
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
+            <div className="relative">
+              <img
+                className="h-auto max-w-full rounded-lg object-cover"
+                src={t.src}
+                alt={t.alt || "Template"}
+              />
+              {t.category && (
+                <Badge
+                  variant="secondary"
+                  className="absolute top-2 left-2 text-xs pointer-events-none"
+                >
+                  {t.category
+                    .split("_")
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ")}
+                </Badge>
+              )}
+              <div className="pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:opacity-100 group-hover:bg-black/30" />
+              <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-100 lg:opacity-0 transition-opacity group-hover:opacity-100">
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  onClick={() => onView(t)}
+                  className="pointer-events-auto rounded-full h-9 w-9 p-0"
+                  aria-label="View template"
+                >
+                  <Eye className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="icon"
+                  onClick={() => onEdit(t)}
+                  className="pointer-events-auto rounded-full h-9 w-9 p-0"
+                  aria-label="Edit template"
+                >
+                  <Pencil className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
         ))}
@@ -792,7 +850,7 @@ export default function TemplateGrid() {
                               minHeight: "40px",
                               maxHeight: "300px",
                             }}
-                            className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
+                            className="bg-transparent rounded-2xl border-none w-full min-h-[60px] text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
                             aria-label="Enter your prompt"
                             aria-describedby={
                               inputError ? "input-error" : undefined
@@ -802,14 +860,6 @@ export default function TemplateGrid() {
 
                         <div className="flex justify-between items-center">
                           <div className="flex gap-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                              disabled={isGenerating}
-                            >
-                              <Mic className="w-3.5 h-3.5 text-muted-foreground" />
-                            </Button>
                             <button
                               type="button"
                               className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1123,7 +1173,7 @@ export default function TemplateGrid() {
                               minHeight: "40px",
                               maxHeight: "300px",
                             }}
-                            className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
+                            className="bg-transparent rounded-2xl border-none w-full min-h-[60px] text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
                             aria-label="Enter your prompt"
                             aria-describedby={
                               inputError ? "input-error" : undefined
@@ -1133,14 +1183,6 @@ export default function TemplateGrid() {
 
                         <div className="flex justify-between items-center">
                           <div className="flex gap-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                              disabled={isGenerating}
-                            >
-                              <Mic className="w-3.5 h-3.5 text-muted-foreground" />
-                            </Button>
                             <button
                               type="button"
                               className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"

@@ -390,7 +390,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     value: string,
     attachedFile?: any,
     selectedFiles?: string[],
-    designTypeId?: string
+    designTypeId?: string,
+    orientation?: string | null,
+    customSize?: { width: string; height: string } | null
   ) => {
 
     let category;
@@ -410,6 +412,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       collaborators: [],
       messages: [],
       category: category,
+      orientation: orientation || undefined,
+      customSize: customSize || undefined,
       analytics: {
         totalMessages: 0,
         totalGenerations: 0,

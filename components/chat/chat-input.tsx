@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { useRef, useEffect, useCallback, useState } from "react";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const models = [
   {
@@ -66,7 +67,7 @@ export function ChatInput({
   const inputSectionRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useUserContext();
-  const { toast } = useToast();
+  const router = useRouter();
 
   const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 10;
   const validateInput = useCallback((value: string, files: File[]) => {
@@ -81,42 +82,6 @@ export function ChatInput({
     }
     return null;
   }, []);
-  // Restore idea draft (prompt + files) if present
-  // useEffect(() => {
-  //   try {
-  //     const raw = localStorage.getItem("gennit_idea_draft");
-  //     if (!raw) return;
-  //     const parsed = JSON.parse(raw) as {
-  //       prompt?: string;
-  //       files?: { name: string; type: string; size: number; dataUrl: string }[];
-  //     };
-  //     if (parsed.prompt) setInputValue(parsed.prompt);
-  //     if (Array.isArray(parsed.files) && parsed.files.length > 0) {
-  //       // Reconstruct File objects from data URLs
-  //       const reconstructed = parsed.files.map((f, idx) => {
-  //         const arr = f.dataUrl.split(",");
-  //         const mime =
-  //           arr[0].match(/:(.*?);/)?.[1] ||
-  //           f.type ||
-  //           "application/octet-stream";
-  //         const bstr = atob(arr[1] || "");
-  //         let n = bstr.length;
-  //         const u8arr = new Uint8Array(n);
-  //         while (n--) {
-  //           u8arr[n] = bstr.charCodeAt(n);
-  //         }
-  //         const file = new File([u8arr], f.name || `file-${idx}`, {
-  //           type: mime,
-  //         });
-  //         (file as any).fileKey = `${file.name}-${Date.now()}-${idx}`;
-  //         return file;
-  //       });
-  //       setAttachedFiles(reconstructed);
-  //     }
-  //     // Clear after restoring so it doesn't keep overwriting
-  //     localStorage.removeItem("gennit_idea_draft");
-  //   } catch {}
-  // }, [setInputValue, setAttachedFiles]);
 
   // Track if user has manually scrolled up
   const [userScrolledUp, setUserScrolledUp] = useState(false);
@@ -243,10 +208,15 @@ export function ChatInput({
     // Check for low credits
     const creditsRemaining = user?.creditsRemaining ?? 0;
     if (creditsRemaining <= 10) {
-      toast({
-        title: "Low Credits",
-        description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? 's' : ''} remaining. Please top up to continue creating.`,
-        variant: "destructive",
+      const isBasic = String(user?.userPlan) === "Basic";
+      toast.error(`Low Credits`, {
+        description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? "s" : ""} remaining. Please top up to continue creating.`,
+        action: {
+          label: isBasic ? "Upgrade" : "Buy Credits",
+          onClick: () => {
+            router.push(isBasic ? "/pricing" : "/user/settings?tab=billing");
+          },
+        },
       });
       return;
     }
@@ -305,24 +275,6 @@ export function ChatInput({
 
   return (
     <div className={`h-full flex flex-col bg-transparent  ${className}`}>
-      {/* <style jsx>{`
-        @keyframes gentle-bounce {
-          0%,
-          20%,
-          50%,
-          80%,
-          100% {
-            transform: translateY(0);
-          }
-          40% {
-            transform: translateY(-2px);
-          }
-          60% {
-            transform: translateY(-1px);
-          }
-        }
-      `}</style> */}
-
       {/* Chat Content Area with hover-only scrollbar */}
       <div className="flex-1 p-4 overflow-y-auto custom-scrollbar">
         {children}
@@ -367,10 +319,17 @@ export function ChatInput({
             // Check for low credits
             const creditsRemaining = user?.creditsRemaining ?? 0;
             if (creditsRemaining <= 10) {
-              toast({
-                title: "Low Credits",
-                description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? 's' : ''} remaining. Please top up to continue creating.`,
-                variant: "destructive",
+              const isBasic = String(user?.userPlan) === "Basic";
+              toast.error(`Low Credits`, {
+                description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? "s" : ""} remaining. Please top up to continue creating.`,
+                action: {
+                  label: isBasic ? "Upgrade" : "Buy Credits",
+                  onClick: () => {
+                    router.push(
+                      isBasic ? "/pricing" : "/user/settings?tab=billing"
+                    );
+                  },
+                },
               });
               return;
             }
@@ -525,16 +484,6 @@ export function ChatInput({
 
             <div className="flex items-center gap-2 justify-between">
               <div className="flex items-center gap-2 justify-start">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                  disabled={isGenerating}
-                >
-                  <Mic className="w-3.5 h-3.5 text-muted-foreground" />
-                </Button>
-
                 <Button
                   type="button"
                   variant="ghost"
