@@ -44,6 +44,19 @@ export const SignupComp = () => {
   const router = useRouter();
   const { fetchCurrentUser } = useUserContext();
 
+  // Extract referral code from URL hash (e.g., #/?creator=@username)
+  const getReferralCode = () => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash;
+      const params = new URLSearchParams(hash.split("?")[1] || "");
+      const creator = params.get("creator");
+      if (creator) {
+        return creator.replace(/^@/, ""); // Remove @ if present
+      }
+    }
+    return null;
+  };
+
   const UserDp: Array<string> = [
     "https://enterboxbucket.blob.core.windows.net/programmablefiles/1.png",
     "https://enterboxbucket.blob.core.windows.net/programmablefiles/2.png",
@@ -139,7 +152,13 @@ export const SignupComp = () => {
 
     setLoading(true);
     try {
-      const response = await apiResponse.post("auth/sign-up", Formdata, {
+      // Add referral code if present in URL
+      const referralCode = getReferralCode();
+      const signupData = referralCode
+        ? { ...Formdata, referralCode }
+        : Formdata;
+
+      const response = await apiResponse.post("auth/sign-up", signupData, {
         withCredentials: true,
       });
       const User = response?.data;
@@ -191,11 +210,13 @@ export const SignupComp = () => {
   const handleGoogleSignUp = async (provider: string, data: any) => {
     console.log("data", data);
 
+    const referralCode = getReferralCode();
     const Formdata = {
       email: data.email,
       username: data.name,
       userdp: data.picture,
       password: data.sub + data.email,
+      ...(referralCode && { referralCode }),
     };
 
     console.log("formdata", Formdata);

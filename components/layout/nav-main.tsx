@@ -15,6 +15,7 @@ import {
   ChevronDown,
   Bot,
   WandSparklesIcon,
+  UserPlus,
 } from "lucide-react";
 
 import {
@@ -51,6 +52,11 @@ const navItems = [
     title: "Inspirations",
     icon: Palette,
     href: "/inspirations",
+  },
+  {
+    title: "Referral",
+    icon: UserPlus,
+    href: "/user/referral",
   },
   {
     title: "Billing",

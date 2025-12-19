@@ -104,11 +104,11 @@ export default function TemplateGridAll() {
         facebook_cover: ["facebook cover", "facebook banner", "cover photo"],
         banner: ["banner design", "web banner", "advertisement banner"],
         logo: ["logo design", "brand logo", "company logo"],
-        generic_design: [
-          "graphic design",
-          "creative design",
-          "design template",
-        ],
+        // generic_design: [
+        //   "graphic design",
+        //   "creative design",
+        //   "design template",
+        // ],
       };
 
       // Get all categories
@@ -144,9 +144,9 @@ export default function TemplateGridAll() {
     }
   };
 
-  useEffect(() => {
-    fetchPins();
-  }, []);
+  // useEffect(() => {
+  //   fetchPins();
+  // }, []);
 
   // Fetch a page of templates
   const fetchTemplatesPage = useCallback(

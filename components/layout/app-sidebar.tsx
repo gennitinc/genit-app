@@ -90,7 +90,10 @@ export function AppSidebar({
         <div className="mx-2 mb-4">
           <div className="relative bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl p-3 text-white overflow-hidden shadow-lg cursor-pointer hover:from-cyan-600/90 hover:to-blue-600/90 transition-all">
             {/* Background Pattern */}
-            
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-white rounded-full -translate-y-12 translate-x-12" />
+              <div className="absolute bottom-0 left-0 w-16 h-16 bg-white rounded-full translate-y-8 -translate-x-8" />
+            </div>
 
             {/* Subtle Grid Pattern */}
             <div className="absolute inset-0 opacity-5">
@@ -138,9 +141,7 @@ export function AppSidebar({
                     <div
                       className="bg-gradient-to-r from-cyan-500 to-blue-500 h-1.5 rounded-full transition-all duration-500 relative overflow-hidden shadow-sm"
                       style={{ width: `${creditPercentage}%` }}
-                    >
-                    
-                    </div>
+                    ></div>
                   </div>
                 </div>
 
@@ -165,7 +166,6 @@ export function AppSidebar({
             onClick={() => setOpen(true)}
           >
             <Crown className="w-4 h-4 text-white" strokeWidth={1.5} />
-            
           </div>
         </div>
       )}

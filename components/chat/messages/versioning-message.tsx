@@ -428,7 +428,7 @@ export function VersioningMessage({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-8 w-8 p-0 mr-4"
+                    className="h-8 w-8 p-0 mr-1"
                     onClick={(e) => {
                       e.stopPropagation();
                       // Prefer an explicit item from the generation items.

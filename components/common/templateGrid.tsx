@@ -96,11 +96,11 @@ export default function TemplateGrid() {
         facebook_cover: ["facebook cover", "facebook banner", "cover photo"],
         banner: ["banner design", "web banner", "advertisement banner"],
         logo: ["logo design", "brand logo", "company logo"],
-        generic_design: [
-          "graphic design",
-          "creative design",
-          "design template",
-        ],
+        // generic_design: [
+        //   "graphic design",
+        //   "creative design",
+        //   "design template",
+        // ],
       };
 
       // Get all categories
@@ -136,9 +136,9 @@ export default function TemplateGrid() {
     }
   };
 
-  useEffect(() => {
-    fetchPins();
-  }, []);
+  // useEffect(() => {
+  //   fetchPins();
+  // }, []);
 
   useEffect(() => {
     const fetchTemplates = async () => {
