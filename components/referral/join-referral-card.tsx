@@ -106,7 +106,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
 
   return (
     <div className="w-full">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl mt-16 lg:mt-0 px-4 sm:px-6 lg:px-8">
         <div className="relative isolate after:pointer-events-none lg:flex lg:gap-x-20 lg:px-8 xl:px-24 lg:pt-0 items-center">
           <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
             <div className="flex mt-6 sm:mt-8 justify-center lg:justify-start">
