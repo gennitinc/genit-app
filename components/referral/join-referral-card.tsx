@@ -27,9 +27,9 @@ interface ChartBarProps {
 
 function ChartBar({ value, height, month, isDark }: ChartBarProps) {
   return (
-    <div className="group relative flex flex-col items-center space-y-1.5 sm:space-y-2 flex-shrink-0">
+    <div className="group relative flex flex-col items-center space-y-1.5 sm:space-y-2 flex-1 min-w-0">
       <div
-        className={`absolute top-2 hidden rounded-full px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs group-hover:block z-10 ${
+        className={`absolute top-2 hidden rounded-full px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs group-hover:block z-10 whitespace-nowrap ${
           isDark
             ? "bg-gray-800 text-gray-100 border border-gray-700"
             : "bg-black text-white"
@@ -38,12 +38,12 @@ function ChartBar({ value, height, month, isDark }: ChartBarProps) {
         {value}
       </div>
       <div
-        className={`flex h-24 sm:h-32 w-2.5 sm:w-3 items-end rounded-full group-hover:cursor-pointer ${
+        className={`flex h-24 sm:h-32 w-full max-w-[20px] sm:max-w-[24px] items-end rounded-full group-hover:cursor-pointer mx-auto ${
           isDark ? "bg-gray-800" : "bg-slate-200"
         }`}
       >
         <div
-          className={`${height} w-2.5 sm:w-3 rounded-full ${isDark ? "bg-blue-500" : "bg-blue-600"}`}
+          className={`${height} w-full rounded-full ${isDark ? "bg-blue-500" : "bg-blue-600"}`}
         />
       </div>
       <div
@@ -226,7 +226,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                   <div className="text-2xl sm:text-3xl">🎉</div>
                 </div>
                 <div
-                  className={`w-full border-t ${isDark ? "border-gray-800" : "border-gray-200"}`}
+                  className={`w-full border-t ${isDark ? "border-gray-800" : "border-gray-200"} -mx-4 sm:-mx-5 px-4 sm:px-5`}
                 />
                 <div className="relative -mt-3 flex space-x-3 sm:space-x-5 lg:space-x-8 overflow-x-auto pb-2">
                   <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500">
@@ -344,7 +344,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                       </svg>
                     </span>
                   </div>
-                  <div className="mt-6 sm:mt-8 flex space-x-1.5 sm:space-x-2.5 w-full overflow-x-auto pb-2">
+                  <div className="mt-6 sm:mt-8 flex justify-between items-end w-full gap-1 sm:gap-2">
                     {chartData.map((data) => (
                       <ChartBar
                         key={data.month}
@@ -361,7 +361,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 mx-4 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16 max-w-4xl lg:max-w-5xl">
+        <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 mx-2 md:mx-8 lg:mx-12 xl:mx-16 max-w-4xl lg:max-w-5xl">
           <div className="mb-4 sm:mb-6">
             <h2 className="text-base sm:text-lg font-normal text-gray-900 dark:text-white mb-2">
               How It Works
