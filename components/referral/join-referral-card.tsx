@@ -361,7 +361,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 mx-2 md:mx-8 lg:mx-12 xl:mx-16 max-w-4xl lg:max-w-5xl">
+        <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 md:mx-8 lg:mx-12 xl:mx-16 max-w-4xl lg:max-w-5xl">
           <div className="mb-4 sm:mb-6">
             <h2 className="text-base sm:text-lg font-normal text-gray-900 dark:text-white mb-2">
               How It Works
