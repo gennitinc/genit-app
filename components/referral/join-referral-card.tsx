@@ -172,13 +172,10 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                 {joining ? (
                   <>
                     <RefreshCw className="h-5 w-5 mr-2 animate-spin" />
-                    Joining...
+                    processing...
                   </>
                 ) : (
-                  <>
-                    <UserPlus className="h-5 w-5 mr-2" />
-                    Join
-                  </>
+                  "Become an affiliate" 
                 )}
               </Button>
 
@@ -374,7 +371,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
           <div className="space-y-4 sm:space-y-6">
             <div className="flex gap-3 sm:gap-4">
               <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-xs sm:text-sm font-normal text-gray-600 dark:text-gray-400">
+                <span className="text-lg sm:text-lg lg:text-sm font-normal text-gray-600 dark:text-gray-400">
                   1
                 </span>
               </div>
@@ -382,7 +379,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                 <h3 className="text-lg sm:text-lg lg:text-sm font-normal text-gray-900 dark:text-white mb-1">
                   Share Your Referral Link
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-lg sm:text-lg lg:text-sm text-gray-500 dark:text-gray-400">
                   Get your unique referral link from your dashboard and share it
                   with friends, family, or on social media.
                 </p>
