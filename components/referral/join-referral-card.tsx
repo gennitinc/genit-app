@@ -27,9 +27,9 @@ interface ChartBarProps {
 
 function ChartBar({ value, height, month, isDark }: ChartBarProps) {
   return (
-    <div className="group relative flex flex-col items-center space-y-2">
+    <div className="group relative flex flex-col items-center space-y-1.5 sm:space-y-2 flex-shrink-0">
       <div
-        className={`absolute top-2 hidden rounded-full px-2 py-1 text-xs group-hover:block ${
+        className={`absolute top-2 hidden rounded-full px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs group-hover:block z-10 ${
           isDark
             ? "bg-gray-800 text-gray-100 border border-gray-700"
             : "bg-black text-white"
@@ -38,15 +38,17 @@ function ChartBar({ value, height, month, isDark }: ChartBarProps) {
         {value}
       </div>
       <div
-        className={`flex h-32 w-3 items-end rounded-full group-hover:cursor-pointer ${
+        className={`flex h-24 sm:h-32 w-2.5 sm:w-3 items-end rounded-full group-hover:cursor-pointer ${
           isDark ? "bg-gray-800" : "bg-slate-200"
         }`}
       >
         <div
-          className={`${height} w-3 rounded-full ${isDark ? "bg-blue-500" : "bg-blue-600"}`}
+          className={`${height} w-2.5 sm:w-3 rounded-full ${isDark ? "bg-blue-500" : "bg-blue-600"}`}
         />
       </div>
-      <div className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+      <div
+        className={`text-[10px] sm:text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}
+      >
         {month}
       </div>
     </div>
@@ -103,29 +105,29 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
   };
 
   return (
-    <div className="">
-      <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 ">
-        <div className="relative isolate px-6 after:pointer-events-none lg:flex lg:gap-x-20 lg:px-24 lg:pt-0 items-center">
+    <div className="w-full">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative isolate after:pointer-events-none lg:flex lg:gap-x-20 lg:px-8 xl:px-24 lg:pt-0 items-center">
           <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
-            <div className="flex mt-8 justify-center lg:justify-start">
+            <div className="flex mt-6 sm:mt-8 justify-center lg:justify-start">
               <div className="flex items-center">
                 <div className="flex -space-x-2">
                   <img
-                    className={`inline-block h-10 w-10 rounded-full ring-2 ${
+                    className={`inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ${
                       isDark ? "ring-gray-800" : "ring-white"
                     }`}
                     src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     alt=""
                   />
                   <img
-                    className={`inline-block h-10 w-10 rounded-full ring-2 ${
+                    className={`inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ${
                       isDark ? "ring-gray-800" : "ring-white"
                     }`}
                     src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     alt=""
                   />
                   <img
-                    className={`inline-block h-10 w-10 rounded-full ring-2 ${
+                    className={`inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ${
                       isDark ? "ring-gray-800" : "ring-white"
                     }`}
                     src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
@@ -133,7 +135,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                   />
                 </div>
                 <div
-                  className={`text-xs ml-4 rounded-full px-3 py-1 ${
+                  className={`text-[10px] sm:text-xs ml-3 sm:ml-4 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 ${
                     isDark
                       ? "text-purple-200 bg-purple-900/30"
                       : "text-purple-700 bg-purple-100"
@@ -145,18 +147,18 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
             </div>
 
             <h2
-              className={`text-3xl mt-5 font-semibold tracking-tight text-balance sm:text-4xl ${isDark ? "text-white" : "text-gray-900"}`}
+              className={`text-2xl sm:text-3xl lg:text-4xl mt-5 font-semibold tracking-tight text-balance ${isDark ? "text-white" : "text-gray-900"}`}
             >
               Affiliate Program
             </h2>
             <div>
-              <p className="text-sm text-muted-foreground mt-2">
+              <p className="text-xs sm:text-sm text-muted-foreground mt-2">
                 Become an an affiliate and start earning, Get a unique referral
                 link, QR code, and media kit to promote your profile
               </p>
             </div>
 
-            <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6 lg:justify-start">
               <Button
                 onClick={handleJoinReferralProgram}
                 disabled={joining}
@@ -193,10 +195,10 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
               </Link>
             </div>
           </div>
-          <div className="h-fit">
-            <div className="relative flex flex-col items-center justify-center overflow-hidden  py-6 sm:py-12">
+          <div className="h-fit w-full mt-8 lg:mt-0">
+            <div className="relative flex flex-col items-center justify-center overflow-hidden py-4 sm:py-6 lg:py-12">
               <div
-                className={`relative overflow-hidden rounded-2xl border p-5 py-3 pt-5 ${
+                className={`relative overflow-hidden rounded-xl sm:rounded-2xl border p-4 sm:p-5 py-3 pt-4 sm:pt-5 w-full md:w-fit max-w-md lg:max-w-lg ${
                   isDark
                     ? "bg-neutral-900 border-neutral-800"
                     : "bg-white border-gray-200"
@@ -204,29 +206,29 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                 id="widget"
               >
                 <div className="absolute inset-0 opacity-10">
-                  <div className="absolute top-0 right-0 w-54 h-24 bg-white rounded-full -translate-y-12 translate-x-12" />
-                  <div className="absolute bottom-0 left-0 w-16 h-16 bg-white rounded-full translate-y-8 -translate-x-8" />
+                  <div className="absolute top-0 right-0 w-32 sm:w-56 h-16 sm:h-24 bg-white rounded-full -translate-y-8 sm:-translate-y-12 translate-x-8 sm:translate-x-12" />
+                  <div className="absolute bottom-0 left-0 w-12 sm:w-16 h-12 sm:h-16 bg-white rounded-full translate-y-6 sm:translate-y-8 -translate-x-6 sm:-translate-x-8" />
                 </div>
 
-                <div className="mb-8 flex items-center justify-between">
+                <div className="mb-6 sm:mb-8 flex items-center justify-between">
                   <div>
                     <div
-                      className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}
+                      className={`text-xs sm:text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}
                     >
                       It's amazing!
                     </div>
                     <div
-                      className={`text-xl font-medium ${isDark ? "text-gray-200" : "text-gray-700"}`}
+                      className={`text-lg sm:text-xl font-medium ${isDark ? "text-gray-200" : "text-gray-700"}`}
                     >
                       5 day streak
                     </div>
                   </div>
-                  <div className="text-3xl">🎉</div>
+                  <div className="text-2xl sm:text-3xl">🎉</div>
                 </div>
                 <div
                   className={`w-full border-t ${isDark ? "border-gray-800" : "border-gray-200"}`}
                 />
-                <div className="relative -mt-3 flex space-x-5 sm:space-x-8">
+                <div className="relative -mt-3 flex space-x-3 sm:space-x-5 lg:space-x-8 overflow-x-auto pb-2">
                   <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -312,14 +314,14 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                   
                 </div> */}
 
-                <div className={`w-full mt-8 rounded-xl`} id="widget">
+                <div className={`w-full mt-6 sm:mt-8 rounded-xl`} id="widget">
                   <h6
                     className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}
                   >
                     Total earnings
                   </h6>
                   <div
-                    className={`mt-2 flex text-xl font-semibold ${isDark ? "text-gray-100" : "text-gray-900"}`}
+                    className={`mt-2 flex text-lg sm:text-xl font-semibold ${isDark ? "text-gray-100" : "text-gray-900"}`}
                   >
                     <span>$256</span>
                     <span
@@ -342,7 +344,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                       </svg>
                     </span>
                   </div>
-                  <div className="mt-8 flex space-x-2.5 w-full">
+                  <div className="mt-6 sm:mt-8 flex space-x-1.5 sm:space-x-2.5 w-full overflow-x-auto pb-2">
                     {chartData.map((data) => (
                       <ChartBar
                         key={data.month}
@@ -359,60 +361,60 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-xl p-6 mb-8 mx-6 md:mx-6 lg:mx-16 lg:mr-40">
-          <div className="mb-6">
-            <h2 className="text-lg font-normal text-gray-900 dark:text-white mb-2">
+        <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 mx-4 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16 max-w-4xl lg:max-w-5xl">
+          <div className="mb-4 sm:mb-6">
+            <h2 className="text-base sm:text-lg font-normal text-gray-900 dark:text-white mb-2">
               How It Works
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
               Our referral process is simple and rewarding for everyone
               involved.
             </p>
           </div>
-          <div className="space-y-6">
-            <div className="flex gap-4">
-              <div className="w-8 h-8 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex gap-3 sm:gap-4">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-xs sm:text-sm font-normal text-gray-600 dark:text-gray-400">
                   1
                 </span>
               </div>
-              <div>
-                <h3 className="text-base font-normal text-gray-900 dark:text-white mb-1">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm sm:text-base font-normal text-gray-900 dark:text-white mb-1">
                   Share Your Referral Link
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                   Get your unique referral link from your dashboard and share it
                   with friends, family, or on social media.
                 </p>
               </div>
             </div>
-            <div className="flex gap-4">
-              <div className="w-8 h-8 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
+            <div className="flex gap-3 sm:gap-4">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-xs sm:text-sm font-normal text-gray-600 dark:text-gray-400">
                   2
                 </span>
               </div>
-              <div>
-                <h3 className="text-base font-normal text-gray-900 dark:text-white mb-1">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm sm:text-base font-normal text-gray-900 dark:text-white mb-1">
                   Friend Signs Up
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                   When someone uses your referral link to create an account and
                   complete their profile, they become your referral.
                 </p>
               </div>
             </div>
-            <div className="flex gap-4">
-              <div className="w-8 h-8 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
+            <div className="flex gap-3 sm:gap-4">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-xs sm:text-sm font-normal text-gray-600 dark:text-gray-400">
                   3
                 </span>
               </div>
-              <div>
-                <h3 className="text-base font-normal text-gray-900 dark:text-white mb-1">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm sm:text-base font-normal text-gray-900 dark:text-white mb-1">
                   Earn Rewards
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                   Once your referral makes their first subscription, you earn
                   rewards. The more referrals, the more you earn.
                 </p>
