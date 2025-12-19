@@ -386,10 +386,10 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
             <h2 className="text-lg sm:text-lg font-bold text-gray-900 dark:text-white mb-2">
               How It Works
             </h2>
-            <span className="text-lg sm:text-lg lg:text-sm font-bold text-gray-600 dark:text-gray-400">
+          <p className="text-sm md:text-lg lg:text-sm text-gray-500 dark:text-gray-400">
               Our referral process is simple and rewarding for everyone
               involved.
-            </span>
+            </p>
           </div>
           <div className="space-y-4 sm:space-y-6">
             <div className="flex gap-3 sm:gap-4">
