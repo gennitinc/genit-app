@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import { apiResponse } from "@/utils/apiResponse";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { useRouter } from "next/navigation";
 
 interface JoinReferralCardProps {
   onJoinSuccess: () => void;
@@ -58,6 +60,8 @@ function ChartBar({ value, height, month, isDark }: ChartBarProps) {
 export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
   const [joining, setJoining] = useState(false);
   const { theme } = useTheme();
+  const { user } = useUserContext();
+  const router = useRouter();
   const isDark = theme === "dark";
 
   const chartData = [
@@ -76,6 +80,15 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
   ];
 
   const handleJoinReferralProgram = async () => {
+    // Check if user is authenticated
+    if (!user) {
+      toast.info("Please sign in to join the referral program", {
+        description: "Redirecting to sign in...",
+      });
+      router.push("/signin");
+      return;
+    }
+
     setJoining(true);
     try {
       const response = await apiResponse.post(
@@ -95,6 +108,16 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
       }
     } catch (error: any) {
       console.error("Failed to join referral program:", error);
+
+      // Handle 401/403 errors - redirect to sign in
+      if (error?.response?.status === 401 || error?.response?.status === 403) {
+        toast.error("Please sign in to join the referral program", {
+          description: "Redirecting to sign in...",
+        });
+        router.push("/signin");
+        return;
+      }
+
       toast.error(
         error?.response?.data?.message ||
           "Failed to join referral program. Please try again."
@@ -363,7 +386,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
             <h2 className="text-lg sm:text-lg font-bold text-gray-900 dark:text-white mb-2">
               How It Works
             </h2>
-              <span className="text-lg sm:text-lg lg:text-sm font-bold text-gray-600 dark:text-gray-400">
+            <span className="text-lg sm:text-lg lg:text-sm font-bold text-gray-600 dark:text-gray-400">
               Our referral process is simple and rewarding for everyone
               involved.
             </span>
