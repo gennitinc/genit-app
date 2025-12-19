@@ -175,7 +175,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                     processing...
                   </>
                 ) : (
-                  "Become an affiliate" 
+                  "Become an affiliate"
                 )}
               </Button>
 
@@ -360,7 +360,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
 
         <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8  md:mx-8 lg:mx-12 xl:mx-16 max-w-4xl lg:max-w-5xl">
           <div className="mb-4 sm:mb-6">
-            <h2 className="text-lg sm:text-lg font-bold font-normal text-gray-900 dark:text-white mb-2">
+            <h2 className="text-lg sm:text-lg font-bold text-gray-900 dark:text-white mb-2">
               How It Works
             </h2>
             <p className="text-lg sm:text-lg lg:text-sm text-gray-500 dark:text-gray-400">
@@ -371,7 +371,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
           <div className="space-y-4 sm:space-y-6">
             <div className="flex gap-3 sm:gap-4">
               <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-lg sm:text-lg lg:text-sm font-normal text-gray-600 dark:text-gray-400">
+                <span className="text-lg sm:text-lg lg:text-sm font-bold text-gray-600 dark:text-gray-400">
                   1
                 </span>
               </div>
@@ -379,23 +379,23 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                 <h3 className="text-lg sm:text-lg lg:text-sm font-normal text-gray-900 dark:text-white mb-1">
                   Share Your Referral Link
                 </h3>
-                <p className="text-lg sm:text-lg lg:text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm md:text-lg lg:text-sm text-gray-500 dark:text-gray-400">
                   Get your unique referral link from your dashboard and share it
                   with friends, family, or on social media.
                 </p>
               </div>
             </div>
             <div className="flex gap-3 sm:gap-4">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-lg sm:text-lg lg:text-sm font-normal text-gray-600 dark:text-gray-400">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 dark:bg-neutral-800 rounded-full flex   items-center justify-center flex-shrink-0">
+                <span className="text-lg sm:text-lg lg:text-sm font-bold text-gray-600 dark:text-gray-400">
                   2
                 </span>
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg sm:text-lg lg:text-sm font-normal text-gray-900 dark:text-white mb-1">
-                  Friend Signs Up
+                  Friend signs up
                 </h3>
-                <p className="text-lg sm:text-lg lg:text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm md:text-lg lg:text-sm text-gray-500 dark:text-gray-400">
                   When someone uses your referral link to create an account and
                   complete their profile, they become your referral.
                 </p>
@@ -403,15 +403,15 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
             </div>
             <div className="flex gap-3 sm:gap-4">
               <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-lg sm:text-lg lg:text-sm font-normal text-gray-600 dark:text-gray-400">
+                <span className="text-sm sm:text-lg lg:text-sm font-normal text-gray-600 dark:text-gray-400">
                   3
                 </span>
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg sm:text-lg lg:text-sm font-normal text-gray-900 dark:text-white mb-1">
-                  Earn Rewards
+                  Earn rewards
                 </h3>
-                <p className="text-lg sm:text-lg lg:text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm md:text-lg lg:text-sm text-gray-500 dark:text-gray-400">
                   Once your referral makes their first subscription, you earn
                   rewards. The more referrals, the more you earn.
                 </p>
