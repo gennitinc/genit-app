@@ -56,6 +56,17 @@ type TemplateItem = {
   category?: string;
 };
 
+type ImageDesignType =
+  | "logo"
+  | "flier"
+  | "poster"
+  | "youtube_thumbnail"
+  | "instagram_post"
+  | "generic_design"
+  | "banner"
+  | "facebook_post"
+  | "facebook_cover";
+
 export default function TemplateGrid() {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -70,53 +81,31 @@ export default function TemplateGrid() {
   const [limit, setLimit] = useState(20);
   const [pins, setPins] = useState([]);
 
+  const [designType, setDesigntype] = useState<ImageDesignType[]>([
+    "logo",
+    "flier",
+    "poster",
+    "youtube_thumbnail",
+    "instagram_post",
+    "generic_design",
+    "banner",
+    "facebook_post",
+    "facebook_cover",
+  ]);
+
   const fetchPins = async () => {
     setLoading(true);
     setNewError(null);
 
     try {
-      // List of categories to randomize with their corresponding search queries
-      const categoryQueries: Record<string, string[]> = {
-        instagram_post: [
-          "instagram post design",
-          "instagram template",
-          "social media post",
-        ],
-        poster: ["poster design", "event poster", "creative poster"],
-        youtube_thumbnail: [
-          "youtube thumbnail",
-          "video thumbnail",
-          "youtube banner",
-        ],
-        facebook_post: [
-          "facebook post design",
-          "facebook template",
-          "social media design",
-        ],
-        facebook_cover: ["facebook cover", "facebook banner", "cover photo"],
-        banner: ["banner design", "web banner", "advertisement banner"],
-        logo: ["logo design", "brand logo", "company logo"],
-        // generic_design: [
-        //   "graphic design",
-        //   "creative design",
-        //   "design template",
-        // ],
-      };
+      
 
-      // Get all categories
-      const categories = Object.keys(categoryQueries);
-
-      // Randomize category
-      const randomCategory =
-        categories[Math.floor(Math.random() * categories.length)];
-
-      // Get random query for the selected category
-      const queries = categoryQueries[randomCategory];
-      const randomQuery = queries[Math.floor(Math.random() * queries.length)];
+      
+      const randomDesignType = designType[Math.floor(Math.random() * designType.length)];
 
       // 👇 Fetch from your Express backend with randomized query and category
       const res = await apiResponse.get(
-        `/templates/scrape/pins/search?q=${encodeURIComponent(randomQuery)}&limit=12&category=${randomCategory}`,
+        `/templates/scrape/pins/search?q=${encodeURIComponent(randomDesignType)}&limit=12&category=${randomDesignType}`,
         {
           withCredentials: true,
         }
