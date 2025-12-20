@@ -125,9 +125,9 @@ export default function TemplateGrid() {
     }
   };
 
-  // useEffect(() => {
-  //   fetchPins();
-  // }, []);
+  useEffect(() => {
+    fetchPins();
+  }, []);
 
   useEffect(() => {
     const fetchTemplates = async () => {

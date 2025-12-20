@@ -69,7 +69,7 @@ type ImageDesignType =
   | "facebook_post"
   | "facebook_cover";
 
-  
+
 export default function TemplateGridAll() {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -132,9 +132,9 @@ export default function TemplateGridAll() {
     }
   };
 
-  // useEffect(() => {
-  //   fetchPins();
-  // }, []);
+  useEffect(() => {
+    fetchPins();
+  }, []);
 
   // Fetch a page of templates
   const fetchTemplatesPage = useCallback(
