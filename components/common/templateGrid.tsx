@@ -62,7 +62,7 @@ type ImageDesignType =
   | "poster"
   | "youtube_thumbnail"
   | "instagram_post"
-  | "generic_design"
+  // | "generic_design"
   | "banner"
   | "facebook_post"
   | "facebook_cover";
@@ -87,7 +87,7 @@ export default function TemplateGrid() {
     "poster",
     "youtube_thumbnail",
     "instagram_post",
-    "generic_design",
+    // "generic_design",
     "banner",
     "facebook_post",
     "facebook_cover",
