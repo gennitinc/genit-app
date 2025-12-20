@@ -236,7 +236,7 @@ export default function ReferralDashboard() {
     return (
       <div className="flex items-center justify-center h-full">
         <svg
-          className="animate-spin -ml-1 mr-3 h-4 w-4 text-white dark:text-black"
+          className="animate-spin -ml-1 mr-3 h-4 w-4 text-black dark:text-white"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
