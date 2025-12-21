@@ -129,7 +129,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
 
   return (
     <div className="w-full">
-      <div className="mx-auto max-w-7xl mt-16 lg:mt-0 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl mt-16 lg:mt-0 px-4 sm:px-6 lg:pl-8">
         <div className="relative isolate after:pointer-events-none lg:flex lg:gap-x-20 lg:px-8 xl:px-24 lg:pt-0 items-center">
           <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
             <div className="flex mt-6 sm:mt-8 justify-center lg:justify-start">
@@ -218,7 +218,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
           <div className="h-fit w-full mt-8 lg:mt-0">
             <div className="relative flex flex-col items-center justify-center overflow-hidden py-4 sm:py-6 lg:py-12">
               <div
-                className={`relative overflow-hidden rounded-xl sm:rounded-2xl border p-4 sm:p-5 py-3 pt-4 sm:pt-5 w-full md:w-fit max-w-md lg:max-w-lg ${
+                className={`relative overflow-hidden rounded-xl sm:rounded-2xl border p-4 sm:p-5 py-3 pt-4 sm:pt-5 w-full md:w-fit max-w-md lg:max-w-xl ${
                   isDark
                     ? "bg-neutral-900 border-neutral-800"
                     : "bg-white border-gray-200"
@@ -226,8 +226,8 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                 id="widget"
               >
                 <div className="absolute inset-0 opacity-10">
-                  <div className="absolute top-0 right-0 w-32 sm:w-56 h-16 sm:h-24 bg-white rounded-full -translate-y-8 sm:-translate-y-12 translate-x-8 sm:translate-x-12" />
-                  <div className="absolute bottom-0 left-0 w-12 sm:w-16 h-12 sm:h-16 bg-white rounded-full translate-y-6 sm:translate-y-8 -translate-x-6 sm:-translate-x-8" />
+                  <div className="absolute top-0 right-0 w-32 sm:w-56 h-16 sm:h-24 bg-neutral-800 dark:bg-neutral-200 rounded-full -translate-y-8 sm:-translate-y-12 translate-x-8 sm:translate-x-12" />
+                  <div className="absolute bottom-0 left-0 w-12 sm:w-16 h-12 sm:h-16 bg-neutral-800 dark:bg-neutral-200 rounded-full translate-y-6 sm:translate-y-8 -translate-x-6 sm:-translate-x-8" />
                 </div>
 
                 <div className="mb-6 sm:mb-8 flex items-center justify-between">
@@ -334,7 +334,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                   
                 </div> */}
 
-                <div className={`w-full mt-6 sm:mt-8 rounded-xl`} id="widget">
+                <div className={`w-full mt-6 sm:mt-3 rounded-xl`} id="widget">
                   <h6
                     className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}
                   >
@@ -364,7 +364,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                       </svg>
                     </span>
                   </div>
-                  <div className="mt-6 sm:mt-8 flex justify-between items-end w-full gap-1 sm:gap-2">
+                  <div className="mt-6 sm:mt-8 lg:mt-2 flex justify-between items-end w-full gap-1 sm:gap-2">
                     {chartData.map((data) => (
                       <ChartBar
                         key={data.month}
@@ -386,7 +386,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
             <h2 className="text-lg sm:text-lg font-bold text-gray-900 dark:text-white mb-2">
               How It Works
             </h2>
-          <p className="text-sm md:text-lg lg:text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm md:text-lg lg:text-sm text-gray-500 dark:text-gray-400">
               Our referral process is simple and rewarding for everyone
               involved.
             </p>
