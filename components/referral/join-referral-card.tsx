@@ -129,8 +129,8 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
 
   return (
     <div className="w-full">
-      <div className="mx-auto max-w-7xl mt-16 lg:mt-0 px-4 sm:px-6 lg:pl-8">
-        <div className="relative isolate after:pointer-events-none lg:flex lg:gap-x-20 lg:px-8 xl:px-24 lg:pt-0 items-center">
+      <div className="mx-auto max-w-7xl  flex flex-col mt-16 lg:mt-0 px-4 sm:px-6 lg:pl-8">
+        <div className="relative isolate after:pointer-events-none lg:flex lg:pt-0 items-center  mx-auto">
           <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
             <div className="flex mt-6 sm:mt-8 justify-center lg:justify-start">
               <div className="flex items-center">
@@ -172,7 +172,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
             <h2
               className={`text-2xl sm:text-3xl lg:text-4xl mt-5 font-semibold tracking-tight text-balance ${isDark ? "text-white" : "text-gray-900"}`}
             >
-              Creators Program
+              Affiliate Program
             </h2>
             <div>
               <p className="text-lg sm:text-lg lg:text-sm text-muted-foreground mt-2">
