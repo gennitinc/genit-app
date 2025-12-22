@@ -172,7 +172,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
             <h2
               className={`text-2xl sm:text-3xl lg:text-4xl mt-5 font-semibold tracking-tight text-balance ${isDark ? "text-white" : "text-gray-900"}`}
             >
-              Affiliate Program
+              Creators Program
             </h2>
             <div>
               <p className="text-lg sm:text-lg lg:text-sm text-muted-foreground mt-2">
