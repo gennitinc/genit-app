@@ -54,7 +54,7 @@ const navItems = [
     href: "/inspirations",
   },
   {
-    title: "Referral",
+    title: "Creator",
     icon: UserPlus,
     href: "/user/referral",
   },
