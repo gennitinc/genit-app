@@ -95,11 +95,11 @@ export default function TemplateGridAll() {
     "flier",
     "poster",
     "youtube_thumbnail",
-    "instagram_post",
-    "generic_design",
+    // "instagram_post",
+    // "generic_design",
     "banner",
-    "facebook_post",
-    "facebook_cover",
+    // "facebook_post",
+    // "facebook_cover",
   ]);
 
   const fetchPins = async () => {
