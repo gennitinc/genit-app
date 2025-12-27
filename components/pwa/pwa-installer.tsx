@@ -79,7 +79,7 @@ export function PWAInstaller() {
 
   return (
     <Dialog open={showInstallPrompt} onOpenChange={setShowInstallPrompt}>
-      <DialogContent className="sm:max-w-md mx-2 rounded-2xl">
+      <DialogContent className="sm:max-w-md rounded-2xl mx-1">
         <DialogHeader>
           <DialogTitle>Install Gennit AI</DialogTitle>
           <DialogDescription>
@@ -87,12 +87,14 @@ export function PWAInstaller() {
             support, and faster loading times.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex gap-2 mt-4">
+        <div className="mt-4">
           <img
             className="rounded-xl w-1/2 h-1/2"
             src="https://i.pinimg.com/originals/ea/f6/81/eaf68175b624f9f2d9f681ffabc8d437.gif"
             alt=""
           />
+        </div>
+        <div className="flex gap-2 mt-4">
           <Button onClick={handleInstallClick} className="flex-1">
             <Download className="w-4 h-4 mr-2" />
             Install App
