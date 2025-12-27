@@ -79,30 +79,42 @@ export function PWAInstaller() {
 
   return (
     <Dialog open={showInstallPrompt} onOpenChange={setShowInstallPrompt}>
-      <DialogContent className="sm:max-w-md rounded-2xl mx-1">
-        <DialogHeader>
-          <DialogTitle>Install Gennit AI</DialogTitle>
-          <DialogDescription>
-            Install our app for a better experience. Get quick access, offline
-            support, and faster loading times.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="mt-4">
+      <DialogContent className="max-w-sm rounded-2xl p-6">
+        <div className="flex flex-col items-center text-center space-y-4">
+          {/* Image */}
           <img
-            className="rounded-xl w-1/2 h-1/2"
             src="https://i.pinimg.com/originals/ea/f6/81/eaf68175b624f9f2d9f681ffabc8d437.gif"
-            alt=""
+            alt="Install Gennit App"
+            className="w-40 h-40 object-contain rounded-xl"
           />
-        </div>
-        <div className="flex gap-2 mt-4">
-          <Button onClick={handleInstallClick} className="flex-1">
-            <Download className="w-4 h-4 mr-2" />
-            Install App
-          </Button>
-          <Button variant="outline" onClick={handleDismiss} className="flex-1">
-            <X className="w-4 h-4 mr-2" />
-            Not Now
-          </Button>
+
+          {/* Text */}
+          <div className="space-y-2">
+            <DialogTitle className="text-xl font-semibold">
+              Install Gennit AI
+            </DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground">
+              Get faster access, offline support, and a smoother experience when
+              you install the app.
+            </DialogDescription>
+          </div>
+
+          {/* Actions */}
+          <div className="flex w-full gap-3 pt-2">
+            <Button onClick={handleInstallClick} className="flex-1 gap-2">
+              <Download className="w-4 h-4" />
+              Install App
+            </Button>
+
+            <Button
+              variant="outline"
+              onClick={handleDismiss}
+              className="flex-1 gap-2"
+            >
+              <X className="w-4 h-4" />
+              Not Now
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
