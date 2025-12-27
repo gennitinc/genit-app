@@ -559,7 +559,7 @@ function VideoCard({
         <p className="text-white text-sm font-medium line-clamp-2 mb-2">
           {video.prompt}
         </p>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             {video.author.avatar ? (
               <img

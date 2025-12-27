@@ -2151,17 +2151,18 @@ function VideoCreatePage() {
       {/* Right Section Drawer for Mobile/Tablet */}
       {isMobile && (
         <Drawer open={sidebarDrawerOpen} onOpenChange={setSidebarDrawerOpen}>
-          <DrawerContent className="h-[90vh] max-h-[90vh]">
+          <DrawerContent className="h-[85vh] max-h-[85vh]">
             <div className="flex flex-1 min-h-0 relative flex-col gap-2.5 pb-3 overflow-hidden">
               <div
                 dir="ltr"
                 data-orientation="horizontal"
-                className="z-10 flex w-full items-end justify-end px-4 pt-4"
+                className="z-10 flex w-full items-end justify-end pt-4 overflow-x-auto scrollbar-hide"
+                style={{ WebkitOverflowScrolling: "touch" }}
               >
                 <div
                   role="tablist"
                   aria-orientation="horizontal"
-                  className="rounded-xl p-1 flex gap-4 bg-page-primary border-separator-card bg-neutral-100 dark:bg-neutral-900"
+                  className="rounded-xl p-1 flex gap-4 bg-page-primary border-separator-card bg-neutral-100 dark:bg-neutral-900 shrink-0"
                   tabIndex={0}
                   data-orientation="horizontal"
                   style={{ outline: "none" }}
