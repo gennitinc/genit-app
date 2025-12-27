@@ -187,8 +187,8 @@ export default function AdminPresentersPage() {
             name: formData.name,
             category: formData.category,
             isPublic: formData.isPublic,
-          },
-          imageFile || undefined
+            image: imageFile || undefined,
+          }
         );
         if (response.success) {
           toast.success("Presenter updated successfully");
