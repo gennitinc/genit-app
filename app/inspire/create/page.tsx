@@ -597,7 +597,7 @@ function VideoCreatePage() {
           <div className="grid grid-cols-[1fr] md:grid-cols-[27rem_1fr] gap-2 md:h-[calc(100vh-4rem)] relative w-full">
             <div className="flex flex-col max-h-full min-h-0">
               {/* Mode Selector: Video / Image Tabs */}
-              <div className="flex items-start justify-between lg:px-4 py-2 mb-1 z-40">
+              <div className="flex items-start justify-between lg:px-4 py-2 mb-1 z-20">
                 <div
                   role="tablist"
                   aria-orientation="horizontal"
