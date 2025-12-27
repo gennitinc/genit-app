@@ -14,6 +14,7 @@ export default function robots(): MetadataRoute.Robots {
           "/contact",
           "/inspirations",
           "/suggest",
+          "/inspire/create",
         ],
         disallow: [
           "/chat",
@@ -27,6 +28,41 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: "GoogleBot",
+        allow: "/",
+        crawlDelay: 1,
+      },
+      {
+        userAgent: "Bingbot",
+        allow: "/",
+        crawlDelay: 1,
+      },
+      {
+        userAgent: "GPTBot",
+        allow: "/",
+        crawlDelay: 1,
+      },
+      {
+        userAgent: "ChatGPT-User",
+        allow: "/",
+        crawlDelay: 1,
+      },
+      {
+        userAgent: "CCBot",
+        allow: "/",
+        crawlDelay: 1,
+      },
+      {
+        userAgent: "anthropic-ai",
+        allow: "/",
+        crawlDelay: 1,
+      },
+      {
+        userAgent: "Claude-Web",
+        allow: "/",
+        crawlDelay: 1,
+      },
+      {
+        userAgent: "PerplexityBot",
         allow: "/",
         crawlDelay: 1,
       },
