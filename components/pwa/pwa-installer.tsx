@@ -81,13 +81,6 @@ export function PWAInstaller() {
     <Dialog open={showInstallPrompt} onOpenChange={setShowInstallPrompt}>
       <DialogContent className="max-w-sm rounded-2xl p-6">
         <div className="flex flex-col items-center text-center space-y-4">
-          {/* Image */}
-          <img
-            src="https://i.pinimg.com/originals/ea/f6/81/eaf68175b624f9f2d9f681ffabc8d437.gif"
-            alt="Install Gennit App"
-            className="w-40 h-40 object-contain rounded-xl"
-          />
-
           {/* Text */}
           <div className="space-y-2">
             <DialogTitle className="text-xl font-semibold">
@@ -98,6 +91,13 @@ export function PWAInstaller() {
               you install the app.
             </DialogDescription>
           </div>
+
+          {/* Image */}
+          <img
+            src="https://i.pinimg.com/originals/ea/f6/81/eaf68175b624f9f2d9f681ffabc8d437.gif"
+            alt="Install Gennit App"
+            className="w-40 h-40 object-contain rounded-xl"
+          />
 
           {/* Actions */}
           <div className="flex w-full gap-3 pt-2">
