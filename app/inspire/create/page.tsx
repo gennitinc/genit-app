@@ -358,66 +358,95 @@ function VideoCreatePage() {
 
       try {
         setLoadingProject(true);
-        const response = await apiResponse.get(`/project/${projectId}`, {
+
+        // Use the correct endpoint based on generation mode
+        let endpoint = "";
+        if (generationMode === "image") {
+          endpoint = `/inspire/generate/image/${projectId}`;
+        } else {
+          endpoint = `/inspire/generate/video/${projectId}`;
+        }
+
+        const response = await apiResponse.get(endpoint, {
           withCredentials: true,
         });
 
         if (response.status === 200 && response.data.success) {
           const project = response.data.project;
 
-          // Check if project has generated content
-          // Assuming the project might have outputs or generatedContent field
-          // Adjust based on your actual project schema
-          if (project.outputs || project.generatedContent) {
-            const content = project.outputs || project.generatedContent || [];
+          // Handle image generation
+          if (generationMode === "image") {
+            // For GeneratedImage, the project itself is the image
+            const image = {
+              id: project._id || project.id,
+              url: project.url,
+              thumbnail: project.thumbnail || project.url,
+              aspectRatio: (project.aspectRatio || "16:9") as AspectRatio,
+              resolution: (project.resolution || "1080p") as Resolution,
+              prompt: project.prompt || "",
+              style: (project.style || "realistic") as ImageStyle,
+              createdAt: project.createdAt || new Date().toISOString(),
+            };
 
-            // Filter content by type (image or video)
-            if (generationMode === "image") {
-              const images = content
-                .filter((item: any) => item.type === "image" || !item.type)
-                .map((item: any) => ({
-                  id: item._id || item.id,
-                  url: item.url || item.mediaUrl,
-                  thumbnail:
-                    item.thumbnail ||
-                    item.thumbnailUrl ||
-                    item.url ||
-                    item.mediaUrl,
-                  aspectRatio: (item.aspectRatio || "16:9") as AspectRatio,
-                  resolution: (item.resolution || "1080p") as Resolution,
-                  prompt: item.prompt || "",
-                  style: (item.style || "realistic") as ImageStyle,
-                  createdAt: item.createdAt || new Date().toISOString(),
-                }));
-              if (images.length > 0) {
-                setGeneratedImages(images);
-                setSelectedImageIndex(0);
-              }
-            } else {
-              const videos = content
-                .filter((item: any) => item.type === "video")
-                .map((item: any) => ({
-                  id: item._id || item.id,
-                  url: item.url || item.mediaUrl || item.videoUrl,
-                  thumbnail:
-                    item.thumbnail ||
-                    item.thumbnailUrl ||
-                    item.url ||
-                    item.mediaUrl,
-                  aspectRatio: (item.aspectRatio || "16:9") as AspectRatio,
-                  resolution: (item.resolution || "1080p") as Resolution,
-                  prompt: item.prompt || "",
-                  createdAt: item.createdAt || new Date().toISOString(),
-                }));
-              if (videos.length > 0) {
-                setGeneratedVideos(videos);
-                setSelectedVideoIndex(0);
-              }
-            }
+            setGeneratedImages([image]);
+            setSelectedImageIndex(0);
 
-            // Restore prompt if available
+            // Restore prompt
             if (project.prompt) {
               setPrompt(project.prompt);
+            }
+
+            // Restore aspect ratio and resolution if available
+            if (project.aspectRatio) {
+              setSelectedAspectRatio(project.aspectRatio as AspectRatio);
+            }
+            if (project.resolution) {
+              setSelectedResolution(project.resolution as Resolution);
+            }
+            if (project.style) {
+              setSelectedImageStyle(project.style as ImageStyle);
+            }
+
+            // Load the model if modelId is available
+            if (project.modelId) {
+              // You might want to fetch and set the model here
+              // For now, we'll just store the modelId
+            }
+          } else {
+            // Handle video generation
+            // For GeneratedVideo, the project itself is the video
+            const video = {
+              id: project._id || project.id,
+              url: project.url,
+              thumbnail: project.thumbnail || project.url,
+              aspectRatio: (project.aspectRatio || "16:9") as AspectRatio,
+              resolution: (project.resolution || "1080p") as Resolution,
+              prompt: project.prompt || "",
+              createdAt: project.createdAt || new Date().toISOString(),
+            };
+
+            setGeneratedVideos([video]);
+            setSelectedVideoIndex(0);
+
+            // Restore prompt
+            if (project.prompt) {
+              setPrompt(project.prompt);
+            }
+
+            // Restore aspect ratio and resolution if available
+            if (project.aspectRatio) {
+              setSelectedAspectRatio(project.aspectRatio as AspectRatio);
+            }
+            if (project.resolution) {
+              setSelectedResolution(project.resolution as Resolution);
+            }
+
+            // Load presenter, voice if available
+            if (project.presenterId) {
+              // You might want to fetch and set the presenter here
+            }
+            if (project.voiceId) {
+              // You might want to fetch and set the voice here
             }
           }
         }

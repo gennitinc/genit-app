@@ -170,6 +170,20 @@ function ChatHistoryPage() {
 
   // Get the last message from a project
   const getLastMessage = (project: Project) => {
+    const projectType = project.type || project.category;
+    
+    // For image/video/presentation projects, show prompt or title
+    if (projectType === "ai-image-gen" && (project as any).imageData?.prompt) {
+      return (project as any).imageData.prompt;
+    }
+    if (projectType === "ai-video-gen" && (project as any).videoData?.prompt) {
+      return (project as any).videoData.prompt;
+    }
+    if (projectType === "presentations" || projectType === "presentation") {
+      return `Presentation with ${(project as any).presentationData?.outline?.length || 0} slides`;
+    }
+    
+    // For chat projects, show last message
     if (!project.messages || project.messages.length === 0) {
       return "No messages yet";
     }
@@ -184,9 +198,20 @@ function ChatHistoryPage() {
   // Projects are already filtered on the server, so we can use them directly
   const filteredProjects = projects;
 
-  // Navigate to project chat
-  const handleProjectClick = (projectId: string) => {
-    router.push(`/chat/${projectId}`);
+  // Navigate to project based on type
+  const handleProjectClick = (project: Project) => {
+    const projectType = project.type || project.category;
+    
+    if (projectType === "ai-image-gen") {
+      router.push(`/inspire/create?mode=ai-image-gen&projectId=${project._id}`);
+    } else if (projectType === "ai-video-gen") {
+      router.push(`/inspire/create?mode=ai-video-gen&projectId=${project._id}`);
+    } else if (projectType === "presentations" || projectType === "presentation") {
+      router.push(`/presentation/${project._id}/studio`);
+    } else {
+      // Default to chat
+      router.push(`/chat/${project._id}`);
+    }
   };
 
   // Handle project actions
@@ -328,11 +353,13 @@ function ChatHistoryPage() {
                   AI Video Gen
                 </Button>
                 <Button
-                  variant="outline"
+                  variant={activeFilter === "presentations" ? "default" : "outline"}
                   size="sm"
-                  disabled={true}
-                  className="gap-2 opacity-50 cursor-not-allowed"
-                  title="Coming soon"
+                  onClick={() => setActiveFilter("presentations")}
+                  className={cn(
+                    "gap-2",
+                    activeFilter === "presentations" && "bg-primary text-primary-foreground"
+                  )}
                 >
                   <Presentation className="h-3 w-3" />
                   Presentations
@@ -391,7 +418,7 @@ function ChatHistoryPage() {
                   <Card
                     key={project._id}
                     className="hover:shadow-sm hover:border-border/60 transition-all duration-200 cursor-pointer group border-border/40"
-                    onClick={() => handleProjectClick(project._id)}
+                    onClick={() => handleProjectClick(project)}
                   >
                     <CardContent className="p-3">
                       <div className="flex items-start justify-between">
@@ -409,10 +436,18 @@ function ChatHistoryPage() {
                               <Clock className="h-3 w-3" />
                               {formatTimestamp(project.updatedAt)}
                             </div>
-                            <div className="flex items-center gap-1">
-                              <MessageSquare className="h-3 w-3" />
-                              {project.messages?.length || 0}
-                            </div>
+                            {(project.type === "chat" || !project.type) && (
+                              <div className="flex items-center gap-1">
+                                <MessageSquare className="h-3 w-3" />
+                                {project.messages?.length || 0}
+                              </div>
+                            )}
+                            {project.type === "presentations" && (
+                              <div className="flex items-center gap-1">
+                                <Presentation className="h-3 w-3" />
+                                {(project as any).presentationData?.outline?.length || 0} slides
+                              </div>
+                            )}
                           </div>
                         </div>
 
@@ -429,27 +464,45 @@ function ChatHistoryPage() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleArchiveProject(project._id);
-                                }}
-                              >
-                                <Archive className="h-3 w-3 mr-2" />
-                                Archive
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="text-destructive"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setIsDeleteModalOpen(true);
-                                  setActiveProject(project);
-                                  // handleDeleteProject(project._id);
-                                }}
-                              >
-                                <Trash2 className="h-3 w-3 mr-2" />
-                                Delete
-                              </DropdownMenuItem>
+                              {(project.type === "chat" || !project.type) && (
+                                <>
+                                  <DropdownMenuItem
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleArchiveProject(project._id);
+                                    }}
+                                  >
+                                    <Archive className="h-3 w-3 mr-2" />
+                                    Archive
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="text-destructive"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setIsDeleteModalOpen(true);
+                                      setActiveProject(project);
+                                    }}
+                                  >
+                                    <Trash2 className="h-3 w-3 mr-2" />
+                                    Delete
+                                  </DropdownMenuItem>
+                                </>
+                              )}
+                              {(project.type === "ai-image-gen" || 
+                                project.type === "ai-video-gen" || 
+                                project.type === "presentations") && (
+                                <DropdownMenuItem
+                                  className="text-destructive"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    // TODO: Implement delete for image/video/presentation projects
+                                    toast.info("Delete functionality coming soon for this project type");
+                                  }}
+                                >
+                                  <Trash2 className="h-3 w-3 mr-2" />
+                                  Delete
+                                </DropdownMenuItem>
+                              )}
                             </DropdownMenuContent>
                           </DropdownMenu>
                           <ChevronRight className="h-4 w-4 text-muted-foreground opacity-100 group-hover:opacity-100 transition-opacity" />
