@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Download, X } from "lucide-react";
+import { Download } from "lucide-react";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -55,31 +55,38 @@ export function PWAInstaller() {
       setShowInstallPrompt(false);
       setDeferredPrompt(null);
     }
+    // If dismissed, keep the dialog open - installation is mandatory
   };
 
-  const handleDismiss = () => {
-    setShowInstallPrompt(false);
-    // Store dismissal in localStorage to avoid showing again for a while
-    localStorage.setItem("pwa-install-dismissed", Date.now().toString());
-  };
-
-  // Don't show if already installed or recently dismissed
+  // Don't show if already installed
   if (isInstalled || !showInstallPrompt) {
     return null;
   }
 
-  const dismissedTime = localStorage.getItem("pwa-install-dismissed");
-  if (dismissedTime) {
-    const daysSinceDismissed =
-      (Date.now() - parseInt(dismissedTime)) / (1000 * 60 * 60 * 24);
-    if (daysSinceDismissed < 7) {
-      return null; // Don't show again for 7 days
-    }
-  }
-
   return (
-    <Dialog open={showInstallPrompt} onOpenChange={setShowInstallPrompt}>
-      <DialogContent className="sm:max-w-md">
+    <Dialog
+      open={showInstallPrompt}
+      onOpenChange={() => {
+        // Prevent closing - installation is mandatory
+        // Do nothing, keep dialog open
+      }}
+    >
+      <DialogContent
+        className="sm:max-w-md"
+        hideDialogClose={true}
+        onEscapeKeyDown={(e) => {
+          // Prevent ESC key from closing
+          e.preventDefault();
+        }}
+        onPointerDownOutside={(e) => {
+          // Prevent clicking outside from closing
+          e.preventDefault();
+        }}
+        onInteractOutside={(e) => {
+          // Prevent any outside interaction from closing
+          e.preventDefault();
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Install Gennit AI</DialogTitle>
           <DialogDescription>
@@ -87,22 +94,30 @@ export function PWAInstaller() {
             support, and faster loading times.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex gap-2 mt-4">
-          <Button onClick={handleInstallClick} className="flex-1">
+        <div className="flex gap-2 mt-4 mx-2">
+          {/* <Button onClick={handleInstallClick} className="w-full">
             <Download className="w-4 h-4 mr-2" />
             Install App
-          </Button>
-          <Button
-            variant="outline"
-            onClick={handleDismiss}
-            className="flex-1"
-          >
-            <X className="w-4 h-4 mr-2" />
-            Not Now
-          </Button>
+          </Button> */}
+          <div className="relative flex items-center justify-center text-sm mx-2">
+            <div className="absolute bottom-2 flex items-center justify-around backdrop-blur-sm w-full max-w-72 rounded-md bg-white/10 border border-white/20 py-2">
+              <p className="text-center">Gennit AI.</p>
+              <Button
+                onClick={handleInstallClick}
+                type="button"
+                className="bg-black/50 rounded-full px-6 py-1.5"
+              >
+                Install App
+              </Button>
+            </div>
+            <img
+              className="rounded-md"
+              src="https://i.pinimg.com/736x/a1/e7/d2/a1e7d260643366ed3a3bf26b97109eca.jpg"
+              alt=""
+            />
+          </div>
         </div>
       </DialogContent>
     </Dialog>
   );
 }
-
