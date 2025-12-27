@@ -44,6 +44,8 @@ import { VoiceSelector } from "@/components/video/voice-selector";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { Toaster } from "@/components/ui/sonner";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import {
   ChevronDown,
@@ -52,6 +54,7 @@ import {
   Volume2,
   Monitor,
   Settings,
+  Menu,
 } from "lucide-react";
 import { IconTemplate } from "@tabler/icons-react";
 import {
@@ -471,6 +474,10 @@ function VideoCreatePage() {
     "community" | "preview" | "templates" | "tutorial"
   >("preview");
 
+  // Sidebar drawer state for mobile/tablet
+  const [sidebarDrawerOpen, setSidebarDrawerOpen] = useState(false);
+  const isMobile = useIsMobile();
+
   // Set up socket connection for video generation progress
   useEffect(() => {
     if (!serverUrlSocket) {
@@ -590,7 +597,7 @@ function VideoCreatePage() {
           <div className="grid grid-cols-[1fr] md:grid-cols-[27rem_1fr] gap-2 md:h-[calc(100vh-4rem)] relative w-full">
             <div className="flex flex-col max-h-full min-h-0">
               {/* Mode Selector: Video / Image Tabs */}
-              <div className="flex items-start justify-start lg:px-4 py-2 mb-1 z-40">
+              <div className="flex items-start justify-between lg:px-4 py-2 mb-1 z-40">
                 <div
                   role="tablist"
                   aria-orientation="horizontal"
@@ -662,6 +669,15 @@ function VideoCreatePage() {
                     Image
                   </button>
                 </div>
+                {/* Sidebar toggle button for mobile/tablet */}
+                <button
+                  type="button"
+                  onClick={() => setSidebarDrawerOpen(true)}
+                  className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors"
+                  aria-label="Open sidebar"
+                >
+                  <Menu className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
+                </button>
               </div>
 
               <div
@@ -671,7 +687,7 @@ function VideoCreatePage() {
                 )}
               >
                 <form
-                  className="generate-form generate-form--asset flex flex-col shrink-0 max-h-[calc(100vh-7rem)] relative z-10 border-t-0 rounded-b-2xl mx-4"
+                  className="generate-form generate-form--asset flex flex-col shrink-0 max-h-[calc(100vh-7rem)] relative z-10 border-t-0 rounded-b-2xl px-2"
                   onSubmit={(e) => {
                     e.preventDefault();
                     // Trigger the generate button click
@@ -685,7 +701,7 @@ function VideoCreatePage() {
                 >
                   {/* Image Generation Form */}
                   {generationMode === "image" && (
-                    <div className="md:px-4 pb-4 shrink-0 overflow-y-auto pt-4 hide-scrollbar space-y-4 max-h-[calc(100vh-15rem)]">
+                    <div className="md:px-4 pb-4 shrink-0 md:overflow-y-auto pt-4 hide-scrollbar space-y-4 md:max-h-[calc(100vh-15rem)]">
                       {/* Model Selection */}
                       <ModelSelector
                         type="image"
@@ -989,7 +1005,7 @@ function VideoCreatePage() {
 
                   {/* Video Generation Form */}
                   {generationMode === "video" && (
-                    <div className="md:px-4 pb-4 shrink-0 overflow-y-auto pt-4 hide-scrollbar space-y-2 max-h-[calc(100vh-15rem)]">
+                    <div className="md:px-4 pb-4 shrink-0 md:overflow-y-auto pt-4 hide-scrollbar space-y-2 md:max-h-[calc(100vh-15rem)]">
                       <fieldset>
                         <PresetSlider
                           currentSlide={currentPresetSlide}
@@ -1006,7 +1022,7 @@ function VideoCreatePage() {
                         />
                       </div>
 
-                      <div className="overflow-y-auto relative">
+                      <div className="md:overflow-y-auto relative">
                         <div
                           id="form-video-dropzones"
                           className="grid grid-cols-2 gap-2 mb-4"
@@ -1861,7 +1877,8 @@ function VideoCreatePage() {
                 </form>
               </div>
             </div>
-            <div className="hidden md:flex md:flex-1 min-h-0 relative  flex-col gap-2.5 pb-3 overflow-hidden">
+            {/* Right Section - Desktop: always visible, Mobile/Tablet: in drawer */}
+            <div className="hidden md:flex md:flex-1 min-h-0 relative flex-col gap-2.5 pb-3 overflow-hidden">
               <div
                 dir="ltr"
                 data-orientation="horizontal"
@@ -1958,7 +1975,7 @@ function VideoCreatePage() {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-auto">
+              <div className="flex-1 md:overflow-auto">
                 {/* Community Tab */}
                 {activeContentTab === "community" && (
                   <>
@@ -2130,6 +2147,278 @@ function VideoCreatePage() {
           </div>
         </div>
       </div>
+
+      {/* Right Section Drawer for Mobile/Tablet */}
+      {isMobile && (
+        <Drawer open={sidebarDrawerOpen} onOpenChange={setSidebarDrawerOpen}>
+          <DrawerContent className="h-[90vh] max-h-[90vh]">
+            <div className="flex flex-1 min-h-0 relative flex-col gap-2.5 pb-3 overflow-hidden">
+              <div
+                dir="ltr"
+                data-orientation="horizontal"
+                className="z-10 flex w-full items-end justify-end px-4 pt-4"
+              >
+                <div
+                  role="tablist"
+                  aria-orientation="horizontal"
+                  className="rounded-xl p-1 flex gap-4 bg-page-primary border-separator-card bg-neutral-100 dark:bg-neutral-900"
+                  tabIndex={0}
+                  data-orientation="horizontal"
+                  style={{ outline: "none" }}
+                >
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={activeContentTab === "preview"}
+                    data-state={
+                      activeContentTab === "preview" ? "active" : "inactive"
+                    }
+                    onClick={() => setActiveContentTab("preview")}
+                    className={cn(
+                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                      activeContentTab === "preview"
+                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                    )}
+                    tabIndex={activeContentTab === "preview" ? -1 : 0}
+                    data-orientation="horizontal"
+                  >
+                    <ViewIcon className="size-4" />
+                    Preview
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={activeContentTab === "community"}
+                    data-state={
+                      activeContentTab === "community" ? "active" : "inactive"
+                    }
+                    onClick={() => setActiveContentTab("community")}
+                    className={cn(
+                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                      activeContentTab === "community"
+                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                    )}
+                    tabIndex={activeContentTab === "community" ? -1 : 0}
+                    data-orientation="horizontal"
+                  >
+                    <Users className="size-4" />
+                    Community
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={activeContentTab === "templates"}
+                    data-state={
+                      activeContentTab === "templates" ? "active" : "inactive"
+                    }
+                    onClick={() => setActiveContentTab("templates")}
+                    className={cn(
+                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                      activeContentTab === "templates"
+                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                    )}
+                    tabIndex={activeContentTab === "templates" ? -1 : 0}
+                    data-orientation="horizontal"
+                  >
+                    <IconTemplate className="size-4" />
+                    Templates
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={activeContentTab === "tutorial"}
+                    data-state={
+                      activeContentTab === "tutorial" ? "active" : "inactive"
+                    }
+                    onClick={() => setActiveContentTab("tutorial")}
+                    className={cn(
+                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                      activeContentTab === "tutorial"
+                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                    )}
+                    tabIndex={activeContentTab === "tutorial" ? -1 : 0}
+                    data-orientation="horizontal"
+                  >
+                    <BookOpen className="size-4" />
+                    Learn how
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-auto px-4">
+                {/* Community Tab */}
+                {activeContentTab === "community" && (
+                  <>
+                    {generationMode === "image" ? (
+                      <ImageCommunityTab
+                        onPromptSelect={setPrompt}
+                        onTabChange={setActiveContentTab}
+                        onParamsRestore={{
+                          setPrompt,
+                          setAspectRatio: (ratio: string) =>
+                            setAspectRatio(ratio as AspectRatio),
+                          setResolution: (res: string) =>
+                            setResolution(res as Resolution),
+                          setModel: setSelectedImageModel,
+                          setStyle: (style: string) =>
+                            setSelectedImageStyle(style as ImageStyle),
+                          setImageCount,
+                          setReferenceImages: async (images: File[]) => {
+                            setPromptImages(images);
+                            const previews = await Promise.all(
+                              images.map((file) => {
+                                return new Promise<string>((resolve) => {
+                                  const reader = new FileReader();
+                                  reader.onloadend = () => {
+                                    resolve(reader.result as string);
+                                  };
+                                  reader.readAsDataURL(file);
+                                });
+                              })
+                            );
+                            setPromptImagePreviews(previews);
+                          },
+                          onTabChange: setActiveContentTab,
+                        }}
+                      />
+                    ) : (
+                      <VideoCommunityTab
+                        onPromptSelect={setPrompt}
+                        onTabChange={setActiveContentTab}
+                        onParamsRestore={{
+                          setPrompt,
+                          setAspectRatio: (ratio: string) =>
+                            setAspectRatio(ratio as AspectRatio),
+                          setResolution: (res: string) =>
+                            setResolution(res as Resolution),
+                          setModel: setSelectedVideoModel,
+                          setPresenter: setSelectedPresenter,
+                          setVoice: setSelectedVoice,
+                          setDuration,
+                          setStartFrame: async (file: File | null) => {
+                            if (file) {
+                              setStartFrame(file);
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                setStartFramePreview(reader.result as string);
+                              };
+                              reader.readAsDataURL(file);
+                            } else {
+                              setStartFrame(null);
+                              setStartFramePreview(null);
+                            }
+                          },
+                          setEndFrame: async (file: File | null) => {
+                            if (file) {
+                              setEndFrame(file);
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                setEndFramePreview(reader.result as string);
+                              };
+                              reader.readAsDataURL(file);
+                            } else {
+                              setEndFrame(null);
+                              setEndFramePreview(null);
+                            }
+                          },
+                          setReferenceImages: async (images: File[]) => {
+                            setPromptImages(images);
+                            const previews = await Promise.all(
+                              images.map((file) => {
+                                return new Promise<string>((resolve) => {
+                                  const reader = new FileReader();
+                                  reader.onloadend = () => {
+                                    resolve(reader.result as string);
+                                  };
+                                  reader.readAsDataURL(file);
+                                });
+                              })
+                            );
+                            setPromptImagePreviews(previews);
+                          },
+                          onTabChange: setActiveContentTab,
+                        }}
+                      />
+                    )}
+                  </>
+                )}
+
+                {activeContentTab === "preview" && (
+                  <>
+                    {generationMode === "image" ? (
+                      <ImagePreviewTab
+                        isGenerating={isGenerating}
+                        generationProgress={generationProgress}
+                        generatedImages={generatedImages}
+                        selectedImageIndex={selectedImageIndex}
+                        selectedAspectRatio={selectedAspectRatio}
+                        onImageSelect={setSelectedImageIndex}
+                        onPromptRestore={setPrompt}
+                        onTabChange={setActiveContentTab}
+                      />
+                    ) : (
+                      <VideoPreviewTab
+                        isGenerating={isGenerating}
+                        generationProgress={generationProgress}
+                        generatedVideos={generatedVideos}
+                        selectedVideoIndex={selectedVideoIndex}
+                        selectedAspectRatio={selectedAspectRatio}
+                        onVideoSelect={setSelectedVideoIndex}
+                        onPromptRestore={setPrompt}
+                        onTabChange={setActiveContentTab}
+                      />
+                    )}
+                  </>
+                )}
+                {activeContentTab === "templates" && (
+                  <>
+                    {generationMode === "image" ? (
+                      <ImageTemplatesTab
+                        onPromptSelect={setPrompt}
+                        onTabChange={setActiveContentTab}
+                        onParamsRestore={{
+                          setPrompt,
+                          setAspectRatio: (ratio: string) =>
+                            setAspectRatio(ratio as AspectRatio),
+                          setResolution: (res: string) =>
+                            setResolution(res as Resolution),
+                          setModel: setSelectedImageModel,
+                          setStyle: (style: string) =>
+                            setSelectedImageStyle(style as ImageStyle),
+                          setImageCount,
+                          onTabChange: setActiveContentTab,
+                        }}
+                      />
+                    ) : (
+                      <VideoTemplatesTab
+                        onPromptSelect={setPrompt}
+                        onTabChange={setActiveContentTab}
+                        onParamsRestore={{
+                          setPrompt,
+                          setAspectRatio: (ratio: string) =>
+                            setAspectRatio(ratio as AspectRatio),
+                          setResolution: (res: string) =>
+                            setResolution(res as Resolution),
+                          setModel: setSelectedVideoModel,
+                          setPresenter: setSelectedPresenter,
+                          setVoice: setSelectedVoice,
+                          setDuration,
+                          onTabChange: setActiveContentTab,
+                        }}
+                      />
+                    )}
+                  </>
+                )}
+                {activeContentTab === "tutorial" && <TutorialTab />}
+              </div>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      )}
     </div>
   );
 }
