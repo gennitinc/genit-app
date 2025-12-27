@@ -673,10 +673,32 @@ function VideoCreatePage() {
                 <button
                   type="button"
                   onClick={() => setSidebarDrawerOpen(true)}
-                  className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors"
+                  className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors"
                   aria-label="Open sidebar"
                 >
-                  <Menu className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
+                  {/* <Menu className="w-5 h-5 text-neutral-700 dark:text-neutral-300" /> */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={24}
+                    height={24}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-5 h-5 text-neutral-700 dark:text-neutral-300"
+                  >
+                    <path d="M10 5H3" />
+                    <path d="M12 19H3" />
+                    <path d="M14 3v4" />
+                    <path d="M16 17v4" />
+                    <path d="M21 12h-9" />
+                    <path d="M21 19h-5" />
+                    <path d="M21 5h-7" />
+                    <path d="M8 10v4" />
+                    <path d="M8 12H3" />
+                  </svg>
                 </button>
               </div>
 
