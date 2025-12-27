@@ -100,7 +100,7 @@ export function PWAInstaller() {
             Install App
           </Button> */}
           <div className="relative flex items-center justify-center text-sm mx-2">
-            <div className="absolute bottom-2 flex items-center justify-around backdrop-blur-sm w-full max-w-72 rounded-md bg-white/10 border border-white/20 py-2">
+            <div className="absolute bottom-2 flex items-center justify-around backdrop-blur-sm w-full max-w-72 rounded-xl bg-white/10 border border-white/20 py-2">
               <p className="text-center">Gennit AI.</p>
               <Button
                 onClick={handleInstallClick}
