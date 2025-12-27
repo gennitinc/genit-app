@@ -429,7 +429,7 @@ export function VideoCommunityTab({
           open={!!selectedVideo}
           onOpenChange={() => setSelectedVideo(null)}
         >
-          <DrawerContent className="max-h-[90vh] overflow-hidden flex flex-col">
+          <DrawerContent className="max-h-[85vh] overflow-hidden flex flex-col">
             {selectedVideo && (
               <VideoDetailContent
                 video={selectedVideo}
