@@ -2152,105 +2152,120 @@ function VideoCreatePage() {
       {isMobile && (
         <Drawer open={sidebarDrawerOpen} onOpenChange={setSidebarDrawerOpen}>
           <DrawerContent className="h-[85vh] max-h-[85vh]">
-            <div className="flex flex-1 min-h-0 relative flex-col gap-2.5 pb-3 overflow-hidden">
+            <div className="flex flex-1 min-h-0 relative flex-col gap-2.5 pb-3">
               <div
                 dir="ltr"
                 data-orientation="horizontal"
-                className="z-10 flex w-full items-end justify-end pt-4 overflow-x-auto scrollbar-hide"
-                style={{ WebkitOverflowScrolling: "touch" }}
+                className="z-10 w-full pt-4"
               >
                 <div
-                  role="tablist"
-                  aria-orientation="horizontal"
-                  className="rounded-xl p-1 flex gap-4 bg-page-primary border-separator-card bg-neutral-100 dark:bg-neutral-900 shrink-0"
-                  tabIndex={0}
-                  data-orientation="horizontal"
-                  style={{ outline: "none" }}
+                  className="overflow-x-auto scrollbar-hide"
+                  style={{
+                    WebkitOverflowScrolling: "touch",
+                    overflowY: "hidden",
+                  }}
                 >
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={activeContentTab === "preview"}
-                    data-state={
-                      activeContentTab === "preview" ? "active" : "inactive"
-                    }
-                    onClick={() => setActiveContentTab("preview")}
-                    className={cn(
-                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
-                      activeContentTab === "preview"
-                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
-                    )}
-                    tabIndex={activeContentTab === "preview" ? -1 : 0}
-                    data-orientation="horizontal"
-                  >
-                    <ViewIcon className="size-4" />
-                    Preview
-                  </button>
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={activeContentTab === "community"}
-                    data-state={
-                      activeContentTab === "community" ? "active" : "inactive"
-                    }
-                    onClick={() => setActiveContentTab("community")}
-                    className={cn(
-                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
-                      activeContentTab === "community"
-                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
-                    )}
-                    tabIndex={activeContentTab === "community" ? -1 : 0}
-                    data-orientation="horizontal"
-                  >
-                    <Users className="size-4" />
-                    Community
-                  </button>
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={activeContentTab === "templates"}
-                    data-state={
-                      activeContentTab === "templates" ? "active" : "inactive"
-                    }
-                    onClick={() => setActiveContentTab("templates")}
-                    className={cn(
-                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
-                      activeContentTab === "templates"
-                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
-                    )}
-                    tabIndex={activeContentTab === "templates" ? -1 : 0}
-                    data-orientation="horizontal"
-                  >
-                    <IconTemplate className="size-4" />
-                    Templates
-                  </button>
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={activeContentTab === "tutorial"}
-                    data-state={
-                      activeContentTab === "tutorial" ? "active" : "inactive"
-                    }
-                    onClick={() => setActiveContentTab("tutorial")}
-                    className={cn(
-                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
-                      activeContentTab === "tutorial"
-                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
-                    )}
-                    tabIndex={activeContentTab === "tutorial" ? -1 : 0}
-                    data-orientation="horizontal"
-                  >
-                    <BookOpen className="size-4" />
-                    Learn how
-                  </button>
+                  <div className="flex items-center min-w-max px-4">
+                    <div
+                      role="tablist"
+                      aria-orientation="horizontal"
+                      className="rounded-xl p-1 flex gap-4 bg-page-primary border-separator-card bg-neutral-100 dark:bg-neutral-900 shrink-0"
+                      tabIndex={0}
+                      data-orientation="horizontal"
+                      style={{ outline: "none" }}
+                    >
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={activeContentTab === "preview"}
+                        data-state={
+                          activeContentTab === "preview" ? "active" : "inactive"
+                        }
+                        onClick={() => setActiveContentTab("preview")}
+                        className={cn(
+                          "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                          activeContentTab === "preview"
+                            ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        )}
+                        tabIndex={activeContentTab === "preview" ? -1 : 0}
+                        data-orientation="horizontal"
+                      >
+                        <ViewIcon className="size-4" />
+                        Preview
+                      </button>
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={activeContentTab === "community"}
+                        data-state={
+                          activeContentTab === "community"
+                            ? "active"
+                            : "inactive"
+                        }
+                        onClick={() => setActiveContentTab("community")}
+                        className={cn(
+                          "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                          activeContentTab === "community"
+                            ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        )}
+                        tabIndex={activeContentTab === "community" ? -1 : 0}
+                        data-orientation="horizontal"
+                      >
+                        <Users className="size-4" />
+                        Community
+                      </button>
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={activeContentTab === "templates"}
+                        data-state={
+                          activeContentTab === "templates"
+                            ? "active"
+                            : "inactive"
+                        }
+                        onClick={() => setActiveContentTab("templates")}
+                        className={cn(
+                          "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                          activeContentTab === "templates"
+                            ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        )}
+                        tabIndex={activeContentTab === "templates" ? -1 : 0}
+                        data-orientation="horizontal"
+                      >
+                        <IconTemplate className="size-4" />
+                        Templates
+                      </button>
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={activeContentTab === "tutorial"}
+                        data-state={
+                          activeContentTab === "tutorial"
+                            ? "active"
+                            : "inactive"
+                        }
+                        onClick={() => setActiveContentTab("tutorial")}
+                        className={cn(
+                          "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                          activeContentTab === "tutorial"
+                            ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        )}
+                        tabIndex={activeContentTab === "tutorial" ? -1 : 0}
+                        data-orientation="horizontal"
+                      >
+                        <BookOpen className="size-4" />
+                        Learn how
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex-1 overflow-auto px-4">
+              <div className="flex-1 overflow-auto px-1">
                 {/* Community Tab */}
                 {activeContentTab === "community" && (
                   <>
