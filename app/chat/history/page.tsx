@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { useRef } from "react";
@@ -15,6 +15,9 @@ import {
   Archive,
   ChevronRight,
   Loader,
+  Video,
+  Image as ImageIcon,
+  Presentation,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,6 +33,7 @@ import { useRouter } from "next/navigation";
 import { RefreshCw } from "lucide-react";
 import AccountActionModal from "@/components/user/account-action-modal";
 import { ProjectActionModal } from "@/components/user/project-action-moda";
+import { cn } from "@/lib/utils";
 
 
 interface Project {
@@ -38,6 +42,8 @@ interface Project {
   status: string;
   userId: string;
   userName: string;
+  category?: string;
+  type?: string;
   messages: Array<{
     role: string;
     type: string;
@@ -51,26 +57,56 @@ interface Project {
   updatedAt: string;
 }
 
+type FilterType = "chat" | "ai-image-gen" | "ai-video-gen" | "presentations";
+
 function ChatHistoryPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { user } = useUserContext();
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeletingProject, setIsDeletingProject] = useState(false);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [activeFilter, setActiveFilter] = useState<FilterType>("chat");
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-  const fetchAllProjects = async () => {
+  const fetchAllProjects = useCallback(async (pageNumber: number = 1, append: boolean = false) => {
     try {
-      setLoading(true);
-      setError(null);
+      if (append) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+        setError(null);
+      }
 
-      const response = await apiResponse.get("/project/myprojects");
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (activeFilter) {
+        params.append("type", activeFilter);
+      }
+      params.append("page", pageNumber.toString());
+      params.append("limit", "10");
+
+      const response = await apiResponse.get(
+        `/project/myprojects?${params.toString()}`
+      );
 
       if (response.status == 200) {
-        setProjects(response.data.projects || []);
+        const newProjects = response.data.projects || [];
+        const pagination = response.data.pagination;
+
+        if (append) {
+          setProjects((prev) => [...prev, ...newProjects]);
+        } else {
+          setProjects(newProjects);
+        }
+
+        setHasMore(pagination?.hasNextPage || false);
+        setPage(pageNumber);
       } else {
         setError("Failed to fetch projects");
       }
@@ -79,14 +115,43 @@ function ChatHistoryPage() {
       setError(error.response?.data?.message || "Failed to fetch projects");
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
-  };
+  }, [activeFilter]);
 
+  // Load more projects when scrolling
+  const loadMoreProjects = useCallback(() => {
+    if (!loadingMore && hasMore) {
+      fetchAllProjects(page + 1, true);
+    }
+  }, [loadingMore, hasMore, page, fetchAllProjects]);
+
+  // Handle scroll to load more
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      // Load more when user is 200px from bottom
+      if (scrollHeight - scrollTop - clientHeight < 200 && hasMore && !loadingMore) {
+        loadMoreProjects();
+      }
+    };
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [hasMore, loadingMore, loadMoreProjects]);
+
+  // Reset pagination when filter changes
   useEffect(() => {
     if (user?._id) {
-      fetchAllProjects();
+      setPage(1);
+      setHasMore(true);
+      setProjects([]);
+      fetchAllProjects(1, false);
     }
-  }, [user?._id]);
+  }, [user?._id, activeFilter, fetchAllProjects]);
 
   // Format timestamp to relative time
   const formatTimestamp = (dateString: string) => {
@@ -115,6 +180,9 @@ function ChatHistoryPage() {
     );
     return textPart?.text || "No text content";
   };
+
+  // Projects are already filtered on the server, so we can use them directly
+  const filteredProjects = projects;
 
   // Navigate to project chat
   const handleProjectClick = (projectId: string) => {
@@ -194,25 +262,82 @@ function ChatHistoryPage() {
           {/* Centered container with custom width for desktop */}
           <div className="max-w-4xl mx-auto">
             {/* Header */}
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-semibold text-foreground mb-1">
-                  Chat History
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  Your recent conversations
-                </p>
-              </div>
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h1 className="text-2xl font-semibold text-foreground mb-1">
+                    History
+                  </h1>
+                  <p className="text-sm text-muted-foreground">
+                    Your recent projects and conversations
+                  </p>
+                </div>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={fetchAllProjects}
+                onClick={() => {
+                  setPage(1);
+                  setHasMore(true);
+                  setProjects([]);
+                  fetchAllProjects(1, false);
+                }}
                 disabled={loading}
                 className="gap-2"
               >
-                <RefreshCw className={`h-3 w-3 ${loading ? "" : ""}`} />
+                <RefreshCw className={`h-3 w-3 ${loading ? "animate-spin" : ""}`} />
                 Refresh
               </Button>
+              </div>
+
+              {/* Filter Buttons */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button
+                  variant={activeFilter === "chat" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setActiveFilter("chat")}
+                  className={cn(
+                    "gap-2",
+                    activeFilter === "chat" && "bg-primary text-primary-foreground"
+                  )}
+                >
+                  <MessageSquare className="h-3 w-3" />
+                  Chat
+                </Button>
+                <Button
+                  variant={activeFilter === "ai-image-gen" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setActiveFilter("ai-image-gen")}
+                  className={cn(
+                    "gap-2",
+                    activeFilter === "ai-image-gen" && "bg-primary text-primary-foreground"
+                  )}
+                >
+                  <ImageIcon className="h-3 w-3" />
+                  AI Image Gen
+                </Button>
+                <Button
+                  variant={activeFilter === "ai-video-gen" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setActiveFilter("ai-video-gen")}
+                  className={cn(
+                    "gap-2",
+                    activeFilter === "ai-video-gen" && "bg-primary text-primary-foreground"
+                  )}
+                >
+                  <Video className="h-3 w-3" />
+                  AI Video Gen
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={true}
+                  className="gap-2 opacity-50 cursor-not-allowed"
+                  title="Coming soon"
+                >
+                  <Presentation className="h-3 w-3" />
+                  Presentations
+                </Button>
+              </div>
             </div>
 
             {/* Chat History List */}
@@ -234,23 +359,35 @@ function ChatHistoryPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={fetchAllProjects}
+                    onClick={() => {
+                      setPage(1);
+                      setHasMore(true);
+                      setProjects([]);
+                      fetchAllProjects(1, false);
+                    }}
                   >
                     Try Again
                   </Button>
                 </div>
-              ) : projects.length === 0 ? (
+              ) : filteredProjects.length === 0 ? (
                 <div className="text-center py-16">
                   <MessageSquare className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
                   <h3 className="text-sm font-medium text-foreground mb-1">
-                    No conversations yet
+                    No {activeFilter === "chat" ? "conversations" : activeFilter === "ai-image-gen" ? "image generations" : activeFilter === "ai-video-gen" ? "video generations" : "presentations"} yet
                   </h3>
                   <p className="text-xs text-muted-foreground">
-                    Start a new conversation to see it here
+                    {activeFilter === "chat" 
+                      ? "Start a new conversation to see it here"
+                      : activeFilter === "ai-image-gen"
+                      ? "Generate an image to see it here"
+                      : activeFilter === "ai-video-gen"
+                      ? "Generate a video to see it here"
+                      : "Create a presentation to see it here"}
                   </p>
                 </div>
               ) : (
-                projects.map((project) => (
+                <>
+                  {filteredProjects.map((project) => (
                   <Card
                     key={project._id}
                     className="hover:shadow-sm hover:border-border/60 transition-all duration-200 cursor-pointer group border-border/40"
@@ -320,7 +457,21 @@ function ChatHistoryPage() {
                       </div>
                     </CardContent>
                   </Card>
-                ))
+                  ))}
+                  {loadingMore && (
+                    <div className="text-center py-8">
+                      <Loader className="animate-spin rounded-full h-6 w-6 mx-auto mb-2 text-muted-foreground" />
+                      <p className="text-xs text-muted-foreground">Loading more...</p>
+                    </div>
+                  )}
+                  {!hasMore && filteredProjects.length > 0 && (
+                    <div className="text-center py-8">
+                      <p className="text-xs text-muted-foreground">
+                        No more projects to load
+                      </p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>

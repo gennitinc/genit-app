@@ -76,6 +76,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const hasProcessedDraftRef = useRef(false);
   const [messages, setMessages] = useState<any[]>([]);
   const lastFetchedProjectIdRef = useRef<string | null>(null);
+  const socketRef = useRef<any>(null);
+  const projectIdRef = useRef<string | null>(null);
+  const messagesRef = useRef<any[]>([]);
 
   const transformMessages = useCallback((messages: any[]) => {
     if (!messages || !Array.isArray(messages)) {
@@ -151,8 +154,25 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     return new File([u8arr], filename, { type: mime });
   };
 
+  // Update project ID ref when project changes
   useEffect(() => {
+    projectIdRef.current = project?._id || null;
+  }, [project?._id]);
+
+  // Update messages ref when messages change
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
+  // Initialize socket connection once on mount
+  useEffect(() => {
+    // Only create socket if it doesn't exist
+    if (socketRef.current) {
+      return;
+    }
+
     const socket = io(`${serverUrlSocket}`);
+    socketRef.current = socket;
 
     const handleConnect = () => {
       console.log("Socket connected");
@@ -163,10 +183,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
       // Ignore messages from other projects
       const incomingProjectId = projectData?._id || projectData?.id;
+      const currentProjectId = projectIdRef.current;
       if (
-        project?._id &&
+        currentProjectId &&
         incomingProjectId &&
-        incomingProjectId !== project._id
+        incomingProjectId !== currentProjectId
       ) {
         return;
       }
@@ -195,10 +216,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     const handleTextStart = (data: any) => {
       try {
         const incomingProjectId = data?.projectId || data?.project_id;
+        const currentProjectId = projectIdRef.current;
         if (
           incomingProjectId &&
-          project?._id &&
-          incomingProjectId !== project._id
+          currentProjectId &&
+          incomingProjectId !== currentProjectId
         ) {
           return;
         }
@@ -215,10 +237,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       // Handle streaming text deltas from server
       try {
         const incomingProjectId = data?.projectId || data?.project_id;
+        const currentProjectId = projectIdRef.current;
         if (
           incomingProjectId &&
-          project?._id &&
-          incomingProjectId !== project._id
+          currentProjectId &&
+          incomingProjectId !== currentProjectId
         ) {
           return;
         }
@@ -235,10 +258,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     const handleTextCompleted = (data: any) => {
       try {
         const incomingProjectId = data?.projectId || data?.project_id;
+        const currentProjectId = projectIdRef.current;
         if (
           incomingProjectId &&
-          project?._id &&
-          incomingProjectId !== project._id
+          currentProjectId &&
+          incomingProjectId !== currentProjectId
         ) {
           return;
         }
@@ -252,17 +276,18 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     const handleGeneratingImage = (data: any) => {
       try {
         const incomingProjectId = data?.projectId || data?.project_id;
+        const currentProjectId = projectIdRef.current;
         if (
           incomingProjectId &&
-          project?._id &&
-          incomingProjectId !== project._id
+          currentProjectId &&
+          incomingProjectId !== currentProjectId
         ) {
           return;
         }
         // Try to attach the skeleton to the most recent user message
         setIsGeneratingImage(true);
         try {
-          const lastUserMessage = [...messages]
+          const lastUserMessage = [...messagesRef.current]
             .reverse()
             .find((m: any) => m?.type === "user");
           if (lastUserMessage && lastUserMessage.id) {
@@ -288,15 +313,18 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
     // Cleanup function to disconnect socket when component unmounts
     return () => {
-      socket.off("connect", handleConnect);
-      socket.off("newMessage", handleNewMessage);
-      socket.off("textStart", handleTextStart);
-      socket.off("textDelta", handleTextDelta);
-      socket.off("textCompleted", handleTextCompleted);
-      socket.off("generatingimage", handleGeneratingImage);
-      socket.disconnect();
+      if (socketRef.current) {
+        socketRef.current.off("connect", handleConnect);
+        socketRef.current.off("newMessage", handleNewMessage);
+        socketRef.current.off("textStart", handleTextStart);
+        socketRef.current.off("textDelta", handleTextDelta);
+        socketRef.current.off("textCompleted", handleTextCompleted);
+        socketRef.current.off("generatingimage", handleGeneratingImage);
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
     };
-  }, [transformMessages, project?._id]);
+  }, [transformMessages]);
 
   const handleLocalStorageDraft = useCallback(
     async (project: IDesignProject) => {

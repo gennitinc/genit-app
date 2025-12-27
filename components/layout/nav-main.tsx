@@ -1,21 +1,14 @@
 "use client";
 import {
   History,
-  Layout,
-  Users,
-  Sparkles,
   Settings,
   HelpCircle,
-  BookOpen,
   Palette,
-  Workflow,
-  CardSim,
   CreditCard,
-  Home,
-  ChevronDown,
-  Bot,
   WandSparklesIcon,
   UserPlus,
+  Video,
+  Image as ImageIcon,
 } from "lucide-react";
 
 import {
@@ -24,12 +17,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -42,6 +29,16 @@ const navItems = [
     title: "Create",
     icon: WandSparklesIcon,
     href: "/chat",
+  },
+  {
+    title: "Ai Video Gen",
+    icon: Video,
+    href: "/inspire/create?mode=ai-video-gen",
+  },
+  {
+    title: "Ai Image Gen",
+    icon: ImageIcon,
+    href: "/inspire/create?mode=ai-image-gen",
   },
   {
     title: "History",
@@ -117,7 +114,7 @@ export function NavMain() {
                 <Link href={item.href}>
                   <item.icon
                     className={cn(
-                      "h-4 w-4",
+                      "h-6 w-6",
                       shouldShowCollapsed ? "mx-auto" : "mr-2"
                     )}
                   />
@@ -157,7 +154,7 @@ export function NavMain() {
                 >
                   <item.icon
                     className={cn(
-                      "h-4 w-4",
+                      "h-6 w-6",
                       shouldShowCollapsed ? "mx-auto" : "mr-2"
                     )}
                   />

@@ -17,6 +17,8 @@
     "@emailjs/browser": "^4.4.1",
     "@heyo.so/js": "^1.1.2",
     "@hookform/resolvers": "^5.2.1",
+    "@hugeicons/core-free-icons": "^3.1.0",
+    "@hugeicons/react": "^1.1.4",
     "@iconify/react": "^6.0.2",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.4",
