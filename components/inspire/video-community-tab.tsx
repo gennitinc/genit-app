@@ -1,7 +1,15 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { Copy, RefreshCw, Heart, Eye, User, Users, Loader2 } from "lucide-react";
+import {
+  Copy,
+  RefreshCw,
+  Heart,
+  Eye,
+  User,
+  Users,
+  Loader2,
+} from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -25,7 +33,7 @@ export interface VideoGenerationParamsCallback {
   setAspectRatio?: (aspectRatio: string) => void;
   setResolution?: (resolution: string) => void;
   setModel?: (model: any) => void;
-  
+
   // Video specific
   setPresenter?: (presenter: any) => void;
   setVoice?: (voice: any) => void;
@@ -33,14 +41,18 @@ export interface VideoGenerationParamsCallback {
   setStartFrame?: (file: File | null) => void;
   setEndFrame?: (file: File | null) => void;
   setReferenceImages?: (images: File[]) => void;
-  
+
   // Switch to preview tab
-  onTabChange: (tab: "preview" | "community" | "templates" | "tutorial") => void;
+  onTabChange: (
+    tab: "preview" | "community" | "templates" | "tutorial"
+  ) => void;
 }
 
 interface VideoCommunityTabProps {
   onPromptSelect: (prompt: string) => void;
-  onTabChange: (tab: "preview") => void;
+  onTabChange: (
+    tab: "preview" | "community" | "templates" | "tutorial"
+  ) => void;
   onParamsRestore?: VideoGenerationParamsCallback;
 }
 
@@ -67,7 +79,9 @@ export function VideoCommunityTab({
 }: VideoCommunityTabProps) {
   const [videos, setVideos] = useState<CommunityContent[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedVideo, setSelectedVideo] = useState<CommunityContent | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<CommunityContent | null>(
+    null
+  );
   const [likedVideos, setLikedVideos] = useState<Set<string>>(new Set());
   const [likingVideoId, setLikingVideoId] = useState<string | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -75,9 +89,12 @@ export function VideoCommunityTab({
 
   // Initialize socket connection
   useEffect(() => {
-    const socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000", {
-      transports: ["websocket", "polling"],
-    });
+    const socket = io(
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000",
+      {
+        transports: ["websocket", "polling"],
+      }
+    );
 
     socketRef.current = socket;
 
@@ -85,15 +102,18 @@ export function VideoCommunityTab({
       console.log("Socket connected");
     });
 
-    socket.on("community:like-updated", (data: { contentId: string; likes: number; liked: boolean }) => {
-      setVideos((prev) =>
-        prev.map((vid) =>
-          vid.id === data.contentId
-            ? { ...vid, likes: data.likes, isLiked: data.liked }
-            : vid
-        )
-      );
-    });
+    socket.on(
+      "community:like-updated",
+      (data: { contentId: string; likes: number; liked: boolean }) => {
+        setVideos((prev) =>
+          prev.map((vid) =>
+            vid.id === data.contentId
+              ? { ...vid, likes: data.likes, isLiked: data.liked }
+              : vid
+          )
+        );
+      }
+    );
 
     return () => {
       socket.disconnect();
@@ -112,7 +132,7 @@ export function VideoCommunityTab({
         if (response.success && response.data) {
           const fetchedVideos = response.data.content || [];
           setVideos(fetchedVideos);
-          
+
           // Initialize liked videos set from API response
           const liked = new Set<string>();
           fetchedVideos.forEach((vid) => {
@@ -179,7 +199,9 @@ export function VideoCommunityTab({
           try {
             const response = await fetch(video.startFrameUrl);
             const blob = await response.blob();
-            const file = new File([blob], "start-frame.jpg", { type: blob.type });
+            const file = new File([blob], "start-frame.jpg", {
+              type: blob.type,
+            });
             onParamsRestore.setStartFrame(file);
           } catch (error) {
             console.error("Failed to load start frame:", error);
@@ -199,13 +221,19 @@ export function VideoCommunityTab({
         }
 
         // Restore reference images if available
-        if (video.referenceImageUrls && video.referenceImageUrls.length > 0 && onParamsRestore.setReferenceImages) {
+        if (
+          video.referenceImageUrls &&
+          video.referenceImageUrls.length > 0 &&
+          onParamsRestore.setReferenceImages
+        ) {
           try {
             const imageFiles = await Promise.all(
               video.referenceImageUrls.map(async (url, index) => {
                 const response = await fetch(url);
                 const blob = await response.blob();
-                return new File([blob], `reference-${index}.jpg`, { type: blob.type });
+                return new File([blob], `reference-${index}.jpg`, {
+                  type: blob.type,
+                });
               })
             );
             onParamsRestore.setReferenceImages(imageFiles);
@@ -219,7 +247,8 @@ export function VideoCommunityTab({
 
         toast({
           title: "Settings restored",
-          description: "All generation parameters have been loaded. Click Generate to create your version.",
+          description:
+            "All generation parameters have been loaded. Click Generate to create your version.",
         });
       } else {
         // Fallback to just setting prompt
@@ -234,6 +263,49 @@ export function VideoCommunityTab({
       // Still allow recreating even if there's an error
       onPromptSelect(video.prompt);
       onTabChange("preview");
+    }
+  };
+
+  const handleLike = async (e: React.MouseEvent, videoId: string) => {
+    e.stopPropagation();
+    try {
+      setLikingVideoId(videoId);
+      const response = await communityApi.toggleLike(videoId);
+      if (response.success && response.data) {
+        const isLiked = response.data.liked || false;
+        const likes = response.data.likes || 0;
+
+        setVideos((prev) =>
+          prev.map((vid) =>
+            vid.id === videoId ? { ...vid, likes, isLiked: isLiked } : vid
+          )
+        );
+
+        if (selectedVideo?.id === videoId) {
+          setSelectedVideo((prev) =>
+            prev ? { ...prev, likes, isLiked: isLiked } : null
+          );
+        }
+
+        if (isLiked) {
+          setLikedVideos((prev) => new Set(prev).add(videoId));
+        } else {
+          setLikedVideos((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(videoId);
+            return newSet;
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error toggling like:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update like. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLikingVideoId(null);
     }
   };
 
@@ -329,7 +401,10 @@ export function VideoCommunityTab({
 
       {/* Desktop Dialog */}
       {isDesktop ? (
-        <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
+        <Dialog
+          open={!!selectedVideo}
+          onOpenChange={() => setSelectedVideo(null)}
+        >
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden flex flex-col p-0">
             {selectedVideo && (
               <VideoDetailContent
@@ -340,7 +415,9 @@ export function VideoCommunityTab({
                 }}
                 onClose={() => setSelectedVideo(null)}
                 onLike={handleLike}
-                isLiked={likedVideos.has(selectedVideo.id) || selectedVideo.isLiked}
+                isLiked={
+                  likedVideos.has(selectedVideo.id) || selectedVideo.isLiked
+                }
                 isLiking={likingVideoId === selectedVideo.id}
               />
             )}
@@ -348,7 +425,10 @@ export function VideoCommunityTab({
         </Dialog>
       ) : (
         /* Mobile/Tablet Drawer */
-        <Drawer open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
+        <Drawer
+          open={!!selectedVideo}
+          onOpenChange={() => setSelectedVideo(null)}
+        >
           <DrawerContent className="max-h-[90vh] overflow-hidden flex flex-col">
             {selectedVideo && (
               <VideoDetailContent
@@ -359,7 +439,9 @@ export function VideoCommunityTab({
                 }}
                 onClose={() => setSelectedVideo(null)}
                 onLike={handleLike}
-                isLiked={likedVideos.has(selectedVideo.id) || selectedVideo.isLiked}
+                isLiked={
+                  likedVideos.has(selectedVideo.id) || selectedVideo.isLiked
+                }
                 isLiking={likingVideoId === selectedVideo.id}
               />
             )}
@@ -417,7 +499,9 @@ function VideoCard({
 
   // Use aspectRatio from API or randomize for masonry effect
   const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "16/9"];
-  const aspectRatio = video.aspectRatio?.replace(":", "/") || aspectRatios[index % aspectRatios.length];
+  const aspectRatio =
+    video.aspectRatio?.replace(":", "/") ||
+    aspectRatios[index % aspectRatios.length];
 
   return (
     <div
@@ -445,7 +529,7 @@ function VideoCard({
           />
         )}
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
-        
+
         {/* Likes count and heart icon - Top right, centered together */}
         <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
           {video.likes > 0 && (
@@ -465,9 +549,7 @@ function VideoCard({
           >
             <Heart
               className={`w-4 h-4 transition-all ${
-                isLiked
-                  ? "fill-red-500 text-red-500"
-                  : "fill-none text-white"
+                isLiked ? "fill-red-500 text-red-500" : "fill-none text-white"
               }`}
             />
           </button>
@@ -515,15 +597,23 @@ function VideoDetailContent({
   video,
   onRecreate,
   onClose,
+  onLike,
+  isLiked,
+  isLiking,
 }: {
   video: CommunityContent;
   onRecreate: () => void;
   onClose: () => void;
+  onLike?: (e: React.MouseEvent, videoId: string) => void;
+  isLiked?: boolean;
+  isLiking?: boolean;
 }) {
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
       <DialogHeader className="px-6 pt-6 pb-4 shrink-0 border-b">
-        <DialogTitle className="text-xl font-semibold">Video Details</DialogTitle>
+        <DialogTitle className="text-xl font-semibold">
+          Video Details
+        </DialogTitle>
       </DialogHeader>
 
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
@@ -590,7 +680,6 @@ function VideoDetailContent({
             <span>{video.views} views</span>
           </div>
         </div>
-
       </div>
 
       {/* Actions - Fixed at bottom */}
@@ -622,4 +711,3 @@ function VideoDetailContent({
     </div>
   );
 }
-
