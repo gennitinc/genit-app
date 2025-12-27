@@ -26,6 +26,7 @@ import {
 interface PresenterSelectorProps {
   selectedPresenter: Presenter | null;
   onSelectPresenter: (presenter: Presenter | null) => void;
+  onDrawerClose?: () => void;
 }
 
 function PresenterCard({
@@ -138,6 +139,7 @@ function PresenterGrid({
 export function PresenterSelector({
   selectedPresenter,
   onSelectPresenter,
+  onDrawerClose,
 }: PresenterSelectorProps) {
   const { user } = useUserContext();
   const isAuthenticated = !!user;
@@ -250,6 +252,7 @@ export function PresenterSelector({
     // Only one avatar can be selected at a time
     // This will replace any previously selected presenter
     onSelectPresenter(presenter);
+    onDrawerClose?.(); // Close drawer on mobile after selection
 
     // Track usage
     try {

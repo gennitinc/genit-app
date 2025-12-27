@@ -1370,6 +1370,9 @@ function VideoCreatePage() {
                               <PresenterSelector
                                 selectedPresenter={selectedPresenter}
                                 onSelectPresenter={setSelectedPresenter}
+                                onDrawerClose={() =>
+                                  setSidebarDrawerOpen(false)
+                                }
                               />
                             </div>
                           )}
@@ -1430,6 +1433,9 @@ function VideoCreatePage() {
                                   onCloneVoice={setClonedVoiceId}
                                   isCloning={isCloningVoice}
                                   onCloningChange={setIsCloningVoice}
+                                  onDrawerClose={() =>
+                                    setSidebarDrawerOpen(false)
+                                  }
                                 />
                               </div>
                             )}
@@ -1488,6 +1494,9 @@ function VideoCreatePage() {
                                 selectedAspectRatio={selectedAspectRatio}
                                 onResolutionChange={setSelectedResolution}
                                 onAspectRatioChange={setSelectedAspectRatio}
+                                onDrawerClose={() =>
+                                  setSidebarDrawerOpen(false)
+                                }
                               />
                               <div className="pt-2 border-t">
                                 <label className="text-sm font-medium mb-2 block text-font-primary">
@@ -1667,6 +1676,13 @@ function VideoCreatePage() {
                         }
 
                         setIsGenerating(true);
+
+                        // Open drawer and set preview tab on mobile when generation starts
+                        if (isMobile) {
+                          setSidebarDrawerOpen(true);
+                          setActiveContentTab("preview");
+                        }
+
                         try {
                           if (generationMode === "image") {
                             // Image generation
@@ -1722,6 +1738,11 @@ function VideoCreatePage() {
                               setSelectedImageIndex(0);
                               setActiveContentTab("preview");
 
+                              // Open drawer on mobile when generation completes
+                              if (isMobile) {
+                                setSidebarDrawerOpen(true);
+                              }
+
                               toast({
                                 title: "Success",
                                 description: `Successfully generated ${newImages.length} image(s)`,
@@ -1746,6 +1767,11 @@ function VideoCreatePage() {
                             // Reset progress and switch to preview tab
                             setGenerationProgress(0);
                             setActiveContentTab("preview");
+
+                            // Open drawer on mobile when video generation starts
+                            if (isMobile) {
+                              setSidebarDrawerOpen(true);
+                            }
 
                             // Collect files for video generation
                             const videoFiles: {
@@ -1816,6 +1842,11 @@ function VideoCreatePage() {
                               setActiveContentTab("preview");
                               setGenerationProgress(100);
                               currentProjectIdRef.current = null;
+
+                              // Open drawer on mobile when generation completes
+                              if (isMobile) {
+                                setSidebarDrawerOpen(true);
+                              }
 
                               toast({
                                 title: "Success",
@@ -2087,6 +2118,7 @@ function VideoCreatePage() {
                         onImageSelect={setSelectedImageIndex}
                         onPromptRestore={setPrompt}
                         onTabChange={setActiveContentTab}
+                        onDrawerClose={() => setSidebarDrawerOpen(false)}
                       />
                     ) : (
                       <VideoPreviewTab
@@ -2098,6 +2130,7 @@ function VideoCreatePage() {
                         onVideoSelect={setSelectedVideoIndex}
                         onPromptRestore={setPrompt}
                         onTabChange={setActiveContentTab}
+                        onDrawerClose={() => setSidebarDrawerOpen(false)}
                       />
                     )}
                   </>
@@ -2375,6 +2408,7 @@ function VideoCreatePage() {
                         onImageSelect={setSelectedImageIndex}
                         onPromptRestore={setPrompt}
                         onTabChange={setActiveContentTab}
+                        onDrawerClose={() => setSidebarDrawerOpen(false)}
                       />
                     ) : (
                       <VideoPreviewTab
@@ -2386,6 +2420,7 @@ function VideoCreatePage() {
                         onVideoSelect={setSelectedVideoIndex}
                         onPromptRestore={setPrompt}
                         onTabChange={setActiveContentTab}
+                        onDrawerClose={() => setSidebarDrawerOpen(false)}
                       />
                     )}
                   </>

@@ -46,6 +46,7 @@ interface VideoPreviewTabProps {
   onTabChange?: (
     tab: "preview" | "community" | "templates" | "tutorial"
   ) => void;
+  onDrawerClose?: () => void;
 }
 
 export function VideoPreviewTab({
@@ -57,6 +58,7 @@ export function VideoPreviewTab({
   onVideoSelect,
   onPromptRestore,
   onTabChange,
+  onDrawerClose,
 }: VideoPreviewTabProps) {
   const [publishing, setPublishing] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -342,6 +344,7 @@ export function VideoPreviewTab({
                     const currentVideo = generatedVideos[selectedVideoIndex];
                     if (currentVideo) {
                       onPromptRestore(currentVideo.prompt);
+                      onDrawerClose?.(); // Close drawer on mobile
                       toast({
                         title: "Prompt restored",
                         description: "Click Generate to recreate",

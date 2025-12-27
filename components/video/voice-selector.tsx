@@ -91,6 +91,7 @@ interface VoiceSelectorProps {
   onCloneVoice: (voiceId: string) => void;
   isCloning: boolean;
   onCloningChange: (isCloning: boolean) => void;
+  onDrawerClose?: () => void;
 }
 
 function VoiceCard({
@@ -182,6 +183,7 @@ export function VoiceSelector({
   onCloneVoice,
   isCloning,
   onCloningChange,
+  onDrawerClose,
 }: VoiceSelectorProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -461,6 +463,7 @@ export function VoiceSelector({
     // Only one voice can be selected at a time
     // This will replace any previously selected voice
     onSelectVoice(voice);
+    onDrawerClose?.(); // Close drawer on mobile after selection
 
     // Track usage
     try {

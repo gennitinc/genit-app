@@ -33,6 +33,7 @@ interface ResolutionSelectorProps {
   selectedAspectRatio: AspectRatio;
   onResolutionChange: (resolution: Resolution) => void;
   onAspectRatioChange: (aspectRatio: AspectRatio) => void;
+  onDrawerClose?: () => void;
 }
 
 const RESOLUTIONS: {
@@ -217,16 +218,19 @@ export function ResolutionSelector({
   selectedAspectRatio,
   onResolutionChange,
   onAspectRatioChange,
+  onDrawerClose,
 }: ResolutionSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const handleResolutionChange = (resolution: Resolution) => {
     onResolutionChange(resolution);
+    onDrawerClose?.(); // Close drawer on mobile after selection
   };
 
   const handleAspectRatioChange = (aspectRatio: AspectRatio) => {
     onAspectRatioChange(aspectRatio);
+    onDrawerClose?.(); // Close drawer on mobile after selection
   };
 
   const FullSettingsPanel = () => (

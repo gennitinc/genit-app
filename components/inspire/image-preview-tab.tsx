@@ -48,6 +48,7 @@ interface ImagePreviewTabProps {
   onTabChange?: (
     tab: "preview" | "community" | "templates" | "tutorial"
   ) => void;
+  onDrawerClose?: () => void;
 }
 
 export function ImagePreviewTab({
@@ -59,6 +60,7 @@ export function ImagePreviewTab({
   onImageSelect,
   onPromptRestore,
   onTabChange,
+  onDrawerClose,
 }: ImagePreviewTabProps) {
   const [publishing, setPublishing] = useState(false);
 
@@ -202,8 +204,6 @@ export function ImagePreviewTab({
 
   return (
     <section className="p-4">
-      
-
       {/* Main Preview Area */}
       <div className="flex flex-col">
         {/* Preview Container */}
@@ -342,6 +342,7 @@ export function ImagePreviewTab({
                     const currentImage = generatedImages[selectedImageIndex];
                     if (currentImage) {
                       onPromptRestore(currentImage.prompt);
+                      onDrawerClose?.(); // Close drawer on mobile
                       toast({
                         title: "Prompt restored",
                         description: "Click Generate to recreate",
