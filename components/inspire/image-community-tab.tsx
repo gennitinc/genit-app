@@ -579,11 +579,11 @@ function ImageDetailContent({
 }) {
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
-      <DialogHeader className="px-6 pt-6 pb-4 shrink-0 border-b">
+      {/* <DialogHeader className="px-6 pt-6 pb-4 shrink-0 border-b">
         <DialogTitle className="text-xl font-semibold">
           Image Details
         </DialogTitle>
-      </DialogHeader>
+      </DialogHeader> */}
 
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
         {/* Image Preview */}
