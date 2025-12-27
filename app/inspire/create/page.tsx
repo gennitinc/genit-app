@@ -690,13 +690,10 @@ function VideoCreatePage() {
                   className="generate-form generate-form--asset flex flex-col shrink-0 max-h-[calc(100vh-7rem)] relative z-10 border-t-0 rounded-b-2xl px-2"
                   onSubmit={(e) => {
                     e.preventDefault();
-                    // Trigger the generate button click
-                    const generateBtn = document.getElementById(
-                      "react-aria3512376871-_r_1f_"
-                    );
-                    if (generateBtn) {
-                      (generateBtn as HTMLButtonElement).click();
-                    }
+                    e.stopPropagation();
+                    // Only trigger generation if prompt is not empty and generate button is explicitly clicked
+                    // This prevents accidental form submission from other buttons
+                    return false;
                   }}
                 >
                   {/* Image Generation Form */}
@@ -717,6 +714,13 @@ function VideoCreatePage() {
                         <textarea
                           value={prompt}
                           onChange={(e) => setPrompt(e.target.value)}
+                          onKeyDown={(e) => {
+                            // Prevent form submission on Enter key
+                            // Allow Shift+Enter for new lines
+                            if (e.key === "Enter" && !e.shiftKey) {
+                              e.preventDefault();
+                            }
+                          }}
                           placeholder="Describe the image you want to generate..."
                           className="w-full min-h-[100px] p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 border-2 border-dashed border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 resize-none focus:outline-none focus:ring-2 focus:ring-transparent focus:border-transparent"
                         />
@@ -1229,6 +1233,13 @@ function VideoCreatePage() {
                           <textarea
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
+                            onKeyDown={(e) => {
+                              // Prevent form submission on Enter key
+                              // Allow Shift+Enter for new lines
+                              if (e.key === "Enter" && !e.shiftKey) {
+                                e.preventDefault();
+                              }
+                            }}
                             placeholder="Describe the scene you imagine, with details..."
                             className="w-full min-h-[100px] p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 border-2 border-dashed border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 resize-none focus:outline-none focus:ring-2 focus:ring-transparent focus:border-transparent"
                           />
