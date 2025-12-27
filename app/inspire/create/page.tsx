@@ -671,7 +671,7 @@ function VideoCreatePage() {
                 )}
               >
                 <form
-                  className="generate-form generate-form--asset flex flex-col shrink-0 max-h-[calc(100vh-7rem)] relative z-10 border-t-0 rounded-b-2xl"
+                  className="generate-form generate-form--asset flex flex-col shrink-0 max-h-[calc(100vh-7rem)] relative z-10 border-t-0 rounded-b-2xl mx-4"
                   onSubmit={(e) => {
                     e.preventDefault();
                     // Trigger the generate button click
