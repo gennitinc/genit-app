@@ -18,6 +18,8 @@ import {
 import { communityApi } from "@/utils/inspire-api";
 import { CommunityContent } from "@/types/inspire";
 import { io, Socket } from "socket.io-client";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { useRouter } from "next/navigation";
 
 export interface GenerationParamsCallback {
   // Common
@@ -66,6 +68,8 @@ export function ImageCommunityTab({
   onTabChange,
   onParamsRestore,
 }: ImageCommunityTabProps) {
+  const { user } = useUserContext();
+  const router = useRouter();
   const [images, setImages] = useState<CommunityContent[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -197,6 +201,12 @@ export function ImageCommunityTab({
   }, [hasMore, loadingMore]);
 
   const handleRecreate = async (image: CommunityContent) => {
+    // Check if user is authenticated
+    if (!user) {
+      router.push("/signin");
+      return;
+    }
+
     try {
       if (onParamsRestore) {
         // Restore prompt
@@ -291,6 +301,12 @@ export function ImageCommunityTab({
 
   const handleLike = async (e: React.MouseEvent, imageId: string) => {
     e.stopPropagation();
+
+    // Check if user is authenticated
+    if (!user) {
+      router.push("/signin");
+      return;
+    }
 
     if (likingImageId === imageId) return; // Prevent double clicks
 
@@ -394,15 +410,6 @@ export function ImageCommunityTab({
   return (
     <>
       <section className="p-4">
-        {/* <div className="mb-4">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-1">
-            Community Images
-          </h2>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            Get inspired by what others have created
-          </p>
-        </div> */}
-
         <div
           ref={containerRef}
           className="columns-2 lg:columns-3 gap-4 overflow-y-auto max-h-[calc(100vh-12rem)]"
@@ -579,8 +586,6 @@ function ImageDetailContent({
 }) {
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
-     
-
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
         {/* Image Preview */}
         <div className="relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800">

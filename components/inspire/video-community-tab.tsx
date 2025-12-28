@@ -26,6 +26,8 @@ import {
 import { communityApi } from "@/utils/inspire-api";
 import { CommunityContent } from "@/types/inspire";
 import { io, Socket } from "socket.io-client";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { useRouter } from "next/navigation";
 
 export interface VideoGenerationParamsCallback {
   // Common
@@ -77,6 +79,8 @@ export function VideoCommunityTab({
   onTabChange,
   onParamsRestore,
 }: VideoCommunityTabProps) {
+  const { user } = useUserContext();
+  const router = useRouter();
   const [videos, setVideos] = useState<CommunityContent[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState<CommunityContent | null>(
@@ -161,6 +165,12 @@ export function VideoCommunityTab({
   }, []);
 
   const handleRecreate = async (video: CommunityContent) => {
+    // Check if user is authenticated
+    if (!user) {
+      router.push("/signin");
+      return;
+    }
+
     try {
       if (onParamsRestore) {
         // Restore prompt
@@ -268,6 +278,13 @@ export function VideoCommunityTab({
 
   const handleLike = async (e: React.MouseEvent, videoId: string) => {
     e.stopPropagation();
+
+    // Check if user is authenticated
+    if (!user) {
+      router.push("/signin");
+      return;
+    }
+
     try {
       setLikingVideoId(videoId);
       const response = await communityApi.toggleLike(videoId);
@@ -374,15 +391,6 @@ export function VideoCommunityTab({
   return (
     <>
       <section className="p-4">
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-1">
-            Community Videos
-          </h2>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            Get inspired by what others have created
-          </p>
-        </div>
-
         <div className="columns-2 lg:columns-3 gap-4">
           {videos.map((video, index) => (
             <VideoCard
@@ -610,8 +618,6 @@ function VideoDetailContent({
 }) {
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
-     
-
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
         {/* Video Preview */}
         <div className="relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800">
