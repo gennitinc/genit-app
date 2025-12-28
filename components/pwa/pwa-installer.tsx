@@ -106,14 +106,14 @@ export function PWAInstaller() {
               Install App
             </Button>
 
-            <Button
+            {/* <Button
               variant="outline"
               onClick={handleDismiss}
               className="flex-1 gap-2"
             >
               <X className="w-4 h-4" />
               Not Now
-            </Button>
+            </Button> */}
           </div>
         </div>
       </DialogContent>
