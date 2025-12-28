@@ -54,50 +54,42 @@ export function PWAInstaller() {
       return false;
     };
 
-    // Check if PWA is installable (for desktop/tablet fallback)
-    const checkInstallable = () => {
-      // Check if service worker is registered (indicates PWA readiness)
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.getRegistration().then((registration) => {
-          if (registration) {
-            // Check if manifest exists and is valid
-            const link = document.querySelector('link[rel="manifest"]');
-            if (link) {
-              setIsInstallable(true);
-              // Show prompt if not dismissed
-              if (!checkDismissal()) {
-                setShowInstallPrompt(true);
-              }
-            }
-          }
-        });
-      }
-    };
-
-    // Handler for beforeinstallprompt event (mobile Chrome/Edge)
+    // Handler for beforeinstallprompt event
     const handler = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      const event = e as BeforeInstallPromptEvent;
+      setDeferredPrompt(event);
       setIsInstallable(true);
-      // Show prompt if not dismissed
-      if (!checkDismissal()) {
-        setShowInstallPrompt(true);
+
+      // Detect if mobile or desktop
+      const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+
+      // Only prevent default and show custom dialog on mobile
+      // On desktop, let the browser show its native install button in the address bar
+      if (isMobile) {
+        e.preventDefault();
+        // Show prompt if not dismissed
+        if (!checkDismissal()) {
+          setShowInstallPrompt(true);
+        }
+      } else {
+        // On desktop, don't show custom dialog - let browser handle it
+        // The browser will show install button in address bar
+        setShowInstallPrompt(false);
       }
     };
 
     window.addEventListener("beforeinstallprompt", handler);
 
-    // Fallback for desktop/tablet: Check after a delay if installable
-    // This allows the page to fully load and service worker to register
-    const checkTimer = setTimeout(() => {
-      if (!isInstalled && !deferredPrompt && !checkDismissal()) {
-        checkInstallable();
-      }
-    }, 3000); // 3 second delay to ensure page is loaded
+    // Note: On desktop, we don't show a custom dialog
+    // The browser will show its native install button in the address bar
+    // This fallback is only for cases where beforeinstallprompt doesn't fire
+    // but the PWA is still installable (rare edge case)
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handler);
-      clearTimeout(checkTimer);
     };
   }, []);
 
@@ -202,15 +194,6 @@ export function PWAInstaller() {
               <Download className="w-4 h-4" />
               Install App
             </Button>
-            {/* 
-            <Button
-              variant="outline"
-              onClick={handleDismiss}
-              className="flex-1 gap-2"
-            >
-              <X className="w-4 h-4" />
-              Not Now
-            </Button> */}
           </div>
         </div>
       </DialogContent>
