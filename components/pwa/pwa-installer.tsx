@@ -21,39 +21,132 @@ export function PWAInstaller() {
     useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [isInstallable, setIsInstallable] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
     // Check if app is already installed
-    if (
-      window.matchMedia("(display-mode: standalone)").matches ||
-      (window.navigator as any).standalone === true
-    ) {
-      setIsInstalled(true);
+    const checkInstalled = () => {
+      if (
+        window.matchMedia("(display-mode: standalone)").matches ||
+        (window.navigator as any).standalone === true
+      ) {
+        setIsInstalled(true);
+        return true;
+      }
+      return false;
+    };
+
+    if (checkInstalled()) {
       return;
     }
 
+    // Check dismissal status
+    const checkDismissal = () => {
+      const dismissedTime = localStorage.getItem("pwa-install-dismissed");
+      if (dismissedTime) {
+        const daysSinceDismissed =
+          (Date.now() - parseInt(dismissedTime)) / (1000 * 60 * 60 * 24);
+        return daysSinceDismissed < 7; // Return true if recently dismissed
+      }
+      return false;
+    };
+
+    // Check if PWA is installable (for desktop/tablet fallback)
+    const checkInstallable = () => {
+      // Check if service worker is registered (indicates PWA readiness)
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.getRegistration().then((registration) => {
+          if (registration) {
+            // Check if manifest exists and is valid
+            const link = document.querySelector('link[rel="manifest"]');
+            if (link) {
+              setIsInstallable(true);
+              // Show prompt if not dismissed
+              if (!checkDismissal()) {
+                setShowInstallPrompt(true);
+              }
+            }
+          }
+        });
+      }
+    };
+
+    // Handler for beforeinstallprompt event (mobile Chrome/Edge)
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setShowInstallPrompt(true);
+      setIsInstallable(true);
+      // Show prompt if not dismissed
+      if (!checkDismissal()) {
+        setShowInstallPrompt(true);
+      }
     };
 
     window.addEventListener("beforeinstallprompt", handler);
 
+    // Fallback for desktop/tablet: Check after a delay if installable
+    // This allows the page to fully load and service worker to register
+    const checkTimer = setTimeout(() => {
+      if (!isInstalled && !deferredPrompt && !checkDismissal()) {
+        checkInstallable();
+      }
+    }, 3000); // 3 second delay to ensure page is loaded
+
     return () => {
       window.removeEventListener("beforeinstallprompt", handler);
+      clearTimeout(checkTimer);
     };
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (deferredPrompt) {
+      // Mobile Chrome/Edge: Use the deferred prompt
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
 
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        setShowInstallPrompt(false);
+        setDeferredPrompt(null);
+        setIsInstalled(true);
+      }
+    } else {
+      // Desktop/Tablet fallback: Show browser's native install UI
+      // For Chrome/Edge desktop, the install button appears in address bar
+      // For Safari, users need to use Share > Add to Home Screen
+      // For Firefox, users need to use the menu
+      // We can't programmatically trigger these, so we show instructions
+      const isChrome =
+        /Chrome/.test(navigator.userAgent) &&
+        /Google Inc/.test(navigator.vendor);
+      const isEdge = /Edg/.test(navigator.userAgent);
+      const isSafari =
+        /Safari/.test(navigator.userAgent) &&
+        !/Chrome/.test(navigator.userAgent) &&
+        !/Firefox/.test(navigator.userAgent);
+      const isFirefox = /Firefox/.test(navigator.userAgent);
 
-    if (outcome === "accepted") {
-      setShowInstallPrompt(false);
-      setDeferredPrompt(null);
+      if (isChrome || isEdge) {
+        // Chrome/Edge desktop: Install button should appear in address bar
+        // Close dialog and let user use browser's install button
+        setShowInstallPrompt(false);
+        handleDismiss();
+      } else if (isSafari) {
+        // Safari: Show instructions
+        alert(
+          "To install: Click Share button (square with arrow) > Add to Home Screen"
+        );
+        handleDismiss();
+      } else if (isFirefox) {
+        // Firefox: Show instructions
+        alert("To install: Click menu (three lines) > Install");
+        handleDismiss();
+      } else {
+        // Other browsers
+        handleDismiss();
+      }
     }
   };
 
@@ -63,18 +156,21 @@ export function PWAInstaller() {
     localStorage.setItem("pwa-install-dismissed", Date.now().toString());
   };
 
-  // Don't show if already installed or recently dismissed
-  if (isInstalled || !showInstallPrompt) {
+  // Don't render until mounted (prevents hydration issues)
+  if (!mounted) {
     return null;
   }
 
-  const dismissedTime = localStorage.getItem("pwa-install-dismissed");
-  if (dismissedTime) {
-    const daysSinceDismissed =
-      (Date.now() - parseInt(dismissedTime)) / (1000 * 60 * 60 * 24);
-    if (daysSinceDismissed < 7) {
-      return null; // Don't show again for 7 days
-    }
+  // Don't show if already installed
+  if (isInstalled) {
+    return null;
+  }
+
+  // Only show if installable and prompt should be shown
+  // The dismissal check is handled in useEffect, so if showInstallPrompt is true,
+  // it means it passed the dismissal check
+  if (!isInstallable || !showInstallPrompt) {
+    return null;
   }
 
   return (
@@ -105,8 +201,8 @@ export function PWAInstaller() {
               <Download className="w-4 h-4" />
               Install App
             </Button>
-
-            {/* <Button
+{/* 
+            <Button
               variant="outline"
               onClick={handleDismiss}
               className="flex-1 gap-2"
