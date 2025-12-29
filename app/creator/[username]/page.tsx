@@ -1706,7 +1706,7 @@ export default function CreatorProfilePage() {
       {/* Content Tabs */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="sticky top-0 z-10 bg-neutral-50/80 dark:bg-neutral-950/80 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-800 mb-6">
-          <div className="flex gap-1 pt-3 pb-3">
+          <div className="flex gap-1 pt-3 pb-0">
             <button
               onClick={() => {
                 // Use requestAnimationFrame to prevent hanging
