@@ -74,6 +74,7 @@ export function LandingNavbar() {
       href: user ? "/user/settings?tab=billing" : "/pricing",
     },
     { name: "History", href: user ? "/chat/history" : "/signin" },
+    { name: "Community", href: "/community" },
     { name: "Contact", href: "/contact" },
   ];
 

@@ -10,6 +10,7 @@ import {
   Users,
   Loader2,
   Play,
+  Pause,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
@@ -89,6 +90,7 @@ export function VideoCommunityTab({
   const [selectedVideo, setSelectedVideo] = useState<CommunityContent | null>(
     null
   );
+  const [viewVideo, setViewVideo] = useState<CommunityContent | null>(null);
   const [likedVideos, setLikedVideos] = useState<Set<string>>(new Set());
   const [likingVideoId, setLikingVideoId] = useState<string | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -417,6 +419,7 @@ export function VideoCommunityTab({
               index={index}
               onRecreate={() => handleRecreate(video)}
               onClick={() => handleVideoClick(video)}
+              onView={() => setViewVideo(video)}
               onLike={handleLike}
               isLiked={likedVideos.has(video.id) || video.isLiked}
               isLiking={likingVideoId === video.id}
@@ -474,6 +477,74 @@ export function VideoCommunityTab({
           </DrawerContent>
         </Drawer>
       )}
+
+      {/* View Drawer - Shows prompt and user profile only (no media) */}
+      <Drawer open={!!viewVideo} onOpenChange={() => setViewVideo(null)}>
+        <DrawerContent className="max-h-[85vh] overflow-y-auto">
+          {viewVideo && (
+            <div className="p-6">
+              <DrawerHeader>
+                <DrawerTitle>Content Details</DrawerTitle>
+              </DrawerHeader>
+              <div className="space-y-6 mt-4">
+                {/* Prompt */}
+                <div>
+                  <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-2">
+                    Prompt
+                  </h3>
+                  <p className="text-base text-neutral-900 dark:text-neutral-100">
+                    {viewVideo.prompt}
+                  </p>
+                </div>
+
+                {/* User Profile */}
+                <div>
+                  <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3">
+                    Creator
+                  </h3>
+                  <Link
+                    href={`/creator/${viewVideo.author.name}`}
+                    className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                  >
+                    {viewVideo.author.avatar ? (
+                      <img
+                        src={viewVideo.author.avatar}
+                        alt={viewVideo.author.name}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
+                        <User className="w-6 h-6 text-neutral-600 dark:text-neutral-400" />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-base font-medium text-neutral-900 dark:text-neutral-100">
+                          {viewVideo.author.name}
+                        </span>
+                        {viewVideo.author.isVerified && (
+                          <svg
+                            viewBox="0 0 22 22"
+                            aria-label="Verified account"
+                            role="img"
+                            className="w-5 h-5 flex-shrink-0"
+                            data-testid="icon-verified"
+                            fill="#3b82f6"
+                          >
+                            <g>
+                              <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                            </g>
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }
@@ -483,6 +554,7 @@ function VideoCard({
   index,
   onRecreate,
   onClick,
+  onView,
   onLike,
   isLiked,
   isLiking,
@@ -491,6 +563,7 @@ function VideoCard({
   index: number;
   onRecreate: () => void;
   onClick: () => void;
+  onView: () => void;
   onLike?: (e: React.MouseEvent, videoId: string) => void;
   isLiked?: boolean;
   isLiking?: boolean;
@@ -613,17 +686,6 @@ function VideoCard({
               className="w-full object-cover"
               style={{ aspectRatio }}
             />
-            {/* Play icon in center when paused (mobile) */}
-            {isPaused && !isDesktop && (
-              <div 
-                className="absolute inset-0 flex items-center justify-center pointer-events-auto cursor-pointer z-10"
-                onClick={handlePlayClick}
-              >
-                <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                  <Play className="w-6 h-6 text-white ml-1" />
-                </div>
-              </div>
-            )}
           </>
         ) : (
           <img
@@ -634,6 +696,49 @@ function VideoCard({
           />
         )}
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+        {/* Play/Pause and View icons - Centered */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
+          <div className="flex items-center gap-3 pointer-events-auto">
+            {/* Play/Pause Button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (isPaused) {
+                  if (isDesktop) {
+                    handleMouseEnter();
+                  } else {
+                    handlePlayClick(e as any);
+                  }
+                } else {
+                  if (videoRef.current) {
+                    videoRef.current.pause();
+                    setIsPaused(true);
+                  }
+                }
+              }}
+              className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors"
+            >
+              {isPaused ? (
+                <Play className="w-6 h-6 text-white ml-1" />
+              ) : (
+                <Pause className="w-6 h-6 text-white" />
+              )}
+            </button>
+            {/* View Button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onView();
+              }}
+              className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors"
+            >
+              <Eye className="w-6 h-6 text-white" />
+            </button>
+          </div>
+        </div>
 
         {/* Likes count and heart icon - Top right, centered together */}
         <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
@@ -732,27 +837,31 @@ function VideoDetailContent({
   isLiked?: boolean;
   isLiking?: boolean;
 }) {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
-        {/* Video Preview */}
-        <div className="relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800">
-          {video.videoUrl ? (
-            <video
-              src={video.videoUrl}
-              poster={video.thumbnailUrl}
-              controls
-              loop
-              className="w-full h-auto max-h-[50vh] object-contain"
-            />
-          ) : (
-            <img
-              src={video.thumbnailUrl}
-              alt={video.prompt}
-              className="w-full h-auto max-h-[50vh] object-contain"
-            />
-          )}
-        </div>
+        {/* Video Preview - Hidden on mobile */}
+        {isDesktop && (
+          <div className="relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+            {video.videoUrl ? (
+              <video
+                src={video.videoUrl}
+                poster={video.thumbnailUrl}
+                controls
+                loop
+                className="w-full h-auto max-h-[50vh] object-contain"
+              />
+            ) : (
+              <img
+                src={video.thumbnailUrl}
+                alt={video.prompt}
+                className="w-full h-auto max-h-[50vh] object-contain"
+              />
+            )}
+          </div>
+        )}
 
         {/* Prompt */}
         <div>

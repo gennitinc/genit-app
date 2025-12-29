@@ -9,6 +9,7 @@ import {
   UserPlus,
   Video,
   Image as ImageIcon,
+  Users,
 } from "lucide-react";
 
 import {
@@ -44,6 +45,11 @@ const navItems = [
     title: "History",
     icon: History,
     href: "/chat/history",
+  },
+  {
+    title: "Community",
+    icon: Users,
+    href: "/community",
   },
   {
     title: "Inspirations",
@@ -89,6 +95,16 @@ export function NavMain() {
   // For mobile, always show full content, for desktop use the state
   const shouldShowCollapsed = !isMobile && state === "collapsed";
 
+  // Helper function to check if a route is active (handles query params)
+  const isRouteActive = (href: string) => {
+    if (href.includes("?")) {
+      // For routes with query params, check if pathname matches the base path
+      const basePath = href.split("?")[0];
+      return pathname === basePath || pathname.startsWith(basePath + "?");
+    }
+    return pathname === href || pathname.startsWith(href + "/");
+  };
+
   return (
     <>
       <SidebarGroup>
@@ -97,11 +113,11 @@ export function NavMain() {
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname === item.href}
+                isActive={isRouteActive(item.href)}
                 tooltip={shouldShowCollapsed ? item.title : undefined}
                 className={cn(
                   "transition-colors duration-300",
-                  pathname === item.href
+                  isRouteActive(item.href)
                     ? theme === "dark"
                       ? "bg-zinc-800 text-white"
                       : "bg-gray-200 text-black"
@@ -114,11 +130,36 @@ export function NavMain() {
                 <Link href={item.href}>
                   <item.icon
                     className={cn(
-                      "h-6 w-6",
-                      shouldShowCollapsed ? "mx-auto" : "mr-2"
+                      "h-6 w-6 flex-shrink-0",
+                      shouldShowCollapsed ? "mx-auto" : "mr-2",
+                      // Make icons more visible on mobile/tablet
+                      isMobile && "h-7 w-7",
+                      // Theme responsive icon colors
+                      isRouteActive(item.href)
+                        ? theme === "dark"
+                          ? "text-white"
+                          : "text-black"
+                        : theme === "dark"
+                          ? "text-zinc-300"
+                          : "text-gray-600"
                     )}
                   />
-                  {!shouldShowCollapsed && <span>{item.title}</span>}
+                  {!shouldShowCollapsed && (
+                    <span
+                      className={cn(
+                        // Theme responsive text colors
+                        isRouteActive(item.href)
+                          ? theme === "dark"
+                            ? "text-white"
+                            : "text-black"
+                          : theme === "dark"
+                            ? "text-zinc-300"
+                            : "text-gray-700"
+                      )}
+                    >
+                      {item.title}
+                    </span>
+                  )}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -134,11 +175,11 @@ export function NavMain() {
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname === item.href}
+                isActive={isRouteActive(item.href)}
                 tooltip={shouldShowCollapsed ? item.title : undefined}
                 className={cn(
                   "transition-colors duration-300",
-                  pathname === item.href
+                  isRouteActive(item.href)
                     ? theme === "dark"
                       ? "bg-zinc-800 text-white"
                       : "bg-gray-200 text-black"
@@ -154,11 +195,36 @@ export function NavMain() {
                 >
                   <item.icon
                     className={cn(
-                      "h-6 w-6",
-                      shouldShowCollapsed ? "mx-auto" : "mr-2"
+                      "h-6 w-6 flex-shrink-0",
+                      shouldShowCollapsed ? "mx-auto" : "mr-2",
+                      // Make icons more visible on mobile/tablet
+                      isMobile && "h-7 w-7",
+                      // Theme responsive icon colors
+                      isRouteActive(item.href)
+                        ? theme === "dark"
+                          ? "text-white"
+                          : "text-black"
+                        : theme === "dark"
+                          ? "text-zinc-300"
+                          : "text-gray-600"
                     )}
                   />
-                  {!shouldShowCollapsed && <span>{item.title}</span>}
+                  {!shouldShowCollapsed && (
+                    <span
+                      className={cn(
+                        // Theme responsive text colors
+                        isRouteActive(item.href)
+                          ? theme === "dark"
+                            ? "text-white"
+                            : "text-black"
+                          : theme === "dark"
+                            ? "text-zinc-300"
+                            : "text-gray-700"
+                      )}
+                    >
+                      {item.title}
+                    </span>
+                  )}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

@@ -866,6 +866,20 @@ export const videoGenApi = {
     );
     return response.data;
   },
+
+  /**
+   * Upload reference image from URL
+   */
+  uploadReferenceImageFromUrl: async (imageUrl: string) => {
+    const response = await apiResponse.post(
+      `/inspire/generate/video/upload-reference-image`,
+      { imageUrl },
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  },
 };
 
 // ============================================

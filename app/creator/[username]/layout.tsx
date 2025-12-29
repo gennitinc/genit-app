@@ -18,13 +18,48 @@ interface CreatorProfile {
   };
 }
 
-async function getCreatorProfile(username: string): Promise<CreatorProfile | null> {
+async function getCreatorProfile(
+  username: string
+): Promise<CreatorProfile | null> {
   try {
-    const response = await apiResponse.get(`/inspire/creator/${username}`, {
-      withCredentials: true,
+    const baseURL =
+      process.env.NEXT_PUBLIC_LIVE_URL ||
+      process.env.NEXT_PUBLIC_LOCAL_URL ||
+      "http://localhost:5000";
+    const url = `${baseURL}/api/v1/inspire/creator/${encodeURIComponent(username)}`;
+
+    // Create AbortController for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+      signal: controller.signal,
     });
-    return response.data.profile;
-  } catch (error) {
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    if (!data || !data.profile) {
+      return null;
+    }
+    return data.profile;
+  } catch (error: any) {
+    // Silently fail for metadata generation - don't break the page
+    if (error.name !== "AbortError") {
+      // Only log in development
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error fetching creator profile for metadata:", error);
+      }
+    }
     return null;
   }
 }
@@ -44,8 +79,11 @@ export async function generateMetadata({
   }
 
   const profileUrl = `https://www.gennit.online/creator/${params.username}`;
-  const ogImage = profile.coverPhoto || profile.userdp || "https://www.gennit.online/opengraph-image.png";
-  const description = profile.bio 
+  const ogImage =
+    profile.coverPhoto ||
+    profile.userdp ||
+    "https://www.gennit.online/opengraph-image.png";
+  const description = profile.bio
     ? `${profile.bio} Follow ${profile.username} on Gennit to see their amazing AI-generated content!`
     : `Follow ${profile.username} on Gennit - Check out their amazing AI-generated content! ${profile.stats.totalPosts} posts, ${profile.followers} followers.`;
 
@@ -99,4 +137,3 @@ export default function CreatorProfileLayout({
 }) {
   return <>{children}</>;
 }
-

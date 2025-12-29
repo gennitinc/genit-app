@@ -263,11 +263,28 @@ export function VersioningMessage({
       // Get the animation prompt based on design type
       const animationPrompt = getAnimationPrompt(designType, originalPrompt);
 
-      // Prepare animate data
+      // Upload the reference image to server (download, upload to S3, return URL)
+      let uploadedImageUrl = imageUrl;
+      try {
+        const { videoGenApi } = await import("@/utils/inspire-api");
+        const response =
+          await videoGenApi.uploadReferenceImageFromUrl(imageUrl);
+        if (response.success && response.data?.imageUrl) {
+          uploadedImageUrl = response.data.imageUrl;
+        }
+      } catch (uploadError) {
+        console.error(
+          "Failed to upload reference image, using original URL:",
+          uploadError
+        );
+        // Continue with original URL if upload fails
+      }
+
+      // Prepare animate data with uploaded S3 URL
       const animateData = {
         type: "video",
         prompt: animationPrompt,
-        referenceImageUrls: [imageUrl],
+        referenceImageUrls: [uploadedImageUrl],
         designType: designType || "generic_design",
       };
 
@@ -279,7 +296,7 @@ export function VersioningMessage({
         mode: "ai-video-gen",
         animate: "true",
         prompt: encodeURIComponent(animationPrompt),
-        referenceImage: encodeURIComponent(imageUrl),
+        referenceImage: encodeURIComponent(uploadedImageUrl),
         designType: designType || "generic_design",
       });
 
@@ -429,7 +446,7 @@ export function VersioningMessage({
                   <p className="text-xs sm:text-sm font-medium text-foreground truncate">
                     {item.name}
                   </p>
-                  <div className="flex items-center justify-between mt-2">
+                  <div className="flex flex-col gap-2 mt-2">
                     <div className="flex items-center gap-1">
                       <ImageIcon className="w-3 h-3 text-muted-foreground" />
                       <p className="text-xs text-muted-foreground">
@@ -443,7 +460,7 @@ export function VersioningMessage({
                         e.stopPropagation();
                         handleAnimateDesign(item);
                       }}
-                      className="h-7 px-2 text-xs gap-1.5"
+                      className="h-7 px-2 text-xs gap-1.5 w-fit"
                     >
                       <Play className="w-3 h-3" />
                       Animate design
