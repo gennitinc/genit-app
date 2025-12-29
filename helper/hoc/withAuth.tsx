@@ -33,8 +33,8 @@ function withAuth(
               router.push("/onboarding");
               return;
             } else {
-              // Verified and onboarded - redirect to chat
-              router.push("/chat");
+              // Verified and onboarded - redirect to inspire create
+              router.push("/inspire/create");
               return;
             }
           }

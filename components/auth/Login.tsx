@@ -122,8 +122,8 @@ export const LoginComp = () => {
           // Verified but not onboarded - redirect to onboarding
           router.push("/onboarding");
         } else {
-          // Verified and onboarded - go to chat
-          router.push("/chat");
+          // Verified and onboarded - go to inspire create
+          router.push("/inspire/create");
         }
       }
     } catch (error: any) {
@@ -188,8 +188,8 @@ export const LoginComp = () => {
             // Verified but not onboarded - redirect to onboarding
             router.push("/onboarding");
           } else {
-            // Verified and onboarded - go to chat
-            router.push("/chat");
+            // Verified and onboarded - go to inspire create
+            router.push("/inspire/create");
           }
         }
       } catch (error: any) {

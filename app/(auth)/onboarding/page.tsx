@@ -599,10 +599,10 @@ export default function BrandOnboardingChecklist() {
 
       if (onboardingCompleted && !hasRedirected) {
         console.log(
-          "User has already completed onboarding, redirecting to chat"
+          "User has already completed onboarding, redirecting to inspire create"
         );
         setHasRedirected(true);
-        router.replace("/chat");
+        router.replace("/inspire/create");
         return;
       }
 
@@ -619,10 +619,10 @@ export default function BrandOnboardingChecklist() {
             response.data.onboarding?.onboardingCompleted === true
           ) {
             console.log(
-              "Onboarding completed (fetched separately), redirecting to chat"
+              "Onboarding completed (fetched separately), redirecting to inspire create"
             );
             setHasRedirected(true);
-            router.replace("/chat");
+            router.replace("/inspire/create");
             return;
           }
         } catch (error) {
@@ -1120,8 +1120,8 @@ export default function BrandOnboardingChecklist() {
           await fetchCurrentUser();
         }
 
-        // Redirect to chat after confetti animation
-        router.replace("/chat");
+        // Redirect to inspire create after confetti animation
+        router.replace("/inspire/create");
       }, 2000); // Wait 2 seconds for confetti animation to complete
     } catch (error: any) {
       console.error("Error saving business profile:", error);
