@@ -85,7 +85,11 @@ const UserPopOver = () => {
       >
         <div className="p-4">
           {/* User Email */}
-          <div className="pb-2 mb-2 flex flex-row items-center gap-2 border-b border-border">
+          <Link
+            href={`/creator/${user?.username}`}
+            onClick={() => setIsUserPopoverOpen(false)}
+            className="pb-2 mb-2 flex flex-row items-center gap-2 border-b border-border hover:opacity-80 transition-opacity"
+          >
             <Avatar className={isMobile ? "w-6 h-6 px-0" : "w-8 h-8 px-0"}>
               <AvatarImage
                 src={user?.userdp}
@@ -97,7 +101,7 @@ const UserPopOver = () => {
             <p className="text-sm font-medium text-foreground">
               {user?.username || "Loading..."}
             </p>
-          </div>
+          </Link>
           {/* Preferences */}
           <div className="mb-2">
             <div className="flex items-center justify-between mb-2">

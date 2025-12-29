@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   BadgeCheck,
   Bell,
@@ -9,6 +10,7 @@ import {
   LogOut,
   Moon,
   Sun,
+  User,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -86,7 +88,10 @@ export function NavUser({ user }: any) {
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 pz-2">
+              <Link
+                href={`/creator/${user?.username}`}
+                className="flex items-center gap-2 pz-2 rounded-md hover:bg-accent transition-colors"
+              >
                 <Avatar className="h-10 w-10">
                   <AvatarImage
                     src={user?.userdp}
@@ -101,10 +106,16 @@ export function NavUser({ user }: any) {
                     {user?.email}
                   </span>
                 </div>
-              </div>
+              </Link>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-border" />
             <DropdownMenuGroup>
+              <DropdownMenuItem asChild className="focus:bg-accent focus:text-accent-foreground">
+                <Link href={`/creator/${user?.username}`}>
+                  <User className="mr-2 h-4 w-4" />
+                  View Profile
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem className="focus:bg-accent focus:text-accent-foreground">
                 <BadgeCheck className="mr-2 h-4 w-4" />
                 Account

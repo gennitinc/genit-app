@@ -519,7 +519,10 @@ export function LandingNavbar() {
                 ))}
                 <hr className="my-4" />
                 {user ? (
-                  <div className="flex items-center gap-2 p-2">
+                  <Link
+                    href={`/creator/${user?.username}`}
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                  >
                     <Avatar className="h-10 w-10">
                       <AvatarImage src={user?.userdp} alt={user?.username} />
                       <AvatarFallback>{user?.username[0]}</AvatarFallback>
@@ -530,7 +533,7 @@ export function LandingNavbar() {
                         {user?.email}
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 ) : (
                   // <>
                   //   <Button
