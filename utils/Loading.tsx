@@ -8,7 +8,7 @@ const Loading = () => {
   const [colorIndex, setColorIndex] = React.useState(0);
 
   return (
-    <div className="text-center flex flex-row items-center gap-2">
+    <div className="text-center flex flex-row items-center gap-2 bg-white dark:bg-black">
       <span className="flex-none text-xl animate-pulse font-semibold text-gray-300 dark:text-gray-200">
         Gennit
       </span>
