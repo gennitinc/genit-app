@@ -1399,7 +1399,10 @@ export default function CreatorProfilePage() {
 
                 {/* Follow/Settings Button - Mobile */}
                 {isOwnProfile ? (
-                  <Drawer open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+                  <Drawer
+                    open={isSettingsOpen}
+                    onOpenChange={setIsSettingsOpen}
+                  >
                     <DrawerTrigger asChild>
                       <Button
                         variant="outline"
@@ -1702,8 +1705,8 @@ export default function CreatorProfilePage() {
 
       {/* Content Tabs */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="sticky top-0 z-0 bg-neutral-50 dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 mb-6">
-          <div className="flex gap-8 pt-2 pb-4">
+        <div className="sticky top-0 z-10 bg-neutral-50/80 dark:bg-neutral-950/80 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-800 mb-6">
+          <div className="flex gap-1 pt-3 pb-3">
             <button
               onClick={() => {
                 // Use requestAnimationFrame to prevent hanging
@@ -1713,17 +1716,33 @@ export default function CreatorProfilePage() {
               }}
               disabled={contentLoading}
               className={cn(
-                "px-1 border-b-2 font-medium text-sm transition-colors",
+                "relative px-4 py-2.5 font-medium text-sm transition-all duration-200 rounded-t-lg",
+                "flex items-center gap-2",
                 activeTab === "images"
-                  ? "border-neutral-500 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100"
-                  : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300",
+                  ? "text-neutral-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 shadow-sm border-b-2 border-neutral-900 dark:border-neutral-100"
+                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/50",
                 contentLoading && "opacity-50 cursor-not-allowed"
               )}
             >
-              <div className="flex items-center gap-2">
-                <ImageIcon className="w-4 h-4" />
-                Images ({content.images.length})
-              </div>
+              <ImageIcon
+                className={cn(
+                  "w-4 h-4 transition-colors",
+                  activeTab === "images"
+                    ? "text-neutral-900 dark:text-neutral-100"
+                    : "text-neutral-500 dark:text-neutral-400"
+                )}
+              />
+              <span>Images</span>
+              <span
+                className={cn(
+                  "ml-1 px-1.5 py-0.5 rounded-full text-xs font-semibold transition-colors",
+                  activeTab === "images"
+                    ? "bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100"
+                    : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
+                )}
+              >
+                {content.images.length}
+              </span>
             </button>
             <button
               onClick={() => {
@@ -1734,17 +1753,33 @@ export default function CreatorProfilePage() {
               }}
               disabled={contentLoading}
               className={cn(
-                "px-1 border-b font-medium text-sm transition-colors",
+                "relative px-4 py-2.5 font-medium text-sm transition-all duration-200 rounded-t-lg",
+                "flex items-center gap-2",
                 activeTab === "videos"
-                  ? "border-neutral-500 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100"
-                  : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300",
+                  ? "text-neutral-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 shadow-sm border-b-2 border-neutral-900 dark:border-neutral-100"
+                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/50",
                 contentLoading && "opacity-50 cursor-not-allowed"
               )}
             >
-              <div className="flex items-center gap-2">
-                <Video className="w-4 h-4" />
-                Videos ({content.videos.length})
-              </div>
+              <Video
+                className={cn(
+                  "w-4 h-4 transition-colors",
+                  activeTab === "videos"
+                    ? "text-neutral-900 dark:text-neutral-100"
+                    : "text-neutral-500 dark:text-neutral-400"
+                )}
+              />
+              <span>Videos</span>
+              <span
+                className={cn(
+                  "ml-1 px-1.5 py-0.5 rounded-full text-xs font-semibold transition-colors",
+                  activeTab === "videos"
+                    ? "bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100"
+                    : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
+                )}
+              >
+                {content.videos.length}
+              </span>
             </button>
           </div>
         </div>

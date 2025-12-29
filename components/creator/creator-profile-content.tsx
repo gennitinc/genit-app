@@ -34,6 +34,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
@@ -501,9 +502,25 @@ export function CreatorProfileContent({
   };
 
   if (loading) {
+    // Generate varying heights for masonry grid effect
+    const skeletonHeights = [
+      200, 280, 240, 320, 260, 300, 220, 340, 250, 290, 210, 270, 230, 310,
+      240, 280, 260, 300, 220, 320,
+    ];
+
     return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 animate-spin text-neutral-400" />
+      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 mb-8">
+        {skeletonHeights.map((height, idx) => (
+          <div
+            key={`skeleton-${idx}`}
+            className="break-inside-avoid mb-4 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800"
+          >
+            <Skeleton
+              className="w-full rounded-xl bg-neutral-200 dark:bg-neutral-700"
+              style={{ height: `${height}px` }}
+            />
+          </div>
+        ))}
       </div>
     );
   }
