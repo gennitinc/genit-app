@@ -500,7 +500,7 @@ export function LandingNavbar() {
           {/* <UserPopOver /> */}
           <Sheet>
             <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon" className="z-50">
+              <Button variant="ghost" size="icon" className="z-50 mr-2">
                 <PanelRight className="size-4 h-4 w-4 text-muted-foreground" />
 
                 <span className="sr-only">Toggle menu</span>
