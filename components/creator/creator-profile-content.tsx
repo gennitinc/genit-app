@@ -82,9 +82,8 @@ function VideoCard({
   const [showFullPrompt, setShowFullPrompt] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  // Auto-play preview when entering viewport - Desktop only
+  // Auto-play preview when entering viewport - All devices
   useEffect(() => {
-    if (!isDesktop) return; // Only auto-play on desktop
     if (item.contentType !== "video" || !item.videoUrl) return;
 
     const videoElement = videoRef.current;
@@ -142,7 +141,7 @@ function VideoCard({
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [item.videoUrl, item.contentType, isHovered, isDesktop]);
+  }, [item.videoUrl, item.contentType, isHovered]);
 
   // Handle hover to play (desktop only, with sound)
   const handleMouseEnter = () => {
@@ -240,11 +239,11 @@ function VideoCard({
         {/* Gradient overlay on hover */}
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-        {/* Play/Pause and View icons - Centered (for videos) */}
+        {/* Play/Pause and View icons - Always visible for videos */}
         {item.contentType === "video" && item.videoUrl && (
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
+          <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
             <div className="flex items-center gap-3 pointer-events-auto">
-              {/* Play/Pause Button */}
+              {/* Play/Pause Button - Always visible */}
               <button
                 type="button"
                 onClick={(e) => {
@@ -262,7 +261,7 @@ function VideoCard({
                     }
                   }
                 }}
-                className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors"
+                className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
               >
                 {isPaused ? (
                   <Play className="w-6 h-6 text-white ml-1" />
@@ -270,14 +269,14 @@ function VideoCard({
                   <Pause className="w-6 h-6 text-white" />
                 )}
               </button>
-              {/* View Button */}
+              {/* View Button - Show on hover */}
               <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   onClick(item);
                 }}
-                className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors"
+                className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-0 group-hover:opacity-100"
               >
                 <Eye className="w-6 h-6 text-white" />
               </button>

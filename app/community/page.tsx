@@ -55,7 +55,12 @@ export default function CommunityPage() {
         <div className="b-8">
           <Tabs
             value={activeTab}
-            onValueChange={(v) => setActiveTab(v as "video" | "image")}
+            onValueChange={(v) => {
+              // Use requestAnimationFrame to prevent hanging
+              requestAnimationFrame(() => {
+                setActiveTab(v as "video" | "image");
+              });
+            }}
             className="w-full"
           >
             <div className="sticky top-0 z-50 bg-white dark:bg-black pb-2 pt-2 mb-6">

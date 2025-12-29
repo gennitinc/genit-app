@@ -196,6 +196,16 @@ export default function CreatorProfilePage() {
     }
   }, [profile, currentUser]);
 
+  // Set document title when profile is loaded
+  useEffect(() => {
+    if (profile) {
+      const title = `${profile.username}${profile.isVerified ? "" : ""} | Gennit Creator Profile`;
+      document.title = title;
+    } else if (!loading) {
+      document.title = "Creator Not Found | Gennit";
+    }
+  }, [profile, loading]);
+
   useEffect(() => {
     if (profile) {
       setSettingsBio(profile.bio || "");
@@ -1537,12 +1547,19 @@ export default function CreatorProfilePage() {
         <div className="sticky top-0 z-50 bg-neutral-50 dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 mb-6">
           <div className="flex gap-8 pt-2 pb-4">
             <button
-              onClick={() => setActiveTab("images")}
+              onClick={() => {
+                // Use requestAnimationFrame to prevent hanging
+                requestAnimationFrame(() => {
+                  setActiveTab("images");
+                });
+              }}
+              disabled={contentLoading}
               className={cn(
                 "px-1 border-b-2 font-medium text-sm transition-colors",
                 activeTab === "images"
                   ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-                  : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+                  : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300",
+                contentLoading && "opacity-50 cursor-not-allowed"
               )}
             >
               <div className="flex items-center gap-2">
@@ -1551,12 +1568,19 @@ export default function CreatorProfilePage() {
               </div>
             </button>
             <button
-              onClick={() => setActiveTab("videos")}
+              onClick={() => {
+                // Use requestAnimationFrame to prevent hanging
+                requestAnimationFrame(() => {
+                  setActiveTab("videos");
+                });
+              }}
+              disabled={contentLoading}
               className={cn(
                 "px-1 border-b-2 font-medium text-sm transition-colors",
                 activeTab === "videos"
                   ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-                  : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+                  : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300",
+                contentLoading && "opacity-50 cursor-not-allowed"
               )}
             >
               <div className="flex items-center gap-2">

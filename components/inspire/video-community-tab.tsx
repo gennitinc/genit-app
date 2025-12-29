@@ -646,10 +646,10 @@ function VideoCard({
         )}
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-        {/* Play/Pause and View icons - Centered */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
+        {/* Play/Pause and View icons - Always visible */}
+        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
           <div className="flex items-center gap-3 pointer-events-auto">
-            {/* Play/Pause Button */}
+            {/* Play/Pause Button - Always visible */}
             <button
               type="button"
               onClick={(e) => {
@@ -667,7 +667,7 @@ function VideoCard({
                   }
                 }
               }}
-              className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors"
+              className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
             >
               {isPaused ? (
                 <Play className="w-6 h-6 text-white ml-1" />
@@ -675,14 +675,14 @@ function VideoCard({
                 <Pause className="w-6 h-6 text-white" />
               )}
             </button>
-            {/* View Button */}
+            {/* View Button - Always visible */}
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 onView();
               }}
-              className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors"
+              className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
             >
               <Eye className="w-6 h-6 text-white" />
             </button>
