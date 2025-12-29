@@ -20,6 +20,7 @@ import {
   Mic,
   PaperclipIcon,
   Loader,
+  User,
 } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -56,6 +57,14 @@ type TemplateItem = {
   src: string;
   alt?: string;
   category?: string;
+  userId?: {
+    _id?: string;
+    username?: string;
+    email?: string;
+    profilePic?: string;
+  };
+  author?: string;
+  isUserGenerated?: boolean;
 };
 
 type ImageDesignType =
@@ -167,6 +176,9 @@ export default function TemplateGridAll() {
               src: template.mediaUrl,
               alt: template.alt || template.title || "Template",
               category: template.category,
+              userId: template.userId,
+              author: template.author,
+              isUserGenerated: template.isUserGenerated,
             })
           );
 
@@ -598,6 +610,27 @@ export default function TemplateGridAll() {
                 </Badge>
               )}
               <div className="pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:opacity-100 group-hover:bg-black/30" />
+              {/* Creator Info on Hover */}
+              {t.isUserGenerated && (t.userId || t.author) && (
+                <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-auto">
+                  <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-black/70 backdrop-blur-sm">
+                    {t.userId?.profilePic ? (
+                      <img
+                        src={t.userId.profilePic}
+                        alt={t.userId.username || t.author || "Creator"}
+                        className="w-5 h-5 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-5 h-5 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
+                        <User className="w-3 h-3 text-neutral-600 dark:text-neutral-400" />
+                      </div>
+                    )}
+                    <span className="text-xs text-white font-medium">
+                      {t.userId?.username || t.author || "Creator"}
+                    </span>
+                  </div>
+                </div>
+              )}
               <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-100 lg:opacity-0 transition-opacity group-hover:opacity-100">
                 <Button
                   size="icon"

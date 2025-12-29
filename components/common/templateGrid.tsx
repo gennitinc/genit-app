@@ -19,6 +19,7 @@ import {
   Mic,
   PaperclipIcon,
   Loader,
+  User,
 } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useRouter } from "next/navigation";
@@ -54,6 +55,14 @@ type TemplateItem = {
   src: string;
   alt?: string;
   category?: string;
+  userId?: {
+    _id?: string;
+    username?: string;
+    email?: string;
+    profilePic?: string;
+  };
+  author?: string;
+  isUserGenerated?: boolean;
 };
 
 type ImageDesignType =
@@ -150,6 +159,9 @@ export default function TemplateGrid() {
               src: template.mediaUrl,
               alt: template.alt || template.title || "Template",
               category: template.category,
+              userId: template.userId,
+              author: template.author,
+              isUserGenerated: template.isUserGenerated,
             })
           );
 
@@ -551,6 +563,27 @@ export default function TemplateGrid() {
                 </Badge>
               )}
               <div className="pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:opacity-100 group-hover:bg-black/30" />
+              {/* Creator Info on Hover */}
+              {t.isUserGenerated && (t.userId || t.author) && (
+                <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-auto">
+                  <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-black/70 backdrop-blur-sm">
+                    {t.userId?.profilePic ? (
+                      <img
+                        src={t.userId.profilePic}
+                        alt={t.userId.username || t.author || "Creator"}
+                        className="w-5 h-5 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-5 h-5 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
+                        <User className="w-3 h-3 text-neutral-600 dark:text-neutral-400" />
+                      </div>
+                    )}
+                    <span className="text-xs text-white font-medium">
+                      {t.userId?.username || t.author || "Creator"}
+                    </span>
+                  </div>
+                </div>
+              )}
               <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-100 lg:opacity-0 transition-opacity group-hover:opacity-100">
                 <Button
                   size="icon"
@@ -610,19 +643,19 @@ export default function TemplateGrid() {
       {/* Edit modal/drawer showing item and sticky action */}
       {selected && !isMobile && (
         <Dialog open={editOpen} onOpenChange={setEditOpen}>
-          <DialogContent className="max-w-3xl h-[80vh] p-0 flex flex-col">
-            <DialogHeader className="px-4 py-3 border-b">
+          <DialogContent className="max-w-3xl h-[80vh] p-0 flex flex-col overflow-hidden">
+            <DialogHeader className="px-4 py-3 border-b flex-shrink-0">
               <DialogTitle>Recreate</DialogTitle>
             </DialogHeader>
-            <div className="">
+            <div className="flex-shrink-0 overflow-hidden">
               <img
                 src={selected.src}
                 alt={selected.alt || "Template"}
-                className="w-full h-[50vh] object-contain rounded-md"
+                className="w-full h-[30vh] object-contain rounded-md"
               />
             </div>
             <motion.div
-              className="flex flex-col relative w-full"
+              className="flex flex-col relative w-full flex-1 min-h-0 overflow-hidden px-4 pb-4"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
@@ -805,7 +838,7 @@ export default function TemplateGrid() {
                     </div> */}
                   </div>
 
-                  <div className="relative">
+                  <div className="relative flex-1 min-h-0 flex flex-col px-4 pb-4">
                     <form
                       onSubmit={
                         user
@@ -815,10 +848,10 @@ export default function TemplateGrid() {
                               router.push("/signin");
                             }
                       }
-                      className="relative"
+                      className="relative flex-1 min-h-0 flex flex-col"
                     >
-                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300">
-                        <div className="flex-1 relative">
+                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300 flex-1 min-h-0 flex flex-col">
+                        <div className="flex-1 relative min-h-0">
                           <textarea
                             ref={textareaRef}
                             id="chat_bot"
@@ -836,7 +869,7 @@ export default function TemplateGrid() {
                               lineHeight: "1.5",
                               fontFamily: "inherit",
                               minHeight: "40px",
-                              maxHeight: "300px",
+                              maxHeight: "150px",
                             }}
                             className="bg-transparent rounded-2xl border-none w-full min-h-[60px] text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
                             aria-label="Enter your prompt"
@@ -931,19 +964,19 @@ export default function TemplateGrid() {
 
       {selected && isMobile && (
         <Drawer open={editOpen} onOpenChange={setEditOpen}>
-          <DrawerContent className="h-[85vh]">
-            <DrawerHeader className="">
+          <DrawerContent className="h-[85vh] flex flex-col overflow-hidden">
+            <DrawerHeader className="flex-shrink-0">
               <DrawerTitle>Recreate</DrawerTitle>
             </DrawerHeader>
-            <div className="px-4">
+            <div className="px-4 flex-shrink-0 overflow-hidden">
               <img
                 src={selected.src}
                 alt={selected.alt || "Template"}
-                className="w-full h-[55vh] object-contain rounded-md"
+                className="w-full h-[30vh] object-contain rounded-md"
               />
             </div>
             <motion.div
-              className="flex flex-col w-full relative"
+              className="flex flex-col w-full relative flex-1 min-h-0 overflow-hidden px-4 pb-4"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
@@ -1045,7 +1078,7 @@ export default function TemplateGrid() {
               </div>
               <div
                 ref={chatContainerRef}
-                className="relative flex bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 dark:from-[#7e7e7e] dark:via-[#363636] dark:to-[#363636] rounded-2xl p-[1.5px] overflow-hidden before:absolute before:content-[''] before:top-[-10px] before:left-[-10px] before:bg-radial-gradient md:before:w-[40vh] before:h-[30px] before:blur-[1px] w-full shadow-lg"
+                className="relative flex bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 dark:from-[#7e7e7e] dark:via-[#363636] dark:to-[#363636] rounded-2xl p-[1.5px] overflow-hidden before:absolute before:content-[''] before:top-[-10px] before:left-[-10px] before:bg-radial-gradient md:before:w-[40vh] before:h-[30px] before:blur-[1px] w-full shadow-lg h-full flex-1 min-h-0"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
@@ -1062,9 +1095,9 @@ export default function TemplateGrid() {
                   }}
                   style={{ transform: "translate(-50%, -50%)" }}
                 />
-                <div className="flex flex-col bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-[15px] w-full overflow-hidden z-10 shadow-inner">
+                <div className="flex flex-col bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-[15px] w-full overflow-hidden z-10 shadow-inner h-full flex-1 min-h-0">
                   {/* Credit info and typing indicator */}
-                  <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2">
+                  <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2 flex-shrink-0">
                     {!isGenerating && (
                       <div className="flex items-center gap-1 justify-between w-full">
                         <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
@@ -1127,7 +1160,7 @@ export default function TemplateGrid() {
                     </div> */}
                   </div>
 
-                  <div className="relative">
+                  <div className="relative flex-1 min-h-0 flex flex-col px-4 pb-4">
                     <form
                       onSubmit={
                         user
@@ -1136,10 +1169,10 @@ export default function TemplateGrid() {
                               router.push("/signin");
                             }
                       }
-                      className="relative"
+                      className="relative flex-1 min-h-0 flex flex-col"
                     >
-                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300">
-                        <div className="flex-1 relative">
+                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300 flex-1 min-h-0 flex flex-col">
+                        <div className="flex-1 relative min-h-0">
                           <textarea
                             ref={textareaRef}
                             id="chat_bot"
@@ -1159,7 +1192,7 @@ export default function TemplateGrid() {
                               lineHeight: "1.5",
                               fontFamily: "inherit",
                               minHeight: "40px",
-                              maxHeight: "300px",
+                              maxHeight: "150px",
                             }}
                             className="bg-transparent rounded-2xl border-none w-full min-h-[60px] text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
                             aria-label="Enter your prompt"
@@ -1169,7 +1202,7 @@ export default function TemplateGrid() {
                           />
                         </div>
 
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center flex-shrink-0">
                           <div className="flex gap-2">
                             <button
                               type="button"

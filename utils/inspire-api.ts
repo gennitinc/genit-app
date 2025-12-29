@@ -883,6 +883,37 @@ export const videoGenApi = {
 };
 
 // ============================================
+// Template/Inspiration API
+// ============================================
+
+export interface PublishToInspirationRequest {
+  mediaUrl: string;
+  thumbnailUrl?: string;
+  mediaType: "image" | "video";
+  prompt?: string;
+  category?: string;
+  tags?: string[];
+  title?: string;
+  width?: number;
+  height?: number;
+  duration?: number;
+}
+
+export const templateApi = {
+  /**
+   * Publish content from chat to inspiration/templates (requires auth)
+   */
+  publishToInspiration: async (
+    data: PublishToInspirationRequest
+  ): Promise<ApiResponse<{ id: string; assetId: string }>> => {
+    const response = await apiResponse.post(`/templates/publish`, data, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+};
+
+// ============================================
 // React Query Hooks (optional, if using react-query)
 // ============================================
 

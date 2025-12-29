@@ -137,42 +137,35 @@ export function NavMain() {
                   "transition-colors duration-300",
                   isRouteActive(item.href)
                     ? theme === "dark"
-                      ? "bg-zinc-800 text-white"
-                      : "bg-gray-200 text-black"
+                      ? "bg-zinc-800 text-white dark:text-white"
+                      : "bg-gray-200 text-black dark:text-black"
                     : theme === "dark"
-                      ? "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-black"
+                      ? "text-zinc-300 dark:text-zinc-300 hover:bg-zinc-800 hover:text-white dark:hover:bg-zinc-800 dark:hover:text-white"
+                      : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-gray-100 dark:hover:text-black"
                 )}
                 onClick={handleLinkClick}
               >
-                <Link href={item.href}>
+                <Link href={item.href} className="flex items-center w-full">
                   <item.icon
                     className={cn(
                       "h-6 w-6 flex-shrink-0",
                       shouldShowCollapsed ? "mx-auto" : "mr-2",
                       // Make icons more visible on mobile/tablet
                       isMobile && "h-7 w-7",
-                      // Theme responsive icon colors
+                      // Theme responsive icon colors - explicit and strong
                       isRouteActive(item.href)
-                        ? theme === "dark"
-                          ? "text-white"
-                          : "text-black"
-                        : theme === "dark"
-                          ? "text-zinc-300"
-                          : "text-gray-600"
+                        ? "text-black dark:text-white"
+                        : "text-gray-700 dark:text-zinc-300"
                     )}
                   />
                   {!shouldShowCollapsed && (
                     <span
                       className={cn(
-                        // Theme responsive text colors
+                        "font-medium",
+                        // Theme responsive text colors - explicit and strong
                         isRouteActive(item.href)
-                          ? theme === "dark"
-                            ? "text-white"
-                            : "text-black"
-                          : theme === "dark"
-                            ? "text-zinc-300"
-                            : "text-gray-700"
+                          ? "text-black dark:text-white"
+                          : "text-gray-800 dark:text-zinc-200"
                       )}
                     >
                       {item.title}
@@ -199,16 +192,17 @@ export function NavMain() {
                   "transition-colors duration-300",
                   isRouteActive(item.href)
                     ? theme === "dark"
-                      ? "bg-zinc-800 text-white"
-                      : "bg-gray-200 text-black"
+                      ? "bg-zinc-800 text-white dark:text-white"
+                      : "bg-gray-200 text-black dark:text-black"
                     : theme === "dark"
-                      ? "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-black"
+                      ? "text-zinc-300 dark:text-zinc-300 hover:bg-zinc-800 hover:text-white dark:hover:bg-zinc-800 dark:hover:text-white"
+                      : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-gray-100 dark:hover:text-black"
                 )}
                 onClick={handleLinkClick}
               >
                 <Link
                   href={item.href}
+                  className="flex items-center w-full"
                   {...(item.href === "/contact" ? { target: "_blank" } : {})}
                 >
                   <item.icon
@@ -217,27 +211,20 @@ export function NavMain() {
                       shouldShowCollapsed ? "mx-auto" : "mr-2",
                       // Make icons more visible on mobile/tablet
                       isMobile && "h-7 w-7",
-                      // Theme responsive icon colors
+                      // Theme responsive icon colors - explicit and strong
                       isRouteActive(item.href)
-                        ? theme === "dark"
-                          ? "text-white"
-                          : "text-black"
-                        : theme === "dark"
-                          ? "text-zinc-300"
-                          : "text-gray-600"
+                        ? "text-black dark:text-white"
+                        : "text-gray-700 dark:text-zinc-300"
                     )}
                   />
                   {!shouldShowCollapsed && (
                     <span
                       className={cn(
-                        // Theme responsive text colors
+                        "font-medium",
+                        // Theme responsive text colors - explicit and strong
                         isRouteActive(item.href)
-                          ? theme === "dark"
-                            ? "text-white"
-                            : "text-black"
-                          : theme === "dark"
-                            ? "text-zinc-300"
-                            : "text-gray-700"
+                          ? "text-black dark:text-white"
+                          : "text-gray-800 dark:text-zinc-200"
                       )}
                     >
                       {item.title}

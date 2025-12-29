@@ -18,6 +18,7 @@ import {
   Video,
   File,
   Play,
+  Sparkles,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -26,6 +27,9 @@ import { Badge } from "@/components/ui/badge";
 import { MessageActions } from "@/components/chat/messages";
 import ShinyText from "@/components/ui/shiny-text";
 import { serverUrlSocket } from "@/utils/apiResponse";
+import { templateApi } from "@/utils/inspire-api";
+import { toast } from "@/hooks/use-toast";
+import { useUserContext } from "@/context/AuthenticatedContext";
 
 interface GenerationItem {
   id: string;
@@ -138,6 +142,8 @@ export function VersioningMessage({
   originalPrompt,
 }: VersioningMessageProps) {
   const router = useRouter();
+  const { user } = useUserContext();
+  const [publishing, setPublishing] = useState<string | null>(null);
 
   // Internal state for collapse if not controlled externally
   const [internalCollapsed, setInternalCollapsed] = useState(
@@ -212,6 +218,74 @@ export function VersioningMessage({
       if (id) {
         onRestore(id);
       }
+    }
+  };
+
+  const handlePublishToInspiration = async (
+    e: React.MouseEvent,
+    item: GenerationItem
+  ) => {
+    e.stopPropagation();
+
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to publish to inspiration",
+        variant: "destructive",
+      });
+      router.push("/signin");
+      return;
+    }
+
+    try {
+      setPublishing(item.id);
+
+      const mediaUrl = item.url || item.filePath;
+      if (!mediaUrl) {
+        throw new Error("Media URL is required");
+      }
+
+      const mediaType = item.type?.startsWith("image/")
+        ? "image"
+        : item.type?.startsWith("video/")
+          ? "video"
+          : "image";
+
+      // Get full URL if it's a relative path
+      let fullMediaUrl = mediaUrl;
+      if (mediaUrl.startsWith("/")) {
+        fullMediaUrl = `${serverUrlSocket}${mediaUrl}`;
+      }
+
+      const response = await templateApi.publishToInspiration({
+        mediaUrl: fullMediaUrl,
+        thumbnailUrl: fullMediaUrl,
+        mediaType,
+        prompt: originalPrompt || item.name || "",
+        category: designType || "generic_design",
+        title: item.name || "User-generated design",
+      });
+
+      if (response.success) {
+        toast({
+          title: "Published to inspiration",
+          description: "Your content has been added to the inspiration gallery",
+        });
+      } else {
+        throw new Error(response.message || "Failed to publish");
+      }
+    } catch (error: any) {
+      console.error("Error publishing to inspiration:", error);
+      toast({
+        title: "Publish failed",
+        description:
+          error?.response?.data?.message ||
+          error?.message ||
+          "Failed to publish to inspiration. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setPublishing(null);
     }
   };
 
@@ -453,18 +527,34 @@ export function VersioningMessage({
                         Image • {fileExt}
                       </p>
                     </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAnimateDesign(item);
-                      }}
-                      className="h-7 px-2 text-xs gap-1.5 w-fit"
-                    >
-                      <Play className="w-3 h-3" />
-                      Animate design
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAnimateDesign(item);
+                        }}
+                        className="h-7 px-2 text-xs gap-1.5 w-fit"
+                      >
+                        <Play className="w-3 h-3" />
+                        Animate design
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => handlePublishToInspiration(e, item)}
+                        disabled={publishing === item.id}
+                        className="h-7 px-2 text-xs gap-1.5 w-fit"
+                      >
+                        {publishing === item.id ? (
+                          <Loader className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <Sparkles className="w-3 h-3" />
+                        )}
+                        {publishing === item.id ? "Publishing..." : "Publish"}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
