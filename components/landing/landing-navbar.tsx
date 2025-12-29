@@ -474,6 +474,7 @@ export function LandingNavbar() {
 
           {/* Mobile Menu Section */}
           <div className="flex items-center gap-2 md:hidden">
+            {user && <UserPopOver />}
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="z-50">
@@ -529,7 +530,6 @@ export function LandingNavbar() {
                 </div>
               </SheetContent>
             </Sheet>
-            {user && <UserPopOver />}
           </div>
         </nav>
         {RouteToShowAurora.includes(pathName) && (

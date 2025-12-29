@@ -260,12 +260,12 @@ function VideoCard({
                       }
                     }
                   }}
-                  className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
+                  className="w-10 h-10 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
                 >
                   {isPaused ? (
-                    <Play className="w-6 h-6 text-white ml-1" />
+                    <Play className="w-5 h-5 text-white ml-0.5" />
                   ) : (
-                    <Pause className="w-6 h-6 text-white" />
+                    <Pause className="w-5 h-5 text-white" />
                   )}
                 </button>
               )}
@@ -276,9 +276,9 @@ function VideoCard({
                   e.stopPropagation();
                   onClick(item);
                 }}
-                className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
+                className="w-10 h-10 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
               >
-                <Eye className="w-6 h-6 text-white" />
+                <Eye className="w-5 h-5 text-white" />
               </button>
             </div>
           </div>
@@ -310,12 +310,12 @@ function VideoCard({
             <p
               className={cn(
                 "text-white text-sm font-medium",
-                !showFullPrompt && "line-clamp-4"
+                !showFullPrompt && "line-clamp-2"
               )}
             >
               {item.prompt}
             </p>
-            {item.prompt.split("\n").length > 4 ||
+            {item.prompt.split("\n").length > 2 ||
             (item.prompt.length > 200 && !showFullPrompt) ? (
               <button
                 type="button"
@@ -667,29 +667,29 @@ function ContentDetailContent({
 
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
-      <div className="flex-1 overflow-y-auto space-y-4">
-        {/* Media Preview - Full width on all devices */}
-        <div className="relative w-full bg-neutral-100 dark:bg-neutral-800">
-          {content.contentType === "video" && content.videoUrl ? (
-            <video
-              ref={videoDetailRef}
-              src={content.videoUrl}
-              controls
-              playsInline
-              preload="auto"
-              autoPlay
-              className="w-full h-auto object-contain"
-              poster={content.thumbnailUrl}
-            />
-          ) : (
-            <img
-              src={content.mediaUrl}
-              alt={content.prompt}
-              className="w-full h-auto object-contain"
-            />
-          )}
-        </div>
+      {/* Media Preview - Full height and width */}
+      <div className="relative w-full flex-1 bg-neutral-100 dark:bg-neutral-800 flex-shrink-0 min-h-0">
+        {content.contentType === "video" && content.videoUrl ? (
+          <video
+            ref={videoDetailRef}
+            src={content.videoUrl}
+            controls
+            playsInline
+            preload="auto"
+            autoPlay
+            className="w-full h-full object-contain"
+            poster={content.thumbnailUrl}
+          />
+        ) : (
+          <img
+            src={content.mediaUrl}
+            alt={content.prompt}
+            className="w-full h-full object-contain"
+          />
+        )}
+      </div>
 
+      <div className="flex-1 overflow-y-auto">
         <div className="px-6 space-y-4">
           {/* Prompt */}
           <div>
@@ -700,12 +700,12 @@ function ContentDetailContent({
               <p
                 className={cn(
                   "text-sm text-neutral-900 dark:text-white",
-                  !showFullPrompt && "line-clamp-4"
+                  !showFullPrompt && "line-clamp-2"
                 )}
               >
                 {content.prompt}
               </p>
-              {content.prompt.split("\n").length > 4 ||
+              {content.prompt.split("\n").length > 2 ||
               (content.prompt.length > 200 && !showFullPrompt) ? (
                 <button
                   type="button"
@@ -769,7 +769,7 @@ function ContentDetailContent({
           </Link>
 
           {/* Stats */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 m-2">
             {onLike ? (
               <button
                 type="button"

@@ -494,12 +494,12 @@ export function ImageCommunityTab({
                   <div className="mb-2">
                     <p
                       className={`text-white text-sm font-medium ${
-                        !expandedPrompts.has(image.id) ? "line-clamp-4" : ""
+                        !expandedPrompts.has(image.id) ? "line-clamp-2" : ""
                       }`}
                     >
                       {image.prompt}
                     </p>
-                    {(image.prompt.split("\n").length > 4 ||
+                    {(image.prompt.split("\n").length > 2 ||
                       (image.prompt.length > 200 &&
                         !expandedPrompts.has(image.id))) && (
                       <button
