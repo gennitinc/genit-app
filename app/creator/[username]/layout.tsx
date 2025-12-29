@@ -11,7 +11,7 @@ interface CreatorProfile {
   following: number;
   bio?: string;
   coverPhoto?: string;
-  stats: {
+  stats?: {
     totalPosts: number;
     totalLikes: number;
     totalViews: number;
@@ -48,10 +48,11 @@ async function getCreatorProfile(
     }
 
     const data = await response.json();
-    if (!data || !data.profile) {
+    if (!data || !data.success || !data.data) {
       return null;
     }
-    return data.profile;
+    // The API returns data.data with the profile fields directly
+    return data.data as CreatorProfile;
   } catch (error: any) {
     // Silently fail for metadata generation - don't break the page
     if (error.name !== "AbortError") {
@@ -79,13 +80,14 @@ export async function generateMetadata({
   }
 
   const profileUrl = `https://www.gennit.online/creator/${params.username}`;
+  // Prioritize profile picture (userdp) over cover photo for OG image
   const ogImage =
-    profile.coverPhoto ||
     profile.userdp ||
+    profile.coverPhoto ||
     "https://www.gennit.online/opengraph-image.png";
   const description = profile.bio
     ? `${profile.bio} Follow ${profile.username} on Gennit to see their amazing AI-generated content!`
-    : `Follow ${profile.username} on Gennit - Check out their amazing AI-generated content! ${profile.stats.totalPosts} posts, ${profile.followers} followers.`;
+    : `Follow ${profile.username} on Gennit - Check out their amazing AI-generated content! ${profile.stats?.totalPosts || 0} posts, ${profile.followers || 0} followers.`;
 
   return {
     title: `${profile.username}${profile.isVerified ? " ✓" : ""} | Gennit Creator Profile`,
@@ -100,24 +102,24 @@ export async function generateMetadata({
     authors: [{ name: profile.username }],
     openGraph: {
       title: `${profile.username}${profile.isVerified ? " ✓" : ""} on Gennit`,
-      description: `Follow ${profile.username} on Gennit - Check out their amazing AI-generated content!`,
+      description: description,
       url: profileUrl,
       siteName: "Gennit AI",
       images: [
         {
           url: ogImage,
           width: 1200,
-          height: 630,
-          alt: `${profile.username}'s profile on Gennit`,
+          height: 1200,
+          alt: `${profile.username}'s profile picture on Gennit`,
         },
       ],
       locale: "en_US",
       type: "profile",
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title: `${profile.username}${profile.isVerified ? " ✓" : ""} on Gennit`,
-      description: `Follow ${profile.username} on Gennit - Check out their amazing AI-generated content!`,
+      description: description,
       images: [ogImage],
     },
     alternates: {
