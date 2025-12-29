@@ -79,7 +79,6 @@ function VideoCard({
   const isPlayingRef = useRef(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
-  const [showFullPrompt, setShowFullPrompt] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   // Auto-play preview when entering viewport - All devices
@@ -307,35 +306,9 @@ function VideoCard({
         {/* Prompt and Recreate button - Bottom overlay on hover */}
         <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
           <div className="mb-2">
-            <p
-              className={cn(
-                "text-white text-sm font-medium",
-                !showFullPrompt && "line-clamp-2"
-              )}
-            >
+            <p className="text-white text-sm font-medium line-clamp-2">
               {item.prompt}
             </p>
-            {item.prompt.split("\n").length > 2 ||
-            (item.prompt.length > 200 && !showFullPrompt) ? (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowFullPrompt(!showFullPrompt);
-                }}
-                className="text-white/80 text-xs font-medium mt-1 hover:text-white transition-colors flex items-center gap-1"
-              >
-                {showFullPrompt ? (
-                  <>
-                    View less <ChevronUp className="w-3 h-3" />
-                  </>
-                ) : (
-                  <>
-                    View more <ChevronDown className="w-3 h-3" />
-                  </>
-                )}
-              </button>
-            ) : null}
           </div>
           <div className="flex flex-col gap-2">
             <Link
@@ -667,29 +640,29 @@ function ContentDetailContent({
 
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
-      {/* Media Preview - Full height and width */}
-      <div className="relative w-full flex-1 bg-neutral-100 dark:bg-neutral-800 flex-shrink-0 min-h-0">
-        {content.contentType === "video" && content.videoUrl ? (
-          <video
-            ref={videoDetailRef}
-            src={content.videoUrl}
-            controls
-            playsInline
-            preload="auto"
-            autoPlay
-            className="w-full h-full object-contain"
-            poster={content.thumbnailUrl}
-          />
-        ) : (
-          <img
-            src={content.mediaUrl}
-            alt={content.prompt}
-            className="w-full h-full object-contain"
-          />
-        )}
-      </div>
+      <div className="flex-1 overflow-y-auto min-h-0">
+        {/* Media Preview */}
+        <div className="relative w-full bg-neutral-100 dark:bg-neutral-800">
+          {content.contentType === "video" && content.videoUrl ? (
+            <video
+              ref={videoDetailRef}
+              src={content.videoUrl}
+              controls
+              playsInline
+              preload="auto"
+              autoPlay
+              className="w-full h-auto object-contain"
+              poster={content.thumbnailUrl}
+            />
+          ) : (
+            <img
+              src={content.mediaUrl}
+              alt={content.prompt}
+              className="w-full h-auto object-contain"
+            />
+          )}
+        </div>
 
-      <div className="flex-1 overflow-y-auto">
         <div className="px-6 space-y-4">
           {/* Prompt */}
           <div>

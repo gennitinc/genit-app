@@ -96,9 +96,6 @@ export function VideoCommunityTab({
   );
   const [likedVideos, setLikedVideos] = useState<Set<string>>(new Set());
   const [likingVideoId, setLikingVideoId] = useState<string | null>(null);
-  const [expandedPrompts, setExpandedPrompts] = useState<Set<string>>(
-    new Set()
-  );
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const socketRef = useRef<Socket | null>(null);
 
@@ -429,8 +426,6 @@ export function VideoCommunityTab({
               onLike={handleLike}
               isLiked={likedVideos.has(video.id) || video.isLiked}
               isLiking={likingVideoId === video.id}
-              expandedPrompts={expandedPrompts}
-              setExpandedPrompts={setExpandedPrompts}
             />
           ))}
         </div>
@@ -498,8 +493,6 @@ function VideoCard({
   onLike,
   isLiked,
   isLiking,
-  expandedPrompts,
-  setExpandedPrompts,
 }: {
   video: CommunityContent;
   index: number;
@@ -509,8 +502,6 @@ function VideoCard({
   onLike?: (e: React.MouseEvent, videoId: string) => void;
   isLiked?: boolean;
   isLiking?: boolean;
-  expandedPrompts: Set<string>;
-  setExpandedPrompts: React.Dispatch<React.SetStateAction<Set<string>>>;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -725,42 +716,9 @@ function VideoCard({
       </div>
       <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
         <div className="mb-2">
-          <p
-            className={`text-white text-sm font-medium ${
-              !expandedPrompts.has(video.id) ? "line-clamp-2" : ""
-            }`}
-          >
+          <p className="text-white text-sm font-medium line-clamp-2">
             {video.prompt}
           </p>
-          {(video.prompt.split("\n").length > 2 ||
-            (video.prompt.length > 200 && !expandedPrompts.has(video.id))) && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setExpandedPrompts((prev) => {
-                  const newSet = new Set(prev);
-                  if (newSet.has(video.id)) {
-                    newSet.delete(video.id);
-                  } else {
-                    newSet.add(video.id);
-                  }
-                  return newSet;
-                });
-              }}
-              className="text-white/80 text-xs font-medium mt-1 hover:text-white transition-colors flex items-center gap-1"
-            >
-              {expandedPrompts.has(video.id) ? (
-                <>
-                  View less <ChevronUp className="w-3 h-3" />
-                </>
-              ) : (
-                <>
-                  View more <ChevronDown className="w-3 h-3" />
-                </>
-              )}
-            </button>
-          )}
         </div>
         <div className="flex flex-col gap-2">
           <Link
@@ -857,29 +815,29 @@ function VideoDetailContent({
 
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
-      {/* Video Preview - Full height and width */}
-      <div className="relative w-full flex-1 bg-neutral-100 dark:bg-neutral-800 flex-shrink-0 min-h-0">
-        {video.videoUrl ? (
-          <video
-            ref={videoDetailRef}
-            src={video.videoUrl}
-            poster={video.thumbnailUrl}
-            controls
-            playsInline
-            preload="auto"
-            autoPlay
-            className="w-full h-full object-contain"
-          />
-        ) : (
-          <img
-            src={video.thumbnailUrl}
-            alt={video.prompt}
-            className="w-full h-full object-contain"
-          />
-        )}
-      </div>
+      <div className="flex-1 overflow-y-auto min-h-0">
+        {/* Video Preview */}
+        <div className="relative w-full bg-neutral-100 dark:bg-neutral-800">
+          {video.videoUrl ? (
+            <video
+              ref={videoDetailRef}
+              src={video.videoUrl}
+              poster={video.thumbnailUrl}
+              controls
+              playsInline
+              preload="auto"
+              autoPlay
+              className="w-full h-auto object-contain"
+            />
+          ) : (
+            <img
+              src={video.thumbnailUrl}
+              alt={video.prompt}
+              className="w-full h-auto object-contain"
+            />
+          )}
+        </div>
 
-      <div className="flex-1 overflow-y-auto">
         <div className="px-6 space-y-4">
           {/* Prompt */}
           <div>
