@@ -553,7 +553,7 @@ export default function CreatorProfilePage() {
       <LandingNavbar />
 
       {/* Profile Header Card - Desktop */}
-      <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 pt-8 pb-8 w-full lg:mt-10">
+      <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 pt-8 lg:pb-8 w-full lg:mt-10">
         <div className=" rounded-t-xl shadow-xs overflow-hidden">
           {/* Banner/Cover Photo - Full width with top border only */}
           <div className="relative h-40 md:h-40 w-full border-t border-neutral-200 dark:border-neutral-800">
