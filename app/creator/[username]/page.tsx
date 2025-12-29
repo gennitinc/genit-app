@@ -484,7 +484,10 @@ export default function CreatorProfilePage() {
     return (
       <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col">
         <LandingNavbar />
-        <Loader2 className="w-8 h-8 animate-spin text-neutral-400" />
+
+        <div className="min-h-[60dhv] flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-neutral-400" />
+        </div>
 
         {/* Profile Header Card - Desktop */}
 
