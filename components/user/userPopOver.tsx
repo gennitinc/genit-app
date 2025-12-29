@@ -188,10 +188,10 @@ const UserPopOver = () => {
               {
                 icon: User,
                 label: "Profile",
-                href: "/user/settings?tab=account",
+                href: `/creator/${user?.username}`,
               },
               { icon: CreditCard, label: "Pricing", href: "/pricing" },
-              { icon: Book, label: "Documentation", href: "/documentation" },
+              // { icon: Book, label: "Documentation", href: "/documentation" },
               { icon: Users, label: "Community", href: "/community" },
               { icon: MessageSquare, label: "Feedback", href: "/contact" },
             ].map(({ icon: Icon, label, href }) => (

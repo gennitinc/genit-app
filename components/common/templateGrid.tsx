@@ -107,10 +107,8 @@ export default function TemplateGrid() {
     setNewError(null);
 
     try {
-      
-
-      
-      const randomDesignType = designType[Math.floor(Math.random() * designType.length)];
+      const randomDesignType =
+        designType[Math.floor(Math.random() * designType.length)];
 
       // 👇 Fetch from your Express backend with randomized query and category
       const res = await apiResponse.get(
@@ -850,7 +848,7 @@ export default function TemplateGrid() {
                       }
                       className="relative flex-1 min-h-0 flex flex-col"
                     >
-                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300 flex-1 min-h-0 flex flex-col">
+                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300 flex-1 min-h-0">
                         <div className="flex-1 relative min-h-0">
                           <textarea
                             ref={textareaRef}
@@ -1171,7 +1169,7 @@ export default function TemplateGrid() {
                       }
                       className="relative flex-1 min-h-0 flex flex-col"
                     >
-                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300 flex-1 min-h-0 flex flex-col">
+                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300 flex-1 min-h-0">
                         <div className="flex-1 relative min-h-0">
                           <textarea
                             ref={textareaRef}
