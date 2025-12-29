@@ -593,7 +593,7 @@ export default function CreatorProfilePage() {
                 <button
                   onClick={() => router.back()}
                   className="absolute top-4 left-4 w-10 h-10 rounded-full bg-white dark:bg-neutral-900 flex items-center justify-center shadow-md hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors z-10 cursor-pointer"
-                  aria-label="Back to community"
+                  aria-label="Previous page"
                 >
                   <svg
                     fill="currentColor"
