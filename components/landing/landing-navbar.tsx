@@ -132,7 +132,7 @@ export function LandingNavbar() {
                           className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                           href="/chat"
                         >
-                          Create
+                          Design Chat
                         </Link>
                       )}
                       <Link

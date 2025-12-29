@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Copy, RefreshCw, Heart, User, Users, Loader2, Eye } from "lucide-react";
+import {
+  Copy,
+  RefreshCw,
+  Heart,
+  User,
+  Users,
+  Loader2,
+  Eye,
+} from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -79,6 +87,7 @@ export function ImageCommunityTab({
   const [selectedImage, setSelectedImage] = useState<CommunityContent | null>(
     null
   );
+  const [viewImage, setViewImage] = useState<CommunityContent | null>(null);
   const [likedImages, setLikedImages] = useState<Set<string>>(new Set());
   const [likingImageId, setLikingImageId] = useState<string | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -283,7 +292,7 @@ export function ImageCommunityTab({
           referenceImageUrls: image.referenceImageUrls || [],
         };
         localStorage.setItem("recreateData", JSON.stringify(recreateData));
-        
+
         // Navigate to create page
         onPromptSelect(image.prompt);
         onTabChange("preview");
@@ -425,10 +434,7 @@ export function ImageCommunityTab({
   return (
     <>
       <section className="p-4">
-        <div
-          ref={containerRef}
-          className="columns-2 lg:columns-3 gap-4"
-        >
+        <div ref={containerRef} className="columns-2 lg:columns-3 gap-4">
           {images.map((image, index) => {
             // Use aspectRatio from API or randomize for masonry effect
             const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "3/2"];
@@ -477,7 +483,7 @@ export function ImageCommunityTab({
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
                   <p className="text-white text-sm font-medium line-clamp-2 mb-2">
                     {image.prompt}
@@ -687,7 +693,7 @@ function ImageDetailContent({
   isLiking?: boolean;
 }) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  
+
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">

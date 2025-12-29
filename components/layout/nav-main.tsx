@@ -21,7 +21,7 @@ import {
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useUserContext } from "@/context/AuthenticatedContext";
 
@@ -84,6 +84,7 @@ const secondaryNavItems = [
 export function NavMain() {
   const { state, setOpenMobile, isMobile } = useSidebar();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { theme } = useTheme();
   const user = useUserContext();
 
@@ -97,10 +98,27 @@ export function NavMain() {
 
   // Helper function to check if a route is active (handles query params)
   const isRouteActive = (href: string) => {
+    // First check if pathname matches
     if (href.includes("?")) {
-      // For routes with query params, check if pathname matches the base path
-      const basePath = href.split("?")[0];
-      return pathname === basePath || pathname.startsWith(basePath + "?");
+      const [basePath, queryString] = href.split("?");
+
+      // Check if pathname matches
+      if (pathname !== basePath && !pathname.startsWith(basePath + "/")) {
+        return false;
+      }
+
+      // Parse query parameters from href
+      const hrefParams = new URLSearchParams(queryString);
+
+      // Check if all query params in href match current search params
+      for (const [key, value] of hrefParams.entries()) {
+        const currentValue = searchParams.get(key);
+        if (currentValue !== value) {
+          return false;
+        }
+      }
+
+      return true;
     }
     return pathname === href || pathname.startsWith(href + "/");
   };
