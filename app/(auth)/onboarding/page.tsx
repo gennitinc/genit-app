@@ -1121,7 +1121,7 @@ export default function BrandOnboardingChecklist() {
         }
 
         // Redirect to inspire create after confetti animation
-        router.replace("/inspire/create");
+        router.replace("/inspire/create?mode=ai-video-gen");
       }, 2000); // Wait 2 seconds for confetti animation to complete
     } catch (error: any) {
       console.error("Error saving business profile:", error);

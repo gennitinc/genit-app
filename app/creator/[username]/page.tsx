@@ -70,6 +70,7 @@ import { CreatorProfileContent } from "@/components/creator/creator-profile-cont
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { useIsMobile } from "@/components/ui/use-mobile";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 interface CreatorProfile {
   _id: string;
@@ -105,6 +106,7 @@ export default function CreatorProfilePage() {
   const { user: currentUser } = useUserContext();
   const username = params.username as string;
   const isMobile = useIsMobile();
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   const [profile, setProfile] = useState<CreatorProfile | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -1183,7 +1185,7 @@ export default function CreatorProfilePage() {
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                {isOwnProfile && !isMobile ? (
+                {isOwnProfile && isDesktop ? (
                   <Dialog
                     open={isSettingsOpen}
                     onOpenChange={setIsSettingsOpen}
@@ -1314,6 +1316,137 @@ export default function CreatorProfilePage() {
                       </div>
                     </DialogContent>
                   </Dialog>
+                ) : isOwnProfile && !isDesktop ? (
+                  <Drawer
+                    open={isSettingsOpen}
+                    onOpenChange={setIsSettingsOpen}
+                  >
+                    <DrawerTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="px-4 py-2 rounded-lg"
+                      >
+                        <Settings className="w-4 h-4 mr-2" />
+                        Settings
+                      </Button>
+                    </DrawerTrigger>
+                    <DrawerContent className="max-h-[85dvh]">
+                      <DrawerHeader>
+                        <DrawerTitle>Edit Profile</DrawerTitle>
+                      </DrawerHeader>
+                      <div className="space-y-4 mt-4 px-4">
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">
+                            Bio
+                          </label>
+                          <textarea
+                            value={settingsBio}
+                            onChange={(e) => setSettingsBio(e.target.value)}
+                            placeholder="Tell us about yourself..."
+                            className="w-full min-h-[100px] px-3 py-2 border rounded-md resize-none"
+                            maxLength={115}
+                          />
+                          <p className="text-xs text-neutral-500 mt-1">
+                            {settingsBio.length}/115
+                          </p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">
+                            Social Media Links (Max 4)
+                          </label>
+                          <div className="space-y-3">
+                            {/* Selected Socials */}
+                            {selectedSocials.map((socialKey) => {
+                              const social = socialMediaOptions.find(
+                                (opt) => opt.key === socialKey
+                              );
+                              if (!social) return null;
+                              return (
+                                <div key={socialKey} className="flex gap-2">
+                                  <div className="flex-1">
+                                    <label className="text-xs text-neutral-500 mb-1 block">
+                                      {social.label}
+                                    </label>
+                                    <Input
+                                      type="url"
+                                      value={
+                                        settingsSocials[
+                                          socialKey as keyof typeof settingsSocials
+                                        ]
+                                      }
+                                      onChange={(e) =>
+                                        setSettingsSocials({
+                                          ...settingsSocials,
+                                          [socialKey]: e.target.value,
+                                        })
+                                      }
+                                      placeholder={social.placeholder}
+                                    />
+                                  </div>
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={() =>
+                                      handleRemoveSocial(socialKey)
+                                    }
+                                    className="mt-6 h-9 w-9 shrink-0"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              );
+                            })}
+
+                            {/* Add Social Button */}
+                            {selectedSocials.length < 4 &&
+                              availableSocials.length > 0 && (
+                                <div>
+                                  <Select onValueChange={handleAddSocial}>
+                                    <SelectTrigger className="w-full">
+                                      <Plus className="w-4 h-4 mr-2" />
+                                      <SelectValue placeholder="Add social media" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {availableSocials.map((option) => (
+                                        <SelectItem
+                                          key={option.key}
+                                          value={option.key}
+                                        >
+                                          {option.label}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                              )}
+                            {selectedSocials.length >= 4 && (
+                              <p className="text-xs text-neutral-500">
+                                Maximum of 4 social media links allowed
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex justify-end gap-2 pt-4">
+                          <Button
+                            variant="outline"
+                            onClick={() => setIsSettingsOpen(false)}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={handleSaveSettings}
+                            disabled={isSavingSettings}
+                          >
+                            {isSavingSettings ? (
+                              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                            ) : null}
+                            Save
+                          </Button>
+                        </div>
+                      </div>
+                    </DrawerContent>
+                  </Drawer>
                 ) : (
                   <Button
                     onClick={handleFollow}

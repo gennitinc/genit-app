@@ -65,7 +65,7 @@ function Page() {
       }
 
       // Authenticated: redirect to the app
-      router.push("/chat");
+      router.push("/inspire/create?mode=ai-video-gen");
       setIsCheckingOnboarding(false);
     };
 
@@ -75,7 +75,7 @@ function Page() {
   // Show loading while checking authentication and onboarding status
   if (loading || isCheckingOnboarding) {
     return (
-      <div className="flex items-center justify-center h-screen bg-white dark:bg-black">
+      <div className="flex items-center justify-center h-screen bg-white dark:bg-black w-full">
         <Loading />
       </div>
     );
@@ -88,7 +88,7 @@ function Page() {
 
   // This should not be reached as authenticated users get redirected
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen bg-white dark:bg-black">
       <Loading />
     </div>
   );
