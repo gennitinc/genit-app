@@ -513,40 +513,47 @@ function VideoCard({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isPlayingRef = useRef(false);
   const [isPaused, setIsPaused] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  // Auto-play preview (muted) when entering viewport - Desktop only
+  // Auto-play preview (muted) when entering viewport - All devices for 2 seconds
   useEffect(() => {
-    if (!isDesktop) return; // Only auto-play on desktop
-    
     const videoElement = videoRef.current;
     if (!videoElement || !video.videoUrl) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && isPaused && !isHovered) {
-            // Auto-play preview for 2 seconds (muted) on desktop
+          if (entry.isIntersecting && !isPlayingRef.current && !isHovered) {
+            // Auto-play preview for 2 seconds (muted) on all devices
             videoElement.currentTime = 0;
             videoElement.muted = true; // Keep muted for preview
-            videoElement.play().catch(() => {
-              // Autoplay failed, user interaction needed
-            });
+            isPlayingRef.current = true;
             setIsPaused(false);
-            // Pause after 2 seconds
-            timeoutRef.current = setTimeout(() => {
-              if (videoElement) {
-                videoElement.pause();
-                videoElement.currentTime = 0;
+            videoElement
+              .play()
+              .then(() => {
+                // Pause after 2 seconds
+                timeoutRef.current = setTimeout(() => {
+                  videoElement.pause();
+                  videoElement.currentTime = 0; // Reset to beginning
+                  isPlayingRef.current = false;
+                  setIsPaused(true);
+                }, 2000);
+              })
+              .catch((error) => {
+                console.error("Error auto-playing video:", error);
+                isPlayingRef.current = false;
                 setIsPaused(true);
-              }
-            }, 2000);
+              });
           } else if (!entry.isIntersecting && !isHovered) {
+            // Video is out of viewport, pause and reset
             videoElement.pause();
             videoElement.currentTime = 0;
             videoElement.muted = true; // Reset to muted
+            isPlayingRef.current = false;
             setIsPaused(true);
             if (timeoutRef.current) {
               clearTimeout(timeoutRef.current);
@@ -564,15 +571,15 @@ function VideoCard({
       observer.disconnect();
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
       }
     };
-  }, [video.videoUrl, isPaused, isDesktop, isHovered]);
+  }, [video.videoUrl, isHovered]);
 
   // Handle hover to play (desktop only, with sound)
   const handleMouseEnter = () => {
     if (video.videoUrl && videoRef.current && isDesktop) {
       setIsHovered(true);
+      isPlayingRef.current = true;
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
@@ -592,6 +599,7 @@ function VideoCard({
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
       videoRef.current.muted = true; // Mute again when leaving
+      isPlayingRef.current = false;
       setIsPaused(true);
     }
   };
@@ -629,9 +637,9 @@ function VideoCard({
               ref={videoRef}
               src={video.videoUrl}
               poster={video.thumbnailUrl}
-              loop
               muted
               playsInline
+              preload="metadata"
               className="w-full object-cover"
               style={{ aspectRatio }}
             />
@@ -646,20 +654,17 @@ function VideoCard({
         )}
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-        {/* Play/Pause and View icons - Always visible */}
+        {/* Play/Pause and View icons - Play/Pause only on mobile/tablet, View always visible */}
         <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-          <div className="flex items-center gap-3 pointer-events-auto">
-            {/* Play/Pause Button - Always visible */}
+          <div className={`flex items-center ${!isDesktop ? 'gap-3' : ''} pointer-events-auto`}>
+            {/* Play/Pause Button - Only visible on mobile/tablet */}
+            {!isDesktop && (
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 if (isPaused) {
-                  if (isDesktop) {
-                    handleMouseEnter();
-                  } else {
                     handlePlayClick(e as any);
-                  }
                 } else {
                   if (videoRef.current) {
                     videoRef.current.pause();
@@ -667,7 +672,7 @@ function VideoCard({
                   }
                 }
               }}
-              className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
+                className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
             >
               {isPaused ? (
                 <Play className="w-6 h-6 text-white ml-1" />
@@ -675,6 +680,7 @@ function VideoCard({
                 <Pause className="w-6 h-6 text-white" />
               )}
             </button>
+            )}
             {/* View Button - Always visible */}
             <button
               type="button"
@@ -824,30 +830,55 @@ function VideoDetailContent({
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [copied, setCopied] = useState(false);
   const [showFullPrompt, setShowFullPrompt] = useState(false);
+  const videoDetailRef = useRef<HTMLVideoElement>(null);
+
+  // Auto-play video in drawer/dialog when it opens
+  useEffect(() => {
+    const videoElement = videoDetailRef.current;
+    if (!videoElement || !video.videoUrl) return;
+
+    // Auto-play when dialog/drawer opens (unmuted, with controls)
+    videoElement.currentTime = 0;
+    videoElement.muted = false; // Unmute for dialog playback
+    videoElement.play().catch((error) => {
+      console.error("Error auto-playing video in dialog:", error);
+    });
+
+    return () => {
+      // Cleanup: pause video when dialog closes
+      if (videoElement) {
+        videoElement.pause();
+        videoElement.currentTime = 0;
+      }
+    };
+  }, [video.videoUrl]);
   
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
-        {/* Video Preview - Hidden on mobile */}
-        {isDesktop && (
-          <div className="relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800">
-            {video.videoUrl ? (
-              <video
-                src={video.videoUrl}
-                poster={video.thumbnailUrl}
-                controls
-                loop
-                className="w-full h-auto max-h-[50vh] object-contain"
-              />
-            ) : (
-              <img
-                src={video.thumbnailUrl}
-                alt={video.prompt}
-                className="w-full h-auto max-h-[50vh] object-contain"
-              />
-            )}
-          </div>
-        )}
+      <div className="flex-1 overflow-y-auto space-y-4">
+        {/* Video Preview - Full width on all devices */}
+        <div className="relative w-full bg-neutral-100 dark:bg-neutral-800">
+          {video.videoUrl ? (
+            <video
+              ref={videoDetailRef}
+              src={video.videoUrl}
+              poster={video.thumbnailUrl}
+              controls
+              playsInline
+              preload="auto"
+              autoPlay
+              className="w-full h-auto object-contain"
+            />
+          ) : (
+            <img
+              src={video.thumbnailUrl}
+              alt={video.prompt}
+              className="w-full h-auto object-contain"
+            />
+          )}
+        </div>
+
+        <div className="px-6 space-y-4">
 
         {/* Prompt */}
         <div>
@@ -935,6 +966,7 @@ function VideoDetailContent({
             <Eye className="w-4 h-4" />
             <span>{video.views} views</span>
           </div>
+        </div>
         </div>
       </div>
 

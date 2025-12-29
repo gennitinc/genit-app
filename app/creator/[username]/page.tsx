@@ -485,7 +485,7 @@ export default function CreatorProfilePage() {
       <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col">
         <LandingNavbar />
 
-        <div className="min-h-[60dhv] flex items-center justify-center">
+        <div className="h-74 flex items-center justify-center">
           <Loader2 className="w-8 h-8 animate-spin text-neutral-400" />
         </div>
 
@@ -1565,7 +1565,7 @@ export default function CreatorProfilePage() {
               className={cn(
                 "px-1 border-b-2 font-medium text-sm transition-colors",
                 activeTab === "images"
-                  ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
+                  ? "border-neutral-500 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100"
                   : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300",
                 contentLoading && "opacity-50 cursor-not-allowed"
               )}
@@ -1584,9 +1584,9 @@ export default function CreatorProfilePage() {
               }}
               disabled={contentLoading}
               className={cn(
-                "px-1 border-b-2 font-medium text-sm transition-colors",
+                "px-1 border-b font-medium text-sm transition-colors",
                 activeTab === "videos"
-                  ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
+                  ? "border-neutral-500 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100"
                   : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300",
                 contentLoading && "opacity-50 cursor-not-allowed"
               )}
