@@ -66,6 +66,8 @@ import {
   VideoTemplatesTab,
   TutorialTab,
 } from "@/components/inspire";
+import { ImageHistoryTab } from "@/components/inspire/image-history-tab";
+import { VideoHistoryTab } from "@/components/inspire/video-history-tab";
 import { ModelSelector } from "@/components/inspire/model-selector";
 import { Model, Presenter, Voice } from "@/types/inspire";
 import { imageGenApi, videoGenApi } from "@/utils/inspire-api";
@@ -281,6 +283,10 @@ function VideoCreatePage() {
       resolution: Resolution;
       prompt: string;
       createdAt: string;
+      generatedVideoId?: string;
+      startFrameUrl?: string;
+      endFrameUrl?: string;
+      referenceImageUrls?: string[];
     }[]
   >([]);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
@@ -307,6 +313,8 @@ function VideoCreatePage() {
       prompt: string;
       style: ImageStyle;
       createdAt: string;
+      generatedImageId?: string;
+      referenceImageUrls?: string[];
     }[]
   >([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -354,6 +362,273 @@ function VideoCreatePage() {
     }
   }, [generationMode]);
 
+  // Restore recreate data from localStorage (when navigating from community page)
+  useEffect(() => {
+    const restoreRecreateData = async () => {
+      try {
+        const storedData = localStorage.getItem("recreateData");
+        if (!storedData) return;
+
+        const recreateData = JSON.parse(storedData);
+
+        // Only restore if the type matches current generation mode
+        if (
+          (recreateData.type === "image" && generationMode === "image") ||
+          (recreateData.type === "video" && generationMode === "video")
+        ) {
+          // Restore prompt (URL prompt takes precedence if exists)
+          const urlPrompt = searchParams.get("prompt");
+          if (urlPrompt) {
+            setPrompt(decodeURIComponent(urlPrompt));
+          } else if (recreateData.prompt) {
+            setPrompt(recreateData.prompt);
+          }
+
+          // Restore aspect ratio
+          if (recreateData.aspectRatio) {
+            setSelectedAspectRatio(recreateData.aspectRatio as AspectRatio);
+            setAspectRatio(recreateData.aspectRatio);
+          }
+
+          // Restore resolution
+          if (recreateData.resolution) {
+            setSelectedResolution(recreateData.resolution as Resolution);
+            setResolution(recreateData.resolution);
+          }
+
+          if (generationMode === "image") {
+            // Restore image-specific settings
+            if (recreateData.style) {
+              setSelectedImageStyle(recreateData.style as ImageStyle);
+            }
+            if (recreateData.imageCount) {
+              setImageCount(recreateData.imageCount);
+            }
+            if (recreateData.modelId) {
+              // Model will be restored by fetching
+            }
+            if (recreateData.referenceImageUrls?.length > 0) {
+              try {
+                const imageFiles = await Promise.all(
+                  recreateData.referenceImageUrls.map(
+                    async (url: string, index: number) => {
+                      const response = await fetch(url);
+                      const blob = await response.blob();
+                      return new File([blob], `reference-${index}.jpg`, {
+                        type: blob.type,
+                      });
+                    }
+                  )
+                );
+                setPromptImages(imageFiles);
+                setPromptImagePreviews(
+                  imageFiles.map((file) => URL.createObjectURL(file))
+                );
+              } catch (error) {
+                console.error("Failed to load reference images:", error);
+              }
+            }
+          } else {
+            // Restore video-specific settings
+            if (recreateData.duration) {
+              setDuration(parseInt(recreateData.duration) || 8);
+            }
+            if (recreateData.startFrameUrl) {
+              try {
+                const response = await fetch(recreateData.startFrameUrl);
+                const blob = await response.blob();
+                const file = new File([blob], "start-frame.jpg", {
+                  type: blob.type,
+                });
+                setStartFrame(file);
+                setStartFramePreview(URL.createObjectURL(file));
+              } catch (error) {
+                console.error("Failed to load start frame:", error);
+              }
+            }
+            if (recreateData.endFrameUrl) {
+              try {
+                const response = await fetch(recreateData.endFrameUrl);
+                const blob = await response.blob();
+                const file = new File([blob], "end-frame.jpg", {
+                  type: blob.type,
+                });
+                setEndFrame(file);
+                setEndFramePreview(URL.createObjectURL(file));
+              } catch (error) {
+                console.error("Failed to load end frame:", error);
+              }
+            }
+            if (recreateData.referenceImageUrls?.length > 0) {
+              try {
+                const imageFiles = await Promise.all(
+                  recreateData.referenceImageUrls.map(
+                    async (url: string, index: number) => {
+                      const response = await fetch(url);
+                      const blob = await response.blob();
+                      return new File([blob], `reference-${index}.jpg`, {
+                        type: blob.type,
+                      });
+                    }
+                  )
+                );
+                setPromptImages(imageFiles);
+                setPromptImagePreviews(
+                  imageFiles.map((file) => URL.createObjectURL(file))
+                );
+              } catch (error) {
+                console.error("Failed to load reference images:", error);
+              }
+            }
+            // Presenter and voice will be restored by fetching if IDs are available
+          }
+
+          // Switch to preview tab
+          setActiveContentTab("preview");
+
+          // Clear localStorage after restoring
+          localStorage.removeItem("recreateData");
+
+          toast({
+            title: "Settings restored",
+            description:
+              "All generation parameters have been loaded. Click Generate to create your version.",
+          });
+        }
+      } catch (error) {
+        console.error("Failed to restore recreate data:", error);
+        localStorage.removeItem("recreateData");
+      }
+    };
+
+    // Only restore if we're not loading a project (projectId takes precedence)
+    if (!projectId && generationMode) {
+      restoreRecreateData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [generationMode, projectId]);
+
+  // Restore animate design data from URL params or localStorage (when navigating from chat)
+  useEffect(() => {
+    const restoreAnimateDesignData = async () => {
+      try {
+        // Check URL parameters first (server-side compatible)
+        const isAnimate = searchParams.get("animate") === "true";
+        const urlPrompt = searchParams.get("prompt");
+        const urlReferenceImage = searchParams.get("referenceImage");
+        const urlDesignType = searchParams.get("designType");
+
+        // Check localStorage as fallback (client-side)
+        const storedData = localStorage.getItem("animateDesignData");
+        let animateData: any = null;
+
+        if (isAnimate && urlPrompt && urlReferenceImage) {
+          // Use URL parameters (server-side compatible)
+          animateData = {
+            type: "video",
+            prompt: decodeURIComponent(urlPrompt),
+            referenceImageUrls: [decodeURIComponent(urlReferenceImage)],
+            designType: urlDesignType || "generic_design",
+          };
+        } else if (storedData) {
+          // Fallback to localStorage (client-side)
+          animateData = JSON.parse(storedData);
+        }
+
+        if (!animateData) return;
+
+        // Only restore if we're in video mode
+        if (generationMode === "video" && animateData.type === "video") {
+          // Restore prompt (URL prompt takes precedence)
+          if (urlPrompt) {
+            setPrompt(decodeURIComponent(urlPrompt));
+          } else if (animateData.prompt) {
+            setPrompt(animateData.prompt);
+          }
+
+          // Restore reference images
+          const referenceImageUrls =
+            animateData.referenceImageUrls ||
+            (urlReferenceImage ? [decodeURIComponent(urlReferenceImage)] : []);
+
+          if (referenceImageUrls.length > 0) {
+            try {
+              const imageFiles = await Promise.all(
+                referenceImageUrls.map(async (url: string, index: number) => {
+                  // Handle relative URLs by converting to absolute URLs
+                  let imageUrl = url;
+                  if (url.startsWith("/")) {
+                    // Convert relative URL to absolute URL
+                    // Try using serverUrlSocket first, then fallback to window.location.origin
+                    const baseUrl = serverUrlSocket
+                      ? serverUrlSocket.replace(/\/$/, "")
+                      : typeof window !== "undefined"
+                        ? window.location.origin
+                        : "";
+                    imageUrl = baseUrl + url;
+                  }
+
+                  // Fetch the image
+                  const response = await fetch(imageUrl);
+                  if (!response.ok) {
+                    throw new Error(
+                      `Failed to fetch image: ${response.status}`
+                    );
+                  }
+                  const blob = await response.blob();
+                  return new File([blob], `reference-${index}.jpg`, {
+                    type: blob.type || "image/jpeg",
+                  });
+                })
+              );
+              setPromptImages(imageFiles);
+              setPromptImagePreviews(
+                imageFiles.map((file) => URL.createObjectURL(file))
+              );
+            } catch (error) {
+              console.error("Failed to load reference images:", error);
+              toast({
+                title: "Error loading image",
+                description:
+                  "Failed to load the reference image. Please try again.",
+                variant: "destructive",
+              });
+            }
+          }
+
+          // Clear localStorage and URL params after restoring
+          localStorage.removeItem("animateDesignData");
+
+          // Remove animate params from URL without reload
+          if (isAnimate) {
+            const newParams = new URLSearchParams(searchParams.toString());
+            newParams.delete("animate");
+            newParams.delete("prompt");
+            newParams.delete("referenceImage");
+            newParams.delete("designType");
+            const newUrl = `${window.location.pathname}?${newParams.toString()}`;
+            window.history.replaceState({}, "", newUrl);
+          }
+
+          toast({
+            title: "Design loaded",
+            description:
+              "Your design has been loaded. You can modify the prompt and click Generate to animate it.",
+          });
+        }
+      } catch (error) {
+        console.error("Failed to restore animate design data:", error);
+        localStorage.removeItem("animateDesignData");
+      }
+    };
+
+    // Only restore if we're not loading a project (projectId takes precedence)
+    if (!projectId && generationMode === "video") {
+      restoreAnimateDesignData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [generationMode, projectId, searchParams, toast]);
+
   // Fetch project data if projectId is provided
   useEffect(() => {
     const fetchProject = async () => {
@@ -382,6 +657,7 @@ function VideoCreatePage() {
             // For GeneratedImage, the project itself is the image
             const image = {
               id: project._id || project.id,
+              generatedImageId: project._id || project.id,
               url: project.url,
               thumbnail: project.thumbnail || project.url,
               aspectRatio: (project.aspectRatio || "16:9") as AspectRatio,
@@ -389,6 +665,7 @@ function VideoCreatePage() {
               prompt: project.prompt || "",
               style: (project.style || "realistic") as ImageStyle,
               createdAt: project.createdAt || new Date().toISOString(),
+              referenceImageUrls: project.referenceImageUrls || [],
             };
 
             setGeneratedImages([image]);
@@ -420,12 +697,16 @@ function VideoCreatePage() {
             // For GeneratedVideo, the project itself is the video
             const video = {
               id: project._id || project.id,
+              generatedVideoId: project._id || project.id,
               url: project.url,
               thumbnail: project.thumbnail || project.url,
               aspectRatio: (project.aspectRatio || "16:9") as AspectRatio,
               resolution: (project.resolution || "1080p") as Resolution,
               prompt: project.prompt || "",
               createdAt: project.createdAt || new Date().toISOString(),
+              startFrameUrl: project.startFrameUrl,
+              endFrameUrl: project.endFrameUrl,
+              referenceImageUrls: project.referenceImageUrls || [],
             };
 
             setGeneratedVideos([video]);
@@ -471,7 +752,7 @@ function VideoCreatePage() {
 
   // Tab states
   const [activeContentTab, setActiveContentTab] = useState<
-    "community" | "preview" | "templates" | "tutorial"
+    "community" | "preview" | "history" | "templates" | "tutorial"
   >("preview");
 
   // Sidebar drawer state for mobile/tablet
@@ -1119,7 +1400,7 @@ function VideoCreatePage() {
                                     >
                                       <div className="flex items-center justify-center p-1.5 size-9 rounded-lg bg-surface-primary shadow-[0_-1.872px_0_0_rgba(20,1,8,0.30)_inset,0_3.744px_3.744px_0_rgba(0,0,0,0.25)]">
                                         <svg
-                                          className="size-5! text-white!"
+                                          className="size-5! text-neutral-700 dark:text-neutral-300"
                                           aria-hidden="true"
                                           width="24px"
                                           height="24px"
@@ -1215,7 +1496,7 @@ function VideoCreatePage() {
                                     >
                                       <div className="flex items-center justify-center p-1.5 size-9 rounded-lg bg-surface-primary shadow-[0_-1.872px_0_0_rgba(20,1,8,0.30)_inset,0_3.744px_3.744px_0_rgba(0,0,0,0.25)]">
                                         <svg
-                                          className="size-5! text-white!"
+                                          className="size-5! text-neutral-700 dark:text-neutral-300"
                                           aria-hidden="true"
                                           width="24px"
                                           height="24px"
@@ -1761,6 +2042,10 @@ function VideoCreatePage() {
                                   prompt: prompt.trim(),
                                   style: selectedImageStyle,
                                   createdAt: new Date().toISOString(),
+                                  referenceImageUrls:
+                                    promptImages.length > 0
+                                      ? promptImagePreviews
+                                      : (img as any).referenceImageUrls || [],
                                 })
                               );
 
@@ -1864,6 +2149,15 @@ function VideoCreatePage() {
                                   prompt: prompt.trim(),
                                   duration: vid.duration || duration,
                                   createdAt: new Date().toISOString(),
+                                  startFrameUrl:
+                                    startFramePreview ||
+                                    (vid as any).startFrameUrl,
+                                  endFrameUrl:
+                                    endFramePreview || (vid as any).endFrameUrl,
+                                  referenceImageUrls:
+                                    promptImages.length > 0
+                                      ? promptImagePreviews
+                                      : (vid as any).referenceImageUrls || [],
                                 })
                               );
 
@@ -1979,6 +2273,26 @@ function VideoCreatePage() {
                   <button
                     type="button"
                     role="tab"
+                    aria-selected={activeContentTab === "history"}
+                    data-state={
+                      activeContentTab === "history" ? "active" : "inactive"
+                    }
+                    onClick={() => setActiveContentTab("history")}
+                    className={cn(
+                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                      activeContentTab === "history"
+                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                    )}
+                    tabIndex={activeContentTab === "history" ? -1 : 0}
+                    data-orientation="horizontal"
+                  >
+                    <History className="size-4" />
+                    History
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
                     aria-selected={activeContentTab === "community"}
                     data-state={
                       activeContentTab === "community" ? "active" : "inactive"
@@ -2040,6 +2354,132 @@ function VideoCreatePage() {
               </div>
 
               <div className="flex-1 md:overflow-auto">
+                {/* Preview Tab */}
+                {activeContentTab === "preview" && (
+                  <>
+                    {generationMode === "image" ? (
+                      <ImagePreviewTab
+                        isGenerating={isGenerating}
+                        generationProgress={generationProgress}
+                        generatedImages={generatedImages}
+                        selectedImageIndex={selectedImageIndex}
+                        selectedAspectRatio={selectedAspectRatio}
+                        onImageSelect={setSelectedImageIndex}
+                        onPromptRestore={setPrompt}
+                        onTabChange={setActiveContentTab}
+                        onDrawerClose={() => setSidebarDrawerOpen(false)}
+                      />
+                    ) : (
+                      <VideoPreviewTab
+                        isGenerating={isGenerating}
+                        generationProgress={generationProgress}
+                        generatedVideos={generatedVideos}
+                        selectedVideoIndex={selectedVideoIndex}
+                        selectedAspectRatio={selectedAspectRatio}
+                        onVideoSelect={setSelectedVideoIndex}
+                        onPromptRestore={setPrompt}
+                        onTabChange={setActiveContentTab}
+                        onDrawerClose={() => setSidebarDrawerOpen(false)}
+                      />
+                    )}
+                  </>
+                )}
+
+                {/* History Tab */}
+                {activeContentTab === "history" && (
+                  <>
+                    {generationMode === "image" ? (
+                      <ImageHistoryTab
+                        onLoadToEditor={(image) => {
+                          // Load image to editor
+                          const loadedImage = {
+                            id: image._id,
+                            generatedImageId: image._id,
+                            url: image.imageData.url,
+                            thumbnail:
+                              image.imageData.thumbnail || image.imageData.url,
+                            aspectRatio: (image.imageData.aspectRatio ||
+                              "16:9") as AspectRatio,
+                            resolution: (image.imageData.resolution ||
+                              "1080p") as Resolution,
+                            prompt: image.imageData.prompt || "",
+                            style: (image.imageData.style ||
+                              "realistic") as ImageStyle,
+                            createdAt: image.createdAt,
+                            referenceImageUrls:
+                              image.imageData.referenceImageUrls || [],
+                          };
+                          setGeneratedImages([loadedImage]);
+                          setSelectedImageIndex(0);
+                          setPrompt(image.imageData.prompt || "");
+                          if (image.imageData.aspectRatio) {
+                            setSelectedAspectRatio(
+                              image.imageData.aspectRatio as AspectRatio
+                            );
+                          }
+                          if (image.imageData.resolution) {
+                            setSelectedResolution(
+                              image.imageData.resolution as Resolution
+                            );
+                          }
+                          if (image.imageData.style) {
+                            setSelectedImageStyle(
+                              image.imageData.style as ImageStyle
+                            );
+                          }
+                          setActiveContentTab("preview");
+                          toast({
+                            title: "Loaded",
+                            description: "Image loaded to editor",
+                          });
+                        }}
+                      />
+                    ) : (
+                      <VideoHistoryTab
+                        onLoadToEditor={(video) => {
+                          // Load video to editor
+                          const loadedVideo = {
+                            id: video._id,
+                            generatedVideoId: video._id,
+                            url: video.videoData.url,
+                            thumbnail:
+                              video.videoData.thumbnail || video.videoData.url,
+                            aspectRatio: (video.videoData.aspectRatio ||
+                              "16:9") as AspectRatio,
+                            resolution: (video.videoData.resolution ||
+                              "1080p") as Resolution,
+                            prompt: video.videoData.prompt || "",
+                            duration: video.videoData.duration || 8,
+                            createdAt: video.createdAt,
+                            startFrameUrl: video.videoData.startFrameUrl,
+                            endFrameUrl: video.videoData.endFrameUrl,
+                            referenceImageUrls:
+                              video.videoData.referenceImageUrls || [],
+                          };
+                          setGeneratedVideos([loadedVideo]);
+                          setSelectedVideoIndex(0);
+                          setPrompt(video.videoData.prompt || "");
+                          if (video.videoData.aspectRatio) {
+                            setSelectedAspectRatio(
+                              video.videoData.aspectRatio as AspectRatio
+                            );
+                          }
+                          if (video.videoData.resolution) {
+                            setSelectedResolution(
+                              video.videoData.resolution as Resolution
+                            );
+                          }
+                          setActiveContentTab("preview");
+                          toast({
+                            title: "Loaded",
+                            description: "Video loaded to editor",
+                          });
+                        }}
+                      />
+                    )}
+                  </>
+                )}
+
                 {/* Community Tab */}
                 {activeContentTab === "community" && (
                   <>
@@ -2139,35 +2579,6 @@ function VideoCreatePage() {
                   </>
                 )}
 
-                {activeContentTab === "preview" && (
-                  <>
-                    {generationMode === "image" ? (
-                      <ImagePreviewTab
-                        isGenerating={isGenerating}
-                        generationProgress={generationProgress}
-                        generatedImages={generatedImages}
-                        selectedImageIndex={selectedImageIndex}
-                        selectedAspectRatio={selectedAspectRatio}
-                        onImageSelect={setSelectedImageIndex}
-                        onPromptRestore={setPrompt}
-                        onTabChange={setActiveContentTab}
-                        onDrawerClose={() => setSidebarDrawerOpen(false)}
-                      />
-                    ) : (
-                      <VideoPreviewTab
-                        isGenerating={isGenerating}
-                        generationProgress={generationProgress}
-                        generatedVideos={generatedVideos}
-                        selectedVideoIndex={selectedVideoIndex}
-                        selectedAspectRatio={selectedAspectRatio}
-                        onVideoSelect={setSelectedVideoIndex}
-                        onPromptRestore={setPrompt}
-                        onTabChange={setActiveContentTab}
-                        onDrawerClose={() => setSidebarDrawerOpen(false)}
-                      />
-                    )}
-                  </>
-                )}
                 {activeContentTab === "templates" && (
                   <>
                     {generationMode === "image" ? (
@@ -2259,6 +2670,26 @@ function VideoCreatePage() {
                       >
                         <ViewIcon className="size-4" />
                         Preview
+                      </button>
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={activeContentTab === "history"}
+                        data-state={
+                          activeContentTab === "history" ? "active" : "inactive"
+                        }
+                        onClick={() => setActiveContentTab("history")}
+                        className={cn(
+                          "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                          activeContentTab === "history"
+                            ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        )}
+                        tabIndex={activeContentTab === "history" ? -1 : 0}
+                        data-orientation="horizontal"
+                      >
+                        <History className="size-4" />
+                        History
                       </button>
                       <button
                         type="button"
@@ -2423,6 +2854,101 @@ function VideoCreatePage() {
                             setPromptImagePreviews(previews);
                           },
                           onTabChange: setActiveContentTab,
+                        }}
+                      />
+                    )}
+                  </>
+                )}
+
+                {/* History Tab */}
+                {activeContentTab === "history" && (
+                  <>
+                    {generationMode === "image" ? (
+                      <ImageHistoryTab
+                        onLoadToEditor={(image) => {
+                          // Load image to editor
+                          const loadedImage = {
+                            id: image._id,
+                            generatedImageId: image._id,
+                            url: image.imageData.url,
+                            thumbnail:
+                              image.imageData.thumbnail || image.imageData.url,
+                            aspectRatio: (image.imageData.aspectRatio ||
+                              "16:9") as AspectRatio,
+                            resolution: (image.imageData.resolution ||
+                              "1080p") as Resolution,
+                            prompt: image.imageData.prompt || "",
+                            style: (image.imageData.style ||
+                              "realistic") as ImageStyle,
+                            createdAt: image.createdAt,
+                            referenceImageUrls:
+                              image.imageData.referenceImageUrls || [],
+                          };
+                          setGeneratedImages([loadedImage]);
+                          setSelectedImageIndex(0);
+                          setPrompt(image.imageData.prompt || "");
+                          if (image.imageData.aspectRatio) {
+                            setSelectedAspectRatio(
+                              image.imageData.aspectRatio as AspectRatio
+                            );
+                          }
+                          if (image.imageData.resolution) {
+                            setSelectedResolution(
+                              image.imageData.resolution as Resolution
+                            );
+                          }
+                          if (image.imageData.style) {
+                            setSelectedImageStyle(
+                              image.imageData.style as ImageStyle
+                            );
+                          }
+                          setActiveContentTab("preview");
+                          toast({
+                            title: "Loaded",
+                            description: "Image loaded to editor",
+                          });
+                        }}
+                      />
+                    ) : (
+                      <VideoHistoryTab
+                        onLoadToEditor={(video) => {
+                          // Load video to editor
+                          const loadedVideo = {
+                            id: video._id,
+                            generatedVideoId: video._id,
+                            url: video.videoData.url,
+                            thumbnail:
+                              video.videoData.thumbnail || video.videoData.url,
+                            aspectRatio: (video.videoData.aspectRatio ||
+                              "16:9") as AspectRatio,
+                            resolution: (video.videoData.resolution ||
+                              "1080p") as Resolution,
+                            prompt: video.videoData.prompt || "",
+                            duration: video.videoData.duration || 8,
+                            createdAt: video.createdAt,
+                            startFrameUrl: video.videoData.startFrameUrl,
+                            endFrameUrl: video.videoData.endFrameUrl,
+                            referenceImageUrls:
+                              video.videoData.referenceImageUrls || [],
+                          };
+                          setGeneratedVideos([loadedVideo]);
+                          setSelectedVideoIndex(0);
+                          setPrompt(video.videoData.prompt || "");
+                          if (video.videoData.aspectRatio) {
+                            setSelectedAspectRatio(
+                              video.videoData.aspectRatio as AspectRatio
+                            );
+                          }
+                          if (video.videoData.resolution) {
+                            setSelectedResolution(
+                              video.videoData.resolution as Resolution
+                            );
+                          }
+                          setActiveContentTab("preview");
+                          toast({
+                            title: "Loaded",
+                            description: "Video loaded to editor",
+                          });
                         }}
                       />
                     )}

@@ -206,6 +206,103 @@ export const communityApi = {
 };
 
 // ============================================
+// Creator Profile API
+// ============================================
+
+export const creatorApi = {
+  /**
+   * Get creator profile by username
+   */
+  getProfile: async (username: string) => {
+    const response = await apiResponse.get(`/inspire/creator/${username}`);
+    return response.data;
+  },
+
+  /**
+   * Get creator's published content
+   */
+  getContent: async (
+    username: string,
+    type?: "image" | "video",
+    page = 1,
+    limit = 50
+  ) => {
+    const response = await apiResponse.get(`/inspire/creator/${username}/content`, {
+      params: { type, page, limit },
+    });
+    return response.data;
+  },
+
+  /**
+   * Follow/Unfollow a creator (requires auth)
+   */
+  follow: async (creatorId: string) => {
+    const response = await apiResponse.post(`/inspire/creator/${creatorId}/follow`);
+    return response.data;
+  },
+
+  /**
+   * Check follow status (requires auth)
+   */
+  getFollowStatus: async (creatorId: string) => {
+    const response = await apiResponse.get(
+      `/inspire/creator/${creatorId}/follow-status`
+    );
+    return response.data;
+  },
+
+  /**
+   * Track content view
+   */
+  trackView: async (contentId: string) => {
+    const response = await apiResponse.post(`/inspire/content/${contentId}/view`);
+    return response.data;
+  },
+
+  /**
+   * Update creator profile (bio, socials, cover photo, profile pic)
+   */
+  updateProfile: async (data: {
+    bio?: string;
+    socials?: {
+      instagram?: string;
+      twitter?: string;
+      github?: string;
+      linkedin?: string;
+      facebook?: string;
+      youtube?: string;
+      dribbble?: string;
+      behance?: string;
+      tiktok?: string;
+    };
+    coverPhoto?: File;
+    profilePic?: File;
+  }) => {
+    const formData = new FormData();
+    if (data.bio !== undefined) {
+      formData.append("bio", data.bio);
+    }
+    if (data.socials) {
+      formData.append("socials", JSON.stringify(data.socials));
+    }
+    if (data.coverPhoto) {
+      formData.append("coverPhoto", data.coverPhoto);
+    }
+    if (data.profilePic) {
+      formData.append("profilePic", data.profilePic);
+    }
+
+    const response = await apiResponse.put(`/inspire/creator/profile`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    });
+    return response.data;
+  },
+};
+
+// ============================================
 // Tutorial API
 // ============================================
 

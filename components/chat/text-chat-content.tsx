@@ -270,16 +270,6 @@ export function TextChatContent() {
                         )
                       }
                     />
-
-                    {isGeneratingImage &&
-                      String(generatingForMessageId) === String(message.id) && (
-                        <div
-                          ref={skeletonRef}
-                          className="flex justify-center mt-2"
-                        >
-                          <Skeleton className="h-[500px] w-[500px] rounded-md" />
-                        </div>
-                      )}
                   </div>
                 );
               }
@@ -315,42 +305,54 @@ export function TextChatContent() {
                       generation={message.generationGroups}
                     />
 
-                    {message.generationGroups?.map((group: GenerationGroup) => (
-                      <VersioningMessage
-                        key={group._id || group.id}
-                        generation={group}
-                        onToggle={(groupId: string) => {
-                          setMessages((prev: any[]) =>
-                            prev.map((msg: any) => {
-                              if (
-                                msg.id === message.id &&
-                                msg.generationGroups
-                              ) {
-                                return {
-                                  ...msg,
-                                  generationGroups: msg.generationGroups.map(
-                                    (g: GenerationGroup) =>
-                                      g._id === groupId || g.id === groupId
-                                        ? { ...g, isCollapsed: !g.isCollapsed }
-                                        : g
-                                  ),
-                                };
-                              }
-                              return msg;
-                            })
-                          );
-                        }}
-                        onRetry={retryLoading}
-                        onCopy={() =>
-                          handleCopyMessage(
-                            JSON.stringify(group.items, null, 2)
-                          )
-                        }
-                        onLike={() => handleLikeToggle(message.id)}
-                        onDislike={() => handleDislikeToggle(message.id)}
-                        onReload={() => retryLoading(message.id)}
-                      />
-                    ))}
+                    {message.generationGroups?.map((group: GenerationGroup) => {
+                      // Extract original prompt from message parts
+                      const originalPrompt = message.parts?.find(
+                        (part: any) => part.type === "text"
+                      )?.text;
+
+                      return (
+                        <VersioningMessage
+                          key={group._id || group.id}
+                          generation={group}
+                          designType={project?.category || undefined}
+                          originalPrompt={originalPrompt}
+                          onToggle={(groupId: string) => {
+                            setMessages((prev: any[]) =>
+                              prev.map((msg: any) => {
+                                if (
+                                  msg.id === message.id &&
+                                  msg.generationGroups
+                                ) {
+                                  return {
+                                    ...msg,
+                                    generationGroups: msg.generationGroups.map(
+                                      (g: GenerationGroup) =>
+                                        g._id === groupId || g.id === groupId
+                                          ? {
+                                              ...g,
+                                              isCollapsed: !g.isCollapsed,
+                                            }
+                                          : g
+                                    ),
+                                  };
+                                }
+                                return msg;
+                              })
+                            );
+                          }}
+                          onRetry={retryLoading}
+                          onCopy={() =>
+                            handleCopyMessage(
+                              JSON.stringify(group.items, null, 2)
+                            )
+                          }
+                          onLike={() => handleLikeToggle(message.id)}
+                          onDislike={() => handleDislikeToggle(message.id)}
+                          onReload={() => retryLoading(message.id)}
+                        />
+                      );
+                    })}
                   </div>
                 );
               }
@@ -384,6 +386,12 @@ export function TextChatContent() {
                   <AIThinkingContent />
                 )
               ))}
+
+            {isGeneratingImage && (
+              <div ref={skeletonRef} className="flex justify-center mt-2">
+                <Skeleton className="h-[500px] w-[500px] rounded-md" />
+              </div>
+            )}
 
             {(!messages || messages.length === 0) && !isTyping && (
               <div className="flex-1 mt-32 flex items-end justify-center">

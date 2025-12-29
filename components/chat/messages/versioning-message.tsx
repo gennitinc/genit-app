@@ -17,12 +17,15 @@ import {
   Image as ImageIcon,
   Video,
   File,
+  Play,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MessageActions } from "@/components/chat/messages";
 import ShinyText from "@/components/ui/shiny-text";
+import { serverUrlSocket } from "@/utils/apiResponse";
 
 interface GenerationItem {
   id: string;
@@ -59,7 +62,34 @@ interface VersioningMessageProps {
   onView?: (id: string) => void;
   onRestore?: (id: string) => void;
   className?: string;
+  designType?: string; // Design type from project (logo, flier, etc.)
+  originalPrompt?: string; // Original prompt from the message
 }
+
+// Helper function to generate animation prompts based on design type
+const getAnimationPrompt = (
+  designType: string | undefined,
+  originalPrompt: string | undefined
+): string => {
+  const basePrompt = originalPrompt || "Animate this design";
+
+  const prompts: Record<string, string> = {
+    logo: `Animate the logo with smooth, professional motion. Add subtle movement like gentle rotation, scaling, or morphing effects. Keep the brand identity intact while bringing the logo to life with elegant transitions. ${basePrompt}`,
+    flier: `Animate this flier design with engaging motion graphics. Add dynamic text animations, smooth transitions between elements, and eye-catching visual effects that highlight key information. ${basePrompt}`,
+    instagram_post: `Create an animated Instagram post with trendy motion effects. Add smooth transitions, text animations, and dynamic elements that capture attention in the feed. ${basePrompt}`,
+    poster: `Animate this poster with cinematic motion. Add dramatic transitions, text reveals, and visual effects that enhance the message and create impact. ${basePrompt}`,
+    youtube_thumbnail: `Animate this YouTube thumbnail with dynamic motion. Add eye-catching effects, text animations, and movement that draws viewers in and stands out in search results. ${basePrompt}`,
+    facebook_post: `Animate this Facebook post with engaging motion. Add smooth transitions, text animations, and visual effects that increase engagement and catch the viewer's attention. ${basePrompt}`,
+    facebook_cover: `Animate this Facebook cover with subtle, professional motion. Add gentle transitions and effects that enhance the design without being distracting. ${basePrompt}`,
+    banner: `Animate this banner with dynamic motion graphics. Add smooth transitions, text animations, and visual effects that create impact and draw attention. ${basePrompt}`,
+    generic_design: `Animate this design with smooth, professional motion. Add elegant transitions and effects that enhance the visual appeal. ${basePrompt}`,
+  };
+
+  return (
+    prompts[designType || ""] ||
+    `Animate this design with smooth, professional motion. Add elegant transitions and visual effects. ${basePrompt}`
+  );
+};
 
 // Utility function to format timestamps
 const formatTimestamp = (timestamp: string): string => {
@@ -104,7 +134,11 @@ export function VersioningMessage({
   onView,
   onRestore,
   className,
+  designType,
+  originalPrompt,
 }: VersioningMessageProps) {
+  const router = useRouter();
+
   // Internal state for collapse if not controlled externally
   const [internalCollapsed, setInternalCollapsed] = useState(
     generation.isCollapsed ?? false
@@ -182,8 +216,7 @@ export function VersioningMessage({
   };
 
   const handleDownload = async (file: { filePath?: string; name?: string }) => {
-
-    console.log("hit download")
+    console.log("hit download");
     try {
       if (!file || !file.filePath) return;
 
@@ -209,6 +242,51 @@ export function VersioningMessage({
       URL.revokeObjectURL(blobUrl);
     } catch (err) {
       console.error("DOWNLOAD ERROR:", err);
+    }
+  };
+
+  const handleAnimateDesign = async (item: GenerationItem) => {
+    try {
+      let imageUrl = item.url || item.filePath;
+      if (!imageUrl) return;
+
+      // Convert relative URL to absolute URL for server-side compatibility
+      if (imageUrl.startsWith("/")) {
+        const baseUrl = serverUrlSocket
+          ? serverUrlSocket.replace(/\/$/, "")
+          : typeof window !== "undefined"
+            ? window.location.origin
+            : "";
+        imageUrl = baseUrl + imageUrl;
+      }
+
+      // Get the animation prompt based on design type
+      const animationPrompt = getAnimationPrompt(designType, originalPrompt);
+
+      // Prepare animate data
+      const animateData = {
+        type: "video",
+        prompt: animationPrompt,
+        referenceImageUrls: [imageUrl],
+        designType: designType || "generic_design",
+      };
+
+      // Store in localStorage for client-side fallback
+      localStorage.setItem("animateDesignData", JSON.stringify(animateData));
+
+      // Build URL with parameters for server-side compatibility
+      const params = new URLSearchParams({
+        mode: "ai-video-gen",
+        animate: "true",
+        prompt: encodeURIComponent(animationPrompt),
+        referenceImage: encodeURIComponent(imageUrl),
+        designType: designType || "generic_design",
+      });
+
+      // Navigate to inspire/create video tab with URL parameters
+      router.push(`/inspire/create?${params.toString()}`);
+    } catch (error) {
+      console.error("Error animating design:", error);
     }
   };
 
@@ -331,8 +409,8 @@ export function VersioningMessage({
         <>
           <div className="flex-1 min-w-0">
             {mediaType === "image" && mediaUrl ? (
-              <div className="flex flex-col items-start gap-2">
-                <div className="flex-shrink-0 w-full h-full sm:w-full sm:h-full rounded-md overflow-hidden border border-border bg-muted">
+              <div className="flex flex-col items-start gap-2 w-full">
+                <div className="flex-shrink-0 w-full h-full sm:w-full sm:h-full rounded-md overflow-hidden border border-border bg-muted relative">
                   <img
                     src={mediaUrl}
                     alt={item.name}
@@ -347,15 +425,29 @@ export function VersioningMessage({
                     }}
                   />
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 w-full">
                   <p className="text-xs sm:text-sm font-medium text-foreground truncate">
                     {item.name}
                   </p>
-                  <div className="flex items-center gap-1 mt-0.5">
-                    <ImageIcon className="w-3 h-3 text-muted-foreground" />
-                    <p className="text-xs text-muted-foreground">
-                      Image • {fileExt} •
-                    </p>
+                  <div className="flex items-center justify-between mt-2">
+                    <div className="flex items-center gap-1">
+                      <ImageIcon className="w-3 h-3 text-muted-foreground" />
+                      <p className="text-xs text-muted-foreground">
+                        Image • {fileExt}
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAnimateDesign(item);
+                      }}
+                      className="h-7 px-2 text-xs gap-1.5"
+                    >
+                      <Play className="w-3 h-3" />
+                      Animate design
+                    </Button>
                   </div>
                 </div>
               </div>

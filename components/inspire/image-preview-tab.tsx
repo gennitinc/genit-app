@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Loader2,
   Wand2,
@@ -35,6 +35,7 @@ interface GeneratedImage {
   aspectRatio?: AspectRatio;
   createdAt?: string;
   generatedImageId?: string; // ID from the database
+  referenceImageUrls?: string[]; // Reference images for style/context
 }
 
 interface ImagePreviewTabProps {
@@ -63,6 +64,54 @@ export function ImagePreviewTab({
   onDrawerClose,
 }: ImagePreviewTabProps) {
   const [publishing, setPublishing] = useState(false);
+  const [publishedImageIds, setPublishedImageIds] = useState<Set<string>>(
+    new Set()
+  );
+  const [publishedContentMap, setPublishedContentMap] = useState<
+    Map<string, string>
+  >(new Map()); // Map of generatedImageId -> communityContentId
+  const [checkingPublished, setCheckingPublished] = useState(false);
+
+  // Check if images have been published on mount and when selected image changes
+  useEffect(() => {
+    const checkPublishedStatus = async () => {
+      if (generatedImages.length === 0) return;
+
+      try {
+        setCheckingPublished(true);
+        // Fetch user's own community content to check for published images
+        const response = await communityApi.getUserContent("image", 1, 100);
+
+        if (response.success && response.data?.content) {
+          const publishedIds = new Set<string>();
+          const contentMap = new Map<string, string>();
+          response.data.content.forEach((content: any) => {
+            if (content.generatedImageId) {
+              publishedIds.add(content.generatedImageId);
+              contentMap.set(content.generatedImageId, content.id);
+            }
+          });
+          setPublishedImageIds(publishedIds);
+          setPublishedContentMap(contentMap);
+        }
+      } catch (error) {
+        console.error("Error checking published status:", error);
+      } finally {
+        setCheckingPublished(false);
+      }
+    };
+
+    checkPublishedStatus();
+  }, [generatedImages.length]); // Re-check when images change
+
+  // Get current image
+  const currentImage = generatedImages[selectedImageIndex];
+
+  // Check if current image is published
+  const isPublished = Boolean(
+    currentImage?.generatedImageId &&
+      publishedImageIds.has(currentImage.generatedImageId)
+  );
 
   const handleDownload = async () => {
     const currentImage = generatedImages[selectedImageIndex];
@@ -132,13 +181,56 @@ export function ImagePreviewTab({
     const currentImage = generatedImages[selectedImageIndex];
     if (!currentImage) return;
 
+    // If already published, unpublish it
+    if (
+      currentImage.generatedImageId &&
+      publishedImageIds.has(currentImage.generatedImageId)
+    ) {
+      const communityContentId = publishedContentMap.get(
+        currentImage.generatedImageId
+      );
+      if (communityContentId) {
+        try {
+          setPublishing(true);
+          await communityApi.delete(communityContentId);
+          setPublishedImageIds((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(currentImage.generatedImageId!);
+            return newSet;
+          });
+          setPublishedContentMap((prev) => {
+            const newMap = new Map(prev);
+            newMap.delete(currentImage.generatedImageId!);
+            return newMap;
+          });
+          toast({
+            title: "Unpublished",
+            description: "Image has been removed from the community",
+          });
+        } catch (error: any) {
+          console.error("Error unpublishing image:", error);
+          toast({
+            title: "Unpublish failed",
+            description:
+              error?.response?.data?.message ||
+              error?.message ||
+              "Failed to unpublish image. Please try again.",
+            variant: "destructive",
+          });
+        } finally {
+          setPublishing(false);
+        }
+      }
+      return;
+    }
+
     try {
       setPublishing(true);
 
       // Use aspect ratio from image object if available, otherwise use selected aspect ratio
       const aspectRatio = currentImage.aspectRatio || selectedAspectRatio;
 
-      await communityApi.submit({
+      const response = await communityApi.submit({
         contentType: "image",
         generatedImageId: currentImage.generatedImageId || currentImage.id, // Use generatedImageId if available
         prompt: currentImage.prompt,
@@ -147,13 +239,23 @@ export function ImagePreviewTab({
         aspectRatio,
         style: currentImage.style,
         resolution: currentImage.resolution,
+        referenceImageUrls: currentImage.referenceImageUrls || [],
         isPublic: true,
       });
 
+      // Update published status
+      if (currentImage.generatedImageId && response.data?.id) {
+        setPublishedImageIds((prev) =>
+          new Set(prev).add(currentImage.generatedImageId!)
+        );
+        setPublishedContentMap((prev) =>
+          new Map(prev).set(currentImage.generatedImageId!, response.data.id)
+        );
+      }
+
       toast({
-        title: "Published!",
-        description:
-          "Your image has been submitted to the community for review",
+        title: "Post published",
+        description: "Your image has been published to the community",
       });
     } catch (error: any) {
       console.error("Error publishing image:", error);
@@ -207,22 +309,14 @@ export function ImagePreviewTab({
       {/* Main Preview Area */}
       <div className="flex flex-col">
         {/* Preview Container */}
-        <div className="relative w-full rounded-xl overflow-hidden min-h-[400px]">
+        <div
+          className={cn(
+            "relative w-full rounded-xl overflow-hidden min-h-[400px]"
+          )}
+        >
           {/* Generating State */}
           {isGenerating && (
-            <div
-              className="absolute inset-0 flex flex-col items-center justify-center text-center p-8"
-              style={{
-                aspectRatio:
-                  selectedAspectRatio === "16:9"
-                    ? "16/9"
-                    : selectedAspectRatio === "9:16"
-                      ? "9/16"
-                      : selectedAspectRatio === "1:1"
-                        ? "1/1"
-                        : "4/3",
-              }}
-            >
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
               <Loader2 className="w-8 h-8 text-neutral-400 dark:text-neutral-500 animate-spin mb-4" />
               <h3 className="text-base font-semibold text-neutral-900 dark:text-white mb-2">
                 Generating image
@@ -413,12 +507,22 @@ export function ImagePreviewTab({
               type="button"
               onClick={handlePublish}
               disabled={publishing}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-sm font-medium text-white dark:text-neutral-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+                isPublished
+                  ? "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-300 dark:hover:bg-neutral-600"
+                  : "bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
+              )}
             >
               {publishing ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
                   Publishing...
+                </>
+              ) : isPublished ? (
+                <>
+                  <Upload className="w-4 h-4" />
+                  Published
                 </>
               ) : (
                 <>

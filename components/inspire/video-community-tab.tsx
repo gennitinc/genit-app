@@ -9,7 +9,9 @@ import {
   User,
   Users,
   Loader2,
+  Play,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -28,6 +30,7 @@ import { CommunityContent } from "@/types/inspire";
 import { io, Socket } from "socket.io-client";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export interface VideoGenerationParamsCallback {
   // Common
@@ -261,12 +264,27 @@ export function VideoCommunityTab({
             "All generation parameters have been loaded. Click Generate to create your version.",
         });
       } else {
-        // Fallback to just setting prompt
+        // Store recreate data in localStorage for navigation
+        const recreateData = {
+          type: "video",
+          prompt: video.prompt,
+          aspectRatio: video.aspectRatio,
+          resolution: video.resolution,
+          duration: video.duration,
+          presenterId: video.presenterId,
+          voiceId: video.voiceId,
+          startFrameUrl: video.startFrameUrl,
+          endFrameUrl: video.endFrameUrl,
+          referenceImageUrls: video.referenceImageUrls || [],
+        };
+        localStorage.setItem("recreateData", JSON.stringify(recreateData));
+        
+        // Navigate to create page
         onPromptSelect(video.prompt);
         onTabChange("preview");
         toast({
-          title: "Prompt copied",
-          description: "Ready to generate your version",
+          title: "Settings saved",
+          description: "All parameters will be restored on the create page",
         });
       }
     } catch (error) {
@@ -478,32 +496,96 @@ function VideoCard({
   isLiking?: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [isPaused, setIsPaused] = useState(true);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
+  // Auto-play preview (muted) when entering viewport
   useEffect(() => {
     const videoElement = videoRef.current;
-    if (!videoElement) return;
+    if (!videoElement || !video.videoUrl) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && isPaused) {
+            // Auto-play preview for 2 seconds (muted)
+            videoElement.currentTime = 0;
+            videoElement.muted = true; // Keep muted for preview
             videoElement.play().catch(() => {
               // Autoplay failed, user interaction needed
             });
-          } else {
+            // Pause after 2 seconds
+            timeoutRef.current = setTimeout(() => {
+              if (videoElement && isPaused) {
+                videoElement.pause();
+                videoElement.currentTime = 0;
+                setIsPaused(true);
+              }
+            }, 2000);
+          } else if (!entry.isIntersecting) {
             videoElement.pause();
+            videoElement.currentTime = 0;
+            videoElement.muted = true; // Reset to muted
+            setIsPaused(true);
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+              timeoutRef.current = null;
+            }
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.1 }
     );
 
     observer.observe(videoElement);
 
     return () => {
       observer.disconnect();
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
     };
-  }, []);
+  }, [video.videoUrl, isPaused]);
+
+  // Handle hover to play (desktop only, with sound)
+  const handleMouseEnter = () => {
+    if (video.videoUrl && videoRef.current && isDesktop) {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      videoRef.current.currentTime = 0;
+      videoRef.current.muted = false; // Unmute on hover
+      videoRef.current.play().catch((error) => {
+        console.error("Error playing video on hover:", error);
+      });
+      setIsPaused(false);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (video.videoUrl && videoRef.current && isDesktop) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+      videoRef.current.muted = true; // Mute again when leaving
+      setIsPaused(true);
+    }
+  };
+
+  // Handle play icon click (mobile only, with sound)
+  const handlePlayClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (video.videoUrl && videoRef.current && !isDesktop) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.muted = false; // Unmute on click
+      videoRef.current.play().catch((error) => {
+        console.error("Error playing video on click:", error);
+      });
+      setIsPaused(false);
+    }
+  };
 
   // Use aspectRatio from API or randomize for masonry effect
   const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "16/9"];
@@ -514,20 +596,35 @@ function VideoCard({
   return (
     <div
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4"
     >
       <div className="relative">
         {video.videoUrl ? (
-          <video
-            ref={videoRef}
-            src={video.videoUrl}
-            poster={video.thumbnailUrl}
-            loop
-            muted
-            playsInline
-            className="w-full object-cover"
-            style={{ aspectRatio }}
-          />
+          <>
+            <video
+              ref={videoRef}
+              src={video.videoUrl}
+              poster={video.thumbnailUrl}
+              loop
+              muted
+              playsInline
+              className="w-full object-cover"
+              style={{ aspectRatio }}
+            />
+            {/* Play icon in center when paused (mobile) */}
+            {isPaused && !isDesktop && (
+              <div 
+                className="absolute inset-0 flex items-center justify-center pointer-events-auto cursor-pointer z-10"
+                onClick={handlePlayClick}
+              >
+                <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                  <Play className="w-6 h-6 text-white ml-1" />
+                </div>
+              </div>
+            )}
+          </>
         ) : (
           <img
             src={video.thumbnailUrl}
@@ -562,35 +659,54 @@ function VideoCard({
             />
           </button>
         </div>
+        
       </div>
       <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
         <p className="text-white text-sm font-medium line-clamp-2 mb-2">
           {video.prompt}
         </p>
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-2">
+          <Link
+            href={`/creator/${video.author.name}`}
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity w-fit"
+          >
             {video.author.avatar ? (
               <img
                 src={video.author.avatar}
                 alt={video.author.name}
-                className="w-6 h-6 rounded-full object-cover"
+                className="w-5 h-5 rounded-full object-cover"
               />
             ) : (
-              <div className="w-6 h-6 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
                 <User className="w-3 h-3 text-neutral-600 dark:text-neutral-400" />
               </div>
             )}
             <span className="text-xs text-white/80 font-medium">
               {video.author.name}
             </span>
-          </div>
+            {video.author.isVerified && (
+              <svg
+                viewBox="0 0 22 22"
+                aria-label="Verified account"
+                role="img"
+                className="w-3.5 h-3.5 flex-shrink-0"
+                data-testid="icon-verified"
+                fill="#3b82f6"
+              >
+                <g>
+                  <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                </g>
+              </svg>
+            )}
+          </Link>
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               onRecreate();
             }}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-medium transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-medium transition-colors w-fit"
           >
             <RefreshCw className="w-3 h-3" />
             Recreate
@@ -649,7 +765,10 @@ function VideoDetailContent({
         </div>
 
         {/* Creator Info */}
-        <div className="flex items-center gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-900">
+        <Link
+          href={`/creator/${video.author.name}`}
+          className="flex items-center gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+        >
           {video.author.avatar ? (
             <img
               src={video.author.avatar}
@@ -662,14 +781,30 @@ function VideoDetailContent({
             </div>
           )}
           <div className="flex-1">
-            <p className="text-sm font-medium text-neutral-900 dark:text-white">
-              {video.author.name}
-            </p>
+            <div className="flex items-center gap-1.5">
+              <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                {video.author.name}
+              </p>
+              {video.author.isVerified && (
+                <svg
+                  viewBox="0 0 22 22"
+                  aria-label="Verified account"
+                  role="img"
+                  className="w-4 h-4 flex-shrink-0"
+                  data-testid="icon-verified"
+                  fill="#3b82f6"
+                >
+                  <g>
+                    <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                  </g>
+                </svg>
+              )}
+            </div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400">
               Creator
             </p>
           </div>
-        </div>
+        </Link>
 
         {/* Stats */}
         <div className="flex items-center gap-4">

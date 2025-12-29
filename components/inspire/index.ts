@@ -13,3 +13,7 @@ export { VideoTemplatesTab } from "./video-templates-tab";
 // Tutorial tab
 export { TutorialTab } from "./tutorial-tab";
 
+// History tabs
+export { ImageHistoryTab } from "./image-history-tab";
+export { VideoHistoryTab } from "./video-history-tab";
+

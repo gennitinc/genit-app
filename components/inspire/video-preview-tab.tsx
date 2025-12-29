@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Loader2,
   Wand2,
@@ -27,12 +27,16 @@ import {
 
 interface GeneratedVideo {
   id: string;
+  generatedVideoId?: string; // ID from the database
   url: string;
   thumbnail: string;
   prompt: string;
   resolution: string;
   aspectRatio: string;
   createdAt?: string;
+  startFrameUrl?: string; // Start frame image URL (for video)
+  endFrameUrl?: string; // End frame image URL (for video)
+  referenceImageUrls?: string[]; // Reference images for style/context
 }
 
 interface VideoPreviewTabProps {
@@ -61,10 +65,57 @@ export function VideoPreviewTab({
   onDrawerClose,
 }: VideoPreviewTabProps) {
   const [publishing, setPublishing] = useState(false);
+  const [publishedVideoIds, setPublishedVideoIds] = useState<Set<string>>(
+    new Set()
+  );
+  const [publishedContentMap, setPublishedContentMap] = useState<
+    Map<string, string>
+  >(new Map()); // Map of generatedVideoId -> communityContentId
+  const [checkingPublished, setCheckingPublished] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Check if videos have been published on mount and when selected video changes
+  useEffect(() => {
+    const checkPublishedStatus = async () => {
+      if (generatedVideos.length === 0) return;
+
+      try {
+        setCheckingPublished(true);
+        // Fetch user's own community content to check for published videos
+        const response = await communityApi.getUserContent("video", 1, 100);
+
+        if (response.success && response.data?.content) {
+          const publishedIds = new Set<string>();
+          const contentMap = new Map<string, string>();
+          response.data.content.forEach((content: any) => {
+            if (content.generatedVideoId) {
+              publishedIds.add(content.generatedVideoId);
+              contentMap.set(content.generatedVideoId, content.id);
+            }
+          });
+          setPublishedVideoIds(publishedIds);
+          setPublishedContentMap(contentMap);
+        }
+      } catch (error) {
+        console.error("Error checking published status:", error);
+      } finally {
+        setCheckingPublished(false);
+      }
+    };
+
+    checkPublishedStatus();
+  }, [generatedVideos.length]); // Re-check when videos change
+
+  // Get current video (used throughout component)
+  const currentVideo = generatedVideos[selectedVideoIndex];
+
+  // Check if current video is published
+  const isPublished = Boolean(
+    currentVideo?.generatedVideoId &&
+      publishedVideoIds.has(currentVideo.generatedVideoId)
+  );
+
   const handleDownload = async () => {
-    const currentVideo = generatedVideos[selectedVideoIndex];
     if (!currentVideo) return;
 
     try {
@@ -93,7 +144,6 @@ export function VideoPreviewTab({
   };
 
   const handleShare = async () => {
-    const currentVideo = generatedVideos[selectedVideoIndex];
     if (!currentVideo) return;
 
     try {
@@ -128,8 +178,50 @@ export function VideoPreviewTab({
   };
 
   const handlePublish = async () => {
-    const currentVideo = generatedVideos[selectedVideoIndex];
     if (!currentVideo) return;
+
+    // If already published, unpublish it
+    if (
+      currentVideo.generatedVideoId &&
+      publishedVideoIds.has(currentVideo.generatedVideoId)
+    ) {
+      const communityContentId = publishedContentMap.get(
+        currentVideo.generatedVideoId
+      );
+      if (communityContentId) {
+        try {
+          setPublishing(true);
+          await communityApi.delete(communityContentId);
+          setPublishedVideoIds((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(currentVideo.generatedVideoId!);
+            return newSet;
+          });
+          setPublishedContentMap((prev) => {
+            const newMap = new Map(prev);
+            newMap.delete(currentVideo.generatedVideoId!);
+            return newMap;
+          });
+          toast({
+            title: "Unpublished",
+            description: "Video has been removed from the community",
+          });
+        } catch (error: any) {
+          console.error("Error unpublishing video:", error);
+          toast({
+            title: "Unpublish failed",
+            description:
+              error?.response?.data?.message ||
+              error?.message ||
+              "Failed to unpublish video. Please try again.",
+            variant: "destructive",
+          });
+        } finally {
+          setPublishing(false);
+        }
+      }
+      return;
+    }
 
     try {
       setPublishing(true);
@@ -137,28 +229,43 @@ export function VideoPreviewTab({
       // Use the selected aspect ratio
       const aspectRatio = selectedAspectRatio;
 
-      await communityApi.submit({
+      const response = await communityApi.submit({
         contentType: "video",
+        generatedVideoId: currentVideo.generatedVideoId || currentVideo.id,
         prompt: currentVideo.prompt,
         thumbnailUrl: currentVideo.thumbnail,
         mediaUrl: currentVideo.url,
         videoUrl: currentVideo.url,
         aspectRatio,
         resolution: currentVideo.resolution,
+        startFrameUrl: currentVideo.startFrameUrl,
+        endFrameUrl: currentVideo.endFrameUrl,
+        referenceImageUrls: currentVideo.referenceImageUrls || [],
         isPublic: true,
       });
 
+      // Update published status
+      if (currentVideo.generatedVideoId && response.data?.id) {
+        setPublishedVideoIds((prev) =>
+          new Set(prev).add(currentVideo.generatedVideoId!)
+        );
+        setPublishedContentMap((prev) =>
+          new Map(prev).set(currentVideo.generatedVideoId!, response.data.id)
+        );
+      }
+
       toast({
-        title: "Published!",
-        description:
-          "Your video has been submitted to the community for review",
+        title: "Post published",
+        description: "Your video has been published to the community",
       });
     } catch (error: any) {
       console.error("Error publishing video:", error);
       toast({
         title: "Publish failed",
         description:
-          error?.message || "Failed to publish video. Please try again.",
+          error?.response?.data?.message ||
+          error?.message ||
+          "Failed to publish video. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -195,23 +302,15 @@ export function VideoPreviewTab({
       {/* Main Preview Area */}
       <div className="flex flex-col">
         {/* Preview Container */}
-        <div className="relative w-full rounded-xl overflow-hidden min-h-[400px]">
+        <div
+          className={cn(
+            "relative w-full rounded-xl overflow-hidden min-h-[400px]"
+          )}
+        >
           {/* Generating State */}
           {isGenerating && (
-            <div
-              className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-8 bg-neutral-50 dark:bg-neutral-900 rounded-xl"
-              style={{
-                aspectRatio:
-                  selectedAspectRatio === "16:9"
-                    ? "16/9"
-                    : selectedAspectRatio === "9:16"
-                      ? "9/16"
-                      : selectedAspectRatio === "1:1"
-                        ? "1/1"
-                        : "4/3",
-              }}
-            >
-              <Loader2 className="w-8 h-8 text-cyan-500 dark:text-cyan-400 animate-spin mb-4" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+              <Loader2 className="w-8 h-8 text-neutral-400 dark:text-neutral-500 animate-spin mb-4" />
               <h3 className="text-base font-semibold text-neutral-900 dark:text-white mb-2">
                 Generating video
               </h3>
@@ -220,7 +319,7 @@ export function VideoPreviewTab({
               </p>
               <div className="w-48 h-1 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-cyan-500 dark:bg-cyan-400 rounded-full transition-all duration-300"
+                  className="h-full bg-neutral-900 dark:bg-neutral-100 rounded-full transition-all duration-300"
                   style={{ width: `${generationProgress}%` }}
                 />
               </div>
@@ -341,7 +440,6 @@ export function VideoPreviewTab({
                 <button
                   type="button"
                   onClick={() => {
-                    const currentVideo = generatedVideos[selectedVideoIndex];
                     if (currentVideo) {
                       onPromptRestore(currentVideo.prompt);
                       onDrawerClose?.(); // Close drawer on mobile
@@ -365,7 +463,6 @@ export function VideoPreviewTab({
                 <button
                   type="button"
                   onClick={() => {
-                    const currentVideo = generatedVideos[selectedVideoIndex];
                     if (currentVideo) {
                       navigator.clipboard.writeText(currentVideo.prompt);
                       toast({
@@ -415,12 +512,22 @@ export function VideoPreviewTab({
               type="button"
               onClick={handlePublish}
               disabled={publishing}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-sm font-medium text-white dark:text-neutral-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+                isPublished
+                  ? "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-300 dark:hover:bg-neutral-600"
+                  : "bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
+              )}
             >
               {publishing ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
                   Publishing...
+                </>
+              ) : isPublished ? (
+                <>
+                  <Upload className="w-4 h-4" />
+                  Published
                 </>
               ) : (
                 <>

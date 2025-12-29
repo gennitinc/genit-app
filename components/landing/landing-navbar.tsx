@@ -66,6 +66,7 @@ export function LandingNavbar() {
 
   const navigation = [
     { name: "Create", href: "/" },
+    { name: "AI gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Company", href: "/company" },
     { name: "Inspirations", href: "/inspirations" },
     {
@@ -133,6 +134,12 @@ export function LandingNavbar() {
                           Create
                         </Link>
                       )}
+                      <Link
+                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
+                        href="/inspire/create?mode=ai-video-gen"
+                      >
+                        AI gen
+                      </Link>
                       <Link
                         target=""
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
@@ -308,6 +315,12 @@ export function LandingNavbar() {
                           Create
                         </Link>
                       )}
+                      <Link
+                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
+                        href="/inspire/create?mode=ai-video-gen"
+                      >
+                        AI gen
+                      </Link>
                       <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"

@@ -101,6 +101,7 @@ export interface Author {
   id?: string;
   name: string;
   avatar?: string;
+  isVerified?: boolean;
 }
 
 export interface GenerationParams {
@@ -173,6 +174,9 @@ export interface CommunityContentSubmission {
   style?: string;
   resolution?: string;
   duration?: string;
+  startFrameUrl?: string; // Start frame image URL (for video)
+  endFrameUrl?: string; // End frame image URL (for video)
+  referenceImageUrls?: string[]; // Reference images for style/context
   tags?: string[];
   isPublic?: boolean;
 }
@@ -391,6 +395,7 @@ export interface GeneratedImageItem {
   url: string;
   name: string;
   id?: string;
+  referenceImageUrls?: string[];
 }
 
 export interface GenerateImageResponse {
@@ -422,6 +427,9 @@ export interface GeneratedVideoItem {
   name: string;
   id?: string;
   duration?: number;
+  startFrameUrl?: string;
+  endFrameUrl?: string;
+  referenceImageUrls?: string[];
 }
 
 export interface GenerateVideoResponse {

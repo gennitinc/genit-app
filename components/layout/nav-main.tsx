@@ -26,20 +26,20 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 
 const navItems = [
   {
-    title: "Create",
+    title: "Design Chat",
     icon: WandSparklesIcon,
     href: "/chat",
   },
-  // {
-  //   title: "Ai Video Gen",
-  //   icon: Video,
-  //   href: "/inspire/create?mode=ai-video-gen",
-  // },
-  // {
-  //   title: "Ai Image Gen",
-  //   icon: ImageIcon,
-  //   href: "/inspire/create?mode=ai-image-gen",
-  // },
+  {
+    title: "Ai Video Gen",
+    icon: Video,
+    href: "/inspire/create?mode=ai-video-gen",
+  },
+  {
+    title: "Ai Image Gen",
+    icon: ImageIcon,
+    href: "/inspire/create?mode=ai-image-gen",
+  },
   {
     title: "History",
     icon: History,

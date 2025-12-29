@@ -20,6 +20,7 @@ import { CommunityContent } from "@/types/inspire";
 import { io, Socket } from "socket.io-client";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export interface GenerationParamsCallback {
   // Common
@@ -186,18 +187,19 @@ export function ImageCommunityTab({
   }, [page]);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container || !hasMore || loadingMore) return;
+    if (!hasMore || loadingMore) return;
 
     const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } = container;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
       if (scrollHeight - scrollTop - clientHeight < 300) {
         setPage((prev) => prev + 1);
       }
     };
 
-    container.addEventListener("scroll", handleScroll);
-    return () => container.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [hasMore, loadingMore]);
 
   const handleRecreate = async (image: CommunityContent) => {
@@ -269,12 +271,25 @@ export function ImageCommunityTab({
             "All generation parameters have been loaded. Click Generate to create your version.",
         });
       } else {
-        // Fallback to just setting prompt
+        // Store recreate data in localStorage for navigation
+        const recreateData = {
+          type: "image",
+          prompt: image.prompt,
+          aspectRatio: image.aspectRatio,
+          resolution: image.resolution,
+          style: image.style,
+          imageCount: image.imageCount,
+          modelId: image.modelId,
+          referenceImageUrls: image.referenceImageUrls || [],
+        };
+        localStorage.setItem("recreateData", JSON.stringify(recreateData));
+        
+        // Navigate to create page
         onPromptSelect(image.prompt);
         onTabChange("preview");
         toast({
-          title: "Prompt copied",
-          description: "Ready to generate your version",
+          title: "Settings saved",
+          description: "All parameters will be restored on the create page",
         });
       }
     } catch (error) {
@@ -412,7 +427,7 @@ export function ImageCommunityTab({
       <section className="p-4">
         <div
           ref={containerRef}
-          className="columns-2 lg:columns-3 gap-4 overflow-y-auto max-h-[calc(100vh-12rem)]"
+          className="columns-2 lg:columns-3 gap-4"
         >
           {images.map((image, index) => {
             // Use aspectRatio from API or randomize for masonry effect
@@ -462,34 +477,53 @@ export function ImageCommunityTab({
                     </button>
                   </div>
                 </div>
+                
                 <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
                   <p className="text-white text-sm font-medium line-clamp-2 mb-2">
                     {image.prompt}
                   </p>
-                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
+                  <div className="flex flex-col gap-2">
+                    <Link
+                      href={`/creator/${image.author.name}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center gap-2 hover:opacity-80 transition-opacity w-fit"
+                    >
                       {image.author.avatar ? (
                         <img
                           src={image.author.avatar}
                           alt={image.author.name}
-                          className="w-6 h-6 rounded-full object-cover"
+                          className="w-5 h-5 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-6 h-6 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
+                        <div className="w-5 h-5 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
                           <User className="w-3 h-3 text-neutral-600 dark:text-neutral-400" />
                         </div>
                       )}
                       <span className="text-xs text-white/80 font-medium">
                         {image.author.name}
                       </span>
-                    </div>
+                      {image.author.isVerified && (
+                        <svg
+                          viewBox="0 0 22 22"
+                          aria-label="Verified account"
+                          role="img"
+                          className="w-3.5 h-3.5 flex-shrink-0"
+                          data-testid="icon-verified"
+                          fill="#3b82f6"
+                        >
+                          <g>
+                            <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                          </g>
+                        </svg>
+                      )}
+                    </Link>
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleRecreate(image);
                       }}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-medium transition-colors"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-medium transition-colors w-fit"
                     >
                       <RefreshCw className="w-3 h-3" />
                       Recreate
@@ -607,7 +641,10 @@ function ImageDetailContent({
         </div>
 
         {/* Creator Info */}
-        <div className="flex items-center gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-900">
+        <Link
+          href={`/creator/${image.author.name}`}
+          className="flex items-center gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+        >
           {image.author.avatar ? (
             <img
               src={image.author.avatar}
@@ -620,14 +657,30 @@ function ImageDetailContent({
             </div>
           )}
           <div className="flex-1">
-            <p className="text-sm font-medium text-neutral-900 dark:text-white">
-              {image.author.name}
-            </p>
+            <div className="flex items-center gap-1.5">
+              <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                {image.author.name}
+              </p>
+              {image.author.isVerified && (
+                <svg
+                  viewBox="0 0 22 22"
+                  aria-label="Verified account"
+                  role="img"
+                  className="w-4 h-4 flex-shrink-0"
+                  data-testid="icon-verified"
+                  fill="#3b82f6"
+                >
+                  <g>
+                    <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                  </g>
+                </svg>
+              )}
+            </div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400">
               Creator
             </p>
           </div>
-        </div>
+        </Link>
 
         {/* Stats */}
         <div className="flex items-center gap-4">

@@ -94,6 +94,12 @@ export interface IDesignProject {
   status: ProjectStatus;
   userId: string;
   userName: string;
+  category?: string;
+  orientation?: string;
+  customSize?: {
+    width: string;
+    height: string;
+  };
   collaborators: ICollaborator[];
   messages: IMessage[];
   analytics: IProjectAnalytics;
