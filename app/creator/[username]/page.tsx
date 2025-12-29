@@ -1719,7 +1719,7 @@ export default function CreatorProfilePage() {
                 "relative px-4 py-2.5 font-medium text-sm transition-all duration-200 rounded-t-lg",
                 "flex items-center gap-2",
                 activeTab === "images"
-                  ? "text-neutral-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 shadow-sm border-b-2 border-neutral-900 dark:border-neutral-100"
+                  ? "text-neutral-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 shadow-sm border-b-1 border-neutral-400 dark:border-neutral-600"
                   : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/50",
                 contentLoading && "opacity-50 cursor-not-allowed"
               )}
