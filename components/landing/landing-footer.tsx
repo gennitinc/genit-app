@@ -287,7 +287,19 @@ export function LandingFooter() {
                 Pricing
               </Link>
               <Link
-                href="/contact"
+                href="/creators-program"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Creators Program
+              </Link>
+              <Link
+                href="/creators-program"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Community
+              </Link>
+              <Link
+                href="/community"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 Contact
