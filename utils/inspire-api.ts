@@ -23,10 +23,6 @@ import {
   GenerateVideoResponse,
 } from "@/types/inspire";
 
-// ============================================
-// Image Generation Templates API
-// ============================================
-
 export const imageGenTemplatesApi = {
   /**
    * Get all image generation templates grouped by category

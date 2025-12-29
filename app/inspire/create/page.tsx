@@ -994,8 +994,6 @@ function VideoCreatePage() {
                   onSubmit={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    // Only trigger generation if prompt is not empty and generate button is explicitly clicked
-                    // This prevents accidental form submission from other buttons
                     return false;
                   }}
                 >
