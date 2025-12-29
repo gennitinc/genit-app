@@ -482,8 +482,13 @@ export default function CreatorProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col">
+        <LandingNavbar />
         <Loader2 className="w-8 h-8 animate-spin text-neutral-400" />
+
+        {/* Profile Header Card - Desktop */}
+
+        <LandingFooter />
       </div>
     );
   }
@@ -563,7 +568,7 @@ export default function CreatorProfilePage() {
       <LandingNavbar />
 
       {/* Profile Header Card - Desktop */}
-      <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 lg:pt-8 lg:pb-8 w-full lg:mt-10">
+      <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 lg:pb-8 w-full">
         <div className=" rounded-t-xl shadow-xs overflow-hidden">
           {/* Banner/Cover Photo - Full width with top border only */}
           <div className="relative h-40 md:h-40 w-full border-t border-neutral-200 dark:border-neutral-800">
@@ -1544,7 +1549,7 @@ export default function CreatorProfilePage() {
 
       {/* Content Tabs */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="sticky top-0 z-50 bg-neutral-50 dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 mb-6">
+        <div className="sticky top-0 z-0 bg-neutral-50 dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 mb-6">
           <div className="flex gap-8 pt-2 pb-4">
             <button
               onClick={() => {

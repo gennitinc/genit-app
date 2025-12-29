@@ -63,7 +63,7 @@ export default function CommunityPage() {
             }}
             className="w-full"
           >
-            <div className="sticky top-0 z-50 bg-white dark:bg-black pb-2 pt-2 mb-6">
+            <div className="sticky top-0 z-10 bg-white dark:bg-black pb-2 pt-2 mb-6">
               <TabsList className="grid w-fit max-w-md grid-cols-2 mt-2 ml-4">
                 <TabsTrigger value="video" className="flex items-center gap-2">
                   Videos
