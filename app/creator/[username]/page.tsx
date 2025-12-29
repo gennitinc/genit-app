@@ -627,7 +627,7 @@ export default function CreatorProfilePage() {
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Back to Community</p>
+                <p>Previous page</p>
               </TooltipContent>
             </Tooltip>
 
