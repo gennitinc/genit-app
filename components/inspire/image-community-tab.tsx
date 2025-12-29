@@ -9,6 +9,9 @@ import {
   Users,
   Loader2,
   Eye,
+  Check,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -90,6 +93,9 @@ export function ImageCommunityTab({
   const [viewImage, setViewImage] = useState<CommunityContent | null>(null);
   const [likedImages, setLikedImages] = useState<Set<string>>(new Set());
   const [likingImageId, setLikingImageId] = useState<string | null>(null);
+  const [expandedPrompts, setExpandedPrompts] = useState<Set<string>>(
+    new Set()
+  );
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const containerRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<Socket | null>(null);
@@ -485,9 +491,45 @@ export function ImageCommunityTab({
                 </div>
 
                 <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <p className="text-white text-sm font-medium line-clamp-2 mb-2">
-                    {image.prompt}
-                  </p>
+                  <div className="mb-2">
+                    <p
+                      className={`text-white text-sm font-medium ${
+                        !expandedPrompts.has(image.id) ? "line-clamp-4" : ""
+                      }`}
+                    >
+                      {image.prompt}
+                    </p>
+                    {(image.prompt.split("\n").length > 4 ||
+                      (image.prompt.length > 200 &&
+                        !expandedPrompts.has(image.id))) && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setExpandedPrompts((prev) => {
+                            const newSet = new Set(prev);
+                            if (newSet.has(image.id)) {
+                              newSet.delete(image.id);
+                            } else {
+                              newSet.add(image.id);
+                            }
+                            return newSet;
+                          });
+                        }}
+                        className="text-white/80 text-xs font-medium mt-1 hover:text-white transition-colors flex items-center gap-1"
+                      >
+                        {expandedPrompts.has(image.id) ? (
+                          <>
+                            View less <ChevronUp className="w-3 h-3" />
+                          </>
+                        ) : (
+                          <>
+                            View more <ChevronDown className="w-3 h-3" />
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
                   <div className="flex flex-col gap-2">
                     <Link
                       href={`/creator/${image.author.name}`}
@@ -693,6 +735,8 @@ function ImageDetailContent({
   isLiking?: boolean;
 }) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [copied, setCopied] = useState(false);
+  const [showFullPrompt, setShowFullPrompt] = useState(false);
 
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
@@ -713,9 +757,33 @@ function ImageDetailContent({
           <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-1">
             Prompt
           </h3>
-          <p className="text-sm text-neutral-900 dark:text-white">
-            {image.prompt}
-          </p>
+          <div>
+            <p
+              className={`text-sm text-neutral-900 dark:text-white ${
+                !showFullPrompt ? "line-clamp-4" : ""
+              }`}
+            >
+              {image.prompt}
+            </p>
+            {(image.prompt.split("\n").length > 4 ||
+              (image.prompt.length > 200 && !showFullPrompt)) && (
+              <button
+                type="button"
+                onClick={() => setShowFullPrompt(!showFullPrompt)}
+                className="text-neutral-500 dark:text-neutral-400 text-xs font-medium mt-1 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors flex items-center gap-1"
+              >
+                {showFullPrompt ? (
+                  <>
+                    View less <ChevronUp className="w-3 h-3" />
+                  </>
+                ) : (
+                  <>
+                    View more <ChevronDown className="w-3 h-3" />
+                  </>
+                )}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Creator Info */}
@@ -802,14 +870,20 @@ function ImageDetailContent({
             type="button"
             onClick={() => {
               navigator.clipboard.writeText(image.prompt);
+              setCopied(true);
               toast({
                 title: "Prompt copied",
                 description: "Copied to clipboard",
               });
+              setTimeout(() => setCopied(false), 2000);
             }}
             className="px-4 py-2.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-colors"
           >
-            <Copy className="w-4 h-4" />
+            {copied ? (
+              <Check className="w-4 h-4 text-green-500" />
+            ) : (
+              <Copy className="w-4 h-4" />
+            )}
           </button>
         </div>
       </div>

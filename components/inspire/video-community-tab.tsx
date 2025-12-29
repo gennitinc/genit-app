@@ -11,6 +11,9 @@ import {
   Loader2,
   Play,
   Pause,
+  Check,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
@@ -93,6 +96,7 @@ export function VideoCommunityTab({
   const [viewVideo, setViewVideo] = useState<CommunityContent | null>(null);
   const [likedVideos, setLikedVideos] = useState<Set<string>>(new Set());
   const [likingVideoId, setLikingVideoId] = useState<string | null>(null);
+  const [expandedPrompts, setExpandedPrompts] = useState<Set<string>>(new Set());
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const socketRef = useRef<Socket | null>(null);
 
@@ -423,6 +427,8 @@ export function VideoCommunityTab({
               onLike={handleLike}
               isLiked={likedVideos.has(video.id) || video.isLiked}
               isLiking={likingVideoId === video.id}
+              expandedPrompts={expandedPrompts}
+              setExpandedPrompts={setExpandedPrompts}
             />
           ))}
         </div>
@@ -558,6 +564,8 @@ function VideoCard({
   onLike,
   isLiked,
   isLiking,
+  expandedPrompts,
+  setExpandedPrompts,
 }: {
   video: CommunityContent;
   index: number;
@@ -567,6 +575,8 @@ function VideoCard({
   onLike?: (e: React.MouseEvent, videoId: string) => void;
   isLiked?: boolean;
   isLiking?: boolean;
+  expandedPrompts: Set<string>;
+  setExpandedPrompts: React.Dispatch<React.SetStateAction<Set<string>>>;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -767,9 +777,44 @@ function VideoCard({
         
       </div>
       <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-        <p className="text-white text-sm font-medium line-clamp-2 mb-2">
-          {video.prompt}
-        </p>
+        <div className="mb-2">
+          <p
+            className={`text-white text-sm font-medium ${
+              !expandedPrompts.has(video.id) ? "line-clamp-4" : ""
+            }`}
+          >
+            {video.prompt}
+          </p>
+          {(video.prompt.split("\n").length > 4 ||
+            (video.prompt.length > 200 && !expandedPrompts.has(video.id))) && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpandedPrompts((prev) => {
+                  const newSet = new Set(prev);
+                  if (newSet.has(video.id)) {
+                    newSet.delete(video.id);
+                  } else {
+                    newSet.add(video.id);
+                  }
+                  return newSet;
+                });
+              }}
+              className="text-white/80 text-xs font-medium mt-1 hover:text-white transition-colors flex items-center gap-1"
+            >
+              {expandedPrompts.has(video.id) ? (
+                <>
+                  View less <ChevronUp className="w-3 h-3" />
+                </>
+              ) : (
+                <>
+                  View more <ChevronDown className="w-3 h-3" />
+                </>
+              )}
+            </button>
+          )}
+        </div>
         <div className="flex flex-col gap-2">
           <Link
             href={`/creator/${video.author.name}`}
@@ -838,6 +883,8 @@ function VideoDetailContent({
   isLiking?: boolean;
 }) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [copied, setCopied] = useState(false);
+  const [showFullPrompt, setShowFullPrompt] = useState(false);
   
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
@@ -868,9 +915,33 @@ function VideoDetailContent({
           <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-1">
             Prompt
           </h3>
-          <p className="text-sm text-neutral-900 dark:text-white">
-            {video.prompt}
-          </p>
+          <div>
+            <p
+              className={`text-sm text-neutral-900 dark:text-white ${
+                !showFullPrompt ? "line-clamp-4" : ""
+              }`}
+            >
+              {video.prompt}
+            </p>
+            {(video.prompt.split("\n").length > 4 ||
+              (video.prompt.length > 200 && !showFullPrompt)) && (
+              <button
+                type="button"
+                onClick={() => setShowFullPrompt(!showFullPrompt)}
+                className="text-neutral-500 dark:text-neutral-400 text-xs font-medium mt-1 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors flex items-center gap-1"
+              >
+                {showFullPrompt ? (
+                  <>
+                    View less <ChevronUp className="w-3 h-3" />
+                  </>
+                ) : (
+                  <>
+                    View more <ChevronDown className="w-3 h-3" />
+                  </>
+                )}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Creator Info */}
@@ -943,14 +1014,20 @@ function VideoDetailContent({
             type="button"
             onClick={() => {
               navigator.clipboard.writeText(video.prompt);
+              setCopied(true);
               toast({
                 title: "Prompt copied",
                 description: "Copied to clipboard",
               });
+              setTimeout(() => setCopied(false), 2000);
             }}
             className="px-4 py-2.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-colors"
           >
-            <Copy className="w-4 h-4" />
+            {copied ? (
+              <Check className="w-4 h-4 text-green-500" />
+            ) : (
+              <Copy className="w-4 h-4" />
+            )}
           </button>
         </div>
       </div>

@@ -65,7 +65,7 @@ export function LandingNavbar() {
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
 
   const navigation = [
-    { name: "Create", href: "/" },
+    { name: "Design Chat", href: "/" },
     { name: "AI gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Company", href: "/company" },
     { name: "Inspirations", href: "/inspirations" },
@@ -569,6 +569,7 @@ export function LandingNavbar() {
               </div>
             </SheetContent>
           </Sheet>
+          <UserPopOver />
         </nav>
         {RouteToShowAurora.includes(pathName) && (
           <div

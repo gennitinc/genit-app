@@ -2,7 +2,19 @@
 
 import { useState, useEffect, useRef } from "react";
 import { CommunityContent } from "@/types/inspire";
-import { Heart, Eye, Loader2, Play, RefreshCw, Copy, User } from "lucide-react";
+import {
+  Heart,
+  Eye,
+  Loader2,
+  Play,
+  Pause,
+  RefreshCw,
+  Copy,
+  User,
+  Check,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { communityApi, creatorApi } from "@/utils/inspire-api";
 import { toast } from "@/hooks/use-toast";
@@ -66,6 +78,7 @@ function VideoCard({
   const isPlayingRef = useRef(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
+  const [showFullPrompt, setShowFullPrompt] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   // Auto-play preview when entering viewport
@@ -207,21 +220,8 @@ function VideoCard({
               muted
               playsInline
               preload="metadata"
+              loop
             />
-            {/* Play icon in center when paused */}
-            {isPaused && (
-              <div
-                className={cn(
-                  "absolute inset-0 flex items-center justify-center",
-                  !isDesktop && "pointer-events-auto cursor-pointer"
-                )}
-                onClick={handlePlayClick}
-              >
-                <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                  <Play className="w-6 h-6 text-white ml-1" />
-                </div>
-              </div>
-            )}
           </>
         ) : (
           <img
@@ -234,7 +234,52 @@ function VideoCard({
         )}
 
         {/* Gradient overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+        {/* Play/Pause and View icons - Centered (for videos) */}
+        {item.contentType === "video" && item.videoUrl && (
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
+            <div className="flex items-center gap-3 pointer-events-auto">
+              {/* Play/Pause Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (isPaused) {
+                    if (isDesktop) {
+                      handleMouseEnter();
+                    } else {
+                      handlePlayClick(e);
+                    }
+                  } else {
+                    if (videoRef.current) {
+                      videoRef.current.pause();
+                      setIsPaused(true);
+                    }
+                  }
+                }}
+                className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors"
+              >
+                {isPaused ? (
+                  <Play className="w-6 h-6 text-white ml-1" />
+                ) : (
+                  <Pause className="w-6 h-6 text-white" />
+                )}
+              </button>
+              {/* View Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClick(item);
+                }}
+                className="w-12 h-12 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors"
+              >
+                <Eye className="w-6 h-6 text-white" />
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Likes count and heart icon - Top right, centered together */}
         <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
@@ -258,9 +303,37 @@ function VideoCard({
 
         {/* Prompt and Recreate button - Bottom overlay on hover */}
         <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-          <p className="text-white text-sm font-medium line-clamp-2 mb-2">
-            {item.prompt}
-          </p>
+          <div className="mb-2">
+            <p
+              className={cn(
+                "text-white text-sm font-medium",
+                !showFullPrompt && "line-clamp-4"
+              )}
+            >
+              {item.prompt}
+            </p>
+            {item.prompt.split("\n").length > 4 ||
+            (item.prompt.length > 200 && !showFullPrompt) ? (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowFullPrompt(!showFullPrompt);
+                }}
+                className="text-white/80 text-xs font-medium mt-1 hover:text-white transition-colors flex items-center gap-1"
+              >
+                {showFullPrompt ? (
+                  <>
+                    View less <ChevronUp className="w-3 h-3" />
+                  </>
+                ) : (
+                  <>
+                    View more <ChevronDown className="w-3 h-3" />
+                  </>
+                )}
+              </button>
+            ) : null}
+          </div>
           <div className="flex flex-col gap-2">
             <Link
               href={`/creator/${item.author.name}`}
@@ -563,6 +636,8 @@ function ContentDetailContent({
   isLiking?: boolean;
 }) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [copied, setCopied] = useState(false);
+  const [showFullPrompt, setShowFullPrompt] = useState(false);
 
   return (
     <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
@@ -592,9 +667,34 @@ function ContentDetailContent({
           <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-1">
             Prompt
           </h3>
-          <p className="text-sm text-neutral-900 dark:text-white">
-            {content.prompt}
-          </p>
+          <div>
+            <p
+              className={cn(
+                "text-sm text-neutral-900 dark:text-white",
+                !showFullPrompt && "line-clamp-4"
+              )}
+            >
+              {content.prompt}
+            </p>
+            {content.prompt.split("\n").length > 4 ||
+            (content.prompt.length > 200 && !showFullPrompt) ? (
+              <button
+                type="button"
+                onClick={() => setShowFullPrompt(!showFullPrompt)}
+                className="text-neutral-500 dark:text-neutral-400 text-xs font-medium mt-1 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors flex items-center gap-1"
+              >
+                {showFullPrompt ? (
+                  <>
+                    View less <ChevronUp className="w-3 h-3" />
+                  </>
+                ) : (
+                  <>
+                    View more <ChevronDown className="w-3 h-3" />
+                  </>
+                )}
+              </button>
+            ) : null}
+          </div>
         </div>
 
         {/* Creator Info */}
@@ -685,14 +785,20 @@ function ContentDetailContent({
             type="button"
             onClick={() => {
               navigator.clipboard.writeText(content.prompt);
+              setCopied(true);
               toast({
                 title: "Prompt copied",
                 description: "Copied to clipboard",
               });
+              setTimeout(() => setCopied(false), 2000);
             }}
             className="px-4 py-2.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-colors"
           >
-            <Copy className="w-4 h-4" />
+            {copied ? (
+              <Check className="w-4 h-4 text-green-500" />
+            ) : (
+              <Copy className="w-4 h-4" />
+            )}
           </button>
         </div>
       </div>
