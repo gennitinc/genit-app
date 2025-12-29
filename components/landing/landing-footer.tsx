@@ -299,7 +299,13 @@ export function LandingFooter() {
                 Community
               </Link>
               <Link
-                href="/community"
+                href="/creators-program"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Templates
+              </Link>
+              <Link
+                href="/templates"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 Contact
