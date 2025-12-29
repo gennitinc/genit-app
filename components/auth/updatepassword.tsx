@@ -112,7 +112,7 @@ export function UpdatePasswordComp() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-[100vh] min-h-[100dvh] overflow-hidden w-full bg-black">
+    <div className="flex flex-col justify-center items-center min-h-[100vh] overflow-hidden w-full bg-white dark:bg-black">
       <Card className="w-full max-w-md mx-4">
         <CardHeader className="text-center">
           <div className="flex justify-center items-center mt-4 gap-2">

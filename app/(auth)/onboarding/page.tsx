@@ -1168,7 +1168,7 @@ export default function BrandOnboardingChecklist() {
   }
 
   return (
-    <section className="bg-black flex flex-col items-center justify-center min-h-[100dvh]">
+    <section className="bg-white dark:bg-black flex flex-col items-center justify-center min-h-[100dvh]">
       <div className="max-w-[85rem]  h-[dvh] px-4 sm:px-6 flex items-center justify-center lg:px-8 mx-auto ">
         {/* Grid */}
         <div className="grid lg:grid-cols-2 items-center justify-center xl:px-16 gap-4 lg:gap-8">

@@ -11,7 +11,7 @@ const VerifyEmail = () => {
   return (
     <React.Suspense
       fallback={
-        <div className="flex justify-center items-center min-h-[100dvh] overflow-hidden w-full bg-black">
+        <div className="flex justify-center items-center min-h-[100dvh] overflow-hidden w-full bg-white dark:bg-black">
           <Loading />
         </div>
       }
