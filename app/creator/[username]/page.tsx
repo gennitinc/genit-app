@@ -1534,12 +1534,12 @@ export default function CreatorProfilePage() {
 
       {/* Content Tabs */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="border-b border-neutral-200 dark:border-neutral-800 mb-6">
-          <div className="flex gap-8">
+        <div className="sticky top-0 z-50 bg-neutral-50 dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 mb-6">
+          <div className="flex gap-8 pt-2 pb-4">
             <button
               onClick={() => setActiveTab("images")}
               className={cn(
-                "pb-4 px-1 border-b-2 font-medium text-sm transition-colors",
+                "px-1 border-b-2 font-medium text-sm transition-colors",
                 activeTab === "images"
                   ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
                   : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
@@ -1553,7 +1553,7 @@ export default function CreatorProfilePage() {
             <button
               onClick={() => setActiveTab("videos")}
               className={cn(
-                "pb-4 px-1 border-b-2 font-medium text-sm transition-colors",
+                "px-1 border-b-2 font-medium text-sm transition-colors",
                 activeTab === "videos"
                   ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
                   : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"

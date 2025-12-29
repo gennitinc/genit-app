@@ -106,19 +106,6 @@ export function LandingNavbar() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          {/* <div className="hidden items-center gap-8 md:flex">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {item.name}
-            </Link>
-          ))}
-        </div> */}
-
           <div className="hidden items-center z-50 gap-4 md:flex">
             {user ? (
               <>
@@ -291,17 +278,6 @@ export function LandingNavbar() {
                 )}
               </>
             ) : (
-              // <>
-              //   <Button className={cn("text-foreground")} variant="ghost" asChild>
-              //     <Link href="/login">Log in</Link>
-              //   </Button>
-              //   <Button
-              //     asChild
-              //     className={`w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-white text-sm px-5 py-2.5 text-center me-2 transition-colors duration-300 `}
-              //   >
-              //     <Link href="/signup">Get started</Link>
-              //   </Button>
-              // </>
               <>
                 {/* Right Section - Desktop */}
                 {!isSmallScreen && (
@@ -496,80 +472,65 @@ export function LandingNavbar() {
             )}
           </div>
 
-          {/* Mobile Navigation */}
-          {/* <UserPopOver /> */}
-          <Sheet>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon" className="z-50 mr-2">
-                <PanelRight className="size-4 h-4 w-4 text-muted-foreground" />
-
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right">
-              <div className="mt-8 flex flex-col gap-4">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-                <hr className="my-4" />
-                {user ? (
-                  <Link
-                    href={`/creator/${user?.username}`}
-                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-                  >
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={user?.userdp} alt={user?.username} />
-                      <AvatarFallback>{user?.username[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <span className="font-medium">{user?.username}</span>
-                      <span className="text-xs text-zinc-400">
-                        {user?.email}
-                      </span>
+          {/* Mobile Menu Section */}
+          <div className="flex items-center gap-2 md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="z-50">
+                  <PanelRight className="size-4 h-4 w-4 text-muted-foreground" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right">
+                <div className="mt-8 flex flex-col gap-4">
+                  {navigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                  <hr className="my-4" />
+                  {user ? (
+                    <Link
+                      href={`/creator/${user?.username}`}
+                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                    >
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={user?.userdp} alt={user?.username} />
+                        <AvatarFallback>{user?.username[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col">
+                        <span className="font-medium">{user?.username}</span>
+                        <span className="text-xs text-zinc-400">
+                          {user?.email}
+                        </span>
+                      </div>
+                    </Link>
+                  ) : (
+                    <div className="flex gap-4">
+                      <Link
+                        className="outline-hidden relative items-center border justify-center select-none rounded-2xl disabled:cursor-not-allowed disabled:opacity-70 transition ease-in-out duration-200 bg-transparent border-transparent text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-4 focus-visible:ring-gray-a2 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold"
+                        data-state="closed"
+                        href="/signin"
+                      >
+                        Sign in
+                      </Link>
+                      <Link
+                        className='outline-hidden text-foreground relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out border-[2px] border-white/5 backdrop-blur-[25px] bg-origin-border bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] shadow-sm not-disabled:hover:bg-white/90 not-disabled:hover:text-black not-disabled:hover:shadow-button transition-all duration-200 disabled:opacity-30 disabled:text-white/50 focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden focus-visible:bg-white/90 focus-visible:text-black after:absolute after:w-[calc(100%+4px)] after:h-[calc(100%+4px)] after:top-[-2px] after:left-[-2px] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat after:pointer-events-none text-sm h-10 gap-0 px-4 font-semibold'
+                        href="/signup"
+                      >
+                        Get Started
+                      </Link>
                     </div>
-                  </Link>
-                ) : (
-                  // <>
-                  //   <Button
-                  //     variant="ghost"
-                  //     asChild
-                  //     className="justify-start text-foreground"
-                  //   >
-                  //     <Link href="/signin">Sign in</Link>
-                  //   </Button>
-                  //   <Button
-                  //     asChild
-                  //     className="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2"
-                  //   >
-                  //     <Link href="/signup">Get started</Link>
-                  //   </Button>
-                  // </>
-                  <div className="flex gap-4">
-                    <Link
-                      className="outline-hidden relative items-center border justify-center select-none rounded-2xl disabled:cursor-not-allowed disabled:opacity-70 transition ease-in-out duration-200 bg-transparent border-transparent text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-4 focus-visible:ring-gray-a2 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold hidden lg:flex"
-                      data-state="closed"
-                      href="/signin"
-                    >
-                      Sign in
-                    </Link>
-                    <Link
-                      className='outline-hidden text-foreground relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out border-[2px] border-white/5 backdrop-blur-[25px] bg-origin-border bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] shadow-sm not-disabled:hover:bg-white/90 not-disabled:hover:text-black not-disabled:hover:shadow-button transition-all duration-200 disabled:opacity-30 disabled:text-white/50 focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden focus-visible:bg-white/90 focus-visible:text-black after:absolute after:w-[calc(100%+4px)] after:h-[calc(100%+4px)] after:top-[-2px] after:left-[-2px] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat after:pointer-events-none text-sm h-10 gap-0 px-4 font-semibold'
-                      href="/signup"
-                    >
-                      Get Started
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </SheetContent>
-          </Sheet>
-          <UserPopOver />
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+            {user && <UserPopOver />}
+          </div>
         </nav>
         {RouteToShowAurora.includes(pathName) && (
           <div

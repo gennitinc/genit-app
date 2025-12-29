@@ -14,6 +14,7 @@ import {
   Check,
   ChevronDown,
   ChevronUp,
+  Download,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { communityApi, creatorApi } from "@/utils/inspire-api";
@@ -81,8 +82,9 @@ function VideoCard({
   const [showFullPrompt, setShowFullPrompt] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  // Auto-play preview when entering viewport
+  // Auto-play preview when entering viewport - Desktop only
   useEffect(() => {
+    if (!isDesktop) return; // Only auto-play on desktop
     if (item.contentType !== "video" || !item.videoUrl) return;
 
     const videoElement = videoRef.current;
@@ -92,8 +94,9 @@ function VideoCard({
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !isPlayingRef.current && !isHovered) {
-            // Video is in viewport, start auto-play preview
+            // Video is in viewport, start auto-play preview (muted)
             videoElement.currentTime = 0;
+            videoElement.muted = true; // Keep muted for preview
             isPlayingRef.current = true;
             setIsPaused(false);
             videoElement
@@ -116,6 +119,7 @@ function VideoCard({
             // Video is out of viewport, pause and reset
             videoElement.pause();
             videoElement.currentTime = 0;
+            videoElement.muted = true; // Reset to muted
             isPlayingRef.current = false;
             setIsPaused(true);
             if (timeoutRef.current) {
@@ -138,7 +142,7 @@ function VideoCard({
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [item.videoUrl, item.contentType, isHovered]);
+  }, [item.videoUrl, item.contentType, isHovered, isDesktop]);
 
   // Handle hover to play (desktop only, with sound)
   const handleMouseEnter = () => {
@@ -799,6 +803,49 @@ function ContentDetailContent({
             ) : (
               <Copy className="w-4 h-4" />
             )}
+          </button>
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                const url =
+                  content.videoUrl || content.mediaUrl || content.thumbnailUrl;
+                if (!url) {
+                  toast({
+                    title: "Error",
+                    description: "No media available to download",
+                    variant: "destructive",
+                  });
+                  return;
+                }
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = downloadUrl;
+                link.download = `gennit-${content.id}.${
+                  content.videoUrl ? "mp4" : "jpg"
+                }`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(downloadUrl);
+                toast({
+                  title: "Download started",
+                  description: "Your download has started",
+                });
+              } catch (error) {
+                console.error("Error downloading:", error);
+                toast({
+                  title: "Error",
+                  description: "Failed to download media",
+                  variant: "destructive",
+                });
+              }
+            }}
+            className="px-4 py-2.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-colors"
+          >
+            <Download className="w-4 h-4" />
           </button>
         </div>
       </div>
