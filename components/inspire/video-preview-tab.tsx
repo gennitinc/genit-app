@@ -290,15 +290,7 @@ export function VideoPreviewTab({
 
   return (
     <section className="p-4">
-      {/* <div className="mb-4">
-        <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-1">
-          Generated Videos
-        </h2>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          Preview and manage your AI-generated videos
-        </p>
-      </div> */}
-
+     
       {/* Main Preview Area */}
       <div className="flex flex-col">
         {/* Preview Container */}

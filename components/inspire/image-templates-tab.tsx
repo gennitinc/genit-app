@@ -343,7 +343,7 @@ export function ImageTemplatesTab({
         <div className="flex flex-col items-center justify-center min-h-[60vh]">
           <Loader2 className="w-6 h-6 text-neutral-400 dark:text-neutral-500 animate-spin mb-3" />
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            Loading templates...
+            Loading templates
           </p>
         </div>
       </section>

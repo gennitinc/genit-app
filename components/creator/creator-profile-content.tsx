@@ -509,7 +509,7 @@ export function CreatorProfileContent({
     ];
 
     return (
-      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 mb-8">
+      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 mb-8 w-full">
         {skeletonHeights.map((height, idx) => (
           <div
             key={`skeleton-${idx}`}
@@ -537,7 +537,7 @@ export function CreatorProfileContent({
 
   return (
     <>
-      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 mb-8">
+      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 mb-8 w-full">
         {contentState.map((item) => {
           const isLiked = likedIds.has(item.id);
           const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "16/9"];

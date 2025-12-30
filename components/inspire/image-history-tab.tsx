@@ -120,9 +120,14 @@ export function ImageHistoryTab({ onLoadToEditor }: ImageHistoryTabProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <Loader2 className="w-6 h-6 animate-spin text-neutral-400" />
-      </div>
+      <section className="p-4">
+        <div className="flex flex-col items-center justify-center min-h-[60vh]">
+          <Loader2 className="w-6 h-6 text-neutral-400 dark:text-neutral-500 animate-spin mb-3" />
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            Loading history images
+          </p>
+        </div>
+      </section>
     );
   }
 
