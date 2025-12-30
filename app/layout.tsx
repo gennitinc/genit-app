@@ -18,6 +18,7 @@ const inter = Inter({ subsets: ["latin"] });
 import { Analytics } from "@vercel/analytics/next";
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { PWAInstaller } from "@/components/pwa/pwa-installer";
+import Script from "next/script";
 
 const metadata: Metadata = {
   title:
@@ -132,6 +133,45 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Blocking script to prevent theme flash - must run before any content renders */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('gennit-theme') || 'dark';
+                  var systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  var resolvedTheme = theme === 'system' ? systemTheme : theme;
+                  
+                  if (resolvedTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.style.colorScheme = 'dark';
+                    document.documentElement.style.backgroundColor = 'oklch(0.145 0 0)';
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.style.colorScheme = 'light';
+                    document.documentElement.style.backgroundColor = 'oklch(1 0 0)';
+                  }
+                  
+                  // Also set body background immediately
+                  if (document.body) {
+                    document.body.style.backgroundColor = resolvedTheme === 'dark' 
+                      ? 'oklch(0.145 0 0)' 
+                      : 'oklch(1 0 0)';
+                  }
+                } catch (e) {
+                  // Fallback to dark theme if there's an error
+                  document.documentElement.classList.add('dark');
+                  document.documentElement.style.colorScheme = 'dark';
+                  document.documentElement.style.backgroundColor = 'oklch(0.145 0 0)';
+                  if (document.body) {
+                    document.body.style.backgroundColor = 'oklch(0.145 0 0)';
+                  }
+                }
+              })();
+            `,
+          }}
+        />
         {/* PWA Meta Tags */}
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#000000" />
@@ -543,12 +583,12 @@ export default function RootLayout({
                 defaultTheme="dark"
                 enableSystem
                 disableTransitionOnChange
-                // storageKey="gennit-theme"
+                storageKey="gennit-theme"
               >
                 <ProjectProvider>
                   <Suspense
                     fallback={
-                      <div className="h-screen flex flex-col items-center justify-center">
+                      <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-black">
                         <Loading />
                       </div>
                     }
@@ -566,6 +606,33 @@ export default function RootLayout({
         <Analytics />
         <ServiceWorkerRegister />
         <PWAInstaller />
+        {/* Theme initialization script - runs before interactive to prevent flash */}
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('gennit-theme') || 'dark';
+                  var systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  var resolvedTheme = theme === 'system' ? systemTheme : theme;
+                  
+                  if (resolvedTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.style.colorScheme = 'dark';
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.style.colorScheme = 'light';
+                  }
+                } catch (e) {
+                  document.documentElement.classList.add('dark');
+                  document.documentElement.style.colorScheme = 'dark';
+                }
+              })();
+            `,
+          }}
+        />
       </body>
     </html>
   );
