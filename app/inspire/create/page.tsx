@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
@@ -257,9 +257,16 @@ function VideoCreatePage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
 
-  // Get mode and project ID from URL parameters
+  // Get mode, project ID, and content tab from URL parameters
   const urlMode = searchParams.get("mode");
   const projectId = searchParams.get("projectId");
+  const urlContentTab = searchParams.get("tab") as
+    | "preview"
+    | "history"
+    | "community"
+    | "templates"
+    | "tutorial"
+    | null;
 
   const [selectedPresenter, setSelectedPresenter] = useState<Presenter | null>(
     null
@@ -484,7 +491,7 @@ function VideoCreatePage() {
           }
 
           // Switch to preview tab
-          setActiveContentTab("preview");
+          updateContentTab("preview");
 
           // Clear localStorage after restoring
           localStorage.removeItem("recreateData");
@@ -750,14 +757,90 @@ function VideoCreatePage() {
     fetchProject();
   }, [projectId, user?._id, generationMode, toast]);
 
-  // Tab states
+  // Tab states - initialize from URL parameter
   const [activeContentTab, setActiveContentTab] = useState<
     "community" | "preview" | "history" | "templates" | "tutorial"
-  >("preview");
+  >(
+    urlContentTab &&
+      ["preview", "history", "community", "templates", "tutorial"].includes(
+        urlContentTab
+      )
+      ? urlContentTab
+      : "preview"
+  );
+
+  // Sync activeContentTab with URL parameter changes (for browser back/forward)
+  useEffect(() => {
+    const currentTab = searchParams.get("tab") as
+      | "preview"
+      | "history"
+      | "community"
+      | "templates"
+      | "tutorial"
+      | null;
+
+    if (
+      currentTab &&
+      ["preview", "history", "community", "templates", "tutorial"].includes(
+        currentTab
+      ) &&
+      activeContentTab !== currentTab
+    ) {
+      setActiveContentTab(currentTab);
+    }
+  }, [searchParams, activeContentTab]);
 
   // Sidebar drawer state for mobile/tablet
   const [sidebarDrawerOpen, setSidebarDrawerOpen] = useState(false);
   const isMobile = useIsMobile();
+
+  // Open drawer on mobile/tablet when tab is set from URL
+  useEffect(() => {
+    const currentTab = searchParams.get("tab") as
+      | "preview"
+      | "history"
+      | "community"
+      | "templates"
+      | "tutorial"
+      | null;
+
+    if (
+      isMobile &&
+      currentTab &&
+      ["preview", "history", "community", "templates", "tutorial"].includes(
+        currentTab
+      )
+    ) {
+      setSidebarDrawerOpen(true);
+    }
+  }, [searchParams, isMobile]);
+
+  // Helper function to update content tab and URL
+  const updateContentTab = useCallback(
+    (tab: "preview" | "history" | "community" | "templates" | "tutorial") => {
+      setActiveContentTab(tab);
+      const urlParams = new URLSearchParams(searchParams.toString());
+      urlParams.set("tab", tab);
+      // Preserve mode if it exists
+      const currentMode = searchParams.get("mode");
+      if (currentMode) {
+        urlParams.set("mode", currentMode);
+      }
+      // Preserve projectId if it exists
+      const currentProjectId = searchParams.get("projectId");
+      if (currentProjectId) {
+        urlParams.set("projectId", currentProjectId);
+      }
+      router.replace(`/inspire/create?${urlParams.toString()}`, {
+        scroll: false,
+      });
+      // Open drawer on mobile/tablet when tab is selected
+      if (isMobile) {
+        setSidebarDrawerOpen(true);
+      }
+    },
+    [searchParams, router, isMobile]
+  );
 
   // Set up socket connection for video generation progress
   useEffect(() => {
@@ -788,7 +871,7 @@ function VideoCreatePage() {
 
             // Switch to preview tab when generation starts
             if (data.progress > 0 && activeContentTab !== "preview") {
-              setActiveContentTab("preview");
+              updateContentTab("preview");
             }
           }
         }
@@ -896,10 +979,16 @@ function VideoCreatePage() {
                     }
                     onClick={() => {
                       setGenerationMode("video");
-                      const urlParams = new URLSearchParams();
+                      const urlParams = new URLSearchParams(
+                        searchParams.toString()
+                      );
                       urlParams.set("mode", "ai-video-gen");
                       if (projectId) {
                         urlParams.set("projectId", projectId);
+                      }
+                      // Preserve tab parameter if it exists
+                      if (urlContentTab) {
+                        urlParams.set("tab", urlContentTab);
                       }
                       router.replace(
                         `/inspire/create?${urlParams.toString()}`,
@@ -927,10 +1016,16 @@ function VideoCreatePage() {
                     }
                     onClick={() => {
                       setGenerationMode("image");
-                      const urlParams = new URLSearchParams();
+                      const urlParams = new URLSearchParams(
+                        searchParams.toString()
+                      );
                       urlParams.set("mode", "ai-image-gen");
                       if (projectId) {
                         urlParams.set("projectId", projectId);
+                      }
+                      // Preserve tab parameter if it exists
+                      if (urlContentTab) {
+                        urlParams.set("tab", urlContentTab);
                       }
                       router.replace(
                         `/inspire/create?${urlParams.toString()}`,
@@ -1992,7 +2087,7 @@ function VideoCreatePage() {
                         // Open drawer and set preview tab on mobile when generation starts
                         if (isMobile) {
                           setSidebarDrawerOpen(true);
-                          setActiveContentTab("preview");
+                          updateContentTab("preview");
                         }
 
                         try {
@@ -2052,7 +2147,7 @@ function VideoCreatePage() {
                                 ...prev,
                               ]);
                               setSelectedImageIndex(0);
-                              setActiveContentTab("preview");
+                              updateContentTab("preview");
 
                               // Open drawer on mobile when generation completes
                               if (isMobile) {
@@ -2082,7 +2177,7 @@ function VideoCreatePage() {
 
                             // Reset progress and switch to preview tab
                             setGenerationProgress(0);
-                            setActiveContentTab("preview");
+                            updateContentTab("preview");
 
                             // Open drawer on mobile when video generation starts
                             if (isMobile) {
@@ -2117,7 +2212,7 @@ function VideoCreatePage() {
                             const videoProjectId = `vid-${Date.now()}`;
                             currentProjectIdRef.current = videoProjectId;
                             setGenerationProgress(0);
-                            setActiveContentTab("preview");
+                            updateContentTab("preview");
 
                             const response = await videoGenApi.generate(
                               {
@@ -2164,7 +2259,7 @@ function VideoCreatePage() {
                                 ...prev,
                               ]);
                               setSelectedVideoIndex(0);
-                              setActiveContentTab("preview");
+                              updateContentTab("preview");
                               setGenerationProgress(100);
                               currentProjectIdRef.current = null;
 
@@ -2255,7 +2350,7 @@ function VideoCreatePage() {
                     data-state={
                       activeContentTab === "preview" ? "active" : "inactive"
                     }
-                    onClick={() => setActiveContentTab("preview")}
+                    onClick={() => updateContentTab("preview")}
                     className={cn(
                       "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                       activeContentTab === "preview"
@@ -2275,7 +2370,7 @@ function VideoCreatePage() {
                     data-state={
                       activeContentTab === "history" ? "active" : "inactive"
                     }
-                    onClick={() => setActiveContentTab("history")}
+                    onClick={() => updateContentTab("history")}
                     className={cn(
                       "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                       activeContentTab === "history"
@@ -2295,7 +2390,7 @@ function VideoCreatePage() {
                     data-state={
                       activeContentTab === "community" ? "active" : "inactive"
                     }
-                    onClick={() => setActiveContentTab("community")}
+                    onClick={() => updateContentTab("community")}
                     className={cn(
                       "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                       activeContentTab === "community"
@@ -2315,7 +2410,7 @@ function VideoCreatePage() {
                     data-state={
                       activeContentTab === "templates" ? "active" : "inactive"
                     }
-                    onClick={() => setActiveContentTab("templates")}
+                    onClick={() => updateContentTab("templates")}
                     className={cn(
                       "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                       activeContentTab === "templates"
@@ -2335,7 +2430,7 @@ function VideoCreatePage() {
                     data-state={
                       activeContentTab === "tutorial" ? "active" : "inactive"
                     }
-                    onClick={() => setActiveContentTab("tutorial")}
+                    onClick={() => updateContentTab("tutorial")}
                     className={cn(
                       "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                       activeContentTab === "tutorial"
@@ -2364,7 +2459,7 @@ function VideoCreatePage() {
                         selectedAspectRatio={selectedAspectRatio}
                         onImageSelect={setSelectedImageIndex}
                         onPromptRestore={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onDrawerClose={() => setSidebarDrawerOpen(false)}
                       />
                     ) : (
@@ -2376,7 +2471,7 @@ function VideoCreatePage() {
                         selectedAspectRatio={selectedAspectRatio}
                         onVideoSelect={setSelectedVideoIndex}
                         onPromptRestore={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onDrawerClose={() => setSidebarDrawerOpen(false)}
                       />
                     )}
@@ -2425,7 +2520,7 @@ function VideoCreatePage() {
                               image.imageData.style as ImageStyle
                             );
                           }
-                          setActiveContentTab("preview");
+                          updateContentTab("preview");
                           toast({
                             title: "Loaded",
                             description: "Image loaded to editor",
@@ -2467,7 +2562,7 @@ function VideoCreatePage() {
                               video.videoData.resolution as Resolution
                             );
                           }
-                          setActiveContentTab("preview");
+                          updateContentTab("preview");
                           toast({
                             title: "Loaded",
                             description: "Video loaded to editor",
@@ -2484,7 +2579,7 @@ function VideoCreatePage() {
                     {generationMode === "image" ? (
                       <ImageCommunityTab
                         onPromptSelect={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onParamsRestore={{
                           setPrompt,
                           setAspectRatio: (ratio: string) =>
@@ -2511,13 +2606,13 @@ function VideoCreatePage() {
                             );
                             setPromptImagePreviews(previews);
                           },
-                          onTabChange: setActiveContentTab,
+                          onTabChange: updateContentTab,
                         }}
                       />
                     ) : (
                       <VideoCommunityTab
                         onPromptSelect={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onParamsRestore={{
                           setPrompt,
                           setAspectRatio: (ratio: string) =>
@@ -2570,7 +2665,7 @@ function VideoCreatePage() {
                             );
                             setPromptImagePreviews(previews);
                           },
-                          onTabChange: setActiveContentTab,
+                          onTabChange: updateContentTab,
                         }}
                       />
                     )}
@@ -2582,7 +2677,7 @@ function VideoCreatePage() {
                     {generationMode === "image" ? (
                       <ImageTemplatesTab
                         onPromptSelect={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onParamsRestore={{
                           setPrompt,
                           setAspectRatio: (ratio: string) =>
@@ -2593,13 +2688,13 @@ function VideoCreatePage() {
                           setStyle: (style: string) =>
                             setSelectedImageStyle(style as ImageStyle),
                           setImageCount,
-                          onTabChange: setActiveContentTab,
+                          onTabChange: updateContentTab,
                         }}
                       />
                     ) : (
                       <VideoTemplatesTab
                         onPromptSelect={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onParamsRestore={{
                           setPrompt,
                           setAspectRatio: (ratio: string) =>
@@ -2610,7 +2705,7 @@ function VideoCreatePage() {
                           setPresenter: setSelectedPresenter,
                           setVoice: setSelectedVoice,
                           setDuration,
-                          onTabChange: setActiveContentTab,
+                          onTabChange: updateContentTab,
                         }}
                       />
                     )}
@@ -2656,7 +2751,7 @@ function VideoCreatePage() {
                         data-state={
                           activeContentTab === "preview" ? "active" : "inactive"
                         }
-                        onClick={() => setActiveContentTab("preview")}
+                        onClick={() => updateContentTab("preview")}
                         className={cn(
                           "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                           activeContentTab === "preview"
@@ -2676,7 +2771,7 @@ function VideoCreatePage() {
                         data-state={
                           activeContentTab === "history" ? "active" : "inactive"
                         }
-                        onClick={() => setActiveContentTab("history")}
+                        onClick={() => updateContentTab("history")}
                         className={cn(
                           "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                           activeContentTab === "history"
@@ -2698,7 +2793,7 @@ function VideoCreatePage() {
                             ? "active"
                             : "inactive"
                         }
-                        onClick={() => setActiveContentTab("community")}
+                        onClick={() => updateContentTab("community")}
                         className={cn(
                           "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                           activeContentTab === "community"
@@ -2720,7 +2815,7 @@ function VideoCreatePage() {
                             ? "active"
                             : "inactive"
                         }
-                        onClick={() => setActiveContentTab("templates")}
+                        onClick={() => updateContentTab("templates")}
                         className={cn(
                           "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                           activeContentTab === "templates"
@@ -2742,7 +2837,7 @@ function VideoCreatePage() {
                             ? "active"
                             : "inactive"
                         }
-                        onClick={() => setActiveContentTab("tutorial")}
+                        onClick={() => updateContentTab("tutorial")}
                         className={cn(
                           "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                           activeContentTab === "tutorial"
@@ -2767,7 +2862,7 @@ function VideoCreatePage() {
                     {generationMode === "image" ? (
                       <ImageCommunityTab
                         onPromptSelect={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onParamsRestore={{
                           setPrompt,
                           setAspectRatio: (ratio: string) =>
@@ -2793,13 +2888,13 @@ function VideoCreatePage() {
                             );
                             setPromptImagePreviews(previews);
                           },
-                          onTabChange: setActiveContentTab,
+                          onTabChange: updateContentTab,
                         }}
                       />
                     ) : (
                       <VideoCommunityTab
                         onPromptSelect={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onParamsRestore={{
                           setPrompt,
                           setAspectRatio: (ratio: string) =>
@@ -2851,7 +2946,7 @@ function VideoCreatePage() {
                             );
                             setPromptImagePreviews(previews);
                           },
-                          onTabChange: setActiveContentTab,
+                          onTabChange: updateContentTab,
                         }}
                       />
                     )}
@@ -2900,7 +2995,7 @@ function VideoCreatePage() {
                               image.imageData.style as ImageStyle
                             );
                           }
-                          setActiveContentTab("preview");
+                          updateContentTab("preview");
                           toast({
                             title: "Loaded",
                             description: "Image loaded to editor",
@@ -2942,7 +3037,7 @@ function VideoCreatePage() {
                               video.videoData.resolution as Resolution
                             );
                           }
-                          setActiveContentTab("preview");
+                          updateContentTab("preview");
                           toast({
                             title: "Loaded",
                             description: "Video loaded to editor",
@@ -2964,7 +3059,7 @@ function VideoCreatePage() {
                         selectedAspectRatio={selectedAspectRatio}
                         onImageSelect={setSelectedImageIndex}
                         onPromptRestore={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onDrawerClose={() => setSidebarDrawerOpen(false)}
                       />
                     ) : (
@@ -2976,7 +3071,7 @@ function VideoCreatePage() {
                         selectedAspectRatio={selectedAspectRatio}
                         onVideoSelect={setSelectedVideoIndex}
                         onPromptRestore={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onDrawerClose={() => setSidebarDrawerOpen(false)}
                       />
                     )}
@@ -2987,7 +3082,7 @@ function VideoCreatePage() {
                     {generationMode === "image" ? (
                       <ImageTemplatesTab
                         onPromptSelect={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onParamsRestore={{
                           setPrompt,
                           setAspectRatio: (ratio: string) =>
@@ -2998,13 +3093,13 @@ function VideoCreatePage() {
                           setStyle: (style: string) =>
                             setSelectedImageStyle(style as ImageStyle),
                           setImageCount,
-                          onTabChange: setActiveContentTab,
+                          onTabChange: updateContentTab,
                         }}
                       />
                     ) : (
                       <VideoTemplatesTab
                         onPromptSelect={setPrompt}
-                        onTabChange={setActiveContentTab}
+                        onTabChange={updateContentTab}
                         onParamsRestore={{
                           setPrompt,
                           setAspectRatio: (ratio: string) =>
@@ -3015,7 +3110,7 @@ function VideoCreatePage() {
                           setPresenter: setSelectedPresenter,
                           setVoice: setSelectedVoice,
                           setDuration,
-                          onTabChange: setActiveContentTab,
+                          onTabChange: updateContentTab,
                         }}
                       />
                     )}
