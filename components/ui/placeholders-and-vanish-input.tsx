@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-
+import { useRouter } from "next/navigation";
 export function PlaceholdersAndVanishInput({
   placeholders,
   onChange,
@@ -14,6 +14,8 @@ export function PlaceholdersAndVanishInput({
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
+
+  const router = useRouter();
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startAnimation = () => {
@@ -173,6 +175,7 @@ export function PlaceholdersAndVanishInput({
     e.preventDefault();
     vanishAndSubmit();
     onSubmit && onSubmit(e);
+    router.push("/signin");
   };
   return (
     <form
@@ -196,12 +199,13 @@ export function PlaceholdersAndVanishInput({
             onChange && onChange(e);
           }
         }}
+        
         onKeyDown={handleKeyDown}
         ref={inputRef}
         value={value}
         type="text"
         className={cn(
-          "w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-10 pr-20",
+          "w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-10 pr-20 disabled",
           animating && "text-transparent dark:text-transparent"
         )}
       />
