@@ -7,35 +7,43 @@ export function LandingAvatar() {
   const cardData = [
     {
       title: "Kimberly Hills",
-      image: "https://i.pravatar.cc/400?img=1",
+      image:
+        "https://i.pinimg.com/736x/a0/cb/f8/a0cbf895e3e033b27a823ef8bb5b6a31.jpg",
     },
     {
       title: "Li Wei",
-      image: "https://i.pravatar.cc/400?img=12",
+      image:
+        "https://i.pinimg.com/736x/74/3d/88/743d88dd2675cd87baa1b560f500c69c.jpg",
     },
     {
       title: "Marcus Johnson",
-      image: "https://i.pravatar.cc/400?img=33",
+      image:
+        "https://i.pinimg.com/736x/5f/5f/3c/5f5f3c82349c1dd8552ffa7e97423fb2.jpg",
     },
     {
       title: "Priya Sharma",
-      image: "https://i.pravatar.cc/400?img=47",
+      image:
+        "https://i.pinimg.com/736x/29/5f/f5/295ff586f4725e8b56b6ba08017e4a6d.jpg",
     },
     {
       title: "Carlos Rodriguez",
-      image: "https://i.pravatar.cc/400?img=52",
+      image:
+        "https://i.pinimg.com/1200x/3e/f3/50/3ef350dc86cc82a092463e5d795654b5.jpg",
     },
     {
       title: "Yuki Tanaka",
-      image: "https://i.pravatar.cc/400?img=68",
+      image:
+        "https://i.pinimg.com/736x/eb/76/a4/eb76a46ab920d056b02d203ca95e9a22.jpg",
     },
     {
       title: "Aisha Mohammed",
-      image: "https://i.pravatar.cc/400?img=70",
+      image:
+        "https://i.pinimg.com/736x/48/08/6e/48086ebb8989d9d6dde7d12d9f2939fd.jpg",
     },
     {
-      title: "James Anderson",
-      image: "https://i.pravatar.cc/400?img=5",
+      title: "Kura Anderson",
+      image:
+        "https://i.pinimg.com/1200x/b2/db/80/b2db80290f2aba3567213d4eab1117a5.jpg",
     },
   ];
 

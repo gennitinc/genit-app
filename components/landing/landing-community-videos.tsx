@@ -16,8 +16,9 @@ const videos: VideoCard[] = [
   {
     id: "1",
     videoUrl:
-      "https://framerusercontent.com/assets/EsKprNy4lLQLqGnbpg4HT6afA.mp4",
-    thumbnailUrl: "https://ext.same-assets.com/3322540528/489297333.jpeg",
+      "https://videocdn.cdnpk.net/videos/a14f0141-106e-5b9b-8ea1-09855c9b7d6b/vertical/previews/clear/large.mp4?token=exp=1767183372~hmac=f9b30f175af0609214c483f0345e0fa6c8d0ac36c5d0ec529bae6915fcacf165",
+    thumbnailUrl:
+      "https://videocdn.cdnpk.net/videos/a14f0141-106e-5b9b-8ea1-09855c9b7d6b/vertical/thumbnails/large.jpg?uid=R18196923&ga=GA1.1.280172149.1766570238&item_id=3442041&w=740&q=80",
     username: "kia_dances",
     profilePic: "https://ext.same-assets.com/3322540528/489297333.jpeg",
     verified: true,
@@ -43,8 +44,9 @@ const videos: VideoCard[] = [
   {
     id: "4",
     videoUrl:
-      "https://framerusercontent.com/assets/fuVrP45UYEBoOfcLoix1DwuHo.mp4 ",
-    thumbnailUrl: "https://ext.same-assets.com/3322540528/2300361184.png",
+      "https://cdn.leonardo.ai/users/37a39c36-57a7-40df-bae2-6f98f6a0ac57/generations/a792d013-1c23-4b07-b34b-e7b11cdd4824/segments/2:4:1/Lucid_Origin_professional_photo_of_a_wine_glass_filled_with_a__1.jpg",
+    thumbnailUrl:
+      "https://cdn.leonardo.ai/users/37a39c36-57a7-40df-bae2-6f98f6a0ac57/generations/a792d013-1c23-4b07-b34b-e7b11cdd4824/segments/2:4:1/Lucid_Origin_professional_photo_of_a_wine_glass_filled_with_a__1.jpg",
     username: "business_chats",
     profilePic: "https://ext.same-assets.com/3322540528/2300361184.png",
     verified: true,
@@ -52,10 +54,11 @@ const videos: VideoCard[] = [
   {
     id: "5",
     videoUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-    thumbnailUrl: "https://ext.same-assets.com/3322540528/88222209.png",
-    username: "golf_with_jess",
-    profilePic: "https://ext.same-assets.com/3322540528/88222209.png",
+      "https://videocdn.cdnpk.net/videos/61a80d6e-fe1f-5120-8e84-b597da1c45f2/horizontal/previews/clear/large.mp4?token=exp=1767184248~hmac=15e0317b6e14269cb74251a0d7278ead9fa8a711a6b96dce3f437946f35ad38c",
+    thumbnailUrl:
+      "https://videocdn.cdnpk.net/videos/61a80d6e-fe1f-5120-8e84-b597da1c45f2/horizontal/thumbnails/large.jpg?uid=R18196923&amp;ga=GA1.1.280172149.1766570238&amp;item_id=3549438&amp;w=740&amp;q=80",
+    username: "tennis_tips",
+    profilePic: "https://ext.same-assets.com/3322540528/3139708538.png",
     verified: true,
   },
   {
@@ -70,8 +73,9 @@ const videos: VideoCard[] = [
   {
     id: "7",
     videoUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-    thumbnailUrl: "https://ext.same-assets.com/3322540528/88222209.png",
+      "https://cdn.leonardo.ai/users/c3f006ed-7910-47f9-9918-9bd067156534/generations/c789bb82-0939-4825-b659-e1a8ea0656af/c789bb82-0939-4825-b659-e1a8ea0656af.mp4",
+    thumbnailUrl:
+      "https://cdn.leonardo.ai/users/c3f006ed-7910-47f9-9918-9bd067156534/generations/c789bb82-0939-4825-b659-e1a8ea0656af/c789bb82-0939-4825-b659-e1a8ea0656af.png?w=512",
     username: "golf_with_jess",
     profilePic: "https://ext.same-assets.com/3322540528/88222209.png",
     verified: true,
@@ -79,8 +83,9 @@ const videos: VideoCard[] = [
   {
     id: "8",
     videoUrl:
-      "https://framerusercontent.com/assets/fuVrP45UYEBoOfcLoix1DwuHo.mp4 ",
-    thumbnailUrl: "https://ext.same-assets.com/3322540528/108827404.jpeg",
+      "https://cdn.leonardo.ai/users/8ff3af02-0eb3-442b-af5f-6266be661fef/generations/1f0e41aa-b754-6f80-9119-11f0c6259841/veo-3.1-fast-generate-preview_A_confident_Black_woman_with_sleek_bob-length_hair_flawless_glowing_skin_soft_gl-0.mp4",
+    thumbnailUrl:
+      "https://cdn.leonardo.ai/users/8ff3af02-0eb3-442b-af5f-6266be661fef/generations/1f0e41aa-b754-6f80-9119-11f0c6259841/veo-3.1-fast-generate-preview_A_confident_Black_woman_with_sleek_bob-length_hair_flawless_glowing_skin_soft_gl-0.jpg?w=512",
     username: "zoe_gardens",
     profilePic: "https://ext.same-assets.com/3322540528/108827404.jpeg",
     verified: true,

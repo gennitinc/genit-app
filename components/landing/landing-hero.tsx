@@ -14,8 +14,9 @@ const reelsVideos = [
   {
     id: "1",
     videoUrl:
-      "https://framerusercontent.com/assets/EsKprNy4lLQLqGnbpg4HT6afA.mp4",
-    thumbnailUrl: "https://ext.same-assets.com/3322540528/489297333.jpeg",
+      "https://videocdn.cdnpk.net/videos/61a80d6e-fe1f-5120-8e84-b597da1c45f2/horizontal/previews/clear/large.mp4?token=exp=1767184248~hmac=15e0317b6e14269cb74251a0d7278ead9fa8a711a6b96dce3f437946f35ad38c",
+    thumbnailUrl:
+      "https://videocdn.cdnpk.net/videos/61a80d6e-fe1f-5120-8e84-b597da1c45f2/horizontal/thumbnails/large.jpg?uid=R18196923&amp;ga=GA1.1.280172149.1766570238&amp;item_id=3549438&amp;w=740&amp;q=80",
     username: "gennit_ai",
     profilePic: "https://picsum.photos/id/1027/150/150",
     location: "Product Commercial",
@@ -25,8 +26,9 @@ const reelsVideos = [
   {
     id: "2",
     videoUrl:
-      "https://pikaso.cdnpk.net/private/production/2117418280/8cdd6e72-262b-43b0-8a12-11f61216be4c-0.mp4",
-    thumbnailUrl: "https://ext.same-assets.com/3322540528/490832111.png",
+      "https://videocdn.cdnpk.net/videos/c665cf70-7017-4e87-a252-e20260e4489a/horizontal/previews/clear/large.mp4?token=exp=1767184737~hmac=4ca4c53c690ade1c67ca7b9bf717712b2f6afbc8781dbbf308621dbf361c537b",
+    thumbnailUrl:
+      "https://videocdn.cdnpk.net/videos/c665cf70-7017-4e87-a252-e20260e4489a/horizontal/thumbnails/large.jpg?uid=R18196923&ga=GA1.1.280172149.1766570238&item_id=163446&w=740&q=80",
     username: "brand_marketing",
     profilePic: "https://picsum.photos/id/64/150/150",
     location: "Brand Promo",
@@ -36,8 +38,9 @@ const reelsVideos = [
   {
     id: "3",
     videoUrl:
-      "https://framerusercontent.com/assets/DXWg7xZQ9FVGADXcu1YyaoKGc.mp4",
-    thumbnailUrl: "https://ext.same-assets.com/3322540528/3139708538.png",
+      "https://cdn.leonardo.ai/users/8ff3af02-0eb3-442b-af5f-6266be661fef/generations/1f0e41aa-b754-6f80-9119-11f0c6259841/veo-3.1-fast-generate-preview_A_confident_Black_woman_with_sleek_bob-length_hair_flawless_glowing_skin_soft_gl-0.mp4",
+    thumbnailUrl:
+      "https://cdn.leonardo.ai/users/8ff3af02-0eb3-442b-af5f-6266be661fef/generations/1f0e41aa-b754-6f80-9119-11f0c6259841/veo-3.1-fast-generate-preview_A_confident_Black_woman_with_sleek_bob-length_hair_flawless_glowing_skin_soft_gl-0.jpg?w=512",
     username: "product_showcase",
     profilePic: "https://picsum.photos/id/177/150/150",
     location: "Product Ad",
@@ -49,7 +52,7 @@ const reelsVideos = [
 const messages = [
   {
     type: "user",
-    text: "Create a product image for a wireless headphone",
+    text: "Create a product image for a shoe design",
   },
   {
     type: "ai",
@@ -63,9 +66,79 @@ const messages = [
   },
   {
     type: "ai",
-    text: "Give me a phot of Meta glasses!",
+    text: "Perfect! I've updated the background to white and added a subtle shadow for depth.",
+    image:
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop",
+  },
+  {
+    type: "user",
+    text: "Can you make the shadow more dramatic?",
+  },
+  {
+    type: "ai",
+    text: "Absolutely! I've enhanced the shadow to make it more dramatic and eye-catching.",
+    image:
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop",
+  },
+  {
+    type: "user",
+    text: "Now create a product image for Meta glasses",
+  },
+  {
+    type: "ai",
+    text: "Here's a sleek product image of Meta glasses!",
     image:
       "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&auto=format&fit=crop",
+  },
+  {
+    type: "user",
+    text: "Add a futuristic tech background",
+  },
+  {
+    type: "ai",
+    text: "Great idea! I've added a futuristic tech background that complements the Meta glasses perfectly.",
+    image:
+      "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&auto=format&fit=crop",
+  },
+  {
+    type: "user",
+    text: "Can you create variations with different angles?",
+  },
+  {
+    type: "ai",
+    text: "Sure! I've generated multiple angle variations for you to choose from.",
+    image:
+      "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&auto=format&fit=crop",
+  },
+  {
+    type: "user",
+    text: "I love the side angle. Can you make it more premium looking?",
+  },
+  {
+    type: "ai",
+    text: "Perfect choice! I've enhanced the side angle with premium lighting and refined details.",
+    image:
+      "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&auto=format&fit=crop",
+  },
+  {
+    type: "user",
+    text: "Generate a product image for a smartwatch",
+  },
+  {
+    type: "ai",
+    text: "Here's a professional product image of a smartwatch!",
+    image:
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&auto=format&fit=crop",
+  },
+  {
+    type: "user",
+    text: "Show it on a wrist with a minimalist background",
+  },
+  {
+    type: "ai",
+    text: "Perfect! I've created a lifestyle shot with the smartwatch on a wrist against a clean, minimalist background.",
+    image:
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&auto=format&fit=crop",
   },
 ];
 
