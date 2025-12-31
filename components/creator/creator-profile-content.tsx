@@ -504,8 +504,8 @@ export function CreatorProfileContent({
   if (loading) {
     // Generate varying heights for masonry grid effect
     const skeletonHeights = [
-      200, 280, 240, 320, 260, 300, 220, 340, 250, 290, 210, 270, 230, 310,
-      240, 280, 260, 300, 220, 320,
+      200, 280, 240, 320, 260, 300, 220, 340, 250, 290, 210, 270, 230, 310, 240,
+      280, 260, 300, 220, 320,
     ];
 
     return (

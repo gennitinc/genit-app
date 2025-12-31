@@ -108,8 +108,6 @@ export function LandingFooter() {
 
   return (
     <footer className="relative border-t border-border overflow-hidden transition-colors duration-300">
-   
-
       {/* Back to Top Button */}
       <div
         className={cn(
@@ -264,6 +262,37 @@ export function LandingFooter() {
             </div>
           </div>
 
+          {/* Company Links */}
+          <div>
+            <h3 className="font-semibold mb-4 text-foreground">Company</h3>
+            <div className="flex flex-col space-y-3 w-fit">
+              <Link
+                href="/company"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Company
+              </Link>
+              <Link
+                href="/legal/privacy-policy"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/legal/terms-of-service"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Terms of Service
+              </Link>
+              <Link
+                href="/contact"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Support
+              </Link>
+            </div>
+          </div>
+
           {/* Navigation Links */}
           <div>
             <h3 className="font-semibold mb-4 text-foreground">Platform</h3>
@@ -309,37 +338,6 @@ export function LandingFooter() {
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 Contact
-              </Link>
-            </div>
-          </div>
-
-          {/* Company Links */}
-          <div>
-            <h3 className="font-semibold mb-4 text-foreground">Company</h3>
-            <div className="flex flex-col space-y-3 w-fit">
-              <Link
-                href="/company"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Company
-              </Link>
-              <Link
-                href="/legal/privacy-policy"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/legal/terms-of-service"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Terms of Service
-              </Link>
-              <Link
-                href="/contact"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Support
               </Link>
             </div>
           </div>
@@ -412,7 +410,6 @@ export function LandingFooter() {
           </p>
           <div className="flex items-center gap-4 mt-4 sm:mt-0">
             <span className="text-xs">Powered by Klip Inc</span>
-            
           </div>
         </div>
       </footer>

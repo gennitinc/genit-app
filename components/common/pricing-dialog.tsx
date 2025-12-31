@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, X } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Drawer,
@@ -147,7 +147,8 @@ function PricingCard({
               : "bg-zinc-800 text-white hover:bg-zinc-700"
           )}
         >
-          Get Started
+          <span>Start for $0</span>
+          <ArrowRight className="w-4 h-4 ml-1" />
         </Button>
         <div className="space-y-3">
           {tier.features.map((feature) => (

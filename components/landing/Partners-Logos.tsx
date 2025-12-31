@@ -164,72 +164,151 @@ const logos = [
 ];
 
 export default function PartnerLogos() {
-
   const router = useRouter();
   return (
     <section className="px-4 py-16 md:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="grid overflow-hidden rounded-xl border border-muted shadow-lg lg:grid-cols-2">
-          <div className="flex items-center px-6 py-12 md:px-8 lg:p-16">
-            <div className="w-full max-w-lg">
-              <Badge className="mb-6 inline-flex items-center gap-1.5 bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary">
-                <Globe className="h-4 w-4" />
-                Strategic Partnerships
-              </Badge>
-              <h2 className="mb-6 text-3xl font-bold tracking-tight lg:text-4xl">
-                Powered by industry-leading technologies
-              </h2>
-              <p className="mb-8 text-base text-normal text-muted-foreground">
-                We collaborate with the most innovative companies in tech to
-                deliver cutting-edge solutions that keep you ahead of the
-                competition. Our strategic partnerships ensure you get the best
-                tools for your needs.
-              </p>
-              <div className="flex flex-col gap-4 sm:flex-row">
-                <Button className="group flex items-center transition-all duration-300 hover:pr-4 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer"
-                  onClick={() => {
-                  router.push("/contact")
-                }}>
-                  Become a partner
-                  <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Button>
-                <Button
-                  variant="outline"
-                  className="group flex items-center gap-2 cursor-not-allowed"
-                  disabled={true}
-                >
-                  <CheckCircle className="size-4" />
-                  View case studies
-                </Button>
+        <div className="relative overflow-hidden">
+          <div className="grid overflow-hidden border border-muted shadow-lg lg:grid-cols-2 relative z-20">
+            {/* Top gradient line */}
+            <div
+              style={
+                {
+                  // @ts-ignore
+                  "--background": "#ffffff",
+                  "--color": "rgba(0, 0, 0, 0.2)",
+                  "--height": "1px",
+                  "--width": "5px",
+                  "--fade-stop": "90%",
+                  "--offset": "200px",
+                  "--color-dark": "rgba(255, 255, 255, 0.2)",
+                  // @ts-ignore
+                  maskComposite: "exclude",
+                } as React.CSSProperties
+              }
+              className="absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] top-0"
+            ></div>
+
+            {/* Bottom gradient line */}
+            <div
+              style={
+                {
+                  // @ts-ignore
+                  "--background": "#ffffff",
+                  "--color": "rgba(0, 0, 0, 0.2)",
+                  "--height": "1px",
+                  "--width": "5px",
+                  "--fade-stop": "90%",
+                  "--offset": "200px",
+                  "--color-dark": "rgba(255, 255, 255, 0.2)",
+                  // @ts-ignore
+                  maskComposite: "exclude",
+                } as React.CSSProperties
+              }
+              className="absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] top-auto bottom-0"
+            ></div>
+
+            {/* Left gradient line */}
+            <div
+              style={
+                {
+                  // @ts-ignore
+                  "--background": "#ffffff",
+                  "--color": "rgba(0, 0, 0, 0.2)",
+                  "--height": "5px",
+                  "--width": "1px",
+                  "--fade-stop": "90%",
+                  "--offset": "80px",
+                  "--color-dark": "rgba(255, 255, 255, 0.2)",
+                  // @ts-ignore
+                  maskComposite: "exclude",
+                } as React.CSSProperties
+              }
+              className="absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] left-0"
+            ></div>
+
+            {/* Right gradient line */}
+            <div
+              style={
+                {
+                  // @ts-ignore
+                  "--background": "#ffffff",
+                  "--color": "rgba(0, 0, 0, 0.2)",
+                  "--height": "5px",
+                  "--width": "1px",
+                  "--fade-stop": "90%",
+                  "--offset": "80px",
+                  "--color-dark": "rgba(255, 255, 255, 0.2)",
+                  // @ts-ignore
+                  maskComposite: "exclude",
+                } as React.CSSProperties
+              }
+              className="absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] right-0 left-auto"
+            ></div>
+
+            <div className="flex items-center px-6 py-12 md:px-8 lg:p-16">
+              <div className="w-full max-w-lg">
+                <Badge className="mb-6 inline-flex items-center gap-1.5 bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary">
+                  <Globe className="h-4 w-4" />
+                  Strategic Partnerships
+                </Badge>
+                <h2 className="mb-6 text-3xl font-bold tracking-tight lg:text-4xl">
+                  Powered by industry-leading technologies
+                </h2>
+                <p className="mb-8 text-base text-normal text-muted-foreground">
+                  We collaborate with the most innovative companies in tech to
+                  deliver cutting-edge solutions that keep you ahead of the
+                  competition. Our strategic partnerships ensure you get the
+                  best tools for your needs.
+                </p>
+                <div className="flex flex-col gap-4 sm:flex-row">
+                  <Button
+                    className="group flex items-center transition-all duration-300 hover:pr-4 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer"
+                    onClick={() => {
+                      router.push("/contact");
+                    }}
+                  >
+                    Become a partner
+                    <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="group flex items-center gap-2 cursor-not-allowed"
+                    disabled={true}
+                  >
+                    <CheckCircle className="size-4" />
+                    View case studies
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="grid grid-cols-2 border-t lg:grid-cols-3 lg:border-l lg:border-t-0">
-            {logos.map((logo, index) => (
-              <a
-                key={index}
-                href={logo.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col items-center justify-center gap-3 border-b border-r p-8 transition-all hover:bg-muted/30"
-              >
-                <div className="relative flex h-16 w-full items-center justify-center">
-                  {logo.svg}
-                </div>
-                <div className="flex flex-col items-center text-center">
-                  <span className="text-base font-semibold text-foreground">
-                    {logo.name}
-                  </span>
-                  <span className="text-sm text-muted-foreground transition-colors group-hover:text-primary">
-                    {logo.description}
-                  </span>
-                </div>
-                <div className="mt-1 flex items-center text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                  <span>Learn more</span>
-                  <ExternalLink className="ml-1 h-3 w-3" />
-                </div>
-              </a>
-            ))}
+            <div className="grid grid-cols-2 border-t lg:grid-cols-3 lg:border-l lg:border-t-0">
+              {logos.map((logo, index) => (
+                <a
+                  key={index}
+                  href={logo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex flex-col items-center justify-center gap-3 border-b border-r p-8 transition-all hover:bg-muted/30"
+                >
+                  <div className="relative flex h-16 w-full items-center justify-center">
+                    {logo.svg}
+                  </div>
+                  <div className="flex flex-col items-center text-center">
+                    <span className="text-base font-semibold text-foreground">
+                      {logo.name}
+                    </span>
+                    <span className="text-sm text-muted-foreground transition-colors group-hover:text-primary">
+                      {logo.description}
+                    </span>
+                  </div>
+                  <div className="mt-1 flex items-center text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                    <span>Learn more</span>
+                    <ExternalLink className="ml-1 h-3 w-3" />
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>

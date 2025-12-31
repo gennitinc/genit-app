@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { apiResponse } from "@/utils/apiResponse";
@@ -382,9 +382,15 @@ export default function PricingComponent() {
                     Processing...
                   </div>
                 ) : plan.monthlyPrice === 0 ? (
-                  "Get Started Free"
+                  <div className="flex flex-row gap-2 items-center">
+                    <span>Start for $0</span>
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </div>
                 ) : (
-                  "Get Started"
+                  <div className="flex flex-row gap-2 items-center">
+                    <span>Start for $0</span>
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </div>
                 )}
               </button>
             </div>

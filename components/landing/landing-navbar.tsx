@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { PanelRight, Search } from "lucide-react";
+import { ArrowRight, PanelRight, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Logo } from "../logo";
@@ -416,7 +416,8 @@ export function LandingNavbar() {
                         className='outline-hidden text-foreground relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out border-[2px] border-white/5 backdrop-blur-[25px] bg-origin-border bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] shadow-sm not-disabled:hover:bg-white/90 not-disabled:hover:text-black not-disabled:hover:shadow-button transition-all duration-200 disabled:opacity-30 disabled:text-white/50 focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden focus-visible:bg-white/90 focus-visible:text-black after:absolute after:w-[calc(100%+4px)] after:h-[calc(100%+4px)] after:top-[-2px] after:left-[-2px] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat after:pointer-events-none text-sm h-10 gap-0 px-4 font-semibold'
                         href="/signup"
                       >
-                        Get Started
+                        <span>Start for $0</span>
+                        <ArrowRight className="w-4 h-4 ml-1" />
                       </Link>
                     </div>
                   </div>
@@ -463,7 +464,8 @@ export function LandingNavbar() {
                         className='outline-hidden text-foreground relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out  border-[2px] border-white/5 backdrop-blur-[25px] bg-origin-border bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] shadow-sm not-disabled:hover:bg-white/90 not-disabled:hover:text-black not-disabled:hover:shadow-button transition-all duration-200 disabled:opacity-30 disabled:text-white/50 focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden focus-visible:bg-white/90 focus-visible:text-black after:absolute after:w-[calc(100%+4px)] after:h-[calc(100%+4px)] after:top-[-2px] after:left-[-2px] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat after:pointer-events-none text-sm h-10 gap-0 px-4 font-semibold'
                         href="/signup"
                       >
-                        Get Started
+                        <span>Start for $0</span>
+                        <ArrowRight className="w-4 h-4 ml-1" />
                       </Link>
                     </div>
                   </div>
@@ -511,9 +513,9 @@ export function LandingNavbar() {
                       </div>
                     </Link>
                   ) : (
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 items-center">
                       <Link
-                        className="outline-hidden relative items-center border justify-center select-none rounded-2xl disabled:cursor-not-allowed disabled:opacity-70 transition ease-in-out duration-200 bg-transparent border-transparent text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-4 focus-visible:ring-gray-a2 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold"
+                        className="hidden relative items-center border justify-center select-none rounded-2xl disabled:cursor-not-allowed disabled:opacity-70 transition ease-in-out duration-200 bg-transparent border-transparent text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-4 focus-visible:ring-gray-a2 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold"
                         data-state="closed"
                         href="/signin"
                       >
@@ -523,7 +525,8 @@ export function LandingNavbar() {
                         className='outline-hidden text-foreground relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out border-[2px] border-white/5 backdrop-blur-[25px] bg-origin-border bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] shadow-sm not-disabled:hover:bg-white/90 not-disabled:hover:text-black not-disabled:hover:shadow-button transition-all duration-200 disabled:opacity-30 disabled:text-white/50 focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden focus-visible:bg-white/90 focus-visible:text-black after:absolute after:w-[calc(100%+4px)] after:h-[calc(100%+4px)] after:top-[-2px] after:left-[-2px] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat after:pointer-events-none text-sm h-10 gap-0 px-4 font-semibold'
                         href="/signup"
                       >
-                        Get Started
+                        <span>Start for $0</span>
+                        <ArrowRight className="w-4 h-4 ml-1" />
                       </Link>
                     </div>
                   )}
@@ -532,20 +535,7 @@ export function LandingNavbar() {
             </Sheet>
           </div>
         </nav>
-        {RouteToShowAurora.includes(pathName) && (
-          <div
-            className={`transition-opacity duration-700 absolute top-0 w-full ease-in-out ${
-              isScrolled ? "opacity-0" : "opacity-100"
-            }`}
-          >
-            <Aurora
-              colorStops={["#d849d0", "#f59307", "#3bc7fc"]}
-              blend={1.0}
-              amplitude={1.0}
-              speed={0.8}
-            />
-          </div>
-        )}
+       
       </header>
       {/* Search experience: Drawer on mobile/tablet, Dialog on desktop */}
       {isSmallScreen ? (
