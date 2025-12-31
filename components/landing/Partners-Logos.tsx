@@ -166,7 +166,7 @@ const logos = [
 export default function PartnerLogos() {
   const router = useRouter();
   return (
-    <section className="px-4 py-16 md:px-6 lg:px-8">
+    <section className="px-2 py-16 md:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="relative overflow-hidden">
           <div className="grid overflow-hidden border border-muted shadow-lg lg:grid-cols-2 relative z-20">

@@ -173,7 +173,7 @@ const LandingCommunityVideos = () => {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
             Creator community showcase
           </h2>
-          <p className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto px-2">
             Discover AI-generated content from our talented community of
             creators.
           </p>

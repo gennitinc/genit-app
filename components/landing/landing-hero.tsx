@@ -413,8 +413,8 @@ const LandingHero = () => {
     };
   }, []);
   return (
-    <section className="relative py-12 md:py-16 px-4 md:px-12 lg:px-20 xl:px-24">
-      <div className="mx-auto mb-8 max-w-3xl text-center">
+    <section className="relative py-12 md:py-16 px-2 md:px-12 lg:px-20 xl:px-24">
+      <div className="mx-auto mb-8 max-w-3xl text-center px-4">
         <h2 className="font-heading mb-6 text-4xl text-balance lg:text-5xl lg:leading-14">
           Think it? <span className="font-serif italic">Generate it</span>
         </h2>
