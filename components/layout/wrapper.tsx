@@ -72,7 +72,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   // }, [pathName]);
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <div className="h-full w-full custom-scrollbar">
         {children}
 

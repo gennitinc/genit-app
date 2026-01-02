@@ -58,7 +58,7 @@ const SidebarProvider = React.forwardRef<
 >(
   (
     {
-      defaultOpen = false,
+      defaultOpen = true,
       open: openProp,
       onOpenChange: setOpenProp,
       className,
@@ -125,7 +125,6 @@ const SidebarProvider = React.forwardRef<
       window.addEventListener("keydown", handleKeyDown);
       return () => window.removeEventListener("keydown", handleKeyDown);
     }, [toggleSidebar]);
-
 
     const state = open ? "expanded" : "collapsed";
 
