@@ -769,7 +769,7 @@ function VideoCreatePage() {
         urlContentTab
       )
       ? urlContentTab
-      : "preview"
+      : "community"
   );
 
   // Sync activeContentTab with URL parameter changes (for browser back/forward)
