@@ -98,12 +98,11 @@ export function NavMain() {
 
   // Helper function to check if a route is active (handles query params)
   const isRouteActive = (href: string) => {
-    // First check if pathname matches
     if (href.includes("?")) {
       const [basePath, queryString] = href.split("?");
 
-      // Check if pathname matches
-      if (pathname !== basePath && !pathname.startsWith(basePath + "/")) {
+      // For routes with query params, pathname must exactly match the base path
+      if (pathname !== basePath) {
         return false;
       }
 
@@ -120,7 +119,9 @@ export function NavMain() {
 
       return true;
     }
-    return pathname === href || pathname.startsWith(href + "/");
+    // For routes without query params, use exact pathname matching
+    // This prevents parent routes from being active when on child routes
+    return pathname === href;
   };
 
   return (

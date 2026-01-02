@@ -10,7 +10,7 @@ const LandingCreator = () => {
           Creators Vibe
         </h2>
         <p className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto">
-          Join the creators program and start earning money by creating content.
+          Join the creators program and start earning money by referring others.
         </p>
       </div>
       <div className="relative flex justify-center items-center w-full px-2 md:px-12 lg:px-20 xl:px-24">

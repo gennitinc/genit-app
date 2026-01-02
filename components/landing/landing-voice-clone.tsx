@@ -10,7 +10,7 @@ export function LandingVoiceClone() {
           Clone your voice with AI
         </h2>
         <p className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto">
-          Generate stunning AI-Human avatars with AI.
+          Speak like the real you with AI.
         </p>
       </div>
       <div className="flex justify-center items-center min-h-[300px] relative">
