@@ -16,9 +16,9 @@ const videos: VideoCard[] = [
   {
     id: "1",
     videoUrl:
-      "https://videocdn.cdnpk.net/videos/a14f0141-106e-5b9b-8ea1-09855c9b7d6b/vertical/previews/clear/large.mp4?token=exp=1767183372~hmac=f9b30f175af0609214c483f0345e0fa6c8d0ac36c5d0ec529bae6915fcacf165",
+      "https://cdn.leonardo.ai/users/61f1539d-5ab8-4ced-be93-ceaf0ba315c2/generations/1f0e3eed-52a5-6bd0-a90c-dee3f3ca5cea/veo-3.1-fast-generate-preview_CUTE_3D_CLAYMATION_STYLE_DETAILED_MINIATURE_WORLD_SOFT_PLASTICINE_TEXTURE_CINEMA-0.mp4",
     thumbnailUrl:
-      "https://videocdn.cdnpk.net/videos/a14f0141-106e-5b9b-8ea1-09855c9b7d6b/vertical/thumbnails/large.jpg?uid=R18196923&ga=GA1.1.280172149.1766570238&item_id=3442041&w=740&q=80",
+      "https://cdn.leonardo.ai/users/61f1539d-5ab8-4ced-be93-ceaf0ba315c2/generations/1f0e3eed-52a5-6bd0-a90c-dee3f3ca5cea/veo-3.1-fast-generate-preview_CUTE_3D_CLAYMATION_STYLE_DETAILED_MINIATURE_WORLD_SOFT_PLASTICINE_TEXTURE_CINEMA-0.jpg?w=512",
     username: "kia_dances",
     profilePic: "https://ext.same-assets.com/3322540528/489297333.jpeg",
     verified: true,
@@ -26,8 +26,9 @@ const videos: VideoCard[] = [
   {
     id: "2",
     videoUrl:
-      "https://pikaso.cdnpk.net/private/production/2117418280/8cdd6e72-262b-43b0-8a12-11f61216be4c-0.mp4",
-    thumbnailUrl: "https://ext.same-assets.com/3322540528/490832111.png",
+      "https://cdn.leonardo.ai/users/eb55f8d8-cffe-4f8b-a8fb-15f532dc5ab3/generations/ba7951da-d947-4611-9b4c-28485f71144b/segments/1:1:1/motion2Fast_body_slowly_turns_muscles_subtly_contract_with_del_0.mp4",
+    thumbnailUrl:
+      "https://cdn.leonardo.ai/users/eb55f8d8-cffe-4f8b-a8fb-15f532dc5ab3/generations/ba7951da-d947-4611-9b4c-28485f71144b/segments/1:1:1/motion2Fast_body_slowly_turns_muscles_subtly_contract_with_del_0.jpg?w=512",
     username: "sarah_rides",
     profilePic: "https://ext.same-assets.com/3322540528/490832111.png",
     verified: true,
@@ -36,7 +37,7 @@ const videos: VideoCard[] = [
     id: "3",
     videoUrl:
       "https://framerusercontent.com/assets/DXWg7xZQ9FVGADXcu1YyaoKGc.mp4",
-    thumbnailUrl: "https://ext.same-assets.com/3322540528/3139708538.png",
+    thumbnailUrl: "",
     username: "tennis_tips",
     profilePic: "https://ext.same-assets.com/3322540528/3139708538.png",
     verified: true,
@@ -44,21 +45,22 @@ const videos: VideoCard[] = [
   {
     id: "4",
     videoUrl:
-      "https://cdn.leonardo.ai/users/37a39c36-57a7-40df-bae2-6f98f6a0ac57/generations/a792d013-1c23-4b07-b34b-e7b11cdd4824/segments/2:4:1/Lucid_Origin_professional_photo_of_a_wine_glass_filled_with_a__1.jpg",
+      "https://cdn.leonardo.ai/users/88cdadb0-927c-4bb1-9105-25c34458a6c8/generations/1f0df4ba-abb7-6ac0-8ff2-82fc40c2c088/kling-video-o-1_Cinematic_medium_shot_of_three_Roman_street_characters_a_heavy-set_butcher_in_an-0.mp4",
     thumbnailUrl:
-      "https://cdn.leonardo.ai/users/37a39c36-57a7-40df-bae2-6f98f6a0ac57/generations/a792d013-1c23-4b07-b34b-e7b11cdd4824/segments/2:4:1/Lucid_Origin_professional_photo_of_a_wine_glass_filled_with_a__1.jpg",
-    username: "business_chats",
+      "https://cdn.leonardo.ai/users/88cdadb0-927c-4bb1-9105-25c34458a6c8/generations/1f0df4ba-abb7-6ac0-8ff2-82fc40c2c088/kling-video-o-1_Cinematic_medium_shot_of_three_Roman_street_characters_a_heavy-set_butcher_in_an-0.jpg?w=512",
+    username: "kudo_charlie",
     profilePic: "https://ext.same-assets.com/3322540528/2300361184.png",
     verified: true,
   },
   {
     id: "5",
     videoUrl:
-      "https://videocdn.cdnpk.net/videos/61a80d6e-fe1f-5120-8e84-b597da1c45f2/horizontal/previews/clear/large.mp4?token=exp=1767184248~hmac=15e0317b6e14269cb74251a0d7278ead9fa8a711a6b96dce3f437946f35ad38c",
+      "https://cdn.leonardo.ai/users/4e43734b-5b24-4439-bf03-493b2b884434/generations/1f0e0a95-9cf7-6b70-9d10-bc5c556c151b/kling-2.6_A_hyper-realistic_AI-generated_ASMR_video_shot_in_macro_perspective._A_razor-sha-0.mp4",
     thumbnailUrl:
-      "https://videocdn.cdnpk.net/videos/61a80d6e-fe1f-5120-8e84-b597da1c45f2/horizontal/thumbnails/large.jpg?uid=R18196923&amp;ga=GA1.1.280172149.1766570238&amp;item_id=3549438&amp;w=740&amp;q=80",
-    username: "tennis_tips",
-    profilePic: "https://ext.same-assets.com/3322540528/3139708538.png",
+      "https://cdn.leonardo.ai/users/4e43734b-5b24-4439-bf03-493b2b884434/generations/1f0e0a95-9cf7-6b70-9d10-bc5c556c151b/kling-2.6_A_hyper-realistic_AI-generated_ASMR_video_shot_in_macro_perspective._A_razor-sha-0.jpg?w=512",
+    username: "hillary_trevor",
+    profilePic:
+      "https://i.pinimg.com/736x/5f/5f/3c/5f5f3c82349c1dd8552ffa7e97423fb2.jpg",
     verified: true,
   },
   {

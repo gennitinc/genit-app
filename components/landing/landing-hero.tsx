@@ -14,9 +14,9 @@ const reelsVideos = [
   {
     id: "1",
     videoUrl:
-      "https://videocdn.cdnpk.net/videos/61a80d6e-fe1f-5120-8e84-b597da1c45f2/horizontal/previews/clear/large.mp4?token=exp=1767184248~hmac=15e0317b6e14269cb74251a0d7278ead9fa8a711a6b96dce3f437946f35ad38c",
+      "https://cdn.leonardo.ai/users/26ac8e01-36b5-47e7-b454-73e1f56828de/generations/f5c5461c-6f42-4518-aa35-1a4512dc1790/segments/1:1:1/motion2Fast_Korean_drama_emotional_scene_30yearold_Korean_woma_0.mp4",
     thumbnailUrl:
-      "https://videocdn.cdnpk.net/videos/61a80d6e-fe1f-5120-8e84-b597da1c45f2/horizontal/thumbnails/large.jpg?uid=R18196923&amp;ga=GA1.1.280172149.1766570238&amp;item_id=3549438&amp;w=740&amp;q=80",
+      "https://cdn.leonardo.ai/users/26ac8e01-36b5-47e7-b454-73e1f56828de/generations/f5c5461c-6f42-4518-aa35-1a4512dc1790/segments/1:1:1/motion2Fast_Korean_drama_emotional_scene_30yearold_Korean_woma_0.jpg?w=512",
     username: "gennit_ai",
     profilePic: "https://picsum.photos/id/1027/150/150",
     location: "Product Commercial",
@@ -26,9 +26,9 @@ const reelsVideos = [
   {
     id: "2",
     videoUrl:
-      "https://videocdn.cdnpk.net/videos/c665cf70-7017-4e87-a252-e20260e4489a/horizontal/previews/clear/large.mp4?token=exp=1767184737~hmac=4ca4c53c690ade1c67ca7b9bf717712b2f6afbc8781dbbf308621dbf361c537b",
+      "https://cdn.leonardo.ai/users/578e674e-459e-4190-a8d2-1aed4b909bc8/generations/d3ff7032-d672-4ffc-82ac-3760ceb07a7a/segments/1:1:1/motion2Fast_A_lone_human_figure_in_a_space_suit_standing_still_0.mp4",
     thumbnailUrl:
-      "https://videocdn.cdnpk.net/videos/c665cf70-7017-4e87-a252-e20260e4489a/horizontal/thumbnails/large.jpg?uid=R18196923&ga=GA1.1.280172149.1766570238&item_id=163446&w=740&q=80",
+      "https://cdn.leonardo.ai/users/578e674e-459e-4190-a8d2-1aed4b909bc8/generations/d3ff7032-d672-4ffc-82ac-3760ceb07a7a/segments/1:1:1/motion2Fast_A_lone_human_figure_in_a_space_suit_standing_still_0.jpg?w=512",
     username: "brand_marketing",
     profilePic: "https://picsum.photos/id/64/150/150",
     location: "Brand Promo",

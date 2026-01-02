@@ -82,45 +82,48 @@ export type { Presenter, Voice, Model } from "@/types/inspire";
 const PRESET_SLIDES = [
   {
     id: "general",
-    title: "General",
-    description: "1.5 Pro",
+    title: "Deep zoom",
+    description: "Real expression captured",
     video:
-      "https://video-previews.elements.envatousercontent.com/h264-video-previews/07f8b177-8b26-4863-9ee3-ca914880047a/60857198.mp4",
+      "https://cdn.leonardo.ai/users/220eee85-2367-43fd-91c1-715ac51afece/generations/ccd8c64a-ae89-49e3-89ef-afab21e2432a/segments/1:1:1/motion2Fast____________________________________________________0.mp4",
     poster:
-      "https://elements-resized.envatousercontent.com/elements-video-cover-images/files/658848604/Preview.jpg?w=500&amp;cf_fit=cover&amp;q=85&amp;format=auto&amp;s=e83c5c6643f8323aaf4b70e477d523cf6f42170ba97c30fc9eb11dbfa689fb38",
+      "https://cdn.leonardo.ai/users/220eee85-2367-43fd-91c1-715ac51afece/generations/ccd8c64a-ae89-49e3-89ef-afab21e2432a/segments/1:1:1/motion2Fast____________________________________________________0.jpg?w=512",
   },
   {
     id: "cinematic",
-    title: "Cinematic",
-    description: "Film Quality",
+    title: "Cinematic Clip",
+    description: "Film expression",
     video:
-      "https://pikaso.cdnpk.net/private/production/1982745598/ade32d81-64c6-40c5-9158-3a55e043ab03-0.mp4?token=exp=1767052800~hmac=85310bc7f718fb34ce3195a0f1bbc123fcce73a1f547ee755e858068b8495def",
+      "https://cdn.leonardo.ai/users/61f1539d-5ab8-4ced-be93-ceaf0ba315c2/generations/1f0e3eed-52a5-6bd0-a90c-dee3f3ca5cea/veo-3.1-fast-generate-preview_CUTE_3D_CLAYMATION_STYLE_DETAILED_MINIATURE_WORLD_SOFT_PLASTICINE_TEXTURE_CINEMA-0.mp4",
     poster:
-      "https://elements-resized.envatousercontent.com/elements-video-cover-images/files/475668830/Image%20Preview.png?w=500&cf_fit=cover&q=85&format=auto&s=408168a1045e2ffd78e224fdc42667d0a995c6556470705689422c2396c97439",
+      "https://cdn.leonardo.ai/users/61f1539d-5ab8-4ced-be93-ceaf0ba315c2/generations/1f0e3eed-52a5-6bd0-a90c-dee3f3ca5cea/veo-3.1-fast-generate-preview_CUTE_3D_CLAYMATION_STYLE_DETAILED_MINIATURE_WORLD_SOFT_PLASTICINE_TEXTURE_CINEMA-0.jpg?w=512",
   },
   {
     id: "anime",
-    title: "Anime",
-    description: "Japanese Style",
+    title: "Japanese Anime",
+    description: "Style like the OG",
     video:
-      "https://pikaso.cdnpk.net/private/production/2148868918/7a13c0a7-62d3-4b3d-9c61-42ddf18c3f0c-0.mp4?token=exp=1767052800~hmac=611a892415752a030387ce949b0a91a55de53f2f99a63bb73de94cd27f5b04f1",
-    poster: "https://static.higgsfield.ai/seedance-1-5-preset-general.webp",
+      "https://cdn.leonardo.ai/users/eb55f8d8-cffe-4f8b-a8fb-15f532dc5ab3/generations/ba7951da-d947-4611-9b4c-28485f71144b/segments/1:1:1/motion2Fast_body_slowly_turns_muscles_subtly_contract_with_del_0.mp4",
+    poster:
+      "https://cdn.leonardo.ai/users/eb55f8d8-cffe-4f8b-a8fb-15f532dc5ab3/generations/ba7951da-d947-4611-9b4c-28485f71144b/segments/1:1:1/motion2Fast_body_slowly_turns_muscles_subtly_contract_with_del_0.jpg?w=512",
   },
   {
     id: "realistic",
-    title: "Realistic",
-    description: "Photo-Real",
+    title: "Realistic Cover",
+    description: "Deepfake style",
     video:
-      "https://pikaso.cdnpk.net/private/production/2154869439/ed9b1fb7-c711-4041-a18d-6888b3fc55f5-0.mp4?token=exp=1767052800~hmac=4c0eb068ebe3826c1c2b75735ed1fc57ec22b627198194f11709122c911e97c9",
-    poster: "https://static.higgsfield.ai/seedance-1-5-preset-general.webp",
+      "https://cdn.leonardo.ai/users/4e43734b-5b24-4439-bf03-493b2b884434/generations/1f0e0a95-9cf7-6b70-9d10-bc5c556c151b/kling-2.6_A_hyper-realistic_AI-generated_ASMR_video_shot_in_macro_perspective._A_razor-sha-0.mp4",
+    poster:
+      "https://cdn.leonardo.ai/users/4e43734b-5b24-4439-bf03-493b2b884434/generations/1f0e0a95-9cf7-6b70-9d10-bc5c556c151b/kling-2.6_A_hyper-realistic_AI-generated_ASMR_video_shot_in_macro_perspective._A_razor-sha-0.jpg?w=512",
   },
   {
     id: "creative",
-    title: "Creative",
-    description: "Artistic Style",
+    title: "Creative Video",
+    description: "Artistic, cinematic",
     video:
-      "https://pikaso.cdnpk.net/private/production/2779811314/89d77d53-d558-4ef8-8fae-33ae26d54307-0.mp4?token=exp=1767052800~hmac=f6602714ec905cf17bef307e091136a451bacfd68ee73b79cb3d8ef2f6cf105d",
-    poster: "https://static.higgsfield.ai/seedance-1-5-preset-general.webp",
+      "https://cdn.leonardo.ai/users/88cdadb0-927c-4bb1-9105-25c34458a6c8/generations/1f0df4ba-abb7-6ac0-8ff2-82fc40c2c088/kling-video-o-1_Cinematic_medium_shot_of_three_Roman_street_characters_a_heavy-set_butcher_in_an-0.mp4",
+    poster:
+      "https://cdn.leonardo.ai/users/88cdadb0-927c-4bb1-9105-25c34458a6c8/generations/1f0df4ba-abb7-6ac0-8ff2-82fc40c2c088/kling-video-o-1_Cinematic_medium_shot_of_three_Roman_street_characters_a_heavy-set_butcher_in_an-0.jpg?w=512",
   },
 ];
 
