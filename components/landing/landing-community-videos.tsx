@@ -68,8 +68,9 @@ const videos: VideoCard[] = [
     videoUrl:
       "https://framerusercontent.com/assets/fuVrP45UYEBoOfcLoix1DwuHo.mp4 ",
     thumbnailUrl: "https://ext.same-assets.com/3322540528/108827404.jpeg",
-    username: "zoe_gardens",
-    profilePic: "https://ext.same-assets.com/3322540528/108827404.jpeg",
+    username: "li_wei",
+    profilePic:
+      "https://i.pinimg.com/736x/74/3d/88/743d88dd2675cd87baa1b560f500c69c.jpg",
     verified: true,
   },
   {
