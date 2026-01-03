@@ -27,7 +27,6 @@ interface UserMessageProps {
   fileSize?: string;
   fileType?: "image" | "document" | "pdf" | "text" | "other";
   onEdit?: (newContent: string, files?: File[]) => Promise<void>;
-  onDelete?: () => void;
   onCopy?: () => void;
   className?: string;
 }
@@ -42,7 +41,6 @@ export function UserMessage({
   fileSize = "2.4 MB",
   fileType = "image",
   onEdit,
-  onDelete,
   onCopy,
   className,
 }: UserMessageProps) {
@@ -93,11 +91,7 @@ export function UserMessage({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete this message?")) {
-      onDelete?.();
-    }
-  };
+
 
   const truncateFileName = (name: string, maxLength = 25) => {
     if (name.length <= maxLength) return name;
@@ -269,7 +263,6 @@ export function UserMessage({
           <HoverActions
             visible={isHovered}
             onEdit={handleEdit}
-            onDelete={handleDelete}
             onCopy={handleCopy}
             copied={copied}
           />

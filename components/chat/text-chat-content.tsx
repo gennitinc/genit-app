@@ -287,11 +287,7 @@ export function TextChatContent() {
                       onEdit={(newContent: any, files: any) =>
                         handleEditMessage(message.id, newContent, files)
                       }
-                      onDelete={
-                        messages && messages.length > 2
-                          ? () => handleDeleteMessage(message.id)
-                          : undefined
-                      }
+                      
                       onCopy={() =>
                         handleCopyMessage(
                           message.parts?.find(

@@ -67,6 +67,12 @@ export interface IMessage {
   metadata?: Record<string, any>;
   parts: IMessagePart[];
   generationGroups?: IGenerationGroup[];
+  feedback?: {
+    like?: number;
+    dislike?: number;
+    comment?: number;
+    userReaction?: "like" | "dislike" | null;
+  };
   createdAt: Date;
 }
 

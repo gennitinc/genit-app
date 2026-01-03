@@ -917,15 +917,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       // Update local state
       setMessages(updatedMessages);
 
-      // Update on server if API endpoint exists
+      // Update on server
       try {
         const projectId = project._id;
-        // TODO: Add API endpoint for deleting messages
-        // For now, we'll update the project with the new messages array
-        // This would require a PATCH endpoint: /project/:projectId/messages
-        // await apiResponse.patch(`/project/${projectId}/messages`, {
-        //   messages: updatedMessages,
-        // });
+        await apiResponse.delete(`/project/${projectId}/messages`, {
+          data: { messageId },
+          withCredentials: true,
+        });
       } catch (apiError) {
         console.error("Error updating messages on server:", apiError);
         // Don't throw - local state is already updated
@@ -946,6 +944,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
+      console.log("messageId", messageId);
+
       // Update local state optimistically
       setMessages((prev: any[]) =>
         prev.map((msg: any) => {
@@ -963,10 +963,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         })
       );
 
-      // TODO: Add API endpoint for adding reactions
-      // await apiResponse.post(`/project/${project._id}/messages/${messageId}/reactions`, {
-      //   type,
-      // });
+      // Update on server
+      await apiResponse.post(
+        `/project/${project._id}/messages/${messageId}/reactions`,
+        { type },
+        { withCredentials: true }
+      );
+      
     } catch (error) {
       console.error("Error adding reaction:", error);
       throw error;
@@ -1001,8 +1004,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         })
       );
 
-      // TODO: Add API endpoint for removing reactions
-      // await apiResponse.delete(`/project/${project._id}/messages/${messageId}/reactions/${type}`);
+      // Update on server
+      await apiResponse.delete(
+        `/project/${project._id}/messages/${messageId}/reactions/${type}`,
+        { withCredentials: true }
+      );
     } catch (error) {
       console.error("Error removing reaction:", error);
       throw error;

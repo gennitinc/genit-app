@@ -21,7 +21,6 @@ export function HoverActions({
   copied,
   className = "",
 }: HoverActionsProps) {
-  
   return (
     <div
       className={`absolute top-2 right-2 flex items-center gap-0.5 bg-background border border-border rounded-md shadow-sm p-0.5 z-10 transition-all duration-200 ease-in-out ${
@@ -39,16 +38,7 @@ export function HoverActions({
         <Edit className="w-3.5 h-3.5" />
       </Button>
       <div className="w-px h-4 bg-border"></div>
-      <Button
-        variant="ghost"
-        size="sm"
-        className="px-1.5 py-1 text-muted-foreground hover:text-foreground h-auto"
-        onClick={onDelete}
-      >
-        <Trash2 className="w-3.5 h-3.5" />
-      </Button>
-      <div className="w-px h-4 bg-border"></div>
-      
+
       <Button
         variant="ghost"
         size="sm"
