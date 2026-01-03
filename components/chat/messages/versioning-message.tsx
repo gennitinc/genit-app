@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Check,
   AlertTriangle,
@@ -19,6 +19,7 @@ import {
   File,
   Play,
   Sparkles,
+  Trash2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -26,10 +27,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MessageActions } from "@/components/chat/messages";
 import ShinyText from "@/components/ui/shiny-text";
-import { serverUrlSocket } from "@/utils/apiResponse";
+import { serverUrlSocket, apiResponse } from "@/utils/apiResponse";
 import { templateApi } from "@/utils/inspire-api";
 import { toast } from "@/hooks/use-toast";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { DeleteConfirmation } from "./delete-confirmation";
 
 interface GenerationItem {
   id: string;
@@ -40,6 +42,7 @@ interface GenerationItem {
   filePath?: string;
   url?: string;
   text?: string;
+  publishStatus?: "published" | "pending" | "rejected" | null;
 }
 
 interface GenerationGroup {
@@ -63,6 +66,7 @@ interface VersioningMessageProps {
   onReload?: () => void;
   onLike?: () => void;
   onDislike?: () => void;
+  onDelete?: () => void;
   onView?: (id: string) => void;
   onRestore?: (id: string) => void;
   className?: string;
@@ -135,6 +139,7 @@ export function VersioningMessage({
   onReload,
   onLike,
   onDislike,
+  onDelete,
   onView,
   onRestore,
   className,
@@ -144,6 +149,9 @@ export function VersioningMessage({
   const router = useRouter();
   const { user } = useUserContext();
   const [publishing, setPublishing] = useState<string | null>(null);
+  const [checkingPublishStatus, setCheckingPublishStatus] = useState(false);
+  const [publishedItems, setPublishedItems] = useState<Set<string>>(new Set());
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Internal state for collapse if not controlled externally
   const [internalCollapsed, setInternalCollapsed] = useState(
@@ -151,6 +159,90 @@ export function VersioningMessage({
   );
 
   const isCollapsed = generation.isCollapsed ?? internalCollapsed;
+
+  // Check publish status from server when component mounts or items change
+  useEffect(() => {
+    const checkPublishStatus = async () => {
+      if (!user || generation.items.length === 0) return;
+
+      try {
+        setCheckingPublishStatus(true);
+
+        // Get all media URLs from generation items
+        const mediaUrls = generation.items
+          .map((item) => {
+            const url = item.url || item.filePath;
+            if (!url) return null;
+            // Convert relative URLs to absolute
+            return url.startsWith("/") ? `${serverUrlSocket}${url}` : url;
+          })
+          .filter((url): url is string => url !== null);
+
+        if (mediaUrls.length === 0) return;
+
+        // Check each URL against templates to see if it's published
+        const checkPromises = mediaUrls.map(async (mediaUrl) => {
+          try {
+            // Check if this URL is already published by querying templates
+            const response = await apiResponse.get(
+              `/templates?mediaUrl=${encodeURIComponent(mediaUrl)}&limit=1`,
+              { withCredentials: true }
+            );
+
+            if (
+              response.data?.success &&
+              response.data?.data?.templates?.length > 0
+            ) {
+              const template = response.data.data.templates[0];
+              // Check if it's published by the current user
+              const templateUserId = template.userId?._id || template.userId;
+              const currentUserId = (user as any)?._id || (user as any)?.id;
+              if (
+                templateUserId &&
+                currentUserId &&
+                String(templateUserId) === String(currentUserId)
+              ) {
+                return { mediaUrl, published: true };
+              }
+            }
+            return { mediaUrl, published: false };
+          } catch (error) {
+            console.error(
+              `Error checking publish status for ${mediaUrl}:`,
+              error
+            );
+            return { mediaUrl, published: false };
+          }
+        });
+
+        const results = await Promise.all(checkPromises);
+
+        // Create a set of published item IDs
+        const publishedSet = new Set<string>();
+        generation.items.forEach((item) => {
+          const itemUrl = item.url || item.filePath;
+          if (!itemUrl) return;
+
+          const fullUrl = itemUrl.startsWith("/")
+            ? `${serverUrlSocket}${itemUrl}`
+            : itemUrl;
+
+          const result = results.find((r) => r.mediaUrl === fullUrl);
+          if (result?.published) {
+            publishedSet.add(item.id);
+          }
+        });
+
+        setPublishedItems(publishedSet);
+      } catch (error) {
+        console.error("Error checking publish status:", error);
+      } finally {
+        setCheckingPublishStatus(false);
+      }
+    };
+
+    checkPublishStatus();
+  }, [generation.items, user, serverUrlSocket]);
 
   const getStatusIcon = (status: GenerationItem["status"]) => {
     const iconMap = {
@@ -267,23 +359,51 @@ export function VersioningMessage({
       });
 
       if (response.success) {
+        // Update the published items state
+        setPublishedItems((prev) => new Set(prev).add(item.id));
         toast({
           title: "Published to inspiration",
           description: "Your content has been added to the inspiration gallery",
         });
       } else {
-        throw new Error(response.message || "Failed to publish");
+        // Check if it's already published
+        if (response.message?.includes("already been published")) {
+          setPublishedItems((prev) => new Set(prev).add(item.id));
+          toast({
+            title: "Already published",
+            description:
+              "This content has already been published to inspiration",
+          });
+        } else {
+          throw new Error(response.message || "Failed to publish");
+        }
       }
     } catch (error: any) {
       console.error("Error publishing to inspiration:", error);
-      toast({
-        title: "Publish failed",
-        description:
-          error?.response?.data?.message ||
-          error?.message ||
-          "Failed to publish to inspiration. Please try again.",
-        variant: "destructive",
-      });
+
+      // Check if it's a duplicate/conflict error (409 status)
+      const errorMessage =
+        error?.response?.data?.message || error?.message || "";
+      if (
+        error?.response?.status === 409 ||
+        errorMessage.includes("already been published") ||
+        errorMessage.includes("already published")
+      ) {
+        // Item is already published
+        setPublishedItems((prev) => new Set(prev).add(item.id));
+        toast({
+          title: "Already published",
+          description: "This content has already been published to inspiration",
+        });
+      } else {
+        toast({
+          title: "Publish failed",
+          description:
+            errorMessage ||
+            "Failed to publish to inspiration. Please try again.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setPublishing(null);
     }
@@ -470,6 +590,10 @@ export function VersioningMessage({
         ? getFileExtension(item.name)
         : item.type?.split("/")[1]?.toUpperCase() || "FILE";
 
+      // Check if item is published (from state or item property)
+      const isPublished =
+        publishedItems.has(item.id) || item.publishStatus === "published";
+
       if (item.status === "generating") {
         return (
           <>
@@ -527,6 +651,28 @@ export function VersioningMessage({
                         Image • {fileExt}
                       </p>
                     </div>
+                    {(isPublished || item.publishStatus) && (
+                      <div className="flex items-center gap-1">
+                        <Badge
+                          variant={
+                            isPublished || item.publishStatus === "published"
+                              ? "default"
+                              : item.publishStatus === "pending"
+                                ? "secondary"
+                                : "destructive"
+                          }
+                          className="text-xs h-5 px-1.5"
+                        >
+                          {isPublished || item.publishStatus === "published"
+                            ? "Published to Inspiration"
+                            : item.publishStatus === "pending"
+                              ? "Pending"
+                              : item.publishStatus === "rejected"
+                                ? "Rejected"
+                                : ""}
+                        </Badge>
+                      </div>
+                    )}
                     <div className="flex items-center gap-2">
                       <Button
                         variant="outline"
@@ -540,20 +686,22 @@ export function VersioningMessage({
                         <Play className="w-3 h-3" />
                         Animate design
                       </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={(e) => handlePublishToInspiration(e, item)}
-                        disabled={publishing === item.id}
-                        className="h-7 px-2 text-xs gap-1.5 w-fit"
-                      >
-                        {publishing === item.id ? (
-                          <Loader className="w-3 h-3 animate-spin" />
-                        ) : (
-                          <Sparkles className="w-3 h-3" />
-                        )}
-                        {publishing === item.id ? "Publishing..." : "Publish"}
-                      </Button>
+                      {!isPublished && !item.publishStatus && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => handlePublishToInspiration(e, item)}
+                          disabled={publishing === item.id}
+                          className="h-7 px-2 text-xs gap-1.5 w-fit"
+                        >
+                          {publishing === item.id ? (
+                            <Loader className="w-3 h-3 animate-spin" />
+                          ) : (
+                            <Sparkles className="w-3 h-3" />
+                          )}
+                          {publishing === item.id ? "Publishing..." : "Publish"}
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -575,11 +723,51 @@ export function VersioningMessage({
                   <p className="text-xs sm:text-sm font-medium text-foreground truncate">
                     {item.name}
                   </p>
-                  <div className="flex items-center gap-1 mt-0.5">
-                    <Video className="w-3 h-3 text-muted-foreground" />
-                    <p className="text-xs text-muted-foreground">
-                      Video • {fileExt} •
-                    </p>
+                  <div className="flex flex-col gap-2 mt-2">
+                    <div className="flex items-center gap-1">
+                      <Video className="w-3 h-3 text-muted-foreground" />
+                      <p className="text-xs text-muted-foreground">
+                        Video • {fileExt}
+                      </p>
+                    </div>
+                    {(isPublished || item.publishStatus) && (
+                      <div className="flex items-center gap-1">
+                        <Badge
+                          variant={
+                            isPublished || item.publishStatus === "published"
+                              ? "default"
+                              : item.publishStatus === "pending"
+                                ? "secondary"
+                                : "destructive"
+                          }
+                          className="text-xs h-5 px-1.5"
+                        >
+                          {isPublished || item.publishStatus === "published"
+                            ? "Published to Inspiration"
+                            : item.publishStatus === "pending"
+                              ? "Pending"
+                              : item.publishStatus === "rejected"
+                                ? "Rejected"
+                                : ""}
+                        </Badge>
+                      </div>
+                    )}
+                    {!isPublished && !item.publishStatus && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => handlePublishToInspiration(e, item)}
+                        disabled={publishing === item.id}
+                        className="h-7 px-2 text-xs gap-1.5 w-fit"
+                      >
+                        {publishing === item.id ? (
+                          <Loader className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <Sparkles className="w-3 h-3" />
+                        )}
+                        {publishing === item.id ? "Publishing..." : "Publish"}
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -660,6 +848,20 @@ export function VersioningMessage({
                   >
                     <Download className="w-4 h-4" />
                   </Button>
+                  {/* {onDelete && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowDeleteConfirm(true);
+                      }}
+                      title="Delete"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  )} */}
                   {generation.isLatest && (
                     <Badge className="text-xs px-1.5 py-0.5 bg-green-500/10 text-green-600 border-green-500/20 flex-shrink-0">
                       Latest
@@ -686,6 +888,14 @@ export function VersioningMessage({
           </div>
         </div>
       </div>
+      {onDelete && (
+        <DeleteConfirmation
+          open={showDeleteConfirm}
+          onOpenChange={setShowDeleteConfirm}
+          onConfirm={onDelete}
+          message="Are you sure you want to delete this? This will delete both the user prompt and AI response, along with all versions after this."
+        />
+      )}
     </div>
   );
 }

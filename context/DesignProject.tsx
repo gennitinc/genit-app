@@ -877,22 +877,136 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const deleteMessage = (messageId: string) => {
-    console.log(`Deleting message ${messageId}`);
+  const deleteMessage = async (messageId: string) => {
+    try {
+      if (!project?._id) {
+        console.error("No project ID available");
+        return;
+      }
+
+      // Prevent deletion if there are only 2 messages (1 user + 1 AI)
+      if (messagesRef.current.length <= 2) {
+        console.log("Cannot delete: minimum 2 messages required");
+        return;
+      }
+
+      // Find the message index
+      const messageIndex = messagesRef.current.findIndex(
+        (msg: any) => msg.id === messageId || msg._id === messageId
+      );
+
+      if (messageIndex === -1) {
+        console.error(`Message ${messageId} not found`);
+        return;
+      }
+
+      const message = messagesRef.current[messageIndex];
+      let deleteFromIndex = messageIndex;
+
+      // If deleting an AI message, also delete the preceding user message
+      if (message.type === "ai" && messageIndex > 0) {
+        const precedingMessage = messagesRef.current[messageIndex - 1];
+        if (precedingMessage.type === "user") {
+          deleteFromIndex = messageIndex - 1;
+        }
+      }
+
+      // Delete the message(s) and all subsequent messages
+      const updatedMessages = messagesRef.current.slice(0, deleteFromIndex);
+
+      // Update local state
+      setMessages(updatedMessages);
+
+      // Update on server if API endpoint exists
+      try {
+        const projectId = project._id;
+        // TODO: Add API endpoint for deleting messages
+        // For now, we'll update the project with the new messages array
+        // This would require a PATCH endpoint: /project/:projectId/messages
+        // await apiResponse.patch(`/project/${projectId}/messages`, {
+        //   messages: updatedMessages,
+        // });
+      } catch (apiError) {
+        console.error("Error updating messages on server:", apiError);
+        // Don't throw - local state is already updated
+      }
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      throw error;
+    }
   };
 
-  const addReaction = (
+  const addReaction = async (
     messageId: string,
     type: "like" | "dislike" | "comment"
   ) => {
-    console.log(`Adding ${type} reaction to message ${messageId}`);
+    try {
+      if (!project?._id) {
+        console.error("No project ID available");
+        return;
+      }
+
+      // Update local state optimistically
+      setMessages((prev: any[]) =>
+        prev.map((msg: any) => {
+          if (msg.id === messageId || msg._id === messageId) {
+            return {
+              ...msg,
+              feedback: {
+                ...msg.feedback,
+                [type]: (msg.feedback?.[type] || 0) + 1,
+                userReaction: type === "like" ? "like" : type === "dislike" ? "dislike" : msg.feedback?.userReaction,
+              },
+            };
+          }
+          return msg;
+        })
+      );
+
+      // TODO: Add API endpoint for adding reactions
+      // await apiResponse.post(`/project/${project._id}/messages/${messageId}/reactions`, {
+      //   type,
+      // });
+    } catch (error) {
+      console.error("Error adding reaction:", error);
+      throw error;
+    }
   };
 
-  const removeReaction = (
+  const removeReaction = async (
     messageId: string,
     type: "like" | "dislike" | "comment"
   ) => {
-    console.log(`Removing ${type} reaction from message ${messageId}`);
+    try {
+      if (!project?._id) {
+        console.error("No project ID available");
+        return;
+      }
+
+      // Update local state optimistically
+      setMessages((prev: any[]) =>
+        prev.map((msg: any) => {
+          if (msg.id === messageId || msg._id === messageId) {
+            const currentCount = msg.feedback?.[type] || 0;
+            return {
+              ...msg,
+              feedback: {
+                ...msg.feedback,
+                [type]: Math.max(0, currentCount - 1),
+                userReaction: type === "like" || type === "dislike" ? null : msg.feedback?.userReaction,
+              },
+            };
+          }
+          return msg;
+        })
+      );
+
+      // TODO: Add API endpoint for removing reactions
+      // await apiResponse.delete(`/project/${project._id}/messages/${messageId}/reactions/${type}`);
+    } catch (error) {
+      console.error("Error removing reaction:", error);
+      throw error;
+    }
   };
 
   const handleGenerationItemClick = (generationId: string) => {

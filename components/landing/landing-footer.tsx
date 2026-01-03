@@ -322,7 +322,7 @@ export function LandingFooter() {
                 Creators Program
               </Link>
               <Link
-                href="/creators-program"
+                href="/community"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 Community

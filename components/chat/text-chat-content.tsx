@@ -209,14 +209,40 @@ export function TextChatContent() {
 
   const handleLikeToggle = async (messageId: string) => {
     try {
-      await addReaction(messageId, "like");
-    } catch {}
+      const message = messages?.find((m: any) => m.id === messageId || m._id === messageId);
+      const isLiked = message?.feedback?.userReaction === "like";
+      
+      if (isLiked) {
+        await removeReaction(messageId, "like");
+      } else {
+        // Remove dislike if present
+        if (message?.feedback?.userReaction === "dislike") {
+          await removeReaction(messageId, "dislike");
+        }
+        await addReaction(messageId, "like");
+      }
+    } catch (error) {
+      console.error("Error toggling like:", error);
+    }
   };
 
   const handleDislikeToggle = async (messageId: string) => {
     try {
-      await addReaction(messageId, "dislike");
-    } catch {}
+      const message = messages?.find((m: any) => m.id === messageId || m._id === messageId);
+      const isDisliked = message?.feedback?.userReaction === "dislike";
+      
+      if (isDisliked) {
+        await removeReaction(messageId, "dislike");
+      } else {
+        // Remove like if present
+        if (message?.feedback?.userReaction === "like") {
+          await removeReaction(messageId, "like");
+        }
+        await addReaction(messageId, "dislike");
+      }
+    } catch (error) {
+      console.error("Error toggling dislike:", error);
+    }
   };
 
   const handleCopyMessage = (content: string) => {
@@ -261,7 +287,11 @@ export function TextChatContent() {
                       onEdit={(newContent: any, files: any) =>
                         handleEditMessage(message.id, newContent, files)
                       }
-                      onDelete={() => handleDeleteMessage(message.id)}
+                      onDelete={
+                        messages && messages.length > 2
+                          ? () => handleDeleteMessage(message.id)
+                          : undefined
+                      }
                       onCopy={() =>
                         handleCopyMessage(
                           message.parts?.find(
@@ -275,6 +305,12 @@ export function TextChatContent() {
               }
 
               if (message.type === "ai") {
+                // Find the first AI message index
+                const firstAIMessageIndex = messages?.findIndex(
+                  (msg: any) => msg.type === "ai"
+                );
+                const isFirstAIResponse = firstAIMessageIndex !== -1 && index === firstAIMessageIndex;
+
                 return (
                   <div key={message.id || index} className="space-y-4">
                     <AIMessage
@@ -301,7 +337,11 @@ export function TextChatContent() {
                       }
                       onLike={() => handleLikeToggle(message.id)}
                       onDislike={() => handleDislikeToggle(message.id)}
-                      onReload={() => retryLoading(message.id)}
+                      onDelete={
+                        !isFirstAIResponse
+                          ? () => handleDeleteMessage(message.id)
+                          : undefined
+                      }
                       generation={message.generationGroups}
                     />
 
@@ -349,7 +389,11 @@ export function TextChatContent() {
                           }
                           onLike={() => handleLikeToggle(message.id)}
                           onDislike={() => handleDislikeToggle(message.id)}
-                          onReload={() => retryLoading(message.id)}
+                          onDelete={
+                            !isFirstAIResponse
+                              ? () => handleDeleteMessage(message.id)
+                              : undefined
+                          }
                         />
                       );
                     })}

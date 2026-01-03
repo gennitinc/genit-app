@@ -902,10 +902,19 @@ export const templateApi = {
   publishToInspiration: async (
     data: PublishToInspirationRequest
   ): Promise<ApiResponse<{ id: string; assetId: string }>> => {
-    const response = await apiResponse.post(`/templates/publish`, data, {
-      withCredentials: true,
-    });
-    return response.data;
+    try {
+      const response = await apiResponse.post(`/templates/publish`, data, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      // If it's a 409 conflict (already published), return the error response
+      if (error?.response?.status === 409) {
+        return error.response.data;
+      }
+      // Re-throw other errors
+      throw error;
+    }
   },
 };
 

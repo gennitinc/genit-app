@@ -29,6 +29,8 @@ import {
   ReasoningTrigger,
 } from "@/components/ai-elements/reasoning";
 import { Response } from "@/components/ai-elements/response";
+import { DeleteConfirmation } from "./delete-confirmation";
+
 interface AIMessageProps {
   message: any;
   analysis?: string;
@@ -38,9 +40,9 @@ interface AIMessageProps {
   streamingContent?: string; // NEW: Real-time streaming content
   streamingAnalysis?: string; // NEW: Real-time streaming analysis
   onCopy?: () => void;
-  onReload?: () => void;
   onLike?: () => void;
   onDislike?: () => void;
+  onDelete?: () => void;
   generation: any;
   className?: string;
 }
@@ -56,15 +58,16 @@ export function AIMessage({
   streamingContent, // NEW: Accept streaming content
   streamingAnalysis, // NEW: Accept streaming analysis
   onCopy,
-  onReload,
   onLike,
   onDislike,
+  onDelete,
   className,
 }: AIMessageProps) {
   const [isAnalysisOpen, setIsAnalysisOpen] = useState(false);
   const [displayContent, setDisplayContent] = useState("");
   const [displayAnalysis, setDisplayAnalysis] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const formatTime = (ms: number) => {
     if (!ms || ms <= 0) return "";
@@ -89,9 +92,11 @@ export function AIMessage({
       actions={
         <MessageActions
           onCopy={onCopy}
-          onReload={onReload}
           onLike={onLike}
           onDislike={onDislike}
+          onDelete={onDelete ? () => setShowDeleteConfirm(true) : undefined}
+          isLiked={message?.feedback?.userReaction === "like"}
+          isDisliked={message?.feedback?.userReaction === "dislike"}
           disabled={isStreaming}
         />
       }
@@ -134,6 +139,14 @@ export function AIMessage({
           </div>
         </div>
       </MessageContent>
+      {onDelete && (
+        <DeleteConfirmation
+          open={showDeleteConfirm}
+          onOpenChange={setShowDeleteConfirm}
+          onConfirm={onDelete}
+          message="Are you sure you want to delete this? This will delete both the user prompt and AI response, along with all versions after this."
+        />
+      )}
     </MessageContainer>
   );
 }
