@@ -2092,9 +2092,10 @@ function VideoCreatePage() {
                           setSidebarDrawerOpen(true);
                           updateContentTab("preview");
                         }
-
+                        
                         try {
                           if (generationMode === "image") {
+                            updateContentTab("preview");
                             // Image generation
                             if (!selectedImageModel) {
                               toast({
