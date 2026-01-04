@@ -727,7 +727,7 @@ export default function TemplateGridAll() {
             <DialogHeader className="px-4 py-3 border-b flex-shrink-0">
               <DialogTitle>Recreate</DialogTitle>
             </DialogHeader>
-            <div className="flex-shrink-0 overflow-hidden h-[63%] border-b">
+            <div className="flex-shrink-0 overflow-hidden h-[63%]">
               <img
                 src={selected.src}
                 alt={selected.alt || "Template"}
@@ -908,7 +908,7 @@ export default function TemplateGridAll() {
                       }
                       className="relative flex-1 min-h-0 flex flex-col"
                     >
-                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300 flex-1 min-h-0">
+                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-1 focus:ring-transparent flex-1 min-h-0">
                         <div className="flex-1 relative min-h-0 overflow-y-auto">
                           <textarea
                             ref={textareaRef}
@@ -1175,7 +1175,7 @@ export default function TemplateGridAll() {
                       }
                       className="relative flex-1 min-h-0 flex flex-col"
                     >
-                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300 flex-1 min-h-0">
+                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-1 focus:ring-transparent flex-1 min-h-0">
                         <div className="flex-1 relative min-h-0 overflow-y-auto">
                           <textarea
                             ref={textareaRef}
