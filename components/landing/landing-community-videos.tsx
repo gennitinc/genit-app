@@ -176,7 +176,7 @@ const VideoCard = ({ video }: { video: VideoCard }) => {
 
 const LandingCommunityVideos = () => {
   return (
-    <section className="relative mb-28 px-2 md:px-12 lg:px-20 xl:px-24">
+    <section className="relative mb-10 px-2 md:px-12 lg:px-20 xl:px-24">
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16 space-y-4">
