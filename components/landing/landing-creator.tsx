@@ -7,7 +7,7 @@ const LandingCreator = () => {
     <div>
       <div className="text-center mb-12 md:mb-16 space-y-4">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-          Creators Vibe
+          Earn as a creator
         </h2>
         <p className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto">
           Join the creators program and start earning money by referring others.
@@ -95,7 +95,7 @@ const LandingCreator = () => {
               <div>
                 <div className="absolute -right-24 top-5 z-20 w-[350px] gap-4 bg-white dark:bg-neutral-900 rounded-2xl h-16 flex items-center px-5 border border-border dark:border-neutral-800 shadow-[0px_4px_8px_0px_#0000001a,0px_15px_15px_0px_#00000017,0px_34px_20px_0px_#0000000d,0px_60px_24px_0px_#00000003,0px_93px_26px_0px_#00000000]">
                   <span>✅</span>
-                  <span className="text-foreground">Earn as a creator</span>
+                  <span className="text-foreground">Creators Vibe</span>
                 </div>
                 <div className="absolute -right-[115px] top-10 z-10 w-[350px] gap-4 bg-white dark:bg-neutral-900 rounded-2xl h-16 flex items-center px-5 border border-border dark:border-neutral-800 shadow-[0px_4px_8px_0px_#0000001a,0px_15px_15px_0px_#00000017,0px_34px_20px_0px_#0000000d,0px_60px_24px_0px_#00000003,0px_93px_26px_0px_#00000000]" />
               </div>
