@@ -2,6 +2,8 @@
 
 import React, { useRef, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRightIcon } from "lucide-react";
 
 interface VideoCard {
   id: string;
@@ -185,6 +187,14 @@ const LandingCommunityVideos = () => {
             Discover AI-generated content from our talented community of
             creators.
           </p>
+
+          <Link
+            href="/community"
+            className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto flex flex-row items-center justify-center gap-2"
+          >
+            <span className="underline">View All</span>
+            <ArrowRightIcon className="w-4 h-4" />
+          </Link>
         </div>
 
         {/* Video Grid - Masonry Layout */}
