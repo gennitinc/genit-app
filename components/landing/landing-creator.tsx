@@ -15,8 +15,8 @@ const LandingCreator = () => {
           Join the creators program and start earning money by referring others.
         </p>
         <Link href="/creators-program" className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto flex flex-row items-center justify-center gap-2">
+          <span>Get Started</span>
           <ArrowRightIcon className="w-4 h-4" />
-          Get Started
         </Link>
       </div>
       <div className="relative flex justify-center items-center w-full px-2 md:px-12 lg:px-20 xl:px-24">
