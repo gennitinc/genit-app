@@ -31,8 +31,9 @@ import { communityApi } from "@/utils/inspire-api";
 import { CommunityContent } from "@/types/inspire";
 import { io, Socket } from "socket.io-client";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export interface GenerationParamsCallback {
   // Common
@@ -96,6 +97,9 @@ export function ImageCommunityTab({
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const containerRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<Socket | null>(null);
+  const [isCommunityPage, setIsCommunityPage] = useState(false);
+
+  const pathname = usePathname();
 
   // Initialize socket connection
   useEffect(() => {
@@ -128,6 +132,8 @@ export function ImageCommunityTab({
     return () => {
       socket.disconnect();
     };
+
+   
   }, []);
 
   useEffect(() => {
@@ -169,8 +175,14 @@ export function ImageCommunityTab({
       }
     };
 
+     if (pathname === "/community") {
+       setIsCommunityPage(true);
+     } else {
+       setIsCommunityPage(false);
+     }
+
     fetchImages();
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (page === 1) return;
@@ -437,7 +449,7 @@ export function ImageCommunityTab({
   return (
     <>
       <section className="p-4">
-        <div ref={containerRef} className="columns-2 lg:columns-3 gap-4">
+        <div ref={containerRef} className={cn("columns-2 lg:columns-3 gap-4", isCommunityPage ? "lg:columns-4" : "")}>
           {images.map((image, index) => {
             // Use aspectRatio from API or randomize for masonry effect
             const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "3/2"];

@@ -34,7 +34,7 @@ import { communityApi } from "@/utils/inspire-api";
 import { CommunityContent } from "@/types/inspire";
 import { io, Socket } from "socket.io-client";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
 export interface VideoGenerationParamsCallback {
@@ -98,6 +98,9 @@ export function VideoCommunityTab({
   const [likingVideoId, setLikingVideoId] = useState<string | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const socketRef = useRef<Socket | null>(null);
+  const [isCommunityPage, setIsCommunityPage] = useState(false);
+
+  const pathname = usePathname();
 
   // Initialize socket connection
   useEffect(() => {
@@ -168,6 +171,12 @@ export function VideoCommunityTab({
         setLoading(false);
       }
     };
+
+    if (pathname === "/community") {
+      setIsCommunityPage(true);
+    } else {
+      setIsCommunityPage(false);
+    }
 
     fetchVideos();
   }, []);
@@ -414,7 +423,12 @@ export function VideoCommunityTab({
   return (
     <>
       <section className="p-4">
-        <div className="columns-2 lg:columns-3 gap-4">
+        <div
+          className={cn(
+            "columns-2 lg:columns-3 gap-4",
+            isCommunityPage ? "lg:columns-4" : ""
+          )}
+        >
           {videos.map((video, index) => (
             <VideoCard
               key={video.id}
