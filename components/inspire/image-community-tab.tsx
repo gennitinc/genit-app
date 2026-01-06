@@ -449,7 +449,7 @@ export function ImageCommunityTab({
   return (
     <>
       <section className="p-4">
-        <div ref={containerRef} className={cn("columns-2 lg:columns-3 gap-4", isCommunityPage ? "lg:columns-5" : "")}>
+        <div ref={containerRef} className={cn("columns-2 lg:columns-3 gap-4", isCommunityPage ? "md:columns-3   lg:columns-5" : "")}>
           {images.map((image, index) => {
             // Use aspectRatio from API or randomize for masonry effect
             const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "3/2"];

@@ -426,7 +426,7 @@ export function VideoCommunityTab({
         <div
           className={cn(
             "columns-2 lg:columns-3 gap-4",
-            isCommunityPage ? "lg:columns-5" : ""
+            isCommunityPage ? "md:columns-3 lg:columns-5" : ""
           )}
         >
           {videos.map((video, index) => (
