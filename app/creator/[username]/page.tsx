@@ -575,7 +575,7 @@ export default function CreatorProfilePage() {
 
       {/* Profile Header Card - Desktop */}
       <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 lg:pb-8 w-full">
-        <div className=" rounded-t-xl shadow-xs overflow-hidden">
+        <div className="shadow-xs overflow-hidden">
           {/* Banner/Cover Photo - Full width with top border only */}
           <div className="relative h-40 md:h-40 w-full border-t border-neutral-200 dark:border-neutral-800">
             <img

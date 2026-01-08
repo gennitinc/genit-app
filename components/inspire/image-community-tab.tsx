@@ -450,6 +450,9 @@ export function ImageCommunityTab({
     <>
       <section className="p-4">
         <div ref={containerRef} className={cn("columns-2 lg:columns-3 gap-4", isCommunityPage ? "md:columns-3   lg:columns-5" : "")}>
+
+
+
           {images.map((image, index) => {
             // Use aspectRatio from API or randomize for masonry effect
             const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "3/2"];
@@ -463,8 +466,83 @@ export function ImageCommunityTab({
               <div
                 key={image.id}
                 onClick={() => handleImageClick(image)}
-                className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4"
+                className="group isolate flex flex-col rounded-none border border-primary/10 bg-white shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] dark:bg-neutral-900 overflow-hidden transition-all duration-300 hover:shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04),0_0_0_1px_hsl(var(--primary)/10%)] hover:scale-[1.02] md:row-span-2 xl:row-span-2 relative mb-4"
               >
+                {/* Top gradient line */}
+                <div
+                  style={
+                    {
+                      // @ts-ignore
+                      "--background": "#ffffff",
+                      "--color": "rgba(0, 0, 0, 0.2)",
+                      "--height": "1px",
+                      "--width": "5px",
+                      "--fade-stop": "90%",
+                      "--offset": "200px",
+                      "--color-dark": "rgba(255, 255, 255, 0.2)",
+                      // @ts-ignore
+                      maskComposite: "exclude",
+                    } as React.CSSProperties
+                  }
+                  className="absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] top-0"
+                ></div>
+
+                {/* Bottom gradient line */}
+                <div
+                  style={
+                    {
+                      // @ts-ignore
+                      "--background": "#ffffff",
+                      "--color": "rgba(0, 0, 0, 0.2)",
+                      "--height": "1px",
+                      "--width": "5px",
+                      "--fade-stop": "90%",
+                      "--offset": "200px",
+                      "--color-dark": "rgba(255, 255, 255, 0.2)",
+                      // @ts-ignore
+                      maskComposite: "exclude",
+                    } as React.CSSProperties
+                  }
+                  className="absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] top-auto bottom-0"
+                ></div>
+
+                {/* Left gradient line */}
+                <div
+                  style={
+                    {
+                      // @ts-ignore
+                      "--background": "#ffffff",
+                      "--color": "rgba(0, 0, 0, 0.2)",
+                      "--height": "5px",
+                      "--width": "1px",
+                      "--fade-stop": "90%",
+                      "--offset": "80px",
+                      "--color-dark": "rgba(255, 255, 255, 0.2)",
+                      // @ts-ignore
+                      maskComposite: "exclude",
+                    } as React.CSSProperties
+                  }
+                  className="absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] left-0"
+                ></div>
+
+                {/* Right gradient line */}
+                <div
+                  style={
+                    {
+                      // @ts-ignore
+                      "--background": "#ffffff",
+                      "--color": "rgba(0, 0, 0, 0.2)",
+                      "--height": "5px",
+                      "--width": "1px",
+                      "--fade-stop": "90%",
+                      "--offset": "80px",
+                      "--color-dark": "rgba(255, 255, 255, 0.2)",
+                      // @ts-ignore
+                      maskComposite: "exclude",
+                    } as React.CSSProperties
+                  }
+                  className="absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] right-0 left-auto"
+                ></div>
                 <div className="relative">
                   <img
                     src={image.thumbnailUrl}

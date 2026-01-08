@@ -308,6 +308,13 @@ export function LandingNavbar() {
                       <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
+                        href="/community"
+                      >
+                        Community
+                      </Link>
+                      <Link
+                        target="__blank"
+                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/inspirations"
                       >
                         Inspirations
