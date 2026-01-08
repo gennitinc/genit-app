@@ -188,11 +188,27 @@ const LandingCommunityVideos = () => {
             creators.
           </p>
 
+       
           <Link
             href="/community"
-            className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto flex flex-row items-center justify-center gap-2"
+            className="
+    text-base md:text-base
+    max-w-2xl mx-auto
+    flex items-center justify-center gap-2 w-fit
+    rounded-full
+    py-2 px-6
+
+    bg-white/10 dark:bg-white/5
+    backdrop-blur-md backdrop-saturate-150
+    border border-white/20
+    text-muted-foreground
+
+    shadow-lg shadow-black/5
+    hover:bg-white/20 dark:hover:bg-white/10
+    transition-all duration-300
+  "
           >
-            <span className="underline">View All</span>
+            <span>View All</span>
             <ArrowRightIcon className="w-4 h-4" />
           </Link>
         </div>

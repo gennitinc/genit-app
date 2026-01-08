@@ -14,8 +14,27 @@ const LandingCreator = () => {
         <p className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto">
           Join the creators program and start earning money by referring others.
         </p>
-        <Link href="/creators-program" target="_blank" className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto flex flex-row items-center justify-center gap-2">
-          <span className="underline">Get Started</span>
+
+        <Link
+          href="/creators-program"
+          className="
+    text-base md:text-base
+    max-w-2xl mx-auto
+    flex items-center justify-center gap-2 w-fit
+    rounded-full
+    py-2 px-6
+
+    bg-white/10 dark:bg-white/5
+    backdrop-blur-md backdrop-saturate-150
+    border border-white/20
+    text-muted-foreground
+
+    shadow-lg shadow-black/5
+    hover:bg-white/20 dark:hover:bg-white/10
+    transition-all duration-300
+  "
+        >
+          <span>Get Started</span>
           <ArrowRightIcon className="w-4 h-4" />
         </Link>
       </div>
