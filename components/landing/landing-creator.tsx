@@ -7,7 +7,7 @@ import Link from "next/link";
 const LandingCreator = () => {
   return (
     <div>
-      <div className="text-center mb-12 md:mb-16 space-y-4">
+      <div className="text-center mb-12 md:mb-16 space-y-4 mt-24">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
           Earn as a creator
         </h2>
