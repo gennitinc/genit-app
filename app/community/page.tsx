@@ -52,7 +52,7 @@ export default function CommunityPage() {
           </div>
         </main>
 
-        <div className="b-8">
+        <div className="mb-8">
           <Tabs
             value={activeTab}
             onValueChange={(v) => {
