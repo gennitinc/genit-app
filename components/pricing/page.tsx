@@ -368,7 +368,7 @@ export default function PricingComponent() {
                 type="button"
                 onClick={() => handleCheckout(plan)}
                 disabled={loadingPlan === plan.name}
-                className={`text-sm w-full py-2 rounded font-medium mt-7 transition-all duration-300 transform hover:scale-105 hover:shadow-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:transform-none ${
+                className={`text-sm w-full flex items-center justify-center py-2 rounded font-medium mt-7 transition-all duration-300 transform hover:scale-105 hover:shadow-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:transform-none ${
                   plan.popular
                     ? "bg-primary text-primary-foreground hover:bg-primary/90"
                     : plan.monthlyPrice === 0
@@ -388,7 +388,7 @@ export default function PricingComponent() {
                   </div>
                 ) : (
                   <div className="flex flex-row gap-2 items-center">
-                    <span>Start for $0</span>
+                    <span>Upgrade </span>
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </div>
                 )}
