@@ -538,12 +538,12 @@ export function IdeaSection() {
       label: "Logo",
       icon: Type,
     },
-    {
-      id: "video",
-      label: "Video",
-      icon: Video,
-      comingSoon: true,
-    },
+    // {
+    //   id: "video",
+    //   label: "Video",
+    //   icon: Video,
+    //   comingSoon: true,
+    // },
     {
       id: "presentation",
       label: "Presentation",
