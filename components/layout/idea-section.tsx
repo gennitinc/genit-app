@@ -139,9 +139,9 @@ export function IdeaSection() {
   const [inputError, setInputError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedDesignTypeId, setSelectedDesignTypeId] =
-    useState<string>("generic_design");
+    useState<string>("flier");
   const [selectedOrientation, setSelectedOrientation] = useState<string | null>(
-    null
+    "portrait"
   );
   const [customSize, setCustomSize] = useState<{
     width: string;
@@ -391,7 +391,7 @@ export function IdeaSection() {
         console.log("Project creation result:", res);
 
         clearInput();
-        setSelectedDesignTypeId("generic_design");
+        setSelectedDesignTypeId("flier");
         setSelectedOrientation(null);
         setShowOrientationSelection(false);
         setCustomSize({ width: "", height: "" });
