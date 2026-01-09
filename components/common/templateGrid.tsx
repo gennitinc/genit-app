@@ -548,7 +548,7 @@ export default function TemplateGrid() {
         {templates.map((t) => (
           <div
             key={t.id}
-            className="group relative mb-4 inline-block w-full align-top"
+            className="group relative mb-4 inline-block w-full align-top border border-border rounded-lg"
             style={{ breakInside: "avoid" }}
           >
             <div className="relative">
