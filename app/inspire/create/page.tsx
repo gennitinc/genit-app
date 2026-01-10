@@ -1230,13 +1230,13 @@ function VideoCreatePage() {
                                 "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200&h=200&fit=crop",
                             },
                             {
-                              value: "digital-art",
+                              value: "digitalArt",
                               label: "Digital Art",
                               image:
                                 "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop",
                             },
                             {
-                              value: "oil-painting",
+                              value: "oilPainting",
                               label: "Oil Painting",
                               image:
                                 "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&h=200&fit=crop",
@@ -1248,7 +1248,7 @@ function VideoCreatePage() {
                                 "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=200&h=200&fit=crop",
                             },
                             {
-                              value: "3d-render",
+                              value: "threeDRrender",
                               label: "3D Render",
                               image:
                                 "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=200&h=200&fit=crop",
@@ -2092,7 +2092,7 @@ function VideoCreatePage() {
                           setSidebarDrawerOpen(true);
                           updateContentTab("preview");
                         }
-                        
+
                         try {
                           if (generationMode === "image") {
                             updateContentTab("preview");
