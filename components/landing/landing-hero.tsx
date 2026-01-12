@@ -8,6 +8,8 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { MainContent } from "../layout/main-content";
+import { IdeaSection } from "../layout/idea-section";
 
 // Video data for Reels carousel
 const reelsVideos = [
@@ -487,7 +489,7 @@ const LandingHero = () => {
   }, []);
   return (
     <section className="relative py-12 md:py-16 px-2 md:px-12 lg:px-20 xl:px-24">
-      <div className="mx-auto mb-8 max-w-3xl text-center px-4">
+      {/* <div className="mx-auto mb-8 max-w-3xl text-center px-4">
         <h2 className="font-heading mb-6 text-4xl text-balance lg:text-5xl lg:leading-14">
           Think it? <span className="font-serif italic">Generate it</span>
         </h2>
@@ -496,8 +498,10 @@ const LandingHero = () => {
         </p>
       </div>
 
-      <InputLandingMediaChat />
-      <div className="relative z-10 mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 mb-5">
+      <InputLandingMediaChat /> */}
+      <IdeaSection />
+
+      <div className="relative z-10 mt-10 md:mt-20 lg:mt-24 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 mb-5">
         <div className="group isolate flex flex-col rounded-none border border-primary/10 bg-white shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] dark:bg-neutral-900 overflow-hidden transition-all duration-300 hover:shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04),0_0_0_1px_hsl(var(--primary)/10%)] hover:scale-[1.02] md:row-span-2 xl:row-span-2 relative">
           {/* Top gradient line */}
           <div

@@ -675,7 +675,7 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              Create photo manipulations, stunning graphics, brand assets, and
+              Create photo manipulations, videos, stunning graphics, brand assets, and
               marketing visuals in minutes, no design skill required
             </motion.p>
           </motion.div>
