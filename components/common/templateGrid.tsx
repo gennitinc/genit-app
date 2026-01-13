@@ -668,7 +668,7 @@ export default function TemplateGrid() {
             >
               {/* File Attachments */}
               {attachedFiles.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal flex-shrink-0">
+                <div className="ml-2 flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal flex-shrink-0">
                   {attachedFiles.map((file: any, index: number) => {
                     const fileKey = file.fileKey || `${file.name}-${index}`;
                     return (
@@ -922,7 +922,9 @@ export default function TemplateGrid() {
               <DialogTitle>Recreate</DialogTitle>
             </DialogHeader>
 
-            <div className="flex-shrink-0 overflow-hidden h-[63%]">
+            <div
+              className={`overflow-auto border-b ${attachedFiles.length > 0 ? "max-h-[40%] flex-shrink" : "h-[63%] flex-shrink-0"}`}
+            >
               <img
                 src={selected.src}
                 alt={selected.alt || "Template"}
@@ -937,7 +939,7 @@ export default function TemplateGrid() {
             >
               {/* File Attachments */}
               {attachedFiles.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal flex-shrink-0">
+                <div className="ml-2 flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal flex-shrink-0">
                   {attachedFiles.map((file: any, index: number) => {
                     const fileKey = file.fileKey || `${file.name}-${index}`;
                     return (
@@ -1189,7 +1191,9 @@ export default function TemplateGrid() {
             <DrawerHeader className="flex-shrink-0">
               <DrawerTitle>Recreate</DrawerTitle>
             </DrawerHeader>
-            <div className="flex-shrink-0 overflow-hidden h-[63%] border-b">
+            <div
+              className={`overflow-auto border-b ${attachedFiles.length > 0 ? "max-h-[40%] flex-shrink" : "h-[63%] flex-shrink-0"}`}
+            >
               <img
                 src={selected.src}
                 alt={selected.alt || "Template"}
@@ -1204,7 +1208,7 @@ export default function TemplateGrid() {
             >
               {/* File Attachments */}
               {attachedFiles.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal flex-shrink-0">
+                <div className="ml-2 flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal flex-shrink-0">
                   {attachedFiles.map((file: any, index: number) => {
                     const fileKey = file.fileKey || `${file.name}-${index}`;
                     return (
