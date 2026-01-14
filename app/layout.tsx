@@ -25,6 +25,11 @@ const metadata: Metadata = {
     "Gennit AI – AI Image & Video Generator | Create Graphics, Videos & Animations",
   description:
     "Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals in minutes—no design skills required. Free AI image generator and video creator.",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
   keywords: [
     "AI image generator",
     "AI video generator",
