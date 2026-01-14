@@ -304,7 +304,7 @@ export default function RootLayout({
                 "@type": "Organization",
                 name: "Gennit AI",
                 url: "https://www.gennit.online",
-                logo: "https://www.gennit.online/logo.png",
+                logo: "https://www.gennit.online/logo.jpeg",
                 description:
                   "Gennit AI is an intelligent media design platform that supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals using artificial intelligence.",
                 foundingDate: "2024",
