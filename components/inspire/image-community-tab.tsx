@@ -509,7 +509,7 @@ export function ImageCommunityTab({
                       {image.prompt}
                     </p>
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex lg:flex-col gap-2">
                     <Link
                       href={`/creator/${image.author.name}`}
                       onClick={(e) => e.stopPropagation()}
@@ -553,7 +553,7 @@ export function ImageCommunityTab({
                       className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-medium transition-colors w-fit"
                     >
                       <RefreshCw className="w-3 h-3" />
-                      Recreate
+                      <span className="hidden md:block">Recreate</span>
                     </button>
                   </div>
                 </div>
