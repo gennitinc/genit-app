@@ -6,6 +6,7 @@ import {
   Palette,
   CreditCard,
   WandSparklesIcon,
+  GalleryHorizontal,
   UserPlus,
   Video,
   Image as ImageIcon,
@@ -32,15 +33,9 @@ const navItems = [
     href: "/chat",
   },
   {
-    title: "Ai Video Gen",
-    icon: Video,
+    title: "Video / Image Gen",
+    icon: GalleryHorizontal,
     href: "/inspire/create?mode=ai-video-gen",
-  },
-
-  {
-    title: "Ai Image Gen",
-    icon: ImageIcon,
-    href: "/inspire/create?mode=ai-image-gen",
   },
   {
     title: "History",
