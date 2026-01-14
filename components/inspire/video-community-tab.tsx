@@ -172,7 +172,7 @@ export function VideoCommunityTab({
       }
     };
 
-    if (pathname === "/community") {
+    if (pathname === "/community" || pathname === "/chat") {
       setIsCommunityPage(true);
     } else {
       setIsCommunityPage(false);
@@ -634,12 +634,29 @@ function VideoCard({
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4"
+      className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4 border border-neutral-200 dark:border-neutral-700"
     >
-    
-      <div className="relative">
+      <div
+        className="relative"
+        onClick={(e) => {
+          e.stopPropagation();
+          onView();
+        }}
+      >
         {video.videoUrl ? (
-          <>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isPaused) {
+                handlePlayClick(e as any);
+              } else {
+                if (videoRef.current) {
+                  videoRef.current.pause();
+                  setIsPaused(true);
+                }
+              }
+            }}
+          >
             <video
               ref={videoRef}
               src={video.videoUrl}
@@ -650,7 +667,7 @@ function VideoCard({
               className="w-full object-cover"
               style={{ aspectRatio }}
             />
-          </>
+          </div>
         ) : (
           <img
             src={video.thumbnailUrl}
@@ -660,49 +677,6 @@ function VideoCard({
           />
         )}
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
-
-        {/* Play/Pause and View icons - Play/Pause only on mobile/tablet, View always visible */}
-        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-          <div
-            className={`flex items-center ${!isDesktop ? "gap-3" : ""} pointer-events-auto`}
-          >
-            {/* Play/Pause Button - Only visible on mobile/tablet */}
-            {!isDesktop && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (isPaused) {
-                    handlePlayClick(e as any);
-                  } else {
-                    if (videoRef.current) {
-                      videoRef.current.pause();
-                      setIsPaused(true);
-                    }
-                  }
-                }}
-                className="w-10 h-10 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
-              >
-                {isPaused ? (
-                  <Play className="w-5 h-5 text-white ml-0.5" />
-                ) : (
-                  <Pause className="w-5 h-5 text-white" />
-                )}
-              </button>
-            )}
-            {/* View Button - Always visible */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onView();
-              }}
-              className="w-10 h-10 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
-            >
-              <Eye className="w-5 h-5 text-white" />
-            </button>
-          </div>
-        </div>
 
         {/* Likes count and heart icon - Top right, centered together */}
         <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
@@ -728,9 +702,15 @@ function VideoCard({
             />
           </button>
         </div>
+
+        {video && (
+          <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10">
+            <span>{video.duration}s</span>
+          </div>
+        )}
       </div>
       <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-        <div className="mb-2">
+        <div className="mb-2 hidden">
           <p className="text-white text-sm font-medium line-clamp-2">
             {video.prompt}
           </p>

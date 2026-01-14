@@ -27,7 +27,7 @@ function Page() {
       }
 
       // Authenticated: redirect to the app
-      router.push("/inspire/create?mode=ai-video-gen");
+      router.push("/chat");
       setIsCheckingOnboarding(false);
     };
 

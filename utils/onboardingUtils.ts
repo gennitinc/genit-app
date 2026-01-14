@@ -8,5 +8,5 @@ export const shouldRedirectToChat = async (): Promise<boolean> => {
 };
 
 export const getOnboardingRedirectPath = async (): Promise<string> => {
-  return "/inspire/create?mode=ai-video-gen";
+  return "/chat";
 };

@@ -123,7 +123,7 @@ export const LoginComp = () => {
           router.push("/onboarding");
         } else {
           // Verified and onboarded - go to inspire create
-          router.push("/inspire/create");
+          router.push("/chat");
         }
       }
     } catch (error: any) {
@@ -189,7 +189,7 @@ export const LoginComp = () => {
             router.push("/onboarding");
           } else {
             // Verified and onboarded - go to inspire create
-            router.push("/inspire/create");
+            router.push("/chat");
           }
         }
       } catch (error: any) {

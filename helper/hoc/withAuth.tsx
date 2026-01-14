@@ -34,7 +34,7 @@ function withAuth(
               return;
             } else {
               // Verified and onboarded - redirect to inspire create
-              router.push("/inspire/create");
+              router.push("/chat");
               return;
             }
           }

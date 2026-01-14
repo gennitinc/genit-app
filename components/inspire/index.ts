@@ -1,7 +1,7 @@
 // Community tabs
 export { ImageCommunityTab } from "./image-community-tab";
 export { VideoCommunityTab } from "./video-community-tab";
-
+export { DesignsCommunityTab } from "./design-community-tab";
 // Preview tabs
 export { ImagePreviewTab } from "./image-preview-tab";
 export { VideoPreviewTab } from "./video-preview-tab";

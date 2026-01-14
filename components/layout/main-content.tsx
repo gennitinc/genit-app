@@ -5,6 +5,7 @@ import { IdeaSection } from "./idea-section";
 import HomeGrid from "../common/templateGrid";
 import TemplateGrid from "../common/templateGrid";
 import DesignType from "../chat/designType";
+import CommunityComp from "../landing/CommunityComp";
 
 export function MainContent() {
   return (
@@ -12,8 +13,10 @@ export function MainContent() {
       <IdeaSection />
 
       {/* AI Team Features */}
-      
-      <TemplateGrid />
+
+      <div className="mt-10">
+        <CommunityComp />
+      </div>
 
       {/* <HomeInfoGrid /> */}
     </div>

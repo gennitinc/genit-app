@@ -175,7 +175,7 @@ export function ImageCommunityTab({
       }
     };
 
-     if (pathname === "/community") {
+     if (pathname === "/community" || pathname === "/chat") {
        setIsCommunityPage(true);
      } else {
        setIsCommunityPage(false);
@@ -504,7 +504,7 @@ export function ImageCommunityTab({
                 </div>
 
                 <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="mb-2">
+                  <div className="mb-2 hidden">
                     <p className="text-white text-sm font-medium line-clamp-2">
                       {image.prompt}
                     </p>

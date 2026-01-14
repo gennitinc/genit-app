@@ -504,6 +504,12 @@ export function IdeaSection() {
       icon: FileText,
     },
     {
+      id: "video",
+      label: "Video",
+      icon: Video,
+      // comingSoon: true,
+    },
+    {
       id: "instagram_post",
       label: "Instagram",
       icon: Camera,
@@ -538,12 +544,6 @@ export function IdeaSection() {
       label: "Logo",
       icon: Type,
     },
-    // {
-    //   id: "video",
-    //   label: "Video",
-    //   icon: Video,
-    //   comingSoon: true,
-    // },
     {
       id: "presentation",
       label: "Presentation",
@@ -675,8 +675,8 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              Create photo manipulations, videos, stunning graphics, brand assets, and
-              marketing visuals in minutes, no design skill required
+              Create photo manipulations, videos, stunning graphics, brand
+              assets, and marketing visuals in minutes, no design skill required
             </motion.p>
           </motion.div>
         </div>
@@ -1051,9 +1051,17 @@ export function IdeaSection() {
                               type="button"
                               onClick={() => {
                                 if (isComingSoon) return;
-                                setSelectedDesignTypeId(item.id);
-                                setSelectedOrientation(null);
-                                setShowOrientationSelection(true);
+
+                                if (item.id === "video") {
+                                  router.push(
+                                    "/inspire/create?mode=ai-video-gen"
+                                  );
+                                  return;
+                                } else {
+                                  setSelectedDesignTypeId(item.id);
+                                  setSelectedOrientation(null);
+                                  setShowOrientationSelection(true);
+                                }
                               }}
                               disabled={isComingSoon}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors ${
