@@ -15,7 +15,6 @@ export function MainContent() {
       </div>
 
       {/* AI Team Features */}
-
       <div className="mt-10">
         <CommunityComp />
       </div>
