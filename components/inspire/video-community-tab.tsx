@@ -715,7 +715,7 @@ function VideoCard({
             {video.prompt}
           </p>
         </div>
-        <div className="flex lg:flex-col gap-2">
+        <div className="hidden md:flex lg:flex-col gap-2">
           <Link
             href={`/creator/${video.author.name}`}
             onClick={(e) => e.stopPropagation()}

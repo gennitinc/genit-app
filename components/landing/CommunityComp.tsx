@@ -35,8 +35,8 @@ export default function CommunityComp() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
-      <div className="md:px-12 lg:px-20 xl:px-24">
+    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col px-0">
+      <div className="px-0 md:px-12 lg:px-20 xl:px-24">
         <div className="mb-8 w-full">
           <Tabs
             value={activeTab}
@@ -48,7 +48,7 @@ export default function CommunityComp() {
             }}
             className="w-full"
           >
-            <div className="sticky top-0 z-10 bg-white dark:bg-black pb-2 pt-2 mb-6 w-full flex justify-center">
+            <div className="sticky top-0 z-10 bg-white dark:bg-black pb-2 pt-2 mb-6 w-full flex justify-center px-0">
               <TabsList className="grid w-fit grid-cols-3 mt-2 ml-4">
                 <TabsTrigger value="video" className="flex items-center gap-2">
                   Videos
@@ -79,7 +79,7 @@ export default function CommunityComp() {
               />
             </TabsContent>
 
-            <TabsContent value="image" className="mt-0">
+            <TabsContent value="image" className="mt-0 ">
               <ImageCommunityTab
                 onPromptSelect={handlePromptSelect}
                 onTabChange={handleTabChange}
