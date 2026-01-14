@@ -36,7 +36,7 @@ export default function CommunityComp() {
 
   return (
     <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col px-0">
-      <div className="px-0 md:px-12 lg:px-20 xl:px-24">
+      <div className="">
         <div className="mb-8 w-full">
           <Tabs
             value={activeTab}

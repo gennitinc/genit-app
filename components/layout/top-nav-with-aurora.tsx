@@ -21,6 +21,7 @@ import { Logo } from "../logo";
 import { useSidebar } from "../ui/sidebar";
 import { cn } from "@/lib/utils";
 import UserPopOver from "../user/userPopOver";
+import Link from "next/link";
 
 interface TopNavWithAuroraProps {
   scrollContainerRef?: RefObject<HTMLDivElement>;
@@ -105,10 +106,10 @@ export default function TopNavWithAurora({
         <div className="flex px-4 py-2 items-center justify-between w-full">
           <div className="flex z-20 items-center flex-1 gap-4">
             <SidebarTrigger className="-ml-2 z-20" />
-            <div className="lg:hidden flex items-center gap-1">
+            <Link href="/" className="lg:hidden flex items-center gap-1">
               <Logo className="w-9 h-9" />
               <span className="font-semibold text-lg">Gennit</span>
-            </div>
+            </Link>
           </div>
           <div className="flex z-20 items-center gap-4">
             <Button

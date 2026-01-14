@@ -132,8 +132,6 @@ export function ImageCommunityTab({
     return () => {
       socket.disconnect();
     };
-
-   
   }, []);
 
   useEffect(() => {
@@ -175,11 +173,11 @@ export function ImageCommunityTab({
       }
     };
 
-     if (pathname === "/community" || pathname === "/chat") {
-       setIsCommunityPage(true);
-     } else {
-       setIsCommunityPage(false);
-     }
+    if (pathname === "/community" || pathname === "/chat") {
+      setIsCommunityPage(true);
+    } else {
+      setIsCommunityPage(false);
+    }
 
     fetchImages();
   }, [pathname]);
@@ -449,10 +447,13 @@ export function ImageCommunityTab({
   return (
     <>
       <section className="p-4">
-        <div ref={containerRef} className={cn("columns-2 lg:columns-3 gap-4", isCommunityPage ? "md:columns-3   lg:columns-5" : "")}>
-
-
-
+        <div
+          ref={containerRef}
+          className={cn(
+            "columns-2 lg:columns-3 gap-4",
+            isCommunityPage ? "md:columns-3   lg:columns-4" : ""
+          )}
+        >
           {images.map((image, index) => {
             // Use aspectRatio from API or randomize for masonry effect
             const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "3/2"];
@@ -468,7 +469,6 @@ export function ImageCommunityTab({
                 onClick={() => handleImageClick(image)}
                 className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4"
               >
-               
                 <div className="relative">
                   <img
                     src={image.thumbnailUrl}

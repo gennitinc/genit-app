@@ -10,11 +10,13 @@ import CommunityComp from "../landing/CommunityComp";
 export function MainContent() {
   return (
     <div className="w-full px-2 overflow-x-hidden sm:px-6 lg:px-8 py-8">
-      <IdeaSection />
+      <div className="mt-10">
+        <IdeaSection />
+      </div>
 
       {/* AI Team Features */}
 
-      <div className="mt-10">
+      <div className="mt-10 bg-red-500">
         <CommunityComp />
       </div>
 

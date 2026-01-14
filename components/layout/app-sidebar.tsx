@@ -32,6 +32,7 @@ import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo"; // Updated import
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useUrlState } from "@/hooks/use-url-state";
+import Link from "next/link";
 
 export function AppSidebar({
   className,
@@ -62,7 +63,8 @@ export function AppSidebar({
       {...props}
     >
       <SidebarHeader className="flex-row justify-start">
-        <div
+        <Link
+        href="/"
           className={cn(
             "flex items-center gap-2 pb-2",
             state === "collapsed" && !isMobile && "justify-start"
@@ -80,7 +82,7 @@ export function AppSidebar({
           >
             Gennit
           </span>
-        </div>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <NavMain />
