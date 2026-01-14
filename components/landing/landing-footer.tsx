@@ -334,7 +334,7 @@ export function LandingFooter() {
                 Templates
               </Link>
               <Link
-                href="/templates"
+                href="/contact"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 Contact
