@@ -686,7 +686,12 @@ export default function TemplateGridAll() {
             <DialogHeader className="px-4 py-3 border-b flex-shrink-0">
               <DialogTitle>Recreate</DialogTitle>
             </DialogHeader>
-            <div className="flex-shrink-0 overflow-hidden h-[63%]">
+            <div
+              className={cn(
+                "flex-shrink-0 overflow-hidden h-auto max-h-[58%]",
+                attachedFiles.length > 0 ? "h-[60%]" : "h-[63%]"
+              )}
+            >
               <img
                 src={selected.src}
                 alt={selected.alt || "Template"}
@@ -953,7 +958,12 @@ export default function TemplateGridAll() {
             <DrawerHeader className="flex-shrink-0">
               <DrawerTitle>Recreate</DrawerTitle>
             </DrawerHeader>
-            <div className="flex-shrink-0 overflow-auto h-[63%] border-b">
+            <div
+              className={cn(
+                "flex-shrink-0 overflow-hidden h-auto max-h-[58%]",
+                attachedFiles.length > 0 ? "h-[61%]" : "h-[63%]"
+              )}
+            >
               <img
                 src={selected.src}
                 alt={selected.alt || "Template"}
