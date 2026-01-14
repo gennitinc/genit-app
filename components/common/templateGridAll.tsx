@@ -660,7 +660,7 @@ export default function TemplateGridAll() {
                 <Button
                   size="icon"
                   onClick={() => onEdit(t)}
-                  className="pointer-events-auto rounded-full h-9 w-9 p-0 bg-white/90 dark:bg-black/20 backdrop-blur-sm opacity-80"
+                  className="pointer-events-auto rounded-full h-9 w-9 p-0 bg-white/90 dark:bg-black/20 backdrop-blur-sm opacity-50"
                   aria-label="Edit template"
                 >
                   <Pencil className="h-4 w-4 text-black dark:text-white" />
