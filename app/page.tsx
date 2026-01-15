@@ -38,7 +38,7 @@ function Page() {
   if (loading || isCheckingOnboarding) {
     return (
       <div className="flex items-center justify-center h-screen bg-white dark:bg-black w-full">
-        <LandingPage />
+        <Loading />
       </div>
     );
   }
@@ -51,7 +51,7 @@ function Page() {
   // This should not be reached as authenticated users get redirected
   return (
     <div className="flex items-center justify-center h-screen bg-white dark:bg-black">
-      <LandingPage />
+      <Loading />
     </div>
   );
 }
