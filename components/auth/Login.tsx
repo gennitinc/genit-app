@@ -1096,7 +1096,7 @@ export const LoginComp = () => {
               Create Product Ads.
             </h2>
             <p className="text-base text-white">
-              Sign in to create High-Converting Product Ads that can convert
+              Sign in to create High-Converting Product Ads that can turn
               prospects to paying customers
             </p>
           </div>
