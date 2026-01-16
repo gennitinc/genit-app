@@ -628,7 +628,7 @@ export function IdeaSection() {
   const orientationOptions = getOrientationOptions(selectedDesignTypeId);
 
   return (
-    <div className="w-full">
+    <div className="lg:w-full">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
