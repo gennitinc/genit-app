@@ -505,7 +505,7 @@ const LandingHero = () => {
           height={960}
           viewBox="0 0 960 960"
           fill="none"
-          className="pointer-events-none absolute top-0 opacity-25"
+          className="pointer-events-none absolute top-0 opacity-25 hidden lg:block"
         >
           <mask
             id="mask0_4940_405685"
