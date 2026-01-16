@@ -498,6 +498,7 @@ const LandingHero = () => {
         </p>
       </div>
 
+      //update
       <InputLandingMediaChat /> */}
       <div className="relative w-full flex flex-col items-center justify-center">
         <svg
