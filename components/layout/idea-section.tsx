@@ -105,19 +105,28 @@ const images = [
 ];
 
 export function IdeaSection() {
+  
   const placeholders = [
-    "Design a minimalist logo for a wellness brand...",
-    "Create an Instagram carousel about eco-friendly tips...",
-    "Make a bold product promo poster for a new sneaker...",
-    "Design a YouTube thumbnail for a tech review...",
-    "Create a website hero banner for a SaaS startup...",
-    "Design a clean pricing table graphic...",
-    "Make Facebook ad creatives for a summer sale...",
-    "Create a modern business card layout...",
-    "Design an event flyer with a neon vibe...",
-    "Create a LinkedIn banner for a personal brand...",
-    "Design a product mockup for a coffee brand...",
-    "Create an infographic explaining carbon offsets...",
+    "Design high converting logo",
+    "Create viral Instagram carousel",
+    "Generate bold product poster",
+    "Design clickable YouTube thumbnail",
+    "Create SaaS landing banner",
+    "Design clear pricing graphic",
+    "Generate scroll stopping Facebook ads",
+    "Create professional business card",
+    "Design eye catching event flyer",
+    "Create personal brand banner",
+    "Design realistic product mockup",
+    "Create simple data infographic",
+    "Generate engaging video ad",
+    "Create animated social video",
+    "Design modern app interface",
+    "Generate product launch visuals",
+    "Create email marketing banner",
+    "Design clean presentation slides",
+    "Generate brand style guidelines",
+    "Create short promotional animation",
   ];
 
   const {
