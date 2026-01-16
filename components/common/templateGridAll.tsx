@@ -54,6 +54,7 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AIThinkingContent } from "../chat/messages";
 import { toast } from "sonner";
+import { BorderBeam } from "../ui/border-beam";
 
 type TemplateItem = {
   id: string;
@@ -893,9 +894,10 @@ export default function TemplateGridAll() {
                               aria-label="Select files to upload"
                             />
                           </div>
-                          
-                          <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-                            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+
+                          <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 border border-border">
+                            <BorderBeam duration={10} size={40} />
+                            {/* <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" /> */}
                             <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
                               {isGenerating || isSubmitting ? (
                                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -1039,7 +1041,6 @@ export default function TemplateGridAll() {
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
-               
                 <div className="flex flex-col bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-[15px] w-full overflow-hidden z-10 shadow-inner h-full flex-1 min-h-0">
                   {/* <div className="flex items-center mx-4 justify-between text-sm flex-shrink-0">
                     {!isGenerating && (
