@@ -1,132 +1,128 @@
-"use client"
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react'
+"use client";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 const Page = () => {
+  const projects = [
+    {
+      id: 1,
+      username: "kia_dances",
+      image: "https://ext.same-assets.com/3322540528/2818850031.png",
+    },
+    {
+      id: 2,
+      username: "sarah_rides",
+      image: "https://ext.same-assets.com/3322540528/3536909961.png",
+    },
+    {
+      id: 3,
+      username: "tennis_tips",
+      image: "https://ext.same-assets.com/3322540528/108827404.jpeg",
+    },
+    {
+      id: 4,
+      username: "business_chats",
+      image: "https://ext.same-assets.com/3322540528/88222209.png",
+    },
+    {
+      id: 5,
+      username: "golf_with_jess",
+      image: "https://ext.same-assets.com/3322540528/1607598511.png",
+    },
+    {
+      id: 6,
+      username: "zoe_gardens",
+      image: "https://ext.same-assets.com/3322540528/591418869.png",
+    },
+  ];
+  const quotes = [
+    {
+      quote:
+        "Influence helped me turn raw clips into content that actually converts.",
+      name: "MayaLennox",
+      avatar: "https://ext.same-assets.com/3322540528/489297333.jpeg",
+    },
+    {
+      quote:
+        "Our Reels finally have structure, pace, and purpose — thanks to Influence.",
+      name: "_traveldiaries",
+      avatar: "https://ext.same-assets.com/3322540528/490832111.png",
+    },
+    {
+      quote: "Influence made it effortless to stay consistent and grow fast.",
+      name: "sarah_fx",
+      avatar: "https://ext.same-assets.com/3322540528/3139708538.png",
+    },
+    {
+      quote: "From 2K to 10K followers in weeks — Influence knows what works.",
+      name: "Maya Lennox",
+      avatar: "https://ext.same-assets.com/3322540528/489297333.jpeg",
+    },
+    {
+      quote: "Influence gave my videos the polish they were missing.",
+      name: "jo",
+      avatar: "https://ext.same-assets.com/3322540528/2300361184.png",
+    },
+    {
+      quote: "They handled everything — editing, pacing, captions — perfectly.",
+      name: "Lara_Cunningham",
+      avatar: "https://ext.same-assets.com/3322540528/591418869.png",
+    },
+    {
+      quote: "Engagement doubled. Saves tripled. All from Influence's edits.",
+      name: "Rahul_rules",
+      avatar: "https://ext.same-assets.com/3322540528/88222209.png",
+    },
+    {
+      quote: "Influence helped me turn niche content into mainstream reach.",
+      name: "Matt",
+      avatar: "https://ext.same-assets.com/3322540528/108827404.jpeg",
+    },
+  ];
 
-    const projects = [
-      {
-        id: 1,
-        username: "kia_dances",
-        image: "https://ext.same-assets.com/3322540528/2818850031.png",
-      },
-      {
-        id: 2,
-        username: "sarah_rides",
-        image: "https://ext.same-assets.com/3322540528/3536909961.png",
-      },
-      {
-        id: 3,
-        username: "tennis_tips",
-        image: "https://ext.same-assets.com/3322540528/108827404.jpeg",
-      },
-      {
-        id: 4,
-        username: "business_chats",
-        image: "https://ext.same-assets.com/3322540528/88222209.png",
-      },
-      {
-        id: 5,
-        username: "golf_with_jess",
-        image: "https://ext.same-assets.com/3322540528/1607598511.png",
-      },
-      {
-        id: 6,
-        username: "zoe_gardens",
-        image: "https://ext.same-assets.com/3322540528/591418869.png",
-      },
-    ];
-    const quotes = [
-      {
-        quote:
-          "Influence helped me turn raw clips into content that actually converts.",
-        name: "MayaLennox",
-        avatar: "https://ext.same-assets.com/3322540528/489297333.jpeg",
-      },
-      {
-        quote:
-          "Our Reels finally have structure, pace, and purpose — thanks to Influence.",
-        name: "_traveldiaries",
-        avatar: "https://ext.same-assets.com/3322540528/490832111.png",
-      },
-      {
-        quote: "Influence made it effortless to stay consistent and grow fast.",
-        name: "sarah_fx",
-        avatar: "https://ext.same-assets.com/3322540528/3139708538.png",
-      },
-      {
-        quote:
-          "From 2K to 10K followers in weeks — Influence knows what works.",
-        name: "Maya Lennox",
-        avatar: "https://ext.same-assets.com/3322540528/489297333.jpeg",
-      },
-      {
-        quote: "Influence gave my videos the polish they were missing.",
-        name: "jo",
-        avatar: "https://ext.same-assets.com/3322540528/2300361184.png",
-      },
-      {
-        quote:
-          "They handled everything — editing, pacing, captions — perfectly.",
-        name: "Lara_Cunningham",
-        avatar: "https://ext.same-assets.com/3322540528/591418869.png",
-      },
-      {
-        quote: "Engagement doubled. Saves tripled. All from Influence's edits.",
-        name: "Rahul_rules",
-        avatar: "https://ext.same-assets.com/3322540528/88222209.png",
-      },
-      {
-        quote: "Influence helped me turn niche content into mainstream reach.",
-        name: "Matt",
-        avatar: "https://ext.same-assets.com/3322540528/108827404.jpeg",
-      },
-    ];
-
-    const plans = [
-      {
-        name: "Starter plan",
-        price: "$750",
-        description: "Perfect for creators looking to grow an audience.",
-        features: [
-          "8 short-form videos (15–60s each)",
-          "5-day turnaround",
-          "1 revision per video",
-          "Monthly performance report",
-        ],
-        cta: "Get started",
-        popular: false,
-      },
-      {
-        name: "Growth plan",
-        price: "$1,500",
-        description: "Ideal for brands ready to post frequently and grow fast.",
-        features: [
-          "20 short-form videos (15–60s each)",
-          "3-day turnaround",
-          "Unlimited revisions",
-          "Monthly performance report",
-        ],
-        cta: "Book an intro call",
-        popular: true,
-      },
-      {
-        name: "Scale plan",
-        price: "$2,800",
-        description:
-          "For founders, agencies, or creators building a dominant presence.",
-        features: [
-          "32 short-form videos (15–60s each)",
-          "48-hr turnaround",
-          "Unlimited revisions",
-          "Monthly performance report",
-        ],
-        cta: "Get started",
-        popular: false,
-      },
-    ];
-
+  const plans = [
+    {
+      name: "Starter plan",
+      price: "$750",
+      description: "Perfect for creators looking to grow an audience.",
+      features: [
+        "8 short-form videos (15–60s each)",
+        "5-day turnaround",
+        "1 revision per video",
+        "Monthly performance report",
+      ],
+      cta: "Get started",
+      popular: false,
+    },
+    {
+      name: "Growth plan",
+      price: "$1,500",
+      description: "Ideal for brands ready to post frequently and grow fast.",
+      features: [
+        "20 short-form videos (15–60s each)",
+        "3-day turnaround",
+        "Unlimited revisions",
+        "Monthly performance report",
+      ],
+      cta: "Book an intro call",
+      popular: true,
+    },
+    {
+      name: "Scale plan",
+      price: "$2,800",
+      description:
+        "For founders, agencies, or creators building a dominant presence.",
+      features: [
+        "32 short-form videos (15–60s each)",
+        "48-hr turnaround",
+        "Unlimited revisions",
+        "Monthly performance report",
+      ],
+      cta: "Get started",
+      popular: false,
+    },
+  ];
 
   return (
     <div>
@@ -1250,7 +1246,7 @@ const Page = () => {
           {/* Bottom Bar */}
           <div className="flex flex-col md:flex-row justify-between items-center mt-12 pt-8 border-t border-gray-800">
             <p className="text-gray-500 text-sm">
-              © 2025{" "}
+              © 2026{" "}
               <Link
                 href="https://browser.supply"
                 className="underline hover:text-gray-300 transition-colors"
@@ -1287,6 +1283,6 @@ const Page = () => {
       </footer>
     </div>
   );
-}
+};
 
-export default Page
+export default Page;

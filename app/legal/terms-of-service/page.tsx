@@ -44,7 +44,7 @@ export default function About2() {
                 </span>
               </h1>
               <p className=" text-neutral-600 dark:text-neutral-400 text-sm leading-[1.6] text-gray-9 font-normal mt-2 text-start">
-                Last update: <time dateTime="2025-08-01">August 1st, 2025</time>
+                Last update: <time dateTime="2026-08-01">August 1st, 2026</time>
               </p>
             </div>
             <h2

@@ -101,9 +101,9 @@ export function LandingFooter() {
 
   // Recent blog posts - would come from your CMS or API
   const recentPosts = [
-    { title: "The Future of AI in Business", date: "Mar 10, 2025" },
-    { title: "5 Ways to Improve Team Productivity", date: "Mar 5, 2025" },
-    { title: "Understanding Web3 Technologies", date: "Feb 28, 2025" },
+    { title: "The Future of AI in Business", date: "Mar 10, 2026" },
+    { title: "5 Ways to Improve Team Productivity", date: "Mar 5, 2026" },
+    { title: "Understanding Web3 Technologies", date: "Feb 28, 2026" },
   ];
 
   return (

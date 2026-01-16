@@ -1246,7 +1246,7 @@ const Page = () => {
           {/* Bottom Bar */}
           <div className="flex flex-col md:flex-row justify-between items-center mt-12 pt-8 border-t border-gray-800">
             <p className="text-gray-500 text-sm">
-              © 2025{" "}
+              © 2026{" "}
               <Link
                 href="https://browser.supply"
                 className="underline hover:text-gray-300 transition-colors"

@@ -53,7 +53,7 @@ export default function TemplatePage() {
       <LandingPageBanner />
       <LandingNavbar />
       <div className=" hidden">
-        <div className="flex p-3 items-center bg-primary-surface text-primary banner-launch-week-02-2025-03-10 py-4 relative pr-8 rounded-none z-10">
+        <div className="flex p-3 items-center bg-primary-surface text-primary banner-launch-week-02-2026-03-10 py-4 relative pr-8 rounded-none z-10">
           <div className="flex space-y-2 flex-col items-center md:flex-row md:justify-center md:space-y-0 md:space-x-1 w-full">
             <div className="flex space-x-2 items-center">
               <p className="text-sm text-center  font-medium hidden md:block">

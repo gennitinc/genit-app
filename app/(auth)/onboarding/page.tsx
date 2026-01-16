@@ -1582,7 +1582,7 @@ export default function BrandOnboardingChecklist() {
                 </a> */}
               </p>
               <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
-                ©2025 Gennit. A product of{" "}
+                ©2026 Gennit. A product of{" "}
                 <a
                   className="text-gray-800 dark:text-white font-medium hover:text-blue-600"
                   href="#"
