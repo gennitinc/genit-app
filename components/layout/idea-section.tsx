@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { PointerHighlight } from "@/components/ui/pointer-highlight";
 import {
   X,
   PaperclipIcon,
@@ -656,7 +657,14 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              AI Media Designer
+              AI Media
+              <PointerHighlight
+                rectangleClassName="bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700 leading-loose"
+                pointerClassName="text-blue-500 h-3 w-3"
+                containerClassName="inline-block mx-1"
+              >
+                <span className="relative z-10"> Designer </span>
+              </PointerHighlight>
             </motion.h1>
             <motion.p
               className="mt-4 text-center text-gray-600 dark:text-gray-300 max-w-lg"
