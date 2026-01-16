@@ -57,7 +57,7 @@ export const AccountActionModal = ({
             {description}
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
+        <DialogFooter className="flex flex-col gap-2 md:flex-row justify-center md:items-center">
           <Button variant="outline" onClick={onClose} disabled={loading}>
             {cancelLabel}
           </Button>
