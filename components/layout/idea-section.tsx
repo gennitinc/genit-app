@@ -93,7 +93,7 @@ function useTypewriterEffect({
     }
 
     return () => clearTimeout(timeout);
-  }, [text, isDeleting, wordIndex, words, typingSpeed, delay]);
+  }, [text, isDeleting, wordIndex, words, typingSpeed, delay, isDeleting]);
 
   return text;
 }
@@ -107,7 +107,6 @@ const images = [
 ];
 
 export function IdeaSection() {
-  
   const placeholders = [
     "Design high converting logo",
     "Create viral Instagram carousel",
@@ -190,8 +189,8 @@ export function IdeaSection() {
 
   const placeholderText = useTypewriterEffect({
     words: placeholders,
-    typingSpeed: 25,
-    delay: 2000,
+    typingSpeed: 40,
+    delay: 1000,
   });
 
   // Input validation
@@ -919,8 +918,9 @@ export function IdeaSection() {
                       placeholder={
                         isGenerating
                           ? ""
-                          : placeholderText + "✦" ||
-                            "Tell your AI team what to create...✦"
+                          : placeholderText
+                            ? placeholderText + " ✦"
+                            : "Tell your AI team what to create... ✦"
                       }
                       disabled={isGenerating || isSubmitting || isSettingsOpen}
                       style={{
