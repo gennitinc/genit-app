@@ -1367,11 +1367,11 @@ export const LoginComp = () => {
 
             {/* Divider */}
             <div className="flex items-center">
-              <hr className="flex-grow border-t border-gray-500 dark:border-neutral-900" />
+              <hr className="flex-grow border-t border-gray-200 dark:border-neutral-900" />
               <span className="px-3 text-sm text-gray-500 dark:text-gray-400">
                 Or sign up with
               </span>
-              <hr className="flex-grow border-t border-gray-500 dark:border-neutral-900" />
+              <hr className="flex-grow border-t border-gray-200 dark:border-neutral-900" />
             </div>
 
             {/* Form */}
