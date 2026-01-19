@@ -239,7 +239,7 @@ export const AuthMediaCarousel: React.FC<AuthMediaCarouselProps> = ({
       )}
 
       {/* Navigation Arrows */}
-      {media.length > 1 && showControls && (
+      {/* {media.length > 1 && showControls && (
         <>
           <button
             onClick={goToPrev}
@@ -256,7 +256,7 @@ export const AuthMediaCarousel: React.FC<AuthMediaCarouselProps> = ({
             <ChevronRight className="w-6 h-6" />
           </button>
         </>
-      )}
+      )} */}
 
       {/* Testimonial Content */}
       <div className="z-10 flex flex-col items-start justify-start gap-8 bg-gradient-to-t from-black/60 to-black/0 px-16 py-24 w-full">
