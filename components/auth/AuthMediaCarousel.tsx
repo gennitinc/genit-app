@@ -400,8 +400,8 @@ export const loginCarouselData: { media: MediaItem[] } = {
       },
     },
     {
-      type: "video",
-      src: "https://res.cloudinary.com/dkym1gbk1/video/upload/v1768804869/3a66b4cdeb2255a3d9fb5da87139b819_bmnioo.mp4?_s=public-apps",
+      type: "image",
+      src: "https://i.pinimg.com/1200x/c8/62/04/c862048c66b954303866047010109f36.jpg",
       alt: "Voice AI",
       showControls: false,
       testimonial: {
@@ -502,8 +502,8 @@ export const signupCarouselData: { media: MediaItem[] } = {
       },
     },
     {
-      type: "video",
-      src: "https://res.cloudinary.com/dkym1gbk1/video/upload/v1768804869/3a66b4cdeb2255a3d9fb5da87139b819_bmnioo.mp4?_s=public-apps",
+      type: "image",
+      src: "https://i.pinimg.com/1200x/99/f1/69/99f169a3b1c58c7f6b46314c30458a9e.jpg",
       alt: "Voice Cloning",
       showControls: false,
       testimonial: {
