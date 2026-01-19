@@ -19,6 +19,7 @@ import dynamic from "next/dynamic";
 import { Logo } from "@/components/logo";
 import { RegexType, AuthTypes } from "@/types/Authtypes";
 import withAuth from "@/helper/hoc/withAuth";
+import { AuthMediaCarousel, loginCarouselData } from "./AuthMediaCarousel";
 
 // import { LoginSocialGoogle, LoginSocialGithub } from "reactjs-social-login";
 
@@ -209,10 +210,9 @@ export const LoginComp = () => {
   return (
     <div className="h-screen grid grid-cols-1 lg:grid-cols-2">
       <div className="relative hidden items-end justify-center overflow-hidden lg:flex h-screen">
-        <img
-          src="https://i.pinimg.com/1200x/40/d9/b7/40d9b7c963e383dc23a50bbc7c5b6158.jpg"
-          className="absolute inset-0 size-full object-cover"
-          alt="Portrait of person providing testimonial"
+        <AuthMediaCarousel
+          media={loginCarouselData.media}
+          autoPlayInterval={5000}
         />
         <svg
           width={960}
@@ -1070,191 +1070,6 @@ export const LoginComp = () => {
             </clipPath>
           </defs>
         </svg>
-        <div className="z-10 flex flex-col items-start justify-start gap-8 bg-linear-to-t from-black/40 to-black/0 px-16 py-24">
-          <svg width={80} height={80} viewBox="0 0 80 80" fill="none">
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M0 40C25.4247 40 40 25.4247 40 0C40 25.4247 54.5753 40 80 40C54.5753 40 40 54.5753 40 80C40 54.5753 25.4247 40 0 40Z"
-              className="fill-fg-white"
-            />
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M0 12C7.62742 12 12 7.62742 12 0C12 7.62742 16.3726 12 24 12C16.3726 12 12 16.3726 12 24C12 16.3726 7.62742 12 0 12Z"
-              className="fill-warning-300"
-            />
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M64 24C69.0849 24 72 21.0849 72 16C72 21.0849 74.9151 24 80 24C74.9151 24 72 26.9151 72 32C72 26.9151 69.0849 24 64 24Z"
-              className="fill-warning-300"
-            />
-          </svg>
-          <div className="flex flex-col gap-5">
-            <h2 className="text-display-xl text-4xl font-semibold -tracking-[1.2px] text-white">
-              Create Product Ads.
-            </h2>
-            <p className="text-base text-white">
-              Sign in to create High-Converting Product Ads that can turn
-              prospects to paying customers
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex -space-x-3">
-              <img
-                className="size-10 rounded-full object-cover ring-2 ring-bg-primary"
-                src="https://www.untitledui.com/images/avatars/olivia-rhye?fm=webp&q=80"
-                alt="Olivia Rhye"
-              />
-              <img
-                className="size-10 rounded-full object-cover ring-2 ring-bg-primary"
-                src="https://www.untitledui.com/images/avatars/phoenix-baker?fm=webp&q=80"
-                alt="Phoenix Baker"
-              />
-              <img
-                className="size-10 rounded-full object-cover ring-2 ring-bg-primary"
-                src="https://www.untitledui.com/images/avatars/lana-steiner?fm=webp&q=80"
-                alt="Lana Steiner"
-              />
-              <img
-                className="size-10 rounded-full object-cover ring-2 ring-bg-primary"
-                src="https://www.untitledui.com/images/avatars/demi-wilkinson?fm=webp&q=80"
-                alt="Demi Wilkinson"
-              />
-              <img
-                className="size-10 rounded-full object-cover ring-2 ring-bg-primary"
-                src="https://www.untitledui.com/images/avatars/candice-wu?fm=webp&q=80"
-                alt="Candice Wu"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <div className="flex flex-row items-center gap-2">
-                <div className="flex gap-1">
-                  <svg
-                    width={20}
-                    height={20}
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    className="size-5 text-warning-300 text-orange-400"
-                  >
-                    <path
-                      d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-                      className="fill-bg-tertiary"
-                    />
-                    <g clipPath="url(#clip-_R_2mv9bsnpfiv7b_)">
-                      <path
-                        d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-                        fill="currentColor"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip-_R_2mv9bsnpfiv7b_">
-                        <rect width="100%" height={20} fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  <svg
-                    width={20}
-                    height={20}
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    className="size-5 text-warning-300 text-orange-400"
-                  >
-                    <path
-                      d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-                      className="fill-bg-tertiary"
-                    />
-                    <g clipPath="url(#clip-_R_4mv9bsnpfiv7b_)">
-                      <path
-                        d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-                        fill="currentColor"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip-_R_4mv9bsnpfiv7b_">
-                        <rect width="100%" height={20} fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  <svg
-                    width={20}
-                    height={20}
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    className="size-5 text-warning-300 text-orange-400"
-                  >
-                    <path
-                      d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-                      className="fill-bg-tertiary"
-                    />
-                    <g clipPath="url(#clip-_R_6mv9bsnpfiv7b_)">
-                      <path
-                        d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-                        fill="currentColor"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip-_R_6mv9bsnpfiv7b_">
-                        <rect width="100%" height={20} fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  <svg
-                    width={20}
-                    height={20}
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    className="size-5 text-warning-300 text-orange-400"
-                  >
-                    <path
-                      d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-                      className="fill-bg-tertiary"
-                    />
-                    <g clipPath="url(#clip-_R_8mv9bsnpfiv7b_)">
-                      <path
-                        d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-                        fill="currentColor"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip-_R_8mv9bsnpfiv7b_">
-                        <rect width="100%" height={20} fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                  <svg
-                    width={20}
-                    height={20}
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    className="size-5 text-warning-300"
-                  >
-                    <path
-                      d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-                      className="fill-bg-tertiary"
-                    />
-                    <g clipPath="url(#clip-_R_amv9bsnpfiv7b_)">
-                      <path
-                        d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-                        fill="currentColor"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip-_R_amv9bsnpfiv7b_">
-                        <rect width="100%" height={20} fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                </div>
-                <p className="text-md font-semibold text-white">5.0</p>
-              </div>
-              <span className="text-md font-medium text-white">
-                from 200+ reviews
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
       <div className="flex flex-col justify-center items-center min-h-[100vh] overflow-hidden w-full bg-white dark:bg-black">
         <Card className="w-full max-w-md mx-4 lg:bg-transparent lg:border-none">
