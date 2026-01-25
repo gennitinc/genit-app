@@ -425,6 +425,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
     let category;
 
+
     if (selectedFiles && selectedFiles?.length >= 1) {
       category = "auto";
     }
@@ -454,6 +455,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       createdAt: new Date(),
       updatedAt: new Date(),
     };
+
 
     try {
       const response = await apiResponseFileUpload.post(
