@@ -13,18 +13,18 @@ import { useRouter } from "next/navigation";
 export default function CommunityComp() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"video" | "image" | "designs">(
-    "video"
+    "video",
   );
 
   const handlePromptSelect = (prompt: string) => {
     // Redirect to create page with the prompt
     if (activeTab === "video") {
       router.push(
-        `/inspire/create?mode=ai-video-gen&prompt=${encodeURIComponent(prompt)}`
+        `/inspire/create?mode=ai-video-gen&prompt=${encodeURIComponent(prompt)}`,
       );
     } else {
       router.push(
-        `/inspire/create?mode=ai-image-gen&prompt=${encodeURIComponent(prompt)}`
+        `/inspire/create?mode=ai-image-gen&prompt=${encodeURIComponent(prompt)}`,
       );
     }
   };
@@ -48,8 +48,15 @@ export default function CommunityComp() {
             }}
             className="w-full"
           >
-            <div className="sticky top-0 z-10 bg-white dark:bg-black pb-2 pt-2 mb-6 w-full flex justify-center px-0">
-              <TabsList className="grid w-fit grid-cols-3 mt-2 ml-4">
+            <div className="sticky top-0 z-10 bg-white dark:bg-black pb-2 pt-2 mb-6 w-full flex items-center justify-between px-2 md:px-14 lg:px-10">
+              <div className="">
+                {" "}
+                <span className="text-lg md:text-xl lg:text-2xl font-bold">
+                  Community
+                </span>{" "}
+              </div>
+
+              <TabsList className="grid w-fit grid-cols-3">
                 <TabsTrigger value="video" className="flex items-center gap-2">
                   Videos
                 </TabsTrigger>
@@ -79,7 +86,7 @@ export default function CommunityComp() {
               />
             </TabsContent>
 
-            <TabsContent value="image" className="mt-0 ">
+            <TabsContent value="image" className="mt-0">
               <ImageCommunityTab
                 onPromptSelect={handlePromptSelect}
                 onTabChange={handleTabChange}
