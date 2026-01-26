@@ -52,7 +52,7 @@ export default function CommunityComp() {
               <div className="">
                 {" "}
                 <span className="text-lg md:text-xl lg:text-2xl font-bold">
-                  Community
+                  Featured
                 </span>{" "}
               </div>
 
