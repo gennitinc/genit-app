@@ -51,7 +51,7 @@ export default function CommunityComp() {
             <div className="sticky top-0 z-10 bg-white dark:bg-black pb-2 pt-2 mb-6 w-full flex items-center justify-between px-2 md:px-14 lg:px-10">
               <div className="">
                 {" "}
-                <span className="text-lg md:text-xl lg:text-2xl font-bold">
+                <span className="text-lg md:text-xl lg:text-2xl font-normal">
                   Featured
                 </span>{" "}
               </div>
