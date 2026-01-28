@@ -5,45 +5,24 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { io, Socket } from "socket.io-client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import {
   Loader2,
-  ArrowLeft,
   Sparkles,
   Video,
-  Mic,
-  Play,
-  Pause,
-  RefreshCw,
   History,
   BookOpen,
   ViewIcon,
-  Download,
-  Share2,
-  MoreHorizontal,
-  Copy,
-  Clock,
-  Maximize2,
   Users,
   Image as ImageIcon,
   Wand2,
-  Palette,
 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import withAuth from "@/helper/hoc/withAuth";
 import { PresenterSelector } from "@/components/video/presenter-selector";
 import { ResolutionSelector } from "@/components/video/resolution-selector";
 import { VoiceSelector } from "@/components/video/voice-selector";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
-import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -54,7 +33,6 @@ import {
   Volume2,
   Monitor,
   Settings,
-  Menu,
 } from "lucide-react";
 import { IconTemplate } from "@tabler/icons-react";
 import {
@@ -71,6 +49,7 @@ import { VideoHistoryTab } from "@/components/inspire/video-history-tab";
 import { ModelSelector } from "@/components/inspire/model-selector";
 import { Model, Presenter, Voice } from "@/types/inspire";
 import { imageGenApi, videoGenApi } from "@/utils/inspire-api";
+import { Toaster } from "@/components/ui/sonner";
 
 export type Resolution = "1080p" | "720p" | "480p" | "4K";
 export type AspectRatio = "16:9" | "9:16" | "1:1" | "4:3";
@@ -221,7 +200,7 @@ function PresetSlider({
               "w-1.5 h-1.5 rounded-full transition-all duration-300",
               currentSlide === index
                 ? "bg-white w-4"
-                : "bg-white/50 hover:bg-white/70"
+                : "bg-white/50 hover:bg-white/70",
             )}
             aria-label={`Go to slide ${index + 1}`}
           />
@@ -233,7 +212,7 @@ function PresetSlider({
         type="button"
         onClick={() =>
           onSlideChange(
-            (currentSlide - 1 + PRESET_SLIDES.length) % PRESET_SLIDES.length
+            (currentSlide - 1 + PRESET_SLIDES.length) % PRESET_SLIDES.length,
           )
         }
         className="absolute left-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity z-20"
@@ -256,7 +235,6 @@ function PresetSlider({
 function VideoCreatePage() {
   const router = useRouter();
   const { user } = useUserContext();
-  const { toast } = useToast();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
 
@@ -272,7 +250,7 @@ function VideoCreatePage() {
     | null;
 
   const [selectedPresenter, setSelectedPresenter] = useState<Presenter | null>(
-    null
+    null,
   );
   const [selectedResolution, setSelectedResolution] =
     useState<Resolution>("1080p");
@@ -332,17 +310,17 @@ function VideoCreatePage() {
     useState<ImageStyle>("realistic");
   const [imageCount, setImageCount] = useState(1);
   const [selectedImageModel, setSelectedImageModel] = useState<Model | null>(
-    null
+    null,
   );
   const [selectedVideoModel, setSelectedVideoModel] = useState<Model | null>(
-    null
+    null,
   );
 
   const pathname = usePathname();
 
   // Generation mode: image or video - initialize from URL parameter
   const [generationMode, setGenerationMode] = useState<"image" | "video">(
-    urlMode === "ai-image-gen" ? "image" : "video"
+    urlMode === "ai-image-gen" ? "image" : "video",
   );
 
   // Listen to URL parameter changes and update generation mode (for browser back/forward navigation)
@@ -427,12 +405,12 @@ function VideoCreatePage() {
                       return new File([blob], `reference-${index}.jpg`, {
                         type: blob.type,
                       });
-                    }
-                  )
+                    },
+                  ),
                 );
                 setPromptImages(imageFiles);
                 setPromptImagePreviews(
-                  imageFiles.map((file) => URL.createObjectURL(file))
+                  imageFiles.map((file) => URL.createObjectURL(file)),
                 );
               } catch (error) {
                 console.error("Failed to load reference images:", error);
@@ -479,12 +457,12 @@ function VideoCreatePage() {
                       return new File([blob], `reference-${index}.jpg`, {
                         type: blob.type,
                       });
-                    }
-                  )
+                    },
+                  ),
                 );
                 setPromptImages(imageFiles);
                 setPromptImagePreviews(
-                  imageFiles.map((file) => URL.createObjectURL(file))
+                  imageFiles.map((file) => URL.createObjectURL(file)),
                 );
               } catch (error) {
                 console.error("Failed to load reference images:", error);
@@ -499,11 +477,9 @@ function VideoCreatePage() {
           // Clear localStorage after restoring
           localStorage.removeItem("recreateData");
 
-          toast({
-            title: "Settings restored",
-            description:
-              "All generation parameters have been loaded. Click Generate to create your version.",
-          });
+          toast(
+            "All generation parameters have been loaded. Click Generate to create your version.",
+          );
         }
       } catch (error) {
         console.error("Failed to restore recreate data:", error);
@@ -582,27 +558,22 @@ function VideoCreatePage() {
                   const response = await fetch(imageUrl);
                   if (!response.ok) {
                     throw new Error(
-                      `Failed to fetch image: ${response.status}`
+                      `Failed to fetch image: ${response.status}`,
                     );
                   }
                   const blob = await response.blob();
                   return new File([blob], `reference-${index}.jpg`, {
                     type: blob.type || "image/jpeg",
                   });
-                })
+                }),
               );
               setPromptImages(imageFiles);
               setPromptImagePreviews(
-                imageFiles.map((file) => URL.createObjectURL(file))
+                imageFiles.map((file) => URL.createObjectURL(file)),
               );
             } catch (error) {
               console.error("Failed to load reference images:", error);
-              toast({
-                title: "Error loading image",
-                description:
-                  "Failed to load the reference image. Please try again.",
-                variant: "destructive",
-              });
+              toast("Failed to load the reference image. Please try again.");
             }
           }
 
@@ -620,11 +591,9 @@ function VideoCreatePage() {
             window.history.replaceState({}, "", newUrl);
           }
 
-          toast({
-            title: "Design loaded",
-            description:
-              "Your design has been loaded. You can modify the prompt and click Generate to animate it.",
-          });
+          toast(
+            "Your design has been loaded. You can modify the prompt and click Generate to animate it.",
+          );
         }
       } catch (error) {
         console.error("Failed to restore animate design data:", error);
@@ -746,12 +715,7 @@ function VideoCreatePage() {
         }
       } catch (error: any) {
         console.error("Error fetching project:", error);
-        toast({
-          title: "Failed to load project",
-          description:
-            error?.response?.data?.message || "Could not load project data",
-          variant: "destructive",
-        });
+        toast(error?.response?.data?.message || "Could not load project data");
       } finally {
         setLoadingProject(false);
       }
@@ -766,10 +730,10 @@ function VideoCreatePage() {
   >(
     urlContentTab &&
       ["preview", "history", "community", "templates", "tutorial"].includes(
-        urlContentTab
+        urlContentTab,
       )
       ? urlContentTab
-      : "community"
+      : "community",
   );
 
   // Sync activeContentTab with URL parameter changes (for browser back/forward)
@@ -785,7 +749,7 @@ function VideoCreatePage() {
     if (
       currentTab &&
       ["preview", "history", "community", "templates", "tutorial"].includes(
-        currentTab
+        currentTab,
       ) &&
       activeContentTab !== currentTab
     ) {
@@ -811,7 +775,7 @@ function VideoCreatePage() {
       isMobile &&
       currentTab &&
       ["preview", "history", "community", "templates", "tutorial"].includes(
-        currentTab
+        currentTab,
       )
     ) {
       setSidebarDrawerOpen(true);
@@ -842,7 +806,7 @@ function VideoCreatePage() {
         setSidebarDrawerOpen(true);
       }
     },
-    [searchParams, router, isMobile]
+    [searchParams, router, isMobile],
   );
 
   // Set up socket connection for video generation progress
@@ -877,7 +841,7 @@ function VideoCreatePage() {
               updateContentTab("preview");
             }
           }
-        }
+        },
       );
 
       socket.on("disconnect", () => {
@@ -898,7 +862,7 @@ function VideoCreatePage() {
   const [startFrame, setStartFrame] = useState<File | null>(null);
   const [endFrame, setEndFrame] = useState<File | null>(null);
   const [startFramePreview, setStartFramePreview] = useState<string | null>(
-    null
+    null,
   );
   const [endFramePreview, setEndFramePreview] = useState<string | null>(null);
   const [prompt, setPrompt] = useState("");
@@ -932,7 +896,7 @@ function VideoCreatePage() {
   const handleFileUpload = (
     file: File | null,
     setFile: (file: File | null) => void,
-    setPreview: (preview: string | null) => void
+    setPreview: (preview: string | null) => void,
   ) => {
     if (file) {
       setFile(file);
@@ -983,7 +947,7 @@ function VideoCreatePage() {
                     onClick={() => {
                       setGenerationMode("video");
                       const urlParams = new URLSearchParams(
-                        searchParams.toString()
+                        searchParams.toString(),
                       );
                       urlParams.set("mode", "ai-video-gen");
                       if (projectId) {
@@ -995,14 +959,14 @@ function VideoCreatePage() {
                       }
                       router.replace(
                         `/inspire/create?${urlParams.toString()}`,
-                        { scroll: false }
+                        { scroll: false },
                       );
                     }}
                     className={cn(
                       "relative min-w-fit cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2 px-3",
                       generationMode === "video"
                         ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                     )}
                     tabIndex={generationMode === "video" ? -1 : 0}
                     data-orientation="horizontal"
@@ -1020,7 +984,7 @@ function VideoCreatePage() {
                     onClick={() => {
                       setGenerationMode("image");
                       const urlParams = new URLSearchParams(
-                        searchParams.toString()
+                        searchParams.toString(),
                       );
                       urlParams.set("mode", "ai-image-gen");
                       if (projectId) {
@@ -1032,14 +996,14 @@ function VideoCreatePage() {
                       }
                       router.replace(
                         `/inspire/create?${urlParams.toString()}`,
-                        { scroll: false }
+                        { scroll: false },
                       );
                     }}
                     className={cn(
                       "relative min-w-fit cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2 px-3",
                       generationMode === "image"
                         ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                     )}
                     tabIndex={generationMode === "image" ? -1 : 0}
                     data-orientation="horizontal"
@@ -1084,7 +1048,7 @@ function VideoCreatePage() {
               <div
                 className={cn(
                   "absolute w-full lg:w-[27rem]",
-                  generationMode === "video" ? "top-[50px]" : "top-[50px]"
+                  generationMode === "video" ? "top-[50px]" : "top-[50px]",
                 )}
               >
                 <form
@@ -1264,7 +1228,7 @@ function VideoCreatePage() {
                                 "relative rounded-xl overflow-hidden transition-all group",
                                 selectedImageStyle === style.value
                                   ? "ring-2 ring-cyan-500 ring-offset-2 ring-offset-background"
-                                  : "hover:ring-2 hover:ring-neutral-300 dark:hover:ring-neutral-600"
+                                  : "hover:ring-2 hover:ring-neutral-300 dark:hover:ring-neutral-600",
                               )}
                             >
                               <div className="aspect-square relative">
@@ -1279,7 +1243,7 @@ function VideoCreatePage() {
                                     "absolute inset-0 transition-all",
                                     selectedImageStyle === style.value
                                       ? "bg-cyan-500/20"
-                                      : "bg-black/40 group-hover:bg-black/30"
+                                      : "bg-black/40 group-hover:bg-black/30",
                                   )}
                                 />
                                 {/* Checkmark for selected */}
@@ -1309,7 +1273,7 @@ function VideoCreatePage() {
                                   "absolute bottom-0 left-0 right-0 p-2 text-center",
                                   selectedImageStyle === style.value
                                     ? "bg-black/60"
-                                    : "bg-black/60"
+                                    : "bg-black/60",
                                 )}
                               >
                                 <span className="text-xs font-medium text-white">
@@ -1361,7 +1325,7 @@ function VideoCreatePage() {
                                 "p-3 rounded-lg text-xs font-medium transition-all text-left",
                                 selectedAspectRatio === ratio.value
                                   ? "bg-cyan-500 text-white"
-                                  : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                                  : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700",
                               )}
                             >
                               <div className="font-semibold">{ratio.label}</div>
@@ -1370,7 +1334,7 @@ function VideoCreatePage() {
                                   "text-[10px] mt-0.5",
                                   selectedAspectRatio === ratio.value
                                     ? "text-white/80"
-                                    : "text-neutral-500 dark:text-neutral-400"
+                                    : "text-neutral-500 dark:text-neutral-400",
                                 )}
                               >
                                 {ratio.desc}
@@ -1395,7 +1359,7 @@ function VideoCreatePage() {
                                 "p-2 rounded-lg text-xs font-medium transition-all",
                                 imageCount === count
                                   ? "bg-cyan-500 text-white"
-                                  : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                                  : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700",
                               )}
                             >
                               {count}
@@ -1474,7 +1438,7 @@ function VideoCreatePage() {
                                     handleFileUpload(
                                       file,
                                       setStartFrame,
-                                      setStartFramePreview
+                                      setStartFramePreview,
                                     );
                                   }}
                                 />
@@ -1570,7 +1534,7 @@ function VideoCreatePage() {
                                     handleFileUpload(
                                       file,
                                       setEndFrame,
-                                      setEndFramePreview
+                                      setEndFramePreview,
                                     );
                                   }}
                                 />
@@ -1756,7 +1720,7 @@ function VideoCreatePage() {
                                   "relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-200",
                                   sectionsEnabled.avatar
                                     ? "bg-neutral-900 dark:bg-neutral-100"
-                                    : "bg-neutral-300 dark:bg-neutral-600"
+                                    : "bg-neutral-300 dark:bg-neutral-600",
                                 )}
                               >
                                 <span
@@ -1764,7 +1728,7 @@ function VideoCreatePage() {
                                     "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200",
                                     sectionsEnabled.avatar
                                       ? "translate-x-4"
-                                      : "translate-x-0.5"
+                                      : "translate-x-0.5",
                                   )}
                                 />
                               </button>
@@ -1815,7 +1779,7 @@ function VideoCreatePage() {
                                     "relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-200",
                                     sectionsEnabled.audio
                                       ? "bg-neutral-900 dark:bg-neutral-100"
-                                      : "bg-neutral-300 dark:bg-neutral-600"
+                                      : "bg-neutral-300 dark:bg-neutral-600",
                                   )}
                                 >
                                   <span
@@ -1823,7 +1787,7 @@ function VideoCreatePage() {
                                       "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200",
                                       sectionsEnabled.audio
                                         ? "translate-x-4"
-                                        : "translate-x-0.5"
+                                        : "translate-x-0.5",
                                     )}
                                   />
                                 </button>
@@ -1878,7 +1842,7 @@ function VideoCreatePage() {
                                   "relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-200",
                                   sectionsEnabled.resolution
                                     ? "bg-neutral-900 dark:bg-neutral-100"
-                                    : "bg-neutral-300 dark:bg-neutral-600"
+                                    : "bg-neutral-300 dark:bg-neutral-600",
                                 )}
                               >
                                 <span
@@ -1886,7 +1850,7 @@ function VideoCreatePage() {
                                     "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200",
                                     sectionsEnabled.resolution
                                       ? "translate-x-4"
-                                      : "translate-x-0.5"
+                                      : "translate-x-0.5",
                                   )}
                                 />
                               </button>
@@ -1962,7 +1926,7 @@ function VideoCreatePage() {
                                         "w-10 h-10 rounded-lg flex items-center justify-center",
                                         fixedLens
                                           ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                                          : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400"
+                                          : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
                                       )}
                                     >
                                       <svg
@@ -1998,7 +1962,7 @@ function VideoCreatePage() {
                                       "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
                                       fixedLens
                                         ? "bg-neutral-900 dark:bg-neutral-100"
-                                        : "bg-neutral-300 dark:bg-neutral-600"
+                                        : "bg-neutral-300 dark:bg-neutral-600",
                                     )}
                                   >
                                     <span
@@ -2007,7 +1971,7 @@ function VideoCreatePage() {
                                         "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
                                         fixedLens
                                           ? "translate-x-5"
-                                          : "translate-x-0.5"
+                                          : "translate-x-0.5",
                                       )}
                                     />
                                   </button>
@@ -2023,7 +1987,7 @@ function VideoCreatePage() {
                                         "w-10 h-10 rounded-lg flex items-center justify-center",
                                         audioEnabled
                                           ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                                          : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400"
+                                          : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
                                       )}
                                     >
                                       <Volume2 className="w-5 h-5" />
@@ -2049,7 +2013,7 @@ function VideoCreatePage() {
                                       "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
                                       audioEnabled
                                         ? "bg-neutral-900 dark:bg-neutral-100"
-                                        : "bg-neutral-300 dark:bg-neutral-600"
+                                        : "bg-neutral-300 dark:bg-neutral-600",
                                     )}
                                   >
                                     <span
@@ -2058,7 +2022,7 @@ function VideoCreatePage() {
                                         "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
                                         audioEnabled
                                           ? "translate-x-5"
-                                          : "translate-x-0.5"
+                                          : "translate-x-0.5",
                                       )}
                                     />
                                   </button>
@@ -2077,11 +2041,7 @@ function VideoCreatePage() {
                       type="button"
                       onClick={async () => {
                         if (!prompt.trim()) {
-                          toast({
-                            title: "Error",
-                            description: "Please enter a prompt",
-                            variant: "destructive",
-                          });
+                          toast("Please enter a prompt");
                           return;
                         }
 
@@ -2098,11 +2058,7 @@ function VideoCreatePage() {
                             updateContentTab("preview");
                             // Image generation
                             if (!selectedImageModel) {
-                              toast({
-                                title: "Error",
-                                description: "Please select an image model",
-                                variant: "destructive",
-                              });
+                              toast("Please select an image model");
                               setIsGenerating(false);
                               return;
                             }
@@ -2123,7 +2079,7 @@ function VideoCreatePage() {
                                 style: selectedImageStyle,
                                 imageCount: imageCount,
                               },
-                              files.length > 0 ? files : undefined
+                              files.length > 0 ? files : undefined,
                             );
 
                             if (response.success && response.data.images) {
@@ -2143,7 +2099,7 @@ function VideoCreatePage() {
                                     promptImages.length > 0
                                       ? promptImagePreviews
                                       : (img as any).referenceImageUrls || [],
-                                })
+                                }),
                               );
 
                               setGeneratedImages((prev) => [
@@ -2158,23 +2114,18 @@ function VideoCreatePage() {
                                 setSidebarDrawerOpen(true);
                               }
 
-                              toast({
-                                title: "Success",
-                                description: `Successfully generated ${newImages.length} image(s)`,
-                              });
+                              toast(
+                                `Successfully generated ${newImages.length} image(s)`,
+                              );
                             } else {
                               throw new Error(
-                                response.message || "Failed to generate image"
+                                response.message || "Failed to generate image",
                               );
                             }
                           } else {
                             // Video generation
                             if (!selectedVideoModel) {
-                              toast({
-                                title: "Error",
-                                description: "Please select a video model",
-                                variant: "destructive",
-                              });
+                              toast("Please select a video model");
                               setIsGenerating(false);
                               return;
                             }
@@ -2230,7 +2181,7 @@ function VideoCreatePage() {
                               },
                               Object.keys(videoFiles).length > 0
                                 ? videoFiles
-                                : undefined
+                                : undefined,
                             );
 
                             if (response.success && response.data.videos) {
@@ -2255,7 +2206,7 @@ function VideoCreatePage() {
                                     promptImages.length > 0
                                       ? promptImagePreviews
                                       : (vid as any).referenceImageUrls || [],
-                                })
+                                }),
                               );
 
                               setGeneratedVideos((prev) => [
@@ -2272,30 +2223,42 @@ function VideoCreatePage() {
                                 setSidebarDrawerOpen(true);
                               }
 
-                              toast({
-                                title: "Success",
-                                description: `Successfully generated ${newVideos.length} video(s)`,
-                              });
-                            } else {
-                              throw new Error(
-                                response.message || "Failed to generate video"
+                              toast(
+                                `Successfully generated ${newVideos.length} video(s)`,
                               );
+                            } else {
+                              toast(response.message);
                             }
                           }
                         } catch (error: any) {
                           console.error("Generation error:", error);
                           setGenerationProgress(0);
                           currentProjectIdRef.current = null;
-                          toast({
-                            title: "Error",
-                            description:
-                              error?.response?.data?.message ||
-                              error?.message ||
-                              (generationMode === "image"
-                                ? "Failed to generate image"
-                                : "Failed to generate video"),
-                            variant: "destructive",
-                          });
+                          // toast(
+                          //   error?.response?.data?.message ||
+                          //   error?.message ||
+                          //   (generationMode === "image"
+                          //     ? "Failed to generate image"
+                          //     : "Failed to generate video"),
+                          // );
+                          const creditsRemaining = user?.creditsRemaining ?? 0;
+                          if (creditsRemaining <= 10) {
+                            const isBasic = String(user?.userPlan) === "Basic";
+                            toast.error(`Low Credits`, {
+                              description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? "s" : ""} remaining.`,
+                              action: {
+                                label: isBasic ? "Upgrade" : "Buy Credits",
+                                onClick: () => {
+                                  router.push(
+                                    isBasic
+                                      ? "/pricing"
+                                      : "/user/settings?tab=billing",
+                                  );
+                                },
+                              },
+                            });
+                            return;
+                          }
                         } finally {
                           setIsGenerating(false);
                         }
@@ -2359,7 +2322,7 @@ function VideoCreatePage() {
                       "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                       activeContentTab === "preview"
                         ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                     )}
                     tabIndex={activeContentTab === "preview" ? -1 : 0}
                     data-orientation="horizontal"
@@ -2379,7 +2342,7 @@ function VideoCreatePage() {
                       "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                       activeContentTab === "history"
                         ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                     )}
                     tabIndex={activeContentTab === "history" ? -1 : 0}
                     data-orientation="horizontal"
@@ -2399,7 +2362,7 @@ function VideoCreatePage() {
                       "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                       activeContentTab === "community"
                         ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                     )}
                     tabIndex={activeContentTab === "community" ? -1 : 0}
                     data-orientation="horizontal"
@@ -2419,7 +2382,7 @@ function VideoCreatePage() {
                       "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                       activeContentTab === "templates"
                         ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                     )}
                     tabIndex={activeContentTab === "templates" ? -1 : 0}
                     data-orientation="horizontal"
@@ -2439,7 +2402,7 @@ function VideoCreatePage() {
                       "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                       activeContentTab === "tutorial"
                         ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                     )}
                     tabIndex={activeContentTab === "tutorial" ? -1 : 0}
                     data-orientation="horizontal"
@@ -2511,24 +2474,21 @@ function VideoCreatePage() {
                           setPrompt(image.imageData.prompt || "");
                           if (image.imageData.aspectRatio) {
                             setSelectedAspectRatio(
-                              image.imageData.aspectRatio as AspectRatio
+                              image.imageData.aspectRatio as AspectRatio,
                             );
                           }
                           if (image.imageData.resolution) {
                             setSelectedResolution(
-                              image.imageData.resolution as Resolution
+                              image.imageData.resolution as Resolution,
                             );
                           }
                           if (image.imageData.style) {
                             setSelectedImageStyle(
-                              image.imageData.style as ImageStyle
+                              image.imageData.style as ImageStyle,
                             );
                           }
                           updateContentTab("preview");
-                          toast({
-                            title: "Loaded",
-                            description: "Image loaded to editor",
-                          });
+                          toast("Image loaded to editor");
                         }}
                       />
                     ) : (
@@ -2558,19 +2518,16 @@ function VideoCreatePage() {
                           setPrompt(video.videoData.prompt || "");
                           if (video.videoData.aspectRatio) {
                             setSelectedAspectRatio(
-                              video.videoData.aspectRatio as AspectRatio
+                              video.videoData.aspectRatio as AspectRatio,
                             );
                           }
                           if (video.videoData.resolution) {
                             setSelectedResolution(
-                              video.videoData.resolution as Resolution
+                              video.videoData.resolution as Resolution,
                             );
                           }
                           updateContentTab("preview");
-                          toast({
-                            title: "Loaded",
-                            description: "Video loaded to editor",
-                          });
+                          toast("Video loaded to editor");
                         }}
                       />
                     )}
@@ -2606,7 +2563,7 @@ function VideoCreatePage() {
                                   };
                                   reader.readAsDataURL(file);
                                 });
-                              })
+                              }),
                             );
                             setPromptImagePreviews(previews);
                           },
@@ -2665,7 +2622,7 @@ function VideoCreatePage() {
                                   };
                                   reader.readAsDataURL(file);
                                 });
-                              })
+                              }),
                             );
                             setPromptImagePreviews(previews);
                           },
@@ -2760,7 +2717,7 @@ function VideoCreatePage() {
                           "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                           activeContentTab === "preview"
                             ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                         )}
                         tabIndex={activeContentTab === "preview" ? -1 : 0}
                         data-orientation="horizontal"
@@ -2780,7 +2737,7 @@ function VideoCreatePage() {
                           "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                           activeContentTab === "history"
                             ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                         )}
                         tabIndex={activeContentTab === "history" ? -1 : 0}
                         data-orientation="horizontal"
@@ -2802,7 +2759,7 @@ function VideoCreatePage() {
                           "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                           activeContentTab === "community"
                             ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                         )}
                         tabIndex={activeContentTab === "community" ? -1 : 0}
                         data-orientation="horizontal"
@@ -2824,7 +2781,7 @@ function VideoCreatePage() {
                           "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                           activeContentTab === "templates"
                             ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                         )}
                         tabIndex={activeContentTab === "templates" ? -1 : 0}
                         data-orientation="horizontal"
@@ -2846,7 +2803,7 @@ function VideoCreatePage() {
                           "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
                           activeContentTab === "tutorial"
                             ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center",
                         )}
                         tabIndex={activeContentTab === "tutorial" ? -1 : 0}
                         data-orientation="horizontal"
@@ -2888,7 +2845,7 @@ function VideoCreatePage() {
                                   };
                                   reader.readAsDataURL(file);
                                 });
-                              })
+                              }),
                             );
                             setPromptImagePreviews(previews);
                           },
@@ -2946,7 +2903,7 @@ function VideoCreatePage() {
                                   };
                                   reader.readAsDataURL(file);
                                 });
-                              })
+                              }),
                             );
                             setPromptImagePreviews(previews);
                           },
@@ -2986,24 +2943,21 @@ function VideoCreatePage() {
                           setPrompt(image.imageData.prompt || "");
                           if (image.imageData.aspectRatio) {
                             setSelectedAspectRatio(
-                              image.imageData.aspectRatio as AspectRatio
+                              image.imageData.aspectRatio as AspectRatio,
                             );
                           }
                           if (image.imageData.resolution) {
                             setSelectedResolution(
-                              image.imageData.resolution as Resolution
+                              image.imageData.resolution as Resolution,
                             );
                           }
                           if (image.imageData.style) {
                             setSelectedImageStyle(
-                              image.imageData.style as ImageStyle
+                              image.imageData.style as ImageStyle,
                             );
                           }
                           updateContentTab("preview");
-                          toast({
-                            title: "Loaded",
-                            description: "Image loaded to editor",
-                          });
+                          toast("Image loaded to editor");
                         }}
                       />
                     ) : (
@@ -3033,19 +2987,16 @@ function VideoCreatePage() {
                           setPrompt(video.videoData.prompt || "");
                           if (video.videoData.aspectRatio) {
                             setSelectedAspectRatio(
-                              video.videoData.aspectRatio as AspectRatio
+                              video.videoData.aspectRatio as AspectRatio,
                             );
                           }
                           if (video.videoData.resolution) {
                             setSelectedResolution(
-                              video.videoData.resolution as Resolution
+                              video.videoData.resolution as Resolution,
                             );
                           }
                           updateContentTab("preview");
-                          toast({
-                            title: "Loaded",
-                            description: "Video loaded to editor",
-                          });
+                          toast("Video loaded to editor");
                         }}
                       />
                     )}
