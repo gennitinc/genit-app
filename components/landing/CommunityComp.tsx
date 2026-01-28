@@ -53,7 +53,7 @@ export default function CommunityComp() {
               <div className="flex flex-row items-center gap-1">
                 {" "}
                 <Compass />
-                <span className="text-lg md:text-xl lg:text-2xl font-normal">
+                <span className="text-sm sm:text-base md:text-xl lg:text-2xl font-normal">
                   Discover
                 </span>{" "}
               </div>
