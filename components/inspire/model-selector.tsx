@@ -46,7 +46,7 @@ function ModelIcon({
         <img
           src={icon}
           alt={name}
-          className="w-4 h-4 flex-shrink-0 object-contain"
+          className="w-4 h-4 flex-shrink-0 object-contain rounded-full"
           onError={(e) => {
             // Fallback to default icon on error
             e.currentTarget.style.display = "none";

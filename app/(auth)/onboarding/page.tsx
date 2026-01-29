@@ -76,6 +76,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import { apiResponse } from "@/utils/apiResponse";
 import { toast } from "sonner";
+import { BorderBeam } from "@/components/ui/border-beam";
 // TwitterApi removed - using direct API calls instead
 
 // Google Identity Services types
@@ -599,10 +600,10 @@ export default function BrandOnboardingChecklist() {
 
       if (onboardingCompleted && !hasRedirected) {
         console.log(
-          "User has already completed onboarding, redirecting to inspire create"
+          "User has already completed onboarding, redirecting to inspire create",
         );
         setHasRedirected(true);
-        router.replace("/chat");
+        // router.replace("/chat");
         return;
       }
 
@@ -619,7 +620,7 @@ export default function BrandOnboardingChecklist() {
             response.data.onboarding?.onboardingCompleted === true
           ) {
             console.log(
-              "Onboarding completed (fetched separately), redirecting to inspire create"
+              "Onboarding completed (fetched separately), redirecting to inspire create",
             );
             setHasRedirected(true);
             router.replace("/chat");
@@ -664,7 +665,7 @@ export default function BrandOnboardingChecklist() {
           const parsedData = JSON.parse(savedData);
           console.log(
             "Loading saved onboarding data from localStorage:",
-            parsedData
+            parsedData,
           );
 
           setFormData((prev) => ({
@@ -726,7 +727,7 @@ export default function BrandOnboardingChecklist() {
             (channelId: string) => ({
               platform: channelId,
               url: "",
-            })
+            }),
           );
           setSocialMediaUrls(convertedUrls);
         }
@@ -784,7 +785,7 @@ export default function BrandOnboardingChecklist() {
     return countries.filter(
       (country) =>
         country.name.toLowerCase().includes(countrySearchValue.toLowerCase()) ||
-        country.code.toLowerCase().includes(countrySearchValue.toLowerCase())
+        country.code.toLowerCase().includes(countrySearchValue.toLowerCase()),
     );
   }, [countrySearchValue]);
 
@@ -861,7 +862,7 @@ export default function BrandOnboardingChecklist() {
         console.error("Error saving to localStorage:", error);
       }
     },
-    [user, socialMediaUrls]
+    [user, socialMediaUrls],
   );
 
   // Clear localStorage data
@@ -883,7 +884,7 @@ export default function BrandOnboardingChecklist() {
       if (!user) return;
       await saveToLocalStorage(data, completedSections);
     },
-    [user, saveToLocalStorage]
+    [user, saveToLocalStorage],
   );
 
   // Debounced local save effect (localStorage only)
@@ -906,7 +907,7 @@ export default function BrandOnboardingChecklist() {
     ) {
       const description = generateAgentDescription(
         formData.agentName,
-        formData.agentType
+        formData.agentType,
       );
       setFormData((prev) => ({
         ...prev,
@@ -1035,20 +1036,30 @@ export default function BrandOnboardingChecklist() {
     try {
       // Save business profile data to database with onboarding completed
       const formDataToSend = new FormData();
-      formDataToSend.append("businessName", formData.brandName);
-      formDataToSend.append("businessBio", formData.brandDescription);
+      formDataToSend.append(
+        "businessName",
+        formData.brandName || user?.username || "",
+      );
+      formDataToSend.append(
+        "businessBio",
+        formData.brandDescription ||
+          "Digital Creator looking forward to boosting my brand visibility",
+      );
       formDataToSend.append("companyWebsite", formData.website);
-      formDataToSend.append("industry", formData.industry);
-      formDataToSend.append("country", formData.country);
-      formDataToSend.append("language", formData.language);
-      formDataToSend.append("primaryGoal", formData.primaryGoal);
+      formDataToSend.append("industry", formData.industry || "Technology");
+      formDataToSend.append("country", formData.country || "US");
+      formDataToSend.append("language", formData.language || "English");
+      formDataToSend.append(
+        "primaryGoal",
+        formData.primaryGoal || "Brand Awareness",
+      );
       formDataToSend.append("socialMediaUrls", JSON.stringify(socialMediaUrls));
       formDataToSend.append("agentName", formData.agentName);
       formDataToSend.append("agentDescription", formData.agentDescription);
       formDataToSend.append("primaryColor", formData.primaryColor || "#3b82f6");
       formDataToSend.append(
         "secondaryColor",
-        formData.secondaryColor || "#8b5cf6"
+        formData.secondaryColor || "#8b5cf6",
       );
       formDataToSend.append("onboardingCompleted", "true");
 
@@ -1058,7 +1069,7 @@ export default function BrandOnboardingChecklist() {
 
       const response = await apiResponseFileUpload.post(
         "/auth/onboarding/save",
-        formDataToSend
+        formDataToSend,
       );
 
       if (response.status !== 200) {
@@ -1121,14 +1132,14 @@ export default function BrandOnboardingChecklist() {
         }
 
         // Redirect to inspire create after confetti animation
-        router.replace("/chat");
+        // router.replace("/chat");
       }, 2000); // Wait 2 seconds for confetti animation to complete
     } catch (error: any) {
       console.error("Error saving business profile:", error);
       toast.error(
         error?.response?.data?.message ||
           error?.message ||
-          "Failed to complete onboarding. Please try again."
+          "Failed to complete onboarding. Please try again.",
       );
     } finally {
       setIsSaving(false);
@@ -1434,8 +1445,8 @@ export default function BrandOnboardingChecklist() {
               <div className="w-full max-w-4xl space-y-2 border border-gray-200 dark:border-neutral-800 py-4 px-4 sm:px-6 rounded-xl shadow-sm bg-BackgroundLight2 dark:bg-neutral-900">
                 <div className="flex flex-col items-center gap-3 mb-3">
                   <span className="text-xl font-bold">Brand Onboarding</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-32 h-2 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+                  <div className="flex items-center gap-2 justify-between">
+                    <div className="w-24 h-2 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500 ease-out"
                         style={{
@@ -1452,6 +1463,28 @@ export default function BrandOnboardingChecklist() {
                         Saving
                       </div>
                     )} */}
+
+                    <div className="">or </div>
+                    <div className="">
+                      <span
+                        className="relative text-sm text-muted-foreground bg-neutral-50 cursor-pointer dark:bg-neutral-900/20 py-1 px-2 rounded-full border border-neutral-200 dark:border-neutral-800"
+                        onClick={() => handleLaunchComplete()}
+                      >
+                        <BorderBeam
+                          duration={6}
+                          size={40}
+                          className="from-transparent via-red-500 to-transparent"
+                        />
+                        <BorderBeam
+                          duration={6}
+                          delay={3}
+                          size={40}
+                          borderWidth={2}
+                          className="from-transparent via-yellow-500 to-transparent"
+                        />
+                        Skip
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -1465,7 +1498,7 @@ export default function BrandOnboardingChecklist() {
                           ? ""
                           : canStartItem(item.id)
                             ? "border-gray-200 dark:border-neutral-700"
-                            : "border-gray-200 dark:border-neutral-700 opacity-60"
+                            : "border-gray-200 dark:border-neutral-700 opacity-60",
                       )}
                     >
                       <div
@@ -1473,7 +1506,7 @@ export default function BrandOnboardingChecklist() {
                           "w-8 h-8 md:w-12 md:h-12 rounded-lg flex items-center justify-center transition-colors",
                           completedItems.includes(item.id)
                             ? ""
-                            : "bg-neutral-900 dark:bg-neutral-800"
+                            : "bg-neutral-900 dark:bg-neutral-800",
                         )}
                       >
                         <item.icon
@@ -1481,7 +1514,7 @@ export default function BrandOnboardingChecklist() {
                             "w-6 h-6 transition-colors",
                             completedItems.includes(item.id)
                               ? "text-white dark:text-gray-300"
-                              : "text-white dark:text-gray-300"
+                              : "text-white dark:text-gray-300",
                           )}
                         />
                       </div>
@@ -1528,7 +1561,7 @@ export default function BrandOnboardingChecklist() {
                             "transition-all duration-300 ease-out transform hover:scale-105 active:scale-95",
                             canStartItem(item.id)
                               ? "bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg hover:shadow-xl"
-                              : "bg-gray-200 dark:bg-neutral-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                              : "bg-gray-200 dark:bg-neutral-700 text-gray-500 dark:text-gray-400 cursor-not-allowed",
                           )}
                         >
                           {item.id === "launch" && canStartItem(item.id) ? (
@@ -1631,7 +1664,7 @@ export default function BrandOnboardingChecklist() {
                       // Store the URL to prevent re-creation on re-renders
                       if (!formData.brandLogoUrl && formData.brandLogo) {
                         const objectUrl = URL.createObjectURL(
-                          formData.brandLogo
+                          formData.brandLogo,
                         );
                         setFormData((prev) => ({
                           ...prev,
@@ -1783,7 +1816,10 @@ export default function BrandOnboardingChecklist() {
                       value={countrySearchValue}
                       onValueChange={setCountrySearchValue}
                     />
-                    <CommandList className="max-h-[300px] overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 hover:[&::-webkit-scrollbar-thumb]:bg-gray-400 dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-500">
+                    <CommandList
+                      onWheel={(e) => e.stopPropagation()}
+                      className="max-h-[300px] overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 hover:[&::-webkit-scrollbar-thumb]:bg-gray-400 dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-500"
+                    >
                       <CommandEmpty>No country found.</CommandEmpty>
                       <CommandGroup>
                         {filteredCountries.map((country) => (
@@ -1808,7 +1844,7 @@ export default function BrandOnboardingChecklist() {
                                 "ml-auto h-4 w-4",
                                 formData.country === country.code
                                   ? "opacity-100"
-                                  : "opacity-0"
+                                  : "opacity-0",
                               )}
                             />
                           </CommandItem>
@@ -2078,7 +2114,7 @@ export default function BrandOnboardingChecklist() {
             <div className="space-y-3">
               {channels.map((channel) => {
                 const existingUrl = socialMediaUrls.find(
-                  (url) => url.platform === channel.id
+                  (url) => url.platform === channel.id,
                 );
                 return (
                   <div key={channel.id} className="space-y-2">
@@ -2103,7 +2139,7 @@ export default function BrandOnboardingChecklist() {
                           const url = e.target.value.trim();
                           setSocialMediaUrls((prev) => {
                             const filtered = prev.filter(
-                              (u) => u.platform !== channel.id
+                              (u) => u.platform !== channel.id,
                             );
                             if (url) {
                               return [
@@ -2123,7 +2159,7 @@ export default function BrandOnboardingChecklist() {
                           size="sm"
                           onClick={() => {
                             setSocialMediaUrls((prev) =>
-                              prev.filter((u) => u.platform !== channel.id)
+                              prev.filter((u) => u.platform !== channel.id),
                             );
                           }}
                           className="h-11 px-3"
@@ -2179,7 +2215,7 @@ export default function BrandOnboardingChecklist() {
         </div>
       </ResponsiveDialog>
 
-      {/* Platform Requirements Dialog removed - now using URL inputs */}
+      {/* Skip, the onboarding, by filling demo form  */}
     </section>
   );
 }
