@@ -1,11 +1,11 @@
 
 import React from 'react'
-import GennittWorkflow from '@/components/gennitt-workflow'
+// import GennittWorkflow from '@/components/gennitt-workflow'
 
 const page = () => {
   return (
     <div>
-      <GennittWorkflow />
+      {/* <GennittWorkflow /> */}
     </div>
   )
 }
