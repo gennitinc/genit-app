@@ -603,7 +603,7 @@ export default function BrandOnboardingChecklist() {
           "User has already completed onboarding, redirecting to inspire create",
         );
         setHasRedirected(true);
-        router.replace("/chat");
+        // router.replace("/chat");
         return;
       }
 
@@ -623,7 +623,7 @@ export default function BrandOnboardingChecklist() {
               "Onboarding completed (fetched separately), redirecting to inspire create",
             );
             setHasRedirected(true);
-            router.replace("/chat");
+            // router.replace("/chat");
             return;
           }
         } catch (error) {
