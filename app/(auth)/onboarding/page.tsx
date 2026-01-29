@@ -603,7 +603,7 @@ export default function BrandOnboardingChecklist() {
           "User has already completed onboarding, redirecting to inspire create",
         );
         setHasRedirected(true);
-        // router.replace("/chat");
+        router.replace("/chat");
         return;
       }
 
