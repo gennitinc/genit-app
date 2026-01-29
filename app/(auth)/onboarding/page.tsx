@@ -1184,7 +1184,7 @@ export default function BrandOnboardingChecklist() {
         {/* Grid */}
         <div className="grid lg:grid-cols-2 items-center justify-center xl:px-16 gap-4 lg:gap-8">
           <div className="flex flex-col items-center justify-center lg:justify-start lg:items-start px-4 lg:px-0">
-            <div className="flex justify-center items-center mt-4 gap-2">
+            <div className="flex justify-center items-center mt-20 mb-4 lg:mb-0 lg:mt-4 gap-2">
               <Logo />
               <h1 className="text-2xl font-semibold tracking-tight text-foreground">
                 Gennit
