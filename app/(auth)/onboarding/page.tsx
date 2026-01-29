@@ -603,7 +603,7 @@ export default function BrandOnboardingChecklist() {
           "User has already completed onboarding, redirecting to inspire create",
         );
         setHasRedirected(true);
-        // router.replace("/chat");
+        router.replace("/chat");
         return;
       }
 
@@ -623,7 +623,7 @@ export default function BrandOnboardingChecklist() {
               "Onboarding completed (fetched separately), redirecting to inspire create",
             );
             setHasRedirected(true);
-            // router.replace("/chat");
+            router.replace("/chat");
             return;
           }
         } catch (error) {
@@ -1132,7 +1132,7 @@ export default function BrandOnboardingChecklist() {
         }
 
         // Redirect to inspire create after confetti animation
-        // router.replace("/chat");
+        router.replace("/chat");
       }, 2000); // Wait 2 seconds for confetti animation to complete
     } catch (error: any) {
       console.error("Error saving business profile:", error);
