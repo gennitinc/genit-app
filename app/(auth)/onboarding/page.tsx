@@ -1184,7 +1184,7 @@ export default function BrandOnboardingChecklist() {
         {/* Grid */}
         <div className="grid lg:grid-cols-2 items-center justify-center xl:px-16 gap-4 lg:gap-8">
           <div className="flex flex-col items-center justify-center lg:justify-start lg:items-start px-4 lg:px-0">
-            <div className="flex justify-center items-center mt-20 mb-4 lg:mb-0 lg:mt-4 gap-2">
+            <div className="flex justify-center items-center mt-16 mb-4 lg:mb-0 lg:mt-4 gap-2">
               <Logo />
               <h1 className="text-2xl font-semibold tracking-tight text-foreground">
                 Gennit
@@ -1441,7 +1441,7 @@ export default function BrandOnboardingChecklist() {
           </div>
           {/* End Col */}
           <div className="container max-w-none flex w-full flex-col items-center justify-center py-4 overflow-y-auto">
-            <div className="flex w-full max-w-[506px] flex-col items-center justify-center gap-4 px-2">
+            <div className="flex w-full max-w-[506px] flex-col items-center justify-center gap-4">
               <div className="w-full max-w-4xl space-y-2 border border-gray-200 dark:border-neutral-800 py-4 px-4 sm:px-6 rounded-xl shadow-sm bg-BackgroundLight2 dark:bg-neutral-900">
                 <div className="flex flex-col items-center gap-3 my-8">
                   <span className="text-xl font-bold">Brand Onboarding</span>
