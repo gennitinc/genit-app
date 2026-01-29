@@ -1885,9 +1885,9 @@ function VideoCreatePage() {
                                 >
                                   <option value={4}>4 seconds</option>
                                   <option value={8}>8 seconds</option>
-                                  <option value={12}>12 seconds</option>
+                                  {/* <option value={12}>12 seconds</option>
                                   <option value={16}>16 seconds</option>
-                                  <option value={30}>30 seconds</option>
+                                  <option value={30}>30 seconds</option> */}
                                 </select>
                               </div>
                             </div>
