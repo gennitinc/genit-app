@@ -1443,31 +1443,27 @@ export default function BrandOnboardingChecklist() {
           <div className="container max-w-none flex w-full flex-col items-center justify-center py-4 overflow-y-auto">
             <div className="flex w-full max-w-[506px] flex-col items-center justify-center gap-4 px-2">
               <div className="w-full max-w-4xl space-y-2 border border-gray-200 dark:border-neutral-800 py-4 px-4 sm:px-6 rounded-xl shadow-sm bg-BackgroundLight2 dark:bg-neutral-900">
-                <div className="flex flex-col items-center gap-3 mb-3">
+                <div className="flex flex-col items-center gap-3 my-8">
                   <span className="text-xl font-bold">Brand Onboarding</span>
-                  <div className="flex items-center gap-2 justify-between">
-                    <div className="w-24 h-2 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500 ease-out"
-                        style={{
-                          width: `${(completedCount / totalCount) * 100}%`,
-                        }}
-                      />
-                    </div>
-                    <span className="text-sm text-muted-foreground font-medium">
-                      {completedCount} of {totalCount} completed
-                    </span>
-                    {/* {isAutoSaving && (
-                      <div className="flex items-center gap-1 text-xs text-cyan-600 dark:text-cyan-400">
-                        <div className="w-2 h-2 border border-current border-t-transparent rounded-full animate-spin" />
-                        Saving
+                  <div className="flex flex-col md:flex-row items-center gap-4 md:gap-4 justify-between mt-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-24 h-2 bg-gray-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500 ease-out"
+                          style={{
+                            width: `${(completedCount / totalCount) * 100}%`,
+                          }}
+                        />
                       </div>
-                    )} */}
+                      <span className="text-sm text-muted-foreground font-medium">
+                        {completedCount} of {totalCount} completed
+                      </span>
+                    </div>
 
                     <div className="">or </div>
-                    <div className="">
+                    <div className="mb-3 md:mb-0">
                       <span
-                        className="relative text-sm text-muted-foreground bg-neutral-50 cursor-pointer dark:bg-neutral-900/20 py-1 px-2 rounded-full border border-neutral-200 dark:border-neutral-800"
+                        className="relative text-sm text-muted-foreground bg-neutral-50 cursor-pointer dark:bg-neutral-900/20 py-2 px-8 rounded-full border border-neutral-200 dark:border-neutral-800"
                         onClick={() => handleLaunchComplete()}
                       >
                         <BorderBeam
@@ -1488,7 +1484,7 @@ export default function BrandOnboardingChecklist() {
                   </div>
                 </div>
 
-                <div className="flex w-full flex-col items-start gap-4">
+                <div className="flex w-full flex-col items-start gap-4 mb-8">
                   {checklistItems.map((item, index) => (
                     <Card
                       key={item.id}
