@@ -22,7 +22,7 @@ import Script from "next/script";
 
 const metadata: Metadata = {
   title:
-    "Gennit AI – AI Image & Video Generator | Create Graphics, Videos & Animations",
+    "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
   description:
     "Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals in minutes—no design skills required. Free AI image generator and video creator.",
   icons: {
@@ -77,17 +77,19 @@ const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gennit AI – AI Image & Video Generator | Create Graphics & Videos",
+    title:
+      "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
     description:
       "Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos instantly—no design skills required.",
     creator: "@GennitAI",
     images: {
       url: "https://www.gennit.online/opengraph-image.png",
-      alt: "Gennit AI – AI Image & Video Generator Platform",
+      alt: "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
     },
   },
   openGraph: {
-    title: "Gennit AI – AI Image & Video Generator | Create Graphics & Videos",
+    title:
+      "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
     description:
       "Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals instantly. Free AI image and video generator.",
     url: "https://www.gennit.online",
@@ -97,13 +99,13 @@ const metadata: Metadata = {
         url: "https://www.gennit.online/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Gennit AI – AI Media Design Platform",
+        alt: "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
       },
       {
         url: "https://www.gennit.online/opengraph-image.png",
         width: 1200,
         height: 1200,
-        alt: "Gennit AI – AI Media Design Platform",
+        alt: "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
         type: "image/png",
       },
     ],
@@ -194,7 +196,7 @@ export default function RootLayout({
         <meta property="og:url" content="https://www.gennit.online" />
         <meta
           property="og:title"
-          content="Gennit AI – AI Image & Video Generator | Create Graphics & Videos"
+          content="Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required."
         />
         <meta
           property="og:description"
