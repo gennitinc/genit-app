@@ -34,6 +34,7 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import GridLoading from "@/utils/girdLoading";
 
 export interface GenerationParamsCallback {
   // Common
@@ -399,14 +400,7 @@ export function ImageCommunityTab({
 
   if (loading) {
     return (
-      <section className="p-4">
-        <div className="flex flex-col items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-6 h-6 text-neutral-400 dark:text-neutral-500 animate-spin mb-3" />
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            Loading community images
-          </p>
-        </div>
-      </section>
+      <GridLoading />
     );
   }
 

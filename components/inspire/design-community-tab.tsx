@@ -36,6 +36,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import TemplateGrid from "../common/templateGrid";
 import TemplateGridAll from "../common/templateGridAll";
+import { Skeleton } from "../ui/skeleton";
+import GridLoading from "@/utils/girdLoading";
 
 export interface GenerationParamsCallback {
   // Common
@@ -228,14 +230,7 @@ export function DesignsCommunityTab({
  
    if (loading) {
      return (
-       <section className="p-4">
-         <div className="flex flex-col items-center justify-center min-h-[60vh]">
-           <Loader2 className="w-6 h-6 text-neutral-400 dark:text-neutral-500 animate-spin mb-3" />
-           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-             Loading community designs
-           </p>
-         </div>
-       </section>
+       <GridLoading />
      );
    }
 

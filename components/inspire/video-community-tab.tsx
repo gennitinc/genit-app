@@ -36,6 +36,8 @@ import { io, Socket } from "socket.io-client";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { Skeleton } from "../ui/skeleton";
+import GridLoading from "@/utils/girdLoading";
 
 export interface VideoGenerationParamsCallback {
   // Common
@@ -54,14 +56,14 @@ export interface VideoGenerationParamsCallback {
 
   // Switch to preview tab
   onTabChange: (
-    tab: "preview" | "community" | "templates" | "tutorial"
+    tab: "preview" | "community" | "templates" | "tutorial",
   ) => void;
 }
 
 interface VideoCommunityTabProps {
   onPromptSelect: (prompt: string) => void;
   onTabChange: (
-    tab: "preview" | "community" | "templates" | "tutorial"
+    tab: "preview" | "community" | "templates" | "tutorial",
   ) => void;
   onParamsRestore?: VideoGenerationParamsCallback;
 }
@@ -92,7 +94,7 @@ export function VideoCommunityTab({
   const [videos, setVideos] = useState<CommunityContent[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState<CommunityContent | null>(
-    null
+    null,
   );
   const [likedVideos, setLikedVideos] = useState<Set<string>>(new Set());
   const [likingVideoId, setLikingVideoId] = useState<string | null>(null);
@@ -108,7 +110,7 @@ export function VideoCommunityTab({
       process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000",
       {
         transports: ["websocket", "polling"],
-      }
+      },
     );
 
     socketRef.current = socket;
@@ -124,10 +126,10 @@ export function VideoCommunityTab({
           prev.map((vid) =>
             vid.id === data.contentId
               ? { ...vid, likes: data.likes, isLiked: data.liked }
-              : vid
-          )
+              : vid,
+          ),
         );
-      }
+      },
     );
 
     return () => {
@@ -261,7 +263,7 @@ export function VideoCommunityTab({
                 return new File([blob], `reference-${index}.jpg`, {
                   type: blob.type,
                 });
-              })
+              }),
             );
             onParamsRestore.setReferenceImages(imageFiles);
           } catch (error) {
@@ -326,13 +328,13 @@ export function VideoCommunityTab({
 
         setVideos((prev) =>
           prev.map((vid) =>
-            vid.id === videoId ? { ...vid, likes, isLiked: isLiked } : vid
-          )
+            vid.id === videoId ? { ...vid, likes, isLiked: isLiked } : vid,
+          ),
         );
 
         if (selectedVideo?.id === videoId) {
           setSelectedVideo((prev) =>
-            prev ? { ...prev, likes, isLiked: isLiked } : null
+            prev ? { ...prev, likes, isLiked: isLiked } : null,
           );
         }
 
@@ -374,16 +376,7 @@ export function VideoCommunityTab({
   };
 
   if (loading) {
-    return (
-      <section className="p-4">
-        <div className="flex flex-col items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-6 h-6 text-neutral-400 dark:text-neutral-500 animate-spin mb-3" />
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            Loading community videos
-          </p>
-        </div>
-      </section>
-    );
+    return <GridLoading />;
   }
 
   if (videos.length === 0 && !loading) {
@@ -426,7 +419,7 @@ export function VideoCommunityTab({
         <div
           className={cn(
             "columns-2 lg:columns-3 gap-4",
-            isCommunityPage ? "md:columns-3 lg:columns-4" : ""
+            isCommunityPage ? "md:columns-3 lg:columns-4" : "",
           )}
         >
           {videos.map((video, index) => (
@@ -568,7 +561,7 @@ function VideoCard({
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     observer.observe(videoElement);
