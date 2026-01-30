@@ -695,8 +695,7 @@ export function IdeaSection() {
             >
               {/* Create photo manipulations, videos, stunning graphics, brand
               assets, and marketing visuals in minutes, no design skill required */}
-              Creates stunning graphics, commercial videos, and brand assets, no design
-              skills or expensive budget required.
+              Creates stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.
             </motion.p>
           </motion.div>
         </div>
