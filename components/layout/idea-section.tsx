@@ -693,8 +693,10 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              Create photo manipulations, videos, stunning graphics, brand
-              assets, and marketing visuals in minutes, no design skill required
+              {/* Create photo manipulations, videos, stunning graphics, brand
+              assets, and marketing visuals in minutes, no design skill required */}
+              Creates stunning graphics, commercial videos, and brand assets, no design
+              skills or expensive budget required.
             </motion.p>
           </motion.div>
         </div>
@@ -726,7 +728,7 @@ export function IdeaSection() {
                             className="w-full h-full object-cover rounded"
                             onLoad={(e) =>
                               URL.revokeObjectURL(
-                                (e.target as HTMLImageElement).src
+                                (e.target as HTMLImageElement).src,
                               )
                             }
                           />
@@ -779,7 +781,7 @@ export function IdeaSection() {
                               className="max-w-[200px] max-h-[150px] object-contain rounded"
                               onLoad={(e) =>
                                 URL.revokeObjectURL(
-                                  (e.target as HTMLImageElement).src
+                                  (e.target as HTMLImageElement).src,
                                 )
                               }
                             />
@@ -975,9 +977,9 @@ export function IdeaSection() {
                                 •{" "}
                                 {
                                   getOrientationOptions(
-                                    selectedDesignTypeId
+                                    selectedDesignTypeId,
                                   ).find(
-                                    (opt) => opt.id === selectedOrientation
+                                    (opt) => opt.id === selectedOrientation,
                                   )?.label
                                 }
                               </span>
@@ -1085,7 +1087,7 @@ export function IdeaSection() {
 
                                 if (item.id === "video") {
                                   router.push(
-                                    "/inspire/create?mode=ai-video-gen"
+                                    "/inspire/create?mode=ai-video-gen",
                                   );
                                   return;
                                 } else {
@@ -1368,7 +1370,7 @@ export function IdeaSection() {
                                   const newOutline = [...presentationOutline];
                                   newOutline[index].content.splice(
                                     pointIndex,
-                                    1
+                                    1,
                                   );
                                   setPresentationOutline(newOutline);
                                 }}
@@ -1396,7 +1398,7 @@ export function IdeaSection() {
                         type="button"
                         onClick={() => {
                           const newOutline = presentationOutline.filter(
-                            (_, i) => i !== index
+                            (_, i) => i !== index,
                           );
                           setPresentationOutline(newOutline);
                         }}
@@ -1453,7 +1455,7 @@ export function IdeaSection() {
                                 | "minimal"
                                 | "concise"
                                 | "detailed"
-                                | "extensive"
+                                | "extensive",
                             )
                           }
                           className={`flex flex-col items-center gap-2 p-3 rounded-lg border transition-all ${
@@ -1473,7 +1475,7 @@ export function IdeaSection() {
                                       : "bg-muted-foreground w-6"
                                   }`}
                                 />
-                              )
+                              ),
                             )}
                           </div>
                           <span className="text-xs font-medium">
@@ -1601,7 +1603,7 @@ export function IdeaSection() {
                                 | "photorealistic"
                                 | "abstract"
                                 | "3d"
-                                | "line-art"
+                                | "line-art",
                             )
                           }
                           className={`flex items-center justify-center gap-2 p-3 rounded-lg border transition-all ${
@@ -1684,7 +1686,7 @@ export function IdeaSection() {
                   const response = await apiResponse.post(
                     "/presentation/create",
                     presentationData,
-                    { withCredentials: true }
+                    { withCredentials: true },
                   );
 
                   if (response.data && response.data.project) {
@@ -1698,7 +1700,7 @@ export function IdeaSection() {
 
                     // Navigate to presentation studio
                     router.push(
-                      `/presentation/${response.data.project._id || response.data.project.id}/studio`
+                      `/presentation/${response.data.project._id || response.data.project.id}/studio`,
                     );
                   }
                 } catch (error: any) {
