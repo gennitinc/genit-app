@@ -418,7 +418,7 @@ export function VideoCommunityTab({
       <section className="p-4">
         <div
           className={cn(
-            "columns-2 lg:columns-3 gap-4",
+            "columns-2 lg:columns-4 gap-4",
             isCommunityPage ? "md:columns-3 lg:columns-4" : "",
           )}
         >

@@ -444,7 +444,7 @@ export function ImageCommunityTab({
         <div
           ref={containerRef}
           className={cn(
-            "columns-2 lg:columns-3 gap-4",
+            "columns-2 lg:columns-4 gap-4",
             isCommunityPage ? "md:columns-3   lg:columns-4" : ""
           )}
         >
