@@ -59,14 +59,14 @@ export default function CommunityComp() {
               </div>
 
               <TabsList className="grid w-fit grid-cols-3">
-                <TabsTrigger value="video" className="flex items-center gap-2">
-                  Videos
-                </TabsTrigger>
                 <TabsTrigger
                   value="designs"
                   className="flex items-center gap-2"
                 >
                   Designs
+                </TabsTrigger>
+                <TabsTrigger value="video" className="flex items-center gap-2">
+                  Videos
                 </TabsTrigger>
                 <TabsTrigger value="image" className="flex items-center gap-2">
                   Images
