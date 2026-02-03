@@ -19,7 +19,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { PWAInstaller } from "@/components/pwa/pwa-installer";
 import Script from "next/script";
-import "katex/dist/katex.min.css";
+
 
 const metadata: Metadata = {
   title:

@@ -18,7 +18,7 @@ export default function CommunityComp() {
   );
 
   const handlePromptSelect = (prompt: string) => {
-    // Redirect to create page with the prompt
+    // Redirect to create page with the prompt 
     if (activeTab === "video") {
       router.push(
         `/inspire/create?mode=ai-video-gen&prompt=${encodeURIComponent(prompt)}`,
