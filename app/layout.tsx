@@ -12,14 +12,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Suspense } from "react";
-import Loading from "@/utils/Loading";
 import { ProjectProvider } from "@/context/DesignProject";
-const inter = Inter({ subsets: ["latin"] });
 import { Analytics } from "@vercel/analytics/next";
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { PWAInstaller } from "@/components/pwa/pwa-installer";
 import Script from "next/script";
+import Loading from "@/utils/Loading";
 
+const inter = Inter({ subsets: ["latin"] });
 
 const metadata: Metadata = {
   title:
