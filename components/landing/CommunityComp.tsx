@@ -14,7 +14,7 @@ import { Compass } from "lucide-react";
 export default function CommunityComp() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"video" | "image" | "designs">(
-    "video",
+    "designs",
   );
 
   const handlePromptSelect = (prompt: string) => {
