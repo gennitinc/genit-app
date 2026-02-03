@@ -32,6 +32,7 @@ import { templateApi } from "@/utils/inspire-api";
 import { toast } from "@/hooks/use-toast";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { DeleteConfirmation } from "./delete-confirmation";
+import { VideoPlayerMessage } from "../video-player-message";
 
 interface GenerationItem {
   id: string;
@@ -42,6 +43,7 @@ interface GenerationItem {
   filePath?: string;
   url?: string;
   text?: string;
+  videoConfig?: any; // Remotion JSON config
   publishStatus?: "published" | "pending" | "rejected" | null;
 }
 
@@ -77,7 +79,7 @@ interface VersioningMessageProps {
 // Helper function to generate animation prompts based on design type
 const getAnimationPrompt = (
   designType: string | undefined,
-  originalPrompt: string | undefined
+  originalPrompt: string | undefined,
 ): string => {
   const basePrompt = originalPrompt || "Animate this design";
 
@@ -105,7 +107,7 @@ const formatTimestamp = (timestamp: string): string => {
     const date = new Date(timestamp);
     const now = new Date();
     const diffInMinutes = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60)
+      (now.getTime() - date.getTime()) / (1000 * 60),
     );
 
     if (diffInMinutes < 1) {
@@ -155,7 +157,7 @@ export function VersioningMessage({
 
   // Internal state for collapse if not controlled externally
   const [internalCollapsed, setInternalCollapsed] = useState(
-    generation.isCollapsed ?? false
+    generation.isCollapsed ?? false,
   );
 
   const isCollapsed = generation.isCollapsed ?? internalCollapsed;
@@ -186,7 +188,7 @@ export function VersioningMessage({
             // Check if this URL is already published by querying templates
             const response = await apiResponse.get(
               `/templates?mediaUrl=${encodeURIComponent(mediaUrl)}&limit=1`,
-              { withCredentials: true }
+              { withCredentials: true },
             );
 
             if (
@@ -209,7 +211,7 @@ export function VersioningMessage({
           } catch (error) {
             console.error(
               `Error checking publish status for ${mediaUrl}:`,
-              error
+              error,
             );
             return { mediaUrl, published: false };
           }
@@ -315,7 +317,7 @@ export function VersioningMessage({
 
   const handlePublishToInspiration = async (
     e: React.MouseEvent,
-    item: GenerationItem
+    item: GenerationItem,
   ) => {
     e.stopPropagation();
 
@@ -469,7 +471,7 @@ export function VersioningMessage({
       } catch (uploadError) {
         console.error(
           "Failed to upload reference image, using original URL:",
-          uploadError
+          uploadError,
         );
         // Continue with original URL if upload fails
       }
@@ -577,9 +579,12 @@ export function VersioningMessage({
       return filename.split(".").pop()?.toUpperCase() || "FILE";
     };
 
-    const getMediaType = (mimeType: string): "image" | "video" | "file" => {
+    const getMediaType = (
+      mimeType: string,
+    ): "image" | "video" | "file" | "remotion" => {
       if (mimeType?.startsWith("image/")) return "image";
       if (mimeType?.startsWith("video/")) return "video";
+      if (mimeType === "application/json+remotion") return "remotion";
       return "file";
     };
 
@@ -617,6 +622,26 @@ export function VersioningMessage({
               />
             </div>
           </>
+        );
+      }
+
+      // Check for Remotion Video Config
+      if (item.videoConfig) {
+        return (
+          <div className="flex-1 min-w-0 w-full">
+            <VideoPlayerMessage videoConfig={item.videoConfig} />
+            <div className="flex-1 min-w-0 mt-2">
+              <p className="text-xs sm:text-sm font-medium text-foreground truncate">
+                {item.name}
+              </p>
+              <div className="flex items-center gap-1 mt-0.5">
+                <Video className="w-3 h-3 text-muted-foreground" />
+                <p className="text-xs text-muted-foreground">
+                  Preview • Remotion
+                </p>
+              </div>
+            </div>
+          </div>
         );
       }
 
@@ -818,7 +843,7 @@ export function VersioningMessage({
             <div
               className={cn(
                 "transition-transform duration-200 flex-shrink-0",
-                !isCollapsed && "rotate-90"
+                !isCollapsed && "rotate-90",
               )}
             >
               <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
@@ -880,7 +905,7 @@ export function VersioningMessage({
         <div
           className={cn(
             "border-t border-border bg-muted/20 overflow-hidden transition-all duration-300 ease-in-out",
-            isCollapsed ? "max-h-0 opacity-0" : "max-h-fit opacity-100"
+            isCollapsed ? "max-h-0 opacity-0" : "max-h-fit opacity-100",
           )}
         >
           <div className="p-2 space-y-1 relative overflow-y-auto">

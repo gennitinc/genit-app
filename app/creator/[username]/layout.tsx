@@ -19,14 +19,22 @@ interface CreatorProfile {
 }
 
 async function getCreatorProfile(
-  username: string
+  username: string,
 ): Promise<CreatorProfile | null> {
   try {
     const baseURL =
       process.env.NEXT_PUBLIC_LIVE_URL ||
       process.env.NEXT_PUBLIC_LOCAL_URL ||
-      "http://localhost:5000";
-    const url = `${baseURL}/api/v1/inspire/creator/${encodeURIComponent(username)}`;
+      "https://gennit-v1-server-production.up.railway.app/api/v1/"; // Fallback to hardcoded prod if env missing
+
+    // If we rely on localhost default, ensure it's correct port from .env observation (8000)
+    const finalBaseURL = baseURL.includes("localhost:5000")
+      ? "http://localhost:8000/api/v1/"
+      : baseURL;
+
+    const url = `${finalBaseURL.endsWith("/") ? finalBaseURL : finalBaseURL + "/"}inspire/creator/${encodeURIComponent(username)}`;
+
+    console.log("Fetching creator profile metadata from:", url); // Debug log
 
     // Create AbortController for timeout - increased to 10 seconds
     const controller = new AbortController();
@@ -39,7 +47,6 @@ async function getCreatorProfile(
       },
       cache: "no-store",
       signal: controller.signal,
-      // Add timeout to fetch itself
       next: { revalidate: 0 },
     });
 
@@ -49,7 +56,7 @@ async function getCreatorProfile(
       // Log the error for debugging
       if (process.env.NODE_ENV === "development") {
         console.error(
-          `Failed to fetch creator profile: ${response.status} ${response.statusText}`
+          `Failed to fetch creator profile: ${response.status} ${response.statusText}`,
         );
       }
       return null;

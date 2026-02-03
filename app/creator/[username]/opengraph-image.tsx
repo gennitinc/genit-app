@@ -20,14 +20,22 @@ interface CreatorProfile {
 }
 
 async function getCreatorProfile(
-  username: string
+  username: string,
 ): Promise<CreatorProfile | null> {
   try {
     const baseURL =
       process.env.NEXT_PUBLIC_LIVE_URL ||
       process.env.NEXT_PUBLIC_LOCAL_URL ||
-      "http://localhost:5000";
-    const url = `${baseURL}/api/v1/inspire/creator/${encodeURIComponent(username)}`;
+      "https://gennit-v1-server-production.up.railway.app/api/v1/";
+
+    // Ensure correct localhost port if fallback is hit
+    const finalBaseURL = baseURL.includes("localhost:5000")
+      ? "http://localhost:8000/api/v1/"
+      : baseURL;
+
+    const url = `${finalBaseURL.endsWith("/") ? finalBaseURL : finalBaseURL + "/"}inspire/creator/${encodeURIComponent(username)}`;
+
+    console.log("Fetching OG image profile from:", url);
 
     const response = await fetch(url, {
       method: "GET",
@@ -78,26 +86,37 @@ export default async function Image({
             color: "white",
           }}
         >
-          <div style={{ fontSize: 40, marginBottom: 20 }}>Creator Not Found</div>
+          <div style={{ fontSize: 40, marginBottom: 20 }}>
+            Creator Not Found
+          </div>
           <div style={{ fontSize: 24, opacity: 0.8 }}>Gennit AI</div>
         </div>
       ),
       {
         ...size,
-      }
+      },
     );
   }
 
   // Try to fetch the profile picture
   let profileImageUrl = profile.userdp || "";
-  
+
   // If userdp is a relative URL, make it absolute
   if (profileImageUrl && !profileImageUrl.startsWith("http")) {
     const baseURL =
       process.env.NEXT_PUBLIC_LIVE_URL ||
       process.env.NEXT_PUBLIC_LOCAL_URL ||
-      "http://localhost:5000";
-    profileImageUrl = `${baseURL}${profileImageUrl}`;
+      "https://gennit-v1-server-production.up.railway.app/api/v1/";
+
+    // Ensure correct localhost port
+    const finalBaseURL = baseURL.includes("localhost:5000")
+      ? "http://localhost:8000/api/v1/"
+      : baseURL;
+
+    // Remove /api/v1/ suffix for image base URL if it exists, as userdp usually needs base domain
+    const imageBase = finalBaseURL.replace("/api/v1/", "/");
+
+    profileImageUrl = `${imageBase}${profileImageUrl.startsWith("/") ? profileImageUrl.slice(1) : profileImageUrl}`;
   }
 
   return new ImageResponse(
@@ -233,7 +252,6 @@ export default async function Image({
     ),
     {
       ...size,
-    }
+    },
   );
 }
-

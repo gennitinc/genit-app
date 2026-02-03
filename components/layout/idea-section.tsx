@@ -152,7 +152,7 @@ export function IdeaSection() {
   const [selectedDesignTypeId, setSelectedDesignTypeId] =
     useState<string>("flier");
   const [selectedOrientation, setSelectedOrientation] = useState<string | null>(
-    "portrait"
+    "portrait",
   );
   const [customSize, setCustomSize] = useState<{
     width: string;
@@ -176,7 +176,7 @@ export function IdeaSection() {
   >("illustration");
   const [extraKeywords, setExtraKeywords] = useState<string>("");
   const [imageRotations] = useState(() =>
-    images.map(() => Math.random() * 20 - 10)
+    images.map(() => Math.random() * 20 - 10),
   );
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -221,7 +221,7 @@ export function IdeaSection() {
           Math.min(textareaRef.current.scrollHeight, 300) + "px";
       }
     },
-    [setInputValue]
+    [setInputValue],
   );
 
   // Handle file processing with validation
@@ -251,7 +251,7 @@ export function IdeaSection() {
         setInputError(null);
       }
     },
-    [attachedFiles.length, processFiles]
+    [attachedFiles.length, processFiles],
   );
 
   // Handle file input change
@@ -261,7 +261,7 @@ export function IdeaSection() {
       handleFileProcess(files);
       e.target.value = "";
     },
-    [handleFileProcess]
+    [handleFileProcess],
   );
 
   // Handle drag and drop
@@ -277,7 +277,7 @@ export function IdeaSection() {
       const files = Array.from(e.dataTransfer.files);
       handleFileProcess(files);
     },
-    [handleFileProcess]
+    [handleFileProcess],
   );
 
   // Generate presentation outline using AI
@@ -288,7 +288,7 @@ export function IdeaSection() {
         const response = await apiResponse.post(
           "/presentation/generate-outline",
           { prompt },
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         if (response.data && response.data.outline) {
@@ -297,7 +297,7 @@ export function IdeaSection() {
               id: `slide-${index + 1}`,
               title: slide.title || `Slide ${index + 1}`,
               content: slide.content || slide.bulletPoints || [],
-            })
+            }),
           );
           setPresentationOutline(outline);
           setIsPresentationDrawerOpen(true);
@@ -330,7 +330,7 @@ export function IdeaSection() {
         setIsGeneratingOutline(false);
       }
     },
-    [toast]
+    [toast],
   );
 
   // Handle form submission
@@ -368,7 +368,7 @@ export function IdeaSection() {
 
       // Check if selected design type is coming soon
       const selectedItem = designTypeItems.find(
-        (item) => item.id === selectedDesignTypeId
+        (item) => item.id === selectedDesignTypeId,
       );
       if (selectedItem && (selectedItem as any).comingSoon) {
         toast(`${selectedItem.label} is coming soon.`);
@@ -396,7 +396,7 @@ export function IdeaSection() {
           undefined,
           selectedDesignTypeId || undefined,
           selectedOrientation || undefined,
-          customSize.width && customSize.height ? customSize : undefined
+          customSize.width && customSize.height ? customSize : undefined,
         );
 
         console.log("Project creation result:", res);
@@ -414,7 +414,7 @@ export function IdeaSection() {
       } catch (error: any) {
         console.error("Failed to create project:", error);
         setInputError(
-          error.message || "Failed to create project. Please try again."
+          error.message || "Failed to create project. Please try again.",
         );
       } finally {
         setIsSubmitting(false);
@@ -432,7 +432,7 @@ export function IdeaSection() {
       selectedDesignTypeId,
       generatePresentationOutline,
       toast,
-    ]
+    ],
   );
 
   // Handle quick task selection
@@ -443,7 +443,7 @@ export function IdeaSection() {
       setInputError(null);
       textareaRef.current?.focus();
     },
-    [setInputValue]
+    [setInputValue],
   );
 
   // Handle file removal
@@ -452,7 +452,7 @@ export function IdeaSection() {
       removeAttachedFile(index);
       setInputError(null);
     },
-    [removeAttachedFile]
+    [removeAttachedFile],
   );
 
   // Handle key press
@@ -462,7 +462,7 @@ export function IdeaSection() {
         handleSubmit(e as any);
       }
     },
-    [handleSubmit]
+    [handleSubmit],
   );
 
   useEffect(() => {
@@ -569,7 +569,7 @@ export function IdeaSection() {
   ];
 
   const selectedDesignType = designTypeItems.find(
-    (item) => item.id === selectedDesignTypeId
+    (item) => item.id === selectedDesignTypeId,
   );
 
   // Orientation options for different design types
@@ -584,14 +584,14 @@ export function IdeaSection() {
           { id: "reels", label: "Reels", dimensions: "9:16" },
           { id: "video", label: "Video", dimensions: "16:9" },
           { id: "square", label: "Square", dimensions: "1:1" },
-          { id: "story", label: "Story", dimensions: "9:16" }
+          { id: "story", label: "Story", dimensions: "9:16" },
         );
         break;
       case "instagram_post":
         options.push(
           { id: "square", label: "Square", dimensions: "1:1" },
           { id: "portrait", label: "Portrait", dimensions: "4:5" },
-          { id: "landscape", label: "Landscape", dimensions: "1.91:1" }
+          { id: "landscape", label: "Landscape", dimensions: "1.91:1" },
         );
         break;
       case "youtube_thumbnail":
@@ -601,7 +601,7 @@ export function IdeaSection() {
       case "facebook_cover":
         options.push(
           { id: "landscape", label: "Landscape", dimensions: "16:9" },
-          { id: "square", label: "Square", dimensions: "1:1" }
+          { id: "square", label: "Square", dimensions: "1:1" },
         );
         break;
       case "poster":
@@ -609,27 +609,27 @@ export function IdeaSection() {
         options.push(
           { id: "portrait", label: "Portrait", dimensions: "2:3" },
           { id: "landscape", label: "Landscape", dimensions: "3:2" },
-          { id: "square", label: "Square", dimensions: "1:1" }
+          { id: "square", label: "Square", dimensions: "1:1" },
         );
         break;
       case "presentation":
         options.push(
           { id: "standard", label: "Standard", dimensions: "16:9" },
           { id: "widescreen", label: "Widescreen", dimensions: "16:10" },
-          { id: "square", label: "Square", dimensions: "1:1" }
+          { id: "square", label: "Square", dimensions: "1:1" },
         );
         break;
       case "flier":
         options.push(
           { id: "portrait", label: "Portrait", dimensions: "8.5:11" },
-          { id: "landscape", label: "Landscape", dimensions: "11:8.5" }
+          { id: "landscape", label: "Landscape", dimensions: "11:8.5" },
         );
         break;
       default:
         options.push(
           { id: "portrait", label: "Portrait", dimensions: "2:3" },
           { id: "landscape", label: "Landscape", dimensions: "3:2" },
-          { id: "square", label: "Square", dimensions: "1:1" }
+          { id: "square", label: "Square", dimensions: "1:1" },
         );
     }
 
@@ -695,7 +695,8 @@ export function IdeaSection() {
             >
               {/* Create photo manipulations, videos, stunning graphics, brand
               assets, and marketing visuals in minutes, no design skill required */}
-              Creates stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.
+              Creates stunning graphics, commercial videos, stock images and
+              brand assets, no design skills or expensive budget required.
             </motion.p>
           </motion.div>
         </div>
@@ -1084,16 +1085,9 @@ export function IdeaSection() {
                               onClick={() => {
                                 if (isComingSoon) return;
 
-                                if (item.id === "video") {
-                                  router.push(
-                                    "/inspire/create?mode=ai-video-gen",
-                                  );
-                                  return;
-                                } else {
-                                  setSelectedDesignTypeId(item.id);
-                                  setSelectedOrientation(null);
-                                  setShowOrientationSelection(true);
-                                }
+                                setSelectedDesignTypeId(item.id);
+                                setSelectedOrientation(null);
+                                setShowOrientationSelection(true);
                               }}
                               disabled={isComingSoon}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors ${
