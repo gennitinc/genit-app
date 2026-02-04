@@ -97,9 +97,9 @@ export async function generateMetadata({
 
   const profileUrl = `https://www.gennit.online/creator/${username}`;
   // Use dynamic OG image route that will generate image with creator name and userdp
-  const ogImage = `https://www.gennit.online/creator/${username}/opengraph-image`;
+  const ogImage = `${profile.userdp}`;
   const description = profile.bio
-    ? `${profile.bio} Follow ${profile.username} on Gennit to see their amazing AI-generated content!`
+    ? `Follow ${profile.username} on Gennit to see their amazing AI-generated content! ${profile.stats?.totalPosts || 0} posts, ${profile.followers || 0} followers.`
     : `Follow ${profile.username} on Gennit - Check out their amazing AI-generated content! ${profile.stats?.totalPosts || 0} posts, ${profile.followers || 0} followers.`;
 
   return {
