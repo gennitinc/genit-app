@@ -65,7 +65,7 @@ export function LandingNavbar() {
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
 
   const navigation = [
-    { name: "Design Chat", href: "/" },
+    { name: "Design Chat", href: "/chat" },
     { name: "AI gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Company", href: "/company" },
     { name: "Inspirations", href: "/inspirations" },
