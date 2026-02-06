@@ -1172,7 +1172,7 @@ export default function BrandOnboardingChecklist() {
 
   if (isLoading) {
     return (
-      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-black">
+      <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-black">
         <Loading />
       </div>
     );
