@@ -13,7 +13,6 @@ const Loading = () => {
 
         <style jsx>{`
           .page {
-            background-color: black;
             min-height: 100vh;
             display: flex;
             align-items: center;
