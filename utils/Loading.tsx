@@ -20,8 +20,8 @@ const Loading = () => {
           }
 
           .loading {
-            width: 50px;
-            height: 50px;
+            width: 30px;
+            height: 30px;
             display: inline-block;
             background-color: white;
             margin: 10px;
