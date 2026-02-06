@@ -169,7 +169,7 @@ const UserPopOver = () => {
             </div>
             <Link href="/pricing" target="_blank">
               <button className="text-xs text-primary hover:text-primary/80 font-medium mt-2 hover:underline transition-colors cursor-pointer">
-                Buy more credits →
+                Pricing →
               </button>
             </Link>
             <div className="mt-2">
