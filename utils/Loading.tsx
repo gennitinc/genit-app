@@ -5,7 +5,7 @@ import React from "react";
 
 const Loading = () => {
   return (
-    <div className="text-center flex flex-row items-center gap-1 bg-white dark:bg-black">
+    <div className="text-center flex flex-row items-center bg-white dark:bg-black">
       <>
         <div className="page">
           <span className="loading" />
