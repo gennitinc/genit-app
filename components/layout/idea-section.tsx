@@ -706,7 +706,7 @@ export function IdeaSection() {
             <>
               <button
                 className="relative group flex w-[240px] rounded-full shadow-md bg-neutral-100 dark:bg-neutral-700 items-center justify-between cursor-pointer border-none"
-                onClick={() => router.push("/login")}
+                onClick={() => router.push("/signin")}
               >
                 <BorderBeam
                   duration={6}
