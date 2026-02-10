@@ -415,21 +415,22 @@ export default function ReferralDashboard() {
               <div className="flex items-center justify-center p-4 bg-white rounded-lg border">
                 <img src={qrCodeUrl} alt="QR Code" className="w-48 h-48" />
               </div>
-              <div className="flex gap-2">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 w-full">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => handleDownloadQR("png")}
-                  className="flex-1"
+                  className="w-full flex items-center justify-center"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download PNG
                 </Button>
+
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleCopyCode}
-                  className="flex-1"
+                  className="w-full flex items-center justify-center"
                 >
                   <Code className="h-4 w-4 mr-2" />
                   Copy Code
