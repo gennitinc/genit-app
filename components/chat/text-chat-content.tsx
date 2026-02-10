@@ -72,7 +72,7 @@ export function TextChatContent() {
         });
       });
     },
-    []
+    [],
   );
 
   const scrollSkeleton = useCallback(() => {
@@ -113,7 +113,7 @@ export function TextChatContent() {
         requestAnimationFrame(() =>
           requestAnimationFrame(() => {
             doScrollToBottom({ behavior: "auto" });
-          })
+          }),
         );
       } else if (localConversationRef.current) {
         scrollElRef.current = localConversationRef.current;
@@ -122,7 +122,7 @@ export function TextChatContent() {
         requestAnimationFrame(() =>
           requestAnimationFrame(() => {
             doScrollToBottom({ behavior: "auto" });
-          })
+          }),
         );
       }
     }, 0);
@@ -181,14 +181,14 @@ export function TextChatContent() {
     return () =>
       window.removeEventListener(
         "scroll-chat-to-bottom",
-        handler as EventListener
+        handler as EventListener,
       );
   }, [doScrollToBottom]);
 
   const handleEditMessage = async (
     messageId: string,
     newContent: string,
-    files?: File[]
+    files?: File[],
   ) => {
     try {
       const projectId = project?._id || "";
@@ -209,9 +209,11 @@ export function TextChatContent() {
 
   const handleLikeToggle = async (messageId: string) => {
     try {
-      const message = messages?.find((m: any) => m.id === messageId || m._id === messageId);
+      const message = messages?.find(
+        (m: any) => m.id === messageId || m._id === messageId,
+      );
       const isLiked = message?.feedback?.userReaction === "like";
-      
+
       if (isLiked) {
         await removeReaction(messageId, "like");
       } else {
@@ -228,9 +230,11 @@ export function TextChatContent() {
 
   const handleDislikeToggle = async (messageId: string) => {
     try {
-      const message = messages?.find((m: any) => m.id === messageId || m._id === messageId);
+      const message = messages?.find(
+        (m: any) => m.id === messageId || m._id === messageId,
+      );
       const isDisliked = message?.feedback?.userReaction === "dislike";
-      
+
       if (isDisliked) {
         await removeReaction(messageId, "dislike");
       } else {
@@ -257,11 +261,11 @@ export function TextChatContent() {
             {messages?.map((message: any, index: number) => {
               if (message.type === "user") {
                 const imageAttachment = message.fileAttachments?.find(
-                  (f: any) => f.type?.startsWith("image/")
+                  (f: any) => f.type?.startsWith("image/"),
                 )?.url;
 
                 const fileAttachment = message.fileAttachments?.find(
-                  (f: any) => !f.type?.startsWith("image/")
+                  (f: any) => !f.type?.startsWith("image/"),
                 )?.url;
 
                 return (
@@ -287,12 +291,11 @@ export function TextChatContent() {
                       onEdit={(newContent: any, files: any) =>
                         handleEditMessage(message.id, newContent, files)
                       }
-                      
                       onCopy={() =>
                         handleCopyMessage(
                           message.parts?.find(
-                            (part: any) => part.type === "text"
-                          )?.text || ""
+                            (part: any) => part.type === "text",
+                          )?.text || "",
                         )
                       }
                     />
@@ -303,9 +306,10 @@ export function TextChatContent() {
               if (message.type === "ai") {
                 // Find the first AI message index
                 const firstAIMessageIndex = messages?.findIndex(
-                  (msg: any) => msg.type === "ai"
+                  (msg: any) => msg.type === "ai",
                 );
-                const isFirstAIResponse = firstAIMessageIndex !== -1 && index === firstAIMessageIndex;
+                const isFirstAIResponse =
+                  firstAIMessageIndex !== -1 && index === firstAIMessageIndex;
 
                 return (
                   <div key={message.id || index} className="space-y-4">
@@ -327,24 +331,20 @@ export function TextChatContent() {
                       onCopy={() =>
                         handleCopyMessage(
                           message.parts?.find(
-                            (part: any) => part.type === "text"
-                          )?.text || ""
+                            (part: any) => part.type === "text",
+                          )?.text || "",
                         )
                       }
                       onLike={() => handleLikeToggle(message.id)}
                       onDislike={() => handleDislikeToggle(message.id)}
-                      onDelete={
-                        !isFirstAIResponse
-                          ? () => handleDeleteMessage(message.id)
-                          : undefined
-                      }
+                      onDelete={() => handleDeleteMessage(message.id)}
                       generation={message.generationGroups}
                     />
 
                     {message.generationGroups?.map((group: GenerationGroup) => {
                       // Extract original prompt from message parts
                       const originalPrompt = message.parts?.find(
-                        (part: any) => part.type === "text"
+                        (part: any) => part.type === "text",
                       )?.text;
 
                       return (
@@ -369,27 +369,23 @@ export function TextChatContent() {
                                               ...g,
                                               isCollapsed: !g.isCollapsed,
                                             }
-                                          : g
+                                          : g,
                                     ),
                                   };
                                 }
                                 return msg;
-                              })
+                              }),
                             );
                           }}
                           onRetry={retryLoading}
                           onCopy={() =>
                             handleCopyMessage(
-                              JSON.stringify(group.items, null, 2)
+                              JSON.stringify(group.items, null, 2),
                             )
                           }
                           onLike={() => handleLikeToggle(message.id)}
                           onDislike={() => handleDislikeToggle(message.id)}
-                          onDelete={
-                            !isFirstAIResponse
-                              ? () => handleDeleteMessage(message.id)
-                              : undefined
-                          }
+                          onDelete={() => handleDeleteMessage(message.id)}
                         />
                       );
                     })}

@@ -91,8 +91,6 @@ export function UserMessage({
     setTimeout(() => setCopied(false), 2000);
   };
 
-
-
   const truncateFileName = (name: string, maxLength = 25) => {
     if (name.length <= maxLength) return name;
     const extension = name.split(".").pop();
@@ -372,7 +370,7 @@ function AttachedFilePreview({ file }: { file: any }) {
                   <Eye className="w-4 h-4" />
                 </Button>
               </DialogTrigger>
-              <DialogContent className="w-fit p-0">
+              <DialogContent className="w-fit max-w-[50vw] h-auto p-0">
                 <div className="">
                   <div className="relative w-auto h-auto">
                     {isImage ? (
@@ -381,8 +379,7 @@ function AttachedFilePreview({ file }: { file: any }) {
                         alt={file.name}
                         width={0}
                         height={0}
-                        sizes="100vw"
-                        className="h-auto max-h-[90vh] w-auto max-w-[90vw] object-contain rounded-md"
+                        className="h-auto w-auto object-contain rounded-md"
                         unoptimized
                       />
                     ) : (

@@ -21,7 +21,7 @@ import {
 } from "@/types/ProjectTypes";
 
 const ProjectDesignContext = createContext<IProjectDesignContext | undefined>(
-  undefined
+  undefined,
 );
 
 export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -32,7 +32,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const user = useUserContext().user;
   const userId = String(user?._id);
   const [currentProjectRoom, setCurrentProjectRoom] = useState<string | null>(
-    null
+    null,
   );
   const [isGenerating, setIsGenerating] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
@@ -389,7 +389,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           prompt,
           restoredFiles.length > 0 ? restoredFiles : null,
           project._id,
-          selectedFiles
+          selectedFiles,
         );
         // Remove draft after successful generation
         localStorage.removeItem("newData");
@@ -402,7 +402,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [isProcessingDraft, setAttachedFiles]
+    [isProcessingDraft, setAttachedFiles],
   );
 
   const clearError = () => setError(null);
@@ -420,16 +420,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     selectedFiles?: string[],
     designTypeId?: string,
     orientation?: string | null,
-    customSize?: { width: string; height: string } | null
+    customSize?: { width: string; height: string } | null,
   ) => {
-
     let category;
-
 
     if (selectedFiles && selectedFiles?.length >= 1) {
       category = "auto";
-    }
-    else {
+    } else {
       category = designTypeId;
     }
 
@@ -456,14 +453,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       updatedAt: new Date(),
     };
 
-
     try {
       const response = await apiResponseFileUpload.post(
         "/project/create",
         newProject,
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (response.status === 201) {
@@ -501,8 +497,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                 };
                 reader.onerror = reject;
                 reader.readAsDataURL(file);
-              })
-          )
+              }),
+          ),
         );
 
         // 🧠 Save all data in localStorage
@@ -514,7 +510,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             selectedFiles: selectedFiles || [],
             designType: designTypeId || null,
             projectId,
-          })
+          }),
         );
 
         return {
@@ -539,7 +535,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const fetchProject = useCallback(
     async (
-      projectId: string
+      projectId: string,
     ): Promise<{
       success: boolean;
       error?: "not_found" | "unauthorized" | "server_error";
@@ -581,11 +577,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           if (Array.isArray(projectData?.messages)) {
             if (projectData.messages.length >= 1) {
               const serverMessages = transformMessages(
-                projectData.messages || []
+                projectData.messages || [],
               );
               setMessages((prev: any[]) => {
                 const serverIds = new Set(
-                  serverMessages.map((m: any) => String(m.id || m._id))
+                  serverMessages.map((m: any) => String(m.id || m._id)),
                 );
                 const serverUserTexts = new Set<string>();
                 const serverAiKeys = new Set<string>();
@@ -663,14 +659,14 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsLoadingProject(false);
       }
     },
-    [transformMessages, handleLocalStorageDraft]
+    [transformMessages, handleLocalStorageDraft],
   );
 
   const toggleGeneration = (id: string) => {
     setGenerations((prev) =>
       prev.map((gen) =>
-        gen.id === id ? { ...gen, isCollapsed: !gen.isCollapsed } : gen
-      )
+        gen.id === id ? { ...gen, isCollapsed: !gen.isCollapsed } : gen,
+      ),
     );
   };
 
@@ -682,7 +678,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     messageId: string,
     updatedContent: string,
     files: File[] | null,
-    projectId: string
+    projectId: string,
   ) => {
     try {
       setIsGenerating(true);
@@ -691,7 +687,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         {
           text: updatedContent,
           files,
-        }
+        },
       );
     } catch (error) {
       console.error("Error editing message:", error);
@@ -710,7 +706,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     messageContent: string,
     files: File[] | null,
     projectId: string,
-    selectedFiles?: string[] // e.g., ["https://example.com/image1.png", "video.mp4"]
+    selectedFiles?: string[], // e.g., ["https://example.com/image1.png", "video.mp4"]
   ) => {
     try {
       setIsGenerating(true);
@@ -848,7 +844,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         ) {
           console.log(
             key,
-            `[File: ${(value as File).name}, size: ${(value as File).size}]`
+            `[File: ${(value as File).name}, size: ${(value as File).size}]`,
           );
         } else {
           console.log(key, value);
@@ -864,14 +860,14 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         {
           withCredentials: true,
           // Remove manual Content-Type header - let axios set it automatically with boundary
-        }
+        },
       );
 
       console.log("✅ Server response:", response.data);
     } catch (error) {
       console.error("❌ Error sending message:", error);
       setError(
-        error instanceof Error ? error.message : "Failed to send message"
+        error instanceof Error ? error.message : "Failed to send message",
       );
     } finally {
       setIsGenerating(false);
@@ -886,15 +882,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
-      // Prevent deletion if there are only 2 messages (1 user + 1 AI)
-      if (messagesRef.current.length <= 2) {
-        console.log("Cannot delete: minimum 2 messages required");
-        return;
-      }
-
       // Find the message index
       const messageIndex = messagesRef.current.findIndex(
-        (msg: any) => msg.id === messageId || msg._id === messageId
+        (msg: any) => msg.id === messageId || msg._id === messageId,
       );
 
       if (messageIndex === -1) {
@@ -938,7 +928,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const addReaction = async (
     messageId: string,
-    type: "like" | "dislike" | "comment"
+    type: "like" | "dislike" | "comment",
   ) => {
     try {
       if (!project?._id) {
@@ -957,21 +947,25 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
               feedback: {
                 ...msg.feedback,
                 [type]: (msg.feedback?.[type] || 0) + 1,
-                userReaction: type === "like" ? "like" : type === "dislike" ? "dislike" : msg.feedback?.userReaction,
+                userReaction:
+                  type === "like"
+                    ? "like"
+                    : type === "dislike"
+                      ? "dislike"
+                      : msg.feedback?.userReaction,
               },
             };
           }
           return msg;
-        })
+        }),
       );
 
       // Update on server
       await apiResponse.post(
         `/project/${project._id}/messages/${messageId}/reactions`,
         { type },
-        { withCredentials: true }
+        { withCredentials: true },
       );
-      
     } catch (error) {
       console.error("Error adding reaction:", error);
       throw error;
@@ -980,7 +974,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const removeReaction = async (
     messageId: string,
-    type: "like" | "dislike" | "comment"
+    type: "like" | "dislike" | "comment",
   ) => {
     try {
       if (!project?._id) {
@@ -998,18 +992,21 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
               feedback: {
                 ...msg.feedback,
                 [type]: Math.max(0, currentCount - 1),
-                userReaction: type === "like" || type === "dislike" ? null : msg.feedback?.userReaction,
+                userReaction:
+                  type === "like" || type === "dislike"
+                    ? null
+                    : msg.feedback?.userReaction,
               },
             };
           }
           return msg;
-        })
+        }),
       );
 
       // Update on server
       await apiResponse.delete(
         `/project/${project._id}/messages/${messageId}/reactions/${type}`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
     } catch (error) {
       console.error("Error removing reaction:", error);
@@ -1027,7 +1024,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const handleKeyDown = (
-    _event?: React.KeyboardEvent<HTMLTextAreaElement>
+    _event?: React.KeyboardEvent<HTMLTextAreaElement>,
   ) => {};
 
   const handlePaste = () => {};

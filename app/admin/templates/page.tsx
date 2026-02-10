@@ -37,11 +37,11 @@ export default function AdminTemplatesPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [templateToDelete, setTemplateToDelete] = useState<Template | null>(
-    null
+    null,
   );
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedTemplates, setSelectedTemplates] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false);
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
@@ -97,7 +97,7 @@ export default function AdminTemplatesPage() {
         `/templates/${templateToDelete._id}`,
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (res.data.success) {
@@ -106,7 +106,7 @@ export default function AdminTemplatesPage() {
         setTemplateToDelete(null);
         // Remove from UI without reloading
         setTemplates((prev) =>
-          prev.filter((t) => t._id !== templateToDelete._id)
+          prev.filter((t) => t._id !== templateToDelete._id),
         );
         // Remove from selection if it was selected
         setSelectedTemplates((prev) => {
@@ -142,7 +142,7 @@ export default function AdminTemplatesPage() {
         setBulkDeleteDialogOpen(false);
         // Remove deleted items from UI without reloading
         setTemplates((prev) =>
-          prev.filter((t) => !selectedTemplates.has(t._id))
+          prev.filter((t) => !selectedTemplates.has(t._id)),
         );
         setSelectedTemplates(new Set());
       } else {
@@ -151,7 +151,7 @@ export default function AdminTemplatesPage() {
     } catch (error: any) {
       console.error("Failed to delete templates:", error);
       toast.error(
-        error.response?.data?.message || "Failed to delete templates"
+        error.response?.data?.message || "Failed to delete templates",
       );
     } finally {
       setIsBulkDeleting(false);
@@ -189,7 +189,7 @@ export default function AdminTemplatesPage() {
   useEffect(() => {
     if (selectAllCheckboxRef.current) {
       const input = selectAllCheckboxRef.current.querySelector(
-        'input[type="checkbox"]'
+        'input[type="checkbox"]',
       ) as HTMLInputElement;
       if (input) {
         input.indeterminate = isSomeSelected;
@@ -263,11 +263,11 @@ export default function AdminTemplatesPage() {
                 : "Select all"}
             </span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="columns-2 md:columns-4 gap-4 [column-fill:balance] space-y-4">
             {templates.map((template) => (
               <div
                 key={template._id}
-                className={`group relative border rounded-lg overflow-hidden bg-card hover:shadow-lg transition-shadow ${
+                className={`group relative mb-4 inline-block w-full align-top break-inside-avoid border rounded-lg overflow-hidden bg-card hover:shadow-lg transition-shadow ${
                   selectedTemplates.has(template._id)
                     ? "border-primary ring-2 ring-primary"
                     : "border-border"
@@ -283,18 +283,19 @@ export default function AdminTemplatesPage() {
                     className="bg-background/80 backdrop-blur-sm"
                   />
                 </div>
-                <div className="aspect-square relative bg-muted">
+                <div className="relative bg-muted">
                   <img
                     src={template.mediaUrl}
                     alt={template.alt}
-                    className="w-full h-full object-cover"
+                    className="w-full h-auto object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.style.display = "none";
                       target.parentElement?.classList.add(
                         "flex",
                         "items-center",
-                        "justify-center"
+                        "justify-center",
+                        "h-40", // Add fixed height for broken images
                       );
                     }}
                   />

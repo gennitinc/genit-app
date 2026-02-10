@@ -125,10 +125,10 @@ export default function TemplateGridAll() {
 
       // 👇 Fetch from your Express backend with randomized query and category
       const res = await apiResponse.get(
-        `/templates/scrape/pins/search?q=${encodeURIComponent(randomDesignType)}&limit=12&category=${randomDesignType}`,
+        `/designinspirations/scrape/pins/search?q=${encodeURIComponent(randomDesignType)}&limit=12&category=${randomDesignType}`,
         {
           withCredentials: true,
-        }
+        },
       );
 
       const data = await res.data();
@@ -145,9 +145,9 @@ export default function TemplateGridAll() {
     }
   };
 
-  // useEffect(() => {
-  //   fetchPins();
-  // }, []);
+  useEffect(() => {
+    fetchPins();
+  }, []);
 
   // Fetch a page of templates
   const fetchTemplatesPage = useCallback(
