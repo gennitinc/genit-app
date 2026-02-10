@@ -106,7 +106,7 @@ export default function TemplateGridAll() {
   const [designType, setDesigntype] = useState<ImageDesignType[]>([
     "logo",
     "flier",
-    "poster",
+    // "poster",
     "youtube_thumbnail",
     // "instagram_post",
     // "generic_design",
