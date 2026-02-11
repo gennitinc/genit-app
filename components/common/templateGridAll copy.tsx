@@ -125,7 +125,7 @@ export default function TemplateGridAll() {
         `/templates/scrape/pins/search?q=${encodeURIComponent(randomDesignType)}&limit=12&category=${randomDesignType}`,
         {
           withCredentials: true,
-        }
+        },
       );
 
       const data = await res.data();
@@ -186,12 +186,12 @@ export default function TemplateGridAll() {
                 : undefined,
               author: template.author,
               isUserGenerated: template.isUserGenerated,
-            })
+            }),
           );
 
           if (append) {
             setTemplates((prev) =>
-              mapped.length ? [...prev, ...mapped] : prev
+              mapped.length ? [...prev, ...mapped] : prev,
             );
           } else {
             setTemplates(mapped.length > 0 ? mapped : []);
@@ -216,7 +216,7 @@ export default function TemplateGridAll() {
         }
       }
     },
-    [apiResponse]
+    [apiResponse],
   );
 
   // Initial and when search changes
@@ -248,13 +248,11 @@ export default function TemplateGridAll() {
           setPage((p) => p + 1);
         }
       },
-      { rootMargin: "200px" }
+      { rootMargin: "200px" },
     );
     observer.observe(el);
     return () => observer.unobserve(el);
   }, [hasNextPage, isFetchingMore, isLoading]);
-
-
 
   const onEdit = (item: TemplateItem) => {
     setSelected(item);
@@ -343,7 +341,7 @@ export default function TemplateGridAll() {
           Math.min(textareaRef.current.scrollHeight, 300) + "px";
       }
     },
-    [setInputValue]
+    [setInputValue],
   );
 
   // Handle file processing with validation
@@ -371,7 +369,7 @@ export default function TemplateGridAll() {
         setInputError(null);
       }
     },
-    [attachedFiles.length, processFiles]
+    [attachedFiles.length, processFiles],
   );
 
   // Handle file input change
@@ -381,7 +379,7 @@ export default function TemplateGridAll() {
       handleFileProcess(files);
       e.target.value = "";
     },
-    [handleFileProcess]
+    [handleFileProcess],
   );
 
   // Handle drag and drop
@@ -397,7 +395,7 @@ export default function TemplateGridAll() {
       const files = Array.from(e.dataTransfer.files);
       handleFileProcess(files);
     },
-    [handleFileProcess]
+    [handleFileProcess],
   );
 
   // Handle form submission
@@ -447,7 +445,7 @@ export default function TemplateGridAll() {
         const result = await createProject(
           inputValue,
           attachedFiles,
-          selectedFiles
+          selectedFiles,
         );
 
         clearInput();
@@ -459,7 +457,7 @@ export default function TemplateGridAll() {
       } catch (error: any) {
         console.error("Failed to create project:", error);
         setInputError(
-          error.message || "Failed to create project. Please try again."
+          error.message || "Failed to create project. Please try again.",
         );
       } finally {
         setIsSubmitting(false);
@@ -475,10 +473,8 @@ export default function TemplateGridAll() {
       createProject,
       user,
       router,
-    ]
+    ],
   );
-
-
 
   // Handle file removal
   const handleFileRemove = useCallback(
@@ -486,7 +482,7 @@ export default function TemplateGridAll() {
       removeAttachedFile(index);
       setInputError(null);
     },
-    [removeAttachedFile]
+    [removeAttachedFile],
   );
 
   // Handle key press
@@ -496,7 +492,7 @@ export default function TemplateGridAll() {
         handleSubmit(e as any);
       }
     },
-    [handleSubmit]
+    [handleSubmit],
   );
 
   useEffect(() => {
@@ -575,7 +571,7 @@ export default function TemplateGridAll() {
                     style={{ height: h }}
                   />
                 </div>
-              )
+              ),
             )}
           </>
         )}
@@ -675,7 +671,7 @@ export default function TemplateGridAll() {
             <div
               className={cn(
                 "flex-shrink-0 overflow-hidden h-auto max-h-[58%]",
-                attachedFiles.length > 0 ? "h-[60%]" : "h-[63%]"
+                attachedFiles.length > 0 ? "h-[60%]" : "h-[63%]",
               )}
             >
               <img
@@ -710,7 +706,7 @@ export default function TemplateGridAll() {
                               className="w-full h-full object-cover rounded"
                               onLoad={(e) =>
                                 URL.revokeObjectURL(
-                                  (e.target as HTMLImageElement).src
+                                  (e.target as HTMLImageElement).src,
                                 )
                               }
                             />
@@ -764,7 +760,7 @@ export default function TemplateGridAll() {
                                 className="max-w-[200px] max-h-[150px] object-contain rounded"
                                 onLoad={(e) =>
                                   URL.revokeObjectURL(
-                                    (e.target as HTMLImageElement).src
+                                    (e.target as HTMLImageElement).src,
                                   )
                                 }
                               />
@@ -808,7 +804,7 @@ export default function TemplateGridAll() {
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
                             <span className="ml-2 text-xs text-muted-foreground">
-                              Get a 20 free credit
+                              Get a 50 free credit
                             </span>
                           )}
                         </div>
@@ -947,7 +943,7 @@ export default function TemplateGridAll() {
             <div
               className={cn(
                 "flex-shrink-0 overflow-hidden h-auto max-h-[58%]",
-                attachedFiles.length > 0 ? "h-[61%]" : "h-[63%]"
+                attachedFiles.length > 0 ? "h-[61%]" : "h-[63%]",
               )}
             >
               <img
@@ -982,7 +978,7 @@ export default function TemplateGridAll() {
                               className="w-full h-full object-cover rounded"
                               onLoad={(e) =>
                                 URL.revokeObjectURL(
-                                  (e.target as HTMLImageElement).src
+                                  (e.target as HTMLImageElement).src,
                                 )
                               }
                             />
@@ -1036,7 +1032,7 @@ export default function TemplateGridAll() {
                                 className="max-w-[200px] max-h-[150px] object-contain rounded"
                                 onLoad={(e) =>
                                   URL.revokeObjectURL(
-                                    (e.target as HTMLImageElement).src
+                                    (e.target as HTMLImageElement).src,
                                   )
                                 }
                               />
@@ -1080,7 +1076,7 @@ export default function TemplateGridAll() {
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
                             <span className="ml-2 text-xs text-muted-foreground">
-                              Get a 20 free credit
+                              Get a 50 free credit
                             </span>
                           )}
                         </div>
@@ -1212,5 +1208,3 @@ export default function TemplateGridAll() {
     </motion.div>
   );
 }
-
-

@@ -52,7 +52,7 @@ const plansDev = [
       yearly: "4952b33d-2654-44f7-9645-bdac62b008c3",
     },
     features: [
-      "20,000 credits per month",
+      "5000 credits per month",
       "4K resolution exports",
       "Full commercial licensing",
       "Dedicated support",
@@ -107,7 +107,7 @@ const plansProd = [
       yearly: "b4c7e616-e50e-4b34-9c07-55be1a485f53",
     },
     features: [
-      "20,000 credits per month",
+      "5,000 credits per month",
       "4K resolution exports",
       "Full commercial licensing",
       "Dedicated support",

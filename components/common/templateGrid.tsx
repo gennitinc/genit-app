@@ -117,7 +117,7 @@ export default function TemplateGrid() {
         `/templates/scrape/pins/search?q=${encodeURIComponent(randomDesignType)}&limit=12&category=${randomDesignType}`,
         {
           withCredentials: true,
-        }
+        },
       );
 
       const data = await res.data();
@@ -168,7 +168,7 @@ export default function TemplateGrid() {
                 : undefined,
               author: template.author,
               isUserGenerated: template.isUserGenerated,
-            })
+            }),
           );
 
           setTemplates(mapped.length > 0 ? mapped : []);
@@ -279,7 +279,7 @@ export default function TemplateGrid() {
           Math.min(textareaRef.current.scrollHeight, 300) + "px";
       }
     },
-    [setInputValue]
+    [setInputValue],
   );
 
   // Handle file processing with validation
@@ -307,7 +307,7 @@ export default function TemplateGrid() {
         setInputError(null);
       }
     },
-    [attachedFiles.length, processFiles]
+    [attachedFiles.length, processFiles],
   );
 
   // Handle file input change
@@ -317,7 +317,7 @@ export default function TemplateGrid() {
       handleFileProcess(files);
       e.target.value = "";
     },
-    [handleFileProcess]
+    [handleFileProcess],
   );
 
   // Handle drag and drop
@@ -333,7 +333,7 @@ export default function TemplateGrid() {
       const files = Array.from(e.dataTransfer.files);
       handleFileProcess(files);
     },
-    [handleFileProcess]
+    [handleFileProcess],
   );
 
   const handleSubmit = useCallback(
@@ -397,7 +397,7 @@ export default function TemplateGrid() {
         const result = await createProject(
           inputValue,
           attachedFiles,
-          selectedFiles
+          selectedFiles,
         );
 
         clearInput();
@@ -409,7 +409,7 @@ export default function TemplateGrid() {
       } catch (error: any) {
         console.error("Failed to create project:", error);
         setInputError(
-          error?.message || "Failed to create project. Please try again."
+          error?.message || "Failed to create project. Please try again.",
         );
       } finally {
         setIsSubmitting(false);
@@ -425,7 +425,7 @@ export default function TemplateGrid() {
       createProject,
       user,
       router,
-    ]
+    ],
   );
 
   // Handle quick task selection
@@ -438,7 +438,7 @@ export default function TemplateGrid() {
       setInputError(null);
       textareaRef.current?.focus();
     },
-    [setInputValue]
+    [setInputValue],
   );
 
   // Handle file removal
@@ -447,7 +447,7 @@ export default function TemplateGrid() {
       removeAttachedFile(index);
       setInputError(null);
     },
-    [removeAttachedFile]
+    [removeAttachedFile],
   );
 
   // Handle key press
@@ -457,7 +457,7 @@ export default function TemplateGrid() {
         handleSubmit(e as any);
       }
     },
-    [handleSubmit]
+    [handleSubmit],
   );
 
   useEffect(() => {
@@ -541,7 +541,7 @@ export default function TemplateGrid() {
                     style={{ height: h }}
                   />
                 </div>
-              )
+              ),
             )}
           </>
         )}
@@ -686,7 +686,7 @@ export default function TemplateGrid() {
                               className="w-full h-full object-cover rounded"
                               onLoad={(e) =>
                                 URL.revokeObjectURL(
-                                  (e.target as HTMLImageElement).src
+                                  (e.target as HTMLImageElement).src,
                                 )
                               }
                             />
@@ -740,7 +740,7 @@ export default function TemplateGrid() {
                                 className="max-w-[200px] max-h-[150px] object-contain rounded"
                                 onLoad={(e) =>
                                   URL.revokeObjectURL(
-                                    (e.target as HTMLImageElement).src
+                                    (e.target as HTMLImageElement).src,
                                   )
                                 }
                               />
@@ -784,7 +784,7 @@ export default function TemplateGrid() {
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
                             <span className="ml-2 text-xs text-muted-foreground">
-                              Get a 20 free credit
+                              Get a 50 free credit
                             </span>
                           )}
                         </div>
@@ -955,7 +955,7 @@ export default function TemplateGrid() {
                               className="w-full h-full object-cover rounded"
                               onLoad={(e) =>
                                 URL.revokeObjectURL(
-                                  (e.target as HTMLImageElement).src
+                                  (e.target as HTMLImageElement).src,
                                 )
                               }
                             />
@@ -1009,7 +1009,7 @@ export default function TemplateGrid() {
                                 className="max-w-[200px] max-h-[150px] object-contain rounded"
                                 onLoad={(e) =>
                                   URL.revokeObjectURL(
-                                    (e.target as HTMLImageElement).src
+                                    (e.target as HTMLImageElement).src,
                                   )
                                 }
                               />
@@ -1053,7 +1053,7 @@ export default function TemplateGrid() {
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
                             <span className="ml-2 text-xs text-muted-foreground">
-                              Get a 20 free credit
+                              Get a 50 free credit
                             </span>
                           )}
                         </div>
@@ -1222,7 +1222,7 @@ export default function TemplateGrid() {
                               className="w-full h-full object-cover rounded"
                               onLoad={(e) =>
                                 URL.revokeObjectURL(
-                                  (e.target as HTMLImageElement).src
+                                  (e.target as HTMLImageElement).src,
                                 )
                               }
                             />
@@ -1276,7 +1276,7 @@ export default function TemplateGrid() {
                                 className="max-w-[200px] max-h-[150px] object-contain rounded"
                                 onLoad={(e) =>
                                   URL.revokeObjectURL(
-                                    (e.target as HTMLImageElement).src
+                                    (e.target as HTMLImageElement).src,
                                   )
                                 }
                               />
@@ -1320,7 +1320,7 @@ export default function TemplateGrid() {
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
                             <span className="ml-2 text-xs text-muted-foreground">
-                              Get a 20 free credit
+                              Get a 50 free credit
                             </span>
                           )}
                         </div>
@@ -1463,7 +1463,7 @@ const AgentHeader = ({
   <div
     className={cn(
       "flex flex-1 w-full h-[200px] rounded-xl bg-cover bg-center",
-      disabled && "opacity-60"
+      disabled && "opacity-60",
     )}
     style={{ backgroundImage: `url(${image})` }}
   ></div>
