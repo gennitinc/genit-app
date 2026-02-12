@@ -66,7 +66,7 @@ export function LandingNavbar() {
 
   const navigation = [
     { name: "Design Chat", href: "/chat" },
-    { name: "AI gen", href: "/inspire/create?mode=ai-video-gen" },
+    { name: "Video / Image Gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Company", href: "/company" },
     { name: "Inspirations", href: "/inspirations" },
     {
@@ -126,7 +126,7 @@ export function LandingNavbar() {
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/inspire/create?mode=ai-video-gen"
                       >
-                        AI gen
+                        Video / Image Gen
                       </Link>
                       <Link
                         target=""
@@ -303,7 +303,7 @@ export function LandingNavbar() {
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/inspire/create?mode=ai-video-gen"
                       >
-                        AI gen
+                        Video / Image Gen
                       </Link>
                       <Link
                         target="__blank"
