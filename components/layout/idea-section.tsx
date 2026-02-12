@@ -1154,10 +1154,15 @@ export function IdeaSection() {
                                   type="button"
                                   onClick={() => {
                                     if (isComingSoon) return;
-
-                                    setSelectedDesignTypeId(item.id);
-                                    setSelectedOrientation(null);
-                                    setShowOrientationSelection(true);
+                                    if (item.id == "video") {
+                                      router.push(
+                                        "/inspire/create?mode=ai-video-gen",
+                                      );
+                                    } else {
+                                      setSelectedDesignTypeId(item.id);
+                                      setSelectedOrientation(null);
+                                      setShowOrientationSelection(true);
+                                    }
                                   }}
                                   disabled={isComingSoon}
                                   className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors ${
