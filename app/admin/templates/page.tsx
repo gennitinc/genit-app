@@ -35,6 +35,8 @@ export default function AdminTemplatesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [templateToDelete, setTemplateToDelete] = useState<Template | null>(
     null,
@@ -46,42 +48,88 @@ export default function AdminTemplatesPage() {
   const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false);
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
-  const fetchTemplates = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const params = new URLSearchParams();
-      params.set("page", String(page));
-      params.set("limit", "50");
-      if (searchTerm.trim()) {
-        params.set("search", searchTerm.trim());
-      }
-
-      const res = await apiResponse.get(`/templates?${params.toString()}`, {
-        withCredentials: true,
-      });
-
-      const data = res.data;
-
-      if (data.success && data.data?.templates) {
-        setTemplates(data.data.templates);
-        setTotalPages(data.data.pagination?.totalPages || 1);
+  const fetchTemplates = useCallback(
+    async (pageToFetch: number, append: boolean = false) => {
+      if (append) {
+        setIsFetchingMore(true);
       } else {
-        setTemplates([]);
+        setIsLoading(true);
       }
-    } catch (error: any) {
-      console.error("Failed to fetch templates:", error);
-      toast.error("Failed to load templates");
-      setTemplates([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [page, searchTerm]);
+      try {
+        const params = new URLSearchParams();
+        params.set("page", String(pageToFetch));
+        params.set("limit", "50");
+        if (searchTerm.trim()) {
+          params.set("search", searchTerm.trim());
+        }
+
+        const res = await apiResponse.get(`/templates?${params.toString()}`, {
+          withCredentials: true,
+        });
+
+        const data = res.data;
+
+        if (data.success && data.data?.templates) {
+          const newTemplates = data.data.templates;
+          if (append) {
+            setTemplates((prev) => [...prev, ...newTemplates]);
+          } else {
+            setTemplates(newTemplates);
+          }
+          setTotalPages(data.data.pagination?.totalPages || 1);
+          setHasNextPage(Boolean(data.data.pagination?.hasNextPage));
+        } else {
+          if (!append) setTemplates([]);
+          setHasNextPage(false);
+        }
+      } catch (error: any) {
+        console.error("Failed to fetch templates:", error);
+        toast.error("Failed to load templates");
+        if (!append) setTemplates([]);
+        setHasNextPage(false);
+      } finally {
+        setIsLoading(false);
+        setIsFetchingMore(false);
+      }
+    },
+    [searchTerm],
+  );
 
   useEffect(() => {
-    fetchTemplates();
+    setPage(1);
+    fetchTemplates(1, false);
     // Clear selection when templates change (page/search)
     setSelectedTemplates(new Set());
-  }, [fetchTemplates]);
+  }, [searchTerm, fetchTemplates]);
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchTemplates(page, true);
+    }
+  }, [page, fetchTemplates]);
+
+  // Infinite scroll observer
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+    const el = loadMoreRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (
+          first.isIntersecting &&
+          hasNextPage &&
+          !isFetchingMore &&
+          !isLoading
+        ) {
+          setPage((p) => p + 1);
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(el);
+    return () => observer.unobserve(el);
+  }, [hasNextPage, isFetchingMore, isLoading]);
 
   const handleDeleteClick = (template: Template) => {
     setTemplateToDelete(template);
@@ -337,27 +385,20 @@ export default function AdminTemplatesPage() {
             ))}
           </div>
 
-          {totalPages > 1 && (
-            <div className="mt-6 flex items-center justify-center gap-2">
-              <Button
-                variant="outline"
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-              >
-                Previous
-              </Button>
-              <span className="text-sm text-muted-foreground">
-                Page {page} of {totalPages}
-              </span>
-              <Button
-                variant="outline"
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-              >
-                Next
-              </Button>
-            </div>
-          )}
+          {/* Sentinel for infinite scroll */}
+          <div
+            ref={loadMoreRef}
+            className="h-20 flex items-center justify-center"
+          >
+            {isFetchingMore && (
+              <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            )}
+            {!hasNextPage && templates.length > 0 && (
+              <p className="text-sm text-muted-foreground">
+                No more templates to load
+              </p>
+            )}
+          </div>
         </>
       )}
 
