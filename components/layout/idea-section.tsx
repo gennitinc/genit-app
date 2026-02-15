@@ -515,10 +515,15 @@ export function IdeaSection() {
       icon: FileText,
     },
     {
+      id: "animation",
+      label: "Animation",
+      icon: Video,
+      comingSoon: true,
+    },
+    {
       id: "video",
       label: "Video",
       icon: Video,
-      // comingSoon: true,
     },
     {
       id: "instagram_post",
@@ -773,7 +778,7 @@ export function IdeaSection() {
             >
               <div className="relative">
                 {/* File Attachments */}
-                {attachedFiles.length > 0 && (
+                {attachedFiles.length > 0 && !isGenerating && (
                   <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal">
                     {attachedFiles.map((file: any, index: number) => {
                       const fileKey = file.fileKey || `${file.name}-${index}`;

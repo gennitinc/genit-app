@@ -326,7 +326,7 @@ export function ChatInput({
                   label: isBasic ? "Upgrade" : "Buy Credits",
                   onClick: () => {
                     router.push(
-                      isBasic ? "/pricing" : "/user/settings?tab=billing"
+                      isBasic ? "/pricing" : "/user/settings?tab=billing",
                     );
                   },
                 },
@@ -335,7 +335,7 @@ export function ChatInput({
             }
             const validationError = validateInput(
               inputValue,
-              attachedFiles as unknown as File[]
+              attachedFiles as unknown as File[],
             );
             if (validationError) {
               console.error("Validation error:", validationError);
@@ -359,7 +359,7 @@ export function ChatInput({
                 </div>
               </div>
             </div>
-          ) : attachedFiles.length > 0 ? (
+          ) : attachedFiles.length > 0 && !isGenerating ? (
             <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal">
               {attachedFiles.map((file, index) => {
                 const fileKey = file.fileKey || `${file.name}-${index}`;
@@ -379,7 +379,7 @@ export function ChatInput({
                           className="w-full h-full object-cover rounded"
                           onLoad={(e) =>
                             URL.revokeObjectURL(
-                              (e.target as HTMLImageElement).src
+                              (e.target as HTMLImageElement).src,
                             )
                           }
                         />
@@ -462,7 +462,7 @@ export function ChatInput({
                               className="max-w-[200px] max-h-[150px] object-contain rounded"
                               onLoad={(e) =>
                                 URL.revokeObjectURL(
-                                  (e.target as HTMLImageElement).src
+                                  (e.target as HTMLImageElement).src,
                                 )
                               }
                             />
