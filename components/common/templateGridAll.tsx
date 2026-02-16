@@ -193,9 +193,15 @@ export default function TemplateGridAll() {
           );
 
           if (append) {
-            setTemplates((prev) =>
-              mapped.length ? [...prev, ...mapped] : prev,
-            );
+            setTemplates((prev) => {
+              const existingIds = new Set(prev.map((t) => t.id));
+              const uniqueNewItems = mapped.filter(
+                (item) => !existingIds.has(item.id),
+              );
+              return uniqueNewItems.length
+                ? [...prev, ...uniqueNewItems]
+                : prev;
+            });
           } else {
             setTemplates(mapped.length > 0 ? mapped : []);
           }
