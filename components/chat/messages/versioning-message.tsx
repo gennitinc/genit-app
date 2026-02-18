@@ -676,28 +676,7 @@ export function VersioningMessage({
                         Image • {fileExt}
                       </p>
                     </div>
-                    {(isPublished || item.publishStatus) && (
-                      <div className="flex items-center gap-1">
-                        <Badge
-                          variant={
-                            isPublished || item.publishStatus === "published"
-                              ? "default"
-                              : item.publishStatus === "pending"
-                                ? "secondary"
-                                : "destructive"
-                          }
-                          className="text-xs h-5 px-1.5"
-                        >
-                          {isPublished || item.publishStatus === "published"
-                            ? "Published"
-                            : item.publishStatus === "pending"
-                              ? "Pending"
-                              : item.publishStatus === "rejected"
-                                ? "Rejected"
-                                : ""}
-                        </Badge>
-                      </div>
-                    )}
+
                     <div className="flex items-center gap-2">
                       <Button
                         variant="outline"
@@ -726,6 +705,29 @@ export function VersioningMessage({
                           )}
                           {publishing === item.id ? "Publishing..." : "Publish"}
                         </Button>
+                      )}
+
+                      {(isPublished || item.publishStatus) && (
+                        <div className="flex items-center gap-1">
+                          <Badge
+                            variant={
+                              isPublished || item.publishStatus === "published"
+                                ? "default"
+                                : item.publishStatus === "pending"
+                                  ? "secondary"
+                                  : "destructive"
+                            }
+                            className="h-7 px-2 text-xs gap-1.5 w-fit"
+                          >
+                            {isPublished || item.publishStatus === "published"
+                              ? "Published"
+                              : item.publishStatus === "pending"
+                                ? "Pending"
+                                : item.publishStatus === "rejected"
+                                  ? "Rejected"
+                                  : ""}
+                          </Badge>
+                        </div>
                       )}
                     </div>
                   </div>
