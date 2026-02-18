@@ -720,7 +720,7 @@ export function VersioningMessage({
                             className="h-7 px-2 text-xs gap-1.5 w-fit"
                           >
                             {isPublished || item.publishStatus === "published"
-                              ? "Published"
+                              ? "Published 🎉"
                               : item.publishStatus === "pending"
                                 ? "Pending"
                                 : item.publishStatus === "rejected"
