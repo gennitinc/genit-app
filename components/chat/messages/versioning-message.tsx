@@ -678,18 +678,6 @@ export function VersioningMessage({
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAnimateDesign(item);
-                        }}
-                        className="h-7 px-2 text-xs gap-1.5 w-fit"
-                      >
-                        <Play className="w-3 h-3" />
-                        Animate design
-                      </Button>
                       {!isPublished && !item.publishStatus && (
                         <Button
                           variant="outline"
@@ -729,6 +717,19 @@ export function VersioningMessage({
                           </Badge>
                         </div>
                       )}
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAnimateDesign(item);
+                        }}
+                        className="h-7.5 px-2 text-xs gap-1.5 w-fit"
+                      >
+                        <Play className="w-3 h-3" />
+                        Convert to video
+                      </Button>
                     </div>
                   </div>
                 </div>
