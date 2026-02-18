@@ -689,7 +689,7 @@ export function VersioningMessage({
                           className="text-xs h-5 px-1.5"
                         >
                           {isPublished || item.publishStatus === "published"
-                            ? "Published to Inspiration"
+                            ? "Published"
                             : item.publishStatus === "pending"
                               ? "Pending"
                               : item.publishStatus === "rejected"
