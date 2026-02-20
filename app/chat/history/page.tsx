@@ -309,7 +309,7 @@ function ChatHistoryPage() {
                 disabled={loading}
                 className="gap-2"
               >
-                <RefreshCw className={`h-3 w-3 ${loading ? "animate-spin" : ""}`} />
+                <RefreshCw className={`h-3 w-3`} />
                 Refresh
               </Button>
               </div>

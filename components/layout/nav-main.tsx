@@ -33,7 +33,7 @@ const navItems = [
     href: "/chat",
   },
   {
-    title: "Video / Image Gen",
+    title: "Video & Image Gen",
     icon: GalleryHorizontal,
     href: "/inspire/create?mode=ai-video-gen",
   },
