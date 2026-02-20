@@ -599,7 +599,7 @@ export default function TemplateGridAll() {
               {t.category && (
                 <Badge
                   variant="secondary"
-                  className="absolute top-2 left-2 text-xs pointer-events-none z-2 hidden lg:block"
+                  className="absolute top-2 left-2 text-xs pointer-events-none z-2 hidden"
                 >
                   {t.category
                     .split("_")
