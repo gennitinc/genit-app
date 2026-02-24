@@ -1,12 +1,13 @@
 "use client";
 
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Check,
   AlertTriangle,
   Edit,
   ChevronRight,
+  ChevronLeft,
   Square,
   Loader,
   Circle,
@@ -20,6 +21,8 @@ import {
   Play,
   Sparkles,
   Trash2,
+  Wand2,
+  Send,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -33,6 +36,9 @@ import { toast } from "@/hooks/use-toast";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { DeleteConfirmation } from "./delete-confirmation";
 import { VideoPlayerMessage } from "../video-player-message";
+import { MaskEditor, toMask } from "react-mask-editor";
+import "react-mask-editor/dist/style.css";
+import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 
 interface GenerationItem {
   id: string;
@@ -45,6 +51,7 @@ interface GenerationItem {
   text?: string;
   videoConfig?: any; // Remotion JSON config
   publishStatus?: "published" | "pending" | "rejected" | null;
+  isActive?: boolean; // NEW: Track the currently selected item in a group
 }
 
 interface GenerationGroup {
@@ -74,6 +81,7 @@ interface VersioningMessageProps {
   className?: string;
   designType?: string; // Design type from project (logo, flier, etc.)
   originalPrompt?: string; // Original prompt from the message
+  projectId?: string; // NEW: Project ID for API calls
 }
 
 // Helper function to generate animation prompts based on design type
@@ -147,6 +155,7 @@ export function VersioningMessage({
   className,
   designType,
   originalPrompt,
+  projectId,
 }: VersioningMessageProps) {
   const router = useRouter();
   const { user } = useUserContext();
@@ -154,6 +163,33 @@ export function VersioningMessage({
   const [checkingPublishStatus, setCheckingPublishStatus] = useState(false);
   const [publishedItems, setPublishedItems] = useState<Set<string>>(new Set());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // Inpaint state
+  const [inpaintMode, setInpaintMode] = useState(false);
+  const [inpaintItem, setInpaintItem] = useState<GenerationItem | null>(null);
+  const [inpaintPrompt, setInpaintPrompt] = useState("");
+  const [isInpainting, setIsInpainting] = useState(false);
+  const [brushSize, setBrushSize] = useState(20);
+  const maskCanvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  // Carousel state
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+  // Initialize and auto-switch to newest or active generation
+  useEffect(() => {
+    if (generation.items.length > 0) {
+      // 1. Check if there's an explicitly active item
+      const activeIndex = generation.items.findIndex(
+        (item: any) => item.isActive,
+      );
+      if (activeIndex !== -1) {
+        setCurrentSlideIndex(activeIndex);
+      } else {
+        // 2. Fallback: default to the first item if none active
+        setCurrentSlideIndex(0);
+      }
+    }
+  }, [generation.items.length]);
 
   // Internal state for collapse if not controlled externally
   const [internalCollapsed, setInternalCollapsed] = useState(
@@ -503,6 +539,111 @@ export function VersioningMessage({
     }
   };
 
+  // Inpaint handler
+  const handleInpaint = async () => {
+    if (!inpaintItem || !inpaintPrompt.trim()) {
+      toast({
+        title: "Missing info",
+        description: "Please paint a mask area and enter a prompt.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsInpainting(true);
+
+      const maskCanvas = maskCanvasRef.current;
+      if (!maskCanvas) throw new Error("Mask canvas not available");
+
+      // Convert mask canvas to Blob
+      const maskBlob = await new Promise<Blob>((resolve, reject) => {
+        maskCanvas.toBlob((blob: Blob | null) => {
+          if (blob) resolve(blob);
+          else reject(new Error("Failed to convert mask to blob"));
+        }, "image/png");
+      });
+
+      const originalImageUrl =
+        inpaintItem.filePath || (inpaintItem as any).url || "";
+
+      const formData = new FormData();
+      formData.append("originalImageUrl", originalImageUrl);
+      formData.append("files", maskBlob, "mask.png");
+      formData.append("prompt", inpaintPrompt.trim());
+      formData.append("generationGroupId", generation.id || "");
+
+      // Use the projectId prop passed from TextChatContent
+      const response = await apiResponseFileUpload.post(
+        `/project/${projectId}/inpaint`,
+        formData,
+        {
+          withCredentials: true,
+        },
+      );
+
+      if (response.data?.success) {
+        toast({
+          title: "Inpaint applied!",
+          description: "Your edited image has been added to the version card.",
+        });
+        setInpaintItem(null);
+        setInpaintPrompt("");
+        setInpaintMode(false);
+      } else {
+        throw new Error(response.data?.message || "Inpaint failed");
+      }
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Inpaint request failed";
+      toast({
+        title: "Inpaint failed",
+        description: msg,
+        variant: "destructive",
+      });
+    } finally {
+      setIsInpainting(false);
+    }
+  };
+
+  const [isUpdatingActive, setIsUpdatingActive] = useState(false);
+  const handleSetAsActive = async (itemId: string) => {
+    try {
+      setIsUpdatingActive(true);
+      const response = await apiResponse.post(
+        `/projects/${projectId}/set-active-generation`,
+        {
+          generationGroupId: generation.id,
+          itemId,
+        },
+        { withCredentials: true },
+      );
+
+      if (response.data?.success) {
+        toast({
+          title: "Selection saved",
+          description: "This version is now the active one for this card.",
+        });
+        // We'll rely on the parent component or context to refresh the project state
+        // if needed, but the current UI state already knows this is selected.
+        // Actually, we should ideally update the local generation state if possible,
+        // but since it's passed as a prop, we might need a reload signal.
+      } else {
+        throw new Error(response.data?.message || "Failed to update selection");
+      }
+    } catch (err: any) {
+      toast({
+        title: "Error",
+        description: err?.message || "Failed to set active generation",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingActive(false);
+    }
+  };
+
   const renderGenerationContent = () => {
     if (generation.isLoading) {
       return (
@@ -650,13 +791,32 @@ export function VersioningMessage({
           <div className="flex-1 min-w-0">
             {mediaType === "image" && mediaUrl ? (
               <div className="flex flex-col items-start gap-2 w-full">
-                <div className="flex-shrink-0 w-full h-full sm:w-full sm:h-full rounded-md overflow-hidden border border-border bg-muted relative">
+                {/* Image container — relative so MaskEditor can overlay absolutely */}
+                <div
+                  className={cn(
+                    "flex-shrink-0 w-full rounded-md overflow-hidden bg-muted relative transition-all duration-200",
+                    inpaintMode && inpaintItem?.id !== item.id
+                      ? "border-2 border-violet-400/50 cursor-crosshair opacity-80 hover:opacity-100 hover:border-violet-500"
+                      : inpaintMode && inpaintItem?.id === item.id
+                        ? "border-2 border-violet-500 ring-2 ring-violet-500/30"
+                        : "border border-border",
+                  )}
+                  onClick={(e) => {
+                    if (!inpaintMode) return;
+                    // Only select — never deselect by clicking the active image
+                    if (inpaintItem?.id !== item.id) {
+                      e.stopPropagation();
+                      setInpaintItem(item);
+                      setInpaintPrompt("");
+                    }
+                  }}
+                >
+                  {/* Base image */}
                   <img
                     src={mediaUrl}
                     alt={item.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover block"
                     onError={(e) => {
-                      // Fallback to icon if image fails to load
                       e.currentTarget.style.display = "none";
                       const parent = e.currentTarget.parentElement;
                       if (parent) {
@@ -664,7 +824,129 @@ export function VersioningMessage({
                       }
                     }}
                   />
+
+                  {/* MaskEditor canvas — absolute on top of image, transparent until painted */}
+                  {inpaintMode && inpaintItem?.id === item.id && (
+                    <div className="absolute inset-0 w-full h-full z-10">
+                      <MaskEditor
+                        src={mediaUrl}
+                        canvasRef={
+                          maskCanvasRef as React.MutableRefObject<HTMLCanvasElement>
+                        }
+                        cursorSize={brushSize}
+                        onCursorSizeChange={setBrushSize}
+                        maskOpacity={0.65}
+                        maskColor="#7c3aed"
+                        maskBlendMode="normal"
+                      />
+                    </div>
+                  )}
+
+                  {/* "Click to edit" hint — shown in inpaint mode before selection */}
+                  {inpaintMode && inpaintItem?.id !== item.id && (
+                    <div className="absolute inset-0 bg-violet-500/10 flex items-center justify-center z-10 pointer-events-none">
+                      <div className="bg-violet-600/80 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1 backdrop-blur-sm">
+                        <Wand2 className="w-3 h-3" />
+                        Click to edit
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Painting badge */}
+                  {inpaintMode && inpaintItem?.id === item.id && (
+                    <div className="absolute top-2 right-2 z-20">
+                      <div className="bg-violet-600 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <Wand2 className="w-3 h-3" />
+                        Painting
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                {/* Brush + prompt controls — shown below image when active */}
+                {inpaintMode && inpaintItem?.id === item.id && (
+                  <div className="w-full space-y-2">
+                    {/* Brush size */}
+                    <div className="flex items-center gap-2 px-1">
+                      <span className="text-xs text-violet-400">Brush:</span>
+                      <input
+                        type="range"
+                        min={4}
+                        max={60}
+                        value={brushSize}
+                        onChange={(e) => setBrushSize(Number(e.target.value))}
+                        className="flex-1 accent-violet-500 h-1"
+                      />
+                      <span className="text-xs text-muted-foreground w-6 text-right">
+                        {brushSize}
+                      </span>
+                    </div>
+
+                    {/* Prompt + submit + clear */}
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 flex items-center gap-2 rounded-xl border border-violet-500/40 bg-muted/60 px-3 py-2 focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500/30 transition-all">
+                        <Wand2 className="w-3.5 h-3.5 text-violet-400 flex-shrink-0" />
+                        <input
+                          type="text"
+                          value={inpaintPrompt}
+                          onChange={(e) => setInpaintPrompt(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && !e.shiftKey) {
+                              e.preventDefault();
+                              handleInpaint();
+                            }
+                          }}
+                          placeholder="Describe what to change…"
+                          className="flex-1 bg-transparent text-xs outline-none placeholder:text-muted-foreground/60"
+                          disabled={isInpainting}
+                          autoFocus
+                        />
+                      </div>
+                      {/* Clear — wipes the mask and deselects */}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-9 px-3 text-xs rounded-xl flex-shrink-0 text-muted-foreground hover:text-destructive hover:border-destructive"
+                        onClick={() => {
+                          // Clear canvas pixels
+                          if (maskCanvasRef.current) {
+                            const ctx = maskCanvasRef.current.getContext("2d");
+                            if (ctx)
+                              ctx.clearRect(
+                                0,
+                                0,
+                                maskCanvasRef.current.width,
+                                maskCanvasRef.current.height,
+                              );
+                          }
+                          setInpaintItem(null);
+                          setInpaintPrompt("");
+                        }}
+                        disabled={isInpainting}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={handleInpaint}
+                        disabled={isInpainting || !inpaintPrompt.trim()}
+                        size="sm"
+                        className="h-9 px-3 gap-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl flex-shrink-0"
+                      >
+                        {isInpainting ? (
+                          <Loader className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <Send className="w-3.5 h-3.5" />
+                        )}
+                        {isInpainting ? "Applying…" : "Apply"}
+                      </Button>
+                    </div>
+                    <p className="text-xs text-muted-foreground px-1">
+                      Painted area stays active — click <strong>Cancel</strong>{" "}
+                      to clear.
+                    </p>
+                  </div>
+                )}
+
                 <div className="flex-1 min-w-0 w-full">
                   <p className="text-xs sm:text-sm font-medium text-foreground truncate">
                     {item.name}
@@ -822,16 +1104,97 @@ export function VersioningMessage({
       );
     };
 
-    return generation.items.map((item, index) => (
-      <div key={item.id} className="relative">
-        {index < generation.items.length - 1 && (
-          <div className="absolute left-[11px] sm:left-[15px] top-[22px] w-0.5 h-6 bg-muted-foreground/10 z-0"></div>
-        )}
-        <div className="flex items-center gap-2 sm:gap-3 px-1.5 py-2 rounded-md relative z-10 hover:bg-muted/50 transition-colors group">
+    if (isCollapsed) return null;
+
+    const items = generation.items || [];
+    if (items.length === 0) return null;
+
+    // Carousel view: only show the item at currentSlideIndex
+    const item = items[currentSlideIndex] || items[0];
+
+    return (
+      <div key={item.id} className="relative group/carousel">
+        <div className="flex flex-col gap-2 sm:gap-3 px-1.5 py-4 rounded-md relative z-10 hover:bg-muted/5 transition-colors">
           {renderItemContent(item)}
+
+          {/* Carousel Navigation - only show if more than one item */}
+          {items.length > 1 && (
+            <div className="flex items-center justify-between mt-2 pt-3 border-t border-border/50">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 rounded-full bg-muted/30 hover:bg-muted"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentSlideIndex((prev) =>
+                      prev > 0 ? prev - 1 : items.length - 1,
+                    );
+                  }}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+                  {currentSlideIndex + 1} / {items.length}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 rounded-full bg-muted/30 hover:bg-muted"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentSlideIndex((prev) =>
+                      prev < items.length - 1 ? prev + 1 : 0,
+                    );
+                  }}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+
+                {/* Set as Active toggle */}
+                {!item.isActive && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-7 px-2 text-[10px] rounded-full border-violet-500/30 text-violet-500 hover:bg-violet-500 hover:text-white"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSetAsActive(item.id);
+                    }}
+                    disabled={isUpdatingActive}
+                  >
+                    Set as main
+                  </Button>
+                )}
+                {item.isActive && (
+                  <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-violet-500/10 border border-violet-500/20">
+                    <Check className="w-3 h-3 text-violet-500" />
+                    <span className="text-[10px] font-semibold text-violet-600 uppercase">
+                      Main version
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Quick indicators (dots) */}
+              <div className="flex items-center gap-1.5 px-2">
+                {items.map((_, idx) => (
+                  <div
+                    key={idx}
+                    className={cn(
+                      "w-1.5 h-1.5 rounded-full transition-all duration-300",
+                      idx === currentSlideIndex
+                        ? "bg-violet-500 w-3"
+                        : "bg-muted-foreground/30",
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    ));
+    );
   };
 
   return (
@@ -857,6 +1220,39 @@ export function VersioningMessage({
                   {generation.title}
                 </h3>
                 <div className="flex flex-row items-center gap-2">
+                  {/* Inpaint (wand) icon — only for image generations */}
+                  {generation.items.some((it) =>
+                    it.type?.startsWith("image/"),
+                  ) && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={cn(
+                        "h-8 w-8 p-0 mr-0.5 transition-colors",
+                        inpaintMode
+                          ? "text-violet-500 bg-violet-500/10"
+                          : "text-muted-foreground hover:text-violet-500",
+                      )}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const next = !inpaintMode;
+                        setInpaintMode(next);
+                        if (!next) {
+                          // Exiting inpaint mode — clear selection
+                          setInpaintItem(null);
+                          setInpaintPrompt("");
+                        }
+                      }}
+                      title={
+                        inpaintMode
+                          ? "Exit inpaint mode"
+                          : "Inpaint — edit a region"
+                      }
+                    >
+                      <Wand2 className="w-4 h-4" />
+                    </Button>
+                  )}
+
                   <Button
                     variant="ghost"
                     size="sm"

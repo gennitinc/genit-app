@@ -284,6 +284,12 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         ) {
           return;
         }
+
+        // Skip global skeleton for inpaint operations
+        if (data?.isInpaint) {
+          return;
+        }
+
         // Try to attach the skeleton to the most recent user message
         setIsGeneratingImage(true);
         try {

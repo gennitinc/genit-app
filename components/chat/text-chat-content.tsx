@@ -351,6 +351,7 @@ export function TextChatContent() {
                         <VersioningMessage
                           key={group._id || group.id}
                           generation={group}
+                          projectId={project?._id?.toString()}
                           designType={project?.category || undefined}
                           originalPrompt={originalPrompt}
                           onToggle={(groupId: string) => {

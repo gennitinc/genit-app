@@ -1168,11 +1168,13 @@ export function IdeaSection() {
                                       router.push(
                                         "/inspire/create?mode=ai-video-gen",
                                       );
-                                    } else if (item.id == "image") {
-                                      router.push(
-                                        "/inspire/create?mode=ai-image-gen",
-                                      );
-                                    } else {
+                                    } 
+                                    // else if (item.id == "image") {
+                                    //   router.push(
+                                    //     "/inspire/create?mode=ai-image-gen",
+                                    //   );
+                                    // } 
+                                    else {
                                       setSelectedDesignTypeId(item.id);
                                       setSelectedOrientation(null);
                                       setShowOrientationSelection(true);
