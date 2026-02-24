@@ -526,6 +526,11 @@ export function IdeaSection() {
       icon: Video,
     },
     {
+      id: "image",
+      label: "HD Images",
+      icon: ImageIcon,
+    },
+    {
       id: "instagram_post",
       label: "Instagram",
       icon: Camera,
@@ -1162,6 +1167,10 @@ export function IdeaSection() {
                                     if (item.id == "video") {
                                       router.push(
                                         "/inspire/create?mode=ai-video-gen",
+                                      );
+                                    } else if (item.id == "image") {
+                                      router.push(
+                                        "/inspire/create?mode=ai-image-gen",
                                       );
                                     } else {
                                       setSelectedDesignTypeId(item.id);
