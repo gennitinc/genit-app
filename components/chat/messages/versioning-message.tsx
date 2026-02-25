@@ -23,8 +23,6 @@ import {
   Trash2,
   Wand2,
   Send,
-  Lock,
-  Unlock,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -172,7 +170,6 @@ export function VersioningMessage({
   const [inpaintPrompt, setInpaintPrompt] = useState("");
   const [isInpainting, setIsInpainting] = useState(false);
   const [brushSize, setBrushSize] = useState(20);
-  const [isScrollLocked, setIsScrollLocked] = useState(false);
   const maskCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Carousel state
@@ -655,7 +652,6 @@ export function VersioningMessage({
       });
     } finally {
       setIsInpainting(false);
-      setIsScrollLocked(false);
     }
   };
 
@@ -854,24 +850,11 @@ export function VersioningMessage({
                   )}
                   onClick={(e) => {
                     if (!inpaintMode) return;
-                    e.stopPropagation();
-                    e.preventDefault();
                     // Only select — never deselect by clicking the active image
                     if (inpaintItem?.id !== item.id) {
+                      e.stopPropagation();
                       setInpaintItem(item);
                       setInpaintPrompt("");
-                      setIsScrollLocked(false);
-                    }
-                  }}
-                  onDoubleClick={(e) => {
-                    if (!inpaintMode || inpaintItem?.id !== item.id) return;
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setIsScrollLocked((prev) => !prev);
-                  }}
-                  onMouseDown={(e) => {
-                    if (inpaintMode) {
-                      e.stopPropagation();
                     }
                   }}
                 >
@@ -891,13 +874,7 @@ export function VersioningMessage({
 
                   {/* MaskEditor canvas — absolute on top of image, transparent until painted */}
                   {inpaintMode && inpaintItem?.id === item.id && (
-                    <div
-                      className={cn(
-                        "absolute inset-0 w-full h-full z-10",
-                        isScrollLocked ? "touch-none" : "touch-auto",
-                      )}
-                      style={{ touchAction: isScrollLocked ? "none" : "auto" }}
-                    >
+                    <div className="absolute inset-0 w-full h-full z-10">
                       <MaskEditor
                         src={mediaUrl}
                         canvasRef={
@@ -925,36 +902,11 @@ export function VersioningMessage({
 
                   {/* Painting badge */}
                   {inpaintMode && inpaintItem?.id === item.id && (
-                    <div className="absolute top-2 right-2 z-20 flex flex-col gap-2 items-end">
-                      <div className="bg-violet-600 text-white text-[10px] md:text-xs px-2 py-0.5 rounded-full flex items-center gap-1 shadow-lg">
-                        <Wand2 className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                    <div className="absolute top-2 right-2 z-20">
+                      <div className="bg-violet-600 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <Wand2 className="w-3 h-3" />
                         Painting
                       </div>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setIsScrollLocked((prev) => !prev);
-                        }}
-                        className={cn(
-                          "px-2 py-1 rounded-lg flex items-center gap-1.5 text-[10px] font-medium transition-all shadow-lg backdrop-blur-md border",
-                          isScrollLocked
-                            ? "bg-violet-600 border-violet-500 text-white"
-                            : "bg-white/80 dark:bg-black/80 border-violet-500/30 text-violet-600 dark:text-violet-400",
-                        )}
-                      >
-                        {isScrollLocked ? (
-                          <>
-                            <Lock className="w-2.5 h-2.5" />
-                            <span>Scroll Locked</span>
-                          </>
-                        ) : (
-                          <>
-                            <Unlock className="w-2.5 h-2.5" />
-                            <span>Unlock to Paint</span>
-                          </>
-                        )}
-                      </button>
                     </div>
                   )}
                 </div>
@@ -1031,7 +983,6 @@ export function VersioningMessage({
                             }
                             setInpaintItem(null);
                             setInpaintPrompt("");
-                            setIsScrollLocked(false);
                           }}
                           disabled={isInpainting}
                         >
