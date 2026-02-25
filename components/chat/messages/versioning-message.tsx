@@ -28,14 +28,6 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerFooter,
-} from "@/components/ui/drawer";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { MessageActions } from "@/components/chat/messages";
 import ShinyText from "@/components/ui/shiny-text";
 import { serverUrlSocket, apiResponse } from "@/utils/apiResponse";
@@ -171,7 +163,6 @@ export function VersioningMessage({
   const [checkingPublishStatus, setCheckingPublishStatus] = useState(false);
   const [publishedItems, setPublishedItems] = useState<Set<string>>(new Set());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   // Inpaint state
   const [inpaintMode, setInpaintMode] = useState(false);
@@ -179,7 +170,6 @@ export function VersioningMessage({
   const [inpaintPrompt, setInpaintPrompt] = useState("");
   const [isInpainting, setIsInpainting] = useState(false);
   const [brushSize, setBrushSize] = useState(20);
-  const [hasPainted, setHasPainted] = useState(false);
   const maskCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Carousel state
@@ -189,10 +179,6 @@ export function VersioningMessage({
     itemId: string;
     index: number;
   } | null>(null);
-
-  const inpaintMediaUrl = inpaintItem
-    ? (inpaintItem as any).url || inpaintItem.filePath || ""
-    : "";
 
   const handleDeleteItem = async () => {
     if (!itemToDelete) return;
@@ -887,7 +873,7 @@ export function VersioningMessage({
                   />
 
                   {/* MaskEditor canvas — absolute on top of image, transparent until painted */}
-                  {inpaintMode && isDesktop && inpaintItem?.id === item.id && (
+                  {inpaintMode && inpaintItem?.id === item.id && (
                     <div className="absolute inset-0 w-full h-full z-10">
                       <MaskEditor
                         src={mediaUrl}
@@ -914,7 +900,7 @@ export function VersioningMessage({
                   )}
 
                   {/* Painting badge */}
-                  {inpaintMode && isDesktop && inpaintItem?.id === item.id && (
+                  {inpaintMode && inpaintItem?.id === item.id && (
                     <div className="absolute top-2 right-2 z-20">
                       <div className="bg-violet-600 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Wand2 className="w-3 h-3" />
@@ -925,7 +911,7 @@ export function VersioningMessage({
                 </div>
 
                 {/* Brush + prompt controls — shown below image when active */}
-                {inpaintMode && isDesktop && inpaintItem?.id === item.id && (
+                {inpaintMode && inpaintItem?.id === item.id && (
                   <div className="w-full space-y-3">
                     {/* Brush size */}
                     <div className="flex items-center gap-2 px-1">
@@ -1425,183 +1411,6 @@ export function VersioningMessage({
           />
         </>
       )}
-
-      {/* Mobile Inpaint Drawer */}
-      <Drawer
-        open={inpaintMode && !isDesktop && !!inpaintItem}
-        onOpenChange={(open) => {
-          if (!open) {
-            setInpaintMode(false);
-            setInpaintItem(null);
-            setInpaintPrompt("");
-            setHasPainted(false);
-          }
-        }}
-      >
-        <DrawerContent className="h-[92vh] focus:outline-none flex flex-col">
-          <DrawerHeader className="border-b pb-4 flex-shrink-0">
-            <div className="flex items-center justify-between">
-              <div>
-                <DrawerTitle className="text-violet-500 flex items-center gap-2">
-                  <Wand2 className="w-5 h-5" />
-                  Edit Image
-                </DrawerTitle>
-                <p className="text-[10px] text-muted-foreground mt-0.5">
-                  Paint over the areas you want to modify
-                </p>
-              </div>
-            </div>
-          </DrawerHeader>
-
-          <div className="flex-1 overflow-y-auto px-4 py-6">
-            {inpaintItem && (
-              <div className="max-w-md mx-auto space-y-6">
-                {/* Image + MaskEditor */}
-                <div
-                  className="w-full aspect-square relative rounded-2xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 border border-violet-500/30 ring-4 ring-violet-500/5"
-                  onPointerUp={() => setHasPainted(true)}
-                >
-                  <img
-                    src={inpaintMediaUrl}
-                    className="w-full h-full object-cover"
-                    alt="To edit"
-                  />
-                  <div className="absolute inset-0 w-full h-full z-10 touch-none">
-                    <MaskEditor
-                      src={inpaintMediaUrl}
-                      canvasRef={
-                        maskCanvasRef as React.MutableRefObject<HTMLCanvasElement>
-                      }
-                      cursorSize={brushSize}
-                      onCursorSizeChange={setBrushSize}
-                      maskOpacity={0.65}
-                      maskColor="#7c3aed"
-                      maskBlendMode="normal"
-                    />
-                  </div>
-                  <div className="absolute top-3 right-3 z-20">
-                    <div className="bg-violet-600 shadow-lg text-white text-[10px] px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium animate-pulse">
-                      <Wand2 className="w-3.5 h-3.5" />
-                      {hasPainted ? "Active Painting" : "Paint to start"}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Controls - conditionally shown after painting */}
-                <div
-                  className={cn(
-                    "transition-all duration-500 space-y-5",
-                    hasPainted
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-10 pointer-events-none",
-                  )}
-                >
-                  {/* Brush size */}
-                  <div className="space-y-2 px-1">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-violet-400">
-                        Brush Size
-                      </span>
-                      <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded">
-                        {brushSize}px
-                      </span>
-                    </div>
-                    <input
-                      type="range"
-                      min={4}
-                      max={60}
-                      value={brushSize}
-                      onChange={(e) => setBrushSize(Number(e.target.value))}
-                      className="w-full accent-violet-500 h-1.5 bg-muted rounded-lg appearance-none cursor-pointer"
-                    />
-                  </div>
-
-                  {/* Prompt Box */}
-                  <div className="space-y-2">
-                    <span className="text-xs font-semibold text-violet-400 px-1">
-                      Edit Instructions
-                    </span>
-                    <div className="flex items-start gap-3 rounded-2xl border border-violet-500/40 bg-muted/40 p-3.5 focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/20 transition-all shadow-sm">
-                      <Wand2 className="w-4 h-4 text-violet-400 mt-1 flex-shrink-0" />
-                      <textarea
-                        value={inpaintPrompt}
-                        onChange={(e) => {
-                          setInpaintPrompt(e.target.value);
-                          e.target.style.height = "auto";
-                          e.target.style.height = e.target.scrollHeight + "px";
-                        }}
-                        placeholder="e.g., 'Change the bird to a golden eagle' or 'Add stars to the sky'"
-                        className="flex-1 bg-transparent text-sm outline-none resize-none placeholder:text-muted-foreground/40 min-h-[80px]"
-                        disabled={isInpainting}
-                        autoFocus
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {!hasPainted && (
-                  <div className="flex flex-col items-center justify-center py-8 text-center animate-in fade-in slide-in-from-bottom-4">
-                    <div className="w-12 h-12 rounded-full bg-violet-500/10 flex items-center justify-center mb-3">
-                      <Wand2 className="w-6 h-6 text-violet-500" />
-                    </div>
-                    <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                      Ready to edit?
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1 px-8">
-                      Use your finger to paint the area you want to change on
-                      the image above.
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <DrawerFooter
-            className={cn(
-              "border-t p-4 sm:p-6 bg-background/80 backdrop-blur-md transition-all duration-500",
-              hasPainted
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-20 pointer-events-none",
-            )}
-          >
-            <div className="flex gap-3 max-w-md mx-auto w-full">
-              <Button
-                variant="outline"
-                className="flex-1 h-12 rounded-xl border-border hover:bg-muted font-medium"
-                onClick={() => {
-                  setInpaintMode(false);
-                  setInpaintItem(null);
-                  setInpaintPrompt("");
-                }}
-                disabled={isInpainting}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="flex-[2] h-12 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-semibold transition-all shadow-lg shadow-violet-500/20 disabled:opacity-50"
-                onClick={handleInpaint}
-                disabled={isInpainting || !inpaintPrompt.trim()}
-              >
-                {isInpainting ? (
-                  <>
-                    <Loader className="w-4 h-4 animate-spin mr-2" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4 mr-2" />
-                    Apply Generative Fill
-                  </>
-                )}
-              </Button>
-            </div>
-            <p className="text-[10px] text-center text-muted-foreground pt-2">
-              Note: The painted areas will be regenerated based on your prompt.
-            </p>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
     </div>
   );
 }
