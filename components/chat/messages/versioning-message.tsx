@@ -958,7 +958,7 @@ export function VersioningMessage({
                           className="flex-1 bg-transparent text-sm outline-none resize-none placeholder:text-muted-foreground/60 max-h-40 overflow-y-auto"
                           rows={1}
                           disabled={isInpainting}
-                          autoFocus
+                          // autoFocus
                         />
                       </div>
 
