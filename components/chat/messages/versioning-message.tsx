@@ -179,6 +179,7 @@ export function VersioningMessage({
   const [inpaintPrompt, setInpaintPrompt] = useState("");
   const [isInpainting, setIsInpainting] = useState(false);
   const [brushSize, setBrushSize] = useState(20);
+  const [hasPainted, setHasPainted] = useState(false);
   const maskCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Carousel state
@@ -1433,6 +1434,7 @@ export function VersioningMessage({
             setInpaintMode(false);
             setInpaintItem(null);
             setInpaintPrompt("");
+            setHasPainted(false);
           }
         }}
       >
@@ -1455,7 +1457,10 @@ export function VersioningMessage({
             {inpaintItem && (
               <div className="max-w-md mx-auto space-y-6">
                 {/* Image + MaskEditor */}
-                <div className="w-full aspect-square relative rounded-2xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 border border-violet-500/30 ring-4 ring-violet-500/5">
+                <div
+                  className="w-full aspect-square relative rounded-2xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 border border-violet-500/30 ring-4 ring-violet-500/5"
+                  onPointerUp={() => setHasPainted(true)}
+                >
                   <img
                     src={inpaintMediaUrl}
                     className="w-full h-full object-cover"
@@ -1477,13 +1482,20 @@ export function VersioningMessage({
                   <div className="absolute top-3 right-3 z-20">
                     <div className="bg-violet-600 shadow-lg text-white text-[10px] px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium animate-pulse">
                       <Wand2 className="w-3.5 h-3.5" />
-                      Active Painting
+                      {hasPainted ? "Active Painting" : "Paint to start"}
                     </div>
                   </div>
                 </div>
 
-                {/* Controls */}
-                <div className="space-y-5">
+                {/* Controls - conditionally shown after painting */}
+                <div
+                  className={cn(
+                    "transition-all duration-500 space-y-5",
+                    hasPainted
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-10 pointer-events-none",
+                  )}
+                >
                   {/* Brush size */}
                   <div className="space-y-2 px-1">
                     <div className="flex items-center justify-between">
@@ -1526,11 +1538,33 @@ export function VersioningMessage({
                     </div>
                   </div>
                 </div>
+
+                {!hasPainted && (
+                  <div className="flex flex-col items-center justify-center py-8 text-center animate-in fade-in slide-in-from-bottom-4">
+                    <div className="w-12 h-12 rounded-full bg-violet-500/10 flex items-center justify-center mb-3">
+                      <Wand2 className="w-6 h-6 text-violet-500" />
+                    </div>
+                    <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                      Ready to edit?
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1 px-8">
+                      Use your finger to paint the area you want to change on
+                      the image above.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>
 
-          <DrawerFooter className="border-t p-4 sm:p-6 bg-background/80 backdrop-blur-md">
+          <DrawerFooter
+            className={cn(
+              "border-t p-4 sm:p-6 bg-background/80 backdrop-blur-md transition-all duration-500",
+              hasPainted
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-20 pointer-events-none",
+            )}
+          >
             <div className="flex gap-3 max-w-md mx-auto w-full">
               <Button
                 variant="outline"
