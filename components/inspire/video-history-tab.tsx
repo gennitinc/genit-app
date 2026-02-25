@@ -6,15 +6,14 @@ import { toast } from "@/hooks/use-toast";
 import { apiResponse } from "@/utils/apiResponse";
 import { cn } from "@/lib/utils";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface HistoryVideo {
   _id: string;
@@ -52,7 +51,7 @@ export function VideoHistoryTab({ onLoadToEditor }: VideoHistoryTabProps) {
       setLoading(true);
       const response = await apiResponse.get(
         `/project/myprojects?type=ai-video-gen&limit=50`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       if (response.status === 200) {
@@ -86,12 +85,12 @@ export function VideoHistoryTab({ onLoadToEditor }: VideoHistoryTabProps) {
       // Use the direct delete endpoint for generated videos
       const response = await apiResponse.delete(
         `/inspire/generate/video/${videoToDelete._id}`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       if (response.status === 200 && response.data.success) {
         setVideos((prev) =>
-          prev.filter((vid) => vid._id !== videoToDelete._id)
+          prev.filter((vid) => vid._id !== videoToDelete._id),
         );
         toast({
           title: "Deleted",
@@ -171,26 +170,31 @@ export function VideoHistoryTab({ onLoadToEditor }: VideoHistoryTabProps) {
         </div>
       </section>
 
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Video</AlertDialogTitle>
-            <AlertDialogDescription>
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Video</DialogTitle>
+            <DialogDescription>
               Are you sure you want to delete this video? This action cannot be
               undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
               onClick={handleDelete}
               className="bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
             >
               Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
@@ -257,7 +261,7 @@ function VideoCard({
       },
       {
         threshold: 0.1, // Trigger when 10% of video is visible
-      }
+      },
     );
 
     observer.observe(videoElement);
