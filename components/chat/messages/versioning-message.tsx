@@ -39,6 +39,13 @@ import { VideoPlayerMessage } from "../video-player-message";
 import { MaskEditor, toMask } from "react-mask-editor";
 import "react-mask-editor/dist/style.css";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 interface GenerationItem {
   id: string;
@@ -171,6 +178,18 @@ export function VersioningMessage({
   const [isInpainting, setIsInpainting] = useState(false);
   const [brushSize, setBrushSize] = useState(20);
   const maskCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [showInpaintModal, setShowInpaintModal] = useState(false);
+  const [capturedMask, setCapturedMask] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // Tablet and below
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Carousel state
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -179,6 +198,23 @@ export function VersioningMessage({
     itemId: string;
     index: number;
   } | null>(null);
+
+  const handleSaveMask = async () => {
+    if (!maskCanvasRef.current) return;
+
+    // Convert mask canvas to Blob
+    return new Promise<void>((resolve) => {
+      maskCanvasRef.current?.toBlob((blob: Blob | null) => {
+        if (blob) {
+          setCapturedMask(URL.createObjectURL(blob));
+          // Store the blob for later use in handleInpaint
+          (window as any)._capturedInpaintBlob = blob;
+          setShowInpaintModal(false);
+          resolve();
+        }
+      }, "image/png");
+    });
+  };
 
   const handleDeleteItem = async () => {
     if (!itemToDelete) return;
@@ -588,7 +624,7 @@ export function VersioningMessage({
 
   // Inpaint handler
   const handleInpaint = async () => {
-    if (!inpaintItem || !inpaintPrompt.trim()) {
+    if (!inpaintItem || (!inpaintPrompt.trim() && !capturedMask)) {
       toast({
         title: "Missing info",
         description: "Please paint a mask area and enter a prompt.",
@@ -600,16 +636,21 @@ export function VersioningMessage({
     try {
       setIsInpainting(true);
 
-      const maskCanvas = maskCanvasRef.current;
-      if (!maskCanvas) throw new Error("Mask canvas not available");
+      let maskBlob: Blob;
+      if (isMobile && (window as any)._capturedInpaintBlob) {
+        maskBlob = (window as any)._capturedInpaintBlob;
+      } else {
+        const maskCanvas = maskCanvasRef.current;
+        if (!maskCanvas) throw new Error("Mask canvas not available");
 
-      // Convert mask canvas to Blob
-      const maskBlob = await new Promise<Blob>((resolve, reject) => {
-        maskCanvas.toBlob((blob: Blob | null) => {
-          if (blob) resolve(blob);
-          else reject(new Error("Failed to convert mask to blob"));
-        }, "image/png");
-      });
+        // Convert mask canvas to Blob
+        maskBlob = await new Promise<Blob>((resolve, reject) => {
+          maskCanvas.toBlob((blob: Blob | null) => {
+            if (blob) resolve(blob);
+            else reject(new Error("Failed to convert mask to blob"));
+          }, "image/png");
+        });
+      }
 
       const originalImageUrl =
         inpaintItem.filePath || (inpaintItem as any).url || "";
@@ -637,6 +678,8 @@ export function VersioningMessage({
         setInpaintItem(null);
         setInpaintPrompt("");
         setInpaintMode(false);
+        setCapturedMask(null);
+        delete (window as any)._capturedInpaintBlob;
       } else {
         throw new Error(response.data?.message || "Inpaint failed");
       }
@@ -855,6 +898,10 @@ export function VersioningMessage({
                       e.stopPropagation();
                       setInpaintItem(item);
                       setInpaintPrompt("");
+                      setCapturedMask(null);
+                      if (isMobile) {
+                        setShowInpaintModal(true);
+                      }
                     }
                   }}
                 >
@@ -873,7 +920,7 @@ export function VersioningMessage({
                   />
 
                   {/* MaskEditor canvas — absolute on top of image, transparent until painted */}
-                  {inpaintMode && inpaintItem?.id === item.id && (
+                  {!isMobile && inpaintMode && inpaintItem?.id === item.id && (
                     <div className="absolute inset-0 w-full h-full z-10 touch-none">
                       <MaskEditor
                         src={mediaUrl}
@@ -885,6 +932,17 @@ export function VersioningMessage({
                         maskOpacity={0.65}
                         maskColor="#7c3aed"
                         maskBlendMode="normal"
+                      />
+                    </div>
+                  )}
+
+                  {/* Mobile Mask Overlay - shows the captured mask as a preview */}
+                  {isMobile && capturedMask && inpaintItem?.id === item.id && (
+                    <div className="absolute inset-0 w-full h-full z-10 pointer-events-none">
+                      <img
+                        src={capturedMask}
+                        className="w-full h-full object-cover opacity-65"
+                        alt="Captured mask"
                       />
                     </div>
                   )}
@@ -903,114 +961,122 @@ export function VersioningMessage({
                   {/* Painting badge */}
                   {inpaintMode && inpaintItem?.id === item.id && (
                     <div className="absolute top-2 right-2 z-20">
-                      <div className="bg-violet-600 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <div className="bg-violet-600 text-white text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Wand2 className="w-3 h-3" />
-                        Painting
+                        {isMobile && capturedMask ? "Mask Saved" : "Painting"}
                       </div>
                     </div>
                   )}
                 </div>
 
                 {/* Brush + prompt controls — shown below image when active */}
-                {inpaintMode && inpaintItem?.id === item.id && (
-                  <div className="w-full space-y-3">
-                    {/* Brush size */}
-                    <div className="flex items-center gap-2 px-1">
-                      <span className="text-xs text-violet-400 whitespace-nowrap">
-                        Brush:
-                      </span>
+                {inpaintMode &&
+                  inpaintItem?.id === item.id &&
+                  (!isMobile || capturedMask) && (
+                    <div className="w-full space-y-3">
+                      {/* Brush size (Desktop Only) */}
+                      {!isMobile && (
+                        <div className="flex items-center gap-2 px-1">
+                          <span className="text-xs text-violet-400 whitespace-nowrap">
+                            Brush:
+                          </span>
 
-                      <input
-                        type="range"
-                        min={4}
-                        max={60}
-                        value={brushSize}
-                        onChange={(e) => setBrushSize(Number(e.target.value))}
-                        className="flex-1 accent-violet-500 h-1"
-                      />
-
-                      <span className="text-xs text-muted-foreground w-7 text-right">
-                        {brushSize}
-                      </span>
-                    </div>
-
-                    {/* Prompt + Actions */}
-                    <div className="flex flex-col gap-3 w-full">
-                      {/* Prompt box */}
-                      <div className="flex items-start gap-2 rounded-xl border border-violet-500/40 bg-muted/60 px-3 py-2 focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500/30 transition-all w-full">
-                        <Wand2 className="w-4 h-4 text-violet-400 mt-1 flex-shrink-0" />
-
-                        <textarea
-                          value={inpaintPrompt}
-                          onChange={(e) => {
-                            setInpaintPrompt(e.target.value);
-                            e.target.style.height = "auto";
-                            e.target.style.height =
-                              e.target.scrollHeight + "px";
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" && !e.shiftKey) {
-                              e.preventDefault();
-                              handleInpaint();
+                          <input
+                            type="range"
+                            min={4}
+                            max={60}
+                            value={brushSize}
+                            onChange={(e) =>
+                              setBrushSize(Number(e.target.value))
                             }
-                          }}
-                          placeholder="Describe what to change…"
-                          className="flex-1 bg-transparent text-sm outline-none resize-none placeholder:text-muted-foreground/60 max-h-40 overflow-y-auto"
-                          rows={1}
-                          disabled={isInpainting}
-                          // autoFocus
-                        />
-                      </div>
+                            className="flex-1 accent-violet-500 h-1"
+                          />
 
-                      {/* Buttons */}
-                      <div className="flex flex-col sm:flex-row gap-2 w-full">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-9 w-full sm:w-auto px-4 text-xs rounded-xl text-muted-foreground hover:text-destructive hover:border-destructive"
-                          onClick={() => {
-                            if (maskCanvasRef.current) {
-                              const ctx =
-                                maskCanvasRef.current.getContext("2d");
-                              if (ctx) {
-                                ctx.clearRect(
-                                  0,
-                                  0,
-                                  maskCanvasRef.current.width,
-                                  maskCanvasRef.current.height,
-                                );
+                          <span className="text-xs text-muted-foreground w-7 text-right">
+                            {brushSize}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Prompt + Actions */}
+                      <div className="flex flex-col gap-3 w-full">
+                        {/* Prompt box */}
+                        <div className="flex items-start gap-2 rounded-xl border border-violet-500/40 bg-muted/60 px-3 py-2 focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500/30 transition-all w-full">
+                          <Wand2 className="w-4 h-4 text-violet-400 mt-1 flex-shrink-0" />
+
+                          <textarea
+                            value={inpaintPrompt}
+                            onChange={(e) => {
+                              setInpaintPrompt(e.target.value);
+                              e.target.style.height = "auto";
+                              e.target.style.height =
+                                e.target.scrollHeight + "px";
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && !e.shiftKey) {
+                                e.preventDefault();
+                                handleInpaint();
                               }
-                            }
-                            setInpaintItem(null);
-                            setInpaintPrompt("");
-                          }}
-                          disabled={isInpainting}
-                        >
-                          Cancel
-                        </Button>
+                            }}
+                            placeholder="Describe what to change…"
+                            className="flex-1 bg-transparent text-sm outline-none resize-none placeholder:text-muted-foreground/60 max-h-40 overflow-y-auto"
+                            rows={1}
+                            disabled={isInpainting}
+                            // autoFocus
+                          />
+                        </div>
 
-                        <Button
-                          onClick={handleInpaint}
-                          disabled={isInpainting || !inpaintPrompt.trim()}
-                          size="sm"
-                          className="h-9 w-full sm:w-auto px-4 gap-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl"
-                        >
-                          {isInpainting ? (
-                            <Loader className="w-3.5 h-3.5 animate-spin" />
-                          ) : (
-                            <Send className="w-3.5 h-3.5" />
-                          )}
-                          {isInpainting ? "Applying…" : "Apply"}
-                        </Button>
+                        {/* Buttons */}
+                        <div className="flex flex-col sm:flex-row gap-2 w-full">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-9 w-full sm:w-auto px-4 text-xs rounded-xl text-muted-foreground hover:text-destructive hover:border-destructive"
+                            onClick={() => {
+                              if (maskCanvasRef.current) {
+                                const ctx =
+                                  maskCanvasRef.current.getContext("2d");
+                                if (ctx) {
+                                  ctx.clearRect(
+                                    0,
+                                    0,
+                                    maskCanvasRef.current.width,
+                                    maskCanvasRef.current.height,
+                                  );
+                                }
+                              }
+                              setInpaintItem(null);
+                              setInpaintPrompt("");
+                              setCapturedMask(null);
+                              delete (window as any)._capturedInpaintBlob;
+                            }}
+                            disabled={isInpainting}
+                          >
+                            Cancel
+                          </Button>
+
+                          <Button
+                            onClick={handleInpaint}
+                            disabled={isInpainting || !inpaintPrompt.trim()}
+                            size="sm"
+                            className="h-9 w-full sm:w-auto px-4 gap-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl"
+                          >
+                            {isInpainting ? (
+                              <Loader className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <Send className="w-3.5 h-3.5" />
+                            )}
+                            {isInpainting ? "Applying…" : "Apply"}
+                          </Button>
+                        </div>
                       </div>
-                    </div>
 
-                    <p className="text-xs text-muted-foreground px-1">
-                      Painted area stays active — click <strong>Cancel</strong>{" "}
-                      to clear.
-                    </p>
-                  </div>
-                )}
+                      <p className="text-xs text-muted-foreground px-1">
+                        Painted area stays active — click{" "}
+                        <strong>Cancel</strong> to clear.
+                      </p>
+                    </div>
+                  )}
 
                 <div className="flex-1 min-w-0 w-full">
                   <p className="text-xs sm:text-sm font-medium text-foreground truncate">
@@ -1325,6 +1391,8 @@ export function VersioningMessage({
                           // Exiting inpaint mode — clear selection
                           setInpaintItem(null);
                           setInpaintPrompt("");
+                          setCapturedMask(null);
+                          delete (window as any)._capturedInpaintBlob;
                         }
                       }}
                       title={
@@ -1401,7 +1469,7 @@ export function VersioningMessage({
           <DeleteConfirmation
             open={showDeleteConfirm}
             onOpenChange={setShowDeleteConfirm}
-            onConfirm={onDelete}
+            onConfirm={onDelete || (() => {})}
             message="Are you sure you want to delete this? This will delete both the user prompt and AI response, along with all versions after this."
           />
           <DeleteConfirmation
@@ -1410,6 +1478,67 @@ export function VersioningMessage({
             onConfirm={handleDeleteItem}
             message="Are you sure you want to delete this specific version? This action cannot be undone and will remove the image from storage."
           />
+          {/* Mobile Inpaint Modal */}
+          <Dialog open={showInpaintModal} onOpenChange={setShowInpaintModal}>
+            <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden bg-black border-violet-500/30">
+              <DialogHeader className="p-4 bg-zinc-900 border-b border-white/10">
+                <DialogTitle className="text-white flex items-center gap-2">
+                  <Wand2 className="w-4 h-4 text-violet-400" />
+                  Paint area to change
+                </DialogTitle>
+              </DialogHeader>
+
+              <div className="relative w-full aspect-square bg-zinc-950 flex items-center justify-center overflow-hidden touch-none">
+                {inpaintItem && (
+                  <MaskEditor
+                    src={inpaintItem.url || inpaintItem.filePath || ""}
+                    canvasRef={
+                      maskCanvasRef as React.MutableRefObject<HTMLCanvasElement>
+                    }
+                    cursorSize={brushSize}
+                    onCursorSizeChange={setBrushSize}
+                    maskOpacity={0.65}
+                    maskColor="#7c3aed"
+                    maskBlendMode="normal"
+                  />
+                )}
+              </div>
+
+              <DialogFooter className="p-4 bg-zinc-900 border-t border-white/10 flex-col sm:flex-row gap-3">
+                <div className="flex-1 flex items-center gap-4 px-2">
+                  <span className="text-xs text-violet-400 whitespace-nowrap">
+                    Brush:
+                  </span>
+                  <input
+                    type="range"
+                    min={4}
+                    max={60}
+                    value={brushSize}
+                    onChange={(e) => setBrushSize(Number(e.target.value))}
+                    className="flex-1 accent-violet-500 h-1"
+                  />
+                  <span className="text-xs text-zinc-400 w-6 text-right">
+                    {brushSize}
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    className="text-white hover:bg-white/10"
+                    onClick={() => setShowInpaintModal(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="bg-violet-600 hover:bg-violet-700 text-white"
+                    onClick={handleSaveMask}
+                  >
+                    Save Mask
+                  </Button>
+                </div>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </>
       )}
     </div>
