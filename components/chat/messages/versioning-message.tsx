@@ -874,7 +874,7 @@ export function VersioningMessage({
 
                   {/* MaskEditor canvas — absolute on top of image, transparent until painted */}
                   {inpaintMode && inpaintItem?.id === item.id && (
-                    <div className="absolute inset-0 w-full h-full z-10">
+                    <div className="absolute inset-0 w-full h-full z-10 touch-none">
                       <MaskEditor
                         src={mediaUrl}
                         canvasRef={
@@ -895,7 +895,7 @@ export function VersioningMessage({
                       <div className="bg-violet-600/80 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1 backdrop-blur-sm">
                         <Wand2 className="w-3 h-3" />
                         <span className="hidden lg:block">Click to edit</span>
-                        <span className="lg:hidden">Only available on desktop</span>
+                        <span className="lg:hidden">Tap to edit</span>
                       </div>
                     </div>
                   )}
