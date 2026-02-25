@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useUserContext } from "./AuthenticatedContext";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
+import { toast } from "@/hooks/use-toast";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { demoMessages } from "../components/chat/dummyMessage";
@@ -89,6 +90,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       if (msg.parts && Array.isArray(msg.parts)) {
         return {
           ...msg,
+          id: msg.id || msg._id,
           // Normalize role and type
           role: (msg.type === "user" ? "user" : "assistant") as
             | "user"
@@ -110,6 +112,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
       return {
         ...msg,
+        id: msg.id || msg._id,
         // Normalize role and type
         role: (msg.type === "user" ? "user" : "assistant") as
           | "user"
@@ -918,16 +921,41 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       // Update on server
       try {
         const projectId = project._id;
-        await apiResponse.delete(`/project/${projectId}/messages`, {
-          data: { messageId },
-          withCredentials: true,
-        });
-      } catch (apiError) {
+        const response = await apiResponse.delete(
+          `/project/${projectId}/messages`,
+          {
+            data: { messageId },
+            withCredentials: true,
+          },
+        );
+
+        if (response.data?.success) {
+          toast({
+            title: "Success",
+            description: "Messages deleted successfully",
+          });
+        } else {
+          throw new Error(
+            response.data?.message || "Failed to delete from server",
+          );
+        }
+      } catch (apiError: any) {
         console.error("Error updating messages on server:", apiError);
-        // Don't throw - local state is already updated
+        toast({
+          title: "Deletion error",
+          description:
+            apiError?.message ||
+            "Local messages cleared, but server update failed.",
+          variant: "destructive",
+        });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting message:", error);
+      toast({
+        title: "Error",
+        description: error?.message || "Could not delete message",
+        variant: "destructive",
+      });
       throw error;
     }
   };

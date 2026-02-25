@@ -174,6 +174,53 @@ export function VersioningMessage({
 
   // Carousel state
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [isDeletingItem, setIsDeletingItem] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<{
+    itemId: string;
+    index: number;
+  } | null>(null);
+
+  const handleDeleteItem = async () => {
+    if (!itemToDelete) return;
+    try {
+      setIsDeletingItem(true);
+      const response = await apiResponse.delete(
+        `/project/${projectId}/generation-item`,
+        {
+          data: {
+            generationGroupId: generation.id || generation._id,
+            itemId: itemToDelete.itemId,
+          },
+          withCredentials: true,
+        },
+      );
+
+      if (response.data?.success) {
+        toast({
+          title: "Deleted",
+          description: "This version has been removed.",
+        });
+
+        // Adjust slide index if we deleted the current slide or the last one
+        if (currentSlideIndex >= (generation.items?.length || 0) - 1) {
+          setCurrentSlideIndex(
+            Math.max(0, (generation.items?.length || 0) - 2),
+          );
+        }
+      } else {
+        throw new Error(response.data?.message || "Failed to delete item");
+      }
+    } catch (err: any) {
+      toast({
+        title: "Error",
+        description: err?.message || "Failed to delete item",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeletingItem(false);
+      setItemToDelete(null);
+    }
+  };
 
   // Initialize and auto-switch to newest or active generation
   useEffect(() => {
@@ -1151,6 +1198,25 @@ export function VersioningMessage({
                   <ChevronRight className="h-4 w-4" />
                 </Button>
 
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 rounded-full bg-muted/30 hover:bg-destructive/10 hover:text-destructive transition-colors ml-1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setItemToDelete({
+                      itemId: item.id,
+                      index: currentSlideIndex,
+                    });
+                  }}
+                  disabled={isDeletingItem}
+                  title="Delete this version"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+
+                <div className="mx-1 h-4 w-[1px] bg-border/50" />
+
                 {/* Set as Active toggle */}
                 {!item.isActive && (
                   <Button
@@ -1272,7 +1338,7 @@ export function VersioningMessage({
                   >
                     <Download className="w-4 h-4" />
                   </Button>
-                  {/* {onDelete && (
+                  {onDelete && generation.items.length > 1 && (
                     <Button
                       variant="ghost"
                       size="sm"
@@ -1285,7 +1351,7 @@ export function VersioningMessage({
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
-                  )} */}
+                  )}
                   {generation.isLatest && (
                     <Badge className="text-xs px-1.5 py-0.5 bg-green-500/10 text-green-600 border-green-500/20 flex-shrink-0">
                       Latest
@@ -1313,12 +1379,20 @@ export function VersioningMessage({
         </div>
       </div>
       {onDelete && (
-        <DeleteConfirmation
-          open={showDeleteConfirm}
-          onOpenChange={setShowDeleteConfirm}
-          onConfirm={onDelete}
-          message="Are you sure you want to delete this? This will delete both the user prompt and AI response, along with all versions after this."
-        />
+        <>
+          <DeleteConfirmation
+            open={showDeleteConfirm}
+            onOpenChange={setShowDeleteConfirm}
+            onConfirm={onDelete}
+            message="Are you sure you want to delete this? This will delete both the user prompt and AI response, along with all versions after this."
+          />
+          <DeleteConfirmation
+            open={!!itemToDelete}
+            onOpenChange={(open) => !open && setItemToDelete(null)}
+            onConfirm={handleDeleteItem}
+            message="Are you sure you want to delete this specific version? This action cannot be undone and will remove the image from storage."
+          />
+        </>
       )}
     </div>
   );
