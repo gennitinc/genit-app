@@ -23,7 +23,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { useUserContext, User } from "@/context/AuthenticatedContext";
+import { useUserContext, User, Plan } from "@/context/AuthenticatedContext";
 import { useTheme } from "next-themes";
 import { useToast } from "@/hooks/use-toast";
 import AccountActionModal from "@/components/user/account-action-modal";
@@ -85,7 +85,7 @@ const SettingsHome = () => {
 
   const handlePreferenceChange = async (
     key: keyof NonNullable<User["preferences"]>,
-    value: boolean
+    value: boolean,
   ) => {
     try {
       await updateUserPreferences({ [key]: value });
@@ -310,7 +310,7 @@ const SettingsHome = () => {
                               {user?.userPlan || "Free Plan"}
                             </h4>
                             <p className="text-sm text-muted-foreground">
-                              {user?.userPlan === "Free"
+                              {user?.userPlan === Plan.BASIC
                                 ? "Free"
                                 : user?.business?.businessPlan || "No plan"}
                             </p>
@@ -388,10 +388,10 @@ const SettingsHome = () => {
                               <p className="text-sm text-muted-foreground">
                                 {rec.billingPeriodStart
                                   ? new Date(
-                                      rec.billingPeriodStart
+                                      rec.billingPeriodStart,
                                     ).toLocaleDateString()
                                   : new Date(
-                                      rec.createdAt
+                                      rec.createdAt,
                                     ).toLocaleDateString()}
                               </p>
                             </div>
@@ -471,7 +471,7 @@ const SettingsHome = () => {
                           onCheckedChange={(checked) =>
                             handlePreferenceChange(
                               "loginNotifications",
-                              checked
+                              checked,
                             )
                           }
                         />
@@ -619,7 +619,7 @@ const SettingsHome = () => {
                           onCheckedChange={(checked) =>
                             handlePreferenceChange(
                               "emailNotifications",
-                              checked
+                              checked,
                             )
                           }
                         />

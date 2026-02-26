@@ -11,7 +11,7 @@ import { NetworkStatus } from "@/components/network/NetworkStatus";
 
 const uToken = cookie.get("gennituToken");
 
-enum Plan {
+export enum Plan {
   BASIC = "Basic",
   CREATOR = "Creator",
   STUDIO = "Studio",
