@@ -12,9 +12,11 @@ import { NetworkStatus } from "@/components/network/NetworkStatus";
 const uToken = cookie.get("gennituToken");
 
 enum Plan {
-  FREE = "Free",
-  INDIVIDUAL = "Individual",
-  TEAM = "Team",
+  BASIC = "Basic",
+  CREATOR = "Creator",
+  STUDIO = "Studio",
+  PRO_STUDIO = "Pro Studio",
+  AGENCY = "Agency",
   ENTERPRISE = "Enterprise",
 }
 
@@ -100,7 +102,7 @@ interface AuthenticatedContextInt {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   fetchCurrentUser: () => Promise<void>;
   updateUserPreferences: (
-    preferences: Partial<User["preferences"]>
+    preferences: Partial<User["preferences"]>,
   ) => Promise<void>;
   setIsKlipAiVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isKlipAiVisible: boolean;
@@ -117,7 +119,7 @@ interface AuthenticatedContextInt {
 }
 
 const AuthenticatedContext = React.createContext<AuthenticatedContextInt>(
-  {} as AuthenticatedContextInt
+  {} as AuthenticatedContextInt,
 );
 
 export function AuthenticatedContextProvider({
@@ -180,7 +182,7 @@ export function AuthenticatedContextProvider({
   };
 
   const updateUserPreferences = async (
-    preferences: Partial<User["preferences"]>
+    preferences: Partial<User["preferences"]>,
   ) => {
     if (!user) return;
 
@@ -255,7 +257,7 @@ export function AuthenticatedContextProvider({
 export function useUserContext() {
   if (AuthenticatedContext === undefined) {
     throw new Error(
-      "Authenticated context cannot be used outside of the provider"
+      "Authenticated context cannot be used outside of the provider",
     );
   }
   return React.useContext(AuthenticatedContext);

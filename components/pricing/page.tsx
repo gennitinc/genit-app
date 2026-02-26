@@ -2,13 +2,16 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Crown, Loader2 } from "lucide-react";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { apiResponse } from "@/utils/apiResponse";
+import { cn } from "@/lib/utils";
+import { Spotlight } from "@/components/ui/spotlight-new";
 
 const plansDev = [
   {
+    id: "basic",
     name: "Basic",
     monthlyPrice: 0,
     yearlyPrice: 0,
@@ -17,7 +20,7 @@ const plansDev = [
       yearly: null,
     },
     features: [
-      "Pay-as-you-go credits",
+      "Limited monthly credits",
       "HD image generation",
       "Short video creation",
       "Basic templates library",
@@ -26,7 +29,44 @@ const plansDev = [
     popular: false,
   },
   {
-    name: "Pro",
+    id: "creator",
+    name: "Creator",
+    monthlyPrice: 5,
+    yearlyPrice: 48,
+    productIds: {
+      monthly: "ADD_CREATOR_MONTHLY_ID",
+      yearly: "ADD_CREATOR_YEARLY_ID",
+    },
+    features: [
+      "500 credits per month",
+      "HD image generation",
+      "Short-form video exports",
+      "Expanded templates library",
+      "Standard support",
+    ],
+    popular: false,
+  },
+  {
+    id: "studio",
+    name: "Studio",
+    monthlyPrice: 12,
+    yearlyPrice: 96,
+    productIds: {
+      monthly: "ADD_STUDIO_MONTHLY_ID",
+      yearly: "ADD_STUDIO_YEARLY_ID",
+    },
+    features: [
+      "1,200 credits per month",
+      "HD & 4K image generation",
+      "Video & ad creation",
+      "Brand kit access",
+      "Priority rendering",
+    ],
+    popular: true,
+  },
+  {
+    id: "pro-studio",
+    name: "Pro Studio",
     monthlyPrice: 19,
     yearlyPrice: 120,
     productIds: {
@@ -36,15 +76,16 @@ const plansDev = [
     features: [
       "2,000 credits per month",
       "HD & 4K image generation",
-      "Video & commercial creation",
+      "Commercial video creation",
       "Priority support",
-      "Brand kit management",
+      "Advanced brand kit",
       "Social media optimized exports",
     ],
-    popular: true,
+    popular: false,
   },
   {
-    name: "Enterprise",
+    id: "agency",
+    name: "Agency",
     monthlyPrice: 25,
     yearlyPrice: 190,
     productIds: {
@@ -52,8 +93,8 @@ const plansDev = [
       yearly: "4952b33d-2654-44f7-9645-bdac62b008c3",
     },
     features: [
-      "5000 credits per month",
-      "4K resolution exports",
+      "5,000 credits per month",
+      "4K ultra exports",
       "Full commercial licensing",
       "Dedicated support",
       "Team collaboration",
@@ -61,9 +102,30 @@ const plansDev = [
     ],
     popular: false,
   },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    monthlyPrice: -1,
+    yearlyPrice: -1,
+    productIds: {
+      monthly: null,
+      yearly: null,
+    },
+    features: [
+      "Custom credit allowance",
+      "Full API access",
+      "Dedicated account manager",
+      "SLA & custom contracts",
+      "SSO & advanced security",
+      "Custom AI model training",
+    ],
+    popular: false,
+  },
 ];
+
 const plansProd = [
   {
+    id: "basic",
     name: "Basic",
     monthlyPrice: 0,
     yearlyPrice: 0,
@@ -72,7 +134,7 @@ const plansProd = [
       yearly: null,
     },
     features: [
-      "Pay-as-you-go credits",
+      "Limited monthly credits",
       "HD image generation",
       "Short video creation",
       "Basic templates library",
@@ -81,7 +143,44 @@ const plansProd = [
     popular: false,
   },
   {
-    name: "Pro",
+    id: "creator",
+    name: "Creator",
+    monthlyPrice: 5,
+    yearlyPrice: 48,
+    productIds: {
+      monthly: "21e60d79-cc2a-4c32-ab78-7eeadaabd60a",
+      yearly: "bbb454d7-742a-419d-ba18-94386be003fe",
+    },
+    features: [
+      "500 credits per month",
+      "HD image generation",
+      "Short-form video exports",
+      "Expanded templates library",
+      "Standard support",
+    ],
+    popular: false,
+  },
+  {
+    id: "studio",
+    name: "Studio",
+    monthlyPrice: 12,
+    yearlyPrice: 96,
+    productIds: {
+      monthly: "efd95591-37f9-4759-9664-332df51a2723",
+      yearly: "881b3661-dcdf-4f7c-802d-5d1d67792b65",
+    },
+    features: [
+      "1,200 credits per month",
+      "HD & 4K image generation",
+      "Video & ad creation",
+      "Brand kit access",
+      "Priority rendering",
+    ],
+    popular: true,
+  },
+  {
+    id: "pro-studio",
+    name: "Pro Studio",
     monthlyPrice: 19,
     yearlyPrice: 120,
     productIds: {
@@ -91,15 +190,16 @@ const plansProd = [
     features: [
       "2,000 credits per month",
       "HD & 4K image generation",
-      "Video & commercial creation",
+      "Commercial video creation",
       "Priority support",
-      "Brand kit management",
+      "Advanced brand kit",
       "Social media optimized exports",
     ],
-    popular: true,
+    popular: false,
   },
   {
-    name: "Enterprise",
+    id: "agency",
+    name: "Agency",
     monthlyPrice: 25,
     yearlyPrice: 190,
     productIds: {
@@ -108,11 +208,30 @@ const plansProd = [
     },
     features: [
       "5,000 credits per month",
-      "4K resolution exports",
+      "4K ultra exports",
       "Full commercial licensing",
       "Dedicated support",
       "Team collaboration",
       "Custom brand assets",
+    ],
+    popular: false,
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    monthlyPrice: -1,
+    yearlyPrice: -1,
+    productIds: {
+      monthly: null,
+      yearly: null,
+    },
+    features: [
+      "Custom credit allowance",
+      "Full API access",
+      "Dedicated account manager",
+      "SLA & custom contracts",
+      "SSO & advanced security",
+      "Custom AI model training",
     ],
     popular: false,
   },
@@ -144,7 +263,7 @@ export default function PricingComponent() {
         },
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (response.data && response.data.checkoutUrl) {
@@ -161,46 +280,9 @@ export default function PricingComponent() {
   };
 
   return (
-    <section className="relative py-24 md:py-32 ">
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadeInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes counterUp {
-          from {
-            transform: translateY(20px);
-            opacity: 0;
-          }
-          to {
-            transform: translateY(0);
-            opacity: 1;
-          }
-        }
-
-        .counter-animation {
-          animation: counterUp 0.3s ease-out;
-        }
-      `}</style>
-      <div className="w-full md:max-w-5xl md:mx-auto p-2 md:p-4">
+    <section className="relative bg-background" id="pricing">
+      <div className="lg:px-8 max-w-7xl mx-auto px-0 md:px-6 py-24 md:py-32">
+        {/* Header */}
         <div className="text-center animate-fadeInUp">
           <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl">
             Choose Your{" "}
@@ -209,186 +291,250 @@ export default function PricingComponent() {
             </span>
           </h1>
           <p
-            className="text-muted-foreground text-sm md:text-lg animate-fadeInUp"
+            className="my-5 text-muted-foreground text-sm md:text-lg animate-fadeInUp"
             style={{ animationDelay: "0.2s" }}
           >
             Flexible pricing options designed for you.
           </p>
         </div>
-        <>
-          {/* Switch */}
-          <div
-            className="flex justify-center items-center gap-x-3 my-16 animate-fadeInUp"
-            style={{ animationDelay: "0.4s" }}
-          >
-            <label
-              htmlFor="pricing-switch"
-              className="text-sm text-gray-800 dark:text-neutral-200"
+
+        {/* Billing toggle */}
+        <div className="flex justify-center mb-20">
+          <div className="inline-flex items-center rounded-full bg-secondary border border-border p-1 text-sm shadow-md">
+            <button
+              type="button"
+              onClick={() => setIsYearly(false)}
+              className={cn(
+                "rounded-full px-8 py-2.5 transition-all duration-200 font-medium",
+                !isYearly
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
             >
               Monthly
-            </label>
-            <label
-              htmlFor="pricing-switch"
-              className="relative inline-block w-11 h-6 cursor-pointer"
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsYearly(true)}
+              className={cn(
+                "rounded-full px-8 py-2.5 transition-all duration-200 flex items-center gap-2 font-medium",
+                isYearly
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
             >
-              <input
-                type="checkbox"
-                id="pricing-switch"
-                className="peer sr-only"
-                checked={isYearly}
-                onChange={(e) => setIsYearly(e.target.checked)}
-              />
-              <span className="absolute inset-0 bg-gray-200 rounded-full transition-colors duration-200 ease-in-out peer-checked:bg-blue-600 dark:bg-neutral-700 dark:peer-checked:bg-blue-500 peer-disabled:opacity-50 peer-disabled:pointer-events-none" />
-              <span className="absolute top-1/2 start-0.5 -translate-y-1/2 size-5 bg-white rounded-full shadow-xs transition-transform duration-200 ease-in-out peer-checked:translate-x-full dark:bg-neutral-400 dark:peer-checked:bg-white" />
-            </label>
-            <label
-              htmlFor="pricing-switch"
-              className="relative text-sm text-gray-800 dark:text-neutral-200"
-            >
-              Annually
-              <span className="absolute -top-10 start-auto -end-10 md:-end-28">
-                <span className="flex items-center">
-                  <svg
-                    className="w-14 h-8 -me-6"
-                    width={45}
-                    height={25}
-                    viewBox="0 0 45 25"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M43.2951 3.47877C43.8357 3.59191 44.3656 3.24541 44.4788 2.70484C44.5919 2.16427 44.2454 1.63433 43.7049 1.52119L43.2951 3.47877ZM4.63031 24.4936C4.90293 24.9739 5.51329 25.1423 5.99361 24.8697L13.8208 20.4272C14.3011 20.1546 14.4695 19.5443 14.1969 19.0639C13.9242 18.5836 13.3139 18.4152 12.8336 18.6879L5.87608 22.6367L1.92723 15.6792C1.65462 15.1989 1.04426 15.0305 0.563943 15.3031C0.0836291 15.5757 -0.0847477 16.1861 0.187863 16.6664L4.63031 24.4936ZM43.7049 1.52119C32.7389 -0.77401 23.9595 0.99522 17.3905 5.28788C10.8356 9.57127 6.58742 16.2977 4.53601 23.7341L6.46399 24.2659C8.41258 17.2023 12.4144 10.9287 18.4845 6.96211C24.5405 3.00476 32.7611 1.27399 43.2951 3.47877L43.7049 1.52119Z"
-                      fill="currentColor"
-                      className="fill-gray-300 dark:fill-neutral-700"
-                    />
-                  </svg>
-                  <span className="mt-3 inline-block whitespace-nowrap text-[11px] leading-5 font-semibold uppercase bg-blue-600 text-white rounded-full py-1 px-2.5">
-                    Save up to 30%
-                  </span>
-                </span>
+              <span>Yearly</span>
+              <span className="bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded-full border border-primary/20">
+                -30%
               </span>
-            </label>
+            </button>
           </div>
-          {/* End Switch */}
-        </>
+        </div>
 
-        <div className="flex flex-wrap items-center justify-center w-full  gap-6">
-          {plans.map((plan, index) => (
-            <div
-              key={plan.name}
-              className={`w-[95%] sm:w-72 text-center p-6 rounded-lg transition-all duration-500 transform hover:scale-105 hover:shadow-xl ${
-                plan.popular
-                  ? "bg-gradient-to-r from-blue-700 via-blue-800 to-gray-900 relative text-white border border-primary/30 pb-14"
-                  : "bg-card text-foreground border border-border hover:border-primary/50"
-              }`}
-              style={{
-                animationDelay: `${index * 200}ms`,
-                animation: `fadeInUp 0.6s ease-out ${index * 200}ms both`,
-              }}
-            >
-              {plan.popular && (
-                <p className="absolute px-3 text-sm -top-3.5 left-3.5 py-1 bg-primary-foreground text-primary rounded-full">
-                  Most Popular
-                </p>
-              )}
+        {/* Cards Container */}
+        <div className="relative grid w-full grid-cols-1 gap-6 overflow-hidden p-4 sm:gap-8 md:grid-cols-2 md:p-8 lg:grid-cols-4">
+          {plans.map((plan) => {
+            const displayPrice = isYearly
+              ? Math.floor(plan.yearlyPrice / 12)
+              : plan.monthlyPrice;
 
-              <p
-                className={`font-semibold ${plan.popular ? "pt-2" : ""} flex items-center justify-center gap-1`}
-              >
-                {plan.name}
-                {plan.name === "Enterprise" && (
-                  <svg
-                    className="mt-0.5"
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M4.555.72a4 4 0 0 1-.297.24c-.179.12-.38.202-.59.244a4 4 0 0 1-.38.041c-.48.039-.721.058-.922.129a1.63 1.63 0 0 0-.992.992c-.071.2-.09.441-.129.922a4 4 0 0 1-.041.38 1.6 1.6 0 0 1-.245.59 3 3 0 0 1-.239.297c-.313.368-.47.551-.56.743-.213.444-.213.96 0 1.404.09.192.247.375.56.743.125.146.187.219.24.297.12.179.202.38.244.59.018.093.026.189.041.38.039.48.058.721.129.922.163.464.528.829.992.992.2.071.441.09.922.129.191.015.287.023.38.041.21.042.411.125.59.245.078.052.151.114.297.239.368.313.551.47.743.56.444.213.96.213 1.404 0 .192-.09.375-.247.743-.56.146-.125.219-.187.297-.24.179-.12.38-.202.59-.244a4 4 0 0 1 .38-.041c.48-.039.721-.058.922-.129.464-.163.829-.528.992-.992.071-.2.09-.441.129-.922a4 4 0 0 1 .041-.38c.042-.21.125-.411.245-.59.052-.078.114-.151.239-.297.313-.368.47-.551.56-.743.213-.444.213-.96 0-1.404-.09-.192-.247-.375-.56-.743a4 4 0 0 1-.24-.297 1.6 1.6 0 0 1-.244-.59 3 3 0 0 1-.041-.38c-.039-.48-.058-.721-.129-.922a1.63 1.63 0 0 0-.992-.992c-.2-.071-.441-.09-.922-.129a4 4 0 0 1-.38-.041 1.6 1.6 0 0 1-.59-.245A3 3 0 0 1 7.445.72C7.077.407 6.894.25 6.702.16a1.63 1.63 0 0 0-1.404 0c-.192.09-.375.247-.743.56m4.07 3.998a.488.488 0 0 0-.691-.69l-2.91 2.91-.958-.957a.488.488 0 0 0-.69.69l1.302 1.302c.19.191.5.191.69 0z"
-                      fill="#2196F3"
-                    />
-                  </svg>
-                )}
-              </p>
-
-              <h1 className="text-3xl font-semibold">
-                {plan.monthlyPrice === 0 ? (
-                  "Free"
-                ) : (
-                  <span className="counter-animation">
-                    ${isYearly ? plan.yearlyPrice : plan.monthlyPrice}
-                    <span
-                      className={`text-sm font-normal ${
-                        plan.popular ? "text-white/80" : "text-muted-foreground"
-                      }`}
-                    >
-                      /{isYearly ? "year" : "month"}
-                    </span>
-                  </span>
-                )}
-              </h1>
-
-              {isYearly && plan.monthlyPrice > 0 && (
-                <p className="text-sm text-green-400 font-medium mt-1">
-                  Save ${plan.monthlyPrice * 12 - plan.yearlyPrice} per year
-                </p>
-              )}
-
-              <ul
-                className={`list-none text-sm mt-6 space-y-1 text-left ${
-                  plan.popular ? "text-white" : "text-muted-foreground"
-                }`}
-              >
-                {plan.features.map((feature, featureIndex) => (
-                  <li
-                    key={featureIndex}
-                    className="flex items-start justify-start gap-2 transition-all duration-300 hover:translate-x-2"
-                    style={{
-                      animationDelay: `${index * 200 + featureIndex * 100}ms`,
-                      animation: `fadeInLeft 0.4s ease-out ${index * 200 + featureIndex * 100}ms both`,
-                    }}
-                  >
-                    <Check className="h-4 w-4 text-primary flex-shrink-0 animate-pulse" />
-                    <p className="text-left">{feature}</p>
-                  </li>
-                ))}
-              </ul>
-
-              <button
-                type="button"
-                onClick={() => handleCheckout(plan)}
-                disabled={loadingPlan === plan.name}
-                className={`text-sm w-full flex items-center justify-center py-2 rounded font-medium mt-7 transition-all duration-300 transform hover:scale-105 hover:shadow-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:transform-none ${
+            return (
+              <div
+                key={plan.id}
+                className={cn(
+                  "relative rounded-sm p-1 sm:p-2 md:p-3 transition-all duration-300",
                   plan.popular
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                    : plan.monthlyPrice === 0
-                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                      : "bg-primary text-primary-foreground hover:bg-primary/90"
-                }`}
-              >
-                {loadingPlan === plan.name ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Processing...
-                  </div>
-                ) : plan.monthlyPrice === 0 ? (
-                  <div className="flex flex-row gap-2 items-center">
-                    <span>Start for $0</span>
-                    <ArrowRight className="w-4 h-4 ml-1" />
-                  </div>
-                ) : (
-                  <div className="flex flex-row gap-2 items-center">
-                    <span>Upgrade </span>
-                    <ArrowRight className="w-4 h-4 ml-1" />
-                  </div>
+                    ? "border border-transparent bg-card shadow ring shadow-black/10 ring-black/5 dark:bg-card"
+                    : "bg-transparent dark:bg-black",
                 )}
-              </button>
-            </div>
-          ))}
+              >
+                {/* Dashed Border Effect for Popular Card */}
+                {plan.popular && (
+                  <>
+                    <div
+                      className="[--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] -top-[2px]"
+                      style={
+                        {
+                          "--background": "hsl(var(--background))",
+                          "--height": "1px",
+                          "--width": "5px",
+                          "--fade-stop": "90%",
+                          "--offset": "100px",
+                          maskComposite: "exclude",
+                        } as React.CSSProperties
+                      }
+                    ></div>
+
+                    <div
+                      className="[--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] -bottom-[2px]"
+                      style={
+                        {
+                          "--background": "hsl(var(--background))",
+                          "--height": "1px",
+                          "--width": "5px",
+                          "--fade-stop": "90%",
+                          "--offset": "100px",
+                          maskComposite: "exclude",
+                        } as React.CSSProperties
+                      }
+                    ></div>
+                    <div
+                      className="[--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] -left-[2px]"
+                      style={
+                        {
+                          "--background": "hsl(var(--background))",
+                          "--height": "5px",
+                          "--width": "1px",
+                          "--fade-stop": "90%",
+                          "--offset": "100px",
+                          maskComposite: "exclude",
+                        } as React.CSSProperties
+                      }
+                    ></div>
+                    <div
+                      className="[--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] -right-[2px] left-auto"
+                      style={
+                        {
+                          "--background": "hsl(var(--background))",
+                          "--height": "5px",
+                          "--width": "1px",
+                          "--fade-stop": "90%",
+                          "--offset": "100px",
+                          maskComposite: "exclude",
+                        } as React.CSSProperties
+                      }
+                    ></div>
+                  </>
+                )}
+
+                <div className="flex h-full flex-col justify-start gap-1 p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-2">
+                        <p className="text-base font-medium text-foreground sm:text-lg">
+                          {plan.name}
+                        </p>
+                        {["pro-studio", "agency", "enterprise"].includes(
+                          plan.id,
+                        ) && (
+                          <Crown className="w-4 h-4 text-yellow-500 fill-cyan-500/10" />
+                        )}
+                      </div>
+                    </div>
+                    {plan.popular && (
+                      <div className="rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-3 py-1 text-xs font-medium text-white animate-pulse shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+                        Popular
+                      </div>
+                    )}
+                  </div>
+
+                  <p className="mt-1 text-sm text-muted-foreground min-h-[40px]">
+                    {plan.name === "Basic" &&
+                      "Perfect for side projects and small teams"}
+                    {plan.name === "Creator" &&
+                      "For individuals starting their creative journey"}
+                    {plan.name === "Studio" &&
+                      "Professional tools for serious builders"}
+                    {plan.name === "Pro Studio" &&
+                      "High-volume production for scaling teams"}
+                    {plan.name === "Agency" &&
+                      "Full enterprise control and collaboration"}
+                    {plan.name === "Enterprise" &&
+                      "For organizations that need full control"}
+                  </p>
+
+                  <div className="my-6">
+                    <div className="flex items-end">
+                      {plan.monthlyPrice === -1 ? (
+                        <span className="text-3xl font-medium text-foreground md:text-4xl">
+                          Custom
+                        </span>
+                      ) : (
+                        <span className="text-3xl font-medium text-foreground md:text-4xl">
+                          ${displayPrice}
+                        </span>
+                      )}
+                    </div>
+                    {plan.monthlyPrice !== -1 && (
+                      <span className="text-sm text-muted-foreground">
+                        per month
+                      </span>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      plan.id === "enterprise"
+                        ? (window.location.href = "mailto:sales@gennit.com")
+                        : handleCheckout(plan)
+                    }
+                    disabled={loadingPlan === plan.name}
+                    className={cn(
+                      "mt-4 mb-2 w-full cursor-pointer rounded-sm px-2 py-1.5 transition duration-200 active:scale-[0.98] border border-transparent flex items-center justify-center gap-2",
+                      plan.popular
+                        ? "bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl text-white shadow ring shadow-cyan-500/15 ring-cyan-500/10"
+                        : "bg-secondary text-secondary-foreground shadow ring shadow-black/15 ring-black/10 dark:bg-secondary",
+                    )}
+                  >
+                    {loadingPlan === plan.name ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : plan.id === "enterprise" ? (
+                      "Contact Sales"
+                    ) : (
+                      "Get Started"
+                    )}
+                  </button>
+
+                  <div className="mt-1">
+                    {plan.features.map((feature: string, fIdx: number) => {
+                      const showPlus =
+                        fIdx === 5 &&
+                        (plan.id === "agency" || plan.id === "enterprise");
+                      return (
+                        <React.Fragment key={fIdx}>
+                          {showPlus && (
+                            <div className="relative my-4">
+                              <div className="h-px w-full bg-border"></div>
+                              <div className="absolute inset-0 m-auto flex h-5 w-5 items-center justify-center rounded-xl bg-card shadow-[0px_-1px_0px_0px_var(--border)]">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  className="h-3 w-3 stroke-[4px] text-foreground"
+                                >
+                                  <path d="M12 5l0 14"></path>
+                                  <path d="M5 12l14 0"></path>
+                                </svg>
+                              </div>
+                            </div>
+                          )}
+                          <div className="my-5 flex items-start justify-start gap-2">
+                            <div
+                              className={cn(
+                                "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full transition-all",
+                                "bg-gradient-to-r from-cyan-500 to-blue-500",
+                              )}
+                            >
+                              <Check className="h-2 w-2 stroke-[4px] text-white" />
+                            </div>
+                            <div className="text-sm font-medium text-muted-foreground">
+                              {feature}
+                            </div>
+                          </div>
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

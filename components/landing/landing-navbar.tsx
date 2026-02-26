@@ -427,7 +427,7 @@ export function LandingNavbar() {
                         Sign in
                       </Link>
                       <Link
-                        className='outline-hidden text-foreground relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out border-[2px] border-white/5 backdrop-blur-[25px] bg-origin-border bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] shadow-sm not-disabled:hover:bg-white/90 not-disabled:hover:text-black not-disabled:hover:shadow-button transition-all duration-200 disabled:opacity-30 disabled:text-white/50 focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden focus-visible:bg-white/90 focus-visible:text-black after:absolute after:w-[calc(100%+4px)] after:h-[calc(100%+4px)] after:top-[-2px] after:left-[-2px] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat after:pointer-events-none text-sm h-10 gap-0 px-4 font-semibold'
+                        className="outline-hidden text-white relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out border-[2px] border-cyan-500/20 backdrop-blur-[25px] bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl shadow-sm shadow-cyan-500/10 hover:shadow-button transition-all duration-200 disabled:opacity-30 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold"
                         href="/signup"
                       >
                         <span>Start for $0</span>
@@ -475,7 +475,7 @@ export function LandingNavbar() {
                         Sign in
                       </Link>
                       <Link
-                        className='outline-hidden text-foreground relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out  border-[2px] border-white/5 backdrop-blur-[25px] bg-origin-border bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] shadow-sm not-disabled:hover:bg-white/90 not-disabled:hover:text-black not-disabled:hover:shadow-button transition-all duration-200 disabled:opacity-30 disabled:text-white/50 focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden focus-visible:bg-white/90 focus-visible:text-black after:absolute after:w-[calc(100%+4px)] after:h-[calc(100%+4px)] after:top-[-2px] after:left-[-2px] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat after:pointer-events-none text-sm h-10 gap-0 px-4 font-semibold'
+                        className="outline-hidden text-primary-foreground relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out  border-[2px] border-primary/20 backdrop-blur-[25px] bg-primary shadow-sm hover:bg-primary/90 hover:shadow-button transition-all duration-200 disabled:opacity-30 focus-visible:ring-4 focus-visible:ring-primary/30 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold"
                         href="/signup"
                       >
                         <span>Start for $0</span>
@@ -549,7 +549,6 @@ export function LandingNavbar() {
             </Sheet>
           </div>
         </nav>
-       
       </header>
       {/* Search experience: Drawer on mobile/tablet, Dialog on desktop */}
       {isSmallScreen ? (
