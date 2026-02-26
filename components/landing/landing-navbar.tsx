@@ -70,12 +70,8 @@ export function LandingNavbar() {
     { name: "Company", href: "/company" },
     { name: "Inspirations", href: "/inspirations" },
     {
-      name: "Pricing",
-      href: "/pricing",
-    },
-    {
-      name: "Billing",
-      href: "/user/settings?tab=billing",
+      name: user ? "Billing" : "Pricing",
+      href: user ? "/user/settings?tab=billing" : "/pricing",
     },
     { name: "History", href: user ? "/chat/history" : "/signin" },
     { name: "Community", href: "/community" },
