@@ -303,12 +303,12 @@ export function LandingFooter() {
               >
                 Home
               </Link>
-              <Link
+              {/* <Link
                 href="/inspirations"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 Inspirations
-              </Link>
+              </Link> */}
               <Link
                 href="/pricing"
                 className="text-muted-foreground hover:text-foreground transition-colors"
