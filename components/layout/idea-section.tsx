@@ -703,10 +703,7 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              {/* Create photo manipulations, videos, stunning graphics, brand
-              assets, and marketing visuals in minutes, no design skill required */}
-              Creates stunning graphics, commercial videos, stock images and
-              brand assets, no design skills or expensive budget required.
+              Design graphics, videos, and assets with AI.
             </motion.p>
           </motion.div>
         </div>
@@ -1168,12 +1165,12 @@ export function IdeaSection() {
                                       router.push(
                                         "/inspire/create?mode=ai-video-gen",
                                       );
-                                    } 
+                                    }
                                     // else if (item.id == "image") {
                                     //   router.push(
                                     //     "/inspire/create?mode=ai-image-gen",
                                     //   );
-                                    // } 
+                                    // }
                                     else {
                                       setSelectedDesignTypeId(item.id);
                                       setSelectedOrientation(null);
