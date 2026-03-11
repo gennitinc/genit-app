@@ -282,9 +282,9 @@ export function LandingFooter() {
                   href="/signup"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8 h-12 text-base gap-2"
+                  className="outline-hidden text-white relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out border-[2px] border-cyan-500/20 backdrop-blur-[25px] bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl shadow-sm shadow-cyan-500/10 hover:shadow-button transition-all duration-200 disabled:opacity-30 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold"
                 >
-                  Start with $0
+                  Start for $0
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={18}
