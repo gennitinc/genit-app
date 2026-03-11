@@ -56,6 +56,7 @@ const LogoAnimationPage = () => {
   const [generatedVideoUrl, setGeneratedVideoUrl] = useState<string | null>(
     null,
   );
+  const [currentJobId, setCurrentJobId] = useState<string | null>(null);
   const [history, setHistory] = useState<LogoAnimationJob[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
@@ -139,9 +140,21 @@ const LogoAnimationPage = () => {
         withCredentials: true,
       });
       setHistory((prev) => prev.filter((j) => j._id !== id));
+      if (currentJobId === id) {
+        setCurrentJobId(null);
+      }
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const handleSelectJob = (job: LogoAnimationJob) => {
+    setPreviewUrl(job.sourceImageUrl);
+    setPrompt(job.prompt);
+    setExportFormat(job.exportFormat as "Video" | "GIF");
+    setGeneratedVideoUrl(job.generatedVideoUrl || null);
+    setCurrentJobId(job._id);
+    setIsHistoryOpen(false);
   };
 
   return (
@@ -425,7 +438,8 @@ const LogoAnimationPage = () => {
               history.map((job) => (
                 <div
                   key={job._id}
-                  className="rounded-xl border border-border bg-card p-3 space-y-3 relative group"
+                  className="rounded-xl border border-border bg-card p-3 space-y-3 relative group cursor-pointer hover:border-primary/50 transition-colors"
+                  onClick={() => handleSelectJob(job)}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
@@ -443,7 +457,10 @@ const LogoAnimationPage = () => {
                       </div>
                     </div>
                     <button
-                      onClick={() => handleDeleteJob(job._id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteJob(job._id);
+                      }}
                       className="absolute top-3 right-3 p-1.5 rounded-lg bg-red-500/10 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/20"
                     >
                       <Trash2 className="size-3.5" />
@@ -459,15 +476,9 @@ const LogoAnimationPage = () => {
                         muted
                       />
                       <div className="absolute top-2 right-2 flex gap-1.5">
-                        <button
-                          onClick={() => {
-                            setGeneratedVideoUrl(job.generatedVideoUrl!);
-                            setIsHistoryOpen(false);
-                          }}
-                          className="text-[10px] font-medium px-2 py-1 bg-black/60 text-white rounded-md hover:bg-black/80 transition-all"
-                        >
-                          Preview
-                        </button>
+                        <div className="text-[10px] font-medium px-2 py-1 bg-black/60 text-white rounded-md">
+                          {job.exportFormat}
+                        </div>
                       </div>
                     </div>
                   )}

@@ -684,7 +684,7 @@ export function IdeaSection() {
                 containerClassName="inline-block mx-1"
               >
                 <span className="relative z-10"> Design </span>
-              </PointerHighlight>{" "} in 10s
+              </PointerHighlight>{" "} in 10.s
             </motion.h1>
             <motion.p
               className="mt-4 text-center text-gray-600 dark:text-gray-300 max-w-lg"

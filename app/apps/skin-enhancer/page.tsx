@@ -230,10 +230,12 @@ const HistoryCard = ({
   job,
   onDeleteJob,
   onDeleteImage,
+  onSelect,
 }: {
   job: SkinEnhancerJob;
   onDeleteJob: (jobId: string) => void;
   onDeleteImage: (jobId: string, imageId: string) => void;
+  onSelect: (job: SkinEnhancerJob) => void;
 }) => {
   const [deletingJob, setDeletingJob] = useState(false);
   const [deletingImage, setDeletingImage] = useState<string | null>(null);
@@ -268,7 +270,10 @@ const HistoryCard = ({
   };
 
   return (
-    <div className="rounded-xl border border-border bg-card p-3 space-y-3">
+    <div
+      className="rounded-xl border border-border bg-card p-3 space-y-3 cursor-pointer hover:border-primary/50 transition-colors"
+      onClick={() => onSelect(job)}
+    >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <img
@@ -286,7 +291,10 @@ const HistoryCard = ({
           </div>
         </div>
         <button
-          onClick={handleDeleteJob}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteJob();
+          }}
           disabled={deletingJob}
           className="flex-shrink-0 size-6 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 flex items-center justify-center transition-colors disabled:opacity-50"
         >
@@ -311,7 +319,10 @@ const HistoryCard = ({
                 className="w-full h-full object-cover"
               />
               <button
-                onClick={() => handleDeleteImage(img._id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteImage(img._id);
+                }}
                 disabled={deletingImage === img._id}
                 className="absolute top-1 right-1 size-5 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-red-600"
               >
@@ -487,6 +498,24 @@ const SkinEnhancerPage = () => {
           : j,
       ),
     );
+  };
+
+  const handleSelectJob = (job: SkinEnhancerJob) => {
+    setPreviewUrl(job.sourceImageUrl);
+    setRealismLevel(job.realismLevel);
+    setBeautySmoothing(job.beautySmoothing);
+    setPrompt(job.prompt || "");
+    setShowPrompt(!!job.prompt);
+    setGeneratedImages(
+      job.generatedImages.map((i) => ({
+        id: i._id,
+        url: i.url,
+        name: i.name,
+      })),
+    );
+    setCurrentJobId(job._id);
+    setActiveTab("controls");
+    setHistoryOpen(false);
   };
 
   return (
@@ -943,6 +972,7 @@ const SkinEnhancerPage = () => {
                   job={job}
                   onDeleteJob={handleHistoryDeleteJob}
                   onDeleteImage={handleHistoryDeleteImage}
+                  onSelect={handleSelectJob}
                 />
               ))
             )}

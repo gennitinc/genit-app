@@ -168,10 +168,12 @@ const HistoryCard = ({
   job,
   onDeleteJob,
   onDeleteAngle,
+  onSelect,
 }: {
   job: AngleReshapeJob;
   onDeleteJob: (jobId: string) => void;
   onDeleteAngle: (jobId: string, imageId: string) => void;
+  onSelect: (job: AngleReshapeJob) => void;
 }) => {
   const [deletingJob, setDeletingJob] = useState(false);
   const [deletingAngle, setDeletingAngle] = useState<string | null>(null);
@@ -206,7 +208,10 @@ const HistoryCard = ({
   };
 
   return (
-    <div className="rounded-xl border border-border bg-card p-3 space-y-3">
+    <div
+      className="rounded-xl border border-border bg-card p-3 space-y-3 cursor-pointer hover:border-primary/50 transition-colors"
+      onClick={() => onSelect(job)}
+    >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <img
@@ -226,7 +231,10 @@ const HistoryCard = ({
           </div>
         </div>
         <button
-          onClick={handleDeleteJob}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteJob();
+          }}
           disabled={deletingJob}
           className="flex-shrink-0 size-6 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 flex items-center justify-center transition-colors disabled:opacity-50"
         >
@@ -252,7 +260,10 @@ const HistoryCard = ({
                 className="w-full h-full object-cover"
               />
               <button
-                onClick={() => handleDeleteAngle(img._id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteAngle(img._id);
+                }}
                 disabled={deletingAngle === img._id}
                 className="absolute top-1 right-1 size-5 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-red-600"
               >
@@ -428,6 +439,24 @@ const AnglesReshapePage = () => {
           : j,
       ),
     );
+  };
+
+  const handleSelectJob = (job: AngleReshapeJob) => {
+    setPreviewUrl(job.sourceImageUrl);
+    setRotation(job.rotation);
+    setTilt(job.tilt);
+    setZoom(job.zoom);
+    setBestAngles(job.bestAngles);
+    setGeneratedImages(
+      job.generatedImages.map((i) => ({
+        id: i._id,
+        url: i.url,
+        name: i.name,
+      })),
+    );
+    setCurrentJobId(job._id);
+    setActiveTab("controls");
+    setHistoryOpen(false);
   };
 
   return (
@@ -959,6 +988,7 @@ const AnglesReshapePage = () => {
                   job={job}
                   onDeleteJob={handleHistoryDeleteJob}
                   onDeleteAngle={handleHistoryDeleteAngle}
+                  onSelect={handleSelectJob}
                 />
               ))
             )}
