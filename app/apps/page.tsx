@@ -208,11 +208,39 @@ const appSections = [
         type: "image",
         imageSrc:
           "https://i.pinimg.com/originals/46/5b/c4/465bc4bc137942ccd0a2a8ecb96387e8.gif",
-        badge: {
-          text: "Coming soon",
-          bgColor: "rgb(157, 78, 221)",
-          textColor: "rgb(255, 255, 255)",
-        },
+        // badge: {
+        //   text: "Coming soon",
+        //   bgColor: "rgb(157, 78, 221)",
+        //   textColor: "rgb(255, 255, 255)",
+        // },
+      },
+
+      {
+        id: "image-generation",
+        href: "/apps/image-generation",
+        title: "Image Generation",
+        description: "Professional AI image creation suite",
+        type: "image",
+        imageSrc:
+          "https://i.pinimg.com/736x/f4/fb/b5/f4fbb53e705d9d641c4f2f4f32cd1527.jpg",
+      },
+      {
+        id: "video-generation",
+        href: "/apps/video-generation",
+        title: "Video Generation",
+        description: "Kinetic AI storytelling and animation",
+        type: "video",
+        imageSrc:
+          "https://cdn.leonardo.ai/users/220eee85-2367-43fd-91c1-715ac51afece/generations/ccd8c64a-ae89-49e3-89ef-afab21e2432a/segments/1:1:1/motion2Fast____________________________________________________0.jpg?w=512",
+      },
+      {
+        id: "presenter",
+        href: "/apps/presenter",
+        title: "Presenter Manager",
+        description: "Manage and generate your own custom digital presenters",
+        type: "image",
+        imageSrc:
+          "https://i.pinimg.com/736x/eb/76/a4/eb76a46ab920d056b02d203ca95e9a22.jpg",
       },
       {
         id: "face-swap",

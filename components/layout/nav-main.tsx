@@ -34,15 +34,25 @@ const navItems = [
     href: "/chat",
   },
   {
+    title: "Image Generation",
+    icon: ImageIcon,
+    href: "/apps/image-generation",
+  },
+  {
+    title: "Video Generation",
+    icon: Video,
+    href: "/apps/video-generation",
+  },
+  {
+    title: "Presenter",
+    icon: UserPlus,
+    href: "/apps/presenter",
+  },
+  {
     title: "Apps",
     icon: LayoutPanelLeft,
     href: "/apps",
   },
-  // {
-  //   title: "Video & Image Gen",
-  //   icon: GalleryHorizontal,
-  //   href: "/inspire/create?mode=ai-video-gen",
-  // },
   {
     title: "History",
     icon: History,
@@ -52,12 +62,6 @@ const navItems = [
     title: "Community",
     icon: Users,
     href: "/community",
-  },
-
-  {
-    title: "Creator",
-    icon: UserPlus,
-    href: "/user/referral",
   },
   {
     title: "Billing",

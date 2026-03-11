@@ -26,7 +26,7 @@ import {
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
-import type { Resolution, AspectRatio } from "@/app/inspire/create/page";
+import type { Resolution, AspectRatio } from "@/types/inspire";
 
 interface ResolutionSelectorProps {
   selectedResolution: Resolution;
@@ -110,7 +110,7 @@ function ResolutionCard({
         "bg-neutral-100 dark:bg-neutral-800",
         isSelected
           ? "ring-1 ring-neutral-900 dark:ring-neutral-500"
-          : "hover:ring-1 hover:ring-neutral-500 dark:hover:ring-neutral-600"
+          : "hover:ring-1 hover:ring-neutral-500 dark:hover:ring-neutral-600",
       )}
     >
       <div className="flex items-center justify-between">
@@ -120,7 +120,7 @@ function ResolutionCard({
               "w-10 h-10 rounded-lg flex items-center justify-center",
               isSelected
                 ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400"
+                : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
             )}
           >
             <Monitor className="w-5 h-5" />
@@ -181,7 +181,7 @@ function AspectRatioCard({
         "bg-neutral-200 dark:bg-neutral-800",
         isSelected
           ? "ring-1 ring-neutral-400 dark:ring-neutral-500"
-          : "hover:ring-1 hover:ring-neutral-300 dark:hover:ring-neutral-600"
+          : "hover:ring-1 hover:ring-neutral-300 dark:hover:ring-neutral-600",
       )}
     >
       <div className="flex flex-col items-center gap-2">
@@ -190,7 +190,7 @@ function AspectRatioCard({
             "w-10 h-10 rounded-lg flex items-center justify-center",
             isSelected
               ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-              : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400"
+              : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
           )}
         >
           {getIcon()}
@@ -273,10 +273,10 @@ export function ResolutionSelector({
 
   // Get current selections for display
   const currentResolution = RESOLUTIONS.find(
-    (r) => r.value === selectedResolution
+    (r) => r.value === selectedResolution,
   );
   const currentAspectRatio = ASPECT_RATIOS.find(
-    (r) => r.value === selectedAspectRatio
+    (r) => r.value === selectedAspectRatio,
   );
 
   return (
@@ -292,7 +292,7 @@ export function ResolutionSelector({
           onClick={() => setIsOpen(true)}
           className={cn(
             "relative overflow-hidden rounded-xl p-3 transition-all group text-left w-full",
-            "bg-neutral-100 dark:bg-neutral-800 hover:ring-1 hover:ring-neutral-300 dark:hover:ring-neutral-600"
+            "bg-neutral-100 dark:bg-neutral-800 hover:ring-1 hover:ring-neutral-300 dark:hover:ring-neutral-600",
           )}
         >
           <div className="flex items-center justify-between">
@@ -318,7 +318,7 @@ export function ResolutionSelector({
           onClick={() => setIsOpen(true)}
           className={cn(
             "relative overflow-hidden rounded-xl p-3 transition-all group text-left w-full",
-            "bg-neutral-100 dark:bg-neutral-800 hover:ring-1 hover:ring-neutral-300 dark:hover:ring-neutral-600"
+            "bg-neutral-100 dark:bg-neutral-800 hover:ring-1 hover:ring-neutral-300 dark:hover:ring-neutral-600",
           )}
         >
           <div className="flex items-center justify-between">

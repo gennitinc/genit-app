@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
-import { AspectRatio } from "@/app/inspire/create/page";
+import { AspectRatio } from "@/types/inspire";
 import { communityApi } from "@/utils/inspire-api";
 import {
   Tooltip,
@@ -48,7 +48,7 @@ interface VideoPreviewTabProps {
   onVideoSelect: (index: number) => void;
   onPromptRestore: (prompt: string) => void;
   onTabChange?: (
-    tab: "preview" | "community" | "templates" | "tutorial"
+    tab: "preview" | "community" | "templates" | "tutorial",
   ) => void;
   onDrawerClose?: () => void;
 }
@@ -66,7 +66,7 @@ export function VideoPreviewTab({
 }: VideoPreviewTabProps) {
   const [publishing, setPublishing] = useState(false);
   const [publishedVideoIds, setPublishedVideoIds] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [publishedContentMap, setPublishedContentMap] = useState<
     Map<string, string>
@@ -112,7 +112,7 @@ export function VideoPreviewTab({
   // Check if current video is published
   const isPublished = Boolean(
     currentVideo?.generatedVideoId &&
-      publishedVideoIds.has(currentVideo.generatedVideoId)
+      publishedVideoIds.has(currentVideo.generatedVideoId),
   );
 
   const handleDownload = async () => {
@@ -186,7 +186,7 @@ export function VideoPreviewTab({
       publishedVideoIds.has(currentVideo.generatedVideoId)
     ) {
       const communityContentId = publishedContentMap.get(
-        currentVideo.generatedVideoId
+        currentVideo.generatedVideoId,
       );
       if (communityContentId) {
         try {
@@ -248,10 +248,10 @@ export function VideoPreviewTab({
       // Update published status
       if (currentVideo.generatedVideoId && response.data?.id) {
         setPublishedVideoIds((prev) =>
-          new Set(prev).add(currentVideo.generatedVideoId!)
+          new Set(prev).add(currentVideo.generatedVideoId!),
         );
         setPublishedContentMap((prev) =>
-          new Map(prev).set(currentVideo.generatedVideoId!, response.data.id)
+          new Map(prev).set(currentVideo.generatedVideoId!, response.data.id),
         );
       }
 
@@ -291,13 +291,12 @@ export function VideoPreviewTab({
 
   return (
     <section className="p-4">
-     
       {/* Main Preview Area */}
       <div className="flex flex-col">
         {/* Preview Container */}
         <div
           className={cn(
-            "relative w-full rounded-xl overflow-hidden min-h-[400px]"
+            "relative w-full rounded-xl overflow-hidden min-h-[400px]",
           )}
         >
           {/* Generating State */}
@@ -369,7 +368,7 @@ export function VideoPreviewTab({
                   type="button"
                   onClick={() =>
                     onPromptRestore(
-                      "A cinematic shot of a woman walking through a neon-lit cyberpunk city at night, rain falling, reflections on wet streets"
+                      "A cinematic shot of a woman walking through a neon-lit cyberpunk city at night, rain falling, reflections on wet streets",
                     )
                   }
                   className="px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-sm font-medium text-neutral-700 dark:text-neutral-300 transition-colors"
@@ -408,7 +407,7 @@ export function VideoPreviewTab({
                     "relative shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all",
                     selectedVideoIndex === index
                       ? "border-neutral-900 dark:border-neutral-100 ring-2 ring-neutral-900/20 dark:ring-neutral-100/20"
-                      : "border-transparent hover:border-neutral-300 dark:hover:border-neutral-600"
+                      : "border-transparent hover:border-neutral-300 dark:hover:border-neutral-600",
                   )}
                 >
                   <img
@@ -509,7 +508,7 @@ export function VideoPreviewTab({
                 "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
                 isPublished
                   ? "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-300 dark:hover:bg-neutral-600"
-                  : "bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
+                  : "bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900",
               )}
             >
               {publishing ? (
@@ -566,7 +565,7 @@ export function VideoPreviewTab({
                 <Clock className="w-3.5 h-3.5" />
                 {generatedVideos[selectedVideoIndex]?.createdAt
                   ? new Date(
-                      generatedVideos[selectedVideoIndex].createdAt
+                      generatedVideos[selectedVideoIndex].createdAt,
                     ).toLocaleTimeString()
                   : "Just now"}
               </div>
