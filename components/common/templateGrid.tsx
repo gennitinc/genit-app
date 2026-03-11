@@ -510,7 +510,7 @@ export default function TemplateGrid() {
       <h2 className="text-base font-semibold text-foreground">Inspirations</h2>
       <button
         className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
-        onClick={() => router.push("/inspirations")}
+        onClick={() => router.push("/community")}
       >
         View all
         <ArrowRight className="h-4 w-4" />

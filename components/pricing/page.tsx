@@ -62,7 +62,7 @@ const plansDev = [
       "Brand kit access",
       "Priority rendering",
     ],
-    popular: true,
+    popular: false,
   },
   {
     id: "pro-studio",
@@ -81,7 +81,7 @@ const plansDev = [
       "Advanced brand kit",
       "Social media optimized exports",
     ],
-    popular: false,
+    popular: true,
   },
   {
     id: "agency",
@@ -176,7 +176,7 @@ const plansProd = [
       "Brand kit access",
       "Priority rendering",
     ],
-    popular: true,
+    popular: false,
   },
   {
     id: "pro-studio",
@@ -195,7 +195,7 @@ const plansProd = [
       "Advanced brand kit",
       "Social media optimized exports",
     ],
-    popular: false,
+    popular: true,
   },
   {
     id: "agency",
@@ -534,7 +534,7 @@ export default function PricingComponent() {
                       </div>
                     </div>
                     {plan.popular && (
-                      <div className="rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-3 py-1 text-xs font-medium text-white animate-pulse shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+                      <div className="rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-3 py-1 text-xs font-medium text-white shadow-[0_0_15px_rgba(6,182,212,0.3)]">
                         Popular
                       </div>
                     )}

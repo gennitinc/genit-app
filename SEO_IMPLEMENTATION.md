@@ -57,7 +57,7 @@ This document outlines the comprehensive SEO implementation across the Gennit AI
 - Support and inquiry keywords
 - Call-to-action focused description
 
-#### Inspirations Page (`app/inspirations/page.tsx`)
+<!-- #### Inspirations Page (`app/inspirations/page.tsx`) -->
 
 ✅ **Added:**
 

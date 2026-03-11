@@ -66,9 +66,9 @@ export function LandingNavbar() {
 
   const navigation = [
     { name: "Design Chat", href: "/chat" },
-    { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
+    { name: "Apps", href: "/apps" },
+    // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Company", href: "/company" },
-    { name: "Inspirations", href: "/inspirations" },
     {
       name: user ? "Billing" : "Pricing",
       href: user ? "/user/settings?tab=billing" : "/pricing",
@@ -124,10 +124,16 @@ export function LandingNavbar() {
                       )}
                       <Link
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
+                        href="/apps"
+                      >
+                        Apps
+                      </Link>
+                      {/* <Link
+                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/inspire/create?mode=ai-video-gen"
                       >
                         Video & Image Gen
-                      </Link>
+                      </Link> */}
                       <Link
                         target=""
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
@@ -135,13 +141,13 @@ export function LandingNavbar() {
                       >
                         Community
                       </Link>
-                      <Link
+                      {/* <Link
                         target=""
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/inspirations"
                       >
                         Inspirations
-                      </Link>
+                      </Link> */}
                       <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
@@ -296,15 +302,21 @@ export function LandingNavbar() {
                           className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                           href="/chat"
                         >
-                          Create
+                          Design Chat
                         </Link>
                       )}
                       <Link
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
+                        href="/apps"
+                      >
+                        Apps
+                      </Link>
+                      {/* <Link
+                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/inspire/create?mode=ai-video-gen"
                       >
                         Video & Image Gen
-                      </Link>
+                      </Link> */}
                       <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
@@ -312,13 +324,13 @@ export function LandingNavbar() {
                       >
                         Community
                       </Link>
-                      <Link
+                      {/* <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
                         href="/inspirations"
                       >
                         Inspirations
-                      </Link>
+                      </Link> */}
                       <Link
                         target="__blank"
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"

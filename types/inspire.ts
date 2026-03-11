@@ -1,4 +1,6 @@
 // types/inspire.ts
+export type AspectRatio = "1:1" | "4:3" | "3:4" | "16:9" | "9:16";
+export type Resolution = "1080p" | "720p" | "480p" | "4K";
 
 // ============================================
 // Image Generation Template Types
@@ -110,11 +112,11 @@ export interface GenerationParams {
   modelId?: string;
   aspectRatio?: string;
   resolution?: string;
-  
+
   // Image specific
   style?: string;
   imageCount?: number;
-  
+
   // Video specific
   presenterId?: string;
   voiceId?: string;
@@ -439,4 +441,3 @@ export interface GenerateVideoResponse {
     videos: GeneratedVideoItem[];
   };
 }
-

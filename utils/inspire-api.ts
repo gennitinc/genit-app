@@ -878,10 +878,6 @@ export const videoGenApi = {
   },
 };
 
-// ============================================
-// Template/Inspiration API
-// ============================================
-
 export interface PublishToInspirationRequest {
   mediaUrl: string;
   thumbnailUrl?: string;

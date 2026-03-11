@@ -107,312 +107,574 @@ export function LandingFooter() {
   ];
 
   return (
-    <footer className="relative border-t border-border overflow-hidden transition-colors duration-300">
-      {/* Back to Top Button */}
-      <div
-        className={cn(
-          "fixed bottom-8 right-8 z-50 transition-all duration-500 transform",
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
-        )}
-      >
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={scrollToTop}
-                size="icon"
-                variant="secondary"
-                className="rounded-full shadow-lg hover:shadow-xl hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-              >
-                <ArrowUp className="h-5 w-5" />
-                <span className="sr-only">Back to top</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              <p>Back to top</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-
-      <footer className="px-2 md:px-12 lg:px-20 xl:px-24 w-full text-sm bg-background border-t border-border pt-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Brand Section */}
-          <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="flex items-center z-40 gap-2 mb-4">
-              <Logo className="w-12 h-12 flex-shrink-0" />
-              <span className="text-xl font-semibold transition-colors duration-300 text-foreground">
-                Gennit
-              </span>
-            </Link>
-            <p className="text-muted-foreground w-full md:max-w-[60vw] lg:max-w-60 mb-6">
-              Create stunning promotional graphics with AI-powered design tools.
-              Transform your ideas into professional visuals in seconds.
-            </p>
-            <div className="flex items-center gap-4">
-              <a
-                href="https://discord.gg/ftZbQvCdN7"
-                target="_blank"
-                rel="noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="size-5"
-                >
-                  <path d="M8 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
-                  <path d="M14 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
-                  <path d="M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3" />
-                  <path d="M7 16.5c3.5 1 6.5 1 10 0" />
-                </svg>
-              </a>
-              <a
-                href="https://twitter.com/gennit_ai"
-                target="_blank"
-                rel="noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="size-5"
-                >
-                  <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
-                </svg>
-              </a>
+    <div className="relative z-10">
+      <section className="py-24 md:py-32 overflow-hidden relative rounded-t-4xl">
+        <div className="absolute top-0 right-0 bottom-0 left-0 gap-x-8 gap-y-8">
+          <img
+            src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/46172b3c-6c63-4bd0-97b0-09a0ca82b055_3840w.webp"
+            alt="Abstract textured portrait behind patterned glass"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70" />
+        </div>
+        <div className="container mx-auto px-6 md:px-12">
+          <div
+            className="relative rounded-[4rem] bg-(--color-primary)/5 border border-(--color-foreground)/5 p-12 md:p-24 overflow-hidden text-center"
+            style={{ opacity: 1, transform: "none" }}
+          >
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none select-none">
+              <div className="grid grid-cols-12 h-full w-full">
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+                <div className="border border-(--color-foreground)/10 aspect-square" />
+              </div>
             </div>
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-gray-200 tracking-tight mb-6 leading-tight">
+                Idea to Design in Seconds
+              </h2>
+              <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto leading-relaxed">
+                Join a community of Creatives who have created
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link
+                  href="/signup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8 h-12 text-base gap-2"
+                >
+                  Start with $0
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={18}
+                    height={18}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-arrow-right"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </Link>
+                <Link
+                  href="/contact"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-gray-400 hover:text-gray-100 rounded-full px-8 h-12 text-base"
+                >
+                  Get in touch
+                </Link>
+              </div>
+              <p className="mt-8 text-sm text-gray-400">
+                No credit card required · Free plan available · Setup in minutes
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="mt-14 flex flex-col items-start sm:flex-row gap-2 md:gap-6 md:items-center">
-              <div className="flex items-center gap-4 mb-2 ">
-                <span className="text-sm font-medium text-muted-foreground">
-                  Theme
-                </span>
-                <div className="flex gap-1 p-1 bg-muted rounded-lg">
-                  <button
-                    className="p-1.5 hover:bg-accent hover:shadow-sm rounded transition-all duration-200"
-                    onClick={() => setTheme("light")}
+      <footer className="relative overflow-hidden min-h-[400px]">
+        <div className=" mx-auto px-4 md:px-12 lg:px-20 xl:px-24 py-16 lg:py-20 relative z-10">
+          <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-24">
+            <div className="lg:max-w-sm">
+              <div className="flex flex-col">
+                <Link href="/" className="flex items-center z-40 mb-1">
+                  <Logo className="w-12 h-12 flex-shrink-0" />
+                  <span className="text-xl font-semibold transition-colors duration-300 text-foreground">
+                    Gennit
+                  </span>
+                </Link>
+                <p className="text-gray-400 w-full md:max-w-[60vw] lg:max-w-60 mb-1">
+                  Brand tailored media just got easier and faster
+                </p>
+                <div className="flex items-center gap-3 mb-6 mt-8">
+                  <a
+                    href="https://www.linkedin.com/company/gennit-ai/"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="LinkedIn"
                   >
-                    <Sun className="h-3.5 w-3.5 text-muted-foreground" />
-                  </button>
-                  <button
-                    className="p-1.5 hover:bg-accent hover:shadow-sm rounded transition-all duration-200"
-                    onClick={() => setTheme("dark")}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width={20}
+                      height={20}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-linkedin"
+                    >
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                      <rect width={4} height={12} x={2} y={9} />
+                      <circle cx={4} cy={4} r={2} />
+                    </svg>
+                  </a>
+                  <a
+                    href="https://x.com/gennit_ai"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="X"
                   >
-                    <Moon className="h-3.5 w-3.5 text-muted-foreground" />
-                  </button>
-                  <button
-                    className="p-1.5 bg-accent shadow-sm rounded"
-                    onClick={() => setTheme("system")}
+                    <svg
+                      width={20}
+                      height={20}
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                  </a>
+
+                  <a
+                    href="https://instagram.com/gennitai"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Instagram"
                   >
-                    <Monitor className="h-3.5 w-3.5 text-primary" />
-                  </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width={20}
+                      height={20}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-instagram"
+                    >
+                      <rect width={20} height={20} x={2} y={2} rx={5} ry={5} />
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                    </svg>
+                  </a>
+                  <a
+                    href="https://www.youtube.com/@gennitai"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="YouTube"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width={20}
+                      height={20}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-youtube"
+                    >
+                      <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+                      <path d="m10 15 5-3-5-3z" />
+                    </svg>
+                  </a>
                 </div>
               </div>
-              <div className="flex items-center justify-between gap-4 mb-2">
-                <span className="text-sm font-medium text-muted-foreground">
-                  Language
-                </span>
 
-                <Select
-                  value={selected}
-                  onValueChange={(value) => setSelected(value)}
-                  disabled
-                >
-                  <SelectTrigger className="w-fit text-sm bg-background border border-border rounded-md px-2 py-1 text-foreground">
-                    <SelectValue placeholder="Select language">
-                      <div className="flex items-center gap-2 w-fit">
-                        <span>
-                          {languages.find((l) => l.code === selected)?.flag}
-                        </span>
-                        <span>
-                          {languages.find((l) => l.code === selected)?.label}
-                        </span>
-                      </div>
-                    </SelectValue>
-                  </SelectTrigger>
+              <div className="mt-6 flex flex-col  gap-2 md:gap-6">
+                {/* <div className="flex items-center justify-between gap-4 mb-2">
+                  <span className="text-sm font-medium text-muted-foreground">
+                    Language
+                  </span>
 
-                  <SelectContent>
-                    {languages.map((lang) => (
-                      <SelectItem key={lang.code} value={lang.code}>
-                        <div className="flex items-center gap-2">
-                          <span>{lang.flag}</span>
-                          <span>{lang.label}</span>
+                  <Select
+                    value={selected}
+                    onValueChange={(value) => setSelected(value)}
+                    disabled
+                  >
+                    <SelectTrigger className="w-fit text-sm bg-background border border-border rounded-md px-2 py-1 text-foreground">
+                      <SelectValue placeholder="Select language">
+                        <div className="flex items-center gap-2 w-fit">
+                          <span>
+                            {languages.find((l) => l.code === selected)?.flag}
+                          </span>
+                          <span>
+                            {languages.find((l) => l.code === selected)?.label}
+                          </span>
                         </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                      </SelectValue>
+                    </SelectTrigger>
+
+                    <SelectContent>
+                      {languages.map((lang) => (
+                        <SelectItem key={lang.code} value={lang.code}>
+                          <div className="flex items-center gap-2">
+                            <span>{lang.flag}</span>
+                            <span>{lang.label}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div> */}
               </div>
             </div>
-          </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 lg:gap-16">
+              <div>
+                <h4 className="font-semibold text-foreground mb-4">Company</h4>
+                <ul className="space-y-3 flex flex-col">
+                  <Link
+                    href="/company"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    About
+                  </Link>
+                  <Link
+                    href="/legal/privacy-policy"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Privacy Policy
+                  </Link>
+                  <Link
+                    href="/legal/terms-of-service"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Terms of Service
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Support
+                  </Link>
+                </ul>
+              </div>
 
-          {/* Company Links */}
-          <div>
-            <h3 className="font-semibold mb-4 text-foreground">Company</h3>
-            <div className="flex flex-col space-y-3 w-fit">
-              <Link
-                href="/company"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Company
-              </Link>
-              <Link
-                href="/legal/privacy-policy"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/legal/terms-of-service"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Terms of Service
-              </Link>
-              <Link
-                href="/contact"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Support
-              </Link>
-            </div>
-          </div>
-
-          {/* Navigation Links */}
-          <div>
-            <h3 className="font-semibold mb-4 text-foreground">Platform</h3>
-            <div className="flex flex-col space-y-3 w-fit">
-              <Link
-                href="/"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Home
-              </Link>
-              <Link
+              <div>
+                <h4 className="font-semibold text-foreground mb-4">
+                  Platform Pages
+                </h4>
+                <ul className="space-y-3 flex flex-col">
+                  <Link
+                    href="/"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Home
+                  </Link>
+                  {/* <Link
                 href="/inspirations"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 Inspirations
-              </Link>
-              <Link
-                href="/pricing"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Pricing
-              </Link>
-              <Link
-                href="/creators-program"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Creators Program
-              </Link>
-              <Link
-                href="/community"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Community
-              </Link>
-              <Link
-                href="/creators-program"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Templates
-              </Link>
-              <Link
-                href="/contact"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Contact
-              </Link>
+              </Link> */}
+                  <Link
+                    href="/pricing"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Pricing
+                  </Link>
+                  <Link
+                    href="/creators-program"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Creators Program
+                  </Link>
+                  <Link
+                    href="/community"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Community
+                  </Link>
+                  <Link
+                    href="/creators-program"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Templates
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Contact
+                  </Link>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground mb-4">Apps</h4>
+                <ul className="space-y-3">
+                  <li>
+                    <Link
+                      href="/apps/chat"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      Design Chat
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/apps/angle-reshape"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      Angle Reshape
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      href="/apps/skin-enhancer"
+                    >
+                      Skin Enhancer
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      href="/logo-animation"
+                    >
+                      Logo Animation
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      href="/face-swap"
+                    >
+                      Face Swap
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      href="/relight"
+                    >
+                      Glow Control
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      href="/apps"
+                    >
+                      More Apps
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground mb-4">
+                  Learn More
+                </h4>
+                <ul className="space-y-3">
+                  <li>
+                    <Link
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      href="/#"
+                    >
+                      Video Tutorials
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      href="/#"
+                    >
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      href="/#"
+                    >
+                      Creator Resources
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
+          <div className="border-t border-border mt-10 pt-4 flex flex-col items-start lg:flex-row lg:items-center justify-between">
+            <div className="flex items-center gap-2 py-2">
+              <span className="text-sm font-medium text-muted-foreground">
+                Theme
+              </span>
 
-          <div>
-            <h3 className="font-semibold mb-4 text-foreground">Use Cases</h3>
-            <div className="flex flex-col space-y-3 w-fit">
-              <div className="text-muted-foreground hover:text-foreground transition-colors">
-                Design Flier
-              </div>
-              <div className="text-muted-foreground hover:text-foreground transition-colors">
-                YT thumbnail
-              </div>
-              <div className="text-muted-foreground hover:text-foreground transition-colors">
-                Design Poster
-              </div>
-              <div className="text-muted-foreground hover:text-foreground transition-colors">
-                Instagram post
-              </div>
-              <div className="text-muted-foreground hover:text-foreground transition-colors">
-                Facebook post
-              </div>
-              <div className="text-muted-foreground hover:text-foreground transition-colors">
-                Design Banner
-              </div>
-              <div className="text-muted-foreground hover:text-foreground transition-colors">
-                Facebook cover
-              </div>
-              <div className="text-muted-foreground hover:text-foreground transition-colors">
-                Design Logo
-              </div>
-              <div className="text-muted-foreground hover:text-foreground transition-colors">
-                Presentations - coming soon
+              <div className="flex items-center bg-muted/60 border border-border rounded-full p-1">
+                <button
+                  onClick={() => setTheme("light")}
+                  className={`flex items-center justify-center size-7 rounded-full transition-all
+        ${theme === "light" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}
+      `}
+                  title="Light mode"
+                >
+                  <Sun className="h-3.5 w-3.5" />
+                </button>
+
+                <button
+                  onClick={() => setTheme("dark")}
+                  className={`flex items-center justify-center size-7 rounded-full transition-all
+        ${theme === "dark" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}
+      `}
+                  title="Dark mode"
+                >
+                  <Moon className="h-3.5 w-3.5" />
+                </button>
+
+                <button
+                  onClick={() => setTheme("system")}
+                  className={`flex items-center justify-center size-7 rounded-full transition-all
+        ${theme === "system" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}
+      `}
+                  title="System theme"
+                >
+                  <Monitor className="h-3.5 w-3.5" />
+                </button>
               </div>
             </div>
-          </div>
 
-          {/* Newsletter Section */}
-          <div>
-            <h3 className="font-semibold mb-4 text-foreground">Stay Updated</h3>
-            <div className="space-y-4">
-              <p className="text-muted-foreground text-sm">
-                Get the latest AI design tips and updates delivered to your
-                inbox.
-              </p>
-              <form onSubmit={handleSubscribe} className="space-y-3">
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                  className="w-full"
-                />
-                <Button type="submit" size="sm" className="w-full">
-                  Subscribe
-                </Button>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <Separator className="my-8" />
-
-        <div className="flex flex-col sm:flex-row justify-between items-center py-4 text-muted-foreground">
-          <p className="text-sm">
-            Copyright {currentYear} ©{" "}
-            <span className="text-foreground font-medium">Gennit</span> All
-            Rights Reserved.
-          </p>
-          <div className="flex items-center gap-4 mt-4 sm:mt-0">
-            <span className="text-xs">Powered by Klip Inc</span>
+            <p className="text-sm text-muted-foreground">
+              ©{currentYear},{" "}
+              <span className="text-foreground font-medium ml-1">Gennit</span>{" "}
+              All Rights Reserved.
+            </p>
           </div>
         </div>
       </footer>
-    </footer>
+    </div>
   );
 }

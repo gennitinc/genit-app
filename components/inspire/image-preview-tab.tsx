@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
-import { AspectRatio } from "@/app/inspire/create/page";
+import { AspectRatio } from "@/types/inspire";
 import { communityApi } from "@/utils/inspire-api";
 import {
   Tooltip,
@@ -47,7 +47,7 @@ interface ImagePreviewTabProps {
   onImageSelect: (index: number) => void;
   onPromptRestore: (prompt: string) => void;
   onTabChange?: (
-    tab: "preview" | "community" | "templates" | "tutorial"
+    tab: "preview" | "community" | "templates" | "tutorial",
   ) => void;
   onDrawerClose?: () => void;
 }
@@ -65,7 +65,7 @@ export function ImagePreviewTab({
 }: ImagePreviewTabProps) {
   const [publishing, setPublishing] = useState(false);
   const [publishedImageIds, setPublishedImageIds] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [publishedContentMap, setPublishedContentMap] = useState<
     Map<string, string>
@@ -110,7 +110,7 @@ export function ImagePreviewTab({
   // Check if current image is published
   const isPublished = Boolean(
     currentImage?.generatedImageId &&
-      publishedImageIds.has(currentImage.generatedImageId)
+      publishedImageIds.has(currentImage.generatedImageId),
   );
 
   const handleDownload = async () => {
@@ -187,7 +187,7 @@ export function ImagePreviewTab({
       publishedImageIds.has(currentImage.generatedImageId)
     ) {
       const communityContentId = publishedContentMap.get(
-        currentImage.generatedImageId
+        currentImage.generatedImageId,
       );
       if (communityContentId) {
         try {
@@ -246,10 +246,10 @@ export function ImagePreviewTab({
       // Update published status
       if (currentImage.generatedImageId && response.data?.id) {
         setPublishedImageIds((prev) =>
-          new Set(prev).add(currentImage.generatedImageId!)
+          new Set(prev).add(currentImage.generatedImageId!),
         );
         setPublishedContentMap((prev) =>
-          new Map(prev).set(currentImage.generatedImageId!, response.data.id)
+          new Map(prev).set(currentImage.generatedImageId!, response.data.id),
         );
       }
 
@@ -311,7 +311,7 @@ export function ImagePreviewTab({
         {/* Preview Container */}
         <div
           className={cn(
-            "relative w-full rounded-xl overflow-hidden min-h-[400px]"
+            "relative w-full rounded-xl overflow-hidden min-h-[400px]",
           )}
         >
           {/* Generating State */}
@@ -372,7 +372,7 @@ export function ImagePreviewTab({
                   type="button"
                   onClick={() =>
                     onPromptRestore(
-                      "A majestic mountain landscape at sunset with dramatic clouds and golden hour lighting"
+                      "A majestic mountain landscape at sunset with dramatic clouds and golden hour lighting",
                     )
                   }
                   className="px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-sm font-medium text-neutral-700 dark:text-neutral-300 transition-colors"
@@ -411,7 +411,7 @@ export function ImagePreviewTab({
                     "relative shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all",
                     selectedImageIndex === index
                       ? "border-neutral-900 dark:border-neutral-100 ring-2 ring-neutral-900/20 dark:ring-neutral-100/20"
-                      : "border-transparent hover:border-neutral-300 dark:hover:border-neutral-600"
+                      : "border-transparent hover:border-neutral-300 dark:hover:border-neutral-600",
                   )}
                 >
                   <img
@@ -511,7 +511,7 @@ export function ImagePreviewTab({
                 "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
                 isPublished
                   ? "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-300 dark:hover:bg-neutral-600"
-                  : "bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
+                  : "bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900",
               )}
             >
               {publishing ? (
@@ -558,7 +558,7 @@ export function ImagePreviewTab({
                 <Clock className="w-3.5 h-3.5" />
                 {generatedImages[selectedImageIndex]?.createdAt
                   ? new Date(
-                      generatedImages[selectedImageIndex].createdAt
+                      generatedImages[selectedImageIndex].createdAt,
                     ).toLocaleTimeString()
                   : "Just now"}
               </div>

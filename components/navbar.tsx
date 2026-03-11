@@ -132,13 +132,13 @@ export function Navbar() {
         <div className="flex items-center gap-2 sm:gap-2">
           {/* Main user avatar with popover */}
           <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
-            <a
+            {/* <a
               target="__blank"
               className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
               href="/inspirations"
             >
               Inspirations
-            </a>
+            </a> */}
             <a
               target="__blank"
               className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"

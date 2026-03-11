@@ -11,6 +11,7 @@ import {
   Video,
   Image as ImageIcon,
   Users,
+  LayoutPanelLeft,
 } from "lucide-react";
 
 import {
@@ -33,9 +34,24 @@ const navItems = [
     href: "/chat",
   },
   {
-    title: "Video & Image Gen",
-    icon: GalleryHorizontal,
-    href: "/inspire/create?mode=ai-video-gen",
+    title: "Image Generation",
+    icon: ImageIcon,
+    href: "/apps/image-generation",
+  },
+  {
+    title: "Video Generation",
+    icon: Video,
+    href: "/apps/video-generation",
+  },
+  {
+    title: "Presenter",
+    icon: UserPlus,
+    href: "/apps/presenter",
+  },
+  {
+    title: "Apps",
+    icon: LayoutPanelLeft,
+    href: "/apps",
   },
   {
     title: "History",
@@ -46,16 +62,6 @@ const navItems = [
     title: "Community",
     icon: Users,
     href: "/community",
-  },
-  {
-    title: "Inspirations",
-    icon: Palette,
-    href: "/inspirations",
-  },
-  {
-    title: "Creator",
-    icon: UserPlus,
-    href: "/user/referral",
   },
   {
     title: "Billing",
@@ -138,7 +144,7 @@ export function NavMain() {
                       : "bg-gray-200 text-black dark:text-black"
                     : theme === "dark"
                       ? "text-zinc-300 dark:text-zinc-300 hover:bg-zinc-800 hover:text-white dark:hover:bg-zinc-800 dark:hover:text-white"
-                      : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-gray-100 dark:hover:text-black"
+                      : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-gray-100 dark:hover:text-black",
                 )}
                 onClick={handleLinkClick}
               >
@@ -152,7 +158,7 @@ export function NavMain() {
                       // Theme responsive icon colors - explicit and strong
                       isRouteActive(item.href)
                         ? "text-black dark:text-white"
-                        : "text-gray-700 dark:text-zinc-300"
+                        : "text-gray-700 dark:text-zinc-300",
                     )}
                   />
                   {!shouldShowCollapsed && (
@@ -162,7 +168,7 @@ export function NavMain() {
                         // Theme responsive text colors - explicit and strong
                         isRouteActive(item.href)
                           ? "text-black dark:text-white"
-                          : "text-gray-800 dark:text-zinc-200"
+                          : "text-gray-800 dark:text-zinc-200",
                       )}
                     >
                       {item.title}
@@ -193,7 +199,7 @@ export function NavMain() {
                       : "bg-gray-200 text-black dark:text-black"
                     : theme === "dark"
                       ? "text-zinc-300 dark:text-zinc-300 hover:bg-zinc-800 hover:text-white dark:hover:bg-zinc-800 dark:hover:text-white"
-                      : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-gray-100 dark:hover:text-black"
+                      : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-gray-100 dark:hover:text-black",
                 )}
                 onClick={handleLinkClick}
               >
@@ -204,14 +210,14 @@ export function NavMain() {
                 >
                   <item.icon
                     className={cn(
-                      "h-6 w-6 flex-shrink-0",
+                      "h-10 w-10 flex-shrink-0",
                       shouldShowCollapsed ? "mx-auto" : "mr-2",
                       // Make icons more visible on mobile/tablet
                       isMobile && "h-7 w-7",
                       // Theme responsive icon colors - explicit and strong
                       isRouteActive(item.href)
                         ? "text-black dark:text-white"
-                        : "text-gray-700 dark:text-zinc-300"
+                        : "text-gray-700 dark:text-zinc-300",
                     )}
                   />
                   {!shouldShowCollapsed && (
@@ -221,7 +227,7 @@ export function NavMain() {
                         // Theme responsive text colors - explicit and strong
                         isRouteActive(item.href)
                           ? "text-black dark:text-white"
-                          : "text-gray-800 dark:text-zinc-200"
+                          : "text-gray-800 dark:text-zinc-200",
                       )}
                     >
                       {item.title}
