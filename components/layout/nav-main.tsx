@@ -34,6 +34,11 @@ const navItems = [
     href: "/chat",
   },
   {
+    title: "Apps",
+    icon: LayoutPanelLeft,
+    href: "/apps",
+  },
+  {
     title: "Image Generation",
     icon: ImageIcon,
     href: "/apps/image-generation",
@@ -48,11 +53,7 @@ const navItems = [
     icon: UserPlus,
     href: "/apps/presenter",
   },
-  {
-    title: "Apps",
-    icon: LayoutPanelLeft,
-    href: "/apps",
-  },
+
   {
     title: "History",
     icon: History,

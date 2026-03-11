@@ -97,7 +97,7 @@ export function LandingNavbar() {
       <header className="bg-transparent w-full backdrop-blur-sm sticky z-30 top-0">
         <nav className="mx-auto flex h-16 items-center z-50 justify-between px-2 md:px-12 lg:px-20 xl:px-24">
           {/* Replace <img> with new <Image> */}
-          <Link href="/" className="flex items-center z-40 gap-2">
+          <Link href="/" className="flex items-center z-40">
             <Logo className="w-12 h-12 flex-shrink-0" />
             <span
               className={`text-xl font-semibold transition-colors duration-300 text-foreground`}

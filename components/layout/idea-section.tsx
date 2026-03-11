@@ -677,14 +677,14 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              Idea to design in
+              Idea to
               <PointerHighlight
                 rectangleClassName="bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700 leading-loose"
                 pointerClassName="text-blue-500 h-3 w-3"
                 containerClassName="inline-block mx-1"
               >
-                <span className="relative z-10"> Seconds </span>
-              </PointerHighlight>
+                <span className="relative z-10"> Design </span>
+              </PointerHighlight>{" "} in 10s
             </motion.h1>
             <motion.p
               className="mt-4 text-center text-gray-600 dark:text-gray-300 max-w-lg"

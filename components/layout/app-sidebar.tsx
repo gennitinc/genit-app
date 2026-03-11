@@ -66,7 +66,7 @@ export function AppSidebar({
         <Link
         href="/"
           className={cn(
-            "flex items-center gap-2 pb-2",
+            "flex items-center pb-2",
             state === "collapsed" && !isMobile && "justify-start"
           )}
         >
