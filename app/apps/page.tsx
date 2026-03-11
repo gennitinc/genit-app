@@ -16,9 +16,9 @@ import {
 const TryNowButton = () => (
   <button
     type="button"
-    className="relative inline-flex items-center justify-center px-8 py-2.5 overflow-hidden tracking-tighter text-white bg-gray-800 rounded-md group w-full"
+    className="relative inline-flex items-center justify-center px-4 py-2.5 overflow-hidden tracking-tighter text-white bg-gray-800 rounded-md group w-full"
   >
-    <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full group-hover:w-56 group-hover:h-56"></span>
+    <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full group-hover:w-full group-hover:h-56"></span>
     <span className="absolute bottom-0 left-0 h-full -ml-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +78,7 @@ const AppCard = ({
   imageSrc,
   badge,
 }: AppCardProps) => (
-  <div className="max-w-[248px] lg:max-w-none shrink-0 md:min-w-0">
+  <div className="w-full h-full">
     <div className="h-full">
       <a
         className="react-aria-Link"
@@ -134,12 +134,12 @@ const AppCard = ({
               )}
             </figure>
           </div>
-          <div className="flex flex-col gap-6 py-3 sm:py-4 min-w-0 justify-between flex-1 p-4">
+          <div className="flex flex-col gap-4 py-3 min-w-0 justify-between flex-1 p-4">
             <div className="flex flex-col gap-1">
-              <h3 className="text-base sm:text-md-semi font-semibold text-font-primary leading-6 tracking-[-0.16px]">
+              <h3 className="text-sm sm:text-base font-semibold text-font-primary leading-tight tracking-tight">
                 {title}
               </h3>
-              <p className="text-sm text-text-secondary line-clamp-2 overflow-hidden text-ellipsis">
+              <p className="text-xs sm:text-sm text-text-secondary line-clamp-2">
                 {description}
               </p>
             </div>
@@ -187,6 +187,15 @@ const appSections = [
         // },
       },
       {
+        id: "video-generation",
+        href: "/apps/video-generation",
+        title: "Video Generation",
+        description: "Kinetic AI storytelling and animation",
+        type: "video",
+        imageSrc:
+          "https://i.pinimg.com/originals/6f/40/25/6f4025f83d11fbb560ed453e98d80104.gif",
+      },
+      {
         id: "skin-enhancer",
         href: "/apps/skin-enhancer",
         title: "Skin Enhancer",
@@ -200,6 +209,7 @@ const appSections = [
         //   textColor: "rgb(255, 255, 255)",
         // },
       },
+
       {
         id: "logo-animation",
         href: "/apps/logo-animation",
@@ -214,7 +224,6 @@ const appSections = [
         //   textColor: "rgb(255, 255, 255)",
         // },
       },
-
       {
         id: "image-generation",
         href: "/apps/image-generation",
@@ -224,15 +233,7 @@ const appSections = [
         imageSrc:
           "https://i.pinimg.com/736x/f4/fb/b5/f4fbb53e705d9d641c4f2f4f32cd1527.jpg",
       },
-      {
-        id: "video-generation",
-        href: "/apps/video-generation",
-        title: "Video Generation",
-        description: "Kinetic AI storytelling and animation",
-        type: "video",
-        imageSrc:
-          "https://cdn.leonardo.ai/users/220eee85-2367-43fd-91c1-715ac51afece/generations/ccd8c64a-ae89-49e3-89ef-afab21e2432a/segments/1:1:1/motion2Fast____________________________________________________0.jpg?w=512",
-      },
+
       {
         id: "presenter",
         href: "/apps/presenter",
@@ -327,32 +328,29 @@ const Apps = () => {
       <LandingPageBanner />
       <LandingNavbar />
 
-      <main id="main" className="h-full min-w-0 area-[main]">
-        <div className="h-full container mx-auto grid gap-8 max-w-[1280px] grid-rows-[auto_1fr_auto] overflow-x-hidden pt-12 md:pt-14 px-4 sm:px-6 lg:px-8">
-          <main className="flex-grow relative bg-background">
+      <main id="main" className="flex-1 w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+          <div className="relative rounded-2xl overflow-hidden bg-background border border-border/50 shadow-sm">
             <div className="absolute inset-0 -z-10 size-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_80%_at_50%_50%,#000_40%,transparent_100%)]"></div>
-            <div className="w-full mx-auto px-4 sm:px-6 py-8 lg:mt-10">
-              <div className="space-y-4 flex flex-col ml-2 md:mx-4 lg:mx-8 items-center justify-center">
-                <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl max-w-xl text-center">
-                  Explore Apps{" "}
-                </h1>
-                <p className="text-normal text-sm text-muted-foreground leading-relaxed max-w-2xl text-center">
-                  Discover amazing AI-generated videos and images created by our
-                  community.
-                </p>
+            <div className="w-full mx-auto px-4 py-12 sm:py-16">
+              <div className="space-y-6 flex flex-col items-center justify-center text-center">
+                <div className="space-y-2">
+                  <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl max-w-2xl">
+                    Explore Apps
+                  </h1>
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl">
+                    Discover amazing AI-generated videos and images created by
+                    our community.
+                  </p>
+                </div>
 
-                <div className="flex items-center justify-center w-full lg:w-[450px]">
-                  <div
-                    className="relative flex items-center gap-2 w-full px-3 py-3 h-11 rounded-xl border border-transparent bg-[rgba(255,255,255,0.04)] focus-within:border-white-24 focus-within:bg-white-12 transition-colors max-w-full"
-                    style={{
-                      boxShadow: "rgba(0, 0, 0, 0.12) 0px 4px 12px 0px",
-                    }}
-                  >
+                <div className="flex items-center justify-center w-full max-w-md">
+                  <div className="relative flex items-center gap-2 w-full px-4 h-12 rounded-xl border border-border bg-background/50 backdrop-blur-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-sm">
                     <svg
                       width={20}
                       height={20}
                       viewBox="0 0 20 20"
-                      className="size-5 text-text-secondary shrink-0"
+                      className="size-5 text-muted-foreground shrink-0"
                     >
                       <path
                         fillRule="evenodd"
@@ -363,33 +361,32 @@ const Apps = () => {
                     </svg>
                     <input
                       placeholder="Search"
-                      className="flex-1 bg-transparent text-sm text-font-primary placeholder:text-text-secondary outline-none min-w-0"
+                      className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none min-w-0"
                       type="text"
-                      defaultValue=""
                     />
 
-                    <div className="shrink-0 flex items-center border-l border-white-8 pl-3 ml-1">
+                    <div className="shrink-0 flex items-center border-l border-border pl-3 ml-1">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <div className="flex items-center gap-1.5 cursor-pointer text-text-secondary hover:text-text-primary transition-colors text-sm font-medium">
+                          <div className="flex items-center gap-1.5 cursor-pointer text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">
                             <Filter className="size-4" />
-                            <span className="whitespace-nowrap">
+                            <span className="hidden xs:inline whitespace-nowrap">
                               {activeType}
                             </span>
                           </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           align="end"
-                          className="w-48 bg-[#1A1D1F] border-white-8 text-text-primary mt-2"
+                          className="w-48 bg-popover border-border text-popover-foreground mt-2"
                         >
                           {mediaTypes.map((mType) => (
                             <DropdownMenuItem
                               key={mType}
                               onClick={() => setActiveType(mType)}
                               className={cn(
-                                "cursor-pointer focus:bg-white-8 focus:text-text-primary",
+                                "cursor-pointer",
                                 activeType === mType &&
-                                  "bg-white-8 text-text-primary",
+                                  "bg-accent text-accent-foreground",
                               )}
                             >
                               {mType}
@@ -402,45 +399,27 @@ const Apps = () => {
                 </div>
               </div>
             </div>
-          </main>
-          <div className="min-w-0 w-full overflow-x-hidden space-y-12 md:space-y-14">
-            <div className="flex flex-col items-center justify-center overflow-x-scroll hide-scrollbar bg-white-8 p-1 rounded-xl border border-white-4">
-              <div className="w-full relative">
-                <div
-                  className="absolute top-0 left-0 h-full w-12 z-10 pointer-events-none transition-opacity rounded-l-lg opacity-0"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, rgb(15, 17, 19) 0%, transparent 100%)",
-                  }}
-                />
-                <div
-                  className="absolute top-0 right-0 h-full w-12 z-10 pointer-events-none transition-opacity rounded-r-lg opacity-100"
-                  style={{
-                    background:
-                      "linear-gradient(270deg, rgb(15, 17, 19) 0%, transparent 100%)",
-                  }}
-                />
-                <div className="overflow-x-auto overflow-y-hidden hide-scrollbar">
-                  <nav className="flex items-center gap-1">
-                    {categories.map((category) => {
-                      const isActive = activeCategory === category.name;
-                      return (
-                        <button
-                          key={category.name}
-                          onClick={() => setActiveCategory(category.name)}
-                          className={cn(
-                            "text-text-secondary text-body-s font-medium px-4 py-2 whitespace-nowrap flex items-center justify-center rounded-[0.625rem] h-9 transition-all duration-200 border border-transparent !text-sm hover:text-text-primary hover:bg-white-12",
-                            isActive &&
-                              "text-text-primary bg-gradient-to-r from-cyan-500 to-blue-500 shadow-sm",
-                          )}
-                        >
-                          <span>{category.name}</span>
-                        </button>
-                      );
-                    })}
-                  </nav>
-                </div>
-              </div>
+          </div>
+          <div className="space-y-12">
+            <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+              <nav className="flex items-center gap-2 min-w-max">
+                {categories.map((category) => {
+                  const isActive = activeCategory === category.name;
+                  return (
+                    <button
+                      key={category.name}
+                      onClick={() => setActiveCategory(category.name)}
+                      className={cn(
+                        "text-muted-foreground text-sm font-medium px-4 py-2 rounded-full transition-all duration-200 hover:text-foreground hover:bg-muted",
+                        isActive &&
+                          "text-white bg-gradient-to-r from-cyan-500 to-blue-500 shadow-md",
+                      )}
+                    >
+                      {category.name}
+                    </button>
+                  );
+                })}
+              </nav>
             </div>
 
             <div className="relative">
@@ -462,16 +441,13 @@ const Apps = () => {
                       if (filteredApps.length === 0) return null;
 
                       return (
-                        <section
-                          key={section.title}
-                          className="space-y-4 last:border-b-0"
-                        >
-                          <div className="flex items-end justify-between gap-4">
-                            <div className="flex-1 space-y-1">
-                              <h2 className="text-h-sm-bold uppercase font-grotesk text-font-primary">
+                        <section key={section.title} className="space-y-6">
+                          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                            <div className="space-y-1">
+                              <h2 className="text-xl font-bold tracking-tight">
                                 {section.title}
                               </h2>
-                              <p className="text-sm text-text-secondary">
+                              <p className="text-sm text-muted-foreground">
                                 {section.description}
                               </p>
                             </div>
@@ -499,7 +475,7 @@ const Apps = () => {
                               </svg>
                             </button>
                           </div>
-                          <div className="flex gap-4 overflow-x-auto hide-scrollbar lg:grid md:grid-cols-3 lg:grid-cols-5">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
                             {filteredApps.map((app) => (
                               <AppCard
                                 key={app.id}
