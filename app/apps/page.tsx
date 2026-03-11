@@ -169,7 +169,7 @@ const mediaTypes = ["All Types", "Video", "Image", "Audio"];
 const appSections = [
   {
     title: "General Apps",
-    description: "Premium visual styles and sophisticated artistic effects",
+    description: "Premium visual styles and sophisticated effects",
     href: "/apps/enhance-style",
     apps: [
       {

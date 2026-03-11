@@ -703,7 +703,7 @@ export function IdeaSection() {
               initial="hidden"
               animate="visible"
             >
-              Design graphics, videos, and brand assets with AI.
+              Design graphics, videos, and assets with AI.
             </motion.p>
           </motion.div>
         </div>

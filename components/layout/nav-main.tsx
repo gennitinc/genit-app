@@ -38,21 +38,21 @@ const navItems = [
     icon: LayoutPanelLeft,
     href: "/apps",
   },
-  {
-    title: "Image Generation",
-    icon: ImageIcon,
-    href: "/apps/image-generation",
-  },
-  {
-    title: "Video Generation",
-    icon: Video,
-    href: "/apps/video-generation",
-  },
-  {
-    title: "Presenter",
-    icon: UserPlus,
-    href: "/apps/presenter",
-  },
+  // {
+  //   title: "Image Generation",
+  //   icon: ImageIcon,
+  //   href: "/apps/image-generation",
+  // },
+  // {
+  //   title: "Video Generation",
+  //   icon: Video,
+  //   href: "/apps/video-generation",
+  // },
+  // {
+  //   title: "Presenter",
+  //   icon: UserPlus,
+  //   href: "/apps/presenter",
+  // },
 
   {
     title: "History",
