@@ -437,8 +437,8 @@ const AnglesReshapePage = () => {
 
       <main className="flex-grow mt-12 md:mb-20 relative">
         <div className="bg-grid-black/[0.1] dark:bg-grid-white/[0.2] absolute inset-0" />
-        <div className="text-center animate-fadeInUp mb-10">
-          <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-5xl">
+        <div className="text-center animate-fadeInUp mb-10 px-2 md:px-4">
+          <h1 className="font-bold tracking-tight text-2xl lg:text-5xl">
             Cinematic Angles{" "}
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Position

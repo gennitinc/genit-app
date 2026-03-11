@@ -16,11 +16,19 @@ import {
   Wand2,
   Check,
   Plus,
+  SaveIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { apiResponse } from "@/utils/apiResponse";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import withAuth from "@/helper/hoc/withAuth";
 import { ModelSelector } from "@/components/inspire/model-selector";
@@ -184,8 +192,8 @@ const PresenterPage = () => {
       <LandingNavbar />
 
       <main className="flex-grow pt-12">
-        <div className="text-center animate-fadeInUp mb-10">
-          <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-5xl">
+        <div className="text-center animate-fadeInUp mb-10 px-2 md:px-4">
+          <h1 className="font-bold tracking-tight text-2xl lg:text-5xl">
             Presenter{" "}
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Manager
@@ -224,22 +232,16 @@ const PresenterPage = () => {
                   <label className="text-xs font-bold uppercase text-muted-foreground">
                     Gender
                   </label>
-                  <div className="flex gap-2">
-                    {["unisex", "male", "female"].map((g) => (
-                      <button
-                        key={g}
-                        onClick={() => setGender(g)}
-                        className={cn(
-                          "flex-1 py-1.5 rounded-lg border text-xs font-medium capitalize transition-all",
-                          gender === g
-                            ? "bg-primary text-white border-primary"
-                            : "bg-transparent border-black/10 dark:border-white/10",
-                        )}
-                      >
-                        {g}
-                      </button>
-                    ))}
-                  </div>
+                  <Select value={gender} onValueChange={setGender}>
+                    <SelectTrigger className="w-full bg-black/5 dark:bg-white/5 border-none h-9 rounded-lg px-4">
+                      <SelectValue placeholder="Select Gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="unisex">Unisex</SelectItem>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
@@ -305,7 +307,7 @@ const PresenterPage = () => {
                   <Button
                     onClick={handleAIGenerate}
                     disabled={isGenerating}
-                    className="w-full h-10 bg-gradient-to-r from-blue-500 to-cyan-500"
+                    className="w-full h-fit bg-gradient-to-r from-blue-500 to-cyan-500"
                   >
                     {isGenerating ? (
                       <Loader2 className="animate-spin" />
@@ -321,12 +323,12 @@ const PresenterPage = () => {
                 <Button
                   onClick={handleCreatePresenter}
                   disabled={isCreating}
-                  className="w-full h-12 text-md font-bold"
+                  className="w-full h-fit text-md"
                 >
                   {isCreating ? (
                     <Loader2 className="animate-spin" />
                   ) : (
-                    <Check className="mr-2" />
+                    <SaveIcon className="mr-2" />
                   )}
                   Save as Presenter
                 </Button>

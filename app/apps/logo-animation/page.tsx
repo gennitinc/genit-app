@@ -150,8 +150,8 @@ const LogoAnimationPage = () => {
       <LandingNavbar />
 
       <main className="flex-grow mt-12 md:mb-20 relative">
-        <div className="text-center animate-fadeInUp mb-10 relative z-10">
-          <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-5xl">
+        <div className="text-center animate-fadeInUp mb-10 px-2 md:px-4">
+          <h1 className="font-bold tracking-tight text-2xl lg:text-5xl">
             Logo{" "}
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Animator
