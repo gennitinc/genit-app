@@ -10,6 +10,7 @@ import {
   Sparkles,
   TrendingUp,
   Zap,
+  Plus,
   Image as ImageIcon,
   ArrowRight,
   Eye,
@@ -27,6 +28,7 @@ import {
 import Link from "next/link";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import {
   Dialog,
   DialogContent,
@@ -302,6 +304,25 @@ export default function TemplateGridAll() {
     processFiles,
     removeAttachedFile,
   } = useProjectDesign();
+
+  const baseValueRef = useRef("");
+
+  const { isListening, startListening, stopListening, isSupported } =
+    useSpeechToText({
+      onTranscript: (transcript) => {
+        const base = baseValueRef.current;
+        setInputValue(base ? `${base} ${transcript}` : transcript);
+      },
+    });
+
+  const handleMicClick = useCallback(() => {
+    if (isListening) {
+      stopListening();
+    } else {
+      baseValueRef.current = inputValue.trim();
+      startListening();
+    }
+  }, [isListening, startListening, stopListening, inputValue]);
 
   const [beamPosition, setBeamPosition] = useState({ x: 50, y: 50 });
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
@@ -837,7 +858,7 @@ export default function TemplateGridAll() {
                     )}
                   </div> */}
 
-                  <div className="relative flex-1 min-h-0 flex flex-col px-4 pb-4">
+                  <div className="relative flex-1 min-h-0 flex flex-col justify-end px-4 pb-4">
                     <form
                       onSubmit={
                         user
@@ -847,10 +868,10 @@ export default function TemplateGridAll() {
                               router.push("/signin");
                             }
                       }
-                      className="relative flex-1 min-h-0 flex flex-col"
+                      className="group flex flex-col gap-2 p-3 w-full rounded-2xl border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
                     >
-                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-1 focus:ring-transparent flex-1 min-h-0">
-                        <div className="flex-1 relative min-h-0 overflow-y-auto">
+                      <div className="min-w-0 w-full">
+                        <div className="relative flex flex-1 items-center">
                           <textarea
                             ref={textareaRef}
                             id="chat_bot"
@@ -861,47 +882,68 @@ export default function TemplateGridAll() {
                             placeholder={
                               isGenerating
                                 ? ""
-                                : "Tell your AI Designer what to create...✦"
+                                : isListening
+                                  ? "Listening... speak now ✦"
+                                  : "Tell your AI Designer what to create...✦"
                             }
                             disabled={isGenerating || isSubmitting}
+                            className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
                             style={{
-                              lineHeight: "1.5",
-                              fontFamily: "inherit",
-                              minHeight: "40px",
+                              minHeight: "60px",
                             }}
-                            className="bg-transparent rounded-2xl border-none w-full text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
                             aria-label="Enter your prompt"
                             aria-describedby={
                               inputError ? "input-error" : undefined
                             }
                           />
                         </div>
+                      </div>
 
-                        <div className="flex justify-between items-center gap-2 flex-shrink-0 pt-2">
-                          <div className="flex gap-2">
-                            <button
-                              type="button"
-                              className="flex items-center justify-center w-9 h-9 text-gray-500 dark:text-gray-400 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/10 border border-border cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                              onClick={() => fileInputRef.current?.click()}
-                              disabled={isGenerating || isSubmitting}
-                              aria-label="Attach files"
-                            >
-                              <PaperclipIcon className="h-4 w-4" />
-                            </button>
-                            <Input
-                              ref={fileInputRef}
-                              type="file"
-                              multiple
-                              onChange={handleFileInputChange}
-                              disabled={isGenerating || isSubmitting}
-                              className="hidden"
-                              id="file-upload"
-                              accept="image/*,.pdf,.txt,.md,.js,.jsx,.ts,.tsx,.css,.html,.json,.xml,.yaml,.yml"
-                              aria-label="Select files to upload"
-                            />
-                          </div>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-secondary text-primary h-8 w-8 shadow-sm flex-shrink-0"
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={isGenerating || isSubmitting}
+                          aria-label="Attach files"
+                        >
+                          <Plus className="shrink-0 size-5" />
+                        </button>
+                        <Input
+                          ref={fileInputRef}
+                          type="file"
+                          multiple
+                          onChange={handleFileInputChange}
+                          disabled={isGenerating || isSubmitting}
+                          className="hidden"
+                          id="file-upload"
+                          accept="image/*,video/*"
+                        />
 
-                          <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 border border-border">
+                        <div className="ml-auto flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            className={cn(
+                              "relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 h-8 w-8",
+                              isListening
+                                ? "text-red-500 bg-red-500/10 animate-pulse"
+                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5",
+                            )}
+                            onClick={handleMicClick}
+                            disabled={!isSupported || isGenerating}
+                            title={
+                              isListening
+                                ? "Stop listening"
+                                : "Start voice input"
+                            }
+                          >
+                            <Mic className="shrink-0 size-4" />
+                          </button>
+                          <button
+                            type="submit"
+                            className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shadow-md flex-shrink-0 overflow-hidden"
+                            disabled={isSubmitDisabled}
+                          >
                             <BorderBeam
                               duration={6}
                               size={40}
@@ -914,17 +956,11 @@ export default function TemplateGridAll() {
                               borderWidth={2}
                               className="from-transparent via-blue-500 to-transparent"
                             />
-                            {/* <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" /> */}
-                            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
-                              {isGenerating || isSubmitting ? (
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                              ) : (
-                                <div className="flex flex-row items-center gap-2">
-                                  <WandSparklesIcon className="w-3 h-3" />
-                                  Recreate
-                                </div>
-                              )}
-                            </span>
+                            {isGenerating || isSubmitting ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <WandSparklesIcon className="w-4 h-4" />
+                            )}
                           </button>
                         </div>
                       </div>
@@ -1105,7 +1141,7 @@ export default function TemplateGridAll() {
                     )}
                   </div> */}
 
-                  <div className="relative flex-1 min-h-0 flex flex-col px-2 pb-4">
+                  <div className="relative flex-1 min-h-0 flex flex-col justify-end px-4 pb-4">
                     <form
                       onSubmit={
                         user
@@ -1115,78 +1151,79 @@ export default function TemplateGridAll() {
                               router.push("/signin");
                             }
                       }
-                      className="relative flex-1 min-h-0 flex flex-col"
+                      className="group flex flex-col gap-2 p-3 w-full rounded-2xl border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
                     >
-                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-1 focus:ring-transparent flex-1 min-h-0">
-                        <div className="flex-1 relative min-h-0 overflow-y-auto">
+                      <div className="min-w-0 w-full">
+                        <div className="relative flex flex-1 items-center">
                           <textarea
                             ref={textareaRef}
-                            id="chat_bot"
-                            name="chat_bot"
+                            id="chat_bot_mobile"
+                            name="chat_bot_mobile"
                             value={isGenerating ? "" : inputValue}
                             onChange={handleInputChange}
                             onKeyDown={handleKeyPress}
                             placeholder={
                               isGenerating
                                 ? ""
-                                : "Tell your AI Designer what to create...✦"
+                                : isListening
+                                  ? "Listening... speak now ✦"
+                                  : "Tell your AI Designer what to create...✦"
                             }
                             disabled={isGenerating || isSubmitting}
+                            className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
                             style={{
-                              lineHeight: "1.0",
-                              fontFamily: "inherit",
-                              minHeight: "40px",
+                              minHeight: "60px",
                             }}
-                            className="bg-transparent rounded-2xl border-none w-full text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base focus:outline-none"
                             aria-label="Enter your prompt"
-                            aria-describedby={
-                              inputError ? "input-error" : undefined
-                            }
                           />
                         </div>
+                      </div>
 
-                        <div className="flex justify-between items-center gap-2 flex-shrink-0 pt-2">
-                          <div className="flex gap-2">
-                            <button
-                              type="button"
-                              className="flex items-center justify-center w-9 h-9 text-gray-500 dark:text-gray-400 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/10 border border-border cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                              onClick={() => fileInputRef.current?.click()}
-                              disabled={isGenerating || isSubmitting}
-                              aria-label="Attach files"
-                            >
-                              <PaperclipIcon className="h-4 w-4" />
-                            </button>
-                            <Input
-                              ref={fileInputRef}
-                              type="file"
-                              multiple
-                              onChange={handleFileInputChange}
-                              disabled={isGenerating || isSubmitting}
-                              className="hidden"
-                              id="file-upload"
-                              accept="image/*,.pdf,.txt,.md,.js,.jsx,.ts,.tsx,.css,.html,.json,.xml,.yaml,.yml"
-                              aria-label="Select files to upload"
-                            />
-                          </div>
-                          {/* <button
-                            type="submit"
-                            disabled={isSubmitDisabled}
-                            className={`relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 transition-opacity ${
-                              isSubmitDisabled
-                                ? "opacity-50 cursor-not-allowed"
-                                : "hover:opacity-90"
-                            }`}
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-secondary text-primary h-8 w-8 shadow-sm flex-shrink-0"
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={isGenerating || isSubmitting}
+                          aria-label="Attach files"
+                        >
+                          <Plus className="shrink-0 size-5" />
+                        </button>
+                        <Input
+                          ref={fileInputRef}
+                          type="file"
+                          multiple
+                          onChange={handleFileInputChange}
+                          disabled={isGenerating || isSubmitting}
+                          className="hidden"
+                          id="file-upload-mobile"
+                          accept="image/*,video/*"
+                        />
+
+                        <div className="ml-auto flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            className={cn(
+                              "relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 h-8 w-8",
+                              isListening
+                                ? "text-red-500 bg-red-500/10 animate-pulse"
+                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5",
+                            )}
+                            onClick={handleMicClick}
+                            disabled={!isSupported || isGenerating}
+                            title={
+                              isListening
+                                ? "Stop listening"
+                                : "Start voice input"
+                            }
                           >
-                            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 dark:bg-slate-50 px-4 py-1 text-sm font-medium text-white dark:text-slate-950 backdrop-blur-3xl">
-                              {isGenerating || isSubmitting ? (
-                                <Loader className="w-4 h-4 animate-spin" />
-                              ) : (
-                                "Recreate"
-                              )}
-                            </span>
-                          </button> */}
-                          <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                            <Mic className="shrink-0 size-4" />
+                          </button>
+                          <button
+                            type="submit"
+                            className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shadow-md flex-shrink-0 overflow-hidden"
+                            disabled={isSubmitDisabled}
+                          >
                             <BorderBeam
                               duration={6}
                               size={40}
@@ -1199,16 +1236,11 @@ export default function TemplateGridAll() {
                               borderWidth={2}
                               className="from-transparent via-blue-500 to-transparent"
                             />
-                            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
-                              {isGenerating || isSubmitting ? (
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                              ) : (
-                                <div className="flex flex-row items-center gap-2">
-                                  <WandSparklesIcon className="w-3 h-3" />
-                                  Recreate
-                                </div>
-                              )}
-                            </span>
+                            {isGenerating || isSubmitting ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <WandSparklesIcon className="w-4 h-4" />
+                            )}
                           </button>
                         </div>
                       </div>

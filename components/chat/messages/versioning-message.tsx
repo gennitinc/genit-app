@@ -1256,7 +1256,7 @@ export function VersioningMessage({
                   <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-violet-500/10 border border-violet-500/20">
                     <Check className="w-3 h-3 text-violet-500" />
                     <span className="text-[10px] font-semibold text-violet-600 uppercase">
-                      Main version
+                      main
                     </span>
                   </div>
                 )}

@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { PremiumInput } from "@/components/ui/premium-input";
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+
 import { cn } from "@/lib/utils";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { Textarea } from "@/components/ui/textarea";

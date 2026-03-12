@@ -634,20 +634,6 @@ function VideoGenerationPage() {
         className="flex-1 relative py-12 md:py-20 px-2 md:px-6 lg:px-20 mt-5"
       >
         <div className="bg-grid-black/[0.05] dark:bg-grid-white/[0.05] absolute inset-0 -z-10" />
-        {/* <div className="text-center animate-fadeInUp mb-10 hidden lg:block">
-          <h1 className="font-bold tracking-tight md:text-2xl lg:text-5xl">
-            AI Video{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Generation
-            </span>
-          </h1>
-          <p
-            className="my-5 text-muted-foreground text-sm md:text-lg animate-fadeInUp"
-            style={{ animationDelay: "0.2s" }}
-          >
-            Generate high-quality videos from text prompts with ease.
-          </p>
-        </div> */}
 
         <div className="grid grid-cols-1 md:grid-cols-[27rem_1fr] gap-6 relative w-full md:h-[calc(100vh-10rem)] min-h-0">
           <div className="flex flex-col h-full min-h-0 overflow-hidden">
