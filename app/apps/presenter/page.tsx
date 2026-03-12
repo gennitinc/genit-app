@@ -35,6 +35,7 @@ import { ModelSelector } from "@/components/inspire/model-selector";
 import { Model } from "@/types/inspire";
 import { imageGenApi } from "@/utils/inspire-api";
 import { Toaster } from "@/components/ui/sonner";
+import { PremiumInput } from "@/components/ui/premium-input";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -297,11 +298,13 @@ const PresenterPage = () => {
                     <label className="text-xs font-bold uppercase text-muted-foreground">
                       Generation Prompt
                     </label>
-                    <textarea
+                    <PremiumInput
                       value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
+                      onChange={setPrompt}
+                      onSubmit={handleAIGenerate}
+                      isGenerating={isGenerating}
                       placeholder="Describe the person's look, ethnicity, clothing..."
-                      className="w-full bg-black/5 dark:bg-white/5 border-none rounded-lg px-4 py-2 text-sm h-24 resize-none outline-none"
+                      minHeight="100px"
                     />
                   </div>
                   <Button

@@ -6,14 +6,15 @@ import { toast } from "@/hooks/use-toast";
 import { apiResponse } from "@/utils/apiResponse";
 import { cn } from "@/lib/utils";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface HistoryImage {
   _id: string;
@@ -31,9 +32,15 @@ interface HistoryImage {
 
 interface ImageHistoryTabProps {
   onLoadToEditor: (image: HistoryImage) => void;
+  onTabChange?: (
+    tab: "preview" | "history" | "community" | "templates" | "tutorial",
+  ) => void;
 }
 
-export function ImageHistoryTab({ onLoadToEditor }: ImageHistoryTabProps) {
+export function ImageHistoryTab({
+  onLoadToEditor,
+  onTabChange,
+}: ImageHistoryTabProps) {
   const [images, setImages] = useState<HistoryImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -166,7 +173,10 @@ export function ImageHistoryTab({ onLoadToEditor }: ImageHistoryTabProps) {
               <div
                 key={image._id}
                 className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4"
-                onClick={() => onLoadToEditor(image)}
+                onClick={() => {
+                  onLoadToEditor(image);
+                  onTabChange?.("preview");
+                }}
               >
                 <div className="relative">
                   <img
@@ -205,31 +215,26 @@ export function ImageHistoryTab({ onLoadToEditor }: ImageHistoryTabProps) {
         </div>
       </section>
 
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete Image</DialogTitle>
-            <DialogDescription>
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Image</AlertDialogTitle>
+            <AlertDialogDescription>
               Are you sure you want to delete this image? This action cannot be
               undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setDeleteDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
               onClick={handleDelete}
               className="bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
             >
               Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

@@ -938,7 +938,6 @@ export function IdeaSection() {
                             )}
                           </div>
 
-                          
                           {user && (user?.creditsRemaining ?? 0) === 0 && (
                             <div className="text-xs font-medium">
                               {String(user?.userPlan) === "Basic" ? (
@@ -992,7 +991,7 @@ export function IdeaSection() {
                               router.push("/signin");
                             }
                       }
-                      className="group flex flex-col gap-2 p-3 w-full rounded-[2rem] md:rounded-[2.5rem] border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
+                      className="group flex flex-col gap-2 p-3 w-full rounded-[1.5rem] border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
                     >
                       <div className="min-w-0 w-full">
                         <div className="relative flex flex-1 items-center">
@@ -1002,8 +1001,7 @@ export function IdeaSection() {
                             value={isGenerating ? "" : inputValue}
                             onChange={handleInputChange}
                             onKeyDown={handleKeyPress}
-                            className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
-                            style={{ height: 80 }}
+                            className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[95px] max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
                             placeholder={
                               isGenerating
                                 ? ""

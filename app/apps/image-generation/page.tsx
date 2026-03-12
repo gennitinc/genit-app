@@ -5,6 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AspectRatio, Resolution } from "@/types/inspire";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { apiResponse } from "@/utils/apiResponse";
+import { PremiumInput } from "@/components/ui/premium-input";
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 import {
   Loader2,
   Image as ImageIcon,
@@ -14,6 +17,7 @@ import {
   ViewIcon,
   BookOpen,
   LayoutDashboard,
+  Trash,
 } from "lucide-react";
 import {
   Drawer,
@@ -379,11 +383,13 @@ function ImageGenerationPage() {
                   <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                     Prompt
                   </label>
-                  <textarea
+                  <PremiumInput
                     value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Describe the image you want to generate..."
-                    className="w-full min-h-[100px] p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 border-2 border-dashed border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 resize-none focus:outline-none"
+                    onChange={setPrompt}
+                    onSubmit={handleGenerate}
+                    isGenerating={isGenerating}
+                    placeholder="Describe your image..."
+                    minHeight="100px"
                   />
 
                   <div className="space-y-2">
@@ -412,7 +418,7 @@ function ImageGenerationPage() {
                             }}
                             className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1"
                           >
-                            <XIcon size={12} />
+                            <Trash size={12} />
                           </button>
                         </div>
                       ))}

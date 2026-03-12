@@ -17,6 +17,9 @@ import {
   Download,
   CheckCircle2,
 } from "lucide-react";
+import { PremiumInput } from "@/components/ui/premium-input";
+
+// ─── Types ───────────────────────────────────────────────────────────────────
 import { cn } from "@/lib/utils";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { Textarea } from "@/components/ui/textarea";
@@ -239,11 +242,13 @@ const LogoAnimationPage = () => {
                     <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                       2. Animation Prompt
                     </label>
-                    <Textarea
-                      placeholder="e.g. Liquid build-up leading to a subtle neon pulse..."
-                      className="resize-none h-24 bg-secondary/50 focus:ring-primary text-sm"
+                    <PremiumInput
                       value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
+                      onChange={setPrompt}
+                      onSubmit={handleGenerate}
+                      isGenerating={isGenerating}
+                      placeholder="Describe how your logo should move..."
+                      minHeight="100px"
                     />
                     <div className="flex flex-wrap gap-1.5 mt-2">
                       {["Morph", "Glow", "Lifecycle", "Clean Build"].map(

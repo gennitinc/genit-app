@@ -403,7 +403,7 @@ export function ChatInput({
               e.preventDefault();
               handlegenerateMessage();
             }}
-            className="group flex flex-col gap-2 p-3 w-full rounded-[2rem] md:rounded-[2.5rem] border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
+            className="group flex flex-col gap-2 p-3 w-full rounded-[1.5rem] border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
           >
             <div className="min-w-0 w-full">
               <div className="relative flex flex-1 items-center">

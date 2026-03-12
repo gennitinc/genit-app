@@ -33,9 +33,15 @@ interface HistoryVideo {
 
 interface VideoHistoryTabProps {
   onLoadToEditor: (video: HistoryVideo) => void;
+  onTabChange?: (
+    tab: "preview" | "history" | "community" | "templates" | "tutorial",
+  ) => void;
 }
 
-export function VideoHistoryTab({ onLoadToEditor }: VideoHistoryTabProps) {
+export function VideoHistoryTab({
+  onLoadToEditor,
+  onTabChange,
+}: VideoHistoryTabProps) {
   const [videos, setVideos] = useState<HistoryVideo[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -164,6 +170,7 @@ export function VideoHistoryTab({ onLoadToEditor }: VideoHistoryTabProps) {
               index={index}
               deletingId={deletingId}
               onLoadToEditor={onLoadToEditor}
+              onTabChange={onTabChange}
               onDelete={(e) => openDeleteDialog(video, e)}
             />
           ))}
@@ -204,12 +211,16 @@ function VideoCard({
   index,
   deletingId,
   onLoadToEditor,
+  onTabChange,
   onDelete,
 }: {
   video: HistoryVideo;
   index: number;
   deletingId: string | null;
   onLoadToEditor: (video: HistoryVideo) => void;
+  onTabChange?: (
+    tab: "preview" | "history" | "community" | "templates" | "tutorial",
+  ) => void;
   onDelete: (e: React.MouseEvent) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -305,9 +316,17 @@ function VideoCard({
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
           <div className="flex items-center gap-2">
-            <div className="w-12 h-12 rounded-full bg-black/50 flex items-center justify-center shadow-lg">
+            <button
+              type="button"
+              onClick={() => {
+                onLoadToEditor(video);
+                onTabChange?.("preview");
+              }}
+              className="w-10 h-10 rounded-lg bg-black/70 hover:bg-black/80 flex items-center justify-center text-white transition-colors shadow-lg"
+              title="Play"
+            >
               <Play className="w-6 h-6 text-white ml-1" />
-            </div>
+            </button>
             <button
               type="button"
               onClick={onDelete}

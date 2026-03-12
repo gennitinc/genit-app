@@ -17,6 +17,7 @@ import {
   Settings2,
   Minus,
   Plus,
+  Trash,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Compare } from "@/components/ui/compare";
@@ -29,6 +30,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { apiResponse } from "@/utils/apiResponse";
+import { PremiumInput } from "@/components/ui/premium-input";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -186,7 +188,7 @@ const GeneratedCarousel = ({
           {deletingId === img.id ? (
             <div className="size-3 border border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            <X className="size-3.5" />
+            <Trash className="size-3.5" />
           )}
         </button>
         <a
@@ -329,7 +331,7 @@ const HistoryCard = ({
                 {deletingImage === img._id ? (
                   <div className="size-2 border border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  <X className="size-2.5" />
+                  <Trash className="size-2.5" />
                 )}
               </button>
             </div>
@@ -817,12 +819,13 @@ const SkinEnhancerPage = () => {
 
                         {/* Prompt Input */}
                         {showPrompt && (
-                          <textarea
+                          <PremiumInput
                             value={prompt}
-                            onChange={(e) => setPrompt(e.target.value)}
+                            onChange={setPrompt}
+                            onSubmit={handleEnhance}
+                            isGenerating={isGenerating}
                             placeholder="Describe additional details... (e.g. blonde hair, light freckles, warm skin tone)"
-                            rows={3}
-                            className="w-full rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-white/[0.03] px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                            minHeight="80px"
                           />
                         )}
                       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { io, Socket } from "socket.io-client";
@@ -21,6 +21,9 @@ import {
   Image as ImageIcon,
   BookOpen,
   LayoutDashboard,
+  Search,
+  Trash,
+  Wand2,
 } from "lucide-react";
 import {
   Drawer,
@@ -43,6 +46,10 @@ import {
   VideoPreviewTab,
   VideoTemplatesTab,
   TutorialTab,
+  ImageCommunityTab,
+  ImagePreviewTab,
+  ImageTemplatesTab,
+  ImageHistoryTab,
 } from "@/components/inspire";
 import { VideoHistoryTab } from "@/components/inspire/video-history-tab";
 import { ModelSelector } from "@/components/inspire/model-selector";
@@ -53,11 +60,16 @@ import {
   AspectRatio,
   Resolution,
 } from "@/types/inspire";
-import { videoGenApi } from "@/utils/inspire-api";
+import { videoGenApi, imageGenApi } from "@/utils/inspire-api";
 import { Toaster } from "@/components/ui/sonner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { PremiumInput } from "@/components/ui/premium-input";
+
+export type { Presenter, Voice, Model } from "@/types/inspire";
+
+// ─── Preset Slides ──────────────────────────────────────────────────────────
 
 const PRESET_SLIDES = [
   {
@@ -158,6 +170,7 @@ function PresetSlider({
 
 function VideoGenerationPage() {
   const router = useRouter();
+  const pathname = usePathname();
   const { user } = useUserContext();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
@@ -182,6 +195,20 @@ function VideoGenerationPage() {
   );
   const [loadingProject, setLoadingProject] = useState(false);
 
+  // Generation mode: image or video - initialize from URL parameter
+  const [generationMode, setGenerationMode] = useState<"image" | "video">(
+    searchParams.get("mode") === "ai-image-gen" ? "image" : "video",
+  );
+
+  // Listen to URL parameter changes and update generation mode
+  useEffect(() => {
+    const currentMode = searchParams.get("mode");
+    const expectedMode = currentMode === "ai-image-gen" ? "image" : "video";
+    if (generationMode !== expectedMode) {
+      setGenerationMode(expectedMode);
+    }
+  }, [searchParams, generationMode]);
+
   const [startFrame, setStartFrame] = useState<File | null>(null);
   const [endFrame, setEndFrame] = useState<File | null>(null);
   const [startFramePreview, setStartFramePreview] = useState<string | null>(
@@ -195,6 +222,21 @@ function VideoGenerationPage() {
   const [fixedLens, setFixedLens] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(true);
 
+  // Image-specific states
+  type ImageStyle =
+    | "realistic"
+    | "anime"
+    | "digitalArt"
+    | "oilPainting"
+    | "watercolor"
+    | "threeDRrender";
+  const [selectedImageStyle, setSelectedImageStyle] =
+    useState<ImageStyle>("realistic");
+  const [imageCount, setImageCount] = useState(1);
+  const [selectedImageModel, setSelectedImageModel] = useState<Model | null>(
+    null,
+  );
+
   const [sectionsEnabled, setSectionsEnabled] = useState({
     avatar: false,
     audio: false,
@@ -203,26 +245,164 @@ function VideoGenerationPage() {
   });
 
   const [generatedVideos, setGeneratedVideos] = useState<any[]>([]);
+  const [generatedImages, setGeneratedImages] = useState<any[]>([]);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeContentTab, setActiveContentTab] = useState<any>(
     urlContentTab || "community",
   );
   const [isResultsDrawerOpen, setIsResultsDrawerOpen] = useState(false);
 
   const socketRef = useRef<Socket | null>(null);
+  const currentProjectIdRef = useRef<string | null>(null);
+
+  const toggleSection = (section: keyof typeof sectionsEnabled) => {
+    setSectionsEnabled((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
 
   const updateContentTab = useCallback(
     (tab: any) => {
       setActiveContentTab(tab);
       const urlParams = new URLSearchParams(searchParams.toString());
       urlParams.set("tab", tab);
+      urlParams.set(
+        "mode",
+        generationMode === "image" ? "ai-image-gen" : "ai-video-gen",
+      );
       if (projectId) urlParams.set("projectId", projectId);
       router.replace(`/apps/video-generation?${urlParams.toString()}`, {
         scroll: false,
       });
     },
-    [searchParams, router, projectId],
+    [searchParams, router, projectId, generationMode],
   );
+
+  // Switch to image model if mode is image
+  useEffect(() => {
+    if (generationMode === "image" && selectedVideoModel) {
+      setSelectedVideoModel(null);
+    } else if (generationMode === "video" && selectedImageModel) {
+      setSelectedImageModel(null);
+    }
+  }, [generationMode, selectedVideoModel, selectedImageModel]);
+
+  // Restore recreate data from localStorage
+  useEffect(() => {
+    const restoreRecreateData = async () => {
+      try {
+        const storedData = localStorage.getItem("recreateData");
+        if (!storedData) return;
+        const recreateData = JSON.parse(storedData);
+
+        if (
+          (recreateData.type === "image" && generationMode === "image") ||
+          (recreateData.type === "video" && generationMode === "video")
+        ) {
+          if (recreateData.prompt) setPrompt(recreateData.prompt);
+          if (recreateData.aspectRatio)
+            setSelectedAspectRatio(recreateData.aspectRatio as AspectRatio);
+          if (recreateData.resolution)
+            setSelectedResolution(recreateData.resolution as Resolution);
+
+          if (generationMode === "image") {
+            if (recreateData.style)
+              setSelectedImageStyle(recreateData.style as ImageStyle);
+            if (recreateData.imageCount) setImageCount(recreateData.imageCount);
+          } else {
+            if (recreateData.duration)
+              setDuration(parseInt(recreateData.duration) || 8);
+          }
+
+          // Handle reference images restoration if URLs provided
+          if (recreateData.referenceImageUrls?.length > 0) {
+            try {
+              const files = await Promise.all(
+                recreateData.referenceImageUrls.map(
+                  async (url: string, i: number) => {
+                    const res = await fetch(url);
+                    const blob = await res.blob();
+                    return new File([blob], `ref-${i}.jpg`, {
+                      type: blob.type,
+                    });
+                  },
+                ),
+              );
+              setPromptImages(files);
+              setPromptImagePreviews(files.map((f) => URL.createObjectURL(f)));
+            } catch (e) {
+              console.error("Ref restore error", e);
+            }
+          }
+
+          updateContentTab("preview");
+          localStorage.removeItem("recreateData");
+          toast("Generation parameters loaded.");
+        }
+      } catch (e) {
+        localStorage.removeItem("recreateData");
+      }
+    };
+    if (!projectId) restoreRecreateData();
+  }, [generationMode, projectId, updateContentTab]);
+
+  // Restore animate design data
+  useEffect(() => {
+    const restoreAnimateData = async () => {
+      try {
+        const isAnimate = searchParams.get("animate") === "true";
+        const urlPrompt = searchParams.get("prompt");
+        const urlRef = searchParams.get("referenceImage");
+        const storedStr = localStorage.getItem("animateDesignData");
+
+        let data: any = null;
+        if (isAnimate && urlPrompt && urlRef) {
+          data = {
+            type: "video",
+            prompt: decodeURIComponent(urlPrompt),
+            referenceImageUrls: [decodeURIComponent(urlRef)],
+          };
+        } else if (storedStr) {
+          data = JSON.parse(storedStr);
+        }
+
+        if (data && generationMode === "video" && data.type === "video") {
+          if (data.prompt) setPrompt(data.prompt);
+          if (data.referenceImageUrls?.length > 0) {
+            const files = await Promise.all(
+              data.referenceImageUrls.map(async (url: string, i: number) => {
+                const res = await fetch(url);
+                const blob = await res.blob();
+                return new File([blob], `animate-ref-${i}.jpg`, {
+                  type: blob.type,
+                });
+              }),
+            );
+            setPromptImages(files);
+            setPromptImagePreviews(files.map((f) => URL.createObjectURL(f)));
+          }
+          localStorage.removeItem("animateDesignData");
+          if (isAnimate) {
+            const params = new URLSearchParams(searchParams.toString());
+            ["animate", "prompt", "referenceImage", "designType"].forEach((k) =>
+              params.delete(k),
+            );
+            window.history.replaceState(
+              {},
+              "",
+              `${window.location.pathname}?${params.toString()}`,
+            );
+          }
+          toast("Your design has been loaded for animation.");
+        }
+      } catch (e) {
+        localStorage.removeItem("animateDesignData");
+      }
+    };
+    if (!projectId && generationMode === "video") restoreAnimateData();
+  }, [generationMode, projectId, searchParams]);
 
   // Fetch project data if projectId is provided
   useEffect(() => {
@@ -238,23 +418,41 @@ function VideoGenerationPage() {
 
         if (response.status === 200 && response.data.success) {
           const project = response.data.project;
-          const video = {
-            id: project._id || project.id,
-            generatedVideoId: project._id || project.id,
-            url: project.url,
-            thumbnail: project.thumbnail || project.url,
-            aspectRatio: (project.aspectRatio || "16:9") as AspectRatio,
-            resolution: (project.resolution || "1080p") as Resolution,
-            prompt: project.prompt || "",
-            duration: project.duration || 8,
-            createdAt: project.createdAt || new Date().toISOString(),
-            startFrameUrl: project.startFrameUrl,
-            endFrameUrl: project.endFrameUrl,
-            referenceImageUrls: project.referenceImageUrls || [],
-          };
 
-          setGeneratedVideos([video]);
-          setSelectedVideoIndex(0);
+          if (generationMode === "image") {
+            const image = {
+              id: project._id || project.id,
+              generatedImageId: project._id || project.id,
+              url: project.url,
+              thumbnail: project.thumbnail || project.url,
+              aspectRatio: project.aspectRatio as AspectRatio,
+              resolution: project.resolution as Resolution,
+              prompt: project.prompt || "",
+              style: project.style || "realistic",
+              createdAt: project.createdAt || new Date().toISOString(),
+              referenceImageUrls: project.referenceImageUrls || [],
+            };
+            setGeneratedImages([image]);
+            setSelectedImageIndex(0);
+          } else {
+            const video = {
+              id: project._id || project.id,
+              generatedVideoId: project._id || project.id,
+              url: project.url,
+              thumbnail: project.thumbnail || project.url,
+              aspectRatio: (project.aspectRatio || "16:9") as AspectRatio,
+              resolution: (project.resolution || "1080p") as Resolution,
+              prompt: project.prompt || "",
+              duration: project.duration || 8,
+              createdAt: project.createdAt || new Date().toISOString(),
+              startFrameUrl: project.startFrameUrl,
+              endFrameUrl: project.endFrameUrl,
+              referenceImageUrls: project.referenceImageUrls || [],
+            };
+            setGeneratedVideos([video]);
+            setSelectedVideoIndex(0);
+          }
+
           setPrompt(project.prompt || "");
           if (project.aspectRatio) setSelectedAspectRatio(project.aspectRatio);
           if (project.resolution) setSelectedResolution(project.resolution);
@@ -301,6 +499,52 @@ function VideoGenerationPage() {
   const handleGenerate = async () => {
     if (!prompt.trim()) {
       toast("Please enter a prompt");
+      return;
+    }
+
+    if (generationMode === "image") {
+      if (!selectedImageModel) {
+        toast("Please select an image model");
+        return;
+      }
+      setIsGenerating(true);
+      updateContentTab("preview");
+      try {
+        const response = await imageGenApi.generate(
+          {
+            prompt: prompt.trim(),
+            modelId: selectedImageModel._id,
+            aspectRatio: selectedAspectRatio,
+            resolution: selectedResolution,
+            style: selectedImageStyle,
+            imageCount: imageCount,
+          },
+          promptImages.length > 0 ? promptImages : undefined,
+        );
+        if (response.success && response.data.images) {
+          const newImages = response.data.images.map((img: any, i: number) => ({
+            id: img.id || `img-${Date.now()}-${i}`,
+            generatedImageId: img.id,
+            url: img.url,
+            thumbnail: img.url,
+            aspectRatio: selectedAspectRatio,
+            resolution: selectedResolution,
+            prompt: prompt.trim(),
+            style: selectedImageStyle,
+            createdAt: new Date().toISOString(),
+            referenceImageUrls: promptImagePreviews,
+          }));
+          setGeneratedImages((prev) => [...newImages, ...prev]);
+          setSelectedImageIndex(0);
+          toast(`Generated ${newImages.length} image(s)`);
+        } else {
+          toast(response.message || "Failed to generate image");
+        }
+      } catch (error: any) {
+        console.error(error);
+      } finally {
+        setIsGenerating(false);
+      }
       return;
     }
 
@@ -407,13 +651,52 @@ function VideoGenerationPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-[27rem_1fr] gap-6 relative w-full md:h-[calc(100vh-10rem)] min-h-0">
           <div className="flex flex-col h-full min-h-0 overflow-hidden">
-            <div className="flex flex-row items-center gap-2 justify-between px-2 py-2">
-              <h1 className="font-bold tracking-tight md:text-2xl lg:text-5xl lg:hidden">
-                AI Video{" "}
-                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Gen
-                </span>
-              </h1>
+            <div className="flex items-start justify-between py-2 z-20">
+              <div
+                role="tablist"
+                className="rounded-xl p-1 flex gap-4 bg-neutral-100 dark:bg-neutral-900"
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGenerationMode("video");
+                    const params = new URLSearchParams(searchParams.toString());
+                    params.set("mode", "ai-video-gen");
+                    router.replace(`${pathname}?${params.toString()}`, {
+                      scroll: false,
+                    });
+                  }}
+                  className={cn(
+                    "flex items-center gap-2 text-sm py-2 px-3 rounded-lg transition-colors",
+                    generationMode === "video"
+                      ? "bg-neutral-200 dark:bg-neutral-800 text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  <Video className="w-4 h-4" />
+                  Video
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGenerationMode("image");
+                    const params = new URLSearchParams(searchParams.toString());
+                    params.set("mode", "ai-image-gen");
+                    router.replace(`${pathname}?${params.toString()}`, {
+                      scroll: false,
+                    });
+                  }}
+                  className={cn(
+                    "flex items-center gap-2 text-sm py-2 px-3 rounded-lg transition-colors",
+                    generationMode === "image"
+                      ? "bg-neutral-200 dark:bg-neutral-800 text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  <ImageIcon className="w-4 h-4" />
+                  Image
+                </button>
+              </div>
 
               <Drawer
                 open={isResultsDrawerOpen}
@@ -458,51 +741,96 @@ function VideoGenerationPage() {
                       ))}
                     </div>
                     <div className="flex-1 overflow-y-auto">
-                      {activeContentTab === "preview" && (
-                        <VideoPreviewTab
-                          generatedVideos={generatedVideos}
-                          selectedVideoIndex={selectedVideoIndex}
-                          onVideoSelect={setSelectedVideoIndex}
-                          isGenerating={isGenerating}
-                          generationProgress={generationProgress}
-                          selectedAspectRatio={selectedAspectRatio}
-                          onPromptRestore={(p) => setPrompt(p)}
-                        />
-                      )}
-                      {activeContentTab === "history" && (
-                        <VideoHistoryTab
-                          onLoadToEditor={(video) => {
-                            const urlParams = new URLSearchParams(
-                              searchParams.toString(),
-                            );
-                            urlParams.set("projectId", video._id);
-                            router.push(
-                              `/apps/video-generation?${urlParams.toString()}`,
-                            );
-                            setIsResultsDrawerOpen(false);
-                          }}
-                        />
-                      )}
-                      {activeContentTab === "community" && (
-                        <VideoCommunityTab
-                          onPromptSelect={(p) => {
-                            setPrompt(p);
-                            setIsResultsDrawerOpen(false);
-                          }}
-                          onTabChange={updateContentTab}
-                        />
-                      )}
-                      {activeContentTab === "templates" && (
-                        <VideoTemplatesTab
-                          onPromptSelect={(p) => {
-                            setPrompt(p);
-                            setIsResultsDrawerOpen(false);
-                          }}
-                          onTabChange={updateContentTab}
-                        />
-                      )}
+                      {activeContentTab === "preview" &&
+                        (generationMode === "image" ? (
+                          <ImagePreviewTab
+                            generatedImages={generatedImages}
+                            selectedImageIndex={selectedImageIndex}
+                            onImageSelect={setSelectedImageIndex}
+                            isGenerating={isGenerating}
+                            generationProgress={generationProgress}
+                            selectedAspectRatio={selectedAspectRatio}
+                            onPromptRestore={(p) => setPrompt(p)}
+                          />
+                        ) : (
+                          <VideoPreviewTab
+                            generatedVideos={generatedVideos}
+                            selectedVideoIndex={selectedVideoIndex}
+                            onVideoSelect={setSelectedVideoIndex}
+                            isGenerating={isGenerating}
+                            generationProgress={generationProgress}
+                            selectedAspectRatio={selectedAspectRatio}
+                            onPromptRestore={(p) => setPrompt(p)}
+                          />
+                        ))}
+                      {activeContentTab === "history" &&
+                        (generationMode === "image" ? (
+                          <ImageHistoryTab
+                            onLoadToEditor={(image) => {
+                              const urlParams = new URLSearchParams(
+                                searchParams.toString(),
+                              );
+                              urlParams.set("projectId", image._id);
+                              router.push(
+                                `/apps/video-generation?${urlParams.toString()}`,
+                              );
+                              setIsResultsDrawerOpen(false);
+                            }}
+                            onTabChange={updateContentTab}
+                          />
+                        ) : (
+                          <VideoHistoryTab
+                            onLoadToEditor={(video) => {
+                              const urlParams = new URLSearchParams(
+                                searchParams.toString(),
+                              );
+                              urlParams.set("projectId", video._id);
+                              router.push(
+                                `/apps/video-generation?${urlParams.toString()}`,
+                              );
+                              setIsResultsDrawerOpen(false);
+                            }}
+                            onTabChange={updateContentTab}
+                          />
+                        ))}
+                      {activeContentTab === "community" &&
+                        (generationMode === "image" ? (
+                          <ImageCommunityTab
+                            onPromptSelect={(p) => {
+                              setPrompt(p);
+                              setIsResultsDrawerOpen(false);
+                            }}
+                            onTabChange={updateContentTab}
+                          />
+                        ) : (
+                          <VideoCommunityTab
+                            onPromptSelect={(p) => {
+                              setPrompt(p);
+                              setIsResultsDrawerOpen(false);
+                            }}
+                            onTabChange={updateContentTab}
+                          />
+                        ))}
+                      {activeContentTab === "templates" &&
+                        (generationMode === "image" ? (
+                          <ImageTemplatesTab
+                            onPromptSelect={(p) => {
+                              setPrompt(p);
+                              setIsResultsDrawerOpen(false);
+                            }}
+                            onTabChange={updateContentTab}
+                          />
+                        ) : (
+                          <VideoTemplatesTab
+                            onPromptSelect={(p) => {
+                              setPrompt(p);
+                              setIsResultsDrawerOpen(false);
+                            }}
+                            onTabChange={updateContentTab}
+                          />
+                        ))}
                       {activeContentTab === "tutorial" && (
-                        <TutorialTab type="video" />
+                        <TutorialTab type={generationMode} />
                       )}
                     </div>
                   </div>
@@ -510,74 +838,208 @@ function VideoGenerationPage() {
               </Drawer>
             </div>
 
-            <div className="flex flex-col h-full min-h-0 pt-4 overflow-hidden bg-white dark:bg-black/20 rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-sm">
+            <div className="flex flex-col h-full min-h-0 pt-4 overflow-hidden bg-white dark:bg-black/20 rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-sm relative z-10">
               <div className="px-4 pb-4 shrink-0 overflow-y-auto hide-scrollbar space-y-3 flex-1">
-                <PresetSlider currentSlide={0} onSlideChange={() => {}} />
+                {generationMode === "video" && (
+                  <PresetSlider currentSlide={0} onSlideChange={() => {}} />
+                )}
 
                 <ModelSelector
-                  type="video"
-                  selectedModel={selectedVideoModel}
-                  onSelectModel={setSelectedVideoModel}
+                  type={generationMode}
+                  selectedModel={
+                    generationMode === "image"
+                      ? selectedImageModel
+                      : selectedVideoModel
+                  }
+                  onSelectModel={
+                    generationMode === "image"
+                      ? setSelectedImageModel
+                      : setSelectedVideoModel
+                  }
                 />
 
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="relative aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-neutral-50 dark:bg-neutral-900">
-                    {startFramePreview ? (
-                      <img
-                        src={startFramePreview}
-                        className="w-full h-full object-cover"
+                {generationMode === "video" && (
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="relative aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-neutral-50 dark:bg-neutral-900">
+                      {startFramePreview ? (
+                        <>
+                          <img
+                            src={startFramePreview}
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setStartFrame(null);
+                              setStartFramePreview(null);
+                            }}
+                            className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1"
+                          >
+                            <Trash size={12} />
+                          </button>
+                        </>
+                      ) : (
+                        <span className="text-[14px] text-neutral-500">
+                          Start Frame
+                        </span>
+                      )}
+                      <input
+                        type="file"
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) {
+                            setStartFrame(f);
+                            setStartFramePreview(URL.createObjectURL(f));
+                          }
+                        }}
                       />
-                    ) : (
-                      <span className="text-[10px] text-neutral-500">
-                        Start Frame
-                      </span>
-                    )}
-                    <input
-                      type="file"
-                      className="absolute inset-0 opacity-0 cursor-pointer"
-                      onChange={(e) => {
-                        const f = e.target.files?.[0];
-                        if (f) {
-                          setStartFrame(f);
-                          setStartFramePreview(URL.createObjectURL(f));
-                        }
-                      }}
-                    />
+                    </div>
+                    <div className="relative aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-neutral-50 dark:bg-neutral-900">
+                      {endFramePreview ? (
+                        <>
+                          <img
+                            src={endFramePreview}
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setEndFrame(null);
+                              setEndFramePreview(null);
+                            }}
+                            className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1"
+                          >
+                            <Trash size={12} />
+                          </button>
+                        </>
+                      ) : (
+                        <span className="text-[14px] text-neutral-500">
+                          End Frame
+                        </span>
+                      )}
+                      <input
+                        type="file"
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) {
+                            setEndFrame(f);
+                            setEndFramePreview(URL.createObjectURL(f));
+                          }
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div className="relative aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-neutral-50 dark:bg-neutral-900">
-                    {endFramePreview ? (
-                      <img
-                        src={endFramePreview}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-[10px] text-neutral-500">
-                        End Frame
-                      </span>
+                )}
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium">Prompt</label>
+                  </div>
+                  <PremiumInput
+                    value={prompt}
+                    onChange={setPrompt}
+                    onSubmit={handleGenerate}
+                    isGenerating={isGenerating}
+                    placeholder={
+                      generationMode === "image"
+                        ? "Describe your image..."
+                        : "Describe the motion..."
+                    }
+                    minHeight="50px"
+                  />
+                </div>
+
+                {/* Reference Images Section */}
+                <div className="space-y-2">
+                  <label className="text-xs text-muted-foreground">
+                    Reference Images (Optional)
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {promptImagePreviews.map((preview, index) => (
+                      <div
+                        key={index}
+                        className="relative w-16 h-16 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700"
+                      >
+                        <img
+                          src={preview}
+                          alt={`Reference ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newFiles = [...promptImages];
+                            const newPreviews = [...promptImagePreviews];
+                            newFiles.splice(index, 1);
+                            newPreviews.splice(index, 1);
+                            setPromptImages(newFiles);
+                            setPromptImagePreviews(newPreviews);
+                          }}
+                          className="absolute top-0.5 right-0.5 bg-black/50 text-white rounded-full p-0.5"
+                        >
+                          <Trash size={10} />
+                        </button>
+                      </div>
+                    ))}
+                    {promptImagePreviews.length < 5 && (
+                      <label className="w-16 h-16 border border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg flex items-center justify-center cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="sr-only"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setPromptImages([...promptImages, file]);
+                              setPromptImagePreviews([
+                                ...promptImagePreviews,
+                                URL.createObjectURL(file),
+                              ]);
+                            }
+                          }}
+                        />
+                        <ImageIcon className="w-4 h-4 text-neutral-400" />
+                      </label>
                     )}
-                    <input
-                      type="file"
-                      className="absolute inset-0 opacity-0 cursor-pointer"
-                      onChange={(e) => {
-                        const f = e.target.files?.[0];
-                        if (f) {
-                          setEndFrame(f);
-                          setEndFramePreview(URL.createObjectURL(f));
-                        }
-                      }}
-                    />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Prompt</label>
-                  <textarea
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Describe the motion..."
-                    className="w-full min-h-[100px] p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 border-2 border-dashed border-neutral-300 dark:border-neutral-600 text-sm resize-none focus:outline-none"
-                  />
-                </div>
+                {generationMode === "image" && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Style</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        "realistic",
+                        "anime",
+                        "digitalArt",
+                        "oilPainting",
+                        "watercolor",
+                        "threeDRrender",
+                      ].map((style) => (
+                        <button
+                          key={style}
+                          onClick={() =>
+                            setSelectedImageStyle(style as ImageStyle)
+                          }
+                          className={cn(
+                            "py-1.5 px-2 text-[10px] font-medium rounded-lg border transition-all text-center capitalize",
+                            selectedImageStyle === style
+                              ? "bg-primary/10 border-primary text-primary"
+                              : "bg-background border-neutral-200 dark:border-neutral-800 text-muted-foreground",
+                          )}
+                        >
+                          {style}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <button
@@ -629,7 +1091,7 @@ function VideoGenerationPage() {
                     />
                   </button>
                   {sectionsEnabled.resolution && (
-                    <div className="p-3 border rounded-lg space-y-2">
+                    <div className="p-3 border rounded-lg space-y-3">
                       <ResolutionSelector
                         selectedResolution={selectedResolution}
                         selectedAspectRatio={selectedAspectRatio}
@@ -637,6 +1099,122 @@ function VideoGenerationPage() {
                         onAspectRatioChange={setSelectedAspectRatio}
                         onDrawerClose={() => {}}
                       />
+                      {generationMode === "video" && (
+                        <div className="pt-2 border-t">
+                          <label className="text-xs font-medium mb-1.5 block">
+                            Duration
+                          </label>
+                          <div className="grid grid-cols-2 gap-2">
+                            {[4, 8].map((d) => (
+                              <button
+                                key={d}
+                                onClick={() => setDuration(d)}
+                                className={cn(
+                                  "py-1.5 rounded-md text-[10px] font-medium border transition-all",
+                                  duration === d
+                                    ? "bg-primary text-primary-foreground border-primary"
+                                    : "bg-background border-neutral-200 dark:border-neutral-800",
+                                )}
+                              >
+                                {d} seconds
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {generationMode === "image" && (
+                        <div className="pt-2 border-t">
+                          <label className="text-xs font-medium mb-1.5 block">
+                            Image Count
+                          </label>
+                          <div className="grid grid-cols-4 gap-2">
+                            {[1, 2, 3, 4].map((c) => (
+                              <button
+                                key={c}
+                                onClick={() => setImageCount(c)}
+                                className={cn(
+                                  "py-1.5 rounded-md text-[10px] font-medium border transition-all",
+                                  imageCount === c
+                                    ? "bg-primary text-primary-foreground border-primary"
+                                    : "bg-background border-neutral-200 dark:border-neutral-800",
+                                )}
+                              >
+                                {c}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <button
+                    onClick={() => toggleSection("advanced")}
+                    className="w-full flex justify-between p-3 bg-neutral-100 dark:bg-neutral-900 rounded-lg text-sm font-medium"
+                  >
+                    Advanced Settings
+                    <ChevronDown
+                      size={16}
+                      className={cn(
+                        "transition-transform",
+                        sectionsEnabled.advanced && "rotate-180",
+                      )}
+                    />
+                  </button>
+                  {sectionsEnabled.advanced && (
+                    <div className="p-3 border rounded-lg space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Monitor
+                            size={14}
+                            className="text-muted-foreground"
+                          />
+                          <span className="text-xs">Fixed Lens</span>
+                        </div>
+                        <button
+                          onClick={() => setFixedLens(!fixedLens)}
+                          className={cn(
+                            "w-8 h-4 rounded-full relative transition-colors",
+                            fixedLens
+                              ? "bg-primary"
+                              : "bg-neutral-300 dark:bg-neutral-700",
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              "absolute top-0.5 size-3 bg-white rounded-full transition-all",
+                              fixedLens ? "left-4.5" : "left-0.5",
+                            )}
+                          />
+                        </button>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Volume2
+                            size={14}
+                            className="text-muted-foreground"
+                          />
+                          <span className="text-xs">Include Audio</span>
+                        </div>
+                        <button
+                          onClick={() => setAudioEnabled(!audioEnabled)}
+                          className={cn(
+                            "w-8 h-4 rounded-full relative transition-colors",
+                            audioEnabled
+                              ? "bg-primary"
+                              : "bg-neutral-300 dark:bg-neutral-700",
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              "absolute top-0.5 size-3 bg-white rounded-full transition-all",
+                              audioEnabled ? "left-4.5" : "left-0.5",
+                            )}
+                          />
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -655,13 +1233,18 @@ function VideoGenerationPage() {
                     </div>
                   ) : (
                     <>
-                      <Sparkles size={16} />
-                      <span>Generate Video</span>
+                      {generationMode === "image" ? (
+                        <Wand2 size={16} />
+                      ) : (
+                        <Sparkles size={16} />
+                      )}
+                      <span>
+                        Generate{" "}
+                        {generationMode === "image" ? "Image" : "Video"}
+                      </span>
                     </>
                   )}
                 </button>
-
-                {/* Mobile Drawer Trigger */}
               </div>
             </div>
           </div>
@@ -692,43 +1275,83 @@ function VideoGenerationPage() {
             </div>
 
             <div className="flex-1 overflow-y-auto pr-1">
-              {activeContentTab === "preview" && (
-                <VideoPreviewTab
-                  generatedVideos={generatedVideos}
-                  selectedVideoIndex={selectedVideoIndex}
-                  onVideoSelect={setSelectedVideoIndex}
-                  isGenerating={isGenerating}
-                  generationProgress={generationProgress}
-                  selectedAspectRatio={selectedAspectRatio}
-                  onPromptRestore={(p) => setPrompt(p)}
-                />
+              {activeContentTab === "preview" &&
+                (generationMode === "image" ? (
+                  <ImagePreviewTab
+                    generatedImages={generatedImages}
+                    selectedImageIndex={selectedImageIndex}
+                    onImageSelect={setSelectedImageIndex}
+                    isGenerating={isGenerating}
+                    generationProgress={generationProgress}
+                    selectedAspectRatio={selectedAspectRatio}
+                    onPromptRestore={(p) => setPrompt(p)}
+                  />
+                ) : (
+                  <VideoPreviewTab
+                    generatedVideos={generatedVideos}
+                    selectedVideoIndex={selectedVideoIndex}
+                    onVideoSelect={setSelectedVideoIndex}
+                    isGenerating={isGenerating}
+                    generationProgress={generationProgress}
+                    selectedAspectRatio={selectedAspectRatio}
+                    onPromptRestore={(p) => setPrompt(p)}
+                  />
+                ))}
+              {activeContentTab === "history" &&
+                (generationMode === "image" ? (
+                  <ImageHistoryTab
+                    onLoadToEditor={(image) => {
+                      const urlParams = new URLSearchParams(
+                        searchParams.toString(),
+                      );
+                      urlParams.set("projectId", image._id);
+                      router.push(
+                        `/apps/video-generation?${urlParams.toString()}`,
+                      );
+                    }}
+                    onTabChange={updateContentTab}
+                  />
+                ) : (
+                  <VideoHistoryTab
+                    onLoadToEditor={(video) => {
+                      const urlParams = new URLSearchParams(
+                        searchParams.toString(),
+                      );
+                      urlParams.set("projectId", video._id);
+                      router.push(
+                        `/apps/video-generation?${urlParams.toString()}`,
+                      );
+                    }}
+                    onTabChange={updateContentTab}
+                  />
+                ))}
+              {activeContentTab === "community" &&
+                (generationMode === "image" ? (
+                  <ImageCommunityTab
+                    onPromptSelect={(p) => setPrompt(p)}
+                    onTabChange={updateContentTab}
+                  />
+                ) : (
+                  <VideoCommunityTab
+                    onPromptSelect={(p) => setPrompt(p)}
+                    onTabChange={updateContentTab}
+                  />
+                ))}
+              {activeContentTab === "templates" &&
+                (generationMode === "image" ? (
+                  <ImageTemplatesTab
+                    onPromptSelect={(p) => setPrompt(p)}
+                    onTabChange={updateContentTab}
+                  />
+                ) : (
+                  <VideoTemplatesTab
+                    onPromptSelect={(p) => setPrompt(p)}
+                    onTabChange={updateContentTab}
+                  />
+                ))}
+              {activeContentTab === "tutorial" && (
+                <TutorialTab type={generationMode} />
               )}
-              {activeContentTab === "history" && (
-                <VideoHistoryTab
-                  onLoadToEditor={(video) => {
-                    const urlParams = new URLSearchParams(
-                      searchParams.toString(),
-                    );
-                    urlParams.set("projectId", video._id);
-                    router.push(
-                      `/apps/video-generation?${urlParams.toString()}`,
-                    );
-                  }}
-                />
-              )}
-              {activeContentTab === "community" && (
-                <VideoCommunityTab
-                  onPromptSelect={(p) => setPrompt(p)}
-                  onTabChange={updateContentTab}
-                />
-              )}
-              {activeContentTab === "templates" && (
-                <VideoTemplatesTab
-                  onPromptSelect={(p) => setPrompt(p)}
-                  onTabChange={updateContentTab}
-                />
-              )}
-              {activeContentTab === "tutorial" && <TutorialTab type="video" />}
             </div>
           </div>
         </div>
