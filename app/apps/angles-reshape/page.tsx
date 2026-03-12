@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
@@ -26,6 +26,19 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { apiResponse } from "@/utils/apiResponse";
 
 interface GeneratedAngle {
@@ -52,12 +65,18 @@ const GeneratedCarousel = ({
   images,
   jobId,
   onDelete,
+  initialIndex = 0,
 }: {
   images: GeneratedAngle[];
   jobId: string;
   onDelete: (imageId: string) => void;
+  initialIndex?: number;
 }) => {
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(initialIndex);
+
+  useEffect(() => {
+    setCurrent(initialIndex);
+  }, [initialIndex]);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   if (images.length === 0) return null;
@@ -159,6 +178,93 @@ const GeneratedCarousel = ({
           ))}
         </div>
       )}
+    </div>
+  );
+};
+
+/** Responsive Carousel Modal */
+const ResponsiveCarouselModal = ({
+  isOpen,
+  onOpenChange,
+  images,
+  jobId,
+  onDelete,
+  initialIndex = 0,
+}: {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  images: GeneratedAngle[];
+  jobId: string;
+  onDelete: (imageId: string) => void;
+  initialIndex?: number;
+}) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  const content = (
+    <div className="p-4 pt-8 md:p-6 bg-black flex flex-col items-center">
+      <GeneratedCarousel
+        images={images}
+        jobId={jobId}
+        onDelete={onDelete}
+        initialIndex={initialIndex}
+      />
+    </div>
+  );
+
+  if (isDesktop) {
+    return (
+      <Dialog open={isOpen} onOpenChange={onOpenChange}>
+        <DialogContent className="max-w-4xl p-0 overflow-hidden bg-black border-white/10">
+          <DialogHeader className="sr-only">
+            <DialogTitle>View Angle</DialogTitle>
+          </DialogHeader>
+          {content}
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return (
+    <Drawer open={isOpen} onOpenChange={onOpenChange}>
+      <DrawerContent className="bg-black border-white/10">
+        <DrawerHeader className="sr-only">
+          <DrawerTitle>View Angle</DrawerTitle>
+        </DrawerHeader>
+        {content}
+      </DrawerContent>
+    </Drawer>
+  );
+};
+
+/** Grid for generated images */
+const GeneratedGrid = ({
+  images,
+  onImageClick,
+}: {
+  images: GeneratedAngle[];
+  onImageClick: (index: number) => void;
+}) => {
+  return (
+    <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-black/40">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+        {images.map((img, idx) => (
+          <div
+            key={img.id}
+            className="group relative aspect-square rounded-xl overflow-hidden bg-muted cursor-pointer ring-1 ring-white/10 hover:ring-cyan-500/50 transition-all shadow-lg"
+            onClick={() => onImageClick(idx)}
+          >
+            <img
+              src={img.url}
+              alt={`Angle ${idx + 1}`}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+            <div className="absolute bottom-2 left-2 px-1.5 py-0.5 rounded bg-black/60 backdrop-blur text-[8px] font-mono text-white/70 opacity-0 group-hover:opacity-100 transition-opacity">
+              Angle {idx + 1}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
@@ -285,6 +391,56 @@ const HistoryCard = ({
   );
 };
 
+/** History Content Helper */
+const HistoryContent = ({
+  loading,
+  history,
+  onDeleteJob,
+  onDeleteAngle,
+  onSelect,
+}: {
+  loading: boolean;
+  history: AngleReshapeJob[];
+  onDeleteJob: (jobId: string) => void;
+  onDeleteAngle: (jobId: string, imageId: string) => void;
+  onSelect: (job: AngleReshapeJob) => void;
+}) => (
+  <>
+    <div className="px-6 py-4 border-b border-border sticky top-0 bg-background z-10 flex items-center justify-between">
+      <h2 className="text-lg font-semibold flex items-center gap-2">
+        <HistoryIcon className="size-4" />
+        Generation History
+      </h2>
+    </div>
+
+    <div className="flex-1 px-4 py-4 space-y-3 overflow-y-auto">
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : history.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-12 text-center gap-3">
+          <HistoryIcon className="size-10 text-muted-foreground/30" />
+          <p className="text-sm text-muted-foreground">No history yet.</p>
+          <p className="text-xs text-muted-foreground">
+            Generate some angles to see them here.
+          </p>
+        </div>
+      ) : (
+        history.map((job) => (
+          <HistoryCard
+            key={job._id}
+            job={job}
+            onDeleteJob={onDeleteJob}
+            onDeleteAngle={onDeleteAngle}
+            onSelect={onSelect}
+          />
+        ))
+      )}
+    </div>
+  </>
+);
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 const AnglesReshapePage = () => {
@@ -305,6 +461,11 @@ const AnglesReshapePage = () => {
   const [generatedImages, setGeneratedImages] = useState<GeneratedAngle[]>([]);
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
   const [generateError, setGenerateError] = useState<string | null>(null);
+
+  // UI state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   // History sheet
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -901,11 +1062,31 @@ const AnglesReshapePage = () => {
                   </div>
                 </div>
               ) : generatedImages.length > 0 && currentJobId ? (
-                <GeneratedCarousel
-                  images={generatedImages}
-                  jobId={currentJobId}
-                  onDelete={handleDeleteCurrentAngle}
-                />
+                <>
+                  {generatedImages.length > 1 ? (
+                    <GeneratedGrid
+                      images={generatedImages}
+                      onImageClick={(idx) => {
+                        setSelectedIndex(idx);
+                        setModalOpen(true);
+                      }}
+                    />
+                  ) : (
+                    <GeneratedCarousel
+                      images={generatedImages}
+                      jobId={currentJobId}
+                      onDelete={handleDeleteCurrentAngle}
+                    />
+                  )}
+                  <ResponsiveCarouselModal
+                    isOpen={modalOpen}
+                    onOpenChange={setModalOpen}
+                    images={generatedImages}
+                    jobId={currentJobId}
+                    onDelete={handleDeleteCurrentAngle}
+                    initialIndex={selectedIndex}
+                  />
+                </>
               ) : previewUrl ? (
                 /* Live preview (pre-generation) */
                 <div className="flex-1 flex flex-col items-center justify-center p-6 gap-4 border-2 border-gray-200 dark:border-white/10 border-dashed">
@@ -958,43 +1139,32 @@ const AnglesReshapePage = () => {
 
       <LandingFooter />
 
-      {/* History Sheet */}
-      <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto flex flex-col gap-0 p-0">
-          <SheetHeader className="px-6 py-4 border-b border-border sticky top-0 bg-background z-10">
-            <SheetTitle className="flex items-center gap-2">
-              <HistoryIcon className="size-4" />
-              Generation History
-            </SheetTitle>
-          </SheetHeader>
-
-          <div className="flex-1 px-4 py-4 space-y-3 overflow-y-auto">
-            {historyLoading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : history.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 text-center gap-3">
-                <HistoryIcon className="size-10 text-muted-foreground/30" />
-                <p className="text-sm text-muted-foreground">No history yet.</p>
-                <p className="text-xs text-muted-foreground">
-                  Generate some angles to see them here.
-                </p>
-              </div>
-            ) : (
-              history.map((job) => (
-                <HistoryCard
-                  key={job._id}
-                  job={job}
-                  onDeleteJob={handleHistoryDeleteJob}
-                  onDeleteAngle={handleHistoryDeleteAngle}
-                  onSelect={handleSelectJob}
-                />
-              ))
-            )}
-          </div>
-        </SheetContent>
-      </Sheet>
+      {/* History Responsive Container */}
+      {isDesktop ? (
+        <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
+          <SheetContent className="w-full sm:max-w-md overflow-y-auto flex flex-col gap-0 p-0">
+            <HistoryContent
+              loading={historyLoading}
+              history={history}
+              onDeleteJob={handleHistoryDeleteJob}
+              onDeleteAngle={handleHistoryDeleteAngle}
+              onSelect={handleSelectJob}
+            />
+          </SheetContent>
+        </Sheet>
+      ) : (
+        <Drawer open={historyOpen} onOpenChange={setHistoryOpen}>
+          <DrawerContent className="h-[80vh]">
+            <HistoryContent
+              loading={historyLoading}
+              history={history}
+              onDeleteJob={handleHistoryDeleteJob}
+              onDeleteAngle={handleHistoryDeleteAngle}
+              onSelect={handleSelectJob}
+            />
+          </DrawerContent>
+        </Drawer>
+      )}
     </div>
   );
 };

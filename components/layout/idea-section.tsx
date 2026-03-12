@@ -55,6 +55,7 @@ import {
 import { apiResponse } from "@/utils/apiResponse";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import { BorderBeam } from "../ui/border-beam";
+import { useSpeechToText } from "@/hooks/use-speech-to-text";
 
 interface TypewriterEffectProps {
   words: string[];
@@ -179,6 +180,17 @@ export function IdeaSection() {
     images.map(() => Math.random() * 20 - 10),
   );
 
+  const [initialInputValue, setInitialInputValue] = useState("");
+
+  const { isListening, startListening, stopListening, isSupported } =
+    useSpeechToText({
+      onTranscript: (transcript) => {
+        setInputValue(
+          initialInputValue ? `${initialInputValue} ${transcript}` : transcript,
+        );
+      },
+    });
+
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -192,6 +204,15 @@ export function IdeaSection() {
     typingSpeed: 40,
     delay: 1000,
   });
+
+  // Effect to resize textarea on inputValue change
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height =
+        Math.min(textareaRef.current.scrollHeight, 300) + "px";
+    }
+  }, [inputValue]);
 
   // Input validation
   const validateInput = useCallback((value: string, files: File[]) => {
@@ -223,6 +244,15 @@ export function IdeaSection() {
     },
     [setInputValue],
   );
+
+  const handleMicClick = useCallback(() => {
+    if (isListening) {
+      stopListening();
+    } else {
+      setInitialInputValue(inputValue.trim());
+      startListening();
+    }
+  }, [isListening, startListening, stopListening, inputValue]);
 
   // Handle file processing with validation
   const handleFileProcess = useCallback(
@@ -649,8 +679,8 @@ export function IdeaSection() {
   const orientationOptions = getOrientationOptions(selectedDesignTypeId);
 
   return (
-    <div className="lg:w-full">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="w-full px-2 md:px-6">
+      <div className="w-full lg:max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
           <AnimatedTooltipPreview />
@@ -661,7 +691,7 @@ export function IdeaSection() {
             // transition={{ duration: 0.6 }}
           >
             <motion.h1
-              className="text-3xl md:text-4xl font-bold tracking-tight text-center lg:text-5xl mt-8"
+              className="mb-2 flex items-center gap-1 text-3xl font-semibold leading-none text-foreground sm:text-3xl md:mb-2.5 md:gap-0 md:text-5xl mt-8"
               custom={1}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -684,10 +714,11 @@ export function IdeaSection() {
                 containerClassName="inline-block mx-1"
               >
                 <span className="relative z-10"> Design </span>
-              </PointerHighlight>{" "} in 10.s
+              </PointerHighlight>{" "}
+              in 10.s
             </motion.h1>
             <motion.p
-              className="mt-4 text-center text-gray-600 dark:text-gray-300 max-w-lg"
+              className="mb-6 max-w-[25ch] text-center text-lg leading-tight text-foreground/65 md:max-w-full md:text-xl"
               custom={2}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -708,7 +739,7 @@ export function IdeaSection() {
           </motion.div>
         </div>
 
-        <div className="flex flex-row items-center justify-center">
+        <div className="flex flex-row items-center justify-center w-full">
           {!user ? (
             <>
               <button
@@ -872,7 +903,7 @@ export function IdeaSection() {
               </div>
               <div
                 ref={chatContainerRef}
-                className="relative flex bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 dark:from-[#7e7e7e] dark:via-[#363636] dark:to-[#363636] rounded-2xl p-[1.5px] overflow-hidden before:absolute before:content-[''] before:top-[-10px] before:left-[-10px] before:bg-radial-gradient md:before:w-[40vh] before:h-[30px] before:blur-[1px] w-full shadow-lg"
+                className="relative flex w-full max-w-3xl mx-auto"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
@@ -889,229 +920,200 @@ export function IdeaSection() {
                   }}
                   style={{ transform: "translate(-50%, -50%)" }}
                 />
-                <div
-                  ref={innerContainerRef}
-                  className="flex flex-col bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-[15px] w-full overflow-hidden z-10 shadow-inner relative"
-                >
-                  {/* Credit info and typing indicator */}
-                  <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2">
-                    {!isGenerating && (
-                      <div className="flex items-center gap-1 justify-between w-full">
-                        <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                          <Zap className="inline-block w-3 h-3  text-emerald-500 mr-2" />
-                          {user ? (
-                            `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
-                          ) : (
-                            <span className="ml-2 text-xs text-muted-foreground">
-                              Get a 50 free credit
-                            </span>
-                          )}
-                        </div>
 
-                        {/* Conditional CTA when credits are zero */}
-                        {user && (user?.creditsRemaining ?? 0) === 0 && (
-                          <div>
-                            {String(user?.userPlan) === "Basic" ? (
-                              <span
-                                className="cursor-pointer"
-                                onClick={() => router.push("/pricing")}
-                              >
-                                Upgrade
-                              </span>
+                <div className="flex w-full flex-col items-center z-10">
+                  <div className="relative size-full">
+                    {/* Credit info and typing indicator */}
+                    <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2">
+                      {!isGenerating && (
+                        <div className="flex items-center gap-1 justify-between w-full">
+                          <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
+                            <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
+                            {user ? (
+                              `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                             ) : (
-                              <span
-                                onClick={() =>
-                                  router.push("/user/settings?tab=billing")
-                                }
-                              >
-                                Buy Credits
+                              <span className="ml-2 text-xs text-muted-foreground">
+                                Get a 50 free credit
                               </span>
                             )}
                           </div>
-                        )}
-                      </div>
-                    )}
-                    {isGenerating && (
-                      <ShinyText
-                        text="Thinking..."
-                        disabled={false}
-                        speed={3}
-                        className="custom-class"
-                      />
-                    )}
-                  </div>
 
-                  {/* Error message */}
-                  <AnimatePresence>
-                    {(inputError || error) && (
-                      <p className="text-xs text-red-500 font-medium flex items-center mt-2 mx-4">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14px"
-                          height="14px"
-                          fill="currentColor"
-                          className="mr-2"
-                          viewBox="0 0 512 512"
-                        >
-                          <path
-                            d="M256 0C114.833 0 0 114.833 0 256s114.833 256 256 256 256-114.853 256-256S397.167 0 256 0zm0 472.341c-119.275 0-216.341-97.046-216.341-216.341S136.725 39.659 256 39.659c119.295 0 216.341 97.046 216.341 216.341S375.275 472.341 256 472.341z"
-                            data-original="#000000"
-                          />
-                          <path
-                            d="M373.451 166.965c-8.071-7.337-20.623-6.762-27.999 1.348L224.491 301.509 166.053 242.1c-7.714-7.813-20.246-7.932-28.039-.238-7.813 7.674-7.932 20.226-.238 28.039l73.151 74.361a19.804 19.804 0 0 0 14.138 5.929c.119 0 .258 0 .377.02a19.842 19.842 0 0 0 14.297-6.504l135.059-148.722c7.358-8.131 6.763-20.663-1.347-28.02z"
-                            data-original="#000000"
-                          />
-                        </svg>
-                        {inputError || error}
-                      </p>
-                    )}
-                  </AnimatePresence>
-
-                  <form
-                    onSubmit={
-                      user
-                        ? handleSubmit
-                        : (e) => {
-                            e.preventDefault();
-                            router.push("/signin");
-                          }
-                    }
-                    className="relative"
-                  >
-                    <div
-                      ref={inputContainerRef}
-                      className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-neutral-500/20 focus-within:border-neutral-300"
-                    >
-                      <div className="flex-1 relative">
-                        <textarea
-                          ref={textareaRef}
-                          id="chat_bot"
-                          name="chat_bot"
-                          value={isGenerating ? "" : inputValue}
-                          onChange={handleInputChange}
-                          onKeyDown={handleKeyPress}
-                          placeholder={
-                            isGenerating
-                              ? ""
-                              : placeholderText
-                                ? placeholderText + " ✦"
-                                : "Tell your AI team what to create... ✦"
-                          }
-                          disabled={
-                            isGenerating || isSubmitting || isSettingsOpen
-                          }
-                          style={{
-                            lineHeight: "1.5",
-                            fontFamily: "inherit",
-                            minHeight: "20px",
-                            maxHeight: "300px",
-                          }}
-                          className="bg-transparent rounded-2xl border-none w-full min-h-[40px] text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
-                          aria-label="Enter your prompt"
-                          aria-describedby={
-                            inputError ? "input-error" : undefined
-                          }
-                        />
-                      </div>
-
-                      <div className="flex justify-between items-center">
-                        <div className="flex gap-2 items-center flex-wrap">
-                          <button
-                            type="button"
-                            className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            onClick={() => fileInputRef.current?.click()}
-                            disabled={isGenerating || isSubmitting}
-                            aria-label="Attach files"
-                          >
-                            <PaperclipIcon className="h-4 w-4" />
-                          </button>
-                          <Input
-                            ref={fileInputRef}
-                            type="file"
-                            multiple
-                            onChange={handleFileInputChange}
-                            disabled={isGenerating || isSubmitting}
-                            className="hidden"
-                            id="file-upload"
-                            accept="image/*,video/*"
-                            aria-label="Select files to upload"
-                          />
-
-                          {selectedDesignType && (
-                            <Badge
-                              variant="secondary"
-                              className="text-xs px-2 py-0.5 h-6 font-medium flex items-center gap-1.5 bg-neutral-50 dark:bg-neutral-950/30 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-800 cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-900/50 transition-colors"
-                              onClick={() => {
-                                setIsSettingsOpen(true);
-                                setShowOrientationSelection(false);
-                              }}
-                            >
-                              <selectedDesignType.icon className="w-3 h-3" />
-                              {selectedDesignType.label}
-                              {selectedOrientation &&
-                                selectedOrientation !== "custom" && (
-                                  <span className="text-muted-foreground">
-                                    •{" "}
-                                    {
-                                      getOrientationOptions(
-                                        selectedDesignTypeId,
-                                      ).find(
-                                        (opt) => opt.id === selectedOrientation,
-                                      )?.label
-                                    }
-                                  </span>
-                                )}
-                              {selectedOrientation === "custom" &&
-                                customSize.width &&
-                                customSize.height && (
-                                  <span className="text-muted-foreground">
-                                    • {customSize.width}×{customSize.height}
-                                  </span>
-                                )}
-                            </Badge>
+                          
+                          {user && (user?.creditsRemaining ?? 0) === 0 && (
+                            <div className="text-xs font-medium">
+                              {String(user?.userPlan) === "Basic" ? (
+                                <span
+                                  className="cursor-pointer text-blue-500 hover:underline"
+                                  onClick={() => router.push("/pricing")}
+                                >
+                                  Upgrade
+                                </span>
+                              ) : (
+                                <span
+                                  className="cursor-pointer text-blue-500 hover:underline"
+                                  onClick={() =>
+                                    router.push("/user/settings?tab=billing")
+                                  }
+                                >
+                                  Buy Credits
+                                </span>
+                              )}
+                            </div>
                           )}
+                        </div>
+                      )}
+                      {isGenerating && (
+                        <ShinyText
+                          text="Thinking..."
+                          disabled={false}
+                          speed={3}
+                          className="custom-class"
+                        />
+                      )}
+                    </div>
 
+                    {/* Error message */}
+                    <AnimatePresence>
+                      {(inputError || error) && (
+                        <p className="text-xs text-red-500 font-medium flex items-center mb-2 mx-4">
+                          <AlertCircle className="size-3.5 mr-2" />
+                          {inputError || error}
+                        </p>
+                      )}
+                    </AnimatePresence>
+
+                    <form
+                      id="chat-input"
+                      onSubmit={
+                        user
+                          ? handleSubmit
+                          : (e) => {
+                              e.preventDefault();
+                              router.push("/signin");
+                            }
+                      }
+                      className="group flex flex-col gap-2 p-3 w-full rounded-[2rem] md:rounded-[2.5rem] border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
+                    >
+                      <div className="min-w-0 w-full">
+                        <div className="relative flex flex-1 items-center">
+                          <textarea
+                            ref={textareaRef}
+                            id="chatinput"
+                            value={isGenerating ? "" : inputValue}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyPress}
+                            className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
+                            style={{ height: 80 }}
+                            placeholder={
+                              isGenerating
+                                ? ""
+                                : isListening
+                                  ? "Listening... speak now ✦"
+                                  : placeholderText
+                                    ? placeholderText + " ✦"
+                                    : "Ask Gennit to create a design... ✦"
+                            }
+                            disabled={isGenerating || isSubmitting}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex-wrap gap-1 flex items-center">
+                        <button
+                          className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(0,0,0,0.2),0_1px_2px_0_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.05)] active:brightness-[0.65] disabled:brightness-100 px-4 py-2 rounded-full !p-0 bg-secondary text-primary h-8 w-8"
+                          type="button"
+                          aria-label="Attach files"
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={isGenerating || isSubmitting}
+                        >
+                          <Plus className="shrink-0 size-5" />
+                        </button>
+                        <Input
+                          ref={fileInputRef}
+                          type="file"
+                          multiple
+                          onChange={handleFileInputChange}
+                          disabled={isGenerating || isSubmitting}
+                          className="hidden"
+                          accept="image/*,video/*"
+                        />
+
+                        {selectedDesignType && (
+                          <Badge
+                            variant="secondary"
+                            className="text-[10px] md:text-xs px-2 py-0.5 h-7 font-medium flex items-center gap-1.5 bg-zinc-100 dark:bg-white/5 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-white/10 cursor-pointer hover:bg-neutral-200 dark:hover:bg-white/10 transition-colors rounded-full"
+                            onClick={() => {
+                              setIsSettingsOpen(true);
+                              setShowOrientationSelection(false);
+                            }}
+                          >
+                            <selectedDesignType.icon className="w-3 h-3" />
+                            {selectedDesignType.label}
+                            {selectedOrientation &&
+                              selectedOrientation !== "custom" && (
+                                <span className="opacity-60 font-normal">
+                                  • {selectedOrientation}
+                                </span>
+                              )}
+                          </Badge>
+                        )}
+
+                        <div className="ml-auto flex items-center gap-1.5">
                           <button
+                            className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-transparent px-4 py-2 rounded-full !p-0 text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5 h-8 w-8"
                             type="button"
-                            className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            aria-label="Settings"
                             onClick={() => {
                               setIsSettingsOpen(!isSettingsOpen);
                               setShowOrientationSelection(true);
                             }}
-                            disabled={isGenerating || isSubmitting}
-                            aria-label="Settings"
                           >
-                            <Settings className="h-4 w-4" />
+                            <Settings className="shrink-0 size-4" />
+                          </button>
+                          <button
+                            className={`relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-transparent px-4 py-2 rounded-full !p-0 h-8 w-8 ${
+                              isListening
+                                ? "text-red-500 bg-red-500/10 animate-pulse"
+                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
+                            }`}
+                            type="button"
+                            aria-label={
+                              isListening ? "Stop listening" : "Voice input"
+                            }
+                            onClick={handleMicClick}
+                            disabled={
+                              !isSupported || isGenerating || isSubmitting
+                            }
+                          >
+                            <Mic className="shrink-0 size-4" />
+                          </button>
+                          <button
+                            className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(0,0,0,0.2),0_1px_2px_0_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.05)] active:brightness-[0.65] disabled:brightness-100 px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shrink-0 ml-1"
+                            type="submit"
+                            disabled={isSubmitDisabled}
+                          >
+                            {isGenerating || isSubmitting ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                width="100%"
+                                height="100%"
+                                className="shrink-0 size-5"
+                                aria-hidden="true"
+                              >
+                                <path
+                                  fill="currentColor"
+                                  d="M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0"
+                                />
+                              </svg>
+                            )}
                           </button>
                         </div>
-
-                        <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 border border-border">
-                          <BorderBeam
-                            duration={6}
-                            size={40}
-                            className="from-transparent via-red-500 to-transparent"
-                          />
-                          <BorderBeam
-                            duration={6}
-                            delay={3}
-                            size={40}
-                            borderWidth={2}
-                            className="from-transparent via-blue-500 to-transparent"
-                          />
-                          <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
-                            {isGenerating || isSubmitting ? (
-                              <Loader2 className="w-5 h-5 animate-spin" />
-                            ) : (
-                              <div className="flex flex-row items-center gap-2">
-                                <WandSparklesIcon className="w-3 h-3" />
-                                Create
-                              </div>
-                            )}
-                          </span>
-                        </button>
                       </div>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </div>
 

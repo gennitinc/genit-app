@@ -1,13 +1,25 @@
 "use client";
 
 import type React from "react";
-import { Paperclip, Mic, ChevronDown, Plus } from "lucide-react";
+import {
+  Paperclip,
+  Mic,
+  ChevronDown,
+  Plus,
+  Settings,
+  Loader2,
+  AlertCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRef, useEffect, useCallback, useState } from "react";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useSpeechToText } from "@/hooks/use-speech-to-text";
+import { motion, AnimatePresence } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
+import ShinyText from "../ui/shiny-text";
 
 const models = [
   {
@@ -87,6 +99,27 @@ export function ChatInput({
   const [userScrolledUp, setUserScrolledUp] = useState(false);
   const [isNearBottom, setIsNearBottom] = useState(true);
   const [hasInitiallyScrolled, setHasInitiallyScrolled] = useState(false);
+  const [initialInputValue, setInitialInputValue] = useState("");
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [selectedModel, setSelectedModel] = useState(models[0].value);
+
+  const { isListening, startListening, stopListening, isSupported } =
+    useSpeechToText({
+      onTranscript: (transcript) => {
+        setInputValue(
+          initialInputValue ? `${initialInputValue} ${transcript}` : transcript,
+        );
+      },
+    });
+
+  const handleMicClick = useCallback(() => {
+    if (isListening) {
+      stopListening();
+    } else {
+      setInitialInputValue(inputValue.trim());
+      startListening();
+    }
+  }, [isListening, startListening, stopListening, inputValue]);
 
   // Local autoResize implementation using textareaRef
   const autoResize = useCallback(() => {
@@ -223,7 +256,7 @@ export function ChatInput({
 
     const validationError = validateInput(
       inputValue,
-      attachedFiles as unknown as File[]
+      attachedFiles as unknown as File[],
     );
     if (validationError) {
       console.error("Validation error:", validationError);
@@ -254,7 +287,7 @@ export function ChatInput({
 
   // Enhanced key down handler
   const handleEnhancedKeyDown = (
-    event: React.KeyboardEvent<HTMLTextAreaElement>
+    event: React.KeyboardEvent<HTMLTextAreaElement>,
   ) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -274,16 +307,19 @@ export function ChatInput({
   };
 
   return (
-    <div className={`h-full flex flex-col bg-transparent  ${className}`}>
+    <div className={`h-full flex flex-col bg-transparent ${className}`}>
       {/* Chat Content Area with hover-only scrollbar */}
-      <div className="flex-1 p-4 overflow-y-auto custom-scrollbar">
+      <div
+        ref={chatContentRef}
+        className="flex-1 p-4 overflow-y-auto custom-scrollbar"
+      >
         {children}
       </div>
 
       {/* Bottom Input Area - with drag and drop handlers */}
       <div
         ref={inputSectionRef}
-        className="sticky bottom-0 p-2 backdrop-blur-sm z-10"
+        className="sticky bottom-0 p-2 backdrop-blur-sm z-10 w-full"
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
@@ -302,7 +338,7 @@ export function ChatInput({
               setUserScrolledUp(false);
               setIsNearBottom(true);
             }}
-            className="bg-background/80 backdrop-blur-sm border border-border rounded-full p-1.5 transition-all duration-200 hover:scale-105 active:scale-95"
+            className="bg-background/80 backdrop-blur-sm border border-border rounded-full p-1.5 transition-all duration-200 hover:scale-105 active:scale-95 shadow-md"
             style={{
               animation: showScrollButton
                 ? "gentle-bounce 2s infinite"
@@ -313,254 +349,174 @@ export function ChatInput({
           </button>
         </div>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            // Check for low credits
-            const creditsRemaining = user?.creditsRemaining ?? 0;
-            if (creditsRemaining <= 10) {
-              const isBasic = String(user?.userPlan) === "Basic";
-              toast.error(`Low Credits`, {
-                description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? "s" : ""}`,
-                action: {
-                  label: isBasic ? "Upgrade" : "Buy Credits",
-                  onClick: () => {
-                    router.push(
-                      isBasic ? "/pricing" : "/user/settings?tab=billing",
-                    );
-                  },
-                },
-              });
-              return;
-            }
-            const validationError = validateInput(
-              inputValue,
-              attachedFiles as unknown as File[],
-            );
-            if (validationError) {
-              console.error("Validation error:", validationError);
-              return;
-            }
-            handlegenerateMessage();
-          }}
-          className="relative"
-        >
-          {/* File Attachments or Drag Drop Zone */}
-          {isDragOver ? (
-            <div className="mb-3">
-              <div className="border-2 border-dashed border-border rounded-lg p-6 text-center bg-background/50 transition-all duration-200 hover:border-border hover:bg-background">
-                <div className="flex items-center justify-center gap-2 text-muted-foreground">
-                  <div className="w-5 h-5 rounded-full border border-border flex items-center justify-center">
-                    <Plus className="w-3 h-3" />
-                  </div>
-                  <span className="text-sm">
-                    Drop files here to add to your message.
-                  </span>
-                </div>
-              </div>
+        <div className="w-full max-w-4xl mx-auto">
+          {/* Thinking / Credits Status */}
+          <div className="flex items-center justify-between mb-2 px-4 h-6">
+            <div className="flex items-center gap-2">
+              {isGenerating && (
+                <ShinyText
+                  text="Thinking..."
+                  disabled={false}
+                  speed={3}
+                  className="text-xs font-medium"
+                />
+              )}
             </div>
-          ) : attachedFiles.length > 0 && !isGenerating ? (
-            <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal">
-              {attachedFiles.map((file, index) => {
-                const fileKey = file.fileKey || `${file.name}-${index}`;
-                const isLoading = fileLoadingStates[fileKey];
-                return (
-                  <div
-                    key={fileKey}
-                    className="relative group bg-muted-foreground/5 border border-border rounded-lg p-2 flex items-center gap-2 hover:bg-background/50 transition-colors max-w-[200px]"
+            {user && (user?.creditsRemaining ?? 0) === 0 && (
+              <div className="text-xs font-medium">
+                {String(user?.userPlan) === "Basic" ? (
+                  <span
+                    className="cursor-pointer text-blue-500 hover:underline"
+                    onClick={() => router.push("/pricing")}
                   >
-                    <div className="w-8 h-8 bg-background border border-border rounded flex items-center justify-center flex-shrink-0 relative">
-                      {isLoading ? (
-                        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                      ) : file.type && file.type.startsWith("image/") ? (
-                        <img
-                          src={URL.createObjectURL(file) || "/placeholder.svg"}
-                          alt={file.name}
-                          className="w-full h-full object-cover rounded"
-                          onLoad={(e) =>
-                            URL.revokeObjectURL(
-                              (e.target as HTMLImageElement).src,
-                            )
-                          }
-                        />
-                      ) : (
-                        <svg
-                          className="w-4 h-4 text-muted-foreground"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                          />
-                        </svg>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p
-                        className={`text-xs font-medium truncate ${
-                          isLoading
-                            ? "text-muted-foreground"
-                            : "text-foreground"
-                        }`}
-                      >
-                        {isLoading ? (
-                          <svg
-                            className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                        ) : file.name && file.name.length > 15 ? (
-                          `${file.name.substring(0, 15)}...`
-                        ) : (
-                          file.name || "Unknown file"
-                        )}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {isLoading
-                          ? "Processing..."
-                          : formatFileSize(file.size)}
-                      </p>
-                    </div>
-                    {!isLoading && (
-                      <button
-                        type="button"
-                        onClick={() => removeAttachedFile(index)}
-                        className="absolute -top-1 -right-1 w-4 h-4 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs"
-                      >
-                        &times;
-                      </button>
-                    )}
-                    {!isLoading &&
-                      file.type &&
-                      file.type.startsWith("image/") && (
-                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                          <div className="bg-background border border-border rounded-lg shadow-lg p-2">
-                            <img
-                              src={
-                                URL.createObjectURL(file) || "/placeholder.svg"
-                              }
-                              alt={file.name}
-                              className="max-w-[200px] max-h-[150px] object-contain rounded"
-                              onLoad={(e) =>
-                                URL.revokeObjectURL(
-                                  (e.target as HTMLImageElement).src,
-                                )
-                              }
-                            />
-                            <div className="mt-1 text-xs text-muted-foreground text-center">
-                              {file.name} • {formatFileSize(file.size)}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                  </div>
-                );
-              })}
-            </div>
-          ) : null}
+                    Upgrade for Credits
+                  </span>
+                ) : (
+                  <span
+                    className="cursor-pointer text-blue-500 hover:underline"
+                    onClick={() => router.push("/user/settings?tab=billing")}
+                  >
+                    Buy Credits
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
 
-          <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-300">
-            <div className="flex-1 relative">
-              <textarea
-                ref={textareaRef}
-                value={inputValue}
-                onChange={handleInput}
-                onKeyDown={handleEnhancedKeyDown}
-                onPaste={handlePaste}
-                placeholder={
-                  isGenerating
-                    ? "AI is generating..."
-                    : "Enter a follow up prompt"
-                }
-                disabled={isGenerating}
-                className="w-full bg-transparent border-none outline-none text-foreground placeholder-muted-foreground text-sm resize-none overflow-y-auto custom-scrollbar disabled:opacity-50"
-                style={{
-                  lineHeight: "1.5",
-                  fontFamily: "inherit",
-                  minHeight: "40px",
-                  maxHeight: "300px",
-                }}
-                rows={1}
-              />
-            </div>
+          {/* Error message */}
+          <AnimatePresence>
+            {error && (
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="text-xs text-red-500 font-medium flex items-center mb-2 mx-4"
+              >
+                <AlertCircle className="size-3.5 mr-2" />
+                {error}
+              </motion.p>
+            )}
+          </AnimatePresence>
 
-            <div className="flex items-center gap-2 justify-between">
-              <div className="flex items-center gap-2 justify-start">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                  onClick={() => fileInputRef.current?.click()}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handlegenerateMessage();
+            }}
+            className="group flex flex-col gap-2 p-3 w-full rounded-[2rem] md:rounded-[2.5rem] border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
+          >
+            <div className="min-w-0 w-full">
+              <div className="relative flex flex-1 items-center">
+                <textarea
+                  ref={textareaRef}
+                  value={isGenerating ? "" : inputValue}
+                  onChange={handleInput}
+                  onKeyDown={handleEnhancedKeyDown}
+                  onPaste={handlePaste}
+                  placeholder={
+                    isGenerating
+                      ? ""
+                      : isListening
+                        ? "Listening... speak now ✦"
+                        : placeholder
+                  }
                   disabled={isGenerating}
-                >
-                  <Paperclip className="w-3.5 h-3.5 text-muted-foreground" />
-                </Button>
-
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  multiple
-                  accept="image/*,video/*"
-                  onChange={handleFileSelect}
-                  className="hidden"
+                  className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
+                  style={{ minHeight: "60px" }}
                 />
               </div>
+            </div>
 
+            {/* File Attachments Previews */}
+            {attachedFiles.length > 0 && !isGenerating && (
+              <div className="flex flex-wrap gap-2 px-3 mb-1">
+                {attachedFiles.map((file, index) => (
+                  <div
+                    key={index}
+                    className="relative group bg-muted-foreground/5 border border-border rounded-lg p-1.5 flex items-center gap-2 max-w-[150px]"
+                  >
+                    <div className="w-6 h-6 bg-background rounded flex items-center justify-center overflow-hidden">
+                      {file.type && file.type.startsWith("image/") ? (
+                        <img
+                          src={URL.createObjectURL(file as any)}
+                          alt={file.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <Paperclip className="w-3 h-3 text-muted-foreground" />
+                      )}
+                    </div>
+                    <span className="text-[10px] truncate max-w-[80px]">
+                      {file.name}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeAttachedFile(index)}
+                      className="text-muted-foreground hover:text-red-500"
+                    >
+                      <Plus className="w-3 h-3 rotate-45" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="flex items-center gap-1.5">
               <button
-                type="submit"
-                disabled={
-                  isGenerating ||
-                  (!inputValue.trim() && attachedFiles.length === 0) ||
-                  !hasEnoughCredits
-                }
-                className={`flex items-center justify-center p-0.5 bg-gradient-to-t from-gray-300 via-gray-200 to-gray-100 dark:from-[#292929] dark:via-[#555555] dark:to-[#292929] rounded-[10px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,0.5)] cursor-pointer border-none outline-none transition-all duration-150 active:scale-[0.92] group ${
-                  isGenerating ||
-                  (!inputValue.trim() && attachedFiles.length === 0) ||
-                  !hasEnoughCredits
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:shadow-md"
-                }`}
+                type="button"
+                className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-secondary text-primary h-8 w-8 shadow-sm flex-shrink-0"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isGenerating}
               >
-                <div className="w-[34px] h-[34px] flex items-center justify-center bg-gray-100/50 dark:bg-black/10 rounded-[10px] backdrop-blur-[3px] text-gray-500 dark:text-[#8b8b8b] group-hover:text-gray-700 dark:group-hover:text-white transition-colors">
+                <Plus className="shrink-0 size-5" />
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="image/*,video/*"
+                onChange={handleFileSelect}
+                className="hidden"
+              />
+
+              <div className="ml-auto flex items-center gap-1.5">
+                <button
+                  type="button"
+                  className={`relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 h-8 w-8 ${
+                    isListening
+                      ? "text-red-500 bg-red-500/10 animate-pulse"
+                      : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
+                  }`}
+                  onClick={handleMicClick}
+                  disabled={!isSupported || isGenerating}
+                >
+                  <Mic className="shrink-0 size-4" />
+                </button>
+                <button
+                  type="submit"
+                  disabled={
+                    isGenerating ||
+                    (!inputValue.trim() && attachedFiles.length === 0)
+                  }
+                  className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shadow-md flex-shrink-0"
+                >
                   {isGenerating ? (
-                    <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <svg
-                      viewBox="0 0 512 512"
-                      className="w-5 h-5 transition-all duration-300"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      className="shrink-0 size-5"
                     >
-                      <path
-                        fill="currentColor"
-                        d="M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05"
-                      />
+                      <path d="M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0" />
                     </svg>
                   )}
-                </div>
-              </button>
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
-        {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/20 rounded-xl -z-10 translate-y-1 blur-sm"></div> */}
+          </form>
+        </div>
       </div>
     </div>
   );

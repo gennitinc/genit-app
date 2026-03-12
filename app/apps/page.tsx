@@ -339,8 +339,7 @@ const Apps = () => {
                     Explore Apps
                   </h1>
                   <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl">
-                    Discover amazing AI-generated videos and images created by
-                    our community.
+                    Discover amazing AI powered apps that can elevate your design style
                   </p>
                 </div>
 

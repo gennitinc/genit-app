@@ -9,7 +9,7 @@ import CommunityComp from "../landing/CommunityComp";
 
 export function MainContent() {
   return (
-    <div className="w-full  overflow-x-hidden sm:px-6 lg:px-8 py-8">
+    <div className="w-full  overflow-x-hidden sm:px-2  lg:px-8 py-8">
       <div className="relative w-full flex flex-col items-center justify-center">
         <svg
           width={960}

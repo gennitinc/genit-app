@@ -58,16 +58,16 @@ export function AppSidebar({
       collapsible="icon"
       className={cn(
         "h-full border-border transition-colors duration-300 bg-white dark:bg-black [&_[data-sidebar=sidebar]]:bg-white dark:[&_[data-sidebar=sidebar]]:bg-black",
-        className
+        className,
       )}
       {...props}
     >
       <SidebarHeader className="flex-row justify-start">
         <Link
-        href="/"
+          href="/"
           className={cn(
             "flex items-center pb-2",
-            state === "collapsed" && !isMobile && "justify-start"
+            state === "collapsed" && !isMobile && "justify-start",
           )}
         >
           {/* <Logo className="w-8 h-8 flex-shrink-0" /> */}
@@ -77,7 +77,7 @@ export function AppSidebar({
               "font-semibold text-lg transition-opacity duration-200",
               (state === "collapsed" && !isMobile) || isTablet
                 ? "hidden"
-                : "block"
+                : "block",
             )}
           >
             Gennit
