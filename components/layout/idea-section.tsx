@@ -679,13 +679,13 @@ export function IdeaSection() {
   const orientationOptions = getOrientationOptions(selectedDesignTypeId);
 
   return (
-    <div className="w-full px-2 md:px-6">
+    <div className="w-full md:px-6">
       <div className="w-full lg:max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
-          <AnimatedTooltipPreview />
+          {/* <AnimatedTooltipPreview /> */}
           <motion.div
-            className="mt-2 mb-6 md:mb-8 lg:mb-12 flex flex-col items-center justify-center"
+            className="mt-2 md:mt-8 mb-6 lg:mt-24 flex flex-col items-center justify-center"
             // initial={{ opacity: 0, y: 20 }}
             // animate={{ opacity: 1, y: 0 }}
             // transition={{ duration: 0.6 }}

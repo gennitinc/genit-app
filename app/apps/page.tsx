@@ -3,7 +3,8 @@ import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import React, { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import { cn } from "@/lib/utils";
 import { Filter } from "lucide-react";
 import {
@@ -13,9 +14,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const TryNowButton = () => (
+const TryNowButton = ({ onClick }: { onClick?: () => void }) => (
   <button
     type="button"
+    onClick={(e) => {
+      if (onClick) {
+        e.preventDefault();
+        e.stopPropagation();
+        onClick();
+      }
+    }}
     className="relative inline-flex items-center justify-center px-4 py-2.5 overflow-hidden tracking-tighter text-white bg-gray-800 rounded-md group w-full"
   >
     <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full group-hover:w-full group-hover:h-56"></span>
@@ -77,79 +85,93 @@ const AppCard = ({
   posterSrc,
   imageSrc,
   badge,
-}: AppCardProps) => (
-  <div className="w-full h-full">
-    <div className="h-full">
-      <a
-        className="react-aria-Link"
-        href={href}
-        style={{ touchAction: "pan-x pan-y pinch-zoom" }}
-      >
-        <div className="flex flex-col group overflow-hidden w-full h-full cursor-pointer rounded-2xl border border-transparent transition-all duration-200 !bg-page-primary border-separator-card flex-1 shadow-[inset_2px_2px_2px_rgba(255,255,255,0.02)] hover:border-separator-card hover:!bg-surface-primary !min-w-0 h-full">
-          <div
-            className="relative overflow-hidden rounded-t-xl rounded-xl"
-            style={{ aspectRatio: "1.03333 / 1" }}
-          >
-            {badge && (
-              <div className="flex flex-wrap gap-2 absolute top-2 left-2 z-10">
-                <span
-                  className="inline-flex items-center justify-center px-1.5 text-sm leading-[18px] font-bold uppercase text-white relative overflow-hidden skew-x-[-10deg] rounded"
-                  style={{
-                    fontFamily: '"Space Grotesk"',
-                    backgroundColor: badge.bgColor,
-                    color: badge.textColor,
-                  }}
-                >
-                  <span>{badge.text}</span>
-                </span>
-              </div>
-            )}
-            <figure
-              className="group relative h-full rounded-2xl"
+}: AppCardProps) => {
+  const router = useRouter();
+  const { user } = useUserContext();
+
+  const handleAction = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    router.push(href);
+  };
+
+  return (
+    <div className="w-full h-full">
+      <div className="h-full">
+        <div
+          onClick={() => handleAction()}
+          className="react-aria-Link cursor-pointer h-full"
+          style={{ touchAction: "pan-x pan-y pinch-zoom" }}
+        >
+          <div className="flex flex-col group overflow-hidden w-full h-full cursor-pointer rounded-2xl border border-transparent transition-all duration-200 !bg-page-primary border-separator-card flex-1 shadow-[inset_2px_2px_2px_rgba(255,255,255,0.02)] hover:border-separator-card hover:!bg-surface-primary !min-w-0 h-full">
+            <div
+              className="relative overflow-hidden rounded-t-xl rounded-xl"
               style={{ aspectRatio: "1.03333 / 1" }}
             >
-              {videoSrc ? (
-                <video
-                  loop
-                  playsInline
-                  disablePictureInPicture
-                  preload="none"
-                  poster={posterSrc}
-                  src={videoSrc}
-                  autoPlay
-                  muted
-                  className="object-cover size-full absolute inset-0 w-full h-full"
-                  aria-label={description}
-                >
-                  Your browser does not support the video.
-                </video>
-              ) : (
-                <img
-                  alt={description}
-                  loading="lazy"
-                  decoding="async"
-                  className="object-cover absolute inset-0 w-full h-full"
-                  src={imageSrc}
-                />
+              {badge && (
+                <div className="flex flex-wrap gap-2 absolute top-2 left-2 z-10">
+                  <span
+                    className="inline-flex items-center justify-center px-1.5 text-sm leading-[18px] font-bold uppercase text-white relative overflow-hidden skew-x-[-10deg] rounded"
+                    style={{
+                      fontFamily: '"Space Grotesk"',
+                      backgroundColor: badge.bgColor,
+                      color: badge.textColor,
+                    }}
+                  >
+                    <span>{badge.text}</span>
+                  </span>
+                </div>
               )}
-            </figure>
-          </div>
-          <div className="flex flex-col gap-4 py-3 min-w-0 justify-between flex-1 p-4">
-            <div className="flex flex-col gap-1">
-              <h3 className="text-sm sm:text-base font-semibold text-font-primary leading-tight tracking-tight">
-                {title}
-              </h3>
-              <p className="text-xs sm:text-sm text-text-secondary line-clamp-2">
-                {description}
-              </p>
+              <figure
+                className="group relative h-full rounded-2xl"
+                style={{ aspectRatio: "1.03333 / 1" }}
+              >
+                {videoSrc ? (
+                  <video
+                    loop
+                    playsInline
+                    disablePictureInPicture
+                    preload="none"
+                    poster={posterSrc}
+                    src={videoSrc}
+                    autoPlay
+                    muted
+                    className="object-cover size-full absolute inset-0 w-full h-full"
+                    aria-label={description}
+                  >
+                    Your browser does not support the video.
+                  </video>
+                ) : (
+                  <img
+                    alt={description}
+                    loading="lazy"
+                    decoding="async"
+                    className="object-cover absolute inset-0 w-full h-full"
+                    src={imageSrc}
+                  />
+                )}
+              </figure>
             </div>
-            <TryNowButton />
+            <div className="flex flex-col gap-4 py-3 min-w-0 justify-between flex-1 p-4">
+              <div className="flex flex-col gap-1">
+                <h3 className="text-sm sm:text-base font-semibold text-font-primary leading-tight tracking-tight">
+                  {title}
+                </h3>
+                <p className="text-xs sm:text-sm text-text-secondary line-clamp-2">
+                  {description}
+                </p>
+              </div>
+              <TryNowButton onClick={() => handleAction()} />
+            </div>
           </div>
         </div>
-      </a>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const categories = [
   { name: "All", href: "/apps" },
@@ -244,6 +266,20 @@ const appSections = [
           "https://i.pinimg.com/736x/eb/76/a4/eb76a46ab920d056b02d203ca95e9a22.jpg",
       },
       {
+        id: "image-inpaint",
+        href: "/apps/image-inpaint",
+        title: "In-Painting",
+        description: "Seamlessly remove objects and fill backgrounds with AI",
+        type: "image",
+        imageSrc:
+          "https://imgv3.fotor.com/images/homepage-feature-card/use-fotor-ai-inpainting-tool-to-generate-a-spooted-white-trousers-for-female.jpg",
+        badge: {
+          text: "Coming soon",
+          bgColor: "rgb(157, 78, 221)",
+          textColor: "rgb(255, 255, 255)",
+        },
+      },
+      {
         id: "face-swap",
         href: "/apps/face-swap",
         title: "Face Swap",
@@ -299,21 +335,6 @@ const appSections = [
       //   imageSrc:
       //     "https://i.pinimg.com/736x/1a/3d/7e/1a3d7e507dc2bbac284165aeda918e99.jpg",
       // },
-
-      // {
-      //   id: "in-painting",
-      //   href: "/apps/in-painting",
-      //   title: "In Painting",
-      //   description: "Remove objects and fill backgrounds seamlessly",
-      //   type: "image",
-      //   imageSrc:
-      //     "https://imgv3.fotor.com/images/homepage-feature-card/use-fotor-ai-inpainting-tool-to-generate-a-spooted-white-trousers-for-female.jpg",
-      //   badge: {
-      //     text: "Pro",
-      //     bgColor: "rgb(157, 78, 221)",
-      //     textColor: "rgb(255, 255, 255)",
-      //   },
-      // },
     ],
   },
 ];
@@ -339,7 +360,8 @@ const Apps = () => {
                     Explore Apps
                   </h1>
                   <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl">
-                    Discover amazing AI powered apps that can elevate your design style
+                    Discover amazing AI powered apps that can elevate your
+                    design style
                   </p>
                 </div>
 

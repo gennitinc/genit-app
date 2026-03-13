@@ -9,13 +9,14 @@ import { cn } from "@/lib/utils";
 interface PremiumInputProps {
   value: string;
   onChange: (value: string) => void;
-  onSubmit: () => void;
+  onSubmit: () => void | Promise<void>;
   placeholder?: string;
   isGenerating?: boolean;
   disabled?: boolean;
   className?: string;
   leftContent?: React.ReactNode;
   rightContent?: React.ReactNode;
+  footerContent?: React.ReactNode;
   error?: string;
   minHeight?: string;
   maxHeight?: string;
@@ -31,6 +32,7 @@ export function PremiumInput({
   className,
   leftContent,
   rightContent,
+  footerContent,
   error,
   minHeight = "30px",
   maxHeight = "300px",
@@ -126,6 +128,8 @@ export function PremiumInput({
             style={{ minHeight }}
           />
         </div>
+
+        {footerContent && <div className="px-1">{footerContent}</div>}
 
         <div className="flex items-center gap-1.5">
           {leftContent}

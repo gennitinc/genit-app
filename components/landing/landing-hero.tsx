@@ -489,17 +489,7 @@ const LandingHero = () => {
   }, []);
   return (
     <section className="relative py-12 md:py-16 px-2 md:px-12 lg:px-20 xl:px-24">
-      {/* <div className="mx-auto mb-8 max-w-3xl text-center px-4">
-        <h2 className="font-heading mb-6 text-4xl text-balance lg:text-5xl lg:leading-14">
-          Think it? <span className="font-serif italic">Generate it</span>
-        </h2>
-        <p className="text-muted-foreground mx-auto max-w-xl text-balance">
-          just describe what you want and watch it come to life.
-        </p>
-      </div>
-
-      //update
-      <InputLandingMediaChat /> */}
+     
       <div className="relative w-full flex flex-col items-center justify-center">
         <svg
           width={960}
