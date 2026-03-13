@@ -811,7 +811,6 @@ export function IdeaSection() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            
             <div className="relative">
               {/* File Attachments */}
               {attachedFiles.length > 0 && !isGenerating && (
@@ -993,7 +992,7 @@ export function IdeaSection() {
                             router.push("/signin");
                           }
                     }
-                    className="group flex flex-col gap-2 p-3 w-full rounded-[1.5rem] border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
+                    className="group flex flex-col gap-2 p-3 w-full rounded-[1.5rem] border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out relative"
                   >
                     <div className="min-w-0 w-full">
                       <div className="relative flex flex-1 items-center">
@@ -1112,13 +1111,19 @@ export function IdeaSection() {
                         </button>
                       </div>
                     </div>
+                    {!user && (
+                      <div
+                        className="w-full h-full absolute top-0 left-0 right-0 bottom-0 z-50  bg-transparent"
+                        onClick={() => router.push("/signin")}
+                      ></div>
+                    )}
                   </form>
                 </div>
               </div>
             </div>
 
             {/* Settings Dropdown - overlays content below input section */}
-            {!user && <div className="w-full h-full absolute top-0 left-0 right-0 bottom-0 z-50  bg-transparent" onClick={() => router.push("/signin")}></div>}
+
             <AnimatePresence>
               {isSettingsOpen && (
                 <motion.div
