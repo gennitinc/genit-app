@@ -740,7 +740,7 @@ export function IdeaSection() {
         </div>
 
         <div className="flex flex-row items-center justify-center w-full">
-          {!user ? (
+          {/* {!user ? (
             <>
               <button
                 className="relative group flex w-[240px] rounded-full shadow-md bg-neutral-100 dark:bg-neutral-700 items-center justify-between cursor-pointer border-none"
@@ -803,585 +803,587 @@ export function IdeaSection() {
               `}</style>
             </>
           ) : (
-            <motion.div
-              className="flex flex-col relative w-full max-w-2xl mx-auto"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <div className="relative">
-                {/* File Attachments */}
-                {attachedFiles.length > 0 && !isGenerating && (
-                  <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal">
-                    {attachedFiles.map((file: any, index: number) => {
-                      const fileKey = file.fileKey || `${file.name}-${index}`;
-                      return (
-                        <div
-                          key={fileKey}
-                          className="relative group bg-muted-foreground/5 border border-border rounded-lg p-2 flex items-center gap-2 hover:bg-background/50 transition-colors max-w-[200px]"
+            <></>
+          )} */}
+          <motion.div
+            className="flex flex-col relative w-full max-w-2xl mx-auto"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            
+            <div className="relative">
+              {/* File Attachments */}
+              {attachedFiles.length > 0 && !isGenerating && (
+                <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal">
+                  {attachedFiles.map((file: any, index: number) => {
+                    const fileKey = file.fileKey || `${file.name}-${index}`;
+                    return (
+                      <div
+                        key={fileKey}
+                        className="relative group bg-muted-foreground/5 border border-border rounded-lg p-2 flex items-center gap-2 hover:bg-background/50 transition-colors max-w-[200px]"
+                      >
+                        <div className="w-8 h-8 bg-background border border-border rounded flex items-center justify-center flex-shrink-0 relative">
+                          {file.type && file.type.startsWith("image/") ? (
+                            <img
+                              src={
+                                URL.createObjectURL(file) || "/placeholder.svg"
+                              }
+                              alt={file.name}
+                              className="w-full h-full object-cover rounded"
+                              onLoad={(e) =>
+                                URL.revokeObjectURL(
+                                  (e.target as HTMLImageElement).src,
+                                )
+                              }
+                            />
+                          ) : file.type && file.type.startsWith("video/") ? (
+                            <div className="w-full h-full grid place-items-center text-[10px] text-muted-foreground">
+                              🎬
+                            </div>
+                          ) : (
+                            <svg
+                              className="w-4 h-4 text-muted-foreground"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                              />
+                            </svg>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium truncate text-foreground">
+                            {file.name && file.name.length > 15
+                              ? `${file.name.substring(0, 15)}...`
+                              : file.name || "Unknown file"}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {formatFileSize(file.size)}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => handleFileRemove(index)}
+                          className="absolute -top-1 -right-1 w-4 h-4 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity text-xs"
+                          disabled={isGenerating}
+                          aria-label={`Remove ${file.name}`}
                         >
-                          <div className="w-8 h-8 bg-background border border-border rounded flex items-center justify-center flex-shrink-0 relative">
-                            {file.type && file.type.startsWith("image/") ? (
+                          &times;
+                        </button>
+                        {file.type && file.type.startsWith("image/") && (
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                            <div className="bg-background border border-border rounded-lg shadow-lg p-2">
                               <img
                                 src={
                                   URL.createObjectURL(file) ||
                                   "/placeholder.svg"
                                 }
                                 alt={file.name}
-                                className="w-full h-full object-cover rounded"
+                                className="max-w-[200px] max-h-[150px] object-contain rounded"
                                 onLoad={(e) =>
                                   URL.revokeObjectURL(
                                     (e.target as HTMLImageElement).src,
                                   )
                                 }
                               />
-                            ) : file.type && file.type.startsWith("video/") ? (
-                              <div className="w-full h-full grid place-items-center text-[10px] text-muted-foreground">
-                                🎬
-                              </div>
-                            ) : (
-                              <svg
-                                className="w-4 h-4 text-muted-foreground"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                />
-                              </svg>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-xs font-medium truncate text-foreground">
-                              {file.name && file.name.length > 15
-                                ? `${file.name.substring(0, 15)}...`
-                                : file.name || "Unknown file"}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {formatFileSize(file.size)}
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => handleFileRemove(index)}
-                            className="absolute -top-1 -right-1 w-4 h-4 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity text-xs"
-                            disabled={isGenerating}
-                            aria-label={`Remove ${file.name}`}
-                          >
-                            &times;
-                          </button>
-                          {file.type && file.type.startsWith("image/") && (
-                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                              <div className="bg-background border border-border rounded-lg shadow-lg p-2">
-                                <img
-                                  src={
-                                    URL.createObjectURL(file) ||
-                                    "/placeholder.svg"
-                                  }
-                                  alt={file.name}
-                                  className="max-w-[200px] max-h-[150px] object-contain rounded"
-                                  onLoad={(e) =>
-                                    URL.revokeObjectURL(
-                                      (e.target as HTMLImageElement).src,
-                                    )
-                                  }
-                                />
-                                {/* <div className="mt-1 text-xs text-muted-foreground text-center">
+                              {/* <div className="mt-1 text-xs text-muted-foreground text-center">
                               {file.name} • {formatFileSize(file.size)}
                             </div> */}
-                              </div>
                             </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            <div
+              ref={chatContainerRef}
+              className="relative flex w-full max-w-3xl mx-auto"
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
+              {/* Animated beam with smoother transitions */}
+              <motion.div
+                className="absolute w-full md:w-40 h-40 rounded-full bg-neutral-400/20 dark:bg-neutral-500/20 blur-3xl pointer-events-none z-0"
+                animate={{
+                  left: `${beamPosition.x}%`,
+                  top: `${beamPosition.y}%`,
+                }}
+                transition={{
+                  duration: 4,
+                  ease: "easeInOut",
+                }}
+                style={{ transform: "translate(-50%, -50%)" }}
+              />
+
+              <div className="flex w-full flex-col items-center z-10">
+                <div className="relative size-full">
+                  {/* Credit info and typing indicator */}
+                  <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2">
+                    {!isGenerating && (
+                      <div className="flex items-center gap-1 justify-between w-full">
+                        <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
+                          <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
+                          {user ? (
+                            `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
+                          ) : (
+                            <span className="ml-2 text-xs text-muted-foreground">
+                              Get a 50 free credit
+                            </span>
                           )}
                         </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-              <div
-                ref={chatContainerRef}
-                className="relative flex w-full max-w-3xl mx-auto"
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-              >
-                {/* Animated beam with smoother transitions */}
-                <motion.div
-                  className="absolute w-full md:w-40 h-40 rounded-full bg-neutral-400/20 dark:bg-neutral-500/20 blur-3xl pointer-events-none z-0"
-                  animate={{
-                    left: `${beamPosition.x}%`,
-                    top: `${beamPosition.y}%`,
-                  }}
-                  transition={{
-                    duration: 4,
-                    ease: "easeInOut",
-                  }}
-                  style={{ transform: "translate(-50%, -50%)" }}
-                />
 
-                <div className="flex w-full flex-col items-center z-10">
-                  <div className="relative size-full">
-                    {/* Credit info and typing indicator */}
-                    <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2">
-                      {!isGenerating && (
-                        <div className="flex items-center gap-1 justify-between w-full">
-                          <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                            <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
-                            {user ? (
-                              `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
+                        {user && (user?.creditsRemaining ?? 0) === 0 && (
+                          <div className="text-xs font-medium">
+                            {String(user?.userPlan) === "Basic" ? (
+                              <span
+                                className="cursor-pointer text-blue-500 hover:underline"
+                                onClick={() => router.push("/pricing")}
+                              >
+                                Upgrade
+                              </span>
                             ) : (
-                              <span className="ml-2 text-xs text-muted-foreground">
-                                Get a 50 free credit
+                              <span
+                                className="cursor-pointer text-blue-500 hover:underline"
+                                onClick={() =>
+                                  router.push("/user/settings?tab=billing")
+                                }
+                              >
+                                Buy Credits
                               </span>
                             )}
                           </div>
-
-                          {user && (user?.creditsRemaining ?? 0) === 0 && (
-                            <div className="text-xs font-medium">
-                              {String(user?.userPlan) === "Basic" ? (
-                                <span
-                                  className="cursor-pointer text-blue-500 hover:underline"
-                                  onClick={() => router.push("/pricing")}
-                                >
-                                  Upgrade
-                                </span>
-                              ) : (
-                                <span
-                                  className="cursor-pointer text-blue-500 hover:underline"
-                                  onClick={() =>
-                                    router.push("/user/settings?tab=billing")
-                                  }
-                                >
-                                  Buy Credits
-                                </span>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      {isGenerating && (
-                        <ShinyText
-                          text="Thinking..."
-                          disabled={false}
-                          speed={3}
-                          className="custom-class"
-                        />
-                      )}
-                    </div>
-
-                    {/* Error message */}
-                    <AnimatePresence>
-                      {(inputError || error) && (
-                        <p className="text-xs text-red-500 font-medium flex items-center mb-2 mx-4">
-                          <AlertCircle className="size-3.5 mr-2" />
-                          {inputError || error}
-                        </p>
-                      )}
-                    </AnimatePresence>
-
-                    <form
-                      id="chat-input"
-                      onSubmit={
-                        user
-                          ? handleSubmit
-                          : (e) => {
-                              e.preventDefault();
-                              router.push("/signin");
-                            }
-                      }
-                      className="group flex flex-col gap-2 p-3 w-full rounded-[1.5rem] border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
-                    >
-                      <div className="min-w-0 w-full">
-                        <div className="relative flex flex-1 items-center">
-                          <textarea
-                            ref={textareaRef}
-                            id="chatinput"
-                            value={isGenerating ? "" : inputValue}
-                            onChange={handleInputChange}
-                            onKeyDown={handleKeyPress}
-                            className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[95px] max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
-                            placeholder={
-                              isGenerating
-                                ? ""
-                                : isListening
-                                  ? "Listening... speak now ✦"
-                                  : placeholderText
-                                    ? placeholderText + " ✦"
-                                    : "Ask Gennit to create a design... ✦"
-                            }
-                            disabled={isGenerating || isSubmitting}
-                          />
-                        </div>
-                      </div>
-                      <div className="flex-wrap gap-1 flex items-center">
-                        <button
-                          className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(0,0,0,0.2),0_1px_2px_0_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.05)] active:brightness-[0.65] disabled:brightness-100 px-4 py-2 rounded-full !p-0 bg-secondary text-primary h-8 w-8"
-                          type="button"
-                          aria-label="Attach files"
-                          onClick={() => fileInputRef.current?.click()}
-                          disabled={isGenerating || isSubmitting}
-                        >
-                          <Plus className="shrink-0 size-5" />
-                        </button>
-                        <Input
-                          ref={fileInputRef}
-                          type="file"
-                          multiple
-                          onChange={handleFileInputChange}
-                          disabled={isGenerating || isSubmitting}
-                          className="hidden"
-                          accept="image/*,video/*"
-                        />
-
-                        {selectedDesignType && (
-                          <Badge
-                            variant="secondary"
-                            className="text-[10px] md:text-xs px-2 py-0.5 h-7 font-medium flex items-center gap-1.5 bg-zinc-100 dark:bg-white/5 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-white/10 cursor-pointer hover:bg-neutral-200 dark:hover:bg-white/10 transition-colors rounded-full"
-                            onClick={() => {
-                              setIsSettingsOpen(true);
-                              setShowOrientationSelection(false);
-                            }}
-                          >
-                            <selectedDesignType.icon className="w-3 h-3" />
-                            {selectedDesignType.label}
-                            {selectedOrientation &&
-                              selectedOrientation !== "custom" && (
-                                <span className="opacity-60 font-normal">
-                                  • {selectedOrientation}
-                                </span>
-                              )}
-                          </Badge>
                         )}
-
-                        <div className="ml-auto flex items-center gap-1.5">
-                          <button
-                            className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-transparent px-4 py-2 rounded-full !p-0 text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5 h-8 w-8"
-                            type="button"
-                            aria-label="Settings"
-                            onClick={() => {
-                              setIsSettingsOpen(!isSettingsOpen);
-                              setShowOrientationSelection(true);
-                            }}
-                          >
-                            <Settings className="shrink-0 size-4" />
-                          </button>
-                          <button
-                            className={`relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-transparent px-4 py-2 rounded-full !p-0 h-8 w-8 ${
-                              isListening
-                                ? "text-red-500 bg-red-500/10 animate-pulse"
-                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
-                            }`}
-                            type="button"
-                            aria-label={
-                              isListening ? "Stop listening" : "Voice input"
-                            }
-                            onClick={handleMicClick}
-                            disabled={
-                              !isSupported || isGenerating || isSubmitting
-                            }
-                          >
-                            <Mic className="shrink-0 size-4" />
-                          </button>
-                          <button
-                            className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(0,0,0,0.2),0_1px_2px_0_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.05)] active:brightness-[0.65] disabled:brightness-100 px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shrink-0 ml-1"
-                            type="submit"
-                            disabled={isSubmitDisabled}
-                          >
-                            {isGenerating || isSubmitting ? (
-                              <Loader2 className="w-4 h-4 animate-spin" />
-                            ) : (
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                                width="100%"
-                                height="100%"
-                                className="shrink-0 size-5"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  fill="currentColor"
-                                  d="M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0"
-                                />
-                              </svg>
-                            )}
-                          </button>
-                        </div>
                       </div>
-                    </form>
+                    )}
+                    {isGenerating && (
+                      <ShinyText
+                        text="Thinking..."
+                        disabled={false}
+                        speed={3}
+                        className="custom-class"
+                      />
+                    )}
                   </div>
-                </div>
-              </div>
 
-              {/* Settings Dropdown - overlays content below input section */}
-              <AnimatePresence>
-                {isSettingsOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black border border-border rounded-xl shadow-xl z-50 max-h-[300px] w-fit overflow-hidden"
+                  {/* Error message */}
+                  <AnimatePresence>
+                    {(inputError || error) && (
+                      <p className="text-xs text-red-500 font-medium flex items-center mb-2 mx-4">
+                        <AlertCircle className="size-3.5 mr-2" />
+                        {inputError || error}
+                      </p>
+                    )}
+                  </AnimatePresence>
+
+                  <form
+                    id="chat-input"
+                    onSubmit={
+                      user
+                        ? handleSubmit
+                        : (e) => {
+                            e.preventDefault();
+                            router.push("/signin");
+                          }
+                    }
+                    className="group flex flex-col gap-2 p-3 w-full rounded-[1.5rem] border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
                   >
-                    <div className="flex flex-col p-4">
-                      {/* Header */}
-                      <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
-                        <div className="flex items-center gap-2">
-                          <h3 className="text-sm font-semibold text-foreground">
-                            Advanced Settings
-                          </h3>
-                        </div>
-                        <button
-                          type="button"
+                    <div className="min-w-0 w-full">
+                      <div className="relative flex flex-1 items-center">
+                        <textarea
+                          ref={textareaRef}
+                          id="chatinput"
+                          value={isGenerating ? "" : inputValue}
+                          onChange={handleInputChange}
+                          onKeyDown={handleKeyPress}
+                          className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[95px] max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
+                          placeholder={
+                            isGenerating
+                              ? ""
+                              : isListening
+                                ? "Listening... speak now ✦"
+                                : placeholderText
+                                  ? placeholderText + " ✦"
+                                  : "Ask Gennit to create a design... ✦"
+                          }
+                          disabled={isGenerating || isSubmitting}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex-wrap gap-1 flex items-center">
+                      <button
+                        className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(0,0,0,0.2),0_1px_2px_0_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.05)] active:brightness-[0.65] disabled:brightness-100 px-4 py-2 rounded-full !p-0 bg-secondary text-primary h-8 w-8"
+                        type="button"
+                        aria-label="Attach files"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isGenerating || isSubmitting}
+                      >
+                        <Plus className="shrink-0 size-5" />
+                      </button>
+                      <Input
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        onChange={handleFileInputChange}
+                        disabled={isGenerating || isSubmitting}
+                        className="hidden"
+                        accept="image/*,video/*"
+                      />
+
+                      {selectedDesignType && (
+                        <Badge
+                          variant="secondary"
+                          className="text-[10px] md:text-xs px-2 py-0.5 h-7 font-medium flex items-center gap-1.5 bg-zinc-100 dark:bg-white/5 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-white/10 cursor-pointer hover:bg-neutral-200 dark:hover:bg-white/10 transition-colors rounded-full"
                           onClick={() => {
-                            setIsSettingsOpen(false);
+                            setIsSettingsOpen(true);
                             setShowOrientationSelection(false);
                           }}
-                          className="flex items-center justify-center w-6 h-6 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
-                          aria-label="Close settings"
                         >
-                          <X className="h-4 w-4" />
+                          <selectedDesignType.icon className="w-3 h-3" />
+                          {selectedDesignType.label}
+                          {selectedOrientation &&
+                            selectedOrientation !== "custom" && (
+                              <span className="opacity-60 font-normal">
+                                • {selectedOrientation}
+                              </span>
+                            )}
+                        </Badge>
+                      )}
+
+                      <div className="ml-auto flex items-center gap-1.5">
+                        <button
+                          className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-transparent px-4 py-2 rounded-full !p-0 text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5 h-8 w-8"
+                          type="button"
+                          aria-label="Settings"
+                          onClick={() => {
+                            setIsSettingsOpen(!isSettingsOpen);
+                            setShowOrientationSelection(true);
+                          }}
+                        >
+                          <Settings className="shrink-0 size-4" />
+                        </button>
+                        <button
+                          className={`relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-transparent px-4 py-2 rounded-full !p-0 h-8 w-8 ${
+                            isListening
+                              ? "text-red-500 bg-red-500/10 animate-pulse"
+                              : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
+                          }`}
+                          type="button"
+                          aria-label={
+                            isListening ? "Stop listening" : "Voice input"
+                          }
+                          onClick={handleMicClick}
+                          disabled={
+                            !isSupported || isGenerating || isSubmitting
+                          }
+                        >
+                          <Mic className="shrink-0 size-4" />
+                        </button>
+                        <button
+                          className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(0,0,0,0.2),0_1px_2px_0_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.05)] active:brightness-[0.65] disabled:brightness-100 px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shrink-0 ml-1"
+                          type="submit"
+                          disabled={isSubmitDisabled}
+                        >
+                          {isGenerating || isSubmitting ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                              width="100%"
+                              height="100%"
+                              className="shrink-0 size-5"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0"
+                              />
+                            </svg>
+                          )}
                         </button>
                       </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
 
-                      {/* Design Type Selection or Orientation Selection */}
-                      <div className="overflow-y-auto max-h-[320px]">
-                        {!showOrientationSelection ? (
-                          <div className="space-y-0.5">
-                            {designTypeItems.map((item) => {
-                              const IconComponent = item.icon;
-                              const isSelected =
-                                selectedDesignTypeId === item.id;
-                              const isComingSoon = (item as any).comingSoon;
-                              return (
-                                <button
-                                  key={item.id}
-                                  type="button"
-                                  onClick={() => {
-                                    if (isComingSoon) return;
-                                    if (item.id == "video") {
-                                      router.push(
-                                        "/inspire/create?mode=ai-video-gen",
-                                      );
-                                    }
-                                    // else if (item.id == "image") {
-                                    //   router.push(
-                                    //     "/inspire/create?mode=ai-image-gen",
-                                    //   );
-                                    // }
-                                    else {
-                                      setSelectedDesignTypeId(item.id);
-                                      setSelectedOrientation(null);
-                                      setShowOrientationSelection(true);
-                                    }
-                                  }}
+            {/* Settings Dropdown - overlays content below input section */}
+            {!user && <div className="w-full h-full absolute top-0 left-0 right-0 bottom-0 z-50  bg-transparent" onClick={() => router.push("/signin")}></div>}
+            <AnimatePresence>
+              {isSettingsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black border border-border rounded-xl shadow-xl z-50 max-h-[300px] w-fit overflow-hidden"
+                >
+                  <div className="flex flex-col p-4">
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-sm font-semibold text-foreground">
+                          Advanced Settings
+                        </h3>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsSettingsOpen(false);
+                          setShowOrientationSelection(false);
+                        }}
+                        className="flex items-center justify-center w-6 h-6 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+                        aria-label="Close settings"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+
+                    {/* Design Type Selection or Orientation Selection */}
+                    <div className="overflow-y-auto max-h-[320px]">
+                      {!showOrientationSelection ? (
+                        <div className="space-y-0.5">
+                          {designTypeItems.map((item) => {
+                            const IconComponent = item.icon;
+                            const isSelected = selectedDesignTypeId === item.id;
+                            const isComingSoon = (item as any).comingSoon;
+                            return (
+                              <button
+                                key={item.id}
+                                type="button"
+                                onClick={() => {
+                                  if (isComingSoon) return;
+                                  if (item.id == "video") {
+                                    router.push(
+                                      "/inspire/create?mode=ai-video-gen",
+                                    );
+                                  }
+                                  // else if (item.id == "image") {
+                                  //   router.push(
+                                  //     "/inspire/create?mode=ai-image-gen",
+                                  //   );
+                                  // }
+                                  else {
+                                    setSelectedDesignTypeId(item.id);
+                                    setSelectedOrientation(null);
+                                    setShowOrientationSelection(true);
+                                  }
+                                }}
+                                disabled={isComingSoon}
+                                className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors ${
+                                  isComingSoon
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : isSelected
+                                      ? "text-foreground"
+                                      : "text-muted-foreground hover:text-foreground"
+                                }`}
+                              >
+                                <Checkbox
+                                  checked={isSelected}
                                   disabled={isComingSoon}
-                                  className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors ${
+                                  className="flex-shrink-0"
+                                  onCheckedChange={() => {}}
+                                />
+                                <IconComponent
+                                  className={`w-4 h-4 flex-shrink-0 ${
                                     isComingSoon
-                                      ? "opacity-50 cursor-not-allowed"
+                                      ? "text-muted-foreground/50"
                                       : isSelected
                                         ? "text-foreground"
-                                        : "text-muted-foreground hover:text-foreground"
+                                        : "text-muted-foreground"
                                   }`}
-                                >
+                                />
+                                <span className="text-sm font-normal flex-1">
+                                  {item.label}
+                                </span>
+                                {isComingSoon && (
+                                  <Badge
+                                    variant="secondary"
+                                    className="text-xs px-2 py-0.5 bg-muted text-muted-foreground"
+                                  >
+                                    Coming Soon
+                                  </Badge>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          {/* Back button */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setShowOrientationSelection(false);
+                            }}
+                            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-2"
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 19l-7-7 7-7"
+                              />
+                            </svg>
+                            Change Design Type
+                          </button>
+                          <div className="text-xs text-muted-foreground mb-3 px-3">
+                            {selectedDesignType?.label} Settings
+                          </div>
+
+                          {/* Orientation Options */}
+                          <div className="space-y-0.5">
+                            {orientationOptions.length > 0 && (
+                              <>
+                                <p className="text-xs text-muted-foreground mb-2 px-3">
+                                  Select orientation
+                                </p>
+                                {orientationOptions.map((option) => (
+                                  <button
+                                    key={option.id}
+                                    type="button"
+                                    onClick={() => {
+                                      setSelectedOrientation(option.id);
+                                      setIsSettingsOpen(false);
+                                      setShowOrientationSelection(false);
+                                    }}
+                                    className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-colors ${
+                                      selectedOrientation === option.id
+                                        ? "text-foreground"
+                                        : "text-muted-foreground hover:text-foreground"
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <Checkbox
+                                        checked={
+                                          selectedOrientation === option.id
+                                        }
+                                        className="flex-shrink-0"
+                                        onCheckedChange={() => {}}
+                                      />
+                                      <span className="text-sm font-normal">
+                                        {option.label}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      {option.dimensions && (
+                                        <span className="text-xs text-muted-foreground">
+                                          {option.dimensions}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </button>
+                                ))}
+                              </>
+                            )}
+
+                            {/* Custom Size Option */}
+                            <div
+                              className={`${orientationOptions.length > 0 ? "pt-2 border-t border-border mt-2" : ""}`}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSelectedOrientation("custom");
+                                }}
+                                className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-colors ${
+                                  selectedOrientation === "custom"
+                                    ? "text-foreground"
+                                    : "text-muted-foreground hover:text-foreground"
+                                }`}
+                              >
+                                <div className="flex items-center gap-3">
                                   <Checkbox
-                                    checked={isSelected}
-                                    disabled={isComingSoon}
+                                    checked={selectedOrientation === "custom"}
                                     className="flex-shrink-0"
                                     onCheckedChange={() => {}}
                                   />
-                                  <IconComponent
-                                    className={`w-4 h-4 flex-shrink-0 ${
-                                      isComingSoon
-                                        ? "text-muted-foreground/50"
-                                        : isSelected
-                                          ? "text-foreground"
-                                          : "text-muted-foreground"
-                                    }`}
-                                  />
-                                  <span className="text-sm font-normal flex-1">
-                                    {item.label}
+                                  <span className="text-sm font-normal">
+                                    Custom Size
                                   </span>
-                                  {isComingSoon && (
-                                    <Badge
-                                      variant="secondary"
-                                      className="text-xs px-2 py-0.5 bg-muted text-muted-foreground"
-                                    >
-                                      Coming Soon
-                                    </Badge>
-                                  )}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        ) : (
-                          <div className="space-y-4">
-                            {/* Back button */}
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setShowOrientationSelection(false);
-                              }}
-                              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-2"
-                            >
-                              <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M15 19l-7-7 7-7"
-                                />
-                              </svg>
-                              Change Design Type
-                            </button>
-                            <div className="text-xs text-muted-foreground mb-3 px-3">
-                              {selectedDesignType?.label} Settings
-                            </div>
+                                </div>
+                              </button>
 
-                            {/* Orientation Options */}
-                            <div className="space-y-0.5">
-                              {orientationOptions.length > 0 && (
-                                <>
-                                  <p className="text-xs text-muted-foreground mb-2 px-3">
-                                    Select orientation
-                                  </p>
-                                  {orientationOptions.map((option) => (
-                                    <button
-                                      key={option.id}
-                                      type="button"
-                                      onClick={() => {
-                                        setSelectedOrientation(option.id);
+                              {selectedOrientation === "custom" && (
+                                <div className="px-3 py-3 space-y-2">
+                                  <div className="flex items-center gap-2">
+                                    <Input
+                                      type="number"
+                                      placeholder="px width"
+                                      value={customSize.width}
+                                      onChange={(e) =>
+                                        setCustomSize((prev) => ({
+                                          ...prev,
+                                          width: e.target.value,
+                                        }))
+                                      }
+                                      className="h-8 text-sm"
+                                      min="1"
+                                    />
+                                    <span className="text-xs text-muted-foreground">
+                                      ×
+                                    </span>
+                                    <Input
+                                      type="number"
+                                      placeholder="px height"
+                                      value={customSize.height}
+                                      onChange={(e) =>
+                                        setCustomSize((prev) => ({
+                                          ...prev,
+                                          height: e.target.value,
+                                        }))
+                                      }
+                                      className="h-8 text-sm"
+                                      min="1"
+                                    />
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      if (
+                                        customSize.width &&
+                                        customSize.height
+                                      ) {
                                         setIsSettingsOpen(false);
                                         setShowOrientationSelection(false);
-                                      }}
-                                      className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-colors ${
-                                        selectedOrientation === option.id
-                                          ? "text-foreground"
-                                          : "text-muted-foreground hover:text-foreground"
-                                      }`}
-                                    >
-                                      <div className="flex items-center gap-3">
-                                        <Checkbox
-                                          checked={
-                                            selectedOrientation === option.id
-                                          }
-                                          className="flex-shrink-0"
-                                          onCheckedChange={() => {}}
-                                        />
-                                        <span className="text-sm font-normal">
-                                          {option.label}
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center gap-2">
-                                        {option.dimensions && (
-                                          <span className="text-xs text-muted-foreground">
-                                            {option.dimensions}
-                                          </span>
-                                        )}
-                                      </div>
-                                    </button>
-                                  ))}
-                                </>
-                              )}
-
-                              {/* Custom Size Option */}
-                              <div
-                                className={`${orientationOptions.length > 0 ? "pt-2 border-t border-border mt-2" : ""}`}
-                              >
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedOrientation("custom");
-                                  }}
-                                  className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-colors ${
-                                    selectedOrientation === "custom"
-                                      ? "text-foreground"
-                                      : "text-muted-foreground hover:text-foreground"
-                                  }`}
-                                >
-                                  <div className="flex items-center gap-3">
-                                    <Checkbox
-                                      checked={selectedOrientation === "custom"}
-                                      className="flex-shrink-0"
-                                      onCheckedChange={() => {}}
-                                    />
-                                    <span className="text-sm font-normal">
-                                      Custom Size
-                                    </span>
-                                  </div>
-                                </button>
-
-                                {selectedOrientation === "custom" && (
-                                  <div className="px-3 py-3 space-y-2">
-                                    <div className="flex items-center gap-2">
-                                      <Input
-                                        type="number"
-                                        placeholder="px width"
-                                        value={customSize.width}
-                                        onChange={(e) =>
-                                          setCustomSize((prev) => ({
-                                            ...prev,
-                                            width: e.target.value,
-                                          }))
-                                        }
-                                        className="h-8 text-sm"
-                                        min="1"
-                                      />
-                                      <span className="text-xs text-muted-foreground">
-                                        ×
-                                      </span>
-                                      <Input
-                                        type="number"
-                                        placeholder="px height"
-                                        value={customSize.height}
-                                        onChange={(e) =>
-                                          setCustomSize((prev) => ({
-                                            ...prev,
-                                            height: e.target.value,
-                                          }))
-                                        }
-                                        className="h-8 text-sm"
-                                        min="1"
-                                      />
-                                    </div>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        if (
-                                          customSize.width &&
-                                          customSize.height
-                                        ) {
-                                          setIsSettingsOpen(false);
-                                          setShowOrientationSelection(false);
-                                        }
-                                      }}
-                                      className="w-full text-xs px-3 py-1.5 bg-foreground text-background rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                                      disabled={
-                                        !customSize.width || !customSize.height
                                       }
-                                    >
-                                      Apply
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
+                                    }}
+                                    className="w-full text-xs px-3 py-1.5 bg-foreground text-background rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={
+                                      !customSize.width || !customSize.height
+                                    }
+                                  >
+                                    Apply
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <div className="absolute"></div>
+          </motion.div>
         </div>
       </div>
 
