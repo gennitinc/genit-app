@@ -112,7 +112,7 @@ export function LandingFooter() {
         <div className="absolute top-0 right-0 bottom-0 left-0 gap-x-8 gap-y-8">
           <img
             src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/46172b3c-6c63-4bd0-97b0-09a0ca82b055_3840w.webp"
-            alt="Abstract textured portrait behind patterned glass"
+            alt=""
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70" />
