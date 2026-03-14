@@ -55,14 +55,19 @@ const navItems = [
   // },
 
   {
+    title: "Community",
+    icon: Users,
+    href: "/community",
+  },
+  {
     title: "History",
     icon: History,
     href: "/chat/history",
   },
   {
-    title: "Community",
-    icon: Users,
-    href: "/community",
+    title: "Creator Program",
+    icon: UserPlus,
+    href: "/creators",
   },
   {
     title: "Billing",

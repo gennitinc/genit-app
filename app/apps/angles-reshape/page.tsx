@@ -16,7 +16,6 @@ import {
   Download,
   Minus,
   Plus,
-  Trash,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -124,7 +123,7 @@ const GeneratedCarousel = ({
           {deletingId === img.id ? (
             <div className="size-3 border border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            <Trash className="size-3.5" />
+            <X className="size-3.5" />
           )}
         </button>
 
@@ -377,7 +376,7 @@ const HistoryCard = ({
                 {deletingAngle === img._id ? (
                   <div className="size-2 border border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  <Trash className="size-2.5" />
+                  <X className="size-2.5" />
                 )}
               </button>
             </div>
@@ -441,7 +440,6 @@ const HistoryContent = ({
     </div>
   </>
 );
-import { PremiumInput } from "@/components/ui/premium-input";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -456,7 +454,6 @@ const AnglesReshapePage = () => {
 
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [prompt, setPrompt] = useState("");
   const [activeTab, setActiveTab] = useState<"upload" | "controls">("upload");
 
   // Generation
@@ -982,31 +979,38 @@ const AnglesReshapePage = () => {
                           })()}
                         </div>
 
-                        <PremiumInput
-                          value={prompt}
-                          onChange={setPrompt}
-                          onSubmit={handleGenerate}
-                          isGenerating={isGenerating}
-                          placeholder="Describe how to reshape... (e.g. slimmer waist, make taller)"
-                          minHeight="80px"
-                          footerContent={
-                            <div className="flex flex-col gap-3 py-1">
-                              <label className="flex items-center gap-2 py-2 px-3 rounded-lg bg-black/5 dark:bg-white/[0.03] border border-black/5 dark:border-white/10 cursor-pointer hover:bg-black/10 dark:hover:bg-white/[0.06] transition-colors">
-                                <input
-                                  type="checkbox"
-                                  checked={bestAngles}
-                                  onChange={(e) =>
-                                    setBestAngles(e.target.checked)
-                                  }
-                                  className="size-3 border-slate-300 dark:border-slate-700 accent-blue-600"
-                                />
-                                <span className="text-sm font-normal text-foreground">
-                                  Auto-Generate 10 Best Angles
-                                </span>
-                              </label>
-                            </div>
-                          }
-                        />
+                        {/* Auto-generate checkbox */}
+                        <label className="flex items-center gap-2 py-2 px-3 rounded-lg bg-black/5 dark:bg-white/[0.03] border border-black/5 dark:border-white/10 cursor-pointer hover:bg-black/10 dark:hover:bg-white/[0.06] transition-colors">
+                          <input
+                            type="checkbox"
+                            checked={bestAngles}
+                            onChange={(e) => setBestAngles(e.target.checked)}
+                            className="size-3 border-slate-300 dark:border-slate-700 accent-blue-600"
+                          />
+                          <span className="text-sm font-normal text-foreground">
+                            Auto-Generate 10 Best Angles
+                          </span>
+                        </label>
+
+                        {/* Error */}
+                        {generateError && (
+                          <p className="text-[10px] text-red-400 text-center">
+                            {generateError}
+                          </p>
+                        )}
+
+                        <Button
+                          className="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all flex flex-row items-center justify-center gap-2"
+                          disabled={!file || isGenerating}
+                          onClick={handleGenerate}
+                        >
+                          <span className="text-sm">
+                            {isGenerating ? "Generating..." : "Generate"}
+                          </span>
+                          {!isGenerating && (
+                            <Sparkles className="size-4 text-white" />
+                          )}
+                        </Button>
                       </div>
                     </TabsContent>
                   </Tabs>

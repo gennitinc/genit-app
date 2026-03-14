@@ -68,13 +68,14 @@ export function LandingNavbar() {
     { name: "Design Chat", href: "/chat" },
     { name: "Apps", href: "/apps" },
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
-    { name: "Company", href: "/company" },
+    { name: "Community", href: "/community" },
+    { name: "History", href: user ? "/chat/history" : "/signin" },
+    { name: "Creator Program", href: "/creators" },
     {
       name: user ? "Billing" : "Pricing",
       href: user ? "/user/settings?tab=billing" : "/pricing",
     },
-    { name: "History", href: user ? "/chat/history" : "/signin" },
-    { name: "Community", href: "/community" },
+    { name: "Company", href: "/company" },
     { name: "Contact", href: "/contact" },
   ];
 
