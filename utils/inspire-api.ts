@@ -28,7 +28,7 @@ export const imageGenTemplatesApi = {
    * Get all image generation templates grouped by category
    */
   getAll: async (
-    params?: TemplateQueryParams
+    params?: TemplateQueryParams,
   ): Promise<ImageGenTemplatesResponse> => {
     const response = await apiResponse.get(`/inspire/templates/image`, {
       params,
@@ -42,7 +42,7 @@ export const imageGenTemplatesApi = {
   getByCategory: async (category: string, page = 1, limit = 20) => {
     const response = await apiResponse.get(
       `/inspire/templates/image/category/${category}`,
-      { params: { page, limit } }
+      { params: { page, limit } },
     );
     return response.data;
   },
@@ -60,7 +60,7 @@ export const imageGenTemplatesApi = {
    */
   getCategories: async () => {
     const response = await apiResponse.get(
-      `/inspire/templates/image/categories`
+      `/inspire/templates/image/categories`,
     );
     return response.data;
   },
@@ -70,7 +70,7 @@ export const imageGenTemplatesApi = {
    */
   trackUsage: async (id: string) => {
     const response = await apiResponse.post(
-      `/inspire/templates/image/${id}/use`
+      `/inspire/templates/image/${id}/use`,
     );
     return response.data;
   },
@@ -85,7 +85,7 @@ export const videoGenTemplatesApi = {
    * Get all video generation templates grouped by category
    */
   getAll: async (
-    params?: TemplateQueryParams
+    params?: TemplateQueryParams,
   ): Promise<VideoGenTemplatesResponse> => {
     const response = await apiResponse.get(`/inspire/templates/video`, {
       params,
@@ -99,7 +99,7 @@ export const videoGenTemplatesApi = {
   getByCategory: async (category: string, page = 1, limit = 20) => {
     const response = await apiResponse.get(
       `/inspire/templates/video/category/${category}`,
-      { params: { page, limit } }
+      { params: { page, limit } },
     );
     return response.data;
   },
@@ -117,7 +117,7 @@ export const videoGenTemplatesApi = {
    */
   getCategories: async () => {
     const response = await apiResponse.get(
-      `/inspire/templates/video/categories`
+      `/inspire/templates/video/categories`,
     );
     return response.data;
   },
@@ -127,7 +127,7 @@ export const videoGenTemplatesApi = {
    */
   trackUsage: async (id: string) => {
     const response = await apiResponse.post(
-      `/inspire/templates/video/${id}/use`
+      `/inspire/templates/video/${id}/use`,
     );
     return response.data;
   },
@@ -142,7 +142,7 @@ export const communityApi = {
    * Get community content (images or videos)
    */
   getContent: async (
-    params?: CommunityQueryParams
+    params?: CommunityQueryParams,
   ): Promise<CommunityContentResponse> => {
     const response = await apiResponse.get(`/inspire/community`, { params });
     return response.data;
@@ -168,7 +168,7 @@ export const communityApi = {
    * Like/unlike content (requires auth)
    */
   toggleLike: async (
-    id: string
+    id: string,
   ): Promise<ApiResponse<{ liked: boolean; likes: number }>> => {
     const response = await apiResponse.post(`/inspire/community/${id}/like`);
     return response.data;
@@ -221,11 +221,14 @@ export const creatorApi = {
     username: string,
     type?: "image" | "video",
     page = 1,
-    limit = 50
+    limit = 50,
   ) => {
-    const response = await apiResponse.get(`/inspire/creator/${username}/content`, {
-      params: { type, page, limit },
-    });
+    const response = await apiResponse.get(
+      `/inspire/creator/${username}/content`,
+      {
+        params: { type, page, limit },
+      },
+    );
     return response.data;
   },
 
@@ -233,7 +236,9 @@ export const creatorApi = {
    * Follow/Unfollow a creator (requires auth)
    */
   follow: async (creatorId: string) => {
-    const response = await apiResponse.post(`/inspire/creator/${creatorId}/follow`);
+    const response = await apiResponse.post(
+      `/inspire/creator/${creatorId}/follow`,
+    );
     return response.data;
   },
 
@@ -242,7 +247,7 @@ export const creatorApi = {
    */
   getFollowStatus: async (creatorId: string) => {
     const response = await apiResponse.get(
-      `/inspire/creator/${creatorId}/follow-status`
+      `/inspire/creator/${creatorId}/follow-status`,
     );
     return response.data;
   },
@@ -251,7 +256,9 @@ export const creatorApi = {
    * Track content view
    */
   trackView: async (contentId: string) => {
-    const response = await apiResponse.post(`/inspire/content/${contentId}/view`);
+    const response = await apiResponse.post(
+      `/inspire/content/${contentId}/view`,
+    );
     return response.data;
   },
 
@@ -288,12 +295,16 @@ export const creatorApi = {
       formData.append("profilePic", data.profilePic);
     }
 
-    const response = await apiResponse.put(`/inspire/creator/profile`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
+    const response = await apiResponse.put(
+      `/inspire/creator/profile`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
       },
-      withCredentials: true,
-    });
+    );
     return response.data;
   },
 };
@@ -315,7 +326,7 @@ export const tutorialApi = {
    * Get featured tutorial
    */
   getFeatured: async (
-    type?: "image" | "video" | "general"
+    type?: "image" | "video" | "general",
   ): Promise<ApiResponse<Tutorial>> => {
     const response = await apiResponse.get(`/inspire/tutorials/featured`, {
       params: { type },
@@ -332,9 +343,6 @@ export const tutorialApi = {
   },
 };
 
-// ============================================
-// Presenter/Avatar API
-// ============================================
 
 export const presenterApi = {
   /**
@@ -395,7 +403,7 @@ export const presenterApi = {
       category?: string;
       isPublic?: boolean;
       image?: File;
-    }
+    },
   ): Promise<ApiResponse<Presenter>> => {
     const formData = new FormData();
     if (data.name) formData.append("name", data.name);
@@ -412,7 +420,7 @@ export const presenterApi = {
           "Content-Type": "multipart/form-data",
         },
         withCredentials: true,
-      }
+      },
     );
     return response.data;
   },
@@ -436,9 +444,6 @@ export const presenterApi = {
   },
 };
 
-// ============================================
-// Voice API
-// ============================================
 
 export const voiceApi = {
   /**
@@ -529,7 +534,7 @@ export const voiceApi = {
       accent?: string;
       isPublic?: boolean;
       audio?: File;
-    }
+    },
   ): Promise<ApiResponse<Voice>> => {
     const formData = new FormData();
     if (data.name) formData.append("name", data.name);
@@ -569,7 +574,7 @@ export const voiceApi = {
   updateStatus: async (
     id: string,
     status: "active" | "inactive" | "pending" | "processing",
-    providerVoiceId?: string
+    providerVoiceId?: string,
   ): Promise<ApiResponse<Voice>> => {
     const response = await apiResponse.put(`/inspire/voices/${id}/status`, {
       status,
@@ -638,7 +643,7 @@ export const modelApi = {
       };
       status?: "active" | "inactive" | "beta";
     },
-    iconFile?: File
+    iconFile?: File,
   ): Promise<ApiResponse<Model>> => {
     const formData = new FormData();
     formData.append("name", data.name);
@@ -687,7 +692,7 @@ export const modelApi = {
       };
       status?: "active" | "inactive" | "beta";
     },
-    iconFile?: File
+    iconFile?: File,
   ): Promise<ApiResponse<Model>> => {
     const formData = new FormData();
     if (data.name) formData.append("name", data.name);
@@ -764,7 +769,7 @@ export const imageGenApi = {
    */
   generate: async (
     data: GenerateImageRequest,
-    files?: File[]
+    files?: File[],
   ): Promise<GenerateImageResponse> => {
     const formData = new FormData();
 
@@ -794,7 +799,7 @@ export const imageGenApi = {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      }
+      },
     );
     return response.data;
   },
@@ -815,7 +820,7 @@ export const videoGenApi = {
       endFrame?: File;
       imageInput?: File;
       referenceImages?: File[];
-    }
+    },
   ): Promise<GenerateVideoResponse> => {
     const formData = new FormData();
 
@@ -858,7 +863,7 @@ export const videoGenApi = {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      }
+      },
     );
     return response.data;
   },
@@ -872,7 +877,7 @@ export const videoGenApi = {
       { imageUrl },
       {
         withCredentials: true,
-      }
+      },
     );
     return response.data;
   },
@@ -896,7 +901,7 @@ export const templateApi = {
    * Publish content from chat to inspiration/templates (requires auth)
    */
   publishToInspiration: async (
-    data: PublishToInspirationRequest
+    data: PublishToInspirationRequest,
   ): Promise<ApiResponse<{ id: string; assetId: string }>> => {
     try {
       const response = await apiResponse.post(`/templates/publish`, data, {

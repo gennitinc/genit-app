@@ -229,11 +229,13 @@ export function PresenterSelector({
               return;
             }
           }
+
           toast({
             title: "Error",
             description: "Failed to load your avatars. Please try again.",
             variant: "destructive",
           });
+          
           setUserPresenters([]);
         } finally {
           setLoading(false);
