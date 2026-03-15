@@ -27,75 +27,77 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useUserContext } from "@/context/AuthenticatedContext";
 
- const user = useUserContext().user;
 
-const navItems = [
-  {
-    title: "Design Chat",
-    icon: WandSparklesIcon,
-    href: "/chat",
-  },
-  {
-    title: "Apps",
-    icon: LayoutPanelLeft,
-    href: "/apps",
-  },
-  // {
-  //   title: "Image Generation",
-  //   icon: ImageIcon,
-  //   href: "/apps/image-generation",
-  // },
-  // {
-  //   title: "Video Generation",
-  //   icon: Video,
-  //   href: "/apps/video-generation",
-  // },
-  // {
-  //   title: "Presenter",
-  //   icon: UserPlus,
-  //   href: "/apps/presenter",
-  // },
-
-  {
-    title: "Community",
-    icon: Users,
-    href: "/community",
-  },
-  {
-    title: "History",
-    icon: History,
-    href: "/chat/history",
-  },
-  {
-    title: "Creator Program",
-    icon: UserPlus,
-    href: `/creator/${user?.username}`,
-  },
-  {
-    title: "Billing",
-    icon: CreditCard,
-    href: "/user/settings?tab=billing",
-  },
-];
-
-const secondaryNavItems = [
-  {
-    title: "Settings",
-    icon: Settings,
-    href: "/user/settings",
-  },
-  {
-    title: "Help",
-    icon: HelpCircle,
-    href: "/contact",
-  },
-];
 
 export function NavMain() {
   const { state, setOpenMobile, isMobile } = useSidebar();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { theme } = useTheme();
+
+   const user = useUserContext().user;
+
+   const navItems = [
+     {
+       title: "Design Chat",
+       icon: WandSparklesIcon,
+       href: "/chat",
+     },
+     {
+       title: "Apps",
+       icon: LayoutPanelLeft,
+       href: "/apps",
+     },
+     // {
+     //   title: "Image Generation",
+     //   icon: ImageIcon,
+     //   href: "/apps/image-generation",
+     // },
+     // {
+     //   title: "Video Generation",
+     //   icon: Video,
+     //   href: "/apps/video-generation",
+     // },
+     // {
+     //   title: "Presenter",
+     //   icon: UserPlus,
+     //   href: "/apps/presenter",
+     // },
+
+     {
+       title: "Community",
+       icon: Users,
+       href: "/community",
+     },
+     {
+       title: "History",
+       icon: History,
+       href: "/chat/history",
+     },
+     {
+       title: "Creator Program",
+       icon: UserPlus,
+       href: `/creator/${user?.username}`,
+     },
+     {
+       title: "Billing",
+       icon: CreditCard,
+       href: "/user/settings?tab=billing",
+     },
+   ];
+
+   const secondaryNavItems = [
+     {
+       title: "Settings",
+       icon: Settings,
+       href: "/user/settings",
+     },
+     {
+       title: "Help",
+       icon: HelpCircle,
+       href: "/contact",
+     },
+   ];
  
 
   const handleLinkClick = () => {

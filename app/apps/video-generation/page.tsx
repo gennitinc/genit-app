@@ -1087,22 +1087,25 @@ function VideoGenerationPage() {
                       />
                       {generationMode === "video" && (
                         <div className="pt-2 border-t">
-                          <label className="text-sm font-medium mb-2 block text-font-primary">
+                          <label className="text-xs font-medium mb-1.5 block">
                             Duration
                           </label>
-                          <select
-                            value={duration}
-                            onChange={(e) =>
-                              setDuration(Number(e.target.value))
-                            }
-                            className="w-full px-3 py-2 bg-background border border-neutral-12 rounded-md text-sm"
-                          >
-                            <option value={4}>4 seconds</option>
-                            <option value={8}>8 seconds</option>
-                            {/* <option value={12}>12 seconds</option>
-                                  <option value={16}>16 seconds</option>
-                                  <option value={30}>30 seconds</option> */}
-                          </select>
+                          <div className="grid grid-cols-2 gap-2">
+                            {[4, 8].map((d) => (
+                              <button
+                                key={d}
+                                onClick={() => setDuration(d)}
+                                className={cn(
+                                  "py-1.5 rounded-md text-[10px] font-medium border transition-all",
+                                  duration === d
+                                    ? "bg-primary text-primary-foreground border-primary"
+                                    : "bg-background border-neutral-200 dark:border-neutral-800",
+                                )}
+                              >
+                                {d} seconds
+                              </button>
+                            ))}
+                          </div>
                         </div>
                       )}
                       {generationMode === "image" && (
@@ -1401,4 +1404,4 @@ function VideoGenerationPage() {
   );
 }
 
-export default withAuth(VideoGenerationPage);
+export default VideoGenerationPage;
