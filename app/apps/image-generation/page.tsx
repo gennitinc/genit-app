@@ -18,6 +18,8 @@ import {
   BookOpen,
   LayoutDashboard,
   Trash,
+  Plus,
+  Minus,
 } from "lucide-react";
 import {
   Drawer,
@@ -47,6 +49,7 @@ import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { GridPattern } from "@/components/ui/grid-pattern";
+import { ASPECT_RATIOS, AspectRatioCard } from "@/components/video/resolution-selector";
 
 export type ImageStyle =
   | "realistic"
@@ -247,7 +250,7 @@ function ImageGenerationPage() {
       <LandingNavbar />
       <div
         id="main-content"
-        className="flex-1 relative py-12 px-2 md:px-6 lg:px-20"
+        className="flex-1 relative px-2 md:px-6 lg:px-20 mt-5"
       >
         <div className="bg-grid-black/[0.05] dark:bg-grid-white/[0.05] absolute inset-0 -z-10" />
         {/* <div className="text-center animate-fadeInUp mb-10">
@@ -265,7 +268,7 @@ function ImageGenerationPage() {
           </p>
         </div> */}
 
-        <div className="flex flex-col md:h-fit min-h-0 overflow-hidden">
+        <div className="flex flex-col md:h-[calc(100vh-10rem)] min-h-0 overflow-hidden">
           <div className="flex flex-row items-center gap-2 justify-between px-2 py-2 shrink-0">
             <h1 className="font-bold tracking-tight md:text-2xl lg:text-5xl lg:hidden">
               AI Image{" "}
@@ -371,7 +374,7 @@ function ImageGenerationPage() {
             </Drawer>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-[27rem_1fr] gap-6 relative w-full flex-1 min-h-0">
-            <div className="flex flex-col h-full min-h-fit pt-4 overflow-hidden bg-white dark:bg-black/20 rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-sm">
+            <div className="flex flex-col h-full min-h-0 pt-4 overflow-hidden bg-white dark:bg-black/20 rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-sm">
               <div className="px-4 pb-4 shrink-0 overflow-y-auto hide-scrollbar space-y-4 flex-1">
                 <ModelSelector
                   type="image"
@@ -391,124 +394,176 @@ function ImageGenerationPage() {
                     placeholder="Describe your image..."
                     minHeight="100px"
                   />
-
-                  <div className="space-y-2">
-                    <label className="text-xs text-neutral-500">
-                      Reference Images (Optional)
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {promptImagePreviews.map((preview, index) => (
-                        <div
-                          key={index}
-                          className="relative w-20 h-20 rounded-lg overflow-hidden border-2 border-neutral-300 dark:border-neutral-600"
-                        >
-                          <img
-                            src={preview}
-                            alt=""
-                            className="w-full h-full object-cover"
-                          />
-                          <button
-                            onClick={() => {
-                              const next = [...promptImages];
-                              const nextP = [...promptImagePreviews];
-                              next.splice(index, 1);
-                              nextP.splice(index, 1);
-                              setPromptImages(next);
-                              setPromptImagePreviews(nextP);
-                            }}
-                            className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1"
-                          >
-                            <Trash size={12} />
-                          </button>
-                        </div>
-                      ))}
-                      {promptImagePreviews.length < 5 && (
-                        <label className="w-20 h-20 border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg flex items-center justify-center cursor-pointer hover:border-cyan-500">
-                          <input
-                            type="file"
-                            className="sr-only"
-                            onChange={(e) => {
-                              const f = e.target.files?.[0];
-                              if (f) {
-                                setPromptImages([...promptImages, f]);
-                                setPromptImagePreviews([
-                                  ...promptImagePreviews,
-                                  URL.createObjectURL(f),
-                                ]);
-                              }
-                            }}
-                          />
-                          <ImageIcon className="w-5 h-5 text-neutral-400" />
-                        </label>
-                      )}
-                    </div>
-                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Style</label>
+                <div className="space-y-2 ">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium">Style</label>
+                  </div>
                   <div className="grid grid-cols-3 gap-2">
                     {[
                       {
                         value: "realistic",
                         label: "Realistic",
-                        img: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200",
+                        image:
+                          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
                       },
                       {
                         value: "anime",
                         label: "Anime",
-                        img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200",
+                        image:
+                          "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200&h=200&fit=crop",
                       },
                       {
                         value: "digitalArt",
                         label: "Digital Art",
-                        img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200",
+                        image:
+                          "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop",
                       },
-                    ].map((s) => (
+                      {
+                        value: "oilPainting",
+                        label: "Oil Painting",
+                        image:
+                          "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&h=200&fit=crop",
+                      },
+                      {
+                        value: "watercolor",
+                        label: "Watercolor",
+                        image:
+                          "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=200&h=200&fit=crop",
+                      },
+                      {
+                        value: "threeDRrender",
+                        label: "3D Render",
+                        image:
+                          "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=200&h=200&fit=crop",
+                      },
+                    ].map((style) => (
                       <button
-                        key={s.value}
+                        key={style.value}
+                        type="button"
                         onClick={() =>
-                          setSelectedImageStyle(s.value as ImageStyle)
+                          setSelectedImageStyle(style.value as ImageStyle)
                         }
                         className={cn(
-                          "relative rounded-xl overflow-hidden aspect-square",
-                          selectedImageStyle === s.value &&
-                            "ring-2 ring-cyan-500",
+                          "relative rounded-xl overflow-hidden transition-all group",
+                          selectedImageStyle === style.value
+                            ? "ring-2 ring-cyan-500 ring-offset-2 ring-offset-background"
+                            : "hover:ring-2 hover:ring-neutral-300 dark:hover:ring-neutral-600",
                         )}
                       >
-                        <img
-                          src={s.img}
-                          alt={s.label}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/40 flex items-end justify-center pb-2">
-                          <span className="text-[10px] text-white font-medium">
-                            {s.label}
+                        <div className="aspect-square relative">
+                          <img
+                            src={style.image}
+                            alt={style.label}
+                            className="w-full h-full object-cover"
+                          />
+                          {/* Overlay */}
+                          <div
+                            className={cn(
+                              "absolute inset-0 transition-all",
+                              selectedImageStyle === style.value
+                                ? "bg-cyan-500/20"
+                                : "bg-black/40 group-hover:bg-black/30",
+                            )}
+                          />
+                          {/* Checkmark for selected */}
+                          {selectedImageStyle === style.value && (
+                            <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-neutral-500 flex items-center justify-center">
+                              <svg
+                                width="12"
+                                height="12"
+                                viewBox="0 0 12 12"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M10 3L4.5 8.5L2 6"
+                                  stroke="white"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                        {/* Label */}
+                        <div
+                          className={cn(
+                            "absolute bottom-0 left-0 right-0 p-2 text-center",
+                            selectedImageStyle === style.value
+                              ? "bg-black/60"
+                              : "bg-black/60",
+                          )}
+                        >
+                          <span className="text-xs font-medium text-white">
+                            {style.label}
                           </span>
                         </div>
                       </button>
                     ))}
                   </div>
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium mt-4">
+                      No of Images
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-1.5 pt-2 border-t">
+                    <button
+                      onClick={() => setImageCount(Math.max(1, imageCount - 1))}
+                      className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0"
+                    >
+                      <Minus className="size-2.5" />
+                    </button>
+
+                    <div
+                      className="relative flex-1 h-[18px] rounded-md bg-neutral-100 dark:bg-neutral-800 overflow-hidden cursor-pointer"
+                      onClick={(e) => {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        const raw = Math.round(
+                          ((e.clientX - rect.left) / rect.width) * 3 + 1,
+                        );
+                        setImageCount(Math.max(1, Math.min(4, raw)));
+                      }}
+                    >
+                      <div
+                        className="absolute left-0 top-0 h-full rounded-l-md bg-neutral-300 dark:bg-neutral-700 transition-[width] duration-100"
+                        style={{ width: `${((imageCount - 1) / 3) * 100}%` }}
+                      />
+
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-[10px] font-medium tabular-nums text-neutral-700 dark:text-neutral-200">
+                          {imageCount}
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setImageCount(Math.min(4, imageCount + 1))}
+                      className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0"
+                    >
+                      <Plus className="size-2.5" />
+                    </button>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Aspect Ratio</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {["16:9", "9:16", "1:1", "4:3"].map((r) => (
-                      <button
-                        key={r}
-                        onClick={() => setSelectedAspectRatio(r as AspectRatio)}
-                        className={cn(
-                          "p-2 rounded-lg text-xs font-medium",
-                          selectedAspectRatio === r
-                            ? "bg-cyan-500 text-white"
-                            : "bg-neutral-100 dark:bg-neutral-800",
-                        )}
-                      >
-                        {r}
-                      </button>
-                    ))}
-                  </div>
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium mt-4">
+                    Aspect Ratio
+                  </label>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {ASPECT_RATIOS.map((ratio) => (
+                    <AspectRatioCard
+                      key={ratio.value}
+                      ratio={ratio}
+                      isSelected={selectedAspectRatio === ratio.value}
+                      onSelect={() =>
+                        setSelectedAspectRatio(ratio.value as AspectRatio)
+                      }
+                    />
+                  ))}
                 </div>
               </div>
 
@@ -601,7 +656,7 @@ function ImageGenerationPage() {
         </div>
       </div>
 
-      {/* <LandingFooter /> */}
+      <LandingFooter />
     </div>
   );
 }

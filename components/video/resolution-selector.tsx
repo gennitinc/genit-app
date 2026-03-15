@@ -66,7 +66,7 @@ const RESOLUTIONS: {
   },
 ];
 
-const ASPECT_RATIOS: {
+export const ASPECT_RATIOS: {
   value: AspectRatio;
   label: string;
   description: string;
@@ -153,7 +153,7 @@ function ResolutionCard({
   );
 }
 
-function AspectRatioCard({
+export function AspectRatioCard({
   ratio,
   isSelected,
   onSelect,

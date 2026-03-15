@@ -24,6 +24,8 @@ import {
   Search,
   Trash,
   Wand2,
+  Plus,
+  Minus,
 } from "lucide-react";
 import {
   Drawer,
@@ -34,7 +36,7 @@ import {
 } from "@/components/ui/drawer";
 import withAuth from "@/helper/hoc/withAuth";
 import { PresenterSelector } from "@/components/video/presenter-selector";
-import { ResolutionSelector } from "@/components/video/resolution-selector";
+import { ASPECT_RATIOS, AspectRatioCard, ResolutionSelector } from "@/components/video/resolution-selector";
 import { VoiceSelector } from "@/components/video/voice-selector";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
@@ -631,7 +633,7 @@ function VideoGenerationPage() {
       <LandingNavbar />
       <div
         id="main-content"
-        className="flex-1 relative py-12 md:py-20 px-2 md:px-6 lg:px-20 mt-5"
+        className="flex-1 relative px-2 md:px-6 lg:px-20 mt-5"
       >
         <div className="bg-grid-black/[0.05] dark:bg-grid-white/[0.05] absolute inset-0 -z-10" />
 
@@ -943,9 +945,11 @@ function VideoGenerationPage() {
 
                 {/* Reference Images Section */}
                 <div className="space-y-2">
-                  <label className="text-xs text-muted-foreground">
-                    Reference Images (Optional)
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium">
+                      Reference Images (Optional)
+                    </label>
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {promptImagePreviews.map((preview, index) => (
                       <div
@@ -997,270 +1001,396 @@ function VideoGenerationPage() {
                 </div>
 
                 {generationMode === "image" && (
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Style</label>
+                  <div className="space-y-2 ">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium">Style</label>
+                    </div>
                     <div className="grid grid-cols-3 gap-2">
                       {[
-                        "realistic",
-                        "anime",
-                        "digitalArt",
-                        "oilPainting",
-                        "watercolor",
-                        "threeDRrender",
+                        {
+                          value: "realistic",
+                          label: "Realistic",
+                          image:
+                            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
+                        },
+                        {
+                          value: "anime",
+                          label: "Anime",
+                          image:
+                            "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200&h=200&fit=crop",
+                        },
+                        {
+                          value: "digitalArt",
+                          label: "Digital Art",
+                          image:
+                            "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop",
+                        },
+                        {
+                          value: "oilPainting",
+                          label: "Oil Painting",
+                          image:
+                            "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&h=200&fit=crop",
+                        },
+                        {
+                          value: "watercolor",
+                          label: "Watercolor",
+                          image:
+                            "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=200&h=200&fit=crop",
+                        },
+                        {
+                          value: "threeDRrender",
+                          label: "3D Render",
+                          image:
+                            "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=200&h=200&fit=crop",
+                        },
                       ].map((style) => (
                         <button
-                          key={style}
+                          key={style.value}
+                          type="button"
                           onClick={() =>
-                            setSelectedImageStyle(style as ImageStyle)
+                            setSelectedImageStyle(style.value as ImageStyle)
                           }
                           className={cn(
-                            "py-1.5 px-2 text-[10px] font-medium rounded-lg border transition-all text-center capitalize",
-                            selectedImageStyle === style
-                              ? "bg-primary/10 border-primary text-primary"
-                              : "bg-background border-neutral-200 dark:border-neutral-800 text-muted-foreground",
+                            "relative rounded-xl overflow-hidden transition-all group",
+                            selectedImageStyle === style.value
+                              ? "ring-2 ring-cyan-500 ring-offset-2 ring-offset-background"
+                              : "hover:ring-2 hover:ring-neutral-300 dark:hover:ring-neutral-600",
                           )}
                         >
-                          {style}
+                          <div className="aspect-square relative">
+                            <img
+                              src={style.image}
+                              alt={style.label}
+                              className="w-full h-full object-cover"
+                            />
+                            {/* Overlay */}
+                            <div
+                              className={cn(
+                                "absolute inset-0 transition-all",
+                                selectedImageStyle === style.value
+                                  ? "bg-cyan-500/20"
+                                  : "bg-black/40 group-hover:bg-black/30",
+                              )}
+                            />
+                            {/* Checkmark for selected */}
+                            {selectedImageStyle === style.value && (
+                              <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-neutral-500 flex items-center justify-center">
+                                <svg
+                                  width="12"
+                                  height="12"
+                                  viewBox="0 0 12 12"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M10 3L4.5 8.5L2 6"
+                                    stroke="white"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
+                          {/* Label */}
+                          <div
+                            className={cn(
+                              "absolute bottom-0 left-0 right-0 p-2 text-center",
+                              selectedImageStyle === style.value
+                                ? "bg-black/60"
+                                : "bg-black/60",
+                            )}
+                          >
+                            <span className="text-xs font-medium text-white">
+                              {style.label}
+                            </span>
+                          </div>
                         </button>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium mt-4">
+                        No of Images
+                      </label>
+                    </div>
+                    <div className="flex items-center gap-1.5 pt-2 border-t">
+                      <button
+                        onClick={() =>
+                          setImageCount(Math.max(1, imageCount - 1))
+                        }
+                        className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0"
+                      >
+                        <Minus className="size-2.5" />
+                      </button>
+
+                      <div
+                        className="relative flex-1 h-[18px] rounded-md bg-neutral-100 dark:bg-neutral-800 overflow-hidden cursor-pointer"
+                        onClick={(e) => {
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          const raw = Math.round(
+                            ((e.clientX - rect.left) / rect.width) * 3 + 1,
+                          );
+                          setImageCount(Math.max(1, Math.min(4, raw)));
+                        }}
+                      >
+                        <div
+                          className="absolute left-0 top-0 h-full rounded-l-md bg-neutral-300 dark:bg-neutral-700 transition-[width] duration-100"
+                          style={{ width: `${((imageCount - 1) / 3) * 100}%` }}
+                        />
+
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-[10px] font-medium tabular-nums text-neutral-700 dark:text-neutral-200">
+                            {imageCount}
+                          </span>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() =>
+                          setImageCount(Math.min(4, imageCount + 1))
+                        }
+                        className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0"
+                      >
+                        <Plus className="size-2.5" />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium mt-4">
+                        Aspect Ratio
+                      </label>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      {ASPECT_RATIOS.map((ratio) => (
+                        <AspectRatioCard
+                          key={ratio.value}
+                          ratio={ratio}
+                          isSelected={selectedAspectRatio === ratio.value}
+                          onSelect={() =>
+                            setSelectedAspectRatio(ratio.value as AspectRatio)
+                          }
+                        />
                       ))}
                     </div>
                   </div>
                 )}
 
-                <div className="space-y-2">
-                  <button
-                    onClick={() =>
-                      setSectionsEnabled({
-                        ...sectionsEnabled,
-                        avatar: !sectionsEnabled.avatar,
-                      })
-                    }
-                    className="w-full flex justify-between p-3 bg-neutral-100 dark:bg-neutral-900 rounded-lg text-sm font-medium"
-                  >
-                    Avatar & Presenter
-                    <ChevronDown
-                      size={16}
-                      className={cn(
-                        "transition-transform",
-                        sectionsEnabled.avatar && "rotate-180",
+                {generationMode === "video" && (
+                  <div className="pb-4 shrink-0 md:overflow-y-auto pt-4 hide-scrollbar space-y-2 md:max-h-[calc(100vh-15rem)]">
+                    <div className="space-y-2">
+                      <button
+                        onClick={() =>
+                          setSectionsEnabled({
+                            ...sectionsEnabled,
+                            avatar: !sectionsEnabled.avatar,
+                          })
+                        }
+                        className="w-full flex justify-between p-3 bg-neutral-100 dark:bg-neutral-900 rounded-lg text-sm font-medium"
+                      >
+                        Avatar & Presenter
+                        <ChevronDown
+                          size={16}
+                          className={cn(
+                            "transition-transform",
+                            sectionsEnabled.avatar && "rotate-180",
+                          )}
+                        />
+                      </button>
+                      {sectionsEnabled.avatar && (
+                        <div className="p-3 border rounded-lg">
+                          <PresenterSelector
+                            selectedPresenter={selectedPresenter}
+                            onSelectPresenter={setSelectedPresenter}
+                            onDrawerClose={() => {}}
+                          />
+                        </div>
                       )}
-                    />
-                  </button>
-                  {sectionsEnabled.avatar && (
-                    <div className="p-3 border rounded-lg">
-                      <PresenterSelector
-                        selectedPresenter={selectedPresenter}
-                        onSelectPresenter={setSelectedPresenter}
-                        onDrawerClose={() => {}}
-                      />
                     </div>
-                  )}
-                </div>
 
-                <div className="space-y-2">
-                  <button
-                    onClick={() =>
-                      setSectionsEnabled({
-                        ...sectionsEnabled,
-                        resolution: !sectionsEnabled.resolution,
-                      })
-                    }
-                    className="w-full flex justify-between p-3 bg-neutral-100 dark:bg-neutral-900 rounded-lg text-sm font-medium"
-                  >
-                    Resolution & Format
-                    <ChevronDown
-                      size={16}
-                      className={cn(
-                        "transition-transform",
-                        sectionsEnabled.resolution && "rotate-180",
+                    <div className="space-y-2">
+                      <button
+                        onClick={() =>
+                          setSectionsEnabled({
+                            ...sectionsEnabled,
+                            resolution: !sectionsEnabled.resolution,
+                          })
+                        }
+                        className="w-full flex justify-between p-3 bg-neutral-100 dark:bg-neutral-900 rounded-lg text-sm font-medium"
+                      >
+                        Resolution & Format
+                        <ChevronDown
+                          size={16}
+                          className={cn(
+                            "transition-transform",
+                            sectionsEnabled.resolution && "rotate-180",
+                          )}
+                        />
+                      </button>
+                      {sectionsEnabled.resolution && (
+                        <div className="p-3 border rounded-lg space-y-3">
+                          <ResolutionSelector
+                            selectedResolution={selectedResolution}
+                            selectedAspectRatio={selectedAspectRatio}
+                            onResolutionChange={setSelectedResolution}
+                            onAspectRatioChange={setSelectedAspectRatio}
+                            onDrawerClose={() => {}}
+                          />
+                          {generationMode === "video" && (
+                            <div className="pt-2 border-t">
+                              <label className="text-sm font-medium mb-2 block text-font-primary">
+                                Duration
+                              </label>
+                              <select
+                                value={duration}
+                                onChange={(e) =>
+                                  setDuration(Number(e.target.value))
+                                }
+                                className="w-full px-3 py-2 bg-background border border-neutral-12 rounded-md text-sm"
+                              >
+                                <option value={4}>4 seconds</option>
+                                <option value={8}>8 seconds</option>
+                                {/* <option value={12}>12 seconds</option>
+                                  <option value={16}>16 seconds</option>
+                                  <option value={30}>30 seconds</option> */}
+                              </select>
+                            </div>
+                          )}
+                        </div>
                       )}
-                    />
-                  </button>
-                  {sectionsEnabled.resolution && (
-                    <div className="p-3 border rounded-lg space-y-3">
-                      <ResolutionSelector
-                        selectedResolution={selectedResolution}
-                        selectedAspectRatio={selectedAspectRatio}
-                        onResolutionChange={setSelectedResolution}
-                        onAspectRatioChange={setSelectedAspectRatio}
-                        onDrawerClose={() => {}}
-                      />
-                      {generationMode === "video" && (
-                        <div className="pt-2 border-t">
-                          <label className="text-xs font-medium mb-1.5 block">
-                            Duration
-                          </label>
-                          <div className="grid grid-cols-2 gap-2">
-                            {[4, 8].map((d) => (
+                    </div>
+
+                    <div className="space-y-2">
+                      <button
+                        onClick={() => toggleSection("advanced")}
+                        className="w-full flex justify-between p-3 bg-neutral-100 dark:bg-neutral-900 rounded-lg text-sm font-medium"
+                      >
+                        Advanced Settings
+                        <ChevronDown
+                          size={16}
+                          className={cn(
+                            "transition-transform",
+                            sectionsEnabled.advanced && "rotate-180",
+                          )}
+                        />
+                      </button>
+                      {sectionsEnabled.advanced && (
+                        <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12 space-y-3">
+                          {/* Fixed Lens Toggle */}
+                          <div className="rounded-xl p-3 bg-neutral-100 dark:bg-neutral-800 transition-all">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div
+                                  className={cn(
+                                    "w-10 h-10 rounded-lg flex items-center justify-center",
+                                    fixedLens
+                                      ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
+                                      : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
+                                  )}
+                                >
+                                  <svg
+                                    width={20}
+                                    height={20}
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <circle cx="12" cy="12" r="10" />
+                                    <circle cx="12" cy="12" r="3" />
+                                  </svg>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                                    Fixed Lens
+                                  </p>
+                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                    Lock camera position
+                                  </p>
+                                </div>
+                              </div>
                               <button
-                                key={d}
-                                onClick={() => setDuration(d)}
+                                type="button"
+                                role="switch"
+                                aria-checked={fixedLens}
+                                aria-label="Fixed Lens"
+                                onClick={() => setFixedLens(!fixedLens)}
                                 className={cn(
-                                  "py-1.5 rounded-md text-[10px] font-medium border transition-all",
-                                  duration === d
-                                    ? "bg-primary text-primary-foreground border-primary"
-                                    : "bg-background border-neutral-200 dark:border-neutral-800",
+                                  "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
+                                  fixedLens
+                                    ? "bg-neutral-900 dark:bg-neutral-100"
+                                    : "bg-neutral-300 dark:bg-neutral-600",
                                 )}
                               >
-                                {d} seconds
+                                <span
+                                  aria-hidden="true"
+                                  className={cn(
+                                    "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
+                                    fixedLens
+                                      ? "translate-x-5"
+                                      : "translate-x-0.5",
+                                  )}
+                                />
                               </button>
-                            ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {generationMode === "image" && (
-                        <div className="pt-2 border-t">
-                          <label className="text-xs font-medium mb-1.5 block">
-                            Image Count
-                          </label>
-                          <div className="grid grid-cols-4 gap-2">
-                            {[1, 2, 3, 4].map((c) => (
+
+                          {/* Audio Toggle */}
+                          <div className="rounded-xl p-3 bg-neutral-100 dark:bg-neutral-800 transition-all">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div
+                                  className={cn(
+                                    "w-10 h-10 rounded-lg flex items-center justify-center",
+                                    audioEnabled
+                                      ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
+                                      : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
+                                  )}
+                                >
+                                  <Volume2 className="w-5 h-5" />
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                                    Include Audio
+                                  </p>
+                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                    Add sound to video
+                                  </p>
+                                </div>
+                              </div>
                               <button
-                                key={c}
-                                onClick={() => setImageCount(c)}
+                                type="button"
+                                role="switch"
+                                aria-checked={audioEnabled}
+                                aria-label="Audio"
+                                onClick={() => setAudioEnabled(!audioEnabled)}
                                 className={cn(
-                                  "py-1.5 rounded-md text-[10px] font-medium border transition-all",
-                                  imageCount === c
-                                    ? "bg-primary text-primary-foreground border-primary"
-                                    : "bg-background border-neutral-200 dark:border-neutral-800",
+                                  "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
+                                  audioEnabled
+                                    ? "bg-neutral-900 dark:bg-neutral-100"
+                                    : "bg-neutral-300 dark:bg-neutral-600",
                                 )}
                               >
-                                {c}
+                                <span
+                                  aria-hidden="true"
+                                  className={cn(
+                                    "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
+                                    audioEnabled
+                                      ? "translate-x-5"
+                                      : "translate-x-0.5",
+                                  )}
+                                />
                               </button>
-                            ))}
+                            </div>
                           </div>
                         </div>
                       )}
                     </div>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <button
-                    onClick={() => toggleSection("advanced")}
-                    className="w-full flex justify-between p-3 bg-neutral-100 dark:bg-neutral-900 rounded-lg text-sm font-medium"
-                  >
-                    Advanced Settings
-                    <ChevronDown
-                      size={16}
-                      className={cn(
-                        "transition-transform",
-                        sectionsEnabled.advanced && "rotate-180",
-                      )}
-                    />
-                  </button>
-                  {sectionsEnabled.advanced && (
-                    <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12 space-y-3">
-                      {/* Fixed Lens Toggle */}
-                      <div className="rounded-xl p-3 bg-neutral-100 dark:bg-neutral-800 transition-all">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div
-                              className={cn(
-                                "w-10 h-10 rounded-lg flex items-center justify-center",
-                                fixedLens
-                                  ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                                  : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
-                              )}
-                            >
-                              <svg
-                                width={20}
-                                height={20}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                <circle cx="12" cy="12" r="10" />
-                                <circle cx="12" cy="12" r="3" />
-                              </svg>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                                Fixed Lens
-                              </p>
-                              <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                                Lock camera position
-                              </p>
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            role="switch"
-                            aria-checked={fixedLens}
-                            aria-label="Fixed Lens"
-                            onClick={() => setFixedLens(!fixedLens)}
-                            className={cn(
-                              "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
-                              fixedLens
-                                ? "bg-neutral-900 dark:bg-neutral-100"
-                                : "bg-neutral-300 dark:bg-neutral-600",
-                            )}
-                          >
-                            <span
-                              aria-hidden="true"
-                              className={cn(
-                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
-                                fixedLens ? "translate-x-5" : "translate-x-0.5",
-                              )}
-                            />
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Audio Toggle */}
-                      <div className="rounded-xl p-3 bg-neutral-100 dark:bg-neutral-800 transition-all">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div
-                              className={cn(
-                                "w-10 h-10 rounded-lg flex items-center justify-center",
-                                audioEnabled
-                                  ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                                  : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
-                              )}
-                            >
-                              <Volume2 className="w-5 h-5" />
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                                Include Audio
-                              </p>
-                              <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                                Add sound to video
-                              </p>
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            role="switch"
-                            aria-checked={audioEnabled}
-                            aria-label="Audio"
-                            onClick={() => setAudioEnabled(!audioEnabled)}
-                            className={cn(
-                              "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
-                              audioEnabled
-                                ? "bg-neutral-900 dark:bg-neutral-100"
-                                : "bg-neutral-300 dark:bg-neutral-600",
-                            )}
-                          >
-                            <span
-                              aria-hidden="true"
-                              className={cn(
-                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
-                                audioEnabled
-                                  ? "translate-x-5"
-                                  : "translate-x-0.5",
-                              )}
-                            />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
               <div className="px-4 py-3 border-t bg-white dark:bg-black z-10 space-y-3">
