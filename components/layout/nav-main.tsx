@@ -13,6 +13,7 @@ import {
   Users,
   LayoutPanelLeft,
   Gift,
+  Grid2X2Plus,
 } from "lucide-react";
 
 import {
@@ -46,7 +47,7 @@ export function NavMain() {
      },
      {
        title: "Apps",
-       icon: LayoutPanelLeft,
+       icon: Grid2X2Plus,
        href: "/apps",
      },
      // {

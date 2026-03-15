@@ -76,6 +76,10 @@ export function LandingNavbar() {
         ? `/user/referral`
         : "/creators-program",
     },
+    // user && {
+    //   name: "Profile",
+    //   href: `/creator/${user?.username}`,
+    // },
     {
       name: user ? "Billing" : "Pricing",
       href: user ? "/user/settings?tab=billing" : "/pricing",
