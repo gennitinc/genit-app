@@ -247,7 +247,7 @@ function ImageGenerationPage() {
       <LandingNavbar />
       <div
         id="main-content"
-        className="flex-1 relative py-12 md:py-20 px-2 md:px-6 lg:px-20 mt-5"
+        className="flex-1 relative py-12 px-2 md:px-6 lg:px-20"
       >
         <div className="bg-grid-black/[0.05] dark:bg-grid-white/[0.05] absolute inset-0 -z-10" />
         {/* <div className="text-center animate-fadeInUp mb-10">
@@ -265,7 +265,7 @@ function ImageGenerationPage() {
           </p>
         </div> */}
 
-        <div className="flex flex-col md:h-[calc(100vh-10rem)] min-h-0 overflow-hidden">
+        <div className="flex flex-col md:h-fit min-h-0 overflow-hidden">
           <div className="flex flex-row items-center gap-2 justify-between px-2 py-2 shrink-0">
             <h1 className="font-bold tracking-tight md:text-2xl lg:text-5xl lg:hidden">
               AI Image{" "}
@@ -371,7 +371,7 @@ function ImageGenerationPage() {
             </Drawer>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-[27rem_1fr] gap-6 relative w-full flex-1 min-h-0">
-            <div className="flex flex-col h-full min-h-0 pt-4 overflow-hidden bg-white dark:bg-black/20 rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-sm">
+            <div className="flex flex-col h-full min-h-fit pt-4 overflow-hidden bg-white dark:bg-black/20 rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-sm">
               <div className="px-4 pb-4 shrink-0 overflow-y-auto hide-scrollbar space-y-4 flex-1">
                 <ModelSelector
                   type="image"
@@ -601,7 +601,7 @@ function ImageGenerationPage() {
         </div>
       </div>
 
-      <LandingFooter />
+      {/* <LandingFooter /> */}
     </div>
   );
 }

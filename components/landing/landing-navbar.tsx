@@ -70,7 +70,10 @@ export function LandingNavbar() {
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Community", href: "/community" },
     { name: "History", href: user ? "/chat/history" : "/signin" },
-    { name: "Creator Program", href: "/creators" },
+    {
+      name: "Creator Program",
+      href: user ? "/creators" : "/creators-program",
+    },
     {
       name: user ? "Billing" : "Pricing",
       href: user ? "/user/settings?tab=billing" : "/pricing",

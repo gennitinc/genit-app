@@ -17,6 +17,7 @@ import {
   Check,
   Plus,
   SaveIcon,
+  Download,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -393,28 +394,6 @@ const PresenterPage = () => {
                     ))
                   ) : presenters.length > 0 ? (
                     presenters.map((p) => (
-                      // <div
-                      //   key={p._id}
-                      //   className="group relative aspect-square rounded-2xl overflow-hidden border border-black/5 dark:border-white/5 bg-card transition-all hover:shadow-xl"
-                      // >
-                      //   <img
-                      //     src={p.imageUrl}
-                      //     alt={p.name}
-                      //     className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                      //   />
-                      //   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                      //   <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      //     <span className="text-[10px] font-bold text-white uppercase tracking-wider">
-                      //       {p.name}
-                      //     </span>
-                      //     <button
-                      //       onClick={() => handleDeletePresenter(p._id)}
-                      //       className="p-1.5 bg-red-500/20 text-red-500 rounded-lg hover:bg-red-500 transition-colors"
-                      //     >
-                      //       <Trash2 size={12} />
-                      //     </button>
-                      //   </div>
-                      // </div>
                       <div className="relative group">
                         <button
                           // onClick={onSelect}
@@ -437,19 +416,24 @@ const PresenterPage = () => {
                               {p.name}
                             </p>
                           </div>
-                       
-                            {/* <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-neutral-900 dark:bg-neutral-100 rounded-full flex items-center justify-center">
-                              <Check className="w-2.5 h-2.5 text-white dark:text-neutral-900" />
-                            </div> */}
                         </button>
-                     
+
+                        <div className="absolute top-1.5 right-1.5 flex gap-2">
+                          <button
+                            // onClick={() => handleDeletePresenter(p._id)}
+                            className=" w-6 h-6 rounded flex items-center justify-center transition-colors text-neutral-600 dark:text-neutral-400 hover:text-green-600 dark:hover:text-green-400 bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm opacity-0 group-hover:opacity-100"
+                            title="Download avatar"
+                          >
+                            <Download className="w-3 h-3" />
+                          </button>
                           <button
                             onClick={() => handleDeletePresenter(p._id)}
-                            className="absolute top-1.5 right-1.5 w-6 h-6 rounded flex items-center justify-center transition-colors text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm opacity-0 group-hover:opacity-100"
+                            className=" w-6 h-6 rounded flex items-center justify-center transition-colors text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm opacity-0 group-hover:opacity-100"
                             title="Delete avatar"
                           >
                             <Trash2 className="w-3 h-3" />
                           </button>
+                        </div>
                       </div>
                     ))
                   ) : (

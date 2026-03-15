@@ -1087,25 +1087,22 @@ function VideoGenerationPage() {
                       />
                       {generationMode === "video" && (
                         <div className="pt-2 border-t">
-                          <label className="text-xs font-medium mb-1.5 block">
+                          <label className="text-sm font-medium mb-2 block text-font-primary">
                             Duration
                           </label>
-                          <div className="grid grid-cols-2 gap-2">
-                            {[4, 8].map((d) => (
-                              <button
-                                key={d}
-                                onClick={() => setDuration(d)}
-                                className={cn(
-                                  "py-1.5 rounded-md text-[10px] font-medium border transition-all",
-                                  duration === d
-                                    ? "bg-primary text-primary-foreground border-primary"
-                                    : "bg-background border-neutral-200 dark:border-neutral-800",
-                                )}
-                              >
-                                {d} seconds
-                              </button>
-                            ))}
-                          </div>
+                          <select
+                            value={duration}
+                            onChange={(e) =>
+                              setDuration(Number(e.target.value))
+                            }
+                            className="w-full px-3 py-2 bg-background border border-neutral-12 rounded-md text-sm"
+                          >
+                            <option value={4}>4 seconds</option>
+                            <option value={8}>8 seconds</option>
+                            {/* <option value={12}>12 seconds</option>
+                                  <option value={16}>16 seconds</option>
+                                  <option value={30}>30 seconds</option> */}
+                          </select>
                         </div>
                       )}
                       {generationMode === "image" && (
@@ -1150,56 +1147,113 @@ function VideoGenerationPage() {
                     />
                   </button>
                   {sectionsEnabled.advanced && (
-                    <div className="p-3 border rounded-lg space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Monitor
-                            size={14}
-                            className="text-muted-foreground"
-                          />
-                          <span className="text-xs">Fixed Lens</span>
-                        </div>
-                        <button
-                          onClick={() => setFixedLens(!fixedLens)}
-                          className={cn(
-                            "w-8 h-4 rounded-full relative transition-colors",
-                            fixedLens
-                              ? "bg-primary"
-                              : "bg-neutral-300 dark:bg-neutral-700",
-                          )}
-                        >
-                          <div
+                    <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12 space-y-3">
+                      {/* Fixed Lens Toggle */}
+                      <div className="rounded-xl p-3 bg-neutral-100 dark:bg-neutral-800 transition-all">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={cn(
+                                "w-10 h-10 rounded-lg flex items-center justify-center",
+                                fixedLens
+                                  ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
+                                  : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
+                              )}
+                            >
+                              <svg
+                                width={20}
+                                height={20}
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="3" />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                                Fixed Lens
+                              </p>
+                              <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                Lock camera position
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={fixedLens}
+                            aria-label="Fixed Lens"
+                            onClick={() => setFixedLens(!fixedLens)}
                             className={cn(
-                              "absolute top-0.5 size-3 bg-white rounded-full transition-all",
-                              fixedLens ? "left-4.5" : "left-0.5",
+                              "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
+                              fixedLens
+                                ? "bg-neutral-900 dark:bg-neutral-100"
+                                : "bg-neutral-300 dark:bg-neutral-600",
                             )}
-                          />
-                        </button>
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={cn(
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
+                                fixedLens ? "translate-x-5" : "translate-x-0.5",
+                              )}
+                            />
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Volume2
-                            size={14}
-                            className="text-muted-foreground"
-                          />
-                          <span className="text-xs">Include Audio</span>
-                        </div>
-                        <button
-                          onClick={() => setAudioEnabled(!audioEnabled)}
-                          className={cn(
-                            "w-8 h-4 rounded-full relative transition-colors",
-                            audioEnabled
-                              ? "bg-primary"
-                              : "bg-neutral-300 dark:bg-neutral-700",
-                          )}
-                        >
-                          <div
+
+                      {/* Audio Toggle */}
+                      <div className="rounded-xl p-3 bg-neutral-100 dark:bg-neutral-800 transition-all">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={cn(
+                                "w-10 h-10 rounded-lg flex items-center justify-center",
+                                audioEnabled
+                                  ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
+                                  : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
+                              )}
+                            >
+                              <Volume2 className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                                Include Audio
+                              </p>
+                              <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                Add sound to video
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={audioEnabled}
+                            aria-label="Audio"
+                            onClick={() => setAudioEnabled(!audioEnabled)}
                             className={cn(
-                              "absolute top-0.5 size-3 bg-white rounded-full transition-all",
-                              audioEnabled ? "left-4.5" : "left-0.5",
+                              "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
+                              audioEnabled
+                                ? "bg-neutral-900 dark:bg-neutral-100"
+                                : "bg-neutral-300 dark:bg-neutral-600",
                             )}
-                          />
-                        </button>
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={cn(
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
+                                audioEnabled
+                                  ? "translate-x-5"
+                                  : "translate-x-0.5",
+                              )}
+                            />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
