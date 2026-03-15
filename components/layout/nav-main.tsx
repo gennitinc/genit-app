@@ -12,6 +12,7 @@ import {
   Image as ImageIcon,
   Users,
   LayoutPanelLeft,
+  Gift,
 } from "lucide-react";
 
 import {
@@ -76,8 +77,13 @@ export function NavMain() {
      },
      {
        title: "Creator Program",
-       icon: UserPlus,
+       icon: Gift,
        href: `/user/referral`,
+     },
+     {
+       title: "Profile",
+       icon: UserPlus,
+       href: `/creator/${user?.username}`,
      },
      {
        title: "Billing",
