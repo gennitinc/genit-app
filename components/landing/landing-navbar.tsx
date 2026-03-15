@@ -72,7 +72,7 @@ export function LandingNavbar() {
     { name: "History", href: user ? "/chat/history" : "/signin" },
     {
       name: "Creator Program",
-      href: user ? "/creator" : "/creators-program",
+      href: user ? `/creator/${user?.username}` : "/creators-program",
     },
     {
       name: user ? "Billing" : "Pricing",

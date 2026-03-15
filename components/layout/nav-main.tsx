@@ -27,6 +27,8 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useUserContext } from "@/context/AuthenticatedContext";
 
+ const user = useUserContext().user;
+
 const navItems = [
   {
     title: "Design Chat",
@@ -67,7 +69,7 @@ const navItems = [
   {
     title: "Creator Program",
     icon: UserPlus,
-    href: "/creators",
+    href: `/creator/${user?.username}`,
   },
   {
     title: "Billing",
@@ -94,7 +96,7 @@ export function NavMain() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { theme } = useTheme();
-  const user = useUserContext();
+ 
 
   const handleLinkClick = () => {
     // Close the mobile sidebar when a link is clicked
