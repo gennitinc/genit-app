@@ -633,7 +633,7 @@ function VideoGenerationPage() {
       <LandingNavbar />
       <div
         id="main-content"
-        className="flex-1 relative px-2 md:px-6 lg:px-20 mt-5"
+        className="flex-1 relative px-2 md:px-6 lg:px-20 mt-5 mb-20"
       >
         <div className="bg-grid-black/[0.05] dark:bg-grid-white/[0.05] absolute inset-0 -z-10" />
 

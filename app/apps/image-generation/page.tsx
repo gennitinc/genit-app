@@ -268,7 +268,7 @@ function ImageGenerationPage() {
           </p>
         </div> */}
 
-        <div className="flex flex-col md:h-[calc(100vh-10rem)] min-h-0 overflow-hidden">
+        <div className="flex flex-col md:h-[calc(100vh-10rem)] min-h-0 overflow-hidden mb-20">
           <div className="flex flex-row items-center gap-2 justify-between px-2 py-2 shrink-0">
             <h1 className="font-bold tracking-tight md:text-2xl lg:text-5xl lg:hidden">
               AI Image{" "}
