@@ -509,7 +509,7 @@ function ImageGenerationPage() {
                       No of Images
                     </label>
                   </div>
-                  <div className="flex items-center gap-1.5 pt-2 border-t">
+                  <div className="flex items-center gap-1.5 pt-2 border-t w-[40%]">
                     <button
                       onClick={() => setImageCount(Math.max(1, imageCount - 1))}
                       className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0"

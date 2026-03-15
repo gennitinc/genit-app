@@ -77,7 +77,7 @@ export function NavMain() {
      {
        title: "Creator Program",
        icon: UserPlus,
-       href: `/creator/${user?.username}`,
+       href: `/user/referral`,
      },
      {
        title: "Billing",
