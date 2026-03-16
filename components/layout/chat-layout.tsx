@@ -29,7 +29,6 @@ export function ChatLayout() {
         />
         <div className="w-full lg:max-w-[600px] lg:mx-auto h-full flex flex-col">
           <TextChatContent />
-         
         </div>
       </div>
     </div>

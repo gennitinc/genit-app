@@ -740,71 +740,7 @@ export function IdeaSection() {
         </div>
 
         <div className="flex flex-row items-center justify-center w-full">
-          {/* {!user ? (
-            <>
-              <button
-                className="relative group flex w-[240px] rounded-full shadow-md bg-neutral-100 dark:bg-neutral-700 items-center justify-between cursor-pointer border-none"
-                onClick={() => router.push("/signin")}
-              >
-                <BorderBeam
-                  duration={6}
-                  size={40}
-                  className="from-transparent via-red-500 to-transparent"
-                />
-                <BorderBeam
-                  duration={6}
-                  delay={3}
-                  size={40}
-                  borderWidth={2}
-                  className="from-transparent via-blue-500 to-transparent"
-                />
-
-                <span className="flex w-[calc(240px-45px)] items-center justify-center text-black dark:text-white text-sm tracking-[1.2px]">
-                  Start designing!
-                </span>
-
-                <span className="flex h-[45px] w-[45px] items-center justify-center rounded-full bg-[#f59aff] border-[3px] border-[#1d2129]">
-                  <svg
-                    className="group-hover:animate-arrow transition-all duration-[1500ms]"
-                    width="16"
-                    height="19"
-                    viewBox="0 0 16 19"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="1.61321" cy="1.61321" r="1.5" fill="black" />
-                    <circle cx="5.73583" cy="1.61321" r="1.5" fill="black" />
-                    <circle cx="5.73583" cy="5.5566" r="1.5" fill="black" />
-                    <circle cx="9.85851" cy="5.5566" r="1.5" fill="black" />
-                    <circle cx="9.85851" cy="9.5" r="1.5" fill="black" />
-                    <circle cx="13.9811" cy="9.5" r="1.5" fill="black" />
-                    <circle cx="5.73583" cy="13.4434" r="1.5" fill="black" />
-                    <circle cx="9.85851" cy="13.4434" r="1.5" fill="black" />
-                    <circle cx="1.61321" cy="17.3868" r="1.5" fill="black" />
-                    <circle cx="5.73583" cy="17.3868" r="1.5" fill="black" />
-                  </svg>
-                </span>
-              </button>
-
-              <style jsx>{`
-                @keyframes arrow {
-                  0% {
-                    opacity: 0;
-                    margin-left: 0px;
-                  }
-                  100% {
-                    opacity: 1;
-                    margin-left: 10px;
-                  }
-                }
-                .animate-arrow {
-                  animation: arrow 1s linear infinite;
-                }
-              `}</style>
-            </>
-          ) : (
-            <></>
-          )} */}
+        
           <motion.div
             className="flex flex-col relative w-full max-w-2xl mx-auto"
             initial={{ opacity: 0, scale: 0.95 }}

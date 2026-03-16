@@ -9,6 +9,7 @@ import {
   Settings,
   Loader2,
   AlertCircle,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRef, useEffect, useCallback, useState } from "react";
@@ -362,7 +363,7 @@ export function ChatInput({
                 />
               )}
             </div>
-            {user && (user?.creditsRemaining ?? 0) === 0 && (
+            {/* {user && (user?.creditsRemaining ?? 0) === 0 && (
               <div className="text-xs font-medium">
                 {String(user?.userPlan) === "Basic" ? (
                   <span
@@ -378,6 +379,42 @@ export function ChatInput({
                   >
                     Buy Credits
                   </span>
+                )}
+              </div>
+            )} */}
+            {!isGenerating && (
+              <div className="flex items-center gap-1 justify-between w-full">
+                <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
+                  <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
+                  {user ? (
+                    `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
+                  ) : (
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      Get a 50 free credit
+                    </span>
+                  )}
+                </div>
+
+                {user && (user?.creditsRemaining ?? 0) === 0 && (
+                  <div className="text-xs font-medium">
+                    {String(user?.userPlan) === "Basic" ? (
+                      <span
+                        className="cursor-pointer text-blue-500 hover:underline"
+                        onClick={() => router.push("/pricing")}
+                      >
+                        Upgrade
+                      </span>
+                    ) : (
+                      <span
+                        className="cursor-pointer text-blue-500 hover:underline"
+                        onClick={() =>
+                          router.push("/user/settings?tab=billing")
+                        }
+                      >
+                        Buy Credits
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             )}
