@@ -56,6 +56,7 @@ import { apiResponse } from "@/utils/apiResponse";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import { BorderBeam } from "../ui/border-beam";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
+import { div } from "three/src/nodes/math/OperatorNode.js";
 
 interface TypewriterEffectProps {
   words: string[];
@@ -740,7 +741,6 @@ export function IdeaSection() {
         </div>
 
         <div className="flex flex-row items-center justify-center w-full">
-        
           <motion.div
             className="flex flex-col relative w-full max-w-2xl mx-auto"
             initial={{ opacity: 0, scale: 0.95 }}
@@ -867,9 +867,12 @@ export function IdeaSection() {
                         <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
                           <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
                           {user ? (
-                            `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
+                            <span className="text-xs text-muted-foreground">
+                              {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
+                              Credits left
+                            </span>
                           ) : (
-                            <span className="ml-2 text-xs text-muted-foreground">
+                            <span className="text-xs text-muted-foreground">
                               Get a 50 free credit
                             </span>
                           )}

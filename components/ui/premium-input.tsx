@@ -1,10 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Mic, Loader2, AlertCircle } from "lucide-react";
+import { Mic, Loader2, AlertCircle, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { cn } from "@/lib/utils";
+import ShinyText from "./shiny-text";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { useRouter } from "next/navigation";
 
 interface PremiumInputProps {
   value: string;
@@ -47,6 +50,10 @@ export function PremiumInput({
       textarea.style.height = `${Math.min(textarea.scrollHeight, parseInt(maxHeight))}px`;
     }
   }, [maxHeight]);
+
+  const { user } = useUserContext();
+
+  const router = useRouter();
 
   useEffect(() => {
     adjustHeight();
@@ -95,6 +102,61 @@ export function PremiumInput({
           </motion.p>
         )}
       </AnimatePresence>
+
+      <div className="flex items-center justify-between mb-2 px-4 h-fit">
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">Prompt</label>
+        </div>
+        <div className="flex items-center justify-between px-4 h-fit">
+          <div className="flex items-center gap-2">
+            {isGenerating && (
+              <ShinyText
+                text="Thinking..."
+                disabled={false}
+                speed={3}
+                className="text-xs font-medium"
+              />
+            )}
+          </div>
+          {!isGenerating && (
+            <div className="flex items-center gap-1 justify-between w-full">
+              <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
+                <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
+                {user ? (
+                  <span className="text-xs text-muted-foreground">
+                    {(user?.creditsRemaining ?? 0).toLocaleString()} Credits
+                    left
+                  </span>
+                ) : (
+                  <span className="text-xs text-muted-foreground">
+                    Get a 50 free credit
+                  </span>
+                )}
+              </div>
+
+              {user && (user?.creditsRemaining ?? 0) === 0 && (
+                <div className="text-xs font-medium">
+                  {String(user?.userPlan) === "Basic" ? (
+                    <span
+                      className="cursor-pointer text-blue-500 hover:underline"
+                      onClick={() => router.push("/pricing")}
+                    >
+                      Upgrade
+                    </span>
+                  ) : (
+                    <span
+                      className="cursor-pointer text-blue-500 hover:underline"
+                      onClick={() => router.push("/user/settings?tab=billing")}
+                    >
+                      Buy Credits
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
 
       <div
         className={cn(

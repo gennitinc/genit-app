@@ -824,8 +824,8 @@ const SkinEnhancerPage = () => {
                             onChange={setPrompt}
                             onSubmit={handleEnhance}
                             isGenerating={isGenerating}
-                            placeholder="Describe additional details... (e.g. blonde hair, light freckles, warm skin tone)"
-                            minHeight="80px"
+                            placeholder="Describe additional details..."
+                            minHeight="50px"
                           />
                         )}
                       </div>

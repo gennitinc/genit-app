@@ -312,7 +312,7 @@ export function ChatInput({
       {/* Chat Content Area with hover-only scrollbar */}
       <div
         ref={chatContentRef}
-        className="flex-1 p-4 overflow-y-auto custom-scrollbar"
+        className="flex-1 overflow-y-auto custom-scrollbar"
       >
         {children}
       </div>
@@ -350,6 +350,40 @@ export function ChatInput({
           </button>
         </div>
 
+        {/* File Attachments Previews */}
+        {attachedFiles.length > 0 && !isGenerating && (
+          <div className="flex flex-wrap gap-2 px-3 mb-1">
+            {attachedFiles.map((file, index) => (
+              <div
+                key={index}
+                className="relative group bg-muted-foreground/5 border border-border rounded-lg p-1.5 flex items-center gap-2 max-w-[150px]"
+              >
+                <div className="w-6 h-6 bg-background rounded flex items-center justify-center overflow-hidden">
+                  {file.type && file.type.startsWith("image/") ? (
+                    <img
+                      src={URL.createObjectURL(file as any)}
+                      alt={file.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Paperclip className="w-3 h-3 text-muted-foreground" />
+                  )}
+                </div>
+                <span className="text-[10px] truncate max-w-[80px]">
+                  {file.name}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removeAttachedFile(index)}
+                  className="text-muted-foreground hover:text-red-500"
+                >
+                  <Plus className="w-3 h-3 rotate-45" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
         <div className="w-full max-w-4xl mx-auto">
           {/* Thinking / Credits Status */}
           <div className="flex items-center justify-between mb-2 px-4 h-6">
@@ -363,33 +397,17 @@ export function ChatInput({
                 />
               )}
             </div>
-            {/* {user && (user?.creditsRemaining ?? 0) === 0 && (
-              <div className="text-xs font-medium">
-                {String(user?.userPlan) === "Basic" ? (
-                  <span
-                    className="cursor-pointer text-blue-500 hover:underline"
-                    onClick={() => router.push("/pricing")}
-                  >
-                    Upgrade for Credits
-                  </span>
-                ) : (
-                  <span
-                    className="cursor-pointer text-blue-500 hover:underline"
-                    onClick={() => router.push("/user/settings?tab=billing")}
-                  >
-                    Buy Credits
-                  </span>
-                )}
-              </div>
-            )} */}
             {!isGenerating && (
               <div className="flex items-center gap-1 justify-between w-full">
                 <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
                   <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
                   {user ? (
-                    `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
+                    <span className="text-xs text-muted-foreground">
+                      {(user?.creditsRemaining ?? 0).toLocaleString()} Credits
+                      left
+                    </span>
                   ) : (
-                    <span className="ml-2 text-xs text-muted-foreground">
+                    <span className="text-xs text-muted-foreground">
                       Get a 50 free credit
                     </span>
                   )}
@@ -463,40 +481,6 @@ export function ChatInput({
                 />
               </div>
             </div>
-
-            {/* File Attachments Previews */}
-            {attachedFiles.length > 0 && !isGenerating && (
-              <div className="flex flex-wrap gap-2 px-3 mb-1">
-                {attachedFiles.map((file, index) => (
-                  <div
-                    key={index}
-                    className="relative group bg-muted-foreground/5 border border-border rounded-lg p-1.5 flex items-center gap-2 max-w-[150px]"
-                  >
-                    <div className="w-6 h-6 bg-background rounded flex items-center justify-center overflow-hidden">
-                      {file.type && file.type.startsWith("image/") ? (
-                        <img
-                          src={URL.createObjectURL(file as any)}
-                          alt={file.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <Paperclip className="w-3 h-3 text-muted-foreground" />
-                      )}
-                    </div>
-                    <span className="text-[10px] truncate max-w-[80px]">
-                      {file.name}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => removeAttachedFile(index)}
-                      className="text-muted-foreground hover:text-red-500"
-                    >
-                      <Plus className="w-3 h-3 rotate-45" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
 
             <div className="flex items-center gap-1.5">
               <button

@@ -49,7 +49,10 @@ import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { GridPattern } from "@/components/ui/grid-pattern";
-import { ASPECT_RATIOS, AspectRatioCard } from "@/components/video/resolution-selector";
+import {
+  ASPECT_RATIOS,
+  AspectRatioCard,
+} from "@/components/video/resolution-selector";
 
 export type ImageStyle =
   | "realistic"
@@ -383,17 +386,71 @@ function ImageGenerationPage() {
                 />
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                    Prompt
-                  </label>
                   <PremiumInput
                     value={prompt}
                     onChange={setPrompt}
                     onSubmit={handleGenerate}
                     isGenerating={isGenerating}
                     placeholder="Describe your image..."
-                    minHeight="100px"
+                    minHeight="50px"
                   />
+                </div>
+
+                {/* Reference Images Section */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium">
+                      Reference Images (Optional)
+                    </label>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {promptImagePreviews.map((preview, index) => (
+                      <div
+                        key={index}
+                        className="relative w-16 h-16 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700"
+                      >
+                        <img
+                          src={preview}
+                          alt={`Reference ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newFiles = [...promptImages];
+                            const newPreviews = [...promptImagePreviews];
+                            newFiles.splice(index, 1);
+                            newPreviews.splice(index, 1);
+                            setPromptImages(newFiles);
+                            setPromptImagePreviews(newPreviews);
+                          }}
+                          className="absolute top-0.5 right-0.5 bg-black/50 text-white rounded-full p-0.5"
+                        >
+                          <Trash size={10} />
+                        </button>
+                      </div>
+                    ))}
+                    {promptImagePreviews.length < 5 && (
+                      <label className="w-16 h-16 border border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg flex items-center justify-center cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="sr-only"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setPromptImages([...promptImages, file]);
+                              setPromptImagePreviews([
+                                ...promptImagePreviews,
+                                URL.createObjectURL(file),
+                              ]);
+                            }
+                          }}
+                        />
+                        <ImageIcon className="w-4 h-4 text-neutral-400" />
+                      </label>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-2 ">
