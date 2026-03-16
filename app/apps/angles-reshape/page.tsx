@@ -16,6 +16,7 @@ import {
   Download,
   Minus,
   Plus,
+  Trash,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -123,7 +124,7 @@ const GeneratedCarousel = ({
           {deletingId === img.id ? (
             <div className="size-3 border border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            <X className="size-3.5" />
+            <Trash className="size-3.5" />
           )}
         </button>
 
@@ -376,7 +377,7 @@ const HistoryCard = ({
                 {deletingAngle === img._id ? (
                   <div className="size-2 border border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  <X className="size-2.5" />
+                  <Trash className="size-2.5" />
                 )}
               </button>
             </div>

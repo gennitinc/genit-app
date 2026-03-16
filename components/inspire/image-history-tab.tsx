@@ -173,9 +173,10 @@ export function ImageHistoryTab({
               <div
                 key={image._id}
                 className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4"
-                onClick={() => {
-                  onLoadToEditor(image);
+                onClick={(e) => {
+                  e.stopPropagation()
                   onTabChange?.("preview");
+                  onLoadToEditor(image);
                 }}
               >
                 <div className="relative">
