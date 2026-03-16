@@ -161,7 +161,7 @@ export function NavMain() {
                       : "bg-gray-200 text-black dark:text-black"
                     : theme === "dark"
                       ? "text-zinc-300 dark:text-zinc-300 hover:bg-zinc-800 hover:text-white dark:hover:bg-zinc-800 dark:hover:text-white"
-                      : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-gray-100 dark:hover:text-black",
+                      : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-neutral-700 dark:hover:text-neutral-300",
                 )}
                 onClick={handleLinkClick}
               >
