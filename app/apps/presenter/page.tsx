@@ -310,16 +310,13 @@ const PresenterPage = () => {
                     onSelectModel={setSelectedModel}
                   />
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase text-muted-foreground">
-                      Prompt
-                    </label>
                     <PremiumInput
                       value={prompt}
                       onChange={setPrompt}
                       onSubmit={handleAIGenerate}
                       isGenerating={isGenerating}
                       placeholder="Describe the person's look, ethnicity, clothing..."
-                      minHeight="30px"
+                      minHeight="50px"
                     />
                   </div>
                   <Button

@@ -582,7 +582,10 @@ export default function RootLayout({
         <meta name="geo.placename" content="United States" />
         <meta name="ICBM" content="37.7749, -122.4194" />
       </head>
-      <body className={`${inter.className} custom-scrollbar`}>
+      <body
+        suppressHydrationWarning
+        className={`${inter.className} custom-scrollbar`}
+      >
         <TooltipProvider>
           <QueryClientProvider client={queryClient}>
             <AuthenticatedContextProvider>

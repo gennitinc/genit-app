@@ -31,15 +31,25 @@ import cookie from "js-cookie";
 import { useTheme } from "next-themes";
 import UserPopOver from "./user/userPopOver";
 
-export function Navbar() {
+interface NavbarProps {
+  title?: string;
+}
+
+export function Navbar({ title }: NavbarProps) {
   const { user } = useUserContext();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
   const [isUserPopoverOpen, setIsUserPopoverOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [projectTitle, setProjectTitle] = useState("Untitled Project");
+  const [projectTitle, setProjectTitle] = useState(title || "Untitled Project");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
+
+  useEffect(() => {
+    if (title) {
+      setProjectTitle(title);
+    }
+  }, [title]);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -66,7 +76,7 @@ export function Navbar() {
       handleTitleSave();
     } else if (e.key === "Escape") {
       setIsEditingTitle(false);
-      setProjectTitle("Untitled Project"); // Reset to original
+      setProjectTitle(title || "Untitled Project"); // Reset to original
     }
   };
 
@@ -92,7 +102,10 @@ export function Navbar() {
         {/* Logo Section */}
         <div className="flex items-center gap-1 sm:gap-3 relative min-w-0">
           {/* Logo */}
-          <div className="relative group flex-shrink-0">
+          <div
+            className="relative group flex-shrink-0 cursor-pointer"
+            onClick={() => router.push("/")}
+          >
             <Image
               src={appLogo || "/placeholder.svg"}
               alt="Gennit Logo"
@@ -103,7 +116,10 @@ export function Navbar() {
           </div>
           {/* Brand name and project - Responsive */}
           <div className="flex items-center gap-1 sm:gap-2 min-w-0">
-            <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-muted-foreground via-muted-foreground/90 to-muted-foreground bg-clip-text text-transparent relative flex-shrink-0">
+            <span
+              className="text-base sm:text-lg font-bold bg-gradient-to-r from-muted-foreground via-muted-foreground/90 to-muted-foreground bg-clip-text text-transparent relative flex-shrink-0 cursor-pointer"
+              onClick={() => router.push("/")}
+            >
               Gennit
               <div className="absolute inset-x-0 -bottom-0.5 h-0.5 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </span>
@@ -132,24 +148,17 @@ export function Navbar() {
         <div className="flex items-center gap-2 sm:gap-2">
           {/* Main user avatar with popover */}
           <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
-            {/* <a
-              target="__blank"
-              className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-              href="/inspirations"
-            >
-              Inspirations
-            </a> */}
             <a
               target="__blank"
               className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-              href="/playground"
+              href="/pricing"
             >
               Pricing
             </a>
             <a
               target="__blank"
               className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-              href="/playground"
+              href="/agents"
             >
               Agents
             </a>
@@ -223,6 +232,17 @@ export function Navbar() {
               </kbd>
             </button>
           </div>
+
+          <div className="w-px h-6 bg-border mx-1"></div>
+
+          <Button
+            variant="default"
+            size="sm"
+            className="rounded-xl px-4 font-semibold text-xs h-9 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
+          >
+            <Users className="w-4 h-4" />
+            Share
+          </Button>
 
           <Button
             variant="ghost"

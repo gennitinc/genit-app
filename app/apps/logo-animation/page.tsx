@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { PremiumInput } from "@/components/ui/premium-input";
 
-
 import { cn } from "@/lib/utils";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { Textarea } from "@/components/ui/textarea";
@@ -198,9 +197,6 @@ const LogoAnimationPage = () => {
                 <div className="space-y-6">
                   {/* Upload Section */}
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                      1. Upload Logo
-                    </label>
                     <label
                       htmlFor="logo-upload"
                       className="group relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-muted-foreground/25 rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer"
@@ -239,36 +235,17 @@ const LogoAnimationPage = () => {
 
                   {/* Prompt Section */}
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                      2. Animation Prompt
-                    </label>
                     <PremiumInput
                       value={prompt}
                       onChange={setPrompt}
                       onSubmit={handleGenerate}
                       isGenerating={isGenerating}
                       placeholder="Describe how your logo should move..."
-                      minHeight="100px"
+                      minHeight="50px"
                     />
-                    <div className="flex flex-wrap gap-1.5 mt-2">
-                      {["Morph", "Glow", "Lifecycle", "Clean Build"].map(
-                        (style) => (
-                          <button
-                            key={style}
-                            onClick={() => setPrompt(style)}
-                            className="text-[9px] py-1 px-2.5 rounded-full border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                          >
-                            {style}
-                          </button>
-                        ),
-                      )}
-                    </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                      3. Export Format
-                    </label>
                     <Select
                       value={exportFormat}
                       onValueChange={(val: any) => setExportFormat(val)}
@@ -283,12 +260,12 @@ const LogoAnimationPage = () => {
                             <span>Video (MP4)</span>
                           </div>
                         </SelectItem>
-                        <SelectItem value="GIF">
+                        {/* <SelectItem value="GIF">
                           <div className="flex items-center gap-2">
                             <RefreshCw className="size-3.5" />
                             <span>GIF Animation</span>
                           </div>
-                        </SelectItem>
+                        </SelectItem> */}
                       </SelectContent>
                     </Select>
                   </div>
