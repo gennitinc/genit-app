@@ -137,7 +137,7 @@ export const ImageNode = memo(
                               instruction: e.target.value,
                             }))
                           }
-                          placeholder="How should AI handle this image?"
+                          placeholder="Document your file so you can remember them"
                           className="min-h-[80px] resize-none"
                         />
                       )}

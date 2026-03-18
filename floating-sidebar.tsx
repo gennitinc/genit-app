@@ -1058,7 +1058,7 @@ export function FloatingSidebar({
                         onClick={() => handleFileSelect(file)}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                          <div className="w-10 h-10 rounded-md flex items-center justify-center">
                             <Music className="w-5 h-5 text-muted-foreground" />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -1143,7 +1143,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="How should AI handle this audio?"
+                  placeholder="Document your file so you can remember them"
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -1253,7 +1253,7 @@ export function FloatingSidebar({
                   </div>
                   {inputData.hasInstruction && (
                     <Textarea
-                      placeholder="How should AI handle this audio?"
+                      placeholder="Document your file so you can remember them"
                       value={inputData.title}
                       onChange={(e) =>
                         setInputData((prev) => ({
@@ -1364,7 +1364,7 @@ export function FloatingSidebar({
                   </div>
                   {inputData.hasInstruction && (
                     <Textarea
-                      placeholder="How should AI handle this audio?"
+                      placeholder="Document your file so you can remember them"
                       value={inputData.title}
                       onChange={(e) =>
                         setInputData((prev) => ({
@@ -1415,7 +1415,7 @@ export function FloatingSidebar({
                 </div>
 
                 <div
-                  className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary/50 transition-colors"
+                  className="border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors"
                   onDrop={(e) => handleDrop(e, "audio")}
                   onDragOver={handleDragOver}
                 >
@@ -1506,7 +1506,7 @@ export function FloatingSidebar({
                         }
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden bg-muted relative">
+                          <div className="w-10 h-10 rounded-md flex items-center justify-center overflow-hidden bg-muted relative">
                             {file.url ? (
                               <img
                                 src={file.url}
@@ -1593,7 +1593,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="How should AI handle this image?"
+                  placeholder="Document your file so you can remember them"
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -1695,7 +1695,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="How should AI handle this image?"
+                  placeholder="Document your file so you can remember them"
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -1739,7 +1739,7 @@ export function FloatingSidebar({
             </div>
 
             <div
-              className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary/50 transition-colors"
+              className="border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors"
               onDrop={(e) => handleDrop(e, "image")}
               onDragOver={handleDragOver}
             >
@@ -1828,7 +1828,7 @@ export function FloatingSidebar({
                         }
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden bg-muted relative">
+                          <div className="w-10 h-10 rounded-md flex items-center justify-center overflow-hidden bg-muted relative">
                             {file.url ? (
                               <video
                                 src={file.url}
@@ -1925,7 +1925,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="How should AI handle this video?"
+                  placeholder="Document your file so you can remember them"
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -2027,7 +2027,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="How should AI handle this video?"
+                  placeholder="Document your file so you can remember them"
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -2071,7 +2071,7 @@ export function FloatingSidebar({
             </div>
 
             <div
-              className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary/50 transition-colors"
+              className="border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors"
               onDrop={(e) => handleDrop(e, "video")}
               onDragOver={handleDragOver}
             >
@@ -2134,7 +2134,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="How should AI handle this content?"
+                  placeholder="Document your file so you can remember them"
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -2245,7 +2245,7 @@ export function FloatingSidebar({
                             >
                               <div className="flex items-center gap-2">
                                 <div
-                                  className={`w-8 h-8 ${platform.bg} rounded-lg flex items-center justify-center`}
+                                  className={`w-8 h-8 ${platform.bg} rounded-md flex items-center justify-center`}
                                 >
                                   {platform.icon}
                                 </div>
@@ -2287,7 +2287,7 @@ export function FloatingSidebar({
                               }}
                             >
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden bg-muted relative">
+                                <div className="w-10 h-10 rounded-md flex items-center justify-center overflow-hidden bg-muted relative">
                                   {file.url ? (
                                     <img
                                       src={file.url}
@@ -2371,7 +2371,7 @@ export function FloatingSidebar({
                               }}
                             >
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden bg-muted relative">
+                                <div className="w-10 h-10 rounded-md flex items-center justify-center overflow-hidden bg-muted relative">
                                   {file.url ? (
                                     <video
                                       src={file.url}
@@ -2465,7 +2465,7 @@ export function FloatingSidebar({
                               }}
                             >
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-green-500/10">
+                                <div className="w-10 h-10 rounded-md flex items-center justify-center bg-green-500/10">
                                   <Music className="w-5 h-5 text-green-500" />
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -2601,7 +2601,7 @@ export function FloatingSidebar({
                   </div>
                   {inputData.hasInstruction && (
                     <Textarea
-                      placeholder="How should AI handle this content?"
+                      placeholder="Document your file so you can remember them"
                       value={inputData.title}
                       onChange={(e) =>
                         setInputData((prev) => ({
@@ -2777,7 +2777,7 @@ export function FloatingSidebar({
                         }
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                          <div className="w-10 h-10 rounded-md flex items-center justify-center">
                             <FileText className="w-5 h-5 text-muted-foreground" />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -2893,7 +2893,7 @@ export function FloatingSidebar({
             </div>
 
             <div
-              className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary/50 transition-colors"
+              className="border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors"
               onDrop={(e) => handleDrop(e, "document")}
               onDragOver={handleDragOver}
             >
@@ -3084,7 +3084,7 @@ export function FloatingSidebar({
   //                   }}
   //                 >
   //                   <div className="flex items-center gap-3">
-  //                     <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
+  //                     <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center overflow-hidden">
   //                       {item.category === "image" ? (
   //                         <img
   //                           src={item.url}
@@ -3130,14 +3130,14 @@ export function FloatingSidebar({
   return (
     <div className="fixed left-4 top-1/2 -translate-y-1/2 z-50 flex items-center">
       {/* Main Sidebar */}
-      <div className="bg-muted/50 backdrop-blur-sm border border-border rounded-xl shadow-lg p-2 flex flex-col items-center space-y-2">
+      <div className="bg-muted/50 backdrop-blur-sm border border-border rounded-md shadow-lg p-2 flex flex-col items-center space-y-2">
         {/* Media Section */}
 
         <div className="flex flex-col items-center space-y-1">
           <Button
             variant="ghost"
             size="sm"
-            className={`w-8 h-8 p-0 rounded-lg transition-all duration-200 ${
+            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
               selectedIntegrationType === "mic"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
@@ -3154,7 +3154,7 @@ export function FloatingSidebar({
           <Button
             variant="ghost"
             size="sm"
-            className={`w-8 h-8 p-0 rounded-lg transition-all duration-200 ${
+            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
               selectedIntegrationType === "image"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
@@ -3171,7 +3171,7 @@ export function FloatingSidebar({
           <Button
             variant="ghost"
             size="sm"
-            className={`w-8 h-8 p-0 rounded-lg transition-all duration-200 ${
+            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
               selectedIntegrationType === "video"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
@@ -3188,7 +3188,7 @@ export function FloatingSidebar({
           <Button
             variant="ghost"
             size="sm"
-            className={`w-8 h-8 p-0 rounded-lg transition-all duration-200 ${
+            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
               selectedIntegrationType === "text"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
@@ -3206,7 +3206,7 @@ export function FloatingSidebar({
             <Button
               variant="ghost"
               size="sm"
-              className={`w-8 h-8 p-0 rounded-lg transition-all duration-200 ${
+              className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
                 selectedIntegrationType === "database"
                   ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                   : "bg-accent hover:bg-primary/20"
@@ -3229,7 +3229,7 @@ export function FloatingSidebar({
           <Button
             variant="ghost"
             size="sm"
-            className={`w-8 h-8 p-0 rounded-lg transition-all duration-200 ${
+            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
               selectedIntegrationType === "globe"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
@@ -3246,7 +3246,7 @@ export function FloatingSidebar({
           <Button
             variant="ghost"
             size="sm"
-            className={`w-8 h-8 p-0 rounded-lg transition-all duration-200 bg-accent hover:bg-primary/20`}
+            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 bg-accent hover:bg-primary/20`}
             title="Add Prompt"
             onClick={() => onAddIntegration("prompt", {})}
           >
@@ -3259,7 +3259,7 @@ export function FloatingSidebar({
           <Button
             variant="ghost"
             size="sm"
-            className={`w-8 h-8 p-0 rounded-lg transition-all duration-200 ${
+            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
               selectedIntegrationType === "file"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
@@ -3282,7 +3282,7 @@ export function FloatingSidebar({
                 {selectedIntegrationType && (
                   <>
                     <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      className={`w-8 h-8 rounded-md flex items-center justify-center ${
                         selectedIntegrationType === "mic"
                           ? "bg-muted/30"
                           : selectedIntegrationType === "image"

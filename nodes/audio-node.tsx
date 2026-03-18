@@ -194,7 +194,7 @@ export const AudioNode = memo(
                               instruction: e.target.value,
                             }))
                           }
-                          placeholder="How should AI handle this audio?"
+                          placeholder="Document your file so you can remember them"
                           className="min-h-[80px] resize-none"
                         />
                       )}

@@ -167,7 +167,7 @@ export const YouTubeNode = memo(
                                 instruction: e.target.value,
                               }))
                             }
-                            placeholder="How should AI handle this content?"
+                            placeholder="Document your file so you can remember them"
                             className="min-h-[80px] resize-none"
                           />
                         </div>

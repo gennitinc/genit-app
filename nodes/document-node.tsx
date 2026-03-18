@@ -202,7 +202,7 @@ export const DocumentNode = memo(
                                 instruction: e.target.value,
                               }))
                             }
-                            placeholder="How should AI handle this document?"
+                            placeholder="Document your file so you can remember them"
                             className="min-h-[80px] resize-none"
                           />
                         )}
