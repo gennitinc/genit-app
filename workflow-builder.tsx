@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef } from "react";
 import ReactFlow, {
   ReactFlowProvider,
   Background,
@@ -17,21 +17,19 @@ import ReactFlow, {
   type NodeTypes,
   type EdgeTypes,
   type Node,
-} from "reactflow"
-import "reactflow/dist/style.css"
-import { toast } from "@/components/ui/use-toast"
-import { Button } from "@/components/ui/button"
-import { Save, Upload, Play } from "lucide-react"
-import NodeLibrary from "./node-library"
-import NodeConfigPanel from "./node-config-panel"
-import CustomEdge from "./custom-edge"
-import { InputNode } from "./nodes/input-node"
-import { OutputNode } from "./nodes/output-node"
-import { ProcessNode } from "./nodes/process-node"
-import { ConditionalNode } from "./nodes/conditional-node"
-import { CodeNode } from "./nodes/code-node"
-import { generateNodeId, createNode } from "@/lib/workflow-utils"
-import type { WorkflowNode } from "@/lib/types"
+} from "reactflow";
+import "reactflow/dist/style.css";
+import { toast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { Save, Upload, Play } from "lucide-react";
+import NodeLibrary from "./node-library";
+import { InputNode } from "./nodes/input-node";
+import { OutputNode } from "./nodes/output-node";
+import { ProcessNode } from "./nodes/process-node";
+import { ConditionalNode } from "./nodes/conditional-node";
+import { CodeNode } from "./nodes/code-node";
+import { generateNodeId, createNode } from "@/lib/workflow-utils";
+import type { WorkflowNode } from "@/lib/types";
 
 const nodeTypes: NodeTypes = {
   input: InputNode,
@@ -39,66 +37,63 @@ const nodeTypes: NodeTypes = {
   process: ProcessNode,
   conditional: ConditionalNode,
   code: CodeNode,
-}
-
-const edgeTypes: EdgeTypes = {
-  custom: CustomEdge,
-}
+};
 
 export default function WorkflowBuilder() {
-  const reactFlowWrapper = useRef<HTMLDivElement>(null)
-  const [nodes, setNodes, onNodesChange] = useNodesState([])
-  const [edges, setEdges, onEdgesChange] = useEdgesState([])
-  const [selectedNode, setSelectedNode] = useState<Node | null>(null)
-  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null)
+  const reactFlowWrapper = useRef<HTMLDivElement>(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
 
   const onConnect = useCallback(
-    (params: Edge | Connection) => setEdges((eds) => addEdge({ ...params, type: "custom" }, eds)),
+    (params: Edge | Connection) =>
+      setEdges((eds) => addEdge({ ...params, type: "custom" }, eds)),
     [setEdges],
-  )
+  );
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-    event.dataTransfer.dropEffect = "move"
-  }, [])
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  }, []);
 
   const onDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault()
+      event.preventDefault();
 
-      const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect()
-      const type = event.dataTransfer.getData("application/reactflow")
+      const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect();
+      const type = event.dataTransfer.getData("application/reactflow");
 
       // Check if the dropped element is valid
       if (typeof type === "undefined" || !type) {
-        return
+        return;
       }
 
       if (reactFlowBounds && reactFlowInstance) {
         const position = reactFlowInstance.screenToFlowPosition({
           x: event.clientX - reactFlowBounds.left,
           y: event.clientY - reactFlowBounds.top,
-        })
+        });
 
         const newNode = createNode({
           type,
           position,
           id: generateNodeId(type),
-        })
+        });
 
-        setNodes((nds) => nds.concat(newNode))
+        setNodes((nds) => nds.concat(newNode));
       }
     },
     [reactFlowInstance, setNodes],
-  )
+  );
 
   const onNodeClick = useCallback((_: React.MouseEvent, node: Node) => {
-    setSelectedNode(node)
-  }, [])
+    setSelectedNode(node);
+  }, []);
 
   const onPaneClick = useCallback(() => {
-    setSelectedNode(null)
-  }, [])
+    setSelectedNode(null);
+  }, []);
 
   const updateNodeData = useCallback(
     (nodeId: string, data: any) => {
@@ -111,14 +106,14 @@ export default function WorkflowBuilder() {
                 ...node.data,
                 ...data,
               },
-            }
+            };
           }
-          return node
+          return node;
         }),
-      )
+      );
     },
     [setNodes],
-  )
+  );
 
   const saveWorkflow = () => {
     if (nodes.length === 0) {
@@ -126,52 +121,53 @@ export default function WorkflowBuilder() {
         title: "Nothing to save",
         description: "Add some nodes to your workflow first",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
     const workflow = {
       nodes,
       edges,
-    }
+    };
 
-    const workflowString = JSON.stringify(workflow)
-    localStorage.setItem("workflow", workflowString)
+    const workflowString = JSON.stringify(workflow);
+    localStorage.setItem("workflow", workflowString);
 
     toast({
       title: "Workflow saved",
       description: "Your workflow has been saved successfully",
-    })
-  }
+    });
+  };
 
   const loadWorkflow = () => {
-    const savedWorkflow = localStorage.getItem("workflow")
+    const savedWorkflow = localStorage.getItem("workflow");
 
     if (!savedWorkflow) {
       toast({
         title: "No saved workflow",
         description: "There is no workflow saved in your browser",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
     try {
-      const { nodes: savedNodes, edges: savedEdges } = JSON.parse(savedWorkflow)
-      setNodes(savedNodes)
-      setEdges(savedEdges)
+      const { nodes: savedNodes, edges: savedEdges } =
+        JSON.parse(savedWorkflow);
+      setNodes(savedNodes);
+      setEdges(savedEdges);
       toast({
         title: "Workflow loaded",
         description: "Your workflow has been loaded successfully",
-      })
+      });
     } catch (error) {
       toast({
         title: "Error loading workflow",
         description: "There was an error loading your workflow",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const executeWorkflow = () => {
     if (nodes.length === 0) {
@@ -179,14 +175,15 @@ export default function WorkflowBuilder() {
         title: "Nothing to execute",
         description: "Add some nodes to your workflow first",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
     toast({
       title: "Executing workflow",
-      description: "Your workflow is being executed (simulation only in this MVP)",
-    })
+      description:
+        "Your workflow is being executed (simulation only in this MVP)",
+    });
 
     // In a real implementation, we would traverse the graph and execute each node
     // For the MVP, we'll just simulate execution with a success message
@@ -194,9 +191,9 @@ export default function WorkflowBuilder() {
       toast({
         title: "Workflow executed",
         description: "Your workflow has been executed successfully",
-      })
-    }, 2000)
-  }
+      });
+    }, 2000);
+  };
 
   return (
     <div className="flex h-screen">
@@ -220,7 +217,6 @@ export default function WorkflowBuilder() {
               onNodeClick={onNodeClick}
               onPaneClick={onPaneClick}
               nodeTypes={nodeTypes}
-              edgeTypes={edgeTypes}
               fitView
               snapToGrid
               snapGrid={[15, 15]}
@@ -249,16 +245,6 @@ export default function WorkflowBuilder() {
           </ReactFlowProvider>
         </div>
       </div>
-
-      {selectedNode && (
-        <div className="w-80 border-l border-gray-200 p-4 bg-gray-50">
-          <NodeConfigPanel
-            node={selectedNode as WorkflowNode}
-            updateNodeData={updateNodeData}
-            onClose={() => setSelectedNode(null)}
-          />
-        </div>
-      )}
     </div>
-  )
+  );
 }

@@ -1117,7 +1117,7 @@ export function FloatingSidebar({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-medium text-foreground">
-                  Instruction
+                  Label
                 </label>
                 <button
                   type="button"
@@ -1227,7 +1227,7 @@ export function FloatingSidebar({
                 <div>
                   <div className="flex items-center justify-between mb-2 mt-4">
                     <label className="text-xs font-medium text-foreground">
-                      Instruction
+                      Label
                     </label>
                     <button
                       type="button"
@@ -1338,7 +1338,7 @@ export function FloatingSidebar({
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-xs font-medium text-foreground">
-                      Instruction
+                      Label
                     </label>
                     <button
                       type="button"
@@ -1567,7 +1567,7 @@ export function FloatingSidebar({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-medium text-foreground">
-                  Instruction
+                  Label
                 </label>
                 <button
                   type="button"
@@ -1669,7 +1669,7 @@ export function FloatingSidebar({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-medium text-foreground">
-                  Instruction
+                  Label
                 </label>
                 <button
                   type="button"
@@ -1899,7 +1899,7 @@ export function FloatingSidebar({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-medium text-foreground">
-                  Instruction
+                  Label
                 </label>
                 <button
                   type="button"
@@ -2001,7 +2001,7 @@ export function FloatingSidebar({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-medium text-foreground">
-                  Instruction
+                  Label
                 </label>
                 <button
                   type="button"
@@ -2108,7 +2108,7 @@ export function FloatingSidebar({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-medium text-foreground">
-                  Instruction
+                  Label
                 </label>
                 <button
                   type="button"
@@ -2575,7 +2575,7 @@ export function FloatingSidebar({
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-xs font-medium text-foreground">
-                      Instruction
+                      Label
                     </label>
                     <button
                       type="button"
@@ -2849,7 +2849,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="How should AI handle this document?"
+                  placeholder="document your file so you can remember them"
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -2921,7 +2921,7 @@ export function FloatingSidebar({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-medium text-foreground">
-                  Instruction
+                  Label
                 </label>
                 <button
                   type="button"
@@ -2947,7 +2947,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="How should AI handle this document?"
+                  placeholder="document your file so you can remember them"
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -3020,112 +3020,112 @@ export function FloatingSidebar({
         ),
       },
     },
-    database: {
-      title: "Content Database",
-      icon: Database,
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
-      tabs: ["all", "images", "videos", "audio", "docs"],
-      hideFooter: true,
-      content: {
-        all: () => renderDbList(),
-        images: () => renderDbList("image"),
-        videos: () => renderDbList("video"),
-        audio: () => renderDbList("audio"),
-        docs: () => renderDbList("document"),
-      },
-    },
+    // database: {
+    //   title: "Content Database",
+    //   icon: Database,
+    //   color: "text-blue-500",
+    //   bgColor: "bg-blue-500/10",
+    //   tabs: ["all", "images", "videos", "audio", "docs"],
+    //   hideFooter: true,
+    //   content: {
+    //     all: () => renderDbList(),
+    //     images: () => renderDbList("image"),
+    //     videos: () => renderDbList("video"),
+    //     audio: () => renderDbList("audio"),
+    //     docs: () => renderDbList("document"),
+    //   },
+    // },
   };
 
-  function renderDbList(filterCategory?: string) {
-    const filteredItems = filterCategory
-      ? dbItems.filter((item) => item.category === filterCategory)
-      : dbItems;
+  // function renderDbList(filterCategory?: string) {
+  //   const filteredItems = filterCategory
+  //     ? dbItems.filter((item) => item.category === filterCategory)
+  //     : dbItems;
 
-    return (
-      <div className="space-y-3">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder="Search database..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 h-9"
-          />
-        </div>
+  //   return (
+  //     <div className="space-y-3">
+  //       <div className="relative">
+  //         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+  //         <Input
+  //           placeholder="Search database..."
+  //           value={searchQuery}
+  //           onChange={(e) => setSearchQuery(e.target.value)}
+  //           className="pl-10 h-9"
+  //         />
+  //       </div>
 
-        <div className="h-[400px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
-          {isLoadingDb ? (
-            <div className="flex flex-col items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-primary opacity-50" />
-            </div>
-          ) : filteredItems.length === 0 ? (
-            <div className="text-center py-20 border-2 border-dashed border-border rounded-xl">
-              <Database className="w-8 h-8 text-muted-foreground opacity-20 mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">No items found</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-2">
-              {filteredItems
-                .filter((item) =>
-                  item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-                )
-                .map((item) => (
-                  <Card
-                    key={item._id}
-                    className="p-3 hover:bg-muted/50 transition-colors group relative border-border/50 cursor-pointer"
-                    onClick={() => {
-                      onAddIntegration(item.category, {
-                        ...item.metadata,
-                        url: item.url,
-                        title: item.name,
-                      });
-                      resetModal();
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
-                        {item.category === "image" ? (
-                          <img
-                            src={item.url}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : item.category === "video" ? (
-                          <Play className="w-4 h-4 text-blue-500" />
-                        ) : item.category === "audio" ? (
-                          <Music className="w-4 h-4 text-green-500" />
-                        ) : (
-                          <FileText className="w-4 h-4 text-indigo-500" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium truncate">
-                          {item.name}
-                        </p>
-                        <p className="text-[10px] text-muted-foreground capitalize">
-                          {item.category}
-                        </p>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="opacity-0 group-hover:opacity-100 h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          deleteDbItem(item._id);
-                        }}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </Card>
-                ))}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
+  //       <div className="h-[400px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+  //         {isLoadingDb ? (
+  //           <div className="flex flex-col items-center justify-center py-20">
+  //             <Loader2 className="w-8 h-8 animate-spin text-primary opacity-50" />
+  //           </div>
+  //         ) : filteredItems.length === 0 ? (
+  //           <div className="text-center py-20 border-2 border-dashed border-border rounded-xl">
+  //             <Database className="w-8 h-8 text-muted-foreground opacity-20 mx-auto mb-2" />
+  //             <p className="text-sm text-muted-foreground">No items found</p>
+  //           </div>
+  //         ) : (
+  //           <div className="grid grid-cols-1 gap-2">
+  //             {filteredItems
+  //               .filter((item) =>
+  //                 item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  //               )
+  //               .map((item) => (
+  //                 <Card
+  //                   key={item._id}
+  //                   className="p-3 hover:bg-muted/50 transition-colors group relative border-border/50 cursor-pointer"
+  //                   onClick={() => {
+  //                     onAddIntegration(item.category, {
+  //                       ...item.metadata,
+  //                       url: item.url,
+  //                       title: item.name,
+  //                     });
+  //                     resetModal();
+  //                   }}
+  //                 >
+  //                   <div className="flex items-center gap-3">
+  //                     <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
+  //                       {item.category === "image" ? (
+  //                         <img
+  //                           src={item.url}
+  //                           className="w-full h-full object-cover"
+  //                         />
+  //                       ) : item.category === "video" ? (
+  //                         <Play className="w-4 h-4 text-blue-500" />
+  //                       ) : item.category === "audio" ? (
+  //                         <Music className="w-4 h-4 text-green-500" />
+  //                       ) : (
+  //                         <FileText className="w-4 h-4 text-indigo-500" />
+  //                       )}
+  //                     </div>
+  //                     <div className="flex-1 min-w-0">
+  //                       <p className="text-xs font-medium truncate">
+  //                         {item.name}
+  //                       </p>
+  //                       <p className="text-[10px] text-muted-foreground capitalize">
+  //                         {item.category}
+  //                       </p>
+  //                     </div>
+  //                     <Button
+  //                       variant="ghost"
+  //                       size="sm"
+  //                       className="opacity-0 group-hover:opacity-100 h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
+  //                       onClick={(e) => {
+  //                         e.stopPropagation();
+  //                         deleteDbItem(item._id);
+  //                       }}
+  //                     >
+  //                       <Trash2 className="w-4 h-4" />
+  //                     </Button>
+  //                   </div>
+  //                 </Card>
+  //               ))}
+  //           </div>
+  //         )}
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="fixed left-4 top-1/2 -translate-y-1/2 z-50 flex items-center">
@@ -3201,7 +3201,7 @@ export function FloatingSidebar({
           <span className="text-[10px] text-muted-foreground">Text</span>
         </div>
 
-        <div className="flex flex-col items-center space-y-1">
+        {/* <div className="flex flex-col items-center space-y-1">
           <div className="relative">
             <Button
               variant="ghost"
@@ -3223,7 +3223,7 @@ export function FloatingSidebar({
             </div>
           </div>
           <span className="text-[10px] text-muted-foreground">Database</span>
-        </div>
+        </div> */}
 
         <div className="flex flex-col items-center space-y-1">
           <Button
