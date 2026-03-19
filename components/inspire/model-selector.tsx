@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 
 interface ModelSelectorProps {
-  type: "image" | "video";
+  type: "image" | "video" | "text" | "audio";
   selectedModel: Model | null;
   onSelectModel: (model: Model) => void;
 }
@@ -28,7 +28,7 @@ function ModelIcon({
 }: {
   icon?: string;
   name: string;
-  type: "image" | "video";
+  type: "image" | "video" | "text" | "audio";
 }) {
   if (icon) {
     // Check if icon is a URL or SVG string
