@@ -41,9 +41,9 @@ export default function AdminModelsPage() {
   const [models, setModels] = useState<Model[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState<"all" | "image" | "video">(
-    "all"
-  );
+  const [filterType, setFilterType] = useState<
+    "all" | "image" | "video" | "audio" | "text"
+  >("all");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [modelToDelete, setModelToDelete] = useState<Model | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -57,7 +57,7 @@ export default function AdminModelsPage() {
   // Form state
   const [formData, setFormData] = useState({
     name: "",
-    type: "image" as "image" | "video",
+    type: "image" as "image" | "video" | "audio" | "text",
     provider: "",
     modelId: "",
     description: "",
@@ -76,7 +76,7 @@ export default function AdminModelsPage() {
   const fetchModels = useCallback(async () => {
     setIsLoading(true);
     try {
-      const params: { type?: "image" | "video" } = {};
+      const params: { type?: "image" | "video" | "audio" | "text" } = {};
       if (filterType !== "all") {
         params.type = filterType;
       }
@@ -394,7 +394,7 @@ export default function AdminModelsPage() {
                 <Label htmlFor="type">Type *</Label>
                 <Select
                   value={formData.type}
-                  onValueChange={(v: "image" | "video") =>
+                  onValueChange={(v: "image" | "video" | "audio" | "text") =>
                     setFormData({ ...formData, type: v })
                   }
                 >
@@ -404,6 +404,8 @@ export default function AdminModelsPage() {
                   <SelectContent>
                     <SelectItem value="image">Image</SelectItem>
                     <SelectItem value="video">Video</SelectItem>
+                    <SelectItem value="audio">Audio</SelectItem>
+                    <SelectItem value="text">Text</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

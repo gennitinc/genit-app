@@ -82,7 +82,7 @@ export const DocumentNode = memo(
     };
 
     return (
-      <>
+      <div className="relative rounded-[1.5rem]">
         <NodeResizer
           color="#3b82f6"
           isVisible={selected}
@@ -346,7 +346,7 @@ export const DocumentNode = memo(
             isConnectable={isConnectable}
           />
         </div>
-      </>
+      </div>
     );
   },
 );

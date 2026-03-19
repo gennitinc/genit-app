@@ -593,7 +593,7 @@ export const modelApi = {
    * Get all models
    */
   getAll: async (params?: {
-    type?: "image" | "video";
+    type?: "image" | "video" | "audio" | "text";
   }): Promise<ModelResponse> => {
     const response = await apiResponse.get(`/inspire/models`, { params });
     return response.data;
@@ -610,7 +610,7 @@ export const modelApi = {
   /**
    * Get default model for type
    */
-  getDefault: async (type: "image" | "video"): Promise<ApiResponse<Model>> => {
+  getDefault: async (type: "image" | "video" | "audio" | "text"): Promise<ApiResponse<Model>> => {
     const response = await apiResponse.get(`/inspire/models/default/${type}`);
     return response.data;
   },
@@ -629,7 +629,7 @@ export const modelApi = {
   create: async (
     data: {
       name: string;
-      type: "image" | "video";
+      type: "image" | "video" | "audio" | "text";
       provider: string;
       modelId: string;
       description?: string;

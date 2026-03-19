@@ -50,7 +50,7 @@ export const ImageNode = memo(
     };
 
     return (
-      <div className="relative bg-card border border-border rounded-lg shadow-sm p-2 w-80 min-w-[200px] min-h-[150px]">
+      <div className="relative bg-card border border-border rounded-[1.5rem] shadow-sm p-2 w-80 min-w-[200px] min-h-[150px]">
         <Handle
           type="target"
           position={Position.Top}

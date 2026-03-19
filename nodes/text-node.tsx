@@ -48,7 +48,7 @@ export const TextNode = memo(
     };
 
     return (
-      <div className="relative bg-card border border-border rounded-lg shadow-sm p-2 w-80 min-w-[200px] min-h-[120px]">
+      <div className="relative bg-card border border-border rounded-[1.5rem] shadow-sm p-2 w-80 min-w-[200px] min-h-[120px]">
         <Handle
           type="target"
           position={Position.Top}
@@ -205,7 +205,7 @@ export const TextNode = memo(
               </Dialog>
             </div>
 
-            <div className="text-xs text-muted-foreground line-clamp-4 bg-muted p-2 rounded border border-border min-h-[60px]">
+            <div className="text-xs text-muted-foreground line-clamp-4 bg-muted p-2 rounded-[1.5rem] border border-border min-h-[120px]">
               {editData.content ||
                 "No content available. Click edit to add text."}
             </div>

@@ -14,7 +14,7 @@ export const BrandNode = ({ data }: { data: any }) => {
   }, [theme]);
 
   return (
-    <div className="relative max-w-sm bg-muted border border-muted rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className="relative max-w-sm bg-muted border border-muted rounded-[1.5rem] p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
       {/* <BorderBeam
         lightColor={lightColor}
         lightWidth={400}

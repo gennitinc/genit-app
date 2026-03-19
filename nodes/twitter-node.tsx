@@ -58,7 +58,7 @@ export const TwitterNode = memo(
 
     return (
       <>
-        <div className="relative">
+        <div className="relative rounded-[1.5rem]">
           <Handle
             type="target"
             position={Position.Left}

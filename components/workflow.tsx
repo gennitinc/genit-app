@@ -15,7 +15,8 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import { apiResponse } from "@/utils/apiResponse";
+import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
+import { io } from "socket.io-client";
 import {
   Dialog,
   DialogContent,
@@ -34,6 +35,7 @@ import ReactFlow, {
   type EdgeChange,
   type NodeMouseHandler,
   useNodesState,
+  useEdgesState,
   Node,
   NodeTypes,
   applyNodeChanges,
@@ -133,27 +135,37 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   const [historyProjects, setHistoryProjects] = useState<any[]>([]);
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
 
-  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const nodesRef = React.useRef(nodes);
+  const edgesRef = React.useRef(edges);
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    nodesRef.current = nodes;
+  }, [nodes]);
+
+  useEffect(() => {
+    edgesRef.current = edges;
+  }, [edges]);
+
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-  const [undoFn, setUndoFn] = useState<(() => void) | null>(null);
-  const [redoFn, setRedoFn] = useState<(() => void) | null>(null);
-  const [zoomToFitFn, setZoomToFitFn] = useState<(() => void) | null>(null);
+  const socketRef = React.useRef<any>(null);
   const [viewport, setViewport] = useState({ x: 0, y: 0, zoom: 0.8 });
   const [initialViewportApplied, setInitialViewportApplied] = useState(false);
+  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const [isUndoRedoAction, setIsUndoRedoAction] = useState(false);
 
   // History management for undo/redo
   const [history, setHistory] = useState<
     Array<{ nodes: Node[]; edges: Edge[] }>
   >([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [isUndoRedoAction, setIsUndoRedoAction] = useState(false);
 
   // Add current state to history
   const addToHistory = useCallback(
     (newNodes: Node[], newEdges: Edge[]) => {
-      if (isUndoRedoAction) return; // Don't add to history during undo/redo
+      if (isUndoRedoAction) return;
 
       // Ensure we have valid arrays
       const safeNodes = Array.isArray(newNodes) ? newNodes : [];
@@ -167,115 +179,51 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         const newHistory = [...trimmedHistory, currentState];
 
         // Limit history to 50 states to prevent memory issues
-        const limitedHistory = newHistory.slice(-50);
-
-        console.log(
-          "📝 [History] Added state, total history:",
-          limitedHistory.length,
-        );
-        return limitedHistory;
+        return newHistory.slice(-50);
       });
 
-      setHistoryIndex((prevIndex) => {
-        const newIndex = prevIndex + 1;
-        // Ensure index doesn't exceed history bounds
-        const maxIndex = Math.min(newIndex, 49); // 50 states max, so max index is 49
-        console.log("� [History] Index updated to:", maxIndex);
-        return maxIndex;
-      });
+      setHistoryIndex((prevIndex) => Math.min(prevIndex + 1, 49));
     },
     [historyIndex, isUndoRedoAction],
   );
 
-  // Undo function
-  const undo = useCallback(() => {
-    if (historyIndex > 0 && history.length > 0) {
-      const previousState = history[historyIndex - 1];
-      if (previousState && previousState.nodes && previousState.edges) {
-        setIsUndoRedoAction(true);
-        setNodes(injectNodeCallbacks(previousState.nodes));
-        setEdges(previousState.edges);
-        setHistoryIndex(historyIndex - 1);
-        setIsUndoRedoAction(false);
-        console.log("✅ [Undo] Restored to history index:", historyIndex - 1);
-      } else {
-        console.warn("⚠️ [Undo] Invalid previous state found");
-      }
-    } else {
-      console.log("ℹ️ [Undo] No history to undo");
-    }
-  }, [history, historyIndex]);
-
-  // Redo function
-  const redo = useCallback(() => {
-    if (historyIndex < history.length - 1 && history.length > 0) {
-      const nextState = history[historyIndex + 1];
-      if (nextState && nextState.nodes && nextState.edges) {
-        setIsUndoRedoAction(true);
-        setNodes(injectNodeCallbacks(nextState.nodes));
-        setEdges(nextState.edges);
-        setHistoryIndex(historyIndex + 1);
-        setIsUndoRedoAction(false);
-        console.log("✅ [Redo] Restored to history index:", historyIndex + 1);
-      } else {
-        console.warn("⚠️ [Redo] Invalid next state found");
-      }
-    } else {
-      console.log("ℹ️ [Redo] No history to redo");
-    }
-  }, [history, historyIndex]);
-
   // Add node to state
   const addNode = useCallback(
     (node: Node) => {
-      console.log("🎯 [GennittWorkflow] Adding node to workflow:", node);
-      setNodes((prevNodes) => {
-        const newNodes = [...prevNodes, node];
-        console.log(
-          "✅ [GennittWorkflow] Updated nodes array length:",
-          newNodes.length,
-        );
-        addToHistory(newNodes, edges);
-        return newNodes;
-      });
+      console.log("🎯 [GennittWorkflow] Adding node:", node);
+      setNodes((prevNodes) => [...prevNodes, node]);
+      addToHistory([...nodesRef.current, node], edgesRef.current);
     },
-    [edges, addToHistory],
+    [setNodes, addToHistory],
   );
 
   // Remove node from state
   const removeNode = useCallback(
     (nodeId: string) => {
       console.log("🗑️ [GennittWorkflow] Removing node:", nodeId);
-      setNodes((prevNodes: Node[]) => {
-        const newNodes = prevNodes.filter((node) => node.id !== nodeId);
-        console.log(
-          "✅ [GennittWorkflow] Node removed, remaining nodes:",
-          newNodes.length,
-        );
-        addToHistory(newNodes, edges);
-        return newNodes;
-      });
+      const newNodes = nodesRef.current.filter((node) => node.id !== nodeId);
+      setNodes(newNodes);
+      addToHistory(newNodes, edgesRef.current);
     },
-    [edges, addToHistory],
+    [setNodes, addToHistory],
   );
 
-  // Helper to re-inject functional properties into nodes loaded from serializable state
-  const injectNodeCallbacks = useCallback(
-    (nodesToInject: Node[]) => {
-      console.log(
-        "💉 [Workflow] Injecting callbacks into nodes:",
-        nodesToInject.length,
-      );
-      return nodesToInject.map((node) => ({
-        ...node,
-        data: {
-          ...node.data,
-          onRemoveNode: removeNode,
-          nodeId: node.id,
-        },
-      }));
+  // Handle connections
+  const handleConnect = useCallback(
+    (connection: Connection) => {
+      console.log("🔗 [GennittWorkflow] Connection:", connection);
+      if (connection.source && connection.target) {
+        const newEdge: Edge = {
+          id: `edge-${Date.now()}`,
+          source: connection.source,
+          target: connection.target,
+          animated: true,
+        };
+        setEdges((prevEdges) => [...prevEdges, newEdge]);
+        addToHistory(nodesRef.current, [...edgesRef.current, newEdge]);
+      }
     },
-    [removeNode],
+    [setEdges, addToHistory],
   );
 
   // Node creation function - single source of truth
@@ -283,7 +231,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     async (type: string, data: any) => {
       console.log("🎨 [GennittWorkflow] Creating node:", type, data);
 
-      const position = {
+      const position = data.position || {
         x: Math.random() * 400 + 100,
         y: Math.random() * 300 + 100,
       };
@@ -576,64 +524,132 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
       console.log("✅ [GennittWorkflow] Created node:", newNode);
       addNode(newNode);
+      return newNode;
     },
-    [projectId, addNode, removeNode],
+    [projectId, slug, addNode, removeNode],
   );
 
-  // Handle node changes from React Flow
-  const handleNodesChange = useCallback(
-    (changes: NodeChange[]) => {
-      setNodes((nds) => {
-        const newNodes = applyNodeChanges(changes, nds);
-        // Add to history for undo/redo
-        if (
-          changes.some(
-            (change) => change.type === "position" && change.dragging === false,
-          )
-        ) {
-          addToHistory(newNodes, edges);
+  const updateNodeData = useCallback(
+    (nodeId: string, newData: any) => {
+      setNodes((nds) =>
+        nds.map((node) => {
+          if (node.id === nodeId) {
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                ...newData,
+              },
+            };
+          }
+          return node;
+        }),
+      );
+    },
+    [setNodes],
+  );
+
+  const applyAIActions = useCallback(
+    async (sourceNodeId: string, actions: any[]): Promise<any[]> => {
+      console.log("🤖 [Workflow] Applying AI actions:", actions);
+      const results = [];
+
+      for (const action of actions) {
+        if (action.name === "create_node") {
+          const { type, data, position } = action.args;
+
+          const sourceNode = nodesRef.current.find(
+            (n) => n.id === sourceNodeId,
+          );
+          const finalPosition = position || {
+            x: (sourceNode?.position.x || 0) + 400,
+            y: (sourceNode?.position.y || 0) + (Math.random() * 200 - 100),
+          };
+
+          const newNode = await createNode(type, {
+            ...data,
+            position: finalPosition,
+          });
+          results.push(newNode);
+        } else if (action.name === "connect_nodes") {
+          const { sourceId, targetId } = action.args;
+          handleConnect({ source: sourceId, target: targetId } as any);
+          results.push({ type: "edge", source: sourceId, target: targetId });
         }
-        return newNodes;
-      });
-    },
-    [edges, addToHistory],
-  );
-
-  // Handle edge changes
-  const handleEdgesChange = useCallback(
-    (changes: EdgeChange[]) => {
-      setEdges((eds) => {
-        const newEdges = applyEdgeChanges(changes, eds);
-        // Add to history for undo/redo when edges are removed
-        if (changes.some((change) => change.type === "remove")) {
-          addToHistory(nodes, newEdges);
-        }
-        return newEdges;
-      });
-    },
-    [nodes, addToHistory],
-  );
-
-  // Handle connections
-  const handleConnect = useCallback(
-    (connection: Connection) => {
-      console.log("🔗 [GennittWorkflow] Connection:", connection);
-      if (connection.source && connection.target) {
-        const newEdge: Edge = {
-          id: `edge-${Date.now()}`,
-          source: connection.source,
-          target: connection.target,
-          animated: true,
-        };
-        setEdges((prevEdges) => {
-          const newEdges = [...prevEdges, newEdge];
-          addToHistory(nodes, newEdges);
-          return newEdges;
-        });
       }
+      return results;
     },
-    [nodes, addToHistory],
+    [createNode, handleConnect],
   );
+
+  // Helper to re-inject functional properties into nodes loaded from serializable state
+  const injectNodeCallbacks = useCallback(
+    (nodesToInject: Node[]) => {
+      console.log(
+        "💉 [Workflow] Injecting callbacks into nodes:",
+        nodesToInject.length,
+      );
+      return nodesToInject.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          onRemoveNode: removeNode,
+          onAIAction: applyAIActions,
+          onDataChange: (newData: any) => updateNodeData(node.id, newData),
+          onMaximize: () =>
+            reactFlowInstance?.fitView({
+              nodes: [{ id: node.id }],
+              padding: 0.5,
+              duration: 400,
+            }),
+          nodeId: node.id,
+          projectId: projectId || slug,
+        },
+      }));
+    },
+    [
+      removeNode,
+      applyAIActions,
+      updateNodeData,
+      reactFlowInstance,
+      projectId,
+      slug,
+    ],
+  );
+
+  // Undo function
+  const undo = useCallback(() => {
+    if (historyIndex > 0 && history.length > 0) {
+      const previousState = history[historyIndex - 1];
+      if (previousState && previousState.nodes && previousState.edges) {
+        setIsUndoRedoAction(true);
+        setNodes(injectNodeCallbacks(previousState.nodes));
+        setEdges(previousState.edges);
+        setHistoryIndex(historyIndex - 1);
+        setIsUndoRedoAction(false);
+        console.log("✅ [Undo] Restored to history index:", historyIndex - 1);
+      } else {
+        console.warn("⚠️ [Undo] Invalid previous state found");
+      }
+    } else {
+      console.log("ℹ️ [Undo] No history to undo");
+    }
+  }, [history, historyIndex, injectNodeCallbacks, setNodes, setEdges]);
+
+  // Redo function
+  const redo = useCallback(() => {
+    if (historyIndex < history.length - 1 && history.length > 0) {
+      const nextState = history[historyIndex + 1];
+      if (nextState && nextState.nodes && nextState.edges) {
+        setIsUndoRedoAction(true);
+        setNodes(injectNodeCallbacks(nextState.nodes));
+        setEdges(nextState.edges);
+        setHistoryIndex(historyIndex + 1);
+        setIsUndoRedoAction(false);
+        console.log("✅ [Redo] Restored to history index:", historyIndex + 1);
+      }
+    }
+  }, [history, historyIndex, injectNodeCallbacks, setNodes, setEdges]);
 
   // Handle node selection
   const onNodeClick: NodeMouseHandler = useCallback((event, node) => {
@@ -660,11 +676,11 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         const newNodes = nds.map((n) =>
           n.id === node.id ? { ...n, position: node.position } : n,
         );
-        addToHistory(newNodes, edges); // history only on drag stop
+        addToHistory(newNodes, edgesRef.current);
         return newNodes;
       });
     },
-    [edges, addToHistory],
+    [setNodes, addToHistory],
   );
 
   const onMoveEnd = useCallback(
@@ -685,16 +701,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     redo();
   }, [redo]);
 
-  // Set up callbacks for parent component
-  useEffect(() => {
-    setUndoFn(memoizedHandleUndo);
-    setRedoFn(memoizedHandleRedo);
-    // setZoomToFitFn(() =>
-    //   reactFlowInstance?.fitView({ padding: 0.1, duration: 200 })
-    // );
-  }, [memoizedHandleUndo, memoizedHandleRedo, reactFlowInstance]);
-
-  // Fetch project data if slug exists
+  // Reset flag when slug changes
   useEffect(() => {
     if (slug && slug !== "create") {
       const fetchProject = async () => {
@@ -834,6 +841,30 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [undo, redo]);
 
+  // Socket.IO for real-time AI updates
+  useEffect(() => {
+    if (!projectId) return;
+
+    if (!socketRef.current) {
+      socketRef.current = io(serverUrlSocket);
+    }
+
+    const socket = socketRef.current;
+
+    socket.emit("join", projectId);
+
+    socket.on("workflow:ai:update", (data: any) => {
+      console.log("📡 [Workflow] Received real-time AI update:", data);
+      if (data.actions && data.actions.length > 0) {
+        applyAIActions(data.nodeId, data.actions);
+      }
+    });
+
+    return () => {
+      socket.off("workflow:ai:update");
+    };
+  }, [projectId, applyAIActions]);
+
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-background">
@@ -920,8 +951,8 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               nodes={nodes}
               edges={edges}
               nodeTypes={nodeTypes}
-              onNodesChange={handleNodesChange}
-              onEdgesChange={handleEdgesChange}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
               onConnect={handleConnect}
               onNodeClick={onNodeClick}
               onPaneClick={onPaneClick}

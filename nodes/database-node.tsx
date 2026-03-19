@@ -34,7 +34,7 @@ export function DatabaseNode({ data, selected }: DatabaseNodeProps) {
 
   return (
     <div
-      className={`bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-4 w-80 ${selected ? "ring-2 ring-primary" : ""}`}
+      className={`bg-card border border-border rounded-[1.5rem] shadow-sm hover:shadow-md transition-all duration-200 p-4 w-80 ${selected ? "ring-2 ring-primary" : ""}`}
     >
       <Handle type="target" position={Position.Left} className="w-3 h-3" />
 

@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import cookie from "js-cookie";
 import { useTheme } from "next-themes";
 import UserPopOver from "./user/userPopOver";
+import Link from "next/link";
 
 interface NavbarProps {
   title?: string;
@@ -148,20 +149,21 @@ export function Navbar({ title }: NavbarProps) {
         <div className="flex items-center gap-2 sm:gap-2">
           {/* Main user avatar with popover */}
           <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
-            <a
+            <Link
+              target="__blank"
+              className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
+              href="/agents"
+            >
+              Home
+            </Link>
+            <Link
               target="__blank"
               className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
               href="/pricing"
             >
               Pricing
-            </a>
-            <a
-              target="__blank"
-              className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-              href="/agents"
-            >
-              Agents
-            </a>
+            </Link>
+
             <a
               target="__blank"
               className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
@@ -224,8 +226,8 @@ export function Navbar({ title }: NavbarProps) {
                 <path d="M21 21l-6 -6" />
               </svg>
               <span className="transition-colors hover:text-foreground/80 text-foreground/60 rex text-xs sm:text-sm font-medium pl-2 pr-4">
-                Search{" "}
-                <span className="hidden xl:inline-block">Components</span>
+                {" "}
+                <span className="hidden xl:inline-block">Community</span>
               </span>
               <kbd className="pointer-events-none  hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
                 <span className="text-xs">⌘</span>K

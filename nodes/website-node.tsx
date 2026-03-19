@@ -55,7 +55,7 @@ export const WebsiteNode = memo(
     };
 
     return (
-      <>
+      <div className="relative rounded-[1.5rem]">
         <NodeResizer
           color="#3b82f6"
           isVisible={selected}
@@ -215,7 +215,7 @@ export const WebsiteNode = memo(
           className="w-3 h-3 bg-primary"
           isConnectable={isConnectable}
         />
-      </>
+      </div>
     );
   },
 );

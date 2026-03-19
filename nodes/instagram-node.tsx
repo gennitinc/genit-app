@@ -57,7 +57,7 @@ export const InstagramNode = memo(
 
     return (
       <>
-        <div className="relative w-fit">
+        <div className="relative w-fit rounded-[1.5rem]">
           <Handle
             type="target"
             position={Position.Left}

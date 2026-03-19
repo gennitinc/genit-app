@@ -347,7 +347,7 @@ export interface CloneVoiceRequest {
 // Model Types
 // ============================================
 
-export type ModelType = "image" | "video";
+export type ModelType = "image" | "video" | "audio" | "text";
 
 export interface Model {
   _id: string;

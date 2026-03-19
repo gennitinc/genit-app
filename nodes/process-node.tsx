@@ -13,7 +13,7 @@ interface ExtendedNodeData extends NodeData {
 export const ProcessNode = memo(
   ({ data, isConnectable }: NodeProps<ExtendedNodeData>) => {
     return (
-      <div className="bg-card border border-border rounded-lg shadow-sm p-4 w-80 min-w-[150px] min-h-[80px]">
+      <div className="relative rounded-[1.5rem] bg-card border border-border shadow-sm p-4 w-80 min-w-[150px] min-h-[80px]">
         {/* Remove Button */}
         {data.onRemoveNode && data.nodeId && (
           <button

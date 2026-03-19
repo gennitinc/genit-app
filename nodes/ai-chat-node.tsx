@@ -6,6 +6,7 @@ import { Send, Maximize2, Minimize2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { apiResponse } from "@/utils/apiResponse";
 
 interface AIChatNodeData {
   title?: string;
@@ -16,7 +17,9 @@ interface AIChatNodeData {
     timestamp: Date;
   }>;
   onRemoveNode?: (nodeId: string) => void;
+  onAIAction?: (nodeId: string, actions: any[]) => void;
   nodeId?: string;
+  projectId?: string;
 }
 
 export function AIChatNode({
@@ -26,15 +29,58 @@ export function AIChatNode({
 }: NodeProps<AIChatNodeData>) {
   const [message, setMessage] = useState("");
   const [isMaximized, setIsMaximized] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
-  const { title = "AI Chat Assistant", messages = [] } = data;
+  const { title = "AI Chat Assistant", messages: initialMessages = [] } = data;
+  const [messages, setMessages] = useState(initialMessages);
 
-  const handleSendMessage = useCallback(() => {
-    if (message.trim()) {
-      console.log("Sending message:", message);
-      setMessage("");
+  const handleSendMessage = useCallback(async () => {
+    if (!message.trim() || !data.nodeId || !data.projectId) return;
+
+    const userMessage = {
+      id: Date.now().toString(),
+      role: "user" as const,
+      content: message,
+      timestamp: new Date(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setMessage("");
+    setIsTyping(true);
+
+    try {
+      const res = await apiResponse.post(
+        "/apps/workflow/ai/process",
+        {
+          projectId: data.projectId,
+          nodeId: data.nodeId,
+          prompt: message,
+        },
+        { withCredentials: true },
+      );
+
+      if (res.data.success) {
+        const { text, actions } = res.data.data;
+
+        const assistantMessage = {
+          id: (Date.now() + 1).toString(),
+          role: "assistant" as const,
+          content: text || "Processing your request...",
+          timestamp: new Date(),
+        };
+
+        setMessages((prev) => [...prev, assistantMessage]);
+
+        if (actions && actions.length > 0 && data.onAIAction) {
+          data.onAIAction(data.nodeId, actions);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to process AI request:", error);
+    } finally {
+      setIsTyping(false);
     }
-  }, [message]);
+  }, [message, data.nodeId, data.projectId, data.onAIAction]);
 
   const handleKeyPress = useCallback(
     (e: React.KeyboardEvent) => {
@@ -48,7 +94,7 @@ export function AIChatNode({
 
   return (
     <div
-      className={`bg-background border-2 rounded-lg shadow-lg transition-all duration-200 ${
+      className={`bg-background border-2 rounded-[1.5rem] shadow-lg transition-all duration-200 ${
         isMaximized ? "fixed inset-4 z-50" : "w-full h-full"
       } ${selected ? "ring-2 ring-primary ring-offset-2" : ""}`}
       style={{ minWidth: "300px", minHeight: "250px" }}
@@ -99,10 +145,10 @@ export function AIChatNode({
       </div>
 
       {/* Messages */}
-      <div className="flex-1 p-3">
+      <div className="flex-1 p-3 overflow-hidden">
         <ScrollArea className="h-48 w-full">
           <div className="space-y-3">
-            {messages.length === 0 ? (
+            {messages.length === 0 && !isTyping ? (
               <div className="text-center text-muted-foreground text-sm py-8">
                 <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center mx-auto mb-2">
                   <Send className="w-4 h-4" />
@@ -111,24 +157,46 @@ export function AIChatNode({
                 <p className="text-xs">Type your message below</p>
               </div>
             ) : (
-              messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${
-                    msg.role === "user" ? "justify-end" : "justify-start"
-                  }`}
-                >
+              <>
+                {messages.map((msg) => (
                   <div
-                    className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${
-                      msg.role === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-foreground"
+                    key={msg.id}
+                    className={`flex ${
+                      msg.role === "user" ? "justify-end" : "justify-start"
                     }`}
                   >
-                    {msg.content}
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm ${
+                        msg.role === "user"
+                          ? "bg-primary text-primary-foreground rounded-tr-none"
+                          : "bg-muted text-foreground rounded-tl-none border border-border/50"
+                      }`}
+                    >
+                      {msg.content}
+                    </div>
                   </div>
-                </div>
-              ))
+                ))}
+                {isTyping && (
+                  <div className="flex justify-start">
+                    <div className="bg-muted text-foreground rounded-2xl rounded-tl-none px-4 py-2 text-sm border border-border/50 shadow-sm">
+                      <div className="flex space-x-1 items-center h-4">
+                        <div
+                          className="w-1.5 h-1.5 bg-foreground/50 rounded-full animate-bounce"
+                          style={{ animationDelay: "0ms" }}
+                        ></div>
+                        <div
+                          className="w-1.5 h-1.5 bg-foreground/50 rounded-full animate-bounce"
+                          style={{ animationDelay: "150ms" }}
+                        ></div>
+                        <div
+                          className="w-1.5 h-1.5 bg-foreground/50 rounded-full animate-bounce"
+                          style={{ animationDelay: "300ms" }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </ScrollArea>

@@ -61,6 +61,7 @@ interface PremiumInputProps {
   contentType?: keyof typeof MODELS_BY_TYPE;
   selectedModel?: string;
   onModelChange?: (modelId: string) => void;
+  availableModels?: Model[];
 }
 
 export function WorkflowPremiumInput({
@@ -80,18 +81,29 @@ export function WorkflowPremiumInput({
   contentType = "text",
   selectedModel,
   onModelChange,
+  availableModels: propModels,
 }: PremiumInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [serverModels, setServerModels] = useState<Model[]>([]);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
 
   useEffect(() => {
-    if (contentType === "image" || contentType === "video") {
+    if (propModels) {
+      setServerModels(propModels);
+      return;
+    }
+
+    if (
+      contentType === "image" ||
+      contentType === "video" ||
+      contentType === "audio" ||
+      contentType === "text"
+    ) {
       const fetchModels = async () => {
         setIsLoadingModels(true);
         try {
           const response = await modelApi.getAll({ type: contentType });
-          if (response.success && response.data) {
+          if (response.data) {
             setServerModels(response.data);
             // If no model is selected or the selected model is not in the new list, pick the default
             if (
@@ -101,9 +113,7 @@ export function WorkflowPremiumInput({
               const defaultModel =
                 response.data.find((m: any) => m.isDefault) || response.data[0];
               if (defaultModel) {
-                onModelChange?.(
-                  String(defaultModel._id || defaultModel.id || ""),
-                );
+                onModelChange?.(defaultModel.modelId);
               }
             }
           }
@@ -117,16 +127,21 @@ export function WorkflowPremiumInput({
     } else {
       setServerModels([]);
     }
-  }, [contentType]);
+  }, [contentType, propModels]);
 
-  const currentModels =
-    contentType === "image" || contentType === "video"
-      ? serverModels.map((m) => ({
-          id: m._id || m.id || "",
-          name: m.name,
-          icon: m.type === "image" ? "🎨" : "🎬",
-        }))
-      : MODELS_BY_TYPE[contentType as keyof typeof MODELS_BY_TYPE] || [];
+  const currentModels = serverModels.map((m) => ({
+    id: m.modelId,
+    name: m.name,
+    icon: "✦",
+  }));
+
+  // contentType === "image" || contentType === "video"
+  //   ? serverModels.map((m) => ({
+  //       id: m._id || m.id || "",
+  //       name: m.name,
+  //       icon: m.type === "image" ? "🎨" : "🎬",
+  //     }))
+  //   : MODELS_BY_TYPE[contentType as keyof typeof MODELS_BY_TYPE] || [];
 
   const activeModel = currentModels.find((m) => m.id === selectedModel);
 
@@ -191,58 +206,10 @@ export function WorkflowPremiumInput({
         )}
       </AnimatePresence>
 
-      <div className="flex items-center justify-between mb-2 px-4 h-fit">
+      <div className="flex items-center justify-between my-1 px-4 h-fit">
         <div className="flex items-center gap-2">
           <label className="text-sm font-medium">Prompt</label>
           <div className="h-4 w-px bg-border mx-1" />
-
-          <Popover>
-            <PopoverTrigger asChild>
-              <button className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-muted transition-colors text-xs font-medium text-muted-foreground hover:text-foreground">
-                <span className="opacity-70">
-                  {isLoadingModels ? (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  ) : (
-                    activeModel?.icon || "✦"
-                  )}
-                </span>
-                {isLoadingModels
-                  ? "Loading..."
-                  : activeModel?.name || "Select Model"}
-                <ChevronDown className="h-3 w-3 opacity-50" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-1" align="start">
-              <div className="space-y-1">
-                {isLoadingModels ? (
-                  <div className="flex items-center justify-center p-4">
-                    <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                  </div>
-                ) : (
-                  currentModels.map((model) => (
-                    <button
-                      key={model.id}
-                      onClick={() => onModelChange?.(model.id)}
-                      className={cn(
-                        "flex items-center justify-between w-full px-2 py-1.5 rounded-sm text-xs transition-colors",
-                        selectedModel === model.id
-                          ? "bg-primary/10 text-primary font-medium"
-                          : "hover:bg-muted",
-                      )}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="opacity-70">{model.icon}</span>
-                        {model.name}
-                      </div>
-                      {selectedModel === model.id && (
-                        <Check className="h-3 w-3" />
-                      )}
-                    </button>
-                  ))
-                )}
-              </div>
-            </PopoverContent>
-          </Popover>
         </div>
         <div className="flex items-center justify-between px-4 h-fit">
           <div className="flex items-center gap-2">
@@ -330,8 +297,56 @@ export function WorkflowPremiumInput({
 
         {footerContent && <div className="px-1">{footerContent}</div>}
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center justify-between gap-1.5">
           {leftContent}
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-muted transition-colors text-xs font-medium text-muted-foreground hover:text-foreground">
+                <span className="opacity-70">
+                  {isLoadingModels ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    activeModel?.icon || "✦"
+                  )}
+                </span>
+                {isLoadingModels
+                  ? "Loading..."
+                  : activeModel?.name || "Select Model"}
+                <ChevronDown className="h-3 w-3 opacity-50" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-1" align="start">
+              <div className="space-y-1">
+                {isLoadingModels ? (
+                  <div className="flex items-center justify-center p-4">
+                    <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                  </div>
+                ) : (
+                  currentModels.map((model) => (
+                    <button
+                      key={model.id}
+                      onClick={() => onModelChange?.(model.id)}
+                      className={cn(
+                        "flex items-center justify-between w-full px-2 py-1.5 rounded-sm text-xs transition-colors",
+                        selectedModel === model.id
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "hover:bg-muted",
+                      )}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="opacity-70">{model.icon}</span>
+                        {model.name}
+                      </div>
+                      {selectedModel === model.id && (
+                        <Check className="h-3 w-3" />
+                      )}
+                    </button>
+                  ))
+                )}
+              </div>
+            </PopoverContent>
+          </Popover>
 
           <div className="ml-auto flex items-center gap-1.5">
             {rightContent}

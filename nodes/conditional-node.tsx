@@ -14,7 +14,7 @@ interface ExtendedNodeData extends NodeData {
 export const ConditionalNode = memo(
   ({ data, isConnectable, selected }: NodeProps<ExtendedNodeData>) => {
     return (
-      <>
+      <div className="relative rounded-[1.5rem]">
         <NodeResizer
           color="#3b82f6"
           isVisible={selected}
@@ -94,7 +94,7 @@ export const ConditionalNode = memo(
             className="w-3 h-3 bg-red-500"
           />
         </div>
-      </>
+      </div>
     );
   },
 );

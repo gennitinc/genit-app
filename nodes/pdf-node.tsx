@@ -27,7 +27,7 @@ export function PDFNode({ data, selected }: NodeProps<PDFNodeData>) {
   } = data;
 
   return (
-    <>
+    <div className="relative rounded-[1.5rem]">
       <NodeResizer
         color="#ef4444"
         isVisible={selected}
@@ -92,6 +92,6 @@ export function PDFNode({ data, selected }: NodeProps<PDFNodeData>) {
 
         <Handle type="source" position={Position.Right} className="w-3 h-3" />
       </div>
-    </>
+    </div>
   );
 }

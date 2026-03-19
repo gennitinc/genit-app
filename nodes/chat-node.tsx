@@ -51,7 +51,7 @@ export function ChatNode({ data }: ChatNodeProps) {
   };
 
   return (
-    <div className="bg-white border-2 border-purple-200 rounded-lg shadow-lg w-96 h-96">
+    <div className="bg-white border-2 border-purple-200 rounded-[1.5rem] shadow-lg w-96 h-96">
       <Handle
         type="source"
         position={Position.Right}
