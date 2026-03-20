@@ -347,7 +347,7 @@ export function PromptNode({
             side="right"
             className="p-0 overflow-hidden border-none bg-transparent shadow-none w-full sm:max-w-lg h-full"
           >
-            <div className="w-full h-full bg-background/95 backdrop-blur-1xl rounded-l-2xl border border-white/20 shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] p-0 flex flex-col relative">
+            <div className="w-full h-full bg-background/95 backdrop-blur-1xl lg:rounded-l-2xl border lg:border-white/20 lg:shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] p-0 flex flex-col relative">
               {/* Close/Minimize button */}
               {/* <button
                 onClick={() => setIsMaximized(false)}
@@ -359,7 +359,7 @@ export function PromptNode({
               <div className="flex-1 flex flex-col p-1 overflow-hidden">
                 <div className="flex items-center justify-between mb-8 p-4">
                   <div className="flex items-center gap-2">
-                    <h2 className="text-xl font-semibold tracking-tight">
+                    <h2 className="text-xl font-semibold tracking-tight hidden md:block">
                       Chat
                     </h2>
                   </div>
