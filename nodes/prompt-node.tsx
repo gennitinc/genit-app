@@ -359,9 +359,8 @@ export function PromptNode({
               <div className="flex-1 flex flex-col p-1 overflow-hidden">
                 <div className="flex items-center justify-between mb-8 p-4">
                   <div className="flex items-center gap-2">
-                    {/* <div className="size-3 rounded-full bg-primary animate-pulse" /> */}
                     <h2 className="text-xl font-semibold tracking-tight">
-                      Chat node
+                      Chat
                     </h2>
                   </div>
                   <div className="flex items-center gap-2 pr-4">

@@ -104,7 +104,7 @@ export default function About2() {
               </strong>
               ) between{" "}
               <strong className="font-semibold text-slate-12">
-                Plus Five Five, Inc. ("Company", "We", "Our", "Us")
+                Klip Technologies, Inc. ("Company", "We", "Our", "Us")
               </strong>{" "}
               , the operator of Gennit, an AI-powered media design platform, and
               you (
@@ -305,9 +305,10 @@ export default function About2() {
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               At the end of each Billing Cycle, your Subscription will
               automatically renew under the exact same conditions unless you
-              cancel it or Plus Five Five, Inc. cancels it. You may cancel your
-              Subscription renewal either through your online account management
-              page or by contacting Plus Five Five, Inc. customer support team.
+              cancel it or Klip Technologies, Inc. cancels it. You may cancel
+              your Subscription renewal either through your online account
+              management page or by contacting Klip Technologies, Inc. customer
+              support team.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               A valid payment method, including credit card, is required to
@@ -315,9 +316,9 @@ export default function About2() {
               Five Five, Inc. with accurate and complete billing information
               including full name, address, state, zip code, telephone number,
               and a valid payment method information. By submitting such payment
-              information, you automatically authorize Plus Five Five, Inc. to
-              charge all Subscription fees incurred through your account to any
-              such payment instruments.
+              information, you automatically authorize Klip Technologies, Inc.
+              to charge all Subscription fees incurred through your account to
+              any such payment instruments.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Should automatic billing fail to occur for any reason, Plus Five
@@ -354,7 +355,7 @@ export default function About2() {
               </a>
             </h2>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
-              Plus Five Five, Inc. may, at its sole discretion, offer a
+              Klip Technologies, Inc. may, at its sole discretion, offer a
               Subscription with a free trial for a limited period of time (
               <strong className="font-semibold text-slate-12">
                 "Free Trial"
@@ -367,16 +368,16 @@ export default function About2() {
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               If you do enter your billing information when signing up for Free
-              Trial, you will not be charged by Plus Five Five, Inc. until Free
-              Trial has expired. On the last day of Free Trial period, unless
-              you cancelled your Subscription, you will be automatically charged
-              the applicable Subscription fees for the type of Subscription you
-              have selected.
+              Trial, you will not be charged by Klip Technologies, Inc. until
+              Free Trial has expired. On the last day of Free Trial period,
+              unless you cancelled your Subscription, you will be automatically
+              charged the applicable Subscription fees for the type of
+              Subscription you have selected.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
-              At any time and without notice, Plus Five Five, Inc. reserves the
-              right to (i) modify Terms of Service of Free Trial offer, or (ii)
-              cancel such Free Trial offer.
+              At any time and without notice, Klip Technologies, Inc. reserves
+              the right to (i) modify Terms of Service of Free Trial offer, or
+              (ii) cancel such Free Trial offer.
             </p>
             <h2
               id="7-fee-changes"
@@ -406,13 +407,13 @@ export default function About2() {
               </a>
             </h2>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
-              Plus Five Five, Inc., in its sole discretion and at any time, may
-              modify Subscription fees for the Subscriptions. Any Subscription
-              fee change will become effective at the end of the then-current
-              Billing Cycle.
+              Klip Technologies, Inc., in its sole discretion and at any time,
+              may modify Subscription fees for the Subscriptions. Any
+              Subscription fee change will become effective at the end of the
+              then-current Billing Cycle.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
-              Plus Five Five, Inc. will provide you with a reasonable prior
+              Klip Technologies, Inc. will provide you with a reasonable prior
               notice of any change in Subscription fees to give you an
               opportunity to terminate your Subscription before such change
               becomes effective.
@@ -513,7 +514,7 @@ export default function About2() {
               to other users of Service without your approval.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
-              Plus Five Five, Inc. has the right but not the obligation to
+              Klip Technologies, Inc. has the right but not the obligation to
               monitor and edit all Content provided by users.
             </p>
             <h2
@@ -887,11 +888,11 @@ export default function About2() {
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Service and its original content (excluding Content provided by
               users), features and functionality are and will remain the
-              exclusive property of Plus Five Five, Inc. and its licensors.
+              exclusive property of Klip Technologies, Inc. and its licensors.
               Service is protected by copyright, trademark, and other laws of
               the United States and foreign countries. Our trademarks and trade
               dress may not be used in connection with any product or service
-              without the prior written consent of Plus Five Five, Inc.
+              without the prior written consent of Klip Technologies, Inc.
             </p>
             <h2
               id="15-copyright-policy"
@@ -1088,20 +1089,21 @@ export default function About2() {
             </h2>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               Our Service may contain links to third party web sites or services
-              that are not owned or controlled by Plus Five Five, Inc.
+              that are not owned or controlled by Klip Technologies, Inc.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
-              Plus Five Five, Inc. has no control over, and assumes no
+              Klip Technologies, Inc. has no control over, and assumes no
               responsibility for the content, privacy policies, or practices of
               any third party web sites or services. We do not warrant the
               offerings of any of these entities/individuals or their websites.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
-              YOU ACKNOWLEDGE AND AGREE THAT PLUS FIVE FIVE, INC. SHALL NOT BE
-              RESPONSIBLE OR LIABLE, DIRECTLY OR INDIRECTLY, FOR ANY DAMAGE OR
-              LOSS CAUSED OR ALLEGED TO BE CAUSED BY OR IN CONNECTION WITH USE
-              OF OR RELIANCE ON ANY SUCH CONTENT, GOODS OR SERVICES AVAILABLE ON
-              OR THROUGH ANY SUCH THIRD PARTY WEB SITES OR SERVICES.
+              YOU ACKNOWLEDGE AND AGREE THAT Klip Technologies, INC. SHALL NOT
+              BE RESPONSIBLE OR LIABLE, DIRECTLY OR INDIRECTLY, FOR ANY DAMAGE
+              OR LOSS CAUSED OR ALLEGED TO BE CAUSED BY OR IN CONNECTION WITH
+              USE OF OR RELIANCE ON ANY SUCH CONTENT, GOODS OR SERVICES
+              AVAILABLE ON OR THROUGH ANY SUCH THIRD PARTY WEB SITES OR
+              SERVICES.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 text-slate-11 my-5 text-pretty">
               WE STRONGLY ADVISE YOU TO READ THE TERMS OF SERVICE AND PRIVACY

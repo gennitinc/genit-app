@@ -80,7 +80,7 @@ export default function About2() {
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">
-                Plus Five Five, Inc. ("us", "we", or "our")
+                Klip Technologies, Inc. ("us", "we", or "our")
               </strong>{" "}
               operates{" "}
               <a
@@ -165,7 +165,7 @@ export default function About2() {
               >
                 https://gennit.online
               </a>{" "}
-              website operated by Plus Five Five, Inc.
+              website operated by Klip Technologies, Inc.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
               <strong className="font-semibold text-slate-12">
@@ -390,7 +390,8 @@ export default function About2() {
               </a>
             </h2>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
-              Plus Five Five, Inc. uses the collected data for various purposes:
+              Klip Technologies, Inc. uses the collected data for various
+              purposes:
             </p>
             <ol className="leading-7 flex my-5 list-decimal flex-col gap-3 pl-5 text-sm text-neutral-600 dark:text-neutral-400">
               <li>to notify you about changes to our Service;</li>
@@ -513,12 +514,12 @@ export default function About2() {
               such information represents your agreement to that transfer.
             </p>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-7 my-5 text-pretty">
-              Plus Five Five, Inc. will take all the steps reasonably necessary
-              to ensure that your data is treated securely and in accordance
-              with this Privacy Policy and no transfer of your Personal Data
-              will take place to an organisation or a country unless there are
-              adequate controls in place including the security of your data and
-              other personal information.
+              Klip Technologies, Inc. will take all the steps reasonably
+              necessary to ensure that your data is treated securely and in
+              accordance with this Privacy Policy and no transfer of your
+              Personal Data will take place to an organisation or a country
+              unless there are adequate controls in place including the security
+              of your data and other personal information.
             </p>
             <h2
               id="8-disclosure-of-data"
