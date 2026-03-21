@@ -68,6 +68,8 @@ export default function AdminModelsPage() {
     capabilities: {
       supportsAspectRatio: false,
       supportsStyle: false,
+      supportsVideoReference: false,
+      supportsSubjectReference: false,
       maxResolution: "",
       supportedAspectRatios: [] as string[],
     },
@@ -144,6 +146,8 @@ export default function AdminModelsPage() {
       capabilities: {
         supportsAspectRatio: false,
         supportsStyle: false,
+        supportsVideoReference: false,
+        supportsSubjectReference: false,
         maxResolution: "",
         supportedAspectRatios: [],
       },
@@ -168,6 +172,10 @@ export default function AdminModelsPage() {
       capabilities: {
         supportsAspectRatio: model.capabilities?.supportsAspectRatio || false,
         supportsStyle: model.capabilities?.supportsStyle || false,
+        supportsVideoReference:
+          model.capabilities?.supportsVideoReference || false,
+        supportsSubjectReference:
+          model.capabilities?.supportsSubjectReference || false,
         maxResolution: model.capabilities?.maxResolution || "",
         supportedAspectRatios: model.capabilities?.supportedAspectRatios || [],
       },
@@ -201,7 +209,7 @@ export default function AdminModelsPage() {
         const response = await modelApi.update(
           editingModel._id,
           formData,
-          iconFile || undefined
+          iconFile || undefined,
         );
         if (response.success) {
           toast.success("Model updated successfully");
@@ -599,6 +607,46 @@ export default function AdminModelsPage() {
               </div>
             </div>
 
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Switch
+                  id="supportsVideoReference"
+                  checked={formData.capabilities.supportsVideoReference}
+                  onCheckedChange={(checked) =>
+                    setFormData({
+                      ...formData,
+                      capabilities: {
+                        ...formData.capabilities,
+                        supportsVideoReference: checked,
+                      },
+                    })
+                  }
+                />
+                <Label htmlFor="supportsVideoReference">
+                  Supports Video Ref
+                </Label>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Switch
+                  id="supportsSubjectReference"
+                  checked={formData.capabilities.supportsSubjectReference}
+                  onCheckedChange={(checked) =>
+                    setFormData({
+                      ...formData,
+                      capabilities: {
+                        ...formData.capabilities,
+                        supportsSubjectReference: checked,
+                      },
+                    })
+                  }
+                />
+                <Label htmlFor="supportsSubjectReference">
+                  Supports Subject Ref
+                </Label>
+              </div>
+            </div>
+
             {formData.type === "video" && (
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
@@ -860,6 +908,46 @@ export default function AdminModelsPage() {
                   }
                 />
                 <Label htmlFor="edit-supportsStyle">Supports Style</Label>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Switch
+                  id="edit-supportsVideoReference"
+                  checked={formData.capabilities.supportsVideoReference}
+                  onCheckedChange={(checked) =>
+                    setFormData({
+                      ...formData,
+                      capabilities: {
+                        ...formData.capabilities,
+                        supportsVideoReference: checked,
+                      },
+                    })
+                  }
+                />
+                <Label htmlFor="edit-supportsVideoReference">
+                  Supports Video Ref
+                </Label>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Switch
+                  id="edit-supportsSubjectReference"
+                  checked={formData.capabilities.supportsSubjectReference}
+                  onCheckedChange={(checked) =>
+                    setFormData({
+                      ...formData,
+                      capabilities: {
+                        ...formData.capabilities,
+                        supportsSubjectReference: checked,
+                      },
+                    })
+                  }
+                />
+                <Label htmlFor="edit-supportsSubjectReference">
+                  Supports Subject Ref
+                </Label>
               </div>
             </div>
 

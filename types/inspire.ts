@@ -363,6 +363,8 @@ export interface Model {
   capabilities: {
     supportsAspectRatio?: boolean;
     supportsStyle?: boolean;
+    supportsVideoReference?: boolean;
+    supportsSubjectReference?: boolean;
     maxResolution?: string;
     supportedAspectRatios?: string[];
   };
@@ -421,6 +423,7 @@ export interface GenerateVideoRequest {
   startFrameUrl?: string;
   endFrameUrl?: string;
   referenceImages?: string[];
+  referenceVideoUrl?: string;
 }
 
 export interface GeneratedVideoItem {
@@ -432,6 +435,7 @@ export interface GeneratedVideoItem {
   startFrameUrl?: string;
   endFrameUrl?: string;
   referenceImageUrls?: string[];
+  referenceVideoUrl?: string;
 }
 
 export interface GenerateVideoResponse {

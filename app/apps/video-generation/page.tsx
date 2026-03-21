@@ -36,7 +36,11 @@ import {
 } from "@/components/ui/drawer";
 import withAuth from "@/helper/hoc/withAuth";
 import { PresenterSelector } from "@/components/video/presenter-selector";
-import { ASPECT_RATIOS, AspectRatioCard, ResolutionSelector } from "@/components/video/resolution-selector";
+import {
+  ASPECT_RATIOS,
+  AspectRatioCard,
+  ResolutionSelector,
+} from "@/components/video/resolution-selector";
 import { VoiceSelector } from "@/components/video/voice-selector";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
@@ -217,6 +221,10 @@ function VideoGenerationPage() {
     null,
   );
   const [endFramePreview, setEndFramePreview] = useState<string | null>(null);
+  const [referenceVideo, setReferenceVideo] = useState<File | null>(null);
+  const [referenceVideoPreview, setReferenceVideoPreview] = useState<
+    string | null
+  >(null);
   const [prompt, setPrompt] = useState("");
   const [promptImages, setPromptImages] = useState<File[]>([]);
   const [promptImagePreviews, setPromptImagePreviews] = useState<string[]>([]);
@@ -242,6 +250,7 @@ function VideoGenerationPage() {
   const [sectionsEnabled, setSectionsEnabled] = useState({
     avatar: false,
     audio: false,
+    videoRef: false,
     resolution: false,
     advanced: false,
   });
@@ -563,6 +572,7 @@ function VideoGenerationPage() {
       const videoFiles: any = {};
       if (startFrame) videoFiles.startFrame = startFrame;
       if (endFrame) videoFiles.endFrame = endFrame;
+      if (referenceVideo) videoFiles.referenceVideo = referenceVideo;
       if (promptImages.length > 0) {
         videoFiles.imageInput = promptImages[0];
         if (promptImages.length > 1)
@@ -578,6 +588,7 @@ function VideoGenerationPage() {
           duration: duration,
           startFrameUrl: startFramePreview || undefined,
           endFrameUrl: endFramePreview || undefined,
+          referenceVideoUrl: referenceVideoPreview || undefined,
         },
         Object.keys(videoFiles).length > 0 ? videoFiles : undefined,
       );
@@ -639,7 +650,7 @@ function VideoGenerationPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-[27rem_1fr] gap-6 relative w-full md:h-[calc(100vh-10rem)] min-h-0">
           <div className="flex flex-col h-full min-h-0 overflow-hidden">
-            <div className="flex items-start justify-between py-2 z-20">
+            <div className="flex justify-between py-2 z-20 items-baseline">
               <div
                 role="tablist"
                 className="rounded-xl p-1 flex gap-4 bg-neutral-100 dark:bg-neutral-900"
@@ -926,7 +937,6 @@ function VideoGenerationPage() {
                 )}
 
                 <div className="space-y-2">
-                  
                   <PremiumInput
                     value={prompt}
                     onChange={setPrompt}
@@ -997,6 +1007,8 @@ function VideoGenerationPage() {
                     )}
                   </div>
                 </div>
+
+                {/* Reference Video Section */}
 
                 {generationMode === "image" && (
                   <div className="space-y-2 ">
@@ -1176,7 +1188,169 @@ function VideoGenerationPage() {
                 )}
 
                 {generationMode === "video" && (
-                  <div className="pb-4 shrink-0 md:overflow-y-auto pt-4 hide-scrollbar space-y-2 md:max-h-[calc(100vh-15rem)]">
+                  <div className="pb-4 pt-4 space-y-2">
+                    {selectedVideoModel?.capabilities
+                      ?.supportsVideoReference && (
+                      <div className="space-y-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleSection("videoRef")}
+                          className="w-full flex items-center justify-between p-3 bg-neutral-surface-subtle rounded-lg hover:bg-neutral-surface-subtle/80 transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Video className="w-4 h-4 text-text-secondary" />
+                            <span className="text-sm font-medium text-font-primary">
+                              Reference Video
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              role="switch"
+                              aria-checked={sectionsEnabled.videoRef}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleSection("videoRef");
+                              }}
+                              className={cn(
+                                "relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-200",
+                                sectionsEnabled.videoRef
+                                  ? "bg-neutral-900 dark:bg-neutral-100"
+                                  : "bg-neutral-300 dark:bg-neutral-600",
+                              )}
+                            >
+                              <span
+                                className={cn(
+                                  "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200",
+                                  sectionsEnabled.videoRef
+                                    ? "translate-x-4"
+                                    : "translate-x-0.5",
+                                )}
+                              />
+                            </button>
+                            {sectionsEnabled.videoRef ? (
+                              <ChevronUp className="w-4 h-4 text-text-secondary" />
+                            ) : (
+                              <ChevronDown className="w-4 h-4 text-text-secondary" />
+                            )}
+                          </div>
+                        </button>
+                        {sectionsEnabled.videoRef && (
+                          <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12">
+                            {referenceVideoPreview ? (
+                              <div className="relative aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-neutral-50 dark:bg-neutral-900 group">
+                                <video
+                                  src={referenceVideoPreview}
+                                  className="w-full h-full object-cover"
+                                  controls={false}
+                                  autoPlay
+                                  loop
+                                  muted
+                                />
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setReferenceVideo(null);
+                                    setReferenceVideoPreview(null);
+                                  }}
+                                  className="absolute top-2 right-2 bg-black/50 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <Trash size={14} />
+                                </button>
+                              </div>
+                            ) : (
+                              <label className="relative aspect-video rounded-xl border-2 border-dashed border-neutral-300 dark:border-neutral-700 flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
+                                <input
+                                  type="file"
+                                  accept="video/*"
+                                  className="sr-only"
+                                  onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                      setReferenceVideo(file);
+                                      setReferenceVideoPreview(
+                                        URL.createObjectURL(file),
+                                      );
+                                    }
+                                  }}
+                                />
+                                <Video className="w-8 h-8 text-neutral-400 mb-2" />
+                                <span className="text-sm text-neutral-500 font-medium">
+                                  Upload reference video
+                                </span>
+                                <p className="text-xs text-neutral-400 mt-1">
+                                  Max size: 50MB
+                                </p>
+                              </label>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {selectedVideoModel?.allowCustomAudio && (
+                      <div className="mt-2 space-y-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleSection("audio")}
+                          className="w-full flex items-center justify-between p-3 bg-neutral-surface-subtle rounded-lg hover:bg-neutral-surface-subtle/80 transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Volume2 className="w-4 h-4 text-text-secondary" />
+                            <span className="text-sm font-medium text-font-primary">
+                              Audio & Voice
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              role="switch"
+                              aria-checked={sectionsEnabled.audio}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleSection("audio");
+                              }}
+                              className={cn(
+                                "relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-200",
+                                sectionsEnabled.audio
+                                  ? "bg-neutral-900 dark:bg-neutral-100"
+                                  : "bg-neutral-300 dark:bg-neutral-600",
+                              )}
+                            >
+                              <span
+                                className={cn(
+                                  "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200",
+                                  sectionsEnabled.audio
+                                    ? "translate-x-4"
+                                    : "translate-x-0.5",
+                                )}
+                              />
+                            </button>
+                            {sectionsEnabled.audio ? (
+                              <ChevronUp className="w-4 h-4 text-text-secondary" />
+                            ) : (
+                              <ChevronDown className="w-4 h-4 text-text-secondary" />
+                            )}
+                          </div>
+                        </button>
+                        {sectionsEnabled.audio && (
+                          <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12">
+                            <VoiceSelector
+                              selectedVoice={selectedVoice}
+                              clonedVoiceId={clonedVoiceId}
+                              onSelectVoice={setSelectedVoice}
+                              onCloneVoice={setClonedVoiceId}
+                              isCloning={isCloningVoice}
+                              onCloningChange={setIsCloningVoice}
+                              onDrawerClose={() => {}}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <div className="space-y-2">
                       <button
                         onClick={() =>

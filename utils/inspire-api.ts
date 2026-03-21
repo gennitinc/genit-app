@@ -343,7 +343,6 @@ export const tutorialApi = {
   },
 };
 
-
 export const presenterApi = {
   /**
    * Get all presenters
@@ -443,7 +442,6 @@ export const presenterApi = {
     return response.data;
   },
 };
-
 
 export const voiceApi = {
   /**
@@ -610,7 +608,9 @@ export const modelApi = {
   /**
    * Get default model for type
    */
-  getDefault: async (type: "image" | "video" | "audio" | "text"): Promise<ApiResponse<Model>> => {
+  getDefault: async (
+    type: "image" | "video" | "audio" | "text",
+  ): Promise<ApiResponse<Model>> => {
     const response = await apiResponse.get(`/inspire/models/default/${type}`);
     return response.data;
   },
@@ -642,6 +642,7 @@ export const modelApi = {
         supportedAspectRatios?: string[];
       };
       status?: "active" | "inactive" | "beta";
+      allowCustomAudio?: boolean;
     },
     iconFile?: File,
   ): Promise<ApiResponse<Model>> => {
@@ -656,6 +657,8 @@ export const modelApi = {
     if (data.isPremium !== undefined)
       formData.append("isPremium", String(data.isPremium));
     if (data.status) formData.append("status", data.status);
+    if (data.allowCustomAudio !== undefined)
+      formData.append("allowCustomAudio", String(data.allowCustomAudio));
     if (data.capabilities) {
       formData.append("capabilities", JSON.stringify(data.capabilities));
     }
@@ -691,6 +694,7 @@ export const modelApi = {
         supportedAspectRatios?: string[];
       };
       status?: "active" | "inactive" | "beta";
+      allowCustomAudio?: boolean;
     },
     iconFile?: File,
   ): Promise<ApiResponse<Model>> => {
@@ -705,6 +709,8 @@ export const modelApi = {
     if (data.isPremium !== undefined)
       formData.append("isPremium", String(data.isPremium));
     if (data.status) formData.append("status", data.status);
+    if (data.allowCustomAudio !== undefined)
+      formData.append("allowCustomAudio", String(data.allowCustomAudio));
     if (data.capabilities) {
       formData.append("capabilities", JSON.stringify(data.capabilities));
     }
@@ -820,6 +826,7 @@ export const videoGenApi = {
       endFrame?: File;
       imageInput?: File;
       referenceImages?: File[];
+      referenceVideo?: File;
     },
   ): Promise<GenerateVideoResponse> => {
     const formData = new FormData();
@@ -833,6 +840,8 @@ export const videoGenApi = {
     if (data.startFrameUrl)
       formData.append("startFrameUrl", data.startFrameUrl);
     if (data.endFrameUrl) formData.append("endFrameUrl", data.endFrameUrl);
+    if (data.referenceVideoUrl)
+      formData.append("referenceVideoUrl", data.referenceVideoUrl);
     if (data.referenceImages && data.referenceImages.length > 0) {
       formData.append("referenceImages", JSON.stringify(data.referenceImages));
     }
@@ -847,6 +856,9 @@ export const videoGenApi = {
       }
       if (files.imageInput) {
         formData.append("imageInput", files.imageInput);
+      }
+      if (files.referenceVideo) {
+        formData.append("referenceVideo", files.referenceVideo);
       }
       if (files.referenceImages && files.referenceImages.length > 0) {
         files.referenceImages.forEach((file) => {
