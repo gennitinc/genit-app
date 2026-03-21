@@ -1300,7 +1300,7 @@ function VideoGenerationPage() {
                           <div className="flex items-center gap-2">
                             <Volume2 className="w-4 h-4 text-text-secondary" />
                             <span className="text-sm font-medium text-font-primary">
-                              Audio & Voice
+                              Reference Audio
                             </span>
                           </div>
                           <div className="flex items-center gap-2">
