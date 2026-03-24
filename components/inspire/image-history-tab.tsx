@@ -161,7 +161,7 @@ export function ImageHistoryTab({
     <>
       <section className="p-4">
         {/* Masonry Grid */}
-        <div className="columns-2 lg:columns-3 gap-4">
+        <div className="columns-2 lg:columns-4 gap-4">
           {images.map((image, index) => {
             // Use aspectRatio from image data or predefined array (same as community cards)
             const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "3/2"];

@@ -162,7 +162,7 @@ export function VideoHistoryTab({
     <>
       <section className="p-4">
         {/* Masonry Grid */}
-        <div className="columns-2 lg:columns-3 gap-4">
+        <div className="columns-2 lg:columns-4 gap-4">
           {videos.map((video, index) => (
             <VideoCard
               key={video._id}

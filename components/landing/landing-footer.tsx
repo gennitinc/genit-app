@@ -524,10 +524,10 @@ export function LandingFooter() {
                     href="/creators-program"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Templates
+                    Inspirations
                   </Link>
                   <Link
-                    href="/contact"
+                    href="/inspirations"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Contact
