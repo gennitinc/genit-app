@@ -17,7 +17,7 @@ import { LandingVoiceClone } from "./landing-voice-clone";
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
+    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col overflow-x-hidden">
       <Toaster />
       <LandingPageBanner />
       <LandingNavbar />
