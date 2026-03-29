@@ -38,7 +38,7 @@ export default function CommunityComp() {
   return (
     <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col container mx-auto px-2 py-8">
       <div className="">
-        <div className="mb-8 w-full">
+        <div className="mb-8 w-full ">
           <Tabs
             value={activeTab}
             onValueChange={(v) => {

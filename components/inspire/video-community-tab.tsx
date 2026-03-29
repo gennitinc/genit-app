@@ -381,7 +381,7 @@ export function VideoCommunityTab({
 
   if (videos.length === 0 && !loading) {
     return (
-      <section className="p-4">
+      <section className="">
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
           <div className="w-16 h-16 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
             <Users className="w-8 h-8 text-neutral-400 dark:text-neutral-500" />

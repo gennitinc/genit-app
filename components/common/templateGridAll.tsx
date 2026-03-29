@@ -578,7 +578,7 @@ export default function TemplateGridAll() {
 
   return (
     <motion.div
-      className="mt-2 mb-20 px-1 md:px-6 lg:px-8"
+      className="mt-2 mb-20"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.8 }}

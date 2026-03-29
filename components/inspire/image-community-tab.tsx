@@ -440,7 +440,7 @@ export function ImageCommunityTab({
 
   return (
     <>
-      <section className="p-4">
+      <section className="">
         <div
           ref={containerRef}
           className={cn(
