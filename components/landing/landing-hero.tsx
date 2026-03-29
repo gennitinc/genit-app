@@ -488,7 +488,7 @@ const LandingHero = () => {
     };
   }, []);
   return (
-    <section className="relative py-12 md:py-16 px-2 md:px-12 lg:px-20 xl:px-24">
+    <section className="relative py-12 md:py-16 px-2 md:px-12 lg:px-20 xl:px-24 w-screen overflow-x-hidden">
      
       <div className="relative w-full flex flex-col items-center justify-center">
         <svg
