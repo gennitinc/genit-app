@@ -100,10 +100,10 @@ export default function TopNavWithAurora({
         className={cn(
           "sticky top-0 z-30 transition-all duration-300 bg-transparent",
           pathName == "/chat" ? "backdrop-blur-sm" : "backdrop-blur-md",
-          "h-16 shrink-0 w-full"
+          "h-fit shrink-0 w-full"
         )}
       >
-        <div className="flex px-4 py-2 items-center justify-between w-full">
+        <div className="flex px-4 py-1.5 items-center justify-between w-full">
           <div className="flex z-20 items-center flex-1 gap-4">
             <SidebarTrigger className="-ml-2 z-20" />
             <Link href="/" className="lg:hidden flex items-center gap-1">
