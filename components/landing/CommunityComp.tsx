@@ -49,7 +49,7 @@ export default function CommunityComp() {
             }}
             className="w-full"
           >
-            <div className="sticky top-0 z-10 bg-white dark:bg-black pb-2 pt-2 mb-2 w-full flex items-end justify-between px-2 md:px-14 lg:px-10">
+            <div className="sticky top-0 z-10 bg-white dark:bg-black pb-2 pt-2 mb-2 w-full flex items-end justify-between">
               <div className="flex flex-row items-center gap-1">
                 {" "}
                 <Compass />
