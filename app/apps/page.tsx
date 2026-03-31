@@ -155,7 +155,7 @@ const AppCard = ({
                 )}
               </figure>
             </div>
-            <div className="flex flex-col gap-4 py-3 min-w-0 justify-between flex-1 p-4">
+            <div className="flex flex-col gap-4 py-3 min-w-0 justify-between flex-1">
               <div className="flex flex-col gap-1">
                 <h3 className="text-sm sm:text-base font-semibold text-font-primary leading-tight tracking-tight">
                   {title}
@@ -233,20 +233,6 @@ const appSections = [
       },
 
       {
-        id: "logo-animation",
-        href: "/apps/logo-animation",
-        title: "Logo Animator",
-        description: "Bring your logo to life with stunning animations",
-        type: "image",
-        imageSrc:
-          "https://i.pinimg.com/originals/46/5b/c4/465bc4bc137942ccd0a2a8ecb96387e8.gif",
-        // badge: {
-        //   text: "Coming soon",
-        //   bgColor: "rgb(157, 78, 221)",
-        //   textColor: "rgb(255, 255, 255)",
-        // },
-      },
-      {
         id: "image-generation",
         href: "/apps/image-generation",
         title: "Image Generation",
@@ -273,6 +259,20 @@ const appSections = [
         type: "image",
         imageSrc:
           "https://imgv3.fotor.com/images/homepage-feature-card/use-fotor-ai-inpainting-tool-to-generate-a-spooted-white-trousers-for-female.jpg",
+        badge: {
+          text: "Coming soon",
+          bgColor: "rgb(157, 78, 221)",
+          textColor: "rgb(255, 255, 255)",
+        },
+      },
+      {
+        id: "logo-animation",
+        href: "/apps/logo-animation",
+        title: "Logo Animator",
+        description: "Bring your logo to life with stunning animations",
+        type: "image",
+        imageSrc:
+          "https://i.pinimg.com/originals/46/5b/c4/465bc4bc137942ccd0a2a8ecb96387e8.gif",
         badge: {
           text: "Coming soon",
           bgColor: "rgb(157, 78, 221)",
