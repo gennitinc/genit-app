@@ -31,6 +31,10 @@ import {
 } from "@/components/ui/sheet";
 import { apiResponse } from "@/utils/apiResponse";
 import { PremiumInput } from "@/components/ui/premium-input";
+import { Toaster } from "sonner";
+import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { MainContent } from "@/components/layout/main-content";
+import { AppSidebar } from "@/components/layout/app-sidebar";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -521,170 +525,183 @@ const SkinEnhancerPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
-      <LandingPageBanner />
-      <LandingNavbar />
+    <div className="flex relative w-full h-[100dvh] overflow-hidden bg-white dark:bg-black">
+      <Toaster />
+      <AppSidebar />
+      <div className="flex-1 flex flex-col overflow-auto will-change-scroll scroll-container">
+        <TopNavWithAurora />
+        <div
+          id="main-content"
+          className="flex-1"
+          style={{
+            transform: "translateZ(0)",
+            willChange: "transform",
+          }}
+        >
+          <main className="flex-grow pt-12 md:mb-20">
+            {/* Hero */}
 
-      <main className="flex-grow pt-12 md:mb-20">
-        {/* Hero */}
-        <div className="text-center animate-fadeInUp mb-10 px-2 md:px-4">
-          <h1 className="font-bold tracking-tight text-2xl lg:text-5xl">
-            Flawless Skin{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Retouch
-            </span>
-          </h1>
-          <p
-            className="my-5 text-muted-foreground text-sm md:text-lg animate-fadeInUp"
-            style={{ animationDelay: "0.2s" }}
-          >
-            Achieve professional, true-to-life skin textures in seconds.
-          </p>
-        </div>
+            <div className="text-center animate-fadeInUp mb-10 px-2 md:px-4">
+              <h1 className="font-semibold tracking-tight text-2xl lg:text-4xl">
+                Skin
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent ml-1">
+                  Enhancer
+                </span>
+              </h1>
+              <p
+                className="my-2 text-muted-foreground text-sm md:text-lg animate-fadeInUp"
+                style={{ animationDelay: "0.2s" }}
+              >
+                Achieve professional, true-to-life skin textures in seconds.
+              </p>
+            </div>
 
-        {/* Main layout */}
-        <div className="relative w-full border-y border-black/5 dark:border-white/10">
-          <GridPattern
-            width={30}
-            height={30}
-            x={-1}
-            y={-1}
-            strokeDasharray={"4 2"}
-            className="absolute inset-0 z-0 opacity-90 dark:opacity-50"
-          />
-          <section className="sm:px-2 lg:px-8 lg:py-10 grid grid-cols-1 md:grid-cols-[1fr_1.4fr] gap-6 lg:gap-16 max-w-6xl mx-auto px-4 gap-y-6 items-start relative">
-            {/* Left: Controls */}
-            <div className="flex flex-col gap-4 lg:gap-5">
-              <div className="z-1 w-full max-h-fit md:static md:w-auto md:h-full md:max-w-[360px]">
-                <div className="rounded-md bg-white/80 dark:bg-[#141415]/80 backdrop-blur-xl border border-black/5 dark:border-white/5 flex flex-col h-full shadow-2xl overflow-hidden">
-                  {/* Skin-tone preview orb */}
-                  <div
-                    className={cn(
-                      "relative flex items-center justify-center",
-                      "h-[300px]",
-                      "bg-black/[0.02] dark:bg-white/[0.03]",
-                      "border-b border-black/5 dark:border-white/10",
-                    )}
-                  >
-                    <div className="absolute top-4 z-10 text-center space-y-1 pointer-events-none px-4">
-                      <p className="text-[10px] font-bold text-foreground uppercase">
-                        Skin Preview
-                      </p>
-                      <p className="text-[10px] text-foreground">
-                        Controls affect AI output, not this preview
-                      </p>
-                    </div>
-
-                    <div className="relative size-28 md:size-48 flex items-center justify-center mt-8">
-                      {previewUrl ? (
-                        <img
-                          src={previewUrl}
-                          alt="Skin preview"
-                          className="size-full rounded-2xl object-cover shadow-2xl border border-white/10"
-                        />
-                      ) : (
-                        <label
-                          htmlFor="skinUploadFile"
-                          className="size-full rounded-2xl shadow-2xl cursor-pointer flex items-center justify-center bg-gradient-to-br from-rose-200/60 via-amber-100/50 to-orange-200/40 dark:from-rose-400/20 dark:via-amber-200/15 dark:to-orange-300/10 border border-black/10 dark:border-white/10 hover:border-blue-400 transition-colors"
-                        >
-                          <div className="flex flex-col items-center gap-1">
-                            <Sparkles className="size-5 text-muted-foreground" />
-                            <span className="text-[8px] font-bold text-muted-foreground uppercase">
-                              Upload
-                            </span>
-                          </div>
-                        </label>
-                      )}
-                      <div className="absolute inset-0 rounded-full border border-blue-300/20 dark:border-blue-400/10 pointer-events-none" />
-                    </div>
-                  </div>
-
-                  {/* Tabs */}
-                  <Tabs
-                    value={activeTab}
-                    onValueChange={(v) =>
-                      setActiveTab(v as "upload" | "controls")
-                    }
-                    className="w-full mt-1"
-                  >
-                    <TabsList className="w-fit ml-2">
-                      <TabsTrigger value="upload">Upload</TabsTrigger>
-                      <TabsTrigger value="controls">Controls</TabsTrigger>
-                    </TabsList>
-
-                    {/* Upload Tab */}
-                    <TabsContent value="upload" className="w-full">
-                      <div className="px-2 py-1 flex items-center justify-center">
-                        <label
-                          htmlFor="skinUploadFile"
-                          className="bg-white dark:bg-white/[0.03] text-slate-500 dark:text-slate-400 font-semibold text-base rounded-xl w-full h-52 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-200 dark:border-white/10 border-dashed hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-500/5 transition-all"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-10 mb-3 fill-gray-400 dark:fill-slate-500"
-                            viewBox="0 0 32 32"
-                          >
-                            <path d="M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z" />
-                            <path d="M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z" />
-                          </svg>
-                          {file ? (
-                            <span className="text-sm text-blue-500 font-medium">
-                              {file.name}
-                            </span>
-                          ) : (
-                            <span className="text-sm text-slate-600 dark:text-slate-300">
-                              Upload photo
-                            </span>
-                          )}
-                          <input
-                            type="file"
-                            id="skinUploadFile"
-                            className="hidden"
-                            accept="image/png,image/jpeg,image/webp"
-                            onChange={handleFileChange}
-                          />
-                          <p className="text-xs font-medium text-slate-400 dark:text-slate-500 mt-2">
-                            PNG, JPG and WEBP are Allowed.
-                          </p>
-                        </label>
-                      </div>
-                    </TabsContent>
-
-                    {/* Controls Tab */}
-                    <TabsContent value="controls">
-                      <div className="px-2 py-2 space-y-3 bg-black/[0.02] dark:bg-black/20 max-h-[40vh] overflow-y-auto">
-                        {/* Auto Mode Checkbox */}
-                        <label className="flex items-center gap-2 py-2 px-3 rounded-lg border cursor-pointer  transition-colors">
-                          <input
-                            type="checkbox"
-                            checked={autoMode}
-                            onChange={(e) => {
-                              setAutoMode(e.target.checked);
-                              setShowAdvanced(true);
-                              // if (e.target.checked) setShowAdvanced(true);
-                            }}
-                            className="size-3 border-slate-300 dark:border-slate-700 accent-blue-600"
-                          />
-                          {autoMode ? (
-                            <span className="text-xs font-normal text-foreground">
-                              Auto (Recommended)
-                            </span>
-                          ) : (
-                            <div className="flex items-center gap-2">
-                              <Settings2 className="size-3.5 text-muted-foreground" />
-                              <span className="text-xs">Advanced Controls</span>
-                            </div>
-                          )}
-                        </label>
-
-                        {autoMode && (
-                          <p className="text-[10px] text-muted-foreground text-start">
-                            AI will use balanced realism settings automatically.
-                          </p>
+            {/* Main layout */}
+            <div className="relative w-full border-y border-black/5 dark:border-white/10">
+              <GridPattern
+                width={30}
+                height={30}
+                x={-1}
+                y={-1}
+                strokeDasharray={"4 2"}
+                className="absolute inset-0 z-0 opacity-90 dark:opacity-50"
+              />
+              <section className="sm:px-2 lg:px-8 lg:py-10 grid grid-cols-1 md:grid-cols-[1fr_1.4fr] gap-6 lg:gap-16 max-w-6xl mx-auto px-4 gap-y-6 items-start relative">
+                {/* Left: Controls */}
+                <div className="flex flex-col gap-4 lg:gap-5">
+                  <div className="z-1 w-full max-h-fit md:static md:w-auto md:h-full md:max-w-[360px]">
+                    <div className="rounded-md bg-white/80 dark:bg-[#141415]/80 backdrop-blur-xl border border-black/5 dark:border-white/5 flex flex-col h-full shadow-2xl overflow-hidden">
+                      {/* Skin-tone preview orb */}
+                      <div
+                        className={cn(
+                          "relative flex items-center justify-center",
+                          "h-[300px]",
+                          "bg-black/[0.02] dark:bg-white/[0.03]",
+                          "border-b border-black/5 dark:border-white/10",
                         )}
+                      >
+                        <div className="absolute top-4 z-10 text-center space-y-1 pointer-events-none px-4">
+                          <p className="text-[10px] font-bold text-foreground uppercase">
+                            Skin Preview
+                          </p>
+                          <p className="text-[10px] text-foreground">
+                            Controls affect AI output, not this preview
+                          </p>
+                        </div>
 
-                        {/* Advanced Toggle */}
-                        {/* {!autoMode && (
+                        <div className="relative size-28 md:size-48 flex items-center justify-center mt-8">
+                          {previewUrl ? (
+                            <img
+                              src={previewUrl}
+                              alt="Skin preview"
+                              className="size-full rounded-2xl object-cover shadow-2xl border border-white/10"
+                            />
+                          ) : (
+                            <label
+                              htmlFor="skinUploadFile"
+                              className="size-full rounded-2xl shadow-2xl cursor-pointer flex items-center justify-center bg-gradient-to-br from-rose-200/60 via-amber-100/50 to-orange-200/40 dark:from-rose-400/20 dark:via-amber-200/15 dark:to-orange-300/10 border border-black/10 dark:border-white/10 hover:border-blue-400 transition-colors"
+                            >
+                              <div className="flex flex-col items-center gap-1">
+                                <Sparkles className="size-5 text-muted-foreground" />
+                                <span className="text-[8px] font-bold text-muted-foreground uppercase">
+                                  Upload
+                                </span>
+                              </div>
+                            </label>
+                          )}
+                          <div className="absolute inset-0 rounded-full border border-blue-300/20 dark:border-blue-400/10 pointer-events-none" />
+                        </div>
+                      </div>
+
+                      {/* Tabs */}
+                      <Tabs
+                        value={activeTab}
+                        onValueChange={(v) =>
+                          setActiveTab(v as "upload" | "controls")
+                        }
+                        className="w-full mt-1"
+                      >
+                        <TabsList className="w-fit ml-2">
+                          <TabsTrigger value="upload">Upload</TabsTrigger>
+                          <TabsTrigger value="controls">Controls</TabsTrigger>
+                        </TabsList>
+
+                        {/* Upload Tab */}
+                        <TabsContent value="upload" className="w-full">
+                          <div className="px-2 py-1 flex items-center justify-center">
+                            <label
+                              htmlFor="skinUploadFile"
+                              className="bg-white dark:bg-white/[0.03] text-slate-500 dark:text-slate-400 font-semibold text-base rounded-xl w-full h-52 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-200 dark:border-white/10 border-dashed hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-500/5 transition-all"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-10 mb-3 fill-gray-400 dark:fill-slate-500"
+                                viewBox="0 0 32 32"
+                              >
+                                <path d="M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z" />
+                                <path d="M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z" />
+                              </svg>
+                              {file ? (
+                                <span className="text-sm text-blue-500 font-medium">
+                                  {file.name}
+                                </span>
+                              ) : (
+                                <span className="text-sm text-slate-600 dark:text-slate-300">
+                                  Upload photo
+                                </span>
+                              )}
+                              <input
+                                type="file"
+                                id="skinUploadFile"
+                                className="hidden"
+                                accept="image/png,image/jpeg,image/webp"
+                                onChange={handleFileChange}
+                              />
+                              <p className="text-xs font-medium text-slate-400 dark:text-slate-500 mt-2">
+                                PNG, JPG and WEBP are Allowed.
+                              </p>
+                            </label>
+                          </div>
+                        </TabsContent>
+
+                        {/* Controls Tab */}
+                        <TabsContent value="controls">
+                          <div className="px-2 py-2 space-y-3 bg-black/[0.02] dark:bg-black/20 max-h-[40vh] overflow-y-auto">
+                            {/* Auto Mode Checkbox */}
+                            <label className="flex items-center gap-2 py-2 px-3 rounded-lg border cursor-pointer  transition-colors">
+                              <input
+                                type="checkbox"
+                                checked={autoMode}
+                                onChange={(e) => {
+                                  setAutoMode(e.target.checked);
+                                  setShowAdvanced(true);
+                                  // if (e.target.checked) setShowAdvanced(true);
+                                }}
+                                className="size-3 border-slate-300 dark:border-slate-700 accent-blue-600"
+                              />
+                              {autoMode ? (
+                                <span className="text-xs font-normal text-foreground">
+                                  Auto (Recommended)
+                                </span>
+                              ) : (
+                                <div className="flex items-center gap-2">
+                                  <Settings2 className="size-3.5 text-muted-foreground" />
+                                  <span className="text-xs">
+                                    Advanced Controls
+                                  </span>
+                                </div>
+                              )}
+                            </label>
+
+                            {autoMode && (
+                              <p className="text-[10px] text-muted-foreground text-start">
+                                AI will use balanced realism settings
+                                automatically.
+                              </p>
+                            )}
+
+                            {/* Advanced Toggle */}
+                            {/* {!autoMode && (
                           <button
                             onClick={() => setShowAdvanced(!showAdvanced)}
                             className="w-full flex items-center justify-between gap-2 py-2 px-3 rounded-lg bg-black/5 dark:bg-white/[0.03] border border-black/5 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/[0.06] transition-colors text-sm text-foreground"
@@ -699,289 +716,297 @@ const SkinEnhancerPage = () => {
                           </button>
                         )} */}
 
-                        {/* Detailed Sliders — only visible in manual + advanced mode */}
-                        {!autoMode && showAdvanced && (
-                          <div className="space-y-3 px-2">
-                            {/* Skin Realism */}
-                            <SectionLabel>Skin Realism</SectionLabel>
-                            <SliderControl
-                              label="Skin Texture"
-                              value={skinTextureIntensity}
-                              min={0}
-                              max={100}
-                              unit="%"
-                              onChange={setSkinTextureIntensity}
-                            />
-                            <SliderControl
-                              label="Pore Visibility"
-                              value={poreVisibility}
-                              min={0}
-                              max={100}
-                              unit="%"
-                              onChange={setPoreVisibility}
-                            />
-                            <SliderControl
-                              label="Imperfections"
-                              value={imperfectionLevel}
-                              min={0}
-                              max={100}
-                              unit="%"
-                              onChange={setImperfectionLevel}
-                            />
-                            <SliderControl
-                              label="Oil / Shine"
-                              value={oilShineLevel}
-                              min={0}
-                              max={100}
-                              unit="%"
-                              onChange={setOilShineLevel}
-                            />
+                            {/* Detailed Sliders — only visible in manual + advanced mode */}
+                            {!autoMode && showAdvanced && (
+                              <div className="space-y-3 px-2">
+                                {/* Skin Realism */}
+                                <SectionLabel>Skin Realism</SectionLabel>
+                                <SliderControl
+                                  label="Skin Texture"
+                                  value={skinTextureIntensity}
+                                  min={0}
+                                  max={100}
+                                  unit="%"
+                                  onChange={setSkinTextureIntensity}
+                                />
+                                <SliderControl
+                                  label="Pore Visibility"
+                                  value={poreVisibility}
+                                  min={0}
+                                  max={100}
+                                  unit="%"
+                                  onChange={setPoreVisibility}
+                                />
+                                <SliderControl
+                                  label="Imperfections"
+                                  value={imperfectionLevel}
+                                  min={0}
+                                  max={100}
+                                  unit="%"
+                                  onChange={setImperfectionLevel}
+                                />
+                                <SliderControl
+                                  label="Oil / Shine"
+                                  value={oilShineLevel}
+                                  min={0}
+                                  max={100}
+                                  unit="%"
+                                  onChange={setOilShineLevel}
+                                />
 
-                            {/* Hair */}
-                            <SectionLabel>Hair Details</SectionLabel>
-                            <SliderControl
-                              label="Facial Hair Density"
-                              value={facialHairDensity}
-                              min={0}
-                              max={100}
-                              unit="%"
-                              onChange={setFacialHairDensity}
-                            />
-                            <SliderControl
-                              label="Body Hair"
-                              value={bodyHairVisibility}
-                              min={0}
-                              max={100}
-                              unit="%"
-                              onChange={setBodyHairVisibility}
-                            />
-                            <SliderControl
-                              label="Hair Strand Realism"
-                              value={hairStrandRealism}
-                              min={0}
-                              max={100}
-                              unit="%"
-                              onChange={setHairStrandRealism}
-                            />
+                                {/* Hair */}
+                                <SectionLabel>Hair Details</SectionLabel>
+                                <SliderControl
+                                  label="Facial Hair Density"
+                                  value={facialHairDensity}
+                                  min={0}
+                                  max={100}
+                                  unit="%"
+                                  onChange={setFacialHairDensity}
+                                />
+                                <SliderControl
+                                  label="Body Hair"
+                                  value={bodyHairVisibility}
+                                  min={0}
+                                  max={100}
+                                  unit="%"
+                                  onChange={setBodyHairVisibility}
+                                />
+                                <SliderControl
+                                  label="Hair Strand Realism"
+                                  value={hairStrandRealism}
+                                  min={0}
+                                  max={100}
+                                  unit="%"
+                                  onChange={setHairStrandRealism}
+                                />
 
-                            {/* Enhancement */}
-                            <SectionLabel>Enhancement</SectionLabel>
-                            <SliderControl
-                              label="Beauty Smoothing"
-                              value={beautySmoothing}
-                              min={0}
-                              max={100}
-                              unit="%"
-                              onChange={setBeautySmoothing}
-                            />
-                            <SliderControl
-                              label="Realism Level"
-                              value={realismLevel}
-                              min={0}
-                              max={100}
-                              unit="%"
-                              onChange={setRealismLevel}
-                            />
-                            <SliderControl
-                              label="Age Realism"
-                              value={ageRealism}
-                              min={0}
-                              max={100}
-                              unit="%"
-                              onChange={setAgeRealism}
-                            />
-                            <SliderControl
-                              label="Skin Tone Variation"
-                              value={skinToneVariation}
-                              min={0}
-                              max={100}
-                              unit="%"
-                              onChange={setSkinToneVariation}
-                            />
+                                {/* Enhancement */}
+                                <SectionLabel>Enhancement</SectionLabel>
+                                <SliderControl
+                                  label="Beauty Smoothing"
+                                  value={beautySmoothing}
+                                  min={0}
+                                  max={100}
+                                  unit="%"
+                                  onChange={setBeautySmoothing}
+                                />
+                                <SliderControl
+                                  label="Realism Level"
+                                  value={realismLevel}
+                                  min={0}
+                                  max={100}
+                                  unit="%"
+                                  onChange={setRealismLevel}
+                                />
+                                <SliderControl
+                                  label="Age Realism"
+                                  value={ageRealism}
+                                  min={0}
+                                  max={100}
+                                  unit="%"
+                                  onChange={setAgeRealism}
+                                />
+                                <SliderControl
+                                  label="Skin Tone Variation"
+                                  value={skinToneVariation}
+                                  min={0}
+                                  max={100}
+                                  unit="%"
+                                  onChange={setSkinToneVariation}
+                                />
+                              </div>
+                            )}
+
+                            {/* Prompt Toggle */}
+                            <div className="pt-1">
+                              <label className="flex items-center gap-2 py-2 px-3 rounded-lg bg-black/5 dark:bg-white/[0.03] border border-black/5 dark:border-white/10 cursor-pointer hover:bg-black/10 dark:hover:bg-white/[0.06] transition-colors">
+                                <input
+                                  type="checkbox"
+                                  checked={showPrompt}
+                                  onChange={(e) =>
+                                    setShowPrompt(e.target.checked)
+                                  }
+                                  className="size-3 border-slate-300 dark:border-slate-700 accent-blue-600"
+                                />
+                                <MessageSquare className="size-3 text-muted-foreground" />
+                                <span className="text-sm font-normal text-foreground">
+                                  Add Prompt
+                                </span>
+                              </label>
+                            </div>
+
+                            {/* Prompt Input */}
+                            {showPrompt && (
+                              <PremiumInput
+                                value={prompt}
+                                onChange={setPrompt}
+                                onSubmit={handleEnhance}
+                                isGenerating={isGenerating}
+                                placeholder="Describe additional details..."
+                                minHeight="50px"
+                              />
+                            )}
                           </div>
-                        )}
 
-                        {/* Prompt Toggle */}
-                        <div className="pt-1">
-                          <label className="flex items-center gap-2 py-2 px-3 rounded-lg bg-black/5 dark:bg-white/[0.03] border border-black/5 dark:border-white/10 cursor-pointer hover:bg-black/10 dark:hover:bg-white/[0.06] transition-colors">
-                            <input
-                              type="checkbox"
-                              checked={showPrompt}
-                              onChange={(e) => setShowPrompt(e.target.checked)}
-                              className="size-3 border-slate-300 dark:border-slate-700 accent-blue-600"
-                            />
-                            <MessageSquare className="size-3 text-muted-foreground" />
-                            <span className="text-sm font-normal text-foreground">
-                              Add Prompt
-                            </span>
-                          </label>
-                        </div>
-
-                        {/* Prompt Input */}
-                        {showPrompt && (
-                          <PremiumInput
-                            value={prompt}
-                            onChange={setPrompt}
-                            onSubmit={handleEnhance}
-                            isGenerating={isGenerating}
-                            placeholder="Describe additional details..."
-                            minHeight="50px"
-                          />
-                        )}
-                      </div>
-
-                      {/* Sticky Enhance Button */}
-                      <div className="sticky bottom-0 px-2 py-2 border-t border-black/5 dark:border-white/5 bg-white/90 dark:bg-[#141415]/90 backdrop-blur-sm">
-                        {generateError && (
-                          <p className="text-[10px] text-red-400 text-center mb-2">
-                            {generateError}
-                          </p>
-                        )}
-                        <Button
-                          className="w-full text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all flex flex-row items-center justify-center gap-2"
-                          disabled={!file || isGenerating}
-                          onClick={handleEnhance}
-                        >
-                          <span className="text-sm">
-                            {isGenerating ? "Enhancing..." : "Enhance"}
-                          </span>
-                          {!isGenerating && (
-                            <Sparkles className="size-4 text-white" />
-                          )}
-                        </Button>
-                      </div>
-                    </TabsContent>
-                  </Tabs>
+                          {/* Sticky Enhance Button */}
+                          <div className="sticky bottom-0 px-2 py-2 border-t border-black/5 dark:border-white/5 bg-white/90 dark:bg-[#141415]/90 backdrop-blur-sm">
+                            {generateError && (
+                              <p className="text-[10px] text-red-400 text-center mb-2">
+                                {generateError}
+                              </p>
+                            )}
+                            <Button
+                              className="w-full text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all flex flex-row items-center justify-center gap-2"
+                              disabled={!file || isGenerating}
+                              onClick={handleEnhance}
+                            >
+                              <span className="text-sm">
+                                {isGenerating ? "Enhancing..." : "Enhance"}
+                              </span>
+                              {!isGenerating && (
+                                <Sparkles className="size-4 text-white" />
+                              )}
+                            </Button>
+                          </div>
+                        </TabsContent>
+                      </Tabs>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Right: Result Panel */}
-            <div className="relative rounded-2xl overflow-hidden flex flex-col items-stretch min-h-[40vh] border border-black/5 dark:border-white/5 bg-black dark:bg-black">
-              {/* Header */}
-              <div className="h-16 flex items-center justify-between px-8 shrink-0 border-b border-white/5 bg-[#0A0A0A]/50 backdrop-blur">
-                <div className="flex items-center gap-3">
-                  <span className="text-base font-bold text-white">Result</span>
-                  {generatedImages.length > 0 && (
-                    <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] rounded-full font-medium">
-                      {generatedImages.length} image
-                      {generatedImages.length !== 1 ? "s" : ""}
-                    </span>
+                {/* Right: Result Panel */}
+                <div className="relative rounded-2xl overflow-hidden flex flex-col items-stretch min-h-[40vh] border border-black/5 dark:border-white/5 bg-black dark:bg-black">
+                  {/* Header */}
+                  <div className="h-fit flex items-center justify-between px-8 shrink-0 border-b border-white/5 bg-[#0A0A0A]/50 backdrop-blur py-2">
+                    <div className="flex items-center gap-3">
+                      <span className="text-base font-bold text-white">
+                        Result
+                      </span>
+                      {generatedImages.length > 0 && (
+                        <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] rounded-full font-medium">
+                          {generatedImages.length} image
+                          {generatedImages.length !== 1 ? "s" : ""}
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      onClick={openHistory}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full bg-black/5 dark:bg-white/[0.05] border border-black/10 dark:border-white/10 text-neutral-600 dark:text-neutral-300 hover:bg-black/10 dark:hover:bg-white/[0.08] hover:text-black dark:hover:text-white transition-colors"
+                      title="View history"
+                    >
+                      <HistoryIcon className="size-3.5" />
+                      History
+                    </button>
+                  </div>
+
+                  {/* Body */}
+                  {isGenerating ? (
+                    <div className="flex-1 flex flex-col items-center justify-center gap-4 p-8 border-2 border-gray-200 dark:border-white/10 border-dashed">
+                      <div className="relative size-16">
+                        <div className="absolute inset-0 rounded-full border-2 border-blue-500/30 animate-ping" />
+                        <div className="absolute inset-0 rounded-full border-2 border-t-blue-500 animate-spin" />
+                        <div className="absolute inset-2 rounded-full bg-gradient-to-br from-blue-500/20 to-pink-500/20" />
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm font-bold text-white">
+                          Enhancing...
+                        </p>
+                        <p className="mt-1 text-xs text-white/40">
+                          Applying skin retouching with AI
+                        </p>
+                      </div>
+                    </div>
+                  ) : generatedImages.length > 0 && currentJobId ? (
+                    <GeneratedCarousel
+                      images={generatedImages}
+                      jobId={currentJobId}
+                      onDelete={handleDeleteCurrentImage}
+                    />
+                  ) : previewUrl ? (
+                    <div className="flex-1 flex flex-col items-center justify-center p-6 gap-4 border-2 border-gray-200 dark:border-white/10 border-dashed">
+                      <div className="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                        <img
+                          src={previewUrl}
+                          alt="Uploaded preview"
+                          className="w-full object-contain max-h-[55vh] rounded-2xl"
+                        />
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest">
+                          Uploaded Image
+                        </p>
+                        <p className="text-[10px] text-white/30 italic">
+                          Adjust controls and hit Enhance
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="group relative isolate h-fit w-full border-2 border-gray-200 dark:border-white/10 border-dashed">
+                      <Compare
+                        firstImage="https://d2qrb904tbc8rh.cloudfront.net/images/v2-Input.png"
+                        secondImage="https://d2qrb904tbc8rh.cloudfront.net/images/v2-Smooth.jpg"
+                        firstImageClassName="object-cover object-left-top"
+                        secondImageClassname="object-cover object-left-top"
+                        className="h-[500px] w-full md:h-[500px] md:w-[500px] lg:mx-auto mt-4 mx-2"
+                        slideMode="hover"
+                      />
+                      <div className="flex flex-col items-center gap-1 py-2">
+                        <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest">
+                          Upload a photo to get started
+                        </p>
+                        <p className="text-[10px] text-white/30 italic">
+                          AI will enhance skin with hyper-realistic detail
+                        </p>
+                      </div>
+                    </div>
                   )}
                 </div>
-                <button
-                  onClick={openHistory}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full bg-black/5 dark:bg-white/[0.05] border border-black/10 dark:border-white/10 text-neutral-600 dark:text-neutral-300 hover:bg-black/10 dark:hover:bg-white/[0.08] hover:text-black dark:hover:text-white transition-colors"
-                  title="View history"
-                >
-                  <HistoryIcon className="size-3.5" />
-                  History
-                </button>
-              </div>
-
-              {/* Body */}
-              {isGenerating ? (
-                <div className="flex-1 flex flex-col items-center justify-center gap-4 p-8 border-2 border-gray-200 dark:border-white/10 border-dashed">
-                  <div className="relative size-16">
-                    <div className="absolute inset-0 rounded-full border-2 border-blue-500/30 animate-ping" />
-                    <div className="absolute inset-0 rounded-full border-2 border-t-blue-500 animate-spin" />
-                    <div className="absolute inset-2 rounded-full bg-gradient-to-br from-blue-500/20 to-pink-500/20" />
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm font-bold text-white">Enhancing...</p>
-                    <p className="mt-1 text-xs text-white/40">
-                      Applying skin retouching with AI
-                    </p>
-                  </div>
-                </div>
-              ) : generatedImages.length > 0 && currentJobId ? (
-                <GeneratedCarousel
-                  images={generatedImages}
-                  jobId={currentJobId}
-                  onDelete={handleDeleteCurrentImage}
-                />
-              ) : previewUrl ? (
-                <div className="flex-1 flex flex-col items-center justify-center p-6 gap-4 border-2 border-gray-200 dark:border-white/10 border-dashed">
-                  <div className="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-                    <img
-                      src={previewUrl}
-                      alt="Uploaded preview"
-                      className="w-full object-contain max-h-[55vh] rounded-2xl"
-                    />
-                  </div>
-                  <div className="flex flex-col items-center gap-1">
-                    <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest">
-                      Uploaded Image
-                    </p>
-                    <p className="text-[10px] text-white/30 italic">
-                      Adjust controls and hit Enhance
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="group relative isolate h-fit w-full border-2 border-gray-200 dark:border-white/10 border-dashed">
-                  <Compare
-                    firstImage="https://d2qrb904tbc8rh.cloudfront.net/images/v2-Input.png"
-                    secondImage="https://d2qrb904tbc8rh.cloudfront.net/images/v2-Smooth.jpg"
-                    firstImageClassName="object-cover object-left-top"
-                    secondImageClassname="object-cover object-left-top"
-                    className="h-[500px] w-full md:h-[500px] md:w-[500px] lg:mx-auto mt-4 mx-2"
-                    slideMode="hover"
-                  />
-                  <div className="flex flex-col items-center gap-1 py-2">
-                    <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest">
-                      Upload a photo to get started
-                    </p>
-                    <p className="text-[10px] text-white/30 italic">
-                      AI will enhance skin with hyper-realistic detail
-                    </p>
-                  </div>
-                </div>
-              )}
+              </section>
             </div>
-          </section>
+          </main>
+
+          {/* History Sheet */}
+          <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
+            <SheetContent className="w-full sm:max-w-md overflow-y-auto flex flex-col gap-0 p-0">
+              <SheetHeader className="px-6 py-4 border-b border-border sticky top-0 bg-background z-10">
+                <SheetTitle className="flex items-center gap-2 font-normal">
+                  <HistoryIcon className="size-4" />
+                  History
+                </SheetTitle>
+              </SheetHeader>
+
+              <div className="flex-1 px-4 py-4 space-y-3 overflow-y-auto">
+                {historyLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : history.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-12 text-center gap-3">
+                    <HistoryIcon className="size-10 text-muted-foreground/30" />
+                    <p className="text-sm text-muted-foreground">
+                      No history yet.
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Enhance a photo to see results here.
+                    </p>
+                  </div>
+                ) : (
+                  history.map((job) => (
+                    <HistoryCard
+                      key={job._id}
+                      job={job}
+                      onDeleteJob={handleHistoryDeleteJob}
+                      onDeleteImage={handleHistoryDeleteImage}
+                      onSelect={handleSelectJob}
+                    />
+                  ))
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
-      </main>
-
-      <LandingFooter />
-
-      {/* History Sheet */}
-      <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto flex flex-col gap-0 p-0">
-          <SheetHeader className="px-6 py-4 border-b border-border sticky top-0 bg-background z-10">
-            <SheetTitle className="flex items-center gap-2">
-              <HistoryIcon className="size-4" />
-              Enhancement History
-            </SheetTitle>
-          </SheetHeader>
-
-          <div className="flex-1 px-4 py-4 space-y-3 overflow-y-auto">
-            {historyLoading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : history.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 text-center gap-3">
-                <HistoryIcon className="size-10 text-muted-foreground/30" />
-                <p className="text-sm text-muted-foreground">No history yet.</p>
-                <p className="text-xs text-muted-foreground">
-                  Enhance a photo to see results here.
-                </p>
-              </div>
-            ) : (
-              history.map((job) => (
-                <HistoryCard
-                  key={job._id}
-                  job={job}
-                  onDeleteJob={handleHistoryDeleteJob}
-                  onDeleteImage={handleHistoryDeleteImage}
-                  onSelect={handleSelectJob}
-                />
-              ))
-            )}
-          </div>
-        </SheetContent>
-      </Sheet>
+      </div>
     </div>
   );
 };

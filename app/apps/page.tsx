@@ -13,6 +13,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Toaster } from "sonner";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 
 const TryNowButton = ({ onClick }: { onClick?: () => void }) => (
   <button
@@ -160,7 +163,7 @@ const AppCard = ({
                 <h3 className="text-sm sm:text-base font-semibold text-font-primary leading-tight tracking-tight">
                   {title}
                 </h3>
-                <p className="text-xs sm:text-sm text-text-secondary line-clamp-2">
+                <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
                   {description}
                 </p>
               </div>
@@ -243,10 +246,10 @@ const appSections = [
       },
 
       {
-        id: "presenter",
-        href: "/apps/presenter",
-        title: "Presenter Manager",
-        description: "Manage and generate your own custom digital presenters",
+        id: "character",
+        href: "/apps/character",
+        title: "Character Manager",
+        description: "Manage and generate your own custom digital characters",
         type: "image",
         imageSrc:
           "https://i.pinimg.com/736x/eb/76/a4/eb76a46ab920d056b02d203ca95e9a22.jpg",
@@ -345,28 +348,81 @@ const Apps = () => {
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
-      <LandingPageBanner />
-      <LandingNavbar />
+    // <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
+    //   <LandingPageBanner />
+    //   {/* <LandingNavbar /> */}
 
-      <main id="main" className="flex-1 w-full">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
-          <div className="relative rounded-2xl overflow-hidden bg-background border border-border/50 shadow-sm">
-            <div className="absolute inset-0 -z-10 size-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_80%_at_50%_50%,#000_40%,transparent_100%)]"></div>
-            <div className="w-full mx-auto px-4 py-12 sm:py-16">
-              <div className="space-y-6 flex flex-col items-center justify-center text-center">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl max-w-2xl">
-                    Explore Apps
-                  </h1>
-                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl">
-                    Discover amazing AI powered apps that can elevate your
-                    design style
-                  </p>
-                </div>
+    //   {/* <LandingFooter /> */}
 
-                <div className="flex items-center justify-center w-full max-w-md">
-                  <div className="relative flex items-center gap-2 w-full px-4 h-12 rounded-xl border border-border bg-background/50 backdrop-blur-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-sm">
+    //   <Toaster />
+    //   <AppSidebar />
+    //   <div
+    //     // ref={scrollContainerRef}
+    //     className="flex-1 flex flex-col overflow-auto will-change-scroll scroll-container"
+    //   >
+    //     <TopNavWithAurora
+    //       // scrollContainerRef={
+    //       //   scrollContainerRef as React.RefObject<HTMLDivElement>
+    //       // }
+    //     />
+    //     <div
+    //       id="main-content"
+    //       className="flex-1"
+    //       style={{
+    //         transform: "translateZ(0)",
+    //         willChange: "transform",
+    //       }}
+    //     >
+
+    //     </div>
+    //   </div>
+    // </div>
+
+    <div className="flex relative w-full h-[100dvh] overflow-hidden bg-white dark:bg-black">
+      <Toaster />
+      <AppSidebar />
+      <div
+        // ref={scrollContainerRef}
+        className="flex-1 flex flex-col overflow-auto will-change-scroll scroll-container"
+      >
+        <TopNavWithAurora
+        // scrollContainerRef={
+        //   scrollContainerRef as React.RefObject<HTMLDivElement>
+        // }
+        />
+        <div
+          id="main-content"
+          className="flex-1"
+          style={{
+            transform: "translateZ(0)",
+            willChange: "transform",
+          }}
+        >
+          <main id="main" className="flex-1 w-full">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+              <div className="space-y-12">
+                <div className="flex flex-col gap-y-3 lg:gap-y-0 lg:flex-row justify-between items-center">
+                  <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+                    <nav className="flex items-center gap-2 min-w-max">
+                      {categories.map((category) => {
+                        const isActive = activeCategory === category.name;
+                        return (
+                          <button
+                            key={category.name}
+                            onClick={() => setActiveCategory(category.name)}
+                            className={cn(
+                              "text-muted-foreground text-sm font-medium px-4 py-2 rounded-full transition-all duration-200 hover:text-foreground hover:bg-muted",
+                              isActive &&
+                                "text-white bg-gradient-to-r from-cyan-500 to-blue-500 shadow-md",
+                            )}
+                          >
+                            {category.name}
+                          </button>
+                        );
+                      })}
+                    </nav>
+                  </div>
+                  <div className="relative flex items-center gap-2 w-full lg:w-fit px-4 h-12 rounded-xl border border-border bg-background/50 backdrop-blur-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-sm">
                     <svg
                       width={20}
                       height={20}
@@ -418,109 +474,88 @@ const Apps = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-12">
-            <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
-              <nav className="flex items-center gap-2 min-w-max">
-                {categories.map((category) => {
-                  const isActive = activeCategory === category.name;
-                  return (
-                    <button
-                      key={category.name}
-                      onClick={() => setActiveCategory(category.name)}
-                      className={cn(
-                        "text-muted-foreground text-sm font-medium px-4 py-2 rounded-full transition-all duration-200 hover:text-foreground hover:bg-muted",
-                        isActive &&
-                          "text-white bg-gradient-to-r from-cyan-500 to-blue-500 shadow-md",
-                      )}
-                    >
-                      {category.name}
-                    </button>
-                  );
-                })}
-              </nav>
-            </div>
 
-            <div className="relative">
-              <div style={{ opacity: 1, transform: "none" }}>
-                <div className="space-y-8">
-                  {appSections
-                    .filter(
-                      (section) =>
-                        activeCategory === "All" ||
-                        section.title === activeCategory,
-                    )
-                    .map((section) => {
-                      const filteredApps = section.apps.filter(
-                        (app) =>
-                          activeType === "All Types" ||
-                          app.type === activeType.toLowerCase(),
-                      );
+                <div className="relative">
+                  <div style={{ opacity: 1, transform: "none" }}>
+                    <div className="space-y-8">
+                      {appSections
+                        .filter(
+                          (section) =>
+                            activeCategory === "All" ||
+                            section.title === activeCategory,
+                        )
+                        .map((section) => {
+                          const filteredApps = section.apps.filter(
+                            (app) =>
+                              activeType === "All Types" ||
+                              app.type === activeType.toLowerCase(),
+                          );
 
-                      if (filteredApps.length === 0) return null;
+                          if (filteredApps.length === 0) return null;
 
-                      return (
-                        <section key={section.title} className="space-y-6">
-                          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                            <div className="space-y-1">
-                              <h2 className="text-xl font-bold tracking-tight">
-                                {section.title}
-                              </h2>
-                              <p className="text-sm text-muted-foreground">
-                                {section.description}
-                              </p>
-                            </div>
-                            <button
-                              className="flex items-center gap-1 text-sm-semi transition-colors shrink-0 text-white p-[10px]"
-                              onClick={() => setActiveCategory(section.title)}
-                            >
-                              <span>See all</span>
-                              <svg
-                                className="size-2 sm:size-[18px]"
-                                aria-hidden="true"
-                                width="24px"
-                                height="24px"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M10 16L13.6464 12.3536C13.8417 12.1583 13.8417 11.8417 13.6464 11.6464L10 8"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                            </button>
-                          </div>
-                          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
-                            {filteredApps.map((app) => (
-                              <AppCard
-                                key={app.id}
-                                {...(app as AppCardProps)}
-                              />
-                            ))}
-                          </div>
-                        </section>
-                      );
-                    })}
+                          return (
+                            <section key={section.title} className="space-y-6">
+                              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                                <div className="space-y-1">
+                                  <h2 className="text-xl font-bold tracking-tight">
+                                    {section.title}
+                                  </h2>
+                                  <p className="text-sm text-muted-foreground">
+                                    {section.description}
+                                  </p>
+                                </div>
+                                <button
+                                  className="flex items-center gap-1 text-sm-semi transition-colors shrink-0 text-white p-[10px]"
+                                  onClick={() =>
+                                    setActiveCategory(section.title)
+                                  }
+                                >
+                                  <span>See all</span>
+                                  <svg
+                                    className="size-2 sm:size-[18px]"
+                                    aria-hidden="true"
+                                    width="24px"
+                                    height="24px"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M10 16L13.6464 12.3536C13.8417 12.1583 13.8417 11.8417 13.6464 11.6464L10 8"
+                                      stroke="currentColor"
+                                      strokeWidth="1.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
+                                {filteredApps.map((app) => (
+                                  <AppCard
+                                    key={app.id}
+                                    {...(app as AppCardProps)}
+                                  />
+                                ))}
+                              </div>
+                            </section>
+                          );
+                        })}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+            <style
+              type="text/css"
+              dangerouslySetInnerHTML={{
+                __html:
+                  "\n          body {\n            background: radial-gradient(23.93% 26.98% at 100% 0%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(34.93% 41.39% at 92.71% 106.14%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(31.57% 33.97% at -2.15% 107.04%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(39.39% 24% at -13.58% 35.4%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 99.97%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), #D9D9D9!important;\n            box-shadow: transparent !important;\n            backdrop-filter: transparent !important;\n            overflow-x: hidden;\n          }\n          \n    body {\n      background: radial-gradient(23.93% 26.98% at 100% 0%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(34.93% 41.39% at 92.71% 106.14%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(31.57% 33.97% at -2.15% 107.04%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(39.39% 24% at -13.58% 35.4%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 99.97%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), #D9D9D9!important;\n      box-shadow: transparent !important;\n      backdrop-filter: transparent !important;\n    }\n      #header {\n      background: none !important;\n      box-shadow: none !important;\n      backdrop-filter: none !important;\n    }\n    html.apps-header-scrolled #header {\n      background: #0F1113 !important;\n      box-shadow: inset 0 1rem 1rem rgba(0,0,0,1) !important;\n      backdrop-filter: blur(4px) !important;\n    }\n  \n        ",
+              }}
+            />
+          </main>
         </div>
-        <style
-          type="text/css"
-          dangerouslySetInnerHTML={{
-            __html:
-              "\n          body {\n            background: radial-gradient(23.93% 26.98% at 100% 0%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(34.93% 41.39% at 92.71% 106.14%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(31.57% 33.97% at -2.15% 107.04%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(39.39% 24% at -13.58% 35.4%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 99.97%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), #D9D9D9!important;\n            box-shadow: transparent !important;\n            backdrop-filter: transparent !important;\n            overflow-x: hidden;\n          }\n          \n    body {\n      background: radial-gradient(23.93% 26.98% at 100% 0%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(34.93% 41.39% at 92.71% 106.14%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(31.57% 33.97% at -2.15% 107.04%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(39.39% 24% at -13.58% 35.4%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 99.97%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), #D9D9D9!important;\n      box-shadow: transparent !important;\n      backdrop-filter: transparent !important;\n    }\n      #header {\n      background: none !important;\n      box-shadow: none !important;\n      backdrop-filter: none !important;\n    }\n    html.apps-header-scrolled #header {\n      background: #0F1113 !important;\n      box-shadow: inset 0 1rem 1rem rgba(0,0,0,1) !important;\n      backdrop-filter: blur(4px) !important;\n    }\n  \n        ",
-          }}
-        />
-      </main>
-      <LandingFooter />
+      </div>
     </div>
   );
 };
