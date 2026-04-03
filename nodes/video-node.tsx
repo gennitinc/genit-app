@@ -12,6 +12,7 @@ import {
   Edit3,
   Lock,
   Unlock,
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -61,6 +62,25 @@ export const VideoNode = memo(
     const handleSave = () => {
       console.log("Saving video node data:", editData);
       setIsEditOpen(false);
+    };
+
+    const handleDownload = async () => {
+      if (!editData.url) return;
+      try {
+        const response = await fetch(editData.url);
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = editData.instruction || "video.mp4";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      } catch (error) {
+        console.error("Download failed:", error);
+        window.open(editData.url, "_blank");
+      }
     };
 
     // Update internal state when node data changes (e.g. after AI generation)
@@ -284,6 +304,14 @@ export const VideoNode = memo(
                       Play
                     </>
                   )}
+                </div>
+                <div
+                  className="text-xs h-7 bg-transparent border border-border rounded-md flex items-center justify-center cursor-pointer hover:bg-muted px-2 mr-2"
+                  onClick={handleDownload}
+                  title="Download video"
+                >
+                  <Download className="w-3 h-3 mr-1" />
+                  Download
                 </div>
                 <div
                   className="text-xs h-7 bg-transparent border border-border rounded-md flex items-center justify-center cursor-pointer hover:bg-muted px-2"

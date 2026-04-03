@@ -60,6 +60,25 @@ export const DocumentNode = memo(
       setIsEditOpen(false);
     };
 
+    const handleDownload = async () => {
+      if (!editData.url) return;
+      try {
+        const response = await fetch(editData.url);
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = editData.instruction || "document";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      } catch (error) {
+        console.error("Download failed:", error);
+        window.open(editData.url, "_blank");
+      }
+    };
+
     // Update internal state when node data changes (e.g. after AI generation)
     useEffect(() => {
       setEditData({
@@ -322,12 +341,7 @@ export const DocumentNode = memo(
                     size="sm"
                     variant="outline"
                     className="text-xs h-7 bg-transparent"
-                    onClick={() => {
-                      const link = document.createElement("a");
-                      link.href = editData.url;
-                      link.download = editData.instruction;
-                      link.click();
-                    }}
+                    onClick={handleDownload}
                   >
                     <Download className="w-3 h-3" />
                   </Button>

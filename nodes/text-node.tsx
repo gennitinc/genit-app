@@ -2,7 +2,7 @@
 
 import { memo, useState, useEffect } from "react";
 import { Handle, Position, type NodeProps } from "reactflow";
-import { FileText, Edit3, Save, X, Lock, Unlock } from "lucide-react";
+import { FileText, Edit3, Save, X, Lock, Unlock, Copy, CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
@@ -42,6 +42,17 @@ export const TextNode = memo(
       hasLabel: (label || "").trim() !== "",
     });
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isCopied, setIsCopied] = useState(false);
+
+    const handleCopy = async () => {
+      try {
+        await navigator.clipboard.writeText(editData.content);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 2000);
+      } catch (err) {
+        console.error("Failed to copy text:", err);
+      }
+    };
 
     const handleSave = () => {
       console.log("Saving text node data:", editData);
@@ -216,30 +227,45 @@ export const TextNode = memo(
               </Dialog>
             </div>
 
-            <div className="text-xs text-muted-foreground bg-muted p-4 rounded-[1.5rem] border border-border flex-1 overflow-y-auto max-h-[400px] nodrag nowheel cursor-text select-text">
+            <div className="text-xs text-muted-foreground bg-muted p-4 rounded-[1.5rem] border border-border flex-1 overflow-y-auto max-h-[400px] nodrag nowheel cursor-text select-text relative group">
               {editData.content ? (
-                <ReactMarkdown
-                  components={{
-                    h1: ({node, ...props}) => <h1 className="text-lg font-bold mb-2 border-b pb-1" {...props} />,
-                    h2: ({node, ...props}) => <h2 className="text-base font-bold mb-1 mt-3" {...props} />,
-                    h3: ({node, ...props}) => <h3 className="text-[11px] font-bold mb-1 mt-2" {...props} />,
-                    p: ({node, ...props}) => <p className="mb-2 last:mb-0 leading-relaxed" {...props} />,
-                    ul: ({node, ...props}) => <ul className="list-disc ml-4 mb-2 space-y-1" {...props} />,
-                    ol: ({node, ...props}) => <ol className="list-decimal ml-4 mb-2 space-y-1" {...props} />,
-                    li: ({node, ...props}) => <li className="mb-0.5" {...props} />,
-                    code: ({node, ...props}: any) => (
-                      <code className="bg-background/50 px-1 rounded text-[10px] font-mono" {...props} />
-                    ),
-                    pre: ({node, ...props}: any) => (
-                      <pre className="bg-background/50 p-2 rounded-lg my-2 overflow-x-auto font-mono text-[10px]" {...props} />
-                    ),
-                    blockquote: ({node, ...props}) => (
-                      <blockquote className="border-l-2 border-primary/30 pl-3 italic my-2" {...props} />
-                    ),
-                  }}
-                >
-                  {editData.content}
-                </ReactMarkdown>
+                <>
+                  <ReactMarkdown
+                    components={{
+                      h1: ({node, ...props}) => <h1 className="text-lg font-bold mb-2 border-b pb-1" {...props} />,
+                      h2: ({node, ...props}) => <h2 className="text-base font-bold mb-1 mt-3" {...props} />,
+                      h3: ({node, ...props}) => <h3 className="text-[11px] font-bold mb-1 mt-2" {...props} />,
+                      p: ({node, ...props}) => <p className="mb-2 last:mb-0 leading-relaxed" {...props} />,
+                      ul: ({node, ...props}) => <ul className="list-disc ml-4 mb-2 space-y-1" {...props} />,
+                      ol: ({node, ...props}) => <ol className="list-decimal ml-4 mb-2 space-y-1" {...props} />,
+                      li: ({node, ...props}) => <li className="mb-0.5" {...props} />,
+                      code: ({node, ...props}: any) => (
+                        <code className="bg-background/50 px-1 rounded text-[10px] font-mono" {...props} />
+                      ),
+                      pre: ({node, ...props}: any) => (
+                        <pre className="bg-background/50 p-2 rounded-lg my-2 overflow-x-auto font-mono text-[10px]" {...props} />
+                      ),
+                      blockquote: ({node, ...props}) => (
+                        <blockquote className="border-l-2 border-primary/30 pl-3 italic my-2" {...props} />
+                      ),
+                    }}
+                  >
+                    {editData.content}
+                  </ReactMarkdown>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="absolute bottom-2 right-2 h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity bg-background/50 backdrop-blur-sm border border-border rounded-lg"
+                    onClick={handleCopy}
+                    title="Copy to clipboard"
+                  >
+                    {isCopied ? (
+                      <CheckCheck className="w-3.5 h-3.5 text-green-500" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
+                  </Button>
+                </>
               ) : (
                 "No content available. Click edit to add text."
               )}
