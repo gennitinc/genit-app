@@ -109,7 +109,7 @@ export function FloatingSidebar({
     video: [],
     audio: [],
     text: [],
-    doc: [],
+    docs: [],
     social: [],
   });
 
@@ -125,7 +125,7 @@ export function FloatingSidebar({
     video: { page: 1, hasMore: true, isLoading: false },
     audio: { page: 1, hasMore: true, isLoading: false },
     text: { page: 1, hasMore: true, isLoading: false },
-    doc: { page: 1, hasMore: true, isLoading: false },
+    docs: { page: 1, hasMore: true, isLoading: false },
     social: { page: 1, hasMore: true, isLoading: false },
   });
 
@@ -236,7 +236,7 @@ export function FloatingSidebar({
         if (
           category === "text" ||
           category === "all" ||
-          category === "doc" ||
+          category === "docs" ||
           category === "social"
         ) {
           const typeFilter = category === "all" ? undefined : category;
@@ -248,7 +248,7 @@ export function FloatingSidebar({
             const fetchedItems = res.data.data.map((p: any) => ({
               id: p._id,
               _id: p._id,
-              type: "text",
+              type: p.type || "text",
               content: p.content,
               prompt: p.prompt,
               createdAt: p.createdAt,
@@ -1288,8 +1288,9 @@ export function FloatingSidebar({
           mic: "audio",
           image: "image",
           video: "video",
-          file: "doc",
+          file: "docs",
           text: "text",
+          globe: "social",
         };
         const category = categoryMap[selectedIntegrationType] || "all";
         fetchHistory(category);
@@ -2770,8 +2771,8 @@ export function FloatingSidebar({
 
             <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
               <div className="flex flex-col gap-y-2">
-                {historyItems.text.filter((item) => item.type === "social")
-                  .length === 0 && !historyPagination.text.isLoading ? (
+                {historyItems.social.length === 0 &&
+                !historyPagination.social.isLoading ? (
                   <div className="text-center py-8">
                     <Globe className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">
@@ -2780,10 +2781,9 @@ export function FloatingSidebar({
                   </div>
                 ) : (
                   <>
-                    {historyItems.text
+                    {historyItems.social
                       .filter(
                         (item: any) =>
-                          item.type === "social" &&
                           (item.prompt || item.content || "")
                             .toLowerCase()
                             .includes(searchQuery.toLowerCase()),
@@ -3397,8 +3397,8 @@ export function FloatingSidebar({
             <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
               <div className="flex flex-col gap-y-2">
                 {userFiles.document.length === 0 &&
-                historyItems.doc.length === 0 &&
-                !historyPagination.doc.isLoading ? (
+                historyItems.docs.length === 0 &&
+                !historyPagination.docs.isLoading ? (
                   <div className="text-center py-8">
                     <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">
@@ -3454,7 +3454,7 @@ export function FloatingSidebar({
                       ))}
 
                     {/* Generated History Documents */}
-                    {historyItems.doc
+                    {historyItems.docs
                       .filter((item: any) =>
                         (item.prompt || item.content || "")
                           .toLowerCase()
@@ -3502,11 +3502,11 @@ export function FloatingSidebar({
                         </Card>
                       ))}
 
-                    <HistorySentinel category="doc" />
+                    <HistorySentinel category="docs" />
 
-                    {!historyPagination.doc.hasMore &&
-                      (userFiles.document.length > 0 || historyItems.doc.length > 0) &&
-                      !historyPagination.doc.isLoading && (
+                    {!historyPagination.docs.hasMore &&
+                      (userFiles.document.length > 0 || historyItems.docs.length > 0) &&
+                      !historyPagination.docs.isLoading && (
                         <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
                           <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
                             No more files found

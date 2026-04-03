@@ -220,13 +220,13 @@ export function PromptNode({
 
       <div className="bg-background/90 backdrop-blur-md border border-border rounded-3xl shadow-2xl overflow-hidden">
         {/* Content-type tabs */}
-        <div className="flex items-center gap-1 px-3 pt-3 pb-2">
+        <div className="flex items-center px-3 border border-gray-200 dark:border-neutral-800 rounded-md w-fit m-2">
           {CONTENT_TYPES.map((t) => (
             <button
               key={t.id}
               onClick={() => handleContentTypeChange(t.id)}
               className={cn(
-                "flex-1 px-2 py-1.5 rounded-xl text-[10px] font-semibold transition-all",
+                "flex-1 px-2 py-1 my-1 w-full rounded-md text-[10px] font-semibold transition-all",
                 contentType === t.id
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground",
