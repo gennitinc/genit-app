@@ -205,11 +205,20 @@ const appSections = [
         type: "image",
         imageSrc:
           "https://i.pinimg.com/736x/1d/e5/29/1de52947cf871b610fb4276053dd137f.jpg",
-        // badge: {
-        //   text: "Pro",
-        //   bgColor: "rgb(157, 78, 221)",
-        //   textColor: "rgb(255, 255, 255)",
-        // },
+      },
+      {
+        id: "workflow",
+        href: "/apps/workflow",
+        title: "AI Workflow",
+        description: "Automate your creative process with AI nodes",
+        type: "image",
+        imageSrc:
+          "https://i.pinimg.com/1200x/2e/29/24/2e29246282d5e2cc89abedaef9dc4fcd.jpg",
+        badge: {
+          text: "New",
+          bgColor: "rgb(16, 185, 129)", // Emerald 500
+          textColor: "rgb(255, 255, 255)",
+        },
       },
       {
         id: "video-generation",

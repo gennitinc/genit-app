@@ -213,12 +213,14 @@ export function WorkflowPremiumInput({
         }
       }
 
-      if (contentType === "text" || contentType === "social" || contentType === "docs") {
-        const res = await textGenApi.getHistory(contentType);
+      if (contentType === "all" || contentType === "text" || contentType === "social" || contentType === "docs") {
+        // If "all", passing undefined to getHistory might fetch all text-based items
+        const textType = contentType === "all" ? undefined : contentType;
+        const res = await textGenApi.getHistory(textType);
         if (res.success && res.data) {
           const textItems = res.data.map((p: any) => ({
             id: p._id,
-            type: "text",
+            type: p.type || "text",
             content: p.content,
             prompt: p.prompt,
             createdAt: p.createdAt,
@@ -227,7 +229,7 @@ export function WorkflowPremiumInput({
         }
       }
 
-      if (contentType === "audio") {
+      if (contentType === "all" || contentType === "audio") {
         const res = await audioGenApi.getHistory();
         if (res.success && res.data) {
           const audioItems = res.data.map((p: any) => ({

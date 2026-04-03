@@ -11,9 +11,9 @@ import {
   Video,
   Image as ImageIcon,
   Users,
-  LayoutPanelLeft,
   Gift,
   Grid2X2Plus,
+  Workflow,
 } from "lucide-react";
 
 import {
@@ -21,6 +21,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuBadge,
 } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
@@ -50,6 +51,12 @@ export function NavMain() {
        icon: Grid2X2Plus,
        href: "/apps",
      },
+      {
+        title: "Workflow",
+        icon: Workflow,
+        href: "/apps/workflow",
+        badge: "New",
+      },
      // {
      //   title: "Image Generation",
      //   icon: ImageIcon,
@@ -193,6 +200,11 @@ export function NavMain() {
                   )}
                 </Link>
               </SidebarMenuButton>
+              {(item as any).badge && !shouldShowCollapsed && (
+                <SidebarMenuBadge className="bg-emerald-500 text-white font-bold px-1.5 rounded-sm">
+                  {(item as any).badge}
+                </SidebarMenuBadge>
+              )}
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
