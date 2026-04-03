@@ -86,20 +86,7 @@ export function Navbar({ title }: NavbarProps) {
       {/* Left Section */}
       <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
         {/* Mobile Menu Button */}
-        {isMobile && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-1 sm:hidden"
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </Button>
-        )}
+        
         {/* Logo Section */}
         <div className="flex items-center gap-1 sm:gap-3 relative min-w-0">
           {/* Logo */}
