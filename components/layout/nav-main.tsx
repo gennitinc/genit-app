@@ -188,7 +188,7 @@ export function NavMain() {
                   {!shouldShowCollapsed && (
                     <span
                       className={cn(
-                        "font-medium",
+                        "font-normal",
                         // Theme responsive text colors - explicit and strong
                         isRouteActive(item.href)
                           ? "text-black dark:text-white"

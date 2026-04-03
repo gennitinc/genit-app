@@ -89,7 +89,7 @@ export function AppSidebar({
       </SidebarContent>
 
       {state !== "collapsed" || isMobile ? (
-        <div className="mx-2 mb-4">
+        <div className="mx-2 mb-4 border-t border-border pt-2">
           <div className="relative bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl p-3 text-white overflow-hidden shadow-lg cursor-pointer hover:from-cyan-600/90 hover:to-blue-600/90 transition-all">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">
