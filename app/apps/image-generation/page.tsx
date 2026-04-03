@@ -161,6 +161,7 @@ function ImageGenerationPage() {
           if (project.aspectRatio) setSelectedAspectRatio(project.aspectRatio);
           if (project.resolution) setSelectedResolution(project.resolution);
           if (project.style) setSelectedImageStyle(project.style);
+          updateContentTab("preview");
         }
       } catch (error: any) {
         console.error("Error fetching project:", error);
@@ -172,6 +173,33 @@ function ImageGenerationPage() {
 
     fetchProject();
   }, [projectId, user?._id]);
+
+  const handleLoadFromHistory = useCallback(
+    (image: { _id: string; imageData: { url: string; thumbnail: string; prompt: string; aspectRatio: string; resolution: string; style?: string; referenceImageUrls?: string[] }; createdAt: string }) => {
+      const { imageData } = image;
+      const loadedImage = {
+        id: image._id,
+        generatedImageId: image._id,
+        url: imageData.url,
+        thumbnail: imageData.thumbnail || imageData.url,
+        aspectRatio: (imageData.aspectRatio || "1:1") as AspectRatio,
+        resolution: (imageData.resolution || "1080p") as Resolution,
+        prompt: imageData.prompt || "",
+        style: (imageData.style || "realistic") as ImageStyle,
+        createdAt: image.createdAt || new Date().toISOString(),
+        referenceImageUrls: imageData.referenceImageUrls || [],
+      };
+
+      setGeneratedImages([loadedImage]);
+      setSelectedImageIndex(0);
+      setPrompt(imageData.prompt || "");
+      if (imageData.aspectRatio) setSelectedAspectRatio(imageData.aspectRatio as AspectRatio);
+      if (imageData.resolution) setSelectedResolution(imageData.resolution as Resolution);
+      if (imageData.style) setSelectedImageStyle(imageData.style as ImageStyle);
+      updateContentTab("preview");
+    },
+    [updateContentTab],
+  );
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
@@ -335,13 +363,7 @@ function ImageGenerationPage() {
                       {activeContentTab === "history" && (
                         <ImageHistoryTab
                           onLoadToEditor={(image) => {
-                            const urlParams = new URLSearchParams(
-                              searchParams.toString(),
-                            );
-                            urlParams.set("projectId", image._id);
-                            router.push(
-                              `/apps/image-generation?${urlParams.toString()}`,
-                            );
+                            handleLoadFromHistory(image);
                             setIsResultsDrawerOpen(false);
                           }}
                         />
@@ -681,15 +703,7 @@ function ImageGenerationPage() {
                   )}
                   {activeContentTab === "history" && (
                     <ImageHistoryTab
-                      onLoadToEditor={(image) => {
-                        const urlParams = new URLSearchParams(
-                          searchParams.toString(),
-                        );
-                        urlParams.set("projectId", image._id);
-                        router.push(
-                          `/apps/image-generation?${urlParams.toString()}`,
-                        );
-                      }}
+                      onLoadToEditor={handleLoadFromHistory}
                     />
                   )}
                   {activeContentTab === "community" && (

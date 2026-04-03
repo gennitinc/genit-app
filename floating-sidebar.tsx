@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -101,6 +101,243 @@ export function FloatingSidebar({
     document: [],
   });
 
+  const [historyItems, setHistoryItems] = useState<{
+    [key: string]: any[];
+  }>({
+    all: [],
+    image: [],
+    video: [],
+    audio: [],
+    text: [],
+    doc: [],
+    social: [],
+  });
+
+  const [historyPagination, setHistoryPagination] = useState<{
+    [key: string]: {
+      page: number;
+      hasMore: boolean;
+      isLoading: boolean;
+    };
+  }>({
+    all: { page: 1, hasMore: true, isLoading: false },
+    image: { page: 1, hasMore: true, isLoading: false },
+    video: { page: 1, hasMore: true, isLoading: false },
+    audio: { page: 1, hasMore: true, isLoading: false },
+    text: { page: 1, hasMore: true, isLoading: false },
+    doc: { page: 1, hasMore: true, isLoading: false },
+    social: { page: 1, hasMore: true, isLoading: false },
+  });
+
+  const lastLoadedPage = useRef<Record<string, number>>({});
+
+  const fetchHistory = useCallback(
+    async (category: string, isLoadMore = false) => {
+      let page = 1;
+      let currentIsLoading = false;
+      let hasMore = true;
+
+      setHistoryPagination((prev) => {
+        currentIsLoading = prev[category].isLoading;
+        page = isLoadMore ? prev[category].page + 1 : 1;
+        hasMore = prev[category].hasMore;
+
+        // GUARD: If already loading OR if this page was already successfully loaded, ABORT
+        if (currentIsLoading || (!hasMore && isLoadMore)) return prev;
+        if (isLoadMore && lastLoadedPage.current[category] >= page) return prev;
+
+        return {
+          ...prev,
+          [category]: { ...prev[category], isLoading: true },
+        };
+      });
+
+      if (
+        currentIsLoading ||
+        (isLoadMore && lastLoadedPage.current[category] >= page) ||
+        (!hasMore && isLoadMore)
+      ) {
+        return;
+      }
+
+      try {
+        const limit = 20;
+        let items: any[] = [];
+        let newHasMore = false;
+
+        if (category === "image" || category === "all") {
+          const res = await apiResponse.get(
+            `/project/myprojects?type=ai-image-gen&page=${page}&limit=${limit}`,
+            { withCredentials: true },
+          );
+          if (res.data?.success) {
+            const fetchedItems = res.data.projects
+              .filter((p: any) => p.imageData)
+              .map((p: any) => ({
+                id: p._id,
+                _id: p._id,
+                type: "image",
+                url: p.imageData.url,
+                thumbnail: p.imageData.thumbnail || p.imageData.url,
+                prompt: p.imageData.prompt,
+                createdAt: p.createdAt,
+                name: p.title || "Generated Image",
+              }));
+            items = [...items, ...fetchedItems];
+            newHasMore = res.data.pagination?.hasNextPage || false;
+          }
+        }
+
+        if (category === "video" || category === "all") {
+          const res = await apiResponse.get(
+            `/project/myprojects?type=ai-video-gen&page=${page}&limit=${limit}`,
+            { withCredentials: true },
+          );
+          if (res.data?.success) {
+            const fetchedItems = res.data.projects
+              .filter((p: any) => p.videoData)
+              .map((p: any) => ({
+                id: p._id,
+                _id: p._id,
+                type: "video",
+                url: p.videoData.url,
+                thumbnail: p.videoData.thumbnail || p.videoData.url,
+                prompt: p.videoData.prompt,
+                createdAt: p.createdAt,
+                name: p.title || "Generated Video",
+              }));
+            items = [...items, ...fetchedItems];
+            if (!newHasMore)
+              newHasMore = res.data.pagination?.hasNextPage || false;
+          }
+        }
+
+        if (category === "audio" || category === "all") {
+          const res = await apiResponse.get(
+            `/inspire/generate/audio/history?page=${page}&limit=${limit}`,
+            { withCredentials: true },
+          );
+          if (res.data?.success) {
+            const fetchedItems = res.data.data.map((p: any) => ({
+              id: p._id,
+              _id: p._id,
+              type: "audio",
+              url: p.url,
+              prompt: p.prompt,
+              createdAt: p.createdAt,
+              name: "Generated Audio",
+            }));
+            items = [...items, ...fetchedItems];
+            if (!newHasMore)
+              newHasMore = res.data.pagination?.hasNextPage || false;
+          }
+        }
+
+        if (
+          category === "text" ||
+          category === "all" ||
+          category === "doc" ||
+          category === "social"
+        ) {
+          const typeFilter = category === "all" ? undefined : category;
+          const res = await apiResponse.get(
+            `/inspire/generate/text/history?${typeFilter ? `type=${typeFilter}&` : ""}page=${page}&limit=${limit}`,
+            { withCredentials: true },
+          );
+          if (res.data?.success) {
+            const fetchedItems = res.data.data.map((p: any) => ({
+              id: p._id,
+              _id: p._id,
+              type: "text",
+              content: p.content,
+              prompt: p.prompt,
+              createdAt: p.createdAt,
+              name:
+                p.type === "social"
+                  ? "Social Post"
+                  : p.type === "docs"
+                    ? "Document"
+                    : "Generated Text",
+            }));
+            items = [...items, ...fetchedItems];
+            if (!newHasMore)
+              newHasMore = res.data.pagination?.hasNextPage || false;
+          }
+        }
+
+        // Sort combined items by date
+        if (category === "all") {
+          items.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          );
+        }
+
+        // Atomic update for both items and page state
+        setHistoryItems((prev) => ({
+          ...prev,
+          [category]: isLoadMore ? [...prev[category], ...items] : items,
+        }));
+
+        setHistoryPagination((prev) => ({
+          ...prev,
+          [category]: { page, hasMore: newHasMore, isLoading: false },
+        }));
+
+        // Update the red to track successful load
+        lastLoadedPage.current[category] = page;
+      } catch (error) {
+        console.error(`Failed to fetch ${category} history:`, error);
+        setHistoryPagination((prev) => ({
+          ...prev,
+          [category]: { ...prev[category], isLoading: false },
+        }));
+      }
+    },
+    [],
+  ); // Removed historyPagination dependency completely
+
+  // sentinel component for infinite scroll
+  const HistorySentinel = ({ category }: { category: string }) => {
+    const sentinelRef = React.useRef<HTMLDivElement>(null);
+    const pagination = historyPagination[category];
+
+    useEffect(() => {
+      if (!sentinelRef.current || !pagination.hasMore || pagination.isLoading)
+        return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && !pagination.isLoading) {
+            fetchHistory(category, true);
+          }
+        },
+        { rootMargin: "50px" },
+      ); // Reduced margin to prevent premature triggers
+
+      observer.observe(sentinelRef.current);
+      return () => observer.disconnect();
+    }, [category, pagination.hasMore, pagination.isLoading]);
+
+    if (!pagination.hasMore && !pagination.isLoading) return null;
+
+    return (
+      <div
+        ref={sentinelRef}
+        className="w-full py-4 flex flex-col items-center justify-center min-h-fit"
+      >
+        {pagination.isLoading && (
+          <div className="flex flex-col items-center space-y-2 py-2">
+            <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <span className="text-[10px] text-muted-foreground animate-pulse">
+              Loading amazing content...
+            </span>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const [dbItems, setDbItems] = useState<any[]>([]);
   const [isLoadingDb, setIsLoadingDb] = useState(false);
 
@@ -158,6 +395,53 @@ export function FloatingSidebar({
 
     let processedData = { ...inputData };
     let nodeType = selectedIntegrationType;
+
+    // If an item is selected from history (ALL tab), use its data
+    if (activeTab === "all" && selectedItem) {
+      if (selectedItem.type === "image") {
+        nodeType = "image";
+        processedData = {
+          ...processedData,
+          url: selectedItem.url,
+          thumbnail: selectedItem.thumbnail,
+          title: selectedItem.name,
+        };
+      } else if (selectedItem.type === "video") {
+        nodeType = "video";
+        processedData = {
+          ...processedData,
+          url: selectedItem.url,
+          thumbnail: selectedItem.thumbnail,
+          title: selectedItem.name,
+        };
+      } else if (selectedItem.type === "audio") {
+        nodeType = "audio";
+        processedData = {
+          ...processedData,
+          url: selectedItem.url,
+          title: selectedItem.name,
+        };
+      } else if (
+        selectedItem.type === "text" ||
+        selectedItem.type === "social"
+      ) {
+        nodeType = selectedItem.type === "social" ? "social" : "text";
+        processedData = {
+          ...processedData,
+          content: selectedItem.content,
+          title: selectedItem.prompt || selectedItem.name || "Generated Text",
+        };
+      } else if (selectedItem.type === "doc" || selectedItem.type === "docs") {
+        nodeType = "document";
+        processedData = {
+          ...processedData,
+          content: selectedItem.content,
+          title:
+            selectedItem.prompt || selectedItem.name || "Generated Document",
+          url: selectedItem.url || "",
+        };
+      }
+    }
 
     // Map sidebar types to actual node types
     if (selectedIntegrationType === "mic") {
@@ -996,6 +1280,30 @@ export function FloatingSidebar({
     },
   ];
 
+  useEffect(() => {
+    if (showModal && selectedIntegrationType) {
+      if (activeTab === "all") {
+        // Map sidebar types to history categories
+        const categoryMap: { [key: string]: string } = {
+          mic: "audio",
+          image: "image",
+          video: "video",
+          file: "doc",
+          text: "text",
+        };
+        const category = categoryMap[selectedIntegrationType] || "all";
+        fetchHistory(category);
+      }
+    }
+  }, [showModal, selectedIntegrationType, activeTab, fetchHistory]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>, category: string) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    if (scrollHeight - scrollTop <= clientHeight + 50) {
+      fetchHistory(category, true);
+    }
+  };
+
   const modalConfigs = {
     mic: {
       title: "Audio & Voice",
@@ -1030,71 +1338,124 @@ export function FloatingSidebar({
 
             <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
               <div className="flex flex-col gap-y-2">
-                {userFiles.audio.length === 0 ? (
+                {userFiles.audio.length === 0 &&
+                historyItems.audio.length === 0 &&
+                !historyPagination.audio.isLoading ? (
                   <div className="text-center py-8">
                     <Music className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">
-                      No audio files uploaded yet
+                      No audio files yet
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Upload audio files or add them via URL
+                      Generate audio or upload files
                     </p>
                   </div>
                 ) : (
-                  userFiles.audio
-                    .filter((file: any) =>
-                      file.name
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase()),
-                    )
-                    .map((file: any) => (
-                      <Card
-                        key={file.id}
-                        className={`p-3 transition-colors cursor-pointer border-border/50 ${
-                          selectedItem?.id === file.id
-                            ? "bg-primary/10 border-primary/50"
-                            : "hover:bg-muted/50"
-                        }`}
-                        onClick={() => handleFileSelect(file)}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-md flex items-center justify-center">
-                            <Music className="w-5 h-5 text-muted-foreground" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground truncate">
-                              {file.name}
-                            </p>
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <span>{file.duration}</span>
-                              <span>•</span>
-                              <span>{file.size}</span>
-                              <span>•</span>
-                              <span>{file.date}</span>
+                  <>
+                    {/* User Uploaded Files */}
+                    {userFiles.audio
+                      .filter((file: any) =>
+                        file.name
+                          .toLowerCase()
+                          .includes(searchQuery.toLowerCase()),
+                      )
+                      .map((file: any) => (
+                        <Card
+                          key={file.id}
+                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                            selectedItem?.id === file.id
+                              ? "bg-primary/10 border-primary/50"
+                              : "hover:bg-muted/50"
+                          }`}
+                          onClick={() => {
+                            setSelectedItem(file);
+                            // We don't necessarily want to toggle off selectedItem if we click it again
+                          }}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-muted">
+                              <Music className="w-5 h-5 text-muted-foreground" />
                             </div>
-                          </div>
-                          <div className="flex items-center gap-1">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-foreground truncate">
+                                {file.name}
+                              </p>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <span>{file.duration || "Audio"}</span>
+                                <span>•</span>
+                                <span>{file.size || "Upload"}</span>
+                              </div>
+                            </div>
                             {selectedItem?.id === file.id && (
                               <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
                                 <CheckCircle className="w-3 h-3 text-primary-foreground" />
                               </div>
                             )}
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteItem(file.id, "audio");
-                              }}
-                              title="Delete file"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </Button>
                           </div>
+                        </Card>
+                      ))}
+
+                    {/* Generated History Items */}
+                    {historyItems.audio
+                      .filter((item: any) =>
+                        (item.name || item.prompt || "")
+                          .toLowerCase()
+                          .includes(searchQuery.toLowerCase()),
+                      )
+                      .map((item: any) => (
+                        <Card
+                          key={item.id}
+                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                            selectedItem?.id === item.id
+                              ? "bg-primary/10 border-primary/50"
+                              : "hover:bg-muted/50"
+                          }`}
+                          onClick={() => setSelectedItem(item)}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-green-500/10">
+                              <Music className="w-5 h-5 text-green-500" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-foreground truncate">
+                                {item.prompt || "Generated Audio"}
+                              </p>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <Badge
+                                  variant="outline"
+                                  className="px-1 py-0 text-[10px] h-4 bg-primary/5 text-primary"
+                                >
+                                  Generated
+                                </Badge>
+                                <span>•</span>
+                                <span>
+                                  {new Date(
+                                    item.createdAt,
+                                  ).toLocaleDateString()}
+                                </span>
+                              </div>
+                            </div>
+                            {selectedItem?.id === item.id && (
+                              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              </div>
+                            )}
+                          </div>
+                        </Card>
+                      ))}
+
+                    <HistorySentinel category="audio" />
+
+                    {!historyPagination.audio.hasMore &&
+                      (userFiles.audio.length > 0 || historyItems.audio.length > 0) &&
+                      !historyPagination.audio.isLoading && (
+                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                            No more files found
+                          </p>
                         </div>
-                      </Card>
-                    ))
+                      )}
+                  </>
                 )}
               </div>
             </div>
@@ -1474,89 +1835,114 @@ export function FloatingSidebar({
             </div>
 
             <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
-              <div className="space-y-2">
-                {userFiles.image.length === 0 ? (
+              <div className="space-y-4">
+                {userFiles.image.length === 0 &&
+                historyItems.image.length === 0 &&
+                !historyPagination.image.isLoading ? (
                   <div className="text-center py-8">
                     <ImageIcon className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">
-                      No image files uploaded yet
+                      No images yet
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Upload image files or add them via URL
+                      Generate images or upload files
                     </p>
                   </div>
                 ) : (
-                  userFiles.image
-                    .filter((file: any) =>
-                      file.name
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase()),
-                    )
-                    .map((file: any) => (
-                      <Card
-                        key={file.id}
-                        className={`p-3 transition-colors cursor-pointer border-border/50 ${
-                          selectedItem?.id === file.id &&
-                          selectedItem?.type === "image"
-                            ? "bg-primary/10 border-primary/50"
-                            : "hover:bg-muted/50"
-                        }`}
-                        onClick={() =>
-                          handleFileSelect({ ...file, type: "image" })
-                        }
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-md flex items-center justify-center overflow-hidden bg-muted relative">
-                            {file.url ? (
-                              <img
-                                src={file.url}
-                                alt={file.name}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  // Fallback to icon if image fails to load
-                                  const target = e.target as HTMLImageElement;
-                                  target.style.display = "none";
-                                  target.nextElementSibling?.classList.remove(
-                                    "hidden",
-                                  );
-                                }}
-                              />
-                            ) : null}
-                            <ImageIcon className="w-5 h-5 text-muted-foreground absolute inset-0 m-auto" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground truncate">
-                              {file.name}
-                            </p>
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <span>{file.size}</span>
-                              <span>•</span>
-                              <span>{file.date}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-1">
+                  <>
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* User Uploaded Images */}
+                      {userFiles.image
+                        .filter((file: any) =>
+                          file.name
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase()),
+                        )
+                        .map((file: any) => (
+                          <div
+                            key={file.id}
+                            className={`relative aspect-square rounded-md overflow-hidden cursor-pointer border-2 transition-all ${
+                              selectedItem?.id === file.id &&
+                              selectedItem?.type === "image"
+                                ? "border-primary shadow-md"
+                                : "border-transparent hover:border-primary/30"
+                            }`}
+                            onClick={() =>
+                              setSelectedItem({ ...file, type: "image" })
+                            }
+                          >
+                            <img
+                              src={file.url}
+                              alt={file.name}
+                              className="w-full h-full object-cover"
+                            />
                             {selectedItem?.id === file.id &&
                               selectedItem?.type === "image" && (
-                                <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                                <div className="absolute top-1 right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
                                   <CheckCircle className="w-3 h-3 text-primary-foreground" />
                                 </div>
                               )}
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteItem(file.id, "image");
-                              }}
-                              title="Delete file"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </Button>
+                            <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/40 backdrop-blur-[2px]">
+                              <p className="text-[10px] text-white truncate px-1">
+                                {file.name}
+                              </p>
+                            </div>
                           </div>
+                        ))}
+
+                      {/* Generated History Images */}
+                      {historyItems.image
+                        .filter((item: any) =>
+                          (item.prompt || "")
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase()),
+                        )
+                        .map((item: any) => (
+                          <div
+                            key={item.id}
+                            className={`relative aspect-square rounded-md overflow-hidden cursor-pointer border-2 transition-all ${
+                              selectedItem?.id === item.id
+                                ? "border-primary shadow-md"
+                                : "border-transparent hover:border-primary/30"
+                            }`}
+                            onClick={() => setSelectedItem(item)}
+                          >
+                            <img
+                              src={item.thumbnail || item.url}
+                              alt={item.prompt}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute top-1 left-1">
+                              <Badge className="bg-primary/80 hover:bg-primary text-[8px] px-1 py-0 h-3 leading-none border-none">
+                                AI
+                              </Badge>
+                            </div>
+                            {selectedItem?.id === item.id && (
+                              <div className="absolute top-1 right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              </div>
+                            )}
+                            <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/40 backdrop-blur-[2px]">
+                              <p className="text-[10px] text-white truncate px-1">
+                                {item.prompt || "Generated"}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+
+                    <HistorySentinel category="image" />
+
+                    {!historyPagination.image.hasMore &&
+                      (userFiles.image.length > 0 || historyItems.image.length > 0) &&
+                      !historyPagination.image.isLoading && (
+                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                            No more files found
+                          </p>
                         </div>
-                      </Card>
-                    ))
+                      )}
+                  </>
                 )}
               </div>
             </div>
@@ -1777,7 +2163,7 @@ export function FloatingSidebar({
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Search video files..."
+                placeholder="Search videos..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 pr-10 h-9"
@@ -1796,99 +2182,150 @@ export function FloatingSidebar({
             </div>
 
             <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
-              <div className="space-y-2">
-                {userFiles.video.length === 0 ? (
+              <div className="space-y-4">
+                {userFiles.video.length === 0 &&
+                historyItems.video.length === 0 &&
+                !historyPagination.video.isLoading ? (
                   <div className="text-center py-8">
                     <Play className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">
-                      No video files uploaded yet
+                      No videos yet
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Upload video files or add them via URL
+                      Generate videos or upload files
                     </p>
                   </div>
                 ) : (
-                  userFiles.video
-                    .filter((file: any) =>
-                      file.name
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase()),
-                    )
-                    .map((file: any) => (
-                      <Card
-                        key={file.id}
-                        className={`p-3 transition-colors cursor-pointer border-border/50 ${
-                          selectedItem?.id === file.id &&
-                          selectedItem?.type === "video"
-                            ? "bg-primary/10 border-primary/50"
-                            : "hover:bg-muted/50"
-                        }`}
-                        onClick={() =>
-                          handleFileSelect({ ...file, type: "video" })
-                        }
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-md flex items-center justify-center overflow-hidden bg-muted relative">
-                            {file.url ? (
-                              <video
-                                src={file.url}
-                                className="w-full h-full object-cover"
-                                onLoadedData={(e) => {
-                                  // Try to get thumbnail from video
-                                  const video = e.target as HTMLVideoElement;
-                                  video.currentTime = 1; // Seek to 1 second for thumbnail
-                                }}
-                                onError={(e) => {
-                                  // Fallback to icon if video fails to load
-                                  const target = e.target as HTMLVideoElement;
-                                  target.style.display = "none";
-                                  target.nextElementSibling?.classList.remove(
-                                    "hidden",
-                                  );
-                                }}
-                              />
-                            ) : null}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="w-6 h-6 bg-black/50 rounded-full flex items-center justify-center">
-                                <Play className="w-3 h-3 text-white" />
-                              </div>
+                  <>
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* User Uploaded Videos */}
+                      {userFiles.video
+                        .filter((file: any) =>
+                          file.name
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase()),
+                        )
+                        .map((file: any) => (
+                          <div
+                            key={file.id}
+                            className={`relative aspect-video rounded-md overflow-hidden cursor-pointer border-2 transition-all ${
+                              selectedItem?.id === file.id &&
+                              selectedItem?.type === "video"
+                                ? "border-primary shadow-md"
+                                : "border-transparent hover:border-primary/30"
+                            }`}
+                            onClick={() =>
+                              setSelectedItem({ ...file, type: "video" })
+                            }
+                          >
+                            <video
+                              src={file.url}
+                              className="w-full h-full object-cover"
+                              muted
+                              playsInline
+                              onLoadedData={(e) => {
+                                const video = e.target as HTMLVideoElement;
+                                video
+                                  .play()
+                                  .then(() => {
+                                    setTimeout(() => {
+                                      video.pause();
+                                    }, 2000);
+                                  })
+                                  .catch(() => {
+                                    // Auto-play might be blocked even if muted
+                                    video.currentTime = 1;
+                                  });
+                              }}
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                              <Play className="w-4 h-4 text-white fill-white" />
                             </div>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground truncate">
-                              {file.name}
-                            </p>
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <span>{file.duration}</span>
-                              <span>•</span>
-                              <span>{file.size}</span>
-                              <span>•</span>
-                              <span>{file.date}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-1">
                             {selectedItem?.id === file.id &&
                               selectedItem?.type === "video" && (
-                                <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                                <div className="absolute top-1 right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
                                   <CheckCircle className="w-3 h-3 text-primary-foreground" />
                                 </div>
                               )}
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteItem(file.id, "video");
-                              }}
-                              title="Delete file"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </Button>
+                            <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/40 backdrop-blur-[2px]">
+                              <p className="text-[10px] text-white truncate px-1">
+                                {file.name}
+                              </p>
+                            </div>
                           </div>
+                        ))}
+
+                      {/* Generated History Videos */}
+                      {historyItems.video
+                        .filter((item: any) =>
+                          (item.prompt || "")
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase()),
+                        )
+                        .map((item: any) => (
+                          <div
+                            key={item.id}
+                            className={`relative aspect-video rounded-md overflow-hidden cursor-pointer border-2 transition-all ${
+                              selectedItem?.id === item.id
+                                ? "border-primary shadow-md"
+                                : "border-transparent hover:border-primary/30"
+                            }`}
+                            onClick={() => setSelectedItem(item)}
+                          >
+                            <video
+                              src={item.url}
+                              className="w-full h-full object-cover"
+                              muted
+                              playsInline
+                              poster={item.thumbnail}
+                              onLoadedData={(e) => {
+                                const video = e.target as HTMLVideoElement;
+                                video
+                                  .play()
+                                  .then(() => {
+                                    setTimeout(() => {
+                                      video.pause();
+                                    }, 2000);
+                                  })
+                                  .catch(() => {
+                                    video.currentTime = 1;
+                                  });
+                              }}
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                              <Play className="w-4 h-4 text-white fill-white" />
+                            </div>
+                            <div className="absolute top-1 left-1">
+                              <Badge className="bg-primary/80 hover:bg-primary text-[8px] px-1 py-0 h-3 leading-none border-none">
+                                AI
+                              </Badge>
+                            </div>
+                            {selectedItem?.id === item.id && (
+                              <div className="absolute top-1 right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              </div>
+                            )}
+                            <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/40 backdrop-blur-[2px]">
+                              <p className="text-[10px] text-white truncate px-1">
+                                {item.prompt || "Generated"}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+
+                    <HistorySentinel category="video" />
+
+                    {!historyPagination.video.hasMore &&
+                      (userFiles.video.length > 0 || historyItems.video.length > 0) &&
+                      !historyPagination.video.isLoading && (
+                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                            No more files found
+                          </p>
                         </div>
-                      </Card>
-                    ))
+                      )}
+                  </>
                 )}
               </div>
             </div>
@@ -2101,8 +2538,116 @@ export function FloatingSidebar({
       icon: Type,
       color: "text-orange-500",
       bgColor: "bg-orange-500/10",
-      tabs: ["create"],
+      tabs: ["all", "create"],
       content: {
+        all: () => (
+          <div className="space-y-3">
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search text/docs..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-10 h-9"
+              />
+              {searchQuery && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                  onClick={() => setSearchQuery("")}
+                  title="Clear Search"
+                >
+                  <X className="w-3 h-3" />
+                </Button>
+              )}
+            </div>
+
+            <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
+              <div className="flex flex-col gap-y-2">
+                {historyItems.text.length === 0 &&
+                !historyPagination.text.isLoading ? (
+                  <div className="text-center py-8">
+                    <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">
+                      No text history yet
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    {historyItems.text
+                      .filter((item: any) =>
+                        (item.name || item.prompt || item.content || "")
+                          .toLowerCase()
+                          .includes(searchQuery.toLowerCase()),
+                      )
+                      .map((item: any) => (
+                        <Card
+                          key={item.id}
+                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                            selectedItem?.id === item.id
+                              ? "bg-primary/10 border-primary/50"
+                              : "hover:bg-muted/50"
+                          }`}
+                          onClick={() => setSelectedItem(item)}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-orange-500/10 mt-1">
+                              <FileText className="w-5 h-5 text-orange-500" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-foreground line-clamp-1">
+                                {item.prompt || "Generated Text"}
+                              </p>
+                              <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
+                                {item.content}
+                              </p>
+                              <div className="flex items-center gap-2 text-[10px] text-muted-foreground mt-1">
+                                <Badge
+                                  variant="outline"
+                                  className="px-1 py-0 h-3.5 bg-primary/5 text-primary"
+                                >
+                                  {item.type === "social"
+                                    ? "Social"
+                                    : item.type === "docs"
+                                      ? "Doc"
+                                      : "Text"}
+                                </Badge>
+                                <span>•</span>
+                                <span>
+                                  {new Date(
+                                    item.createdAt,
+                                  ).toLocaleDateString()}
+                                </span>
+                              </div>
+                            </div>
+                            {selectedItem?.id === item.id && (
+                              <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center mt-1">
+                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              </div>
+                            )}
+                          </div>
+                        </Card>
+                      ))}
+
+                    <HistorySentinel category="text" />
+
+                    {!historyPagination.text.hasMore &&
+                      historyItems.text.length > 0 &&
+                      !historyPagination.text.isLoading && (
+                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                            No more files found
+                          </p>
+                        </div>
+                      )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        ),
         create: () => (
           <div className="space-y-3">
             <div>
@@ -2197,8 +2742,113 @@ export function FloatingSidebar({
       icon: Globe,
       color: "text-pink-500",
       bgColor: "bg-pink-500/10",
-      tabs: ["socials", "added"],
+      tabs: ["all", "socials", "added"],
       content: {
+        all: () => (
+          <div className="space-y-3">
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search socials..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-10 h-9"
+              />
+              {searchQuery && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                  onClick={() => setSearchQuery("")}
+                  title="Clear Search"
+                >
+                  <X className="w-3 h-3" />
+                </Button>
+              )}
+            </div>
+
+            <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
+              <div className="flex flex-col gap-y-2">
+                {historyItems.text.filter((item) => item.type === "social")
+                  .length === 0 && !historyPagination.text.isLoading ? (
+                  <div className="text-center py-8">
+                    <Globe className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">
+                      No social history yet
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    {historyItems.text
+                      .filter(
+                        (item: any) =>
+                          item.type === "social" &&
+                          (item.prompt || item.content || "")
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase()),
+                      )
+                      .map((item: any) => (
+                        <Card
+                          key={item.id}
+                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                            selectedItem?.id === item.id
+                              ? "bg-primary/10 border-primary/50"
+                              : "hover:bg-muted/50"
+                          }`}
+                          onClick={() => setSelectedItem(item)}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-pink-500/10 mt-1">
+                              <Globe className="w-5 h-5 text-pink-500" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-foreground line-clamp-1">
+                                {item.prompt || "Social Content"}
+                              </p>
+                              <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
+                                {item.content}
+                              </p>
+                              <div className="flex items-center gap-2 text-[10px] text-muted-foreground mt-1">
+                                <Badge
+                                  variant="outline"
+                                  className="px-1 py-0 h-3.5 bg-primary/5 text-primary"
+                                >
+                                  Social
+                                </Badge>
+                                <span>•</span>
+                                <span>
+                                  {new Date(
+                                    item.createdAt,
+                                  ).toLocaleDateString()}
+                                </span>
+                              </div>
+                            </div>
+                            {selectedItem?.id === item.id && (
+                              <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center mt-1">
+                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              </div>
+                            )}
+                          </div>
+                        </Card>
+                      ))}
+
+                    {!historyPagination.text.hasMore &&
+                      historyItems.text.filter((item) => item.type === "social")
+                        .length > 0 &&
+                      !historyPagination.text.isLoading && (
+                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                            No more files found
+                          </p>
+                        </div>
+                      )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        ),
         socials: () => (
           <div className="flex flex-col h-full">
             {!selectedSocialPlatform ? (
@@ -2746,73 +3396,124 @@ export function FloatingSidebar({
 
             <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
               <div className="flex flex-col gap-y-2">
-                {userFiles.document.length === 0 ? (
+                {userFiles.document.length === 0 &&
+                historyItems.doc.length === 0 &&
+                !historyPagination.doc.isLoading ? (
                   <div className="text-center py-8">
                     <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">
-                      No document files uploaded yet
+                      No documents yet
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Upload document files or add them via URL
+                      Generate docs or upload files
                     </p>
                   </div>
                 ) : (
-                  userFiles.document
-                    .filter((file: any) =>
-                      file.name
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase()),
-                    )
-                    .map((file: any) => (
-                      <Card
-                        key={file.id}
-                        className={`p-3 transition-colors cursor-pointer border-border/50 ${
-                          selectedItem?.id === file.id &&
-                          selectedItem?.type === "document"
-                            ? "bg-primary/10 border-primary/50"
-                            : "hover:bg-muted/50"
-                        }`}
-                        onClick={() =>
-                          handleFileSelect({ ...file, type: "document" })
-                        }
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-md flex items-center justify-center">
-                            <FileText className="w-5 h-5 text-muted-foreground" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground truncate">
-                              {file.name}
-                            </p>
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <span>{file.size}</span>
-                              <span>•</span>
-                              <span>{file.date}</span>
+                  <>
+                    {/* User Uploaded Documents */}
+                    {userFiles.document
+                      .filter((file: any) =>
+                        file.name
+                          .toLowerCase()
+                          .includes(searchQuery.toLowerCase()),
+                      )
+                      .map((file: any) => (
+                        <Card
+                          key={file.id}
+                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                            selectedItem?.id === file.id &&
+                            selectedItem?.type === "document"
+                              ? "bg-primary/10 border-primary/50"
+                              : "hover:bg-muted/50"
+                          }`}
+                          onClick={() =>
+                            setSelectedItem({ ...file, type: "document" })
+                          }
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-muted">
+                              <FileText className="w-5 h-5 text-muted-foreground" />
                             </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-foreground truncate">
+                                {file.name}
+                              </p>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <span>{file.size || "File"}</span>
+                                <span>•</span>
+                                <span>{file.date || "Upload"}</span>
+                              </div>
+                            </div>
+                            {selectedItem?.id === file.id && (
+                              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              </div>
+                            )}
                           </div>
-                          <div className="flex items-center gap-1">
-                            {selectedItem?.id === file.id &&
-                              selectedItem?.type === "document" && (
-                                <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                                  <CheckCircle className="w-3 h-3 text-primary-foreground" />
-                                </div>
-                              )}
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteItem(file.id, "document");
-                              }}
-                              title="Delete file"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </Button>
+                        </Card>
+                      ))}
+
+                    {/* Generated History Documents */}
+                    {historyItems.doc
+                      .filter((item: any) =>
+                        (item.prompt || item.content || "")
+                          .toLowerCase()
+                          .includes(searchQuery.toLowerCase()),
+                      )
+                      .map((item: any) => (
+                        <Card
+                          key={item.id}
+                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                            selectedItem?.id === item.id
+                              ? "bg-primary/10 border-primary/50"
+                              : "hover:bg-muted/50"
+                          }`}
+                          onClick={() => setSelectedItem(item)}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-indigo-500/10">
+                              <FileText className="w-5 h-5 text-indigo-500" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-foreground truncate">
+                                {item.prompt || "Generated Doc"}
+                              </p>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <Badge
+                                  variant="outline"
+                                  className="px-1 py-0 text-[10px] h-4 bg-primary/5 text-primary"
+                                >
+                                  Generated
+                                </Badge>
+                                <span>•</span>
+                                <span>
+                                  {new Date(
+                                    item.createdAt,
+                                  ).toLocaleDateString()}
+                                </span>
+                              </div>
+                            </div>
+                            {selectedItem?.id === item.id && (
+                              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              </div>
+                            )}
                           </div>
+                        </Card>
+                      ))}
+
+                    <HistorySentinel category="doc" />
+
+                    {!historyPagination.doc.hasMore &&
+                      (userFiles.document.length > 0 || historyItems.doc.length > 0) &&
+                      !historyPagination.doc.isLoading && (
+                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
+                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                            No more files found
+                          </p>
                         </div>
-                      </Card>
-                    ))
+                      )}
+                  </>
                 )}
               </div>
             </div>
@@ -3020,112 +3721,7 @@ export function FloatingSidebar({
         ),
       },
     },
-    // database: {
-    //   title: "Content Database",
-    //   icon: Database,
-    //   color: "text-blue-500",
-    //   bgColor: "bg-blue-500/10",
-    //   tabs: ["all", "images", "videos", "audio", "docs"],
-    //   hideFooter: true,
-    //   content: {
-    //     all: () => renderDbList(),
-    //     images: () => renderDbList("image"),
-    //     videos: () => renderDbList("video"),
-    //     audio: () => renderDbList("audio"),
-    //     docs: () => renderDbList("document"),
-    //   },
-    // },
   };
-
-  // function renderDbList(filterCategory?: string) {
-  //   const filteredItems = filterCategory
-  //     ? dbItems.filter((item) => item.category === filterCategory)
-  //     : dbItems;
-
-  //   return (
-  //     <div className="space-y-3">
-  //       <div className="relative">
-  //         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-  //         <Input
-  //           placeholder="Search database..."
-  //           value={searchQuery}
-  //           onChange={(e) => setSearchQuery(e.target.value)}
-  //           className="pl-10 h-9"
-  //         />
-  //       </div>
-
-  //       <div className="h-[400px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
-  //         {isLoadingDb ? (
-  //           <div className="flex flex-col items-center justify-center py-20">
-  //             <Loader2 className="w-8 h-8 animate-spin text-primary opacity-50" />
-  //           </div>
-  //         ) : filteredItems.length === 0 ? (
-  //           <div className="text-center py-20 border-2 border-dashed border-border rounded-xl">
-  //             <Database className="w-8 h-8 text-muted-foreground opacity-20 mx-auto mb-2" />
-  //             <p className="text-sm text-muted-foreground">No items found</p>
-  //           </div>
-  //         ) : (
-  //           <div className="grid grid-cols-1 gap-2">
-  //             {filteredItems
-  //               .filter((item) =>
-  //                 item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  //               )
-  //               .map((item) => (
-  //                 <Card
-  //                   key={item._id}
-  //                   className="p-3 hover:bg-muted/50 transition-colors group relative border-border/50 cursor-pointer"
-  //                   onClick={() => {
-  //                     onAddIntegration(item.category, {
-  //                       ...item.metadata,
-  //                       url: item.url,
-  //                       title: item.name,
-  //                     });
-  //                     resetModal();
-  //                   }}
-  //                 >
-  //                   <div className="flex items-center gap-3">
-  //                     <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center overflow-hidden">
-  //                       {item.category === "image" ? (
-  //                         <img
-  //                           src={item.url}
-  //                           className="w-full h-full object-cover"
-  //                         />
-  //                       ) : item.category === "video" ? (
-  //                         <Play className="w-4 h-4 text-blue-500" />
-  //                       ) : item.category === "audio" ? (
-  //                         <Music className="w-4 h-4 text-green-500" />
-  //                       ) : (
-  //                         <FileText className="w-4 h-4 text-indigo-500" />
-  //                       )}
-  //                     </div>
-  //                     <div className="flex-1 min-w-0">
-  //                       <p className="text-xs font-medium truncate">
-  //                         {item.name}
-  //                       </p>
-  //                       <p className="text-[10px] text-muted-foreground capitalize">
-  //                         {item.category}
-  //                       </p>
-  //                     </div>
-  //                     <Button
-  //                       variant="ghost"
-  //                       size="sm"
-  //                       className="opacity-0 group-hover:opacity-100 h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
-  //                       onClick={(e) => {
-  //                         e.stopPropagation();
-  //                         deleteDbItem(item._id);
-  //                       }}
-  //                     >
-  //                       <Trash2 className="w-4 h-4" />
-  //                     </Button>
-  //                   </div>
-  //                 </Card>
-  //               ))}
-  //           </div>
-  //         )}
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="fixed left-4 top-1/2 -translate-y-1/2 z-50 flex items-center">
@@ -3329,7 +3925,7 @@ export function FloatingSidebar({
                         {selectedIntegrationType === "file" &&
                           "Documents & Files"}
                       </h3>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground line-clamp-1 truncate w-40">
                         {selectedIntegrationType === "mic" &&
                           (selectedItem
                             ? `Selected: ${selectedItem.name}`

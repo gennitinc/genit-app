@@ -78,12 +78,23 @@ export function PremiumInput({
     }
   }, [isListening, startListening, stopListening, value]);
 
+  const handleSubmit = useCallback(() => {
+    if (!value.trim() || isGenerating || disabled) return;
+    onSubmit();
+    // Reset height back to minHeight after submit
+    if (textareaRef.current) {
+      textareaRef.current.style.height = minHeight;
+    }
+  }, [value, isGenerating, disabled, onSubmit, minHeight]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    // Plain Enter or Shift+Enter adds a new line (default behavior).
+    // Accidental plain Enter should not submit.
+    if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
+      // Do nothing, let it add a new line
+    } else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      if (value.trim() && !isGenerating && !disabled) {
-        onSubmit();
-      }
+      handleSubmit();
     }
   };
 
@@ -216,7 +227,7 @@ export function PremiumInput({
 
             <button
               type="button"
-              onClick={onSubmit}
+              onClick={handleSubmit}
               disabled={isGenerating || !value.trim() || disabled}
               className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shadow-md flex-shrink-0 disabled:opacity-50"
             >

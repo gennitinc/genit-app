@@ -411,7 +411,7 @@ const Apps = () => {
                             key={category.name}
                             onClick={() => setActiveCategory(category.name)}
                             className={cn(
-                              "text-muted-foreground text-sm font-medium px-4 py-2 rounded-full transition-all duration-200 hover:text-foreground hover:bg-muted",
+                              "text-muted-foreground text-sm font-medium px-4 py-2 rounded-md transition-all duration-200 hover:text-foreground hover:bg-muted",
                               isActive &&
                                 "text-white bg-gradient-to-r from-cyan-500 to-blue-500 shadow-md",
                             )}

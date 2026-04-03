@@ -108,6 +108,7 @@
     "react-email": "^4.2.8",
     "react-hook-form": "^7.68.0",
     "react-konva": "^19.2.1",
+    "react-markdown": "^10.1.0",
     "react-mask-editor": "^0.0.2",
     "react-resizable-panels": "^4.6.5",
     "react-social-media-embed": "^2.5.18",

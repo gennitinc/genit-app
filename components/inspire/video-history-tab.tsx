@@ -288,7 +288,9 @@ function VideoCard({
   return (
     <div
       className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4"
-      onClick={() => onLoadToEditor(video)}
+      onClick={() => {
+        onLoadToEditor(video);
+      }}
     >
       <div className="relative">
         {video.videoData.url ? (

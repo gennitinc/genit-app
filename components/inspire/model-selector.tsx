@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { Loader2, Image as ImageIcon, Video, Crown } from "lucide-react";
+import { Loader2, Image as ImageIcon, Video, Crown, Music, Type as TypeIcon, Share2, FileText } from "lucide-react";
 import { modelApi } from "@/utils/inspire-api";
-import { Model } from "@/types/inspire";
+import { Model, ModelType } from "@/types/inspire";
 import { toast } from "@/hooks/use-toast";
 import {
   Select,
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 
 interface ModelSelectorProps {
-  type: "image" | "video" | "text" | "audio";
+  type: ModelType;
   selectedModel: Model | null;
   onSelectModel: (model: Model) => void;
 }
@@ -28,7 +28,7 @@ function ModelIcon({
 }: {
   icon?: string;
   name: string;
-  type: "image" | "video" | "text" | "audio";
+  type: ModelType;
 }) {
   if (icon) {
     // Check if icon is a URL or SVG string
@@ -57,11 +57,12 @@ function ModelIcon({
   }
 
   // Default icon based on type
-  return type === "image" ? (
-    <ImageIcon className="w-4 h-4 flex-shrink-0" />
-  ) : (
-    <Video className="w-4 h-4 flex-shrink-0" />
-  );
+  if (type === "video") return <Video className="w-4 h-4 flex-shrink-0" />;
+  if (type === "audio") return <Music className="w-4 h-4 flex-shrink-0" />;
+  if (type === "text") return <TypeIcon className="w-4 h-4 flex-shrink-0" />;
+  if (type === "social") return <Share2 className="w-4 h-4 flex-shrink-0" />;
+  if (type === "docs") return <FileText className="w-4 h-4 flex-shrink-0" />;
+  return <ImageIcon className="w-4 h-4 flex-shrink-0" />;
 }
 
 export function ModelSelector({

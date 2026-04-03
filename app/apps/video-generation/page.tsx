@@ -468,9 +468,8 @@ function VideoGenerationPage() {
           if (project.aspectRatio) setSelectedAspectRatio(project.aspectRatio);
           if (project.resolution) setSelectedResolution(project.resolution);
           if (project.duration) setDuration(project.duration);
-          if (project.startFrameUrl)
-            setStartFramePreview(project.startFrameUrl);
           if (project.endFrameUrl) setEndFramePreview(project.endFrameUrl);
+          updateContentTab("preview");
         }
       } catch (error: any) {
         console.error("Error fetching project:", error);
@@ -506,6 +505,62 @@ function VideoGenerationPage() {
       }
     };
   }, [isGenerating, activeContentTab, updateContentTab]);
+
+  // Load an image history item directly into the editor without any extra API call.
+  const handleLoadImageFromHistory = useCallback(
+    (image: { _id: string; imageData: { url: string; thumbnail: string; prompt: string; aspectRatio: string; resolution: string; style?: string; referenceImageUrls?: string[] }; createdAt: string }) => {
+      const { imageData } = image;
+      setGeneratedImages([{
+        id: image._id,
+        generatedImageId: image._id,
+        url: imageData.url,
+        thumbnail: imageData.thumbnail || imageData.url,
+        aspectRatio: (imageData.aspectRatio || "1:1") as AspectRatio,
+        resolution: (imageData.resolution || "1080p") as Resolution,
+        prompt: imageData.prompt || "",
+        style: imageData.style || "realistic",
+        createdAt: image.createdAt || new Date().toISOString(),
+        referenceImageUrls: imageData.referenceImageUrls || [],
+      }]);
+      setSelectedImageIndex(0);
+      setPrompt(imageData.prompt || "");
+      if (imageData.aspectRatio) setSelectedAspectRatio(imageData.aspectRatio as AspectRatio);
+      if (imageData.resolution) setSelectedResolution(imageData.resolution as Resolution);
+      if (imageData.style) setSelectedImageStyle(imageData.style as ImageStyle);
+      updateContentTab("preview");
+    },
+    [updateContentTab],
+  );
+
+  // Load a video history item directly into the editor without any extra API call.
+  const handleLoadVideoFromHistory = useCallback(
+    (video: { _id: string; videoData: { url: string; thumbnail: string; prompt: string; aspectRatio: string; resolution: string; duration?: number; startFrameUrl?: string; endFrameUrl?: string; referenceImageUrls?: string[] }; createdAt: string }) => {
+      const { videoData } = video;
+      setGeneratedVideos([{
+        id: video._id,
+        generatedVideoId: video._id,
+        url: videoData.url,
+        thumbnail: videoData.thumbnail || "",
+        aspectRatio: (videoData.aspectRatio || "16:9") as AspectRatio,
+        resolution: (videoData.resolution || "1080p") as Resolution,
+        prompt: videoData.prompt || "",
+        duration: videoData.duration || 8,
+        createdAt: video.createdAt || new Date().toISOString(),
+        startFrameUrl: videoData.startFrameUrl,
+        endFrameUrl: videoData.endFrameUrl,
+        referenceImageUrls: videoData.referenceImageUrls || [],
+      }]);
+      setSelectedVideoIndex(0);
+      setPrompt(videoData.prompt || "");
+      if (videoData.aspectRatio) setSelectedAspectRatio(videoData.aspectRatio as AspectRatio);
+      if (videoData.resolution) setSelectedResolution(videoData.resolution as Resolution);
+      if (videoData.duration) setDuration(videoData.duration);
+      if (videoData.startFrameUrl) setStartFramePreview(videoData.startFrameUrl);
+      if (videoData.endFrameUrl) setEndFramePreview(videoData.endFrameUrl);
+      updateContentTab("preview");
+    },
+    [updateContentTab],
+  );
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
@@ -794,13 +849,7 @@ function VideoGenerationPage() {
                             (generationMode === "image" ? (
                               <ImageHistoryTab
                                 onLoadToEditor={(image) => {
-                                  const urlParams = new URLSearchParams(
-                                    searchParams.toString(),
-                                  );
-                                  urlParams.set("projectId", image._id);
-                                  router.push(
-                                    `/apps/video-generation?${urlParams.toString()}`,
-                                  );
+                                  handleLoadImageFromHistory(image);
                                   setIsResultsDrawerOpen(false);
                                 }}
                                 onTabChange={updateContentTab}
@@ -808,13 +857,7 @@ function VideoGenerationPage() {
                             ) : (
                               <VideoHistoryTab
                                 onLoadToEditor={(video) => {
-                                  const urlParams = new URLSearchParams(
-                                    searchParams.toString(),
-                                  );
-                                  urlParams.set("projectId", video._id);
-                                  router.push(
-                                    `/apps/video-generation?${urlParams.toString()}`,
-                                  );
+                                  handleLoadVideoFromHistory(video);
                                   setIsResultsDrawerOpen(false);
                                 }}
                                 onTabChange={updateContentTab}
@@ -1152,7 +1195,7 @@ function VideoGenerationPage() {
                             No of Images
                           </label>
                         </div>
-                        <div className="flex items-center gap-1.5 pt-2 border-t">
+                        <div className="flex items-center gap-1.5 pt-2 border-t w-[40%]">
                           <button
                             onClick={() =>
                               setImageCount(Math.max(1, imageCount - 1))
@@ -1680,28 +1723,12 @@ function VideoGenerationPage() {
                   {activeContentTab === "history" &&
                     (generationMode === "image" ? (
                       <ImageHistoryTab
-                        onLoadToEditor={(image) => {
-                          const urlParams = new URLSearchParams(
-                            searchParams.toString(),
-                          );
-                          urlParams.set("projectId", image._id);
-                          router.push(
-                            `/apps/video-generation?${urlParams.toString()}`,
-                          );
-                        }}
+                        onLoadToEditor={handleLoadImageFromHistory}
                         onTabChange={updateContentTab}
                       />
                     ) : (
                       <VideoHistoryTab
-                        onLoadToEditor={(video) => {
-                          const urlParams = new URLSearchParams(
-                            searchParams.toString(),
-                          );
-                          urlParams.set("projectId", video._id);
-                          router.push(
-                            `/apps/video-generation?${urlParams.toString()}`,
-                          );
-                        }}
+                        onLoadToEditor={handleLoadVideoFromHistory}
                         onTabChange={updateContentTab}
                       />
                     ))}

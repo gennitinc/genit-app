@@ -591,7 +591,7 @@ export const modelApi = {
    * Get all models
    */
   getAll: async (params?: {
-    type?: "image" | "video" | "audio" | "text";
+    type?: "image" | "video" | "audio" | "text" | "social" | "docs";
   }): Promise<ModelResponse> => {
     const response = await apiResponse.get(`/inspire/models`, { params });
     return response.data;
@@ -609,7 +609,7 @@ export const modelApi = {
    * Get default model for type
    */
   getDefault: async (
-    type: "image" | "video" | "audio" | "text",
+    type: "image" | "video" | "audio" | "text" | "social" | "docs",
   ): Promise<ApiResponse<Model>> => {
     const response = await apiResponse.get(`/inspire/models/default/${type}`);
     return response.data;
@@ -629,7 +629,7 @@ export const modelApi = {
   create: async (
     data: {
       name: string;
-      type: "image" | "video" | "audio" | "text";
+      type: "image" | "video" | "audio" | "text" | "social" | "docs";
       provider: string;
       modelId: string;
       description?: string;
@@ -682,6 +682,7 @@ export const modelApi = {
     id: string,
     data: {
       name?: string;
+      type?: "image" | "video" | "audio" | "text" | "social" | "docs";
       provider?: string;
       modelId?: string;
       description?: string;
@@ -943,3 +944,60 @@ export const templateApi = {
 //     queryFn: () => imageGenTemplatesApi.getAll(params),
 //   });
 // };
+
+// ============================================
+// Text Generation API
+// ============================================
+
+export const textGenApi = {
+  /**
+   * Generate text content
+   */
+  generate: async (data: {
+    prompt: string;
+    modelId?: string;
+    type?: "text" | "social" | "docs";
+    tone?: string;
+    length?: string;
+  }) => {
+    const response = await apiResponse.post(`/inspire/generate/text`, data);
+    return response.data;
+  },
+
+  /**
+   * Get text generation history
+   */
+  getHistory: async (type?: string) => {
+    const response = await apiResponse.get(`/inspire/generate/text/history`, {
+      params: { type },
+    });
+    return response.data;
+  },
+};
+
+// ============================================
+// Audio Generation API
+// ============================================
+
+export const audioGenApi = {
+  /**
+   * Generate audio content (TTS)
+   */
+  generate: async (data: {
+    prompt: string;
+    voiceId?: string;
+    modelId?: string;
+  }) => {
+    const response = await apiResponse.post(`/inspire/generate/audio`, data);
+    return response.data;
+  },
+
+  /**
+   * Get audio generation history
+   */
+  getHistory: async () => {
+    const response = await apiResponse.get(`/inspire/generate/audio/history`);
+    return response.data;
+  },
+};
+

@@ -178,7 +178,7 @@ export function AspectRatioCard({
       onClick={onSelect}
       className={cn(
         "relative overflow-hidden rounded-xl p-3 transition-all text-center",
-        "bg-neutral-200 dark:bg-neutral-800",
+        "bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0 border-dashed border-2 border-neutral-300 dark:border-neutral-600",
         isSelected
           ? "ring-1 ring-neutral-400 dark:ring-neutral-500"
           : "hover:ring-1 hover:ring-neutral-300 dark:hover:ring-neutral-600",

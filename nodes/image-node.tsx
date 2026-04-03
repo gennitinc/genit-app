@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 import { Handle, Position, type NodeProps } from "reactflow";
 import { Image, ExternalLink, X, Edit3, Lock, Unlock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -48,6 +48,16 @@ export const ImageNode = memo(
       console.log("Saving image node data:", editData);
       setIsEditOpen(false);
     };
+
+    // Update internal state when node data changes (e.g. after AI generation)
+    useEffect(() => {
+      setEditData({
+        instruction: data.instruction || "",
+        status: data.status || "public",
+        url: data.url || "",
+        hasInstruction: (data.instruction || "").trim() !== "",
+      });
+    }, [data.instruction, data.status, data.url]);
 
     return (
       <div className="relative bg-card border border-border rounded-[1.5rem] shadow-sm p-2 w-80 min-w-[200px] min-h-[150px]">
@@ -210,13 +220,15 @@ export const ImageNode = memo(
               </div>
             )}
 
-            {editData.url && (
-              <div className="mb-3">
+            {(editData.url || url) && (
+              <div className="mb-3 overflow-hidden rounded-md border border-border bg-muted/30">
                 <img
-                  src={editData.url}
-                  alt={editData.instruction}
-                  className="w-full h-full object-cover rounded-md border border-border"
+                  src={editData.url || url}
+                  alt={editData.instruction || instruction}
+                  className="w-full h-auto max-h-[300px] object-contain"
+                  loading="lazy"
                   onError={(e) => {
+                    console.error("Image failed to load:", editData.url || url);
                     e.currentTarget.style.display = "none";
                   }}
                 />

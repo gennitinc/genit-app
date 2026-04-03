@@ -2,36 +2,38 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Handle, NodeResizer, Position, type NodeProps } from "reactflow";
-import { Maximize, Plus, Minus, X } from "lucide-react";
+import { X, Loader2, Monitor } from "lucide-react";
 import { WorkflowPremiumInput } from "@/components/ui/workflow-premium-input";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import { modelApi } from "@/utils/inspire-api";
 import { Model } from "@/types/inspire";
-import {
-  Sheet,
-  SheetContent,
-  SheetOverlay,
-  SheetPortal,
-} from "@/components/ui/sheet";
+
+const CONTENT_TYPES = [
+  { id: "all", label: "All" },
+  { id: "text", label: "Text" },
+  { id: "image", label: "Image" },
+  { id: "video", label: "Video" },
+  { id: "audio", label: "Audio" },
+];
+
+const ASPECT_RATIOS = [
+  { value: "16:9", label: "Landscape 16:9" },
+  { value: "9:16", label: "Portrait 9:16" },
+  { value: "1:1", label: "Square 1:1" },
+  { value: "4:3", label: "Standard 4:3" },
+];
 
 interface PromptNodeData {
   title?: string;
-  messages?: Array<{
-    id: string;
-    role: "user" | "assistant";
-    content: string;
-    timestamp: Date;
-  }>;
   onRemoveNode?: (id: string) => void;
-  onAIAction?: (id: string, actions: any[]) => void;
+  onAIAction?: (id: string, actions: any[]) => Promise<any[]>;
   onDataChange?: (newData: any) => void;
-  onMaximize?: () => void;
   nodeId?: string;
   projectId?: string;
   contentType?: "text" | "image" | "video" | "audio";
   model?: string;
-  addedNodes?: Record<string, string>; // messageId -> nodeId
+  aspectRatio?: string;
 }
 
 export function PromptNode({
@@ -40,181 +42,161 @@ export function PromptNode({
   selected,
 }: NodeProps<PromptNodeData>) {
   const [value, setValue] = useState("");
-  const [messages, setMessages] = useState(data.messages || []);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [contentType, setContentType] = useState(data.contentType || "text");
-  const [selectedModel, setSelectedModel] = useState(
-    data.model ||
-      (contentType === "text"
-        ? "gpt-4o"
-        : contentType === "image"
-          ? "stable-diffusion-3"
-          : contentType === "video"
-            ? "sora"
-            : "elevenlabs"),
+  const [contentType, setContentType] = useState<string>(
+    data.contentType || "text",
   );
+  const [selectedModel, setSelectedModel] = useState(data.model || "");
   const [availableModels, setAvailableModels] = useState<Model[]>([]);
-  const [isLoadingModels, setIsLoadingModels] = useState(false);
-  const [addedNodes, setAddedNodes] = useState<Record<string, string>>(
-    data.addedNodes || {},
+  const [aspectRatio, setAspectRatio] = useState(data.aspectRatio || "16:9");
+
+  // Persist state changes to the node data so they survive refresh
+  useEffect(() => {
+    data.onDataChange?.({
+      contentType,
+      model: selectedModel,
+      aspectRatio,
+    });
+  }, [contentType, selectedModel, aspectRatio]);
+
+  // Fetch models
+  const handleSelectHistoryItem = useCallback(
+    (item: any) => {
+      console.log("📜 [PromptNode] Selected history item:", item);
+      // Create a node based on the history item type
+      const nodeType = item.type;
+      const nodeData = {
+        title: item.prompt || `${nodeType} from history`,
+        url: item.url,
+        content: item.content,
+        instruction: item.prompt,
+      };
+
+      // We'll emit an action to the workflow similar to how AI does it
+      const action = {
+        name: "create_node",
+        args: {
+          type: nodeType,
+          data: nodeData,
+        },
+      };
+
+      const socket = (window as any).socket;
+      if (socket && data.projectId) {
+        socket.emit("workflow:ai:update", {
+          projectId: data.projectId,
+          nodeId: data.nodeId,
+          actions: [action],
+          text: `Added ${nodeType} from history.`,
+        });
+      }
+    },
+    [data.projectId, data.nodeId],
   );
-  const [isMaximized, setIsMaximized] = useState(false);
-
-  // Sync messages with parent state for persistence
-  const { onDataChange } = data;
 
   useEffect(() => {
-    if (onDataChange) {
-      onDataChange({ messages, addedNodes, contentType, model: selectedModel });
-    }
-  }, [messages, addedNodes, contentType, selectedModel, onDataChange]);
-
-  // Fetch models from database
-  useEffect(() => {
-    const fetchModels = async () => {
-      setIsLoadingModels(true);
-      try {
-        const res = await modelApi.getAll();
+    modelApi
+      .getAll()
+      .then((res) => {
         if (res.success && res.data) {
           setAvailableModels(res.data);
-
-          // Set default model for current content type if not already set
-          if (!data.model) {
-            const defaultModel = res.data.find(
-              (m) => m.type === contentType && m.isDefault,
-            );
-            if (defaultModel) {
-              setSelectedModel(defaultModel.modelId);
-            }
+          
+          // Improved default selection logic
+          const relevantModels = res.data.filter((m: any) => m.type === contentType);
+          const isCurrentModelValid = relevantModels.some((m: any) => m.modelId === selectedModel);
+          
+          if (!selectedModel || selectedModel === "" || !isCurrentModelValid) {
+            const def = relevantModels.find((m: any) => m.isDefault) || relevantModels[0];
+            if (def) setSelectedModel(def.modelId);
           }
         }
-      } catch (err) {
-        console.error("Failed to fetch models in PromptNode:", err);
-      } finally {
-        setIsLoadingModels(false);
-      }
-    };
-    fetchModels();
-  }, [contentType, data.model]);
+      })
+      .catch(() => {});
+  }, [contentType, data.model, selectedModel]);
 
-  // Filter models based on content type
   const filteredModels = availableModels.filter((m) => m.type === contentType);
 
-  const handleSubmit = useCallback(() => {
-    if (!value.trim()) return;
+  const handleContentTypeChange = (type: string) => {
+    setContentType(type);
+    const def = availableModels.find((m: any) => m.type === type && m.isDefault);
+    if (def) setSelectedModel(def.modelId);
+    else setSelectedModel("");
+  };
 
-    const newUserMessage = {
-      id: Date.now().toString(),
-      role: "user" as const,
-      content: value,
-      timestamp: new Date(),
-    };
+  const handleSubmit = useCallback(async () => {
+    if (!value.trim() || isGenerating) return;
 
-    setMessages((prev) => [...prev, newUserMessage]);
-    setValue("");
-
-    // Call real AI API
     setIsGenerating(true);
     const currentPrompt = value;
     setValue("");
 
-    apiResponse
-      .post(
+    try {
+      const res = await apiResponse.post(
         "/apps/workflow/ai/process",
         {
           projectId: data.projectId,
           nodeId: data.nodeId,
           prompt: currentPrompt,
           modelId: selectedModel,
+          contentType,
+          ...(contentType === "video" || contentType === "image"
+            ? { aspectRatio }
+            : {}),
         },
         { withCredentials: true },
-      )
-      .then((res) => {
-        if (res.data.success) {
-          const { text, actions } = res.data.data;
+      );
 
-          const assistantMessage = {
-            id: (Date.now() + 1).toString(),
-            role: "assistant" as const,
-            content: text || "Processing your request...",
-            timestamp: new Date(),
-          };
+      if (res.data.success && data.onAIAction && data.nodeId) {
+        const { text, url, actions } = res.data.data || {};
 
-          setMessages((prev) => [...prev, assistantMessage]);
-
-          // Handle AI actions (creating nodes, connecting them)
-          if (actions && actions.length > 0 && data.onAIAction && data.nodeId) {
-            data.onAIAction(data.nodeId, actions);
-          }
-        }
-      })
-      .catch((error) => {
-        console.error("Failed to process AI request in PromptNode:", error);
-        const errorMessage = {
-          id: (Date.now() + 1).toString(),
-          role: "assistant" as const,
-          content: "Sorry, I encountered an error processing your request.",
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, errorMessage]);
-      })
-      .finally(() => {
-        setIsGenerating(false);
-      });
-  }, [value, data.projectId, data.nodeId, data.onAIAction, selectedModel]);
-
-  const handleAddNodeToCanvas = useCallback(
-    async (msgId: string, content: string) => {
-      if (data.onAIAction && data.nodeId) {
-        const results = await (data.onAIAction(data.nodeId, [
-          {
-            name: "create_node",
-            args: {
-              type: contentType,
-              data: {
-                title: `From AI: ${content.slice(0, 20)}...`,
-                instruction: content,
-                content: content,
-              },
+        // Build create_node action for the output
+        const outputAction = {
+          name: "create_node",
+          args: {
+            type: contentType,
+            data: {
+              title: currentPrompt.slice(0, 40),
+              instruction: currentPrompt,
+              content: text || "",
+              url: url || "",
             },
           },
-        ]) as unknown as Promise<any[]>);
+        };
 
-        if (results && results.length > 0 && results[0].id) {
-          setAddedNodes((prev) => ({
-            ...prev,
-            [msgId]: results[0].id,
-          }));
+        const allActions = actions?.length ? actions : [outputAction];
+        const results = await data.onAIAction(data.nodeId, allActions);
+
+        // Auto-connect each created node back to this prompt node
+        if (results?.length && data.nodeId) {
+          const connectActions = results
+            .filter((r: any) => r?.id)
+            .map((r: any) => ({
+              name: "connect_nodes",
+              args: { sourceId: data.nodeId, targetId: r.id },
+            }));
+          if (connectActions.length) {
+            await data.onAIAction(data.nodeId, connectActions);
+          }
         }
       }
-    },
-    [data.onAIAction, data.nodeId, contentType],
-  );
-
-  const handleRemoveNodeFromCanvas = useCallback(
-    (msgId: string) => {
-      const nodeIdToRemove = addedNodes[msgId];
-      if (nodeIdToRemove && data.onRemoveNode) {
-        data.onRemoveNode(nodeIdToRemove);
-        setAddedNodes((prev) => {
-          const newState = { ...prev };
-          delete newState[msgId];
-          return newState;
-        });
-      }
-    },
-    [addedNodes, data.onRemoveNode],
-  );
+    } catch (err) {
+      console.error("PromptNode AI error:", err);
+    } finally {
+      setIsGenerating(false);
+    }
+  }, [value, isGenerating, contentType, selectedModel, aspectRatio, data]);
 
   return (
-    <div className="relative group min-w-[350px] max-w-[500px] rounded-[1.5rem]">
+    <div className="relative group min-w-[500px] max-w-[600px]">
       <NodeResizer
         color="#3b82f6"
         isVisible={selected}
-        minWidth={150}
-        minHeight={80}
+        minWidth={280}
+        minHeight={100}
         handleClassName="w-3 h-3 bg-primary border-2 border-white rounded shadow-lg"
       />
+
+      {/* Source handle (left) */}
       <Handle
         type="source"
         position={Position.Left}
@@ -222,254 +204,94 @@ export function PromptNode({
         className="w-3 h-3 bg-primary border-2 border-background"
       />
 
-      {/* Remove Button */}
+      {/* Remove button */}
       {data.onRemoveNode && data.nodeId && (
         <button
           onClick={(e) => {
             e.stopPropagation();
             data.onRemoveNode?.(data.nodeId!);
           }}
-          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-lg z-30 opacity-0 group-hover:opacity-100"
+          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors shadow-lg z-30 opacity-0 group-hover:opacity-100"
           title="Remove node"
         >
           <X className="w-3 h-3" />
         </button>
       )}
 
-      <div className="bg-background/80 backdrop-blur-md border border-border rounded-3xl shadow-2xl overflow-hidden p-1">
-        <div className="flex flex-row items-center justify-between">
-          <div className="flex items-center gap-1 p-2 border-b border-border/50">
-            {[
-              { id: "text", label: "Text", icon: "Type" },
-              { id: "image", label: "Image", icon: "ImageIcon" },
-              { id: "video", label: "Video", icon: "Play" },
-              { id: "audio", label: "Audio", icon: "Music" },
-            ].map((t) => (
-              <button
-                key={t.id}
-                onClick={() => {
-                  setContentType(t.id as any);
-                  // Reset model to default for that type from available models
-                  const defaultModel = availableModels.find(
-                    (m) => m.type === t.id && m.isDefault,
-                  );
-                  if (defaultModel) {
-                    setSelectedModel(defaultModel.modelId);
-                  } else {
-                    // Fallback to hardcoded defaults
-                    const fallbackModel =
-                      t.id === "text"
-                        ? "gpt-4o"
-                        : t.id === "image"
-                          ? "stable-diffusion-3"
-                          : t.id === "video"
-                            ? "sora"
-                            : "elevenlabs";
-                    setSelectedModel(fallbackModel);
-                  }
-                }}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-2xl text-[10px] font-medium transition-all",
-                  contentType === t.id
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                )}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={() => setIsMaximized(true)}
-            className="p-1 hover:bg-muted rounded-md w-fit transition-colors mr-8"
-          >
-            <Maximize className="size-4 text-muted-foreground" />
-          </button>
+      <div className="bg-background/90 backdrop-blur-md border border-border rounded-3xl shadow-2xl overflow-hidden">
+        {/* Content-type tabs */}
+        <div className="flex items-center gap-1 px-3 pt-3 pb-2">
+          {CONTENT_TYPES.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => handleContentTypeChange(t.id)}
+              className={cn(
+                "flex-1 px-2 py-1.5 rounded-xl text-[10px] font-semibold transition-all",
+                contentType === t.id
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
-        {messages.length > 0 && (
-          <div className="px-4 pb-4 pt-0 max-h-[200px] overflow-y-auto space-y-2 mt-2 scrollbar-none">
-            {messages.slice(-3).map((msg) => (
-              <div
-                key={msg.id}
-                className={cn(
-                  "text-xs p-2 rounded-xl max-w-[90%] relative group",
-                  msg.role === "user"
-                    ? "bg-primary/10 text-primary self-end ml-auto"
-                    : "bg-muted text-muted-foreground self-start mr-auto",
-                )}
-              >
-                {msg.content}
-                {msg.role === "assistant" && (
-                  <div className="absolute -bottom-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    {!addedNodes[msg.id] ? (
-                      <button
-                        onClick={() =>
-                          handleAddNodeToCanvas(msg.id, msg.content)
-                        }
-                        className="w-5 h-5 bg-primary text-primary-foreground rounded-full flex items-center justify-center"
-                        title="Add to canvas"
-                      >
-                        <Plus className="w-3 h-3" />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleRemoveNodeFromCanvas(msg.id)}
-                        className="w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow-md"
-                        title="Remove from canvas"
-                      >
-                        <Minus className="w-3 h-3" />
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-        <WorkflowPremiumInput
-          value={value}
-          onChange={setValue}
-          onSubmit={handleSubmit}
-          placeholder="Enter a prompt..."
-          isGenerating={isGenerating}
-          contentType={contentType}
-          selectedModel={selectedModel}
-          onModelChange={(model) => setSelectedModel(model)}
-          availableModels={filteredModels}
-          className="border-none shadow-none bg-transparent"
-        />
-      </div>
 
-      <Sheet open={isMaximized} onOpenChange={setIsMaximized}>
-        <SheetPortal>
-          {/* <SheetOverlay className="backdrop-blur-xl bg-black/60" /> */}
-          <SheetContent
-            side="right"
-            className="p-0 overflow-hidden border-none bg-transparent shadow-none w-full sm:max-w-lg h-full"
-          >
-            <div className="w-full h-full bg-background/95 backdrop-blur-1xl lg:rounded-l-2xl border lg:border-white/20 lg:shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] p-0 flex flex-col relative">
-              {/* Close/Minimize button */}
-              {/* <button
-                onClick={() => setIsMaximized(false)}
-                className="absolute top-1 right-2 p-2 z-0 text-muted-foreground hover:text-foreground"
-              >
-                <X className="size-6" />
-              </button> */}
-
-              <div className="flex-1 flex flex-col p-1 overflow-hidden">
-                <div className="flex items-center justify-between mb-8 p-4">
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-xl font-semibold tracking-tight hidden md:block">
-                      Chat
-                    </h2>
-                  </div>
-                  <div className="flex items-center gap-2 pr-4">
-                    {[
-                      { id: "text", label: "Text" },
-                      { id: "image", label: "Image" },
-                      { id: "video", label: "Video" },
-                      { id: "audio", label: "Audio" },
-                    ].map((t) => (
-                      <div
-                        key={t.id}
-                        onClick={() => {
-                          setContentType(t.id as any);
-                          // Reset model to default for that type from available models
-                          const defaultModel = availableModels.find(
-                            (m) => m.type === t.id && m.isDefault,
-                          );
-                          if (defaultModel) {
-                            setSelectedModel(defaultModel.modelId);
-                          } else {
-                            // Fallback to hardcoded defaults
-                            const fallbackModel =
-                              t.id === "text"
-                                ? "gpt-4o"
-                                : t.id === "image"
-                                  ? "stable-diffusion-3"
-                                  : t.id === "video"
-                                    ? "sora"
-                                    : "elevenlabs";
-                            setSelectedModel(fallbackModel);
-                          }
-                        }}
-                        className={cn(
-                          "px-1 py-0 rounded-xs text-sm font-medium transition-all cursor-pointer",
-                          contentType === t.id
-                            ? "bg-primary text-primary-foreground shadow-lg"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                        )}
-                      >
-                        {t.label}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex-1 overflow-y-auto space-y-6 pr-4 mb-8 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent px-4">
-                  {messages.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={cn(
-                        "p-2 rounded-sm max-w-[85%] relative group text-sm leading-relaxed",
-                        msg.role === "user"
-                          ? "bg-primary/10 text-primary self-end ml-auto"
-                          : "bg-muted text-muted-foreground self-start mr-auto",
-                      )}
-                    >
-                      {msg.content}
-                      {msg.role === "assistant" && (
-                        <div className="absolute -bottom-3 -right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          {!addedNodes[msg.id] ? (
-                            <button
-                              onClick={() =>
-                                handleAddNodeToCanvas(msg.id, msg.content)
-                              }
-                              className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-                              title="Add to canvas"
-                            >
-                              <Plus className="w-4 h-4" />
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => handleRemoveNodeFromCanvas(msg.id)}
-                              className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-                              title="Remove from canvas"
-                            >
-                              <Minus className="w-4 h-4" />
-                            </button>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                  {isGenerating && (
-                    <div className="bg-muted text-muted-foreground self-start mr-auto p-6 rounded-[2rem] max-w-[85%] animate-pulse">
-                      Generating...
-                    </div>
-                  )}
-                </div>
-
-                <div className="mt-auto">
-                  <WorkflowPremiumInput
-                    value={value}
-                    onChange={setValue}
-                    onSubmit={handleSubmit}
-                    placeholder="Enter a prompt... Shift+Enter for new line"
-                    isGenerating={isGenerating}
-                    contentType={contentType}
-                    selectedModel={selectedModel}
-                    onModelChange={(model) => setSelectedModel(model)}
-                    availableModels={filteredModels}
-                    className="border-none shadow-none bg-transparent"
-                  />
-                </div>
+        {/* Video orientation picker — shown as leftContent next to model selector */}
+        {/* Input */}
+        <div className="relative">
+          {isGenerating && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-sm rounded-b-3xl">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                Generating…
               </div>
             </div>
-          </SheetContent>
-        </SheetPortal>
-      </Sheet>
+          )}
+          <WorkflowPremiumInput
+            value={value}
+            onChange={setValue}
+            onSubmit={handleSubmit}
+            placeholder={
+              contentType === "image"
+                ? "Describe the image…"
+                : contentType === "video"
+                  ? "Describe the video…"
+                  : contentType === "audio"
+                    ? "Describe the audio…"
+                    : "Type your prompt…"
+            }
+            isGenerating={isGenerating}
+            contentType={contentType as any}
+            selectedModel={selectedModel}
+            onModelChange={setSelectedModel}
+            availableModels={filteredModels}
+            onSelectHistoryItem={handleSelectHistoryItem}
+            className="border-none shadow-none bg-transparent"
+            minHeight="120px"
+            leftContent={
+              contentType === "video" || contentType === "image" ? (
+                <div className="flex items-center gap-1 ml-1">
+                  <Monitor className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                  <select
+                    value={aspectRatio}
+                    onChange={(e) => setAspectRatio(e.target.value)}
+                    className="text-[11px] font-medium text-muted-foreground bg-transparent border-none outline-none cursor-pointer hover:text-foreground transition-colors pr-1"
+                  >
+                    {ASPECT_RATIOS.map((o: any) => (
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : undefined
+            }
+          />
+        </div>
+      </div>
 
+      {/* Target handle (right) */}
       <Handle
         type="target"
         position={Position.Right}

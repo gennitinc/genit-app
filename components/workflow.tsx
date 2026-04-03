@@ -231,10 +231,23 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     async (type: string, data: any) => {
       console.log("🎨 [GennittWorkflow] Creating node:", type, data);
 
-      const position = data.position || {
-        x: Math.random() * 400 + 100,
-        y: Math.random() * 300 + 100,
-      };
+      // Place node at the center of the current viewport so it's always visible
+      let position = data.position;
+      if (!position) {
+        if (reactFlowInstance) {
+          const vp = reactFlowInstance.getViewport();
+          // Compute canvas-space center of the visible area
+          const centerX = (-vp.x + window.innerWidth / 2) / vp.zoom;
+          const centerY = (-vp.y + window.innerHeight / 2) / vp.zoom;
+          // Add a small jitter so stacked nodes don't perfectly overlap
+          position = {
+            x: centerX + (Math.random() * 80 - 40),
+            y: centerY + (Math.random() * 80 - 40),
+          };
+        } else {
+          position = { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 };
+        }
+      }
 
       let newNode: Node;
 
@@ -513,7 +526,8 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             data: {
               onRemoveNode: removeNode,
               nodeId: `prompt-${Date.now()}`,
-              messages: [],
+              projectId,
+              onAIAction: applyAIActions,
             },
           };
           break;
@@ -554,6 +568,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       console.log("🤖 [Workflow] Applying AI actions:", actions);
       const results = [];
 
+      // Track how many create_node actions we process so we can offset vertically
+      let createIndex = 0;
+
       for (const action of actions) {
         if (action.name === "create_node") {
           const { type, data, position } = action.args;
@@ -561,9 +578,11 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           const sourceNode = nodesRef.current.find(
             (n) => n.id === sourceNodeId,
           );
+
+          // Place the generated node to the right of the source, with vertical offset
           const finalPosition = position || {
-            x: (sourceNode?.position.x || 0) + 400,
-            y: (sourceNode?.position.y || 0) + (Math.random() * 200 - 100),
+            x: (sourceNode?.position.x || 0) + 450,
+            y: (sourceNode?.position.y || 0) + (createIndex * 250),
           };
 
           const newNode = await createNode(type, {
@@ -571,6 +590,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             position: finalPosition,
           });
           results.push(newNode);
+          createIndex++;
         } else if (action.name === "connect_nodes") {
           const { sourceId, targetId } = action.args;
           handleConnect({ source: sourceId, target: targetId } as any);
@@ -603,7 +623,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               duration: 400,
             }),
           nodeId: node.id,
-          projectId: projectId || slug,
+          projectId: (node as any).data?.projectId || projectId || slug,
         },
       }));
     },
@@ -616,6 +636,19 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       slug,
     ],
   );
+
+  // Re-inject callbacks when projectId is finally set (from loading or creation)
+  useEffect(() => {
+    if (projectId && nodes.length > 0) {
+      const someNodeMissingId = nodes.some(
+        (n) => n.type === "prompt" && !n.data.projectId,
+      );
+      if (someNodeMissingId) {
+        console.log("🔄 [Workflow] Re-injecting project properties into nodes");
+        setNodes((nds) => injectNodeCallbacks(nds));
+      }
+    }
+  }, [projectId, injectNodeCallbacks, nodes.length, setNodes]);
 
   // Undo function
   const undo = useCallback(() => {

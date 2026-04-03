@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 import { Handle, Position, type NodeProps } from "reactflow";
 import { FileText, Edit3, Save, X, Lock, Unlock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import ReactMarkdown from "react-markdown";
 
 interface TextNodeData {
   label?: string;
@@ -47,8 +48,18 @@ export const TextNode = memo(
       setIsEditOpen(false);
     };
 
+    // Update internal state when node data changes (e.g. after AI generation)
+    useEffect(() => {
+      setEditData({
+        label: label || "",
+        content: content || "",
+        status: status || "public",
+        hasLabel: (label || "").trim() !== "",
+      });
+    }, [label, content, status]);
+
     return (
-      <div className="relative bg-card border border-border rounded-[1.5rem] shadow-sm p-2 w-80 min-w-[200px] min-h-[120px]">
+      <div className="relative bg-card border border-border rounded-[1.5rem] shadow-sm p-2 w-[450px] min-w-[300px] min-h-[200px]">
         <Handle
           type="target"
           position={Position.Top}
@@ -71,9 +82,9 @@ export const TextNode = memo(
           </button>
         )}
 
-        <div className="flex items-start space-x-3">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-1">
+        <div className="flex items-start space-x-3 h-full">
+          <div className="flex-1 min-w-0 flex flex-col h-full">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-2 flex-1 min-w-0">
                 <h3 className="font-semibold text-xs truncate">
                   {editData.hasLabel && editData.label.trim()
@@ -97,11 +108,11 @@ export const TextNode = memo(
                     <Edit3 className="w-3 h-3 text-muted-foreground" />
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
+                <DialogContent className="sm:max-w-2xl max-h-[85vh] flex flex-col p-0 overflow-hidden">
+                  <DialogHeader className="p-6 pb-2">
                     <DialogTitle>Edit Text Content</DialogTitle>
                   </DialogHeader>
-                  <div className="space-y-4">
+                  <div className="flex-1 overflow-y-auto p-6 pt-2 space-y-6">
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <Label htmlFor="label">Label</Label>
@@ -144,7 +155,7 @@ export const TextNode = memo(
                     </div>
                     <div>
                       <Label htmlFor="status">Status</Label>
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-3 mt-1">
                         <span className="text-xs text-muted-foreground">
                           Public
                         </span>
@@ -188,26 +199,50 @@ export const TextNode = memo(
                           }))
                         }
                         placeholder="Enter your text content..."
-                        rows={4}
+                        className="min-h-[400px] mt-1"
                       />
                     </div>
-                    <div className="flex justify-end space-x-2">
-                      <Button
-                        variant="outline"
-                        onClick={() => setIsEditOpen(false)}
-                      >
-                        Cancel
-                      </Button>
-                      <Button onClick={handleSave}>Save Changes</Button>
-                    </div>
+                  </div>
+                  <div className="p-6 pt-2 border-t flex justify-end space-x-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsEditOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button onClick={handleSave}>Save Changes</Button>
                   </div>
                 </DialogContent>
               </Dialog>
             </div>
 
-            <div className="text-xs text-muted-foreground line-clamp-4 bg-muted p-2 rounded-[1.5rem] border border-border min-h-[120px]">
-              {editData.content ||
-                "No content available. Click edit to add text."}
+            <div className="text-xs text-muted-foreground bg-muted p-4 rounded-[1.5rem] border border-border flex-1 overflow-y-auto max-h-[400px] nodrag nowheel cursor-text select-text">
+              {editData.content ? (
+                <ReactMarkdown
+                  components={{
+                    h1: ({node, ...props}) => <h1 className="text-lg font-bold mb-2 border-b pb-1" {...props} />,
+                    h2: ({node, ...props}) => <h2 className="text-base font-bold mb-1 mt-3" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-[11px] font-bold mb-1 mt-2" {...props} />,
+                    p: ({node, ...props}) => <p className="mb-2 last:mb-0 leading-relaxed" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc ml-4 mb-2 space-y-1" {...props} />,
+                    ol: ({node, ...props}) => <ol className="list-decimal ml-4 mb-2 space-y-1" {...props} />,
+                    li: ({node, ...props}) => <li className="mb-0.5" {...props} />,
+                    code: ({node, ...props}: any) => (
+                      <code className="bg-background/50 px-1 rounded text-[10px] font-mono" {...props} />
+                    ),
+                    pre: ({node, ...props}: any) => (
+                      <pre className="bg-background/50 p-2 rounded-lg my-2 overflow-x-auto font-mono text-[10px]" {...props} />
+                    ),
+                    blockquote: ({node, ...props}) => (
+                      <blockquote className="border-l-2 border-primary/30 pl-3 italic my-2" {...props} />
+                    ),
+                  }}
+                >
+                  {editData.content}
+                </ReactMarkdown>
+              ) : (
+                "No content available. Click edit to add text."
+              )}
             </div>
           </div>
         </div>

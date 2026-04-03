@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 import { Handle, Position, NodeResizer, type NodeProps } from "reactflow";
 import {
   FileText,
@@ -59,6 +59,16 @@ export const DocumentNode = memo(
       console.log("Saving document node data:", editData);
       setIsEditOpen(false);
     };
+
+    // Update internal state when node data changes (e.g. after AI generation)
+    useEffect(() => {
+      setEditData({
+        instruction: data.instruction || "",
+        status: data.status || "public",
+        url: data.url || "",
+        hasInstruction: (data.instruction || "").trim() !== "",
+      });
+    }, [data.instruction, data.status, data.url]);
 
     const getFileIcon = (fileName: string) => {
       const extension = fileName.split(".").pop()?.toLowerCase();

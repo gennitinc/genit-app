@@ -8,6 +8,11 @@ import {
   Zap,
   Check,
   ChevronDown,
+  History,
+  Image as ImageIcon,
+  Video as VideoIcon,
+  Type,
+  Music,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
@@ -16,8 +21,16 @@ import ShinyText from "./shiny-text";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useRouter } from "next/navigation";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { modelApi } from "@/utils/inspire-api";
+import {
+  modelApi,
+  imageGenApi,
+  videoGenApi,
+  textGenApi,
+  audioGenApi,
+} from "@/utils/inspire-api";
 import { Model } from "@/types/inspire";
+import { apiResponse } from "@/utils/apiResponse";
+import { ScrollArea } from "./scroll-area";
 
 const MODELS_BY_TYPE = {
   text: [
@@ -42,6 +55,15 @@ const MODELS_BY_TYPE = {
     { id: "suno-v3", name: "Suno v3", icon: "✦" },
     { id: "udio", name: "Udio", icon: "✦" },
   ],
+  social: [
+    { id: "gpt-4o", name: "GPT-4o", icon: "✦" },
+    { id: "gemini-1-5-pro", name: "Gemini 1.5 Pro", icon: "✦" },
+  ],
+  docs: [
+    { id: "gpt-4o", name: "GPT-4o", icon: "✦" },
+    { id: "gemini-1-5-pro", name: "Gemini 1.5 Pro", icon: "✦" },
+  ],
+  all: [],
 };
 
 interface PremiumInputProps {
@@ -62,6 +84,17 @@ interface PremiumInputProps {
   selectedModel?: string;
   onModelChange?: (modelId: string) => void;
   availableModels?: Model[];
+  onSelectHistoryItem?: (item: any) => void;
+}
+
+interface HistoryItem {
+  id: string;
+  type: "image" | "video" | "text" | "audio" | "social" | "docs";
+  url?: string;
+  thumbnail?: string;
+  content?: string;
+  prompt: string;
+  createdAt: string;
 }
 
 export function WorkflowPremiumInput({
@@ -82,10 +115,14 @@ export function WorkflowPremiumInput({
   selectedModel,
   onModelChange,
   availableModels: propModels,
+  onSelectHistoryItem,
 }: PremiumInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [serverModels, setServerModels] = useState<Model[]>([]);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   useEffect(() => {
     if (propModels) {
@@ -97,7 +134,9 @@ export function WorkflowPremiumInput({
       contentType === "image" ||
       contentType === "video" ||
       contentType === "audio" ||
-      contentType === "text"
+      contentType === "text" ||
+      contentType === "social" ||
+      contentType === "docs"
     ) {
       const fetchModels = async () => {
         setIsLoadingModels(true);
@@ -128,6 +167,98 @@ export function WorkflowPremiumInput({
       setServerModels([]);
     }
   }, [contentType, propModels]);
+
+  const fetchHistory = useCallback(async () => {
+    setIsLoadingHistory(true);
+    try {
+      let items: HistoryItem[] = [];
+
+      if (contentType === "all" || contentType === "image") {
+        const res = await apiResponse.get(
+          `/project/myprojects?type=ai-image-gen&limit=20`,
+          { withCredentials: true },
+        );
+        if (res.data?.projects) {
+          const imageItems = res.data.projects
+            .filter((p: any) => p.imageData)
+            .map((p: any) => ({
+              id: p._id,
+              type: "image",
+              url: p.imageData.url,
+              thumbnail: p.imageData.thumbnail,
+              prompt: p.imageData.prompt,
+              createdAt: p.createdAt,
+            }));
+          items = [...items, ...imageItems];
+        }
+      }
+
+      if (contentType === "all" || contentType === "video") {
+        const res = await apiResponse.get(
+          `/project/myprojects?type=ai-video-gen&limit=20`,
+          { withCredentials: true },
+        );
+        if (res.data?.projects) {
+          const videoItems = res.data.projects
+            .filter((p: any) => p.videoData)
+            .map((p: any) => ({
+              id: p._id,
+              type: "video",
+              url: p.videoData.url,
+              thumbnail: p.videoData.thumbnail,
+              prompt: p.videoData.prompt,
+              createdAt: p.createdAt,
+            }));
+          items = [...items, ...videoItems];
+        }
+      }
+
+      if (contentType === "text" || contentType === "social" || contentType === "docs") {
+        const res = await textGenApi.getHistory(contentType);
+        if (res.success && res.data) {
+          const textItems = res.data.map((p: any) => ({
+            id: p._id,
+            type: "text",
+            content: p.content,
+            prompt: p.prompt,
+            createdAt: p.createdAt,
+          }));
+          items = [...items, ...textItems];
+        }
+      }
+
+      if (contentType === "audio") {
+        const res = await audioGenApi.getHistory();
+        if (res.success && res.data) {
+          const audioItems = res.data.map((p: any) => ({
+            id: p._id,
+            type: "audio",
+            url: p.url,
+            prompt: p.prompt,
+            createdAt: p.createdAt,
+          }));
+          items = [...items, ...audioItems];
+        }
+      }
+
+      // Sort by creation date descending
+      items.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
+      setHistory(items);
+    } catch (error) {
+      console.error("Failed to fetch history:", error);
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  }, [contentType]);
+
+  useEffect(() => {
+    if (isHistoryOpen) {
+      fetchHistory();
+    }
+  }, [isHistoryOpen, fetchHistory]);
 
   const currentModels = serverModels.map((m) => ({
     id: m.modelId,
@@ -181,12 +312,23 @@ export function WorkflowPremiumInput({
     }
   }, [isListening, startListening, stopListening, value]);
 
+  const handleSubmit = useCallback(() => {
+    if (!value.trim() || isGenerating || disabled) return;
+    onSubmit();
+    // Reset height back to minHeight after submit
+    if (textareaRef.current) {
+      textareaRef.current.style.height = minHeight;
+    }
+  }, [value, isGenerating, disabled, onSubmit, minHeight]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    // Plain Enter or Shift+Enter adds a new line (default behavior).
+    // Accidental plain Enter should not submit.
+    if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
+      // Do nothing, let it add a new line
+    } else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      if (value.trim() && !isGenerating && !disabled) {
-        onSubmit();
-      }
+      handleSubmit();
     }
   };
 
@@ -288,7 +430,7 @@ export function WorkflowPremiumInput({
             }
             disabled={isGenerating || disabled}
             className={cn(
-              "flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent outline-none scrollbar-none",
+              " flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent outline-none scrollbar-none",
               isGenerating && "placeholder:opacity-0",
             )}
             style={{ minHeight }}
@@ -298,8 +440,6 @@ export function WorkflowPremiumInput({
         {footerContent && <div className="px-1">{footerContent}</div>}
 
         <div className="flex items-center justify-between gap-1.5">
-          {leftContent}
-
           <Popover>
             <PopoverTrigger asChild>
               <button className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-muted transition-colors text-xs font-medium text-muted-foreground hover:text-foreground">
@@ -348,6 +488,106 @@ export function WorkflowPremiumInput({
             </PopoverContent>
           </Popover>
 
+          {leftContent}
+
+          <Popover open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+            <PopoverTrigger asChild>
+              <button className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-muted transition-colors text-xs font-medium text-muted-foreground hover:text-foreground">
+                <History className="h-3.5 w-3.5 opacity-70" />
+                History
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[320px] p-0" align="start">
+              <div className="p-3 border-b bg-muted/30">
+                <h4 className="text-xs font-semibold flex items-center gap-2">
+                  <History className="h-3 w-3" />
+                  {contentType === "all"
+                    ? "Combined History"
+                    : `${contentType.charAt(0).toUpperCase() + contentType.slice(1)} History`}
+                </h4>
+              </div>
+              <ScrollArea className="h-[300px]">
+                <div className="p-2">
+                  {isLoadingHistory ? (
+                    <div className="flex flex-col items-center justify-center py-8 gap-2">
+                      <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                      <span className="text-[10px] text-muted-foreground">
+                        Loading history...
+                      </span>
+                    </div>
+                  ) : history.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-8 text-center px-4">
+                      <History className="h-8 w-8 text-muted-foreground/20 mb-2" />
+                      <p className="text-[10px] text-muted-foreground">
+                        No generation history found for this category.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-2">
+                      {history.map((item) => (
+                        <div
+                          key={item.id}
+                          onClick={() => {
+                            onSelectHistoryItem?.(item);
+                            setIsHistoryOpen(false);
+                          }}
+                          className="group relative aspect-video rounded-md overflow-hidden bg-muted cursor-pointer border hover:border-primary/50 transition-all"
+                        >
+                          {item.thumbnail || item.url ? (
+                            <>
+                              {item.type === "video" ? (
+                                <video
+                                  src={item.url}
+                                  className="w-full h-full object-cover"
+                                  muted
+                                  playsInline
+                                  autoPlay
+                                  onLoadedData={(e) => {
+                                    const video = e.currentTarget;
+                                    video.play().catch(() => {});
+                                    setTimeout(() => {
+                                      if (video) video.pause();
+                                    }, 2000);
+                                  }}
+                                />
+                              ) : (
+                                <img
+                                  src={item.thumbnail || item.url}
+                                  alt={item.prompt}
+                                  className="w-full h-full object-cover"
+                                />
+                              )}
+                              <div className="absolute top-1 right-1">
+                                {item.type === "image" ? (
+                                  <ImageIcon className="h-3 w-3 text-white drop-shadow-md" />
+                                ) : (
+                                  <VideoIcon className="h-3 w-3 text-white drop-shadow-md" />
+                                )}
+                              </div>
+                            </>
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center p-2 bg-muted/50">
+                              {item.type === "audio" ? (
+                                <Music className="h-4 w-4 text-muted-foreground" />
+                              ) : (
+                                <Type className="h-4 w-4 text-muted-foreground" />
+                              )}
+                            </div>
+                          )}
+                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2">
+                            <p className="text-[9px] text-white line-clamp-2 leading-tight">
+                              {item.prompt}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+            </PopoverContent>
+          </Popover>
+
           <div className="ml-auto flex items-center gap-1.5">
             {rightContent}
 
@@ -368,7 +608,7 @@ export function WorkflowPremiumInput({
 
             <button
               type="button"
-              onClick={onSubmit}
+              onClick={handleSubmit}
               disabled={isGenerating || !value.trim() || disabled}
               className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shadow-md flex-shrink-0 disabled:opacity-50"
             >

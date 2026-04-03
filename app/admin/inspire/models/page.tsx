@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { modelApi } from "@/utils/inspire-api";
-import { Model } from "@/types/inspire";
+import { Model, ModelType } from "@/types/inspire";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,10 @@ import {
   Plus,
   Edit,
   X,
+  Music,
+  Type as TypeIcon,
+  Share2,
+  FileText,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -41,9 +45,7 @@ export default function AdminModelsPage() {
   const [models, setModels] = useState<Model[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState<
-    "all" | "image" | "video" | "audio" | "text"
-  >("all");
+  const [filterType, setFilterType] = useState<ModelType | "all">("all");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [modelToDelete, setModelToDelete] = useState<Model | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -57,7 +59,7 @@ export default function AdminModelsPage() {
   // Form state
   const [formData, setFormData] = useState({
     name: "",
-    type: "image" as "image" | "video" | "audio" | "text",
+    type: "image" as ModelType,
     provider: "",
     modelId: "",
     description: "",
@@ -78,7 +80,7 @@ export default function AdminModelsPage() {
   const fetchModels = useCallback(async () => {
     setIsLoading(true);
     try {
-      const params: { type?: "image" | "video" | "audio" | "text" } = {};
+      const params: { type?: ModelType } = {};
       if (filterType !== "all") {
         params.type = filterType;
       }
@@ -282,6 +284,10 @@ export default function AdminModelsPage() {
             <SelectItem value="all">All Types</SelectItem>
             <SelectItem value="image">Image Models</SelectItem>
             <SelectItem value="video">Video Models</SelectItem>
+            <SelectItem value="audio">Audio Models</SelectItem>
+            <SelectItem value="text">Text Models</SelectItem>
+            <SelectItem value="social">Social Models</SelectItem>
+            <SelectItem value="docs">Docs Models</SelectItem>
           </SelectContent>
         </Select>
         <div className="text-sm text-muted-foreground">
@@ -306,10 +312,23 @@ export default function AdminModelsPage() {
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  {model.type === "image" ? (
+                  {model.type === "image" && (
                     <ImageIcon className="w-5 h-5 text-blue-500" />
-                  ) : (
+                  )}
+                  {model.type === "video" && (
                     <Video className="w-5 h-5 text-purple-500" />
+                  )}
+                  {model.type === "audio" && (
+                    <Music className="w-5 h-5 text-green-500" />
+                  )}
+                  {model.type === "text" && (
+                    <TypeIcon className="w-5 h-5 text-orange-500" />
+                  )}
+                  {model.type === "social" && (
+                    <Share2 className="w-5 h-5 text-pink-500" />
+                  )}
+                  {model.type === "docs" && (
+                    <FileText className="w-5 h-5 text-gray-500" />
                   )}
                   <h3 className="font-semibold">{model.name}</h3>
                 </div>
@@ -414,6 +433,8 @@ export default function AdminModelsPage() {
                     <SelectItem value="video">Video</SelectItem>
                     <SelectItem value="audio">Audio</SelectItem>
                     <SelectItem value="text">Text</SelectItem>
+                    <SelectItem value="social">Social</SelectItem>
+                    <SelectItem value="docs">Documentation</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -711,7 +732,7 @@ export default function AdminModelsPage() {
                 <Label htmlFor="edit-type">Type *</Label>
                 <Select
                   value={formData.type}
-                  onValueChange={(v: "image" | "video") =>
+                  onValueChange={(v: ModelType) =>
                     setFormData({ ...formData, type: v })
                   }
                 >
@@ -721,6 +742,10 @@ export default function AdminModelsPage() {
                   <SelectContent>
                     <SelectItem value="image">Image</SelectItem>
                     <SelectItem value="video">Video</SelectItem>
+                    <SelectItem value="audio">Audio</SelectItem>
+                    <SelectItem value="text">Text</SelectItem>
+                    <SelectItem value="social">Social</SelectItem>
+                    <SelectItem value="docs">Documentation</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
