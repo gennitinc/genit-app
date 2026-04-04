@@ -43,6 +43,8 @@ import cookie from "js-cookie";
 import { useTheme } from "next-themes";
 import UserPopOver from "./user/userPopOver";
 import Link from "next/link";
+import { Logo } from "./logo";
+import { cn } from "@/lib/utils"; 
 
 interface NavbarProps {
   title?: string;
@@ -156,27 +158,28 @@ export function Navbar({ title }: NavbarProps) {
         {/* Logo Section */}
         <div className="flex items-center gap-1 sm:gap-3 relative min-w-0">
           {/* Logo */}
-          <div
-            className="relative group flex-shrink-0 cursor-pointer"
-            onClick={() => router.push("/")}
+          <Link
+            href="/"
+            className={cn(
+              "flex items-center pb-2",
+              // state === "collapsed" && !isMobile && "justify-start",
+            )}
           >
-            <Image
-              src={appLogo || "/placeholder.svg"}
-              alt="Gennit Logo"
-              width={200}
-              height={80}
-              className="h-5 w-5 sm:h-8 sm:w-8 relative z-10 transition-transform duration-300 group-hover:scale-110"
-            />
-          </div>
-          {/* Brand name and project - Responsive */}
-          <div className="flex items-center gap-1 sm:gap-2 min-w-0">
+            {/* <Logo className="w-8 h-8 flex-shrink-0" /> */}
+            <Logo className="w-12 h-12 flex-shrink-0" />
             <span
-              className="text-base sm:text-lg font-bold bg-gradient-to-r from-muted-foreground via-muted-foreground/90 to-muted-foreground bg-clip-text text-transparent relative flex-shrink-0 cursor-pointer"
-              onClick={() => router.push("/")}
+              className={cn(
+                "font-semibold text-lg transition-opacity duration-200",
+                // (state === "collapsed" && !isMobile) || isTablet
+                //   ? "hidden"
+                //   : "block",
+              )}
             >
               Gennit
-              <div className="absolute inset-x-0 -bottom-0.5 h-0.5 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </span>
+          </Link>
+          {/* Brand name and project - Responsive */}
+          <div className="flex items-center gap-1 sm:gap-2 min-w-0">
             {/* Separator - Hidden on very small screens */}
             <div className="hidden xs:flex items-center">
               <span className="text-sm sm:text-base text-muted-foreground/50 mx-1">
