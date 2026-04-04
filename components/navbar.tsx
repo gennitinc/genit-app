@@ -150,7 +150,7 @@ export function Navbar({ title }: NavbarProps) {
   };
 
   return (
-    <nav className="flex items-center justify-between px-2 sm:px-6 sm:pr-1 py-3 bg-background/95 backdrop-blur-sm border-b border-border relative lg:pr-4">
+    <nav className="flex items-center justify-between px-2 sm:px-6 sm:pr-1 py-2 bg-background/95 backdrop-blur-sm border-b border-border relative lg:pr-4">
       {/* Left Section */}
       <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
         {/* Mobile Menu Button */}
@@ -161,7 +161,7 @@ export function Navbar({ title }: NavbarProps) {
           <Link
             href="/"
             className={cn(
-              "flex items-center pb-2",
+              "flex items-center",
               // state === "collapsed" && !isMobile && "justify-start",
             )}
           >
