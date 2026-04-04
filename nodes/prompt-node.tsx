@@ -164,20 +164,7 @@ export function PromptNode({
         };
 
         const allActions = actions?.length ? actions : [outputAction];
-        const results = await data.onAIAction(data.nodeId, allActions);
-
-        // Auto-connect each created node back to this prompt node
-        if (results?.length && data.nodeId) {
-          const connectActions = results
-            .filter((r: any) => r?.id)
-            .map((r: any) => ({
-              name: "connect_nodes",
-              args: { sourceId: data.nodeId, targetId: r.id },
-            }));
-          if (connectActions.length) {
-            await data.onAIAction(data.nodeId, connectActions);
-          }
-        }
+        await data.onAIAction(data.nodeId, allActions);
       }
     } catch (err) {
       console.error("PromptNode AI error:", err);
@@ -196,12 +183,12 @@ export function PromptNode({
         handleClassName="w-3 h-3 bg-primary border-2 border-white rounded shadow-lg"
       />
 
-      {/* Source handle (left) */}
+      {/* Input Context Handle (Target) */}
       <Handle
-        type="source"
+        type="target"
         position={Position.Left}
         isConnectable={isConnectable}
-        className="w-3 h-3 bg-primary border-2 border-background"
+        className="w-3 h-3 bg-blue-500 border-2 border-background"
       />
 
       {/* Remove button */}
@@ -218,7 +205,7 @@ export function PromptNode({
         </button>
       )}
 
-      <div className="bg-background/90 backdrop-blur-md border border-border rounded-3xl shadow-2xl overflow-hidden">
+      <div className="bg-background/90 backdrop-blur-md border border-border rounded-3xl shadow-2xl overflow-hidden relative">
         {/* Content-type tabs */}
         <div className="flex items-center px-3 border border-gray-200 dark:border-neutral-800 rounded-md w-fit m-2">
           {CONTENT_TYPES.map((t) => (
@@ -239,7 +226,7 @@ export function PromptNode({
 
         {/* Video orientation picker — shown as leftContent next to model selector */}
         {/* Input */}
-        <div className="relative">
+        <div className="">
           {isGenerating && (
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-sm rounded-b-3xl">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -291,12 +278,12 @@ export function PromptNode({
         </div>
       </div>
 
-      {/* Target handle (right) */}
+      {/* Output Results Handle (Source) */}
       <Handle
-        type="target"
+        type="source"
         position={Position.Right}
         isConnectable={isConnectable}
-        className="w-3 h-3 bg-primary border-2 border-background"
+        className="w-3 h-3 bg-green-500 border-2 border-background"
       />
     </div>
   );

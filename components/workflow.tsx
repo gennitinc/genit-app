@@ -167,9 +167,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     (newNodes: Node[], newEdges: Edge[]) => {
       if (isUndoRedoAction) return;
 
-      // Ensure we have valid arrays
-      const safeNodes = Array.isArray(newNodes) ? newNodes : [];
-      const safeEdges = Array.isArray(newEdges) ? newEdges : [];
+      // Ensure we have valid arrays and deep copy to prevent reference issues
+      const safeNodes = Array.isArray(newNodes) ? JSON.parse(JSON.stringify(newNodes)) : [];
+      const safeEdges = Array.isArray(newEdges) ? JSON.parse(JSON.stringify(newEdges)) : [];
 
       const currentState = { nodes: safeNodes, edges: safeEdges };
 
@@ -182,7 +182,11 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         return newHistory.slice(-50);
       });
 
-      setHistoryIndex((prevIndex) => Math.min(prevIndex + 1, 49));
+      setHistoryIndex((prevIndex) => {
+        const nextIndex = Math.min(prevIndex + 1, 49);
+        console.log("📜 [History] Added state. New index:", nextIndex);
+        return nextIndex;
+      });
     },
     [historyIndex, isUndoRedoAction],
   );
@@ -277,6 +281,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               name: data.title || data.name || `${type} Item`,
               category: categoryMap[type],
               url: data.url,
+              content: data.content,
               projectId,
               metadata: { ...data },
             },
@@ -545,8 +550,8 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
   const updateNodeData = useCallback(
     (nodeId: string, newData: any) => {
-      setNodes((nds) =>
-        nds.map((node) => {
+      setNodes((nds) => {
+        const newNodes = nds.map((node) => {
           if (node.id === nodeId) {
             return {
               ...node,
@@ -557,8 +562,12 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             };
           }
           return node;
-        }),
-      );
+        });
+        // We don't necessarily want to add to history on EVERY keystroke if this is used for inputs
+        // but for "data" updates (like renaming), we should. 
+        // For now, let's keep it manual or call it where needed.
+        return newNodes;
+      });
     },
     [setNodes],
   );
@@ -589,6 +598,12 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             ...data,
             position: finalPosition,
           });
+          
+          if (newNode && sourceNodeId) {
+            console.log(`🔗 [Workflow] Auto-connecting ${sourceNodeId} -> ${newNode.id}`);
+            handleConnect({ source: sourceNodeId, target: newNode.id } as any);
+          }
+          
           results.push(newNode);
           createIndex++;
         } else if (action.name === "connect_nodes") {
@@ -723,6 +738,31 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     [],
   );
 
+  const onNodesDelete = useCallback(
+    (deletedNodes: Node[]) => {
+      console.log("🗑️ [Workflow] Nodes deleted:", deletedNodes.map(n => n.id));
+      // useNodesState handles the deletion, but we need to capture the state AFTER deletion
+      // Since setNodes is async, we use the functional update to get the latest state
+      setNodes((nds) => {
+        // ReactFlow already updated the state, but we need to push it
+        addToHistory(nds, edgesRef.current);
+        return nds;
+      });
+    },
+    [setNodes, addToHistory],
+  );
+
+  const onEdgesDelete = useCallback(
+    (deletedEdges: Edge[]) => {
+      console.log("✂️ [Workflow] Edges deleted:", deletedEdges.map(e => e.id));
+      setEdges((eds) => {
+        addToHistory(nodesRef.current, eds);
+        return eds;
+      });
+    },
+    [setEdges, addToHistory],
+  );
+
   // Undo/Redo/Zoom functions
   const memoizedHandleUndo = useCallback(() => {
     console.log("Undo");
@@ -747,8 +787,15 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             const project = res.data.data;
             setProjectName(project.name);
             setProjectId(project._id);
-            setNodes(injectNodeCallbacks(project.nodes || []));
-            setEdges(project.edges || []);
+            const loadedNodes = injectNodeCallbacks(project.nodes || []);
+            const loadedEdges = project.edges || [];
+            setNodes(loadedNodes);
+            setEdges(loadedEdges);
+            
+            // Capture initial state in history
+            setHistory([{ nodes: JSON.parse(JSON.stringify(loadedNodes)), edges: JSON.parse(JSON.stringify(loadedEdges)) }]);
+            setHistoryIndex(0);
+
             if (project.viewport) {
               setViewport(project.viewport);
               // We'll apply this in a separate effect once instance is ready
@@ -858,7 +905,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         switch (event.key) {
           case "z":
             event.preventDefault();
-            if (!event.shiftKey) {
+            if (event.shiftKey) {
+              redo();
+            } else {
               undo();
             }
             break;
@@ -986,6 +1035,8 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               nodeTypes={nodeTypes}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
+              onNodesDelete={onNodesDelete}
+              onEdgesDelete={onEdgesDelete}
               onConnect={handleConnect}
               onNodeClick={onNodeClick}
               onPaneClick={onPaneClick}
@@ -994,7 +1045,11 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               onNodeDragStop={onNodeDragStop}
               onEdgeClick={(event, edge) => {
                 // Enable edge disconnection by clicking
-                setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+                setEdges((eds) => {
+                  const newEdges = eds.filter((e) => e.id !== edge.id);
+                  addToHistory(nodesRef.current, newEdges);
+                  return newEdges;
+                });
               }}
               onInit={setReactFlowInstance}
               onMoveEnd={onMoveEnd}

@@ -38,7 +38,7 @@ export function PDFNode({ data, selected }: NodeProps<PDFNodeData>) {
       <div
         className={`relative bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-4 w-80 min-w-[320px] min-h-[120px] ${selected ? "ring-2 ring-primary" : ""}`}
       >
-        <Handle type="target" position={Position.Left} className="w-3 h-3" />
+        <Handle type="target" position={Position.Left} className="w-3 h-3 bg-blue-500 border-2 border-white" />
 
         {/* Remove Button */}
         {onRemoveNode && nodeId && (
@@ -90,7 +90,7 @@ export function PDFNode({ data, selected }: NodeProps<PDFNodeData>) {
           </div>
         </div>
 
-        <Handle type="source" position={Position.Right} className="w-3 h-3" />
+        <Handle type="source" position={Position.Right} className="w-3 h-3 bg-green-500 border-2 border-white" />
       </div>
     </div>
   );

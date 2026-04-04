@@ -71,6 +71,8 @@ export function FloatingSidebar({
     instruction: "",
     status: "public" as "public" | "private",
     hasInstruction: false,
+    duration: "",
+    size: "",
   });
   const [selectedIntegrationType, setSelectedIntegrationType] = useState<
     string | null
@@ -378,8 +380,8 @@ export function FloatingSidebar({
     console.log("🎯 [Sidebar] selectedItem:", selectedItem);
     console.log("🎯 [Sidebar] inputData:", inputData);
 
-    // For text content, require content
-    if (selectedIntegrationType === "text" && !inputData.content.trim()) return;
+    // For text content, require content or a selected item
+    if (selectedIntegrationType === "text" && !inputData.content.trim() && !selectedItem) return;
 
     // For other types, require either:
     // 1. A URL (when on url tab)
@@ -647,26 +649,26 @@ export function FloatingSidebar({
 
     if (selectedIntegrationType && nodeType) {
       console.log("🎯 [Sidebar] Final nodeType:", nodeType);
-      console.log(
-        "🎯 [Sidebar] Calling onAddIntegration with nodeType:",
-        nodeType,
-      );
+      
+      let finalData = { ...processedData };
+      
       if (selectedItem) {
-        // If an item is selected, use that data
-        const itemData = {
-          title: selectedItem.name,
-          url: selectedItem.url,
-          type: selectedItem.type,
-          duration: selectedItem.duration,
-          size: selectedItem.size,
+        // If an item is selected, merge its critical fields into fineData
+        finalData = {
+          ...finalData,
+          title: selectedItem.name || selectedItem.title || finalData.title,
+          url: selectedItem.url || finalData.url,
+          content: selectedItem.content || finalData.content,
+          instruction: selectedItem.prompt || selectedItem.instruction || finalData.instruction,
+          duration: selectedItem.duration || finalData.duration,
+          size: selectedItem.size || finalData.size,
         };
-        console.log("🎯 [Sidebar] Using selectedItem data:", itemData);
-        onAddIntegration(nodeType, itemData);
+        console.log("🎯 [Sidebar] Using merged selectedItem data:", finalData);
       } else {
-        // Otherwise use the processed data
-        console.log("🎯 [Sidebar] Using processedData:", processedData);
-        onAddIntegration(nodeType, processedData);
+        console.log("🎯 [Sidebar] Using processedData:", finalData);
       }
+      
+      onAddIntegration(nodeType, finalData);
     }
     resetModal();
   };
@@ -685,6 +687,8 @@ export function FloatingSidebar({
       instruction: "",
       status: "public",
       hasInstruction: false,
+      duration: "",
+      size: "",
     });
     setSelectedIntegrationType(null);
     setShowModal(false);
@@ -2594,9 +2598,9 @@ export function FloatingSidebar({
                           onClick={() => setSelectedItem(item)}
                         >
                           <div className="flex items-start gap-3">
-                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-orange-500/10 mt-1">
+                            {/* <div className="w-10 h-10 rounded-md flex items-center justify-center bg-orange-500/10 mt-1">
                               <FileText className="w-5 h-5 text-orange-500" />
-                            </div>
+                            </div> */}
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium text-foreground line-clamp-1">
                                 {item.prompt || "Generated Text"}
@@ -4008,7 +4012,7 @@ export function FloatingSidebar({
                   onClick={handleIntegrationAdd}
                   disabled={
                     selectedIntegrationType === "text"
-                      ? !inputData.content.trim()
+                      ? !inputData.content.trim() && !selectedItem
                       : !inputData.url.trim() &&
                         !selectedItem &&
                         activeTab !== "all"

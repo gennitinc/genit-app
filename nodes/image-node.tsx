@@ -82,7 +82,7 @@ export const ImageNode = memo(
       <div className="relative bg-card border border-border rounded-[1.5rem] shadow-sm p-2 w-80 min-w-[200px] min-h-[150px]">
         <Handle
           type="target"
-          position={Position.Top}
+          position={Position.Left}
           className="w-3 h-3 bg-primary"
           isConnectable={isConnectable}
         />
@@ -279,7 +279,7 @@ export const ImageNode = memo(
 
         <Handle
           type="source"
-          position={Position.Bottom}
+          position={Position.Right}
           isConnectable={isConnectable}
         />
       </div>

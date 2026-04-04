@@ -220,7 +220,7 @@ export const TwitterNode = memo(
           <Handle
             type="source"
             position={Position.Right}
-            className="w-3 h-3 bg-blue-500 border-2 border-white"
+            className="w-3 h-3 bg-green-500 border-2 border-white"
             isConnectable={isConnectable}
           />
         </div>

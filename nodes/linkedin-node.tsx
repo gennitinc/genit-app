@@ -61,7 +61,7 @@ export const LinkedInNode = memo(
           <Handle
             type="target"
             position={Position.Left}
-            className="w-3 h-3 bg-blue-700 border-2 border-white"
+            className="w-3 h-3 bg-blue-700 border-2 border-white transition-all shadow-sm"
             isConnectable={isConnectable}
           />
 
@@ -235,7 +235,7 @@ export const LinkedInNode = memo(
           <Handle
             type="source"
             position={Position.Right}
-            className="w-3 h-3 bg-blue-700 border-2 border-white"
+            className="w-3 h-3 bg-green-500 border-2 border-white transition-all shadow-sm"
             isConnectable={isConnectable}
           />
         </div>

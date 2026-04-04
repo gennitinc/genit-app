@@ -73,12 +73,12 @@ export const TextNode = memo(
       <div className="relative bg-card border border-border rounded-[1.5rem] shadow-sm p-2 w-[450px] min-w-[300px] min-h-[200px]">
         <Handle
           type="target"
-          position={Position.Top}
+          position={Position.Left}
           className="w-3 h-3 bg-blue-500 border-2 border-white"
         />
         <Handle
           type="source"
-          position={Position.Bottom}
+          position={Position.Right}
           className="w-3 h-3 bg-green-500 border-2 border-white"
         />
 
