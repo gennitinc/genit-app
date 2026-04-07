@@ -15,7 +15,7 @@ import { Sparkles } from "lucide-react";
 import { BadgeCheck, CreditCard, Bell, LogOut, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import { useState, useEffect, RefObject, useCallback, useRef } from "react";
 import { Logo } from "../logo";
 import { useSidebar } from "../ui/sidebar";
@@ -39,7 +39,7 @@ export default function TopNavWithAurora({
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const scrollTargetRef = useRef<HTMLElement | Window | null>(null);
 
-  // Optimized scroll handler with throttling
+    // Optimized scroll handler with throttling
   const handleScroll = useCallback(() => {
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
@@ -94,6 +94,9 @@ export default function TopNavWithAurora({
     setMounted(true);
   }, []);
 
+  const params = useParams();
+  const isChatIdPage = !!params.id && pathName.startsWith("/chat");
+
   return (
    
       <header
@@ -105,7 +108,7 @@ export default function TopNavWithAurora({
       >
         <div className="flex px-4 py-1.5 items-center justify-between w-full">
           <div className="flex z-20 items-center flex-1 gap-4">
-            <SidebarTrigger className="-ml-2 z-20" />
+            {!isChatIdPage && <SidebarTrigger className="-ml-2 z-20" />}
             <Link href="/" className="lg:hidden flex items-center gap-1">
               <Logo className="w-9 h-9" />
               <span className="font-semibold text-lg">Gennit</span>

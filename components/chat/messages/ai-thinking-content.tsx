@@ -7,9 +7,10 @@ import ShinyText from "@/components/ui/shiny-text";
 
 interface AIThinkingContentProps {
   className?: string;
+  status?: string | null;
 }
 
-export function AIThinkingContent({ className }: AIThinkingContentProps) {
+export function AIThinkingContent({ className, status }: AIThinkingContentProps) {
   return (
     <div className={`space-y-2 ${className ?? ""}`}>
       <div className="flex items-center gap-2">
@@ -21,23 +22,23 @@ export function AIThinkingContent({ className }: AIThinkingContentProps) {
         />
 
         <ShinyText
-          text="thinking"
+          text={status || "thinking"}
           disabled={false}
           speed={3}
-          className="custom-class"
+          className="text-xs font-medium tracking-tight"
         />
         {/* Animated thinking dots */}
         <div className="flex items-center gap-1">
           <div
-            className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+            className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce"
             style={{ animationDelay: "0ms" }}
           ></div>
           <div
-            className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+            className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce"
             style={{ animationDelay: "150ms" }}
           ></div>
           <div
-            className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+            className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce"
             style={{ animationDelay: "300ms" }}
           ></div>
         </div>
@@ -45,3 +46,4 @@ export function AIThinkingContent({ className }: AIThinkingContentProps) {
     </div>
   );
 }
+

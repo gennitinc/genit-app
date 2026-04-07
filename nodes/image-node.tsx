@@ -23,6 +23,7 @@ interface ImageNodeData {
   type?: string;
   size?: string;
   onRemoveNode?: (nodeId: string) => void;
+  onDataChange?: (newData: any) => void;
   nodeId?: string;
 }
 
@@ -46,6 +47,7 @@ export const ImageNode = memo(
 
     const handleSave = () => {
       console.log("Saving image node data:", editData);
+      data.onDataChange?.(editData);
       setIsEditOpen(false);
     };
 

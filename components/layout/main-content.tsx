@@ -11,7 +11,7 @@ export function MainContent() {
   return (
     <div className="w-full  overflow-x-hidden sm:px-2  lg:px-8 py-8">
       <div className="relative w-full flex flex-col items-center justify-center">
-        <svg
+        {/* <svg
           width={960}
           height={960}
           viewBox="0 0 960 960"
@@ -866,7 +866,7 @@ export function MainContent() {
               <rect width={960} height={960} fill="white" />
             </clipPath>
           </defs>
-        </svg>
+        </svg> */}
         <IdeaSection />
       </div>
 

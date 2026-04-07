@@ -139,6 +139,25 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const nodesRef = React.useRef(nodes);
   const edgesRef = React.useRef(edges);
+  const [brainItems, setBrainItems] = useState<any[]>([]);
+
+  // Fetch user's brain items for duplicate checking
+  useEffect(() => {
+    const fetchBrainItems = async () => {
+      try {
+        const res = await apiResponse.get("/apps/workflow/items", {
+          withCredentials: true,
+        });
+        if (res.data.success) {
+          setBrainItems(res.data.data);
+          console.log("🧠 [Workflow] Loaded brain items:", res.data.data.length);
+        }
+      } catch (error) {
+        console.error("Failed to fetch brain items:", error);
+      }
+    };
+    fetchBrainItems();
+  }, []);
 
   // Keep refs in sync with state
   useEffect(() => {
@@ -191,12 +210,15 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     [historyIndex, isUndoRedoAction],
   );
 
-  // Add node to state
   const addNode = useCallback(
     (node: Node) => {
       console.log("🎯 [GennittWorkflow] Adding node:", node);
-      setNodes((prevNodes) => [...prevNodes, node]);
-      addToHistory([...nodesRef.current, node], edgesRef.current);
+      setNodes((prevNodes) => {
+        const newNodes = [...prevNodes, node];
+        // Use a functional update to ensure we have the absolute latest state for history
+        addToHistory(newNodes, edgesRef.current);
+        return newNodes;
+      });
     },
     [setNodes, addToHistory],
   );
@@ -272,24 +294,43 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         tiktok: "social",
       };
 
-      // Save to database if it's a media/content item
-      if (categoryMap[type] && slug) {
-        try {
-          await apiResponse.post(
-            "/apps/workflow/items",
-            {
-              name: data.title || data.name || `${type} Item`,
-              category: categoryMap[type],
-              url: data.url,
-              content: data.content,
-              projectId,
-              metadata: { ...data },
-            },
-            { withCredentials: true },
-          );
-          console.log("✅ [GennittWorkflow] Item saved to database");
-        } catch (error) {
-          console.error("Failed to save item to database:", error);
+      // Save to database if it's a media/content item AND not already in the brain
+      if (categoryMap[type] && slug && !data.alreadyInBrain) {
+        // Check for duplicates in brainItems
+        const existingItem = brainItems.find((item) => {
+          if (data.url && item.url === data.url) return true;
+          if (
+            data.content &&
+            item.content === data.content &&
+            item.category === categoryMap[type]
+          )
+            return true;
+          return false;
+        });
+
+        if (!existingItem) {
+          try {
+            const res = await apiResponse.post(
+              "/apps/workflow/items",
+              {
+                name: data.title || data.name || `${type} Item`,
+                category: categoryMap[type],
+                url: data.url,
+                content: data.content,
+                projectId,
+                metadata: { ...data },
+              },
+              { withCredentials: true },
+            );
+            console.log("✅ [GennittWorkflow] Item saved to database");
+            if (res.data.success) {
+              setBrainItems((prev) => [res.data.data, ...prev]);
+            }
+          } catch (error) {
+            console.error("Failed to save item to database:", error);
+          }
+        } else {
+          console.log("ℹ️ [GennittWorkflow] Item already exists in brain, skipping save");
         }
       }
 
@@ -402,6 +443,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           };
           break;
         case "file":
+        case "document":
           const docType = data.url
             ? getDocumentType(data.url, data.title)
             : "Document";
@@ -545,7 +587,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       addNode(newNode);
       return newNode;
     },
-    [projectId, slug, addNode, removeNode],
+    [projectId, slug, addNode, removeNode, brainItems],
   );
 
   const updateNodeData = useCallback(

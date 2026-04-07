@@ -1,7 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -66,10 +71,12 @@ module.exports = {
         },
         orbit: {
           "0%": {
-            transform: "rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg))",
+            transform:
+              "rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg))",
           },
           "100%": {
-            transform: "rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg))",
+            transform:
+              "rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg))",
           },
         },
       },
@@ -78,8 +85,29 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
         orbit: "orbit 10s linear infinite",
       },
+      keyframes: {
+        flyRight: {
+          "0%": {
+            left: "-10%",
+            transform: "scale(0)",
+            opacity: "0",
+          },
+          "50%": {
+            left: "45%",
+            transform: "scale(1.2)",
+            opacity: "1",
+          },
+          "100%": {
+            left: "100%",
+            transform: "scale(0)",
+            opacity: "0",
+          },
+        },
+      },
+      animation: {
+        flyRight: "flyRight 3s ease-in-out infinite",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
-
+};

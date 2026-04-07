@@ -33,6 +33,8 @@ import { Logo } from "@/components/logo"; // Updated import
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useUrlState } from "@/hooks/use-url-state";
 import Link from "next/link";
+import { usePathname, useParams } from "next/navigation";
+import { useEffect } from "react";
 
 export function AppSidebar({
   className,
@@ -43,6 +45,16 @@ export function AppSidebar({
   const user = useUserContext().user;
   const { setUrlState } = useUrlState();
   const isTablet = useMediaQuery("(max-width: 1024px)");
+  const pathname = usePathname();
+  const params = useParams();
+
+  const isChatIdPage = !!params.id && pathname.startsWith("/chat");
+
+  useEffect(() => {
+    if (isChatIdPage && state === "expanded") {
+      setOpen(false);
+    }
+  }, [isChatIdPage, state, setOpen]);
 
   // Calculate credit stats from user data
   const creditsRemaining = user?.creditsRemaining || 0;
@@ -162,14 +174,16 @@ export function AppSidebar({
           </div>
         </div>
       ) : (
-        <div className="flex justify-center mb-4 mt-2 w-full">
-          <div
-            className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center shadow-lg hover:bg-cyan-500/90 transition-colors cursor-pointer"
-            onClick={() => setOpen(true)}
-          >
-            <Crown className="w-4 h-4 text-white" strokeWidth={1.5} />
+        !isChatIdPage && (
+          <div className="flex justify-center mb-4 mt-2 w-full">
+            <div
+              className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center shadow-lg hover:bg-cyan-500/90 transition-colors cursor-pointer"
+              onClick={() => setOpen(true)}
+            >
+              <Crown className="w-4 h-4 text-white" strokeWidth={1.5} />
+            </div>
           </div>
-        </div>
+        )
       )}
 
       <SidebarFooter className="border-t border-border pt-4">

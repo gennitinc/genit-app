@@ -10,7 +10,7 @@ import { modelApi } from "@/utils/inspire-api";
 import { Model } from "@/types/inspire";
 
 const CONTENT_TYPES = [
-  { id: "all", label: "All" },
+  // { id: "all", label: "All" },
   { id: "text", label: "Text" },
   { id: "image", label: "Image" },
   { id: "video", label: "Video" },

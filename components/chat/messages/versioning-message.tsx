@@ -23,6 +23,7 @@ import {
   Trash2,
   Wand2,
   Send,
+  LayoutGrid,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -34,6 +35,7 @@ import { serverUrlSocket, apiResponse } from "@/utils/apiResponse";
 import { templateApi } from "@/utils/inspire-api";
 import { toast } from "@/hooks/use-toast";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { useProjectDesign } from "@/context/DesignProject";
 import { DeleteConfirmation } from "./delete-confirmation";
 import { VideoPlayerMessage } from "../video-player-message";
 import { MaskEditor, toMask } from "react-mask-editor";
@@ -159,6 +161,7 @@ export function VersioningMessage({
 }: VersioningMessageProps) {
   const router = useRouter();
   const { user } = useUserContext();
+  const { setFocusedGenerationId } = useProjectDesign();
   const [publishing, setPublishing] = useState<string | null>(null);
   const [checkingPublishStatus, setCheckingPublishStatus] = useState(false);
   const [publishedItems, setPublishedItems] = useState<Set<string>>(new Set());
@@ -1027,6 +1030,19 @@ export function VersioningMessage({
                     </div>
 
                     <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSetAsActive(item.id);
+                          if (setFocusedGenerationId) setFocusedGenerationId(item.id);
+                        }}
+                        className="h-7.5 px-2 text-xs gap-1.5 w-fit border-primary/30 text-primary hover:bg-primary/5"
+                      >
+                        <LayoutGrid className="w-3 h-3" />
+                        View in Canvas
+                      </Button>
                       {!isPublished && !item.publishStatus && (
                         <Button
                           variant="outline"

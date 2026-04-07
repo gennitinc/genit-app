@@ -19,7 +19,7 @@ export function MessageContainer({
     <div className={`space-y-2 text-sm font-normal ${className}`}>
       <div className="flex items-start gap-3">
         {avatar}
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 min-w-0">{children}</div>
       </div>
       {actions && <div className="ml-11">{actions}</div>}
     </div>

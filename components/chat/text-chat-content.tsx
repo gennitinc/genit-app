@@ -38,6 +38,8 @@ export function TextChatContent() {
     setShowScrollButton,
     isGeneratingImage,
     generatingForMessageId,
+    generateMessage,
+    aiStatus,
   } = useProjectDesign();
 
   const skeletonRef = useRef<HTMLDivElement | null>(null);
@@ -57,6 +59,7 @@ export function TextChatContent() {
 
       const behavior = opts?.behavior || "auto";
 
+      // Multiple AFs to ensure DOM is settled after state updates
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           try {
@@ -82,7 +85,7 @@ export function TextChatContent() {
         try {
           skeletonRef.current?.scrollIntoView({
             behavior: "auto",
-            block: "center",
+            block: "end",
           });
         } catch {
           doScrollToBottom({ behavior: "auto" });
@@ -96,7 +99,8 @@ export function TextChatContent() {
     const el = scrollElRef.current;
     if (!el) return;
     const distance = el.scrollHeight - el.scrollTop - el.clientHeight;
-    const atBottom = distance <= 8;
+    // Increased threshold for better auto-scroll persistence
+    const atBottom = distance <= 150;
     setIsAtBottom(atBottom);
     setShowButton(!atBottom);
     try {
@@ -105,27 +109,19 @@ export function TextChatContent() {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      const external = document.querySelector<HTMLElement>(".scroll-container");
-      if (external) {
-        scrollElRef.current = external;
-        external.addEventListener("scroll", onScroll, { passive: true });
-        requestAnimationFrame(() =>
-          requestAnimationFrame(() => {
-            doScrollToBottom({ behavior: "auto" });
-          }),
-        );
-      } else if (localConversationRef.current) {
-        scrollElRef.current = localConversationRef.current;
-        const el = localConversationRef.current;
-        el.addEventListener("scroll", onScroll, { passive: true });
-        requestAnimationFrame(() =>
-          requestAnimationFrame(() => {
-            doScrollToBottom({ behavior: "auto" });
-          }),
-        );
-      }
-    }, 0);
+    // We favor our local ref as the primary scroll element now
+    if (localConversationRef.current) {
+      scrollElRef.current = localConversationRef.current;
+      const el = localConversationRef.current;
+      el.addEventListener("scroll", onScroll, { passive: true });
+      
+      // Auto scroll on first mount
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          doScrollToBottom({ behavior: "auto" });
+        }),
+      );
+    }
 
     return () => {
       if (scrollElRef.current) {
@@ -171,12 +167,37 @@ export function TextChatContent() {
     isGeneratingImage,
     generatingForMessageId,
     isAtBottom,
+    aiStatus,
     scrollSkeleton,
     doScrollToBottom,
   ]);
 
+  // Force scroll when AI starts thinking/typing
   useEffect(() => {
-    const handler = () => doScrollToBottom({ behavior: "smooth" });
+    if (isTyping && isAtBottom) {
+      doScrollToBottom({ behavior: "smooth" });
+    }
+  }, [isTyping, isAtBottom, doScrollToBottom]);
+
+  useEffect(() => {
+    const el = localConversationRef.current;
+    if (!el) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (isAtBottom) {
+        doScrollToBottom({ behavior: "smooth" });
+      }
+    });
+
+    resizeObserver.observe(el);
+    return () => resizeObserver.disconnect();
+  }, [isAtBottom, doScrollToBottom]);
+
+  useEffect(() => {
+    const handler = () => {
+      console.log("Auto-scroll triggered via event");
+      doScrollToBottom({ behavior: "smooth" });
+    };
     window.addEventListener("scroll-chat-to-bottom", handler as EventListener);
     return () =>
       window.removeEventListener(
@@ -253,11 +274,23 @@ export function TextChatContent() {
     navigator.clipboard.writeText(content).catch(() => {});
   };
 
+  const handleOptionSelect = async (option: string) => {
+    try {
+      const projectId = project?._id || "";
+      await generateMessage(option, [], projectId);
+    } catch (error) {
+      console.error("Error selecting option:", error);
+    }
+  };
+
   return (
-    <div className="flex flex-col">
-      <div ref={localConversationRef} className="flex-1 px-2 md:px-6">
+    <div className="flex flex-col h-full">
+      <div
+        ref={localConversationRef}
+        className="flex-1 px-2 md:px-6 overflow-y-auto scroll-container custom-scrollbar overflow-x-hidden"
+      >
         <Conversation className="px-0 m-0">
-          <ConversationContent className="px-0 m-0 space-y-4 pb-2 min-h-[70dvh]">
+          <ConversationContent className="px-0 m-0 space-y-4 overflow-x-hidden pb-2 min-h-[70dvh]">
             {messages?.map((message: any, index: number) => {
               if (message.type === "user") {
                 const imageAttachment = message.fileAttachments?.find(
@@ -338,6 +371,7 @@ export function TextChatContent() {
                       onLike={() => handleLikeToggle(message.id)}
                       onDislike={() => handleDislikeToggle(message.id)}
                       onDelete={() => handleDeleteMessage(message.id)}
+                      onOptionClick={handleOptionSelect}
                       generation={message.generationGroups}
                     />
 
@@ -417,18 +451,19 @@ export function TextChatContent() {
                   streamingAnalysis={streamingAnalysis}
                 />
               ) : (
-                (!messages ||
-                  messages.length === 0 ||
-                  messages[messages.length - 1]?.type !== "ai") && (
-                  <AIThinkingContent />
-                )
+                <AIThinkingContent status={aiStatus} />
               ))}
 
-            {isGeneratingImage && (
-              <div ref={skeletonRef} className="flex justify-center mt-2">
-                <Skeleton className="h-[500px] w-[500px] rounded-md" />
+            {/* {isGeneratingImage && (
+              <div ref={skeletonRef} className="flex flex-col items-center gap-3 mt-2">
+                <Skeleton className="h-[500px] w-[500px] rounded-xl" />
+                {aiStatus && (
+                  <p className="text-xs text-muted-foreground italic animate-pulse">
+                    {aiStatus}
+                  </p>
+                )}
               </div>
-            )}
+            )} */}
 
             {(!messages || messages.length === 0) && !isTyping && (
               <div className="flex-1 mt-32 flex items-end justify-center">
@@ -446,7 +481,7 @@ export function TextChatContent() {
         </Conversation>
       </div>
 
-      <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-black/90 backdrop-blur">
+      <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-[#09090B] backdrop-blur">
         <ChatInput placeholder="Ask a follow up message..." />
       </div>
     </div>

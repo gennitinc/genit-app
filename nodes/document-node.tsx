@@ -33,6 +33,7 @@ interface DocumentNodeData {
   docType?: string;
   size?: string;
   onRemoveNode?: (nodeId: string) => void;
+  onDataChange?: (newData: any) => void;
   nodeId?: string;
 }
 
@@ -57,6 +58,7 @@ export const DocumentNode = memo(
 
     const handleSave = () => {
       console.log("Saving document node data:", editData);
+      data.onDataChange?.(editData);
       setIsEditOpen(false);
     };
 
@@ -120,16 +122,6 @@ export const DocumentNode = memo(
           handleClassName="w-3 h-3 bg-primary border-2 border-white rounded shadow-lg"
         />
 
-        {/* Remove Button */}
-        {data.onRemoveNode && data.nodeId && (
-          <button
-            onClick={() => data.onRemoveNode?.(data.nodeId as string)}
-            className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-lg z-10"
-            title="Remove node"
-          >
-            <X className="w-3 h-3" />
-          </button>
-        )}
 
         <div
           className={`bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-4 w-80 min-w-[200px] min-h-[120px] relative cursor-grab active:cursor-grabbing ${
@@ -146,16 +138,6 @@ export const DocumentNode = memo(
             isConnectable={isConnectable}
           />
 
-          {/* Remove Button */}
-          {data.onRemoveNode && data.nodeId && (
-            <button
-              onClick={() => data.onRemoveNode!(data.nodeId!)}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-lg z-10"
-              title="Remove node"
-            >
-              <X className="w-3 h-3" />
-            </button>
-          )}
 
           <div className="flex items-start space-x-3">
             <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">

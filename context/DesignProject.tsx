@@ -80,6 +80,25 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const socketRef = useRef<any>(null);
   const projectIdRef = useRef<string | null>(null);
   const messagesRef = useRef<any[]>([]);
+  const [focusedGenerationId, setFocusedGenerationId] = useState<string | null>(null);
+  const [selectedColorScales, setSelectedColorScales] = useState<Array<{
+    base: string;
+    shades: { [key: number]: string };
+  }>>([]);
+  const [activeGenerationId, setActiveGenerationId] = useState<string | null>(null);
+  const [inputMode, setInputMode] = useState<"text" | "color" | "file">("text");
+  const [generationMode, setGenerationMode] = useState<"auto" | "custom">("custom");
+  const [primaryFont, setPrimaryFont] = useState<string | null>(null);
+  const [aiStatus, setAiStatus] = useState<string | null>(null);
+  const [liveNodes, setLiveNodes] = useState<Array<{ id: string; filePath: string; name: string; prompt: string }>>([]);
+
+  const addLiveNode = useCallback((node: { id: string; filePath: string; name: string; prompt: string }) => {
+    setLiveNodes(prev => {
+      // Avoid duplicates
+      if (prev.find(n => n.id === node.id)) return prev;
+      return [...prev, node];
+    });
+  }, []);
 
   const transformMessages = useCallback((messages: any[]) => {
     if (!messages || !Array.isArray(messages)) {
@@ -159,7 +178,25 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Update project ID ref when project changes
   useEffect(() => {
-    projectIdRef.current = project?._id || null;
+    const newProjectId = project?._id || null;
+    
+    // If project has changed, reset project-specific states to ensure isolation
+    if (newProjectId !== projectIdRef.current) {
+      console.log(`🔄 Project switching detected: ${projectIdRef.current} -> ${newProjectId}. Resetting state...`);
+      setMessages([]);
+      setLiveNodes([]);
+      setAiStatus(null);
+      setStreamingContent("");
+      setStreamingAnalysis("");
+      setIsGenerating(false);
+      setIsGeneratingImage(false);
+      setGeneratingForMessageId(null);
+      
+      // Update the processed draft ref so new project can process its own draft
+      hasProcessedDraftRef.current = false;
+    }
+    
+    projectIdRef.current = newProjectId;
   }, [project?._id]);
 
   // Update messages ref when messages change
@@ -210,6 +247,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setStreamingContent("");
         setStreamingAnalysis("");
         setIsTyping(false);
+        setAiStatus(null);
         // If server sent a new message, stop any image-generating skeleton
         setIsGeneratingImage(false);
         setGeneratingForMessageId(null);
@@ -320,6 +358,27 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     socket.on("textCompleted", handleTextCompleted);
     socket.on("generatingimage", handleGeneratingImage);
 
+    // Real-time canvas node creation
+    const handleWorkflowNodeNew = (data: any) => {
+      const incomingProjectId = data?.projectId;
+      const currentProjectId = projectIdRef.current;
+      if (incomingProjectId && currentProjectId && incomingProjectId !== currentProjectId) return;
+      if (data?.id && data?.filePath) {
+        addLiveNode({ id: data.id, filePath: data.filePath, name: data.name || "Design", prompt: data.prompt || "" });
+      }
+    };
+    socket.on("workflow:node:new", handleWorkflowNodeNew);
+
+    const handleWorkflowAIStatus = (data: any) => {
+      const incomingProjectId = data?.projectId;
+      const currentProjectId = projectIdRef.current;
+      if (incomingProjectId && currentProjectId && incomingProjectId !== currentProjectId) return;
+      if (data?.text) {
+        setAiStatus(data.text);
+      }
+    };
+    socket.on("workflow:ai:status", handleWorkflowAIStatus);
+
     // Cleanup function to disconnect socket when component unmounts
     return () => {
       if (socketRef.current) {
@@ -329,6 +388,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         socketRef.current.off("textDelta", handleTextDelta);
         socketRef.current.off("textCompleted", handleTextCompleted);
         socketRef.current.off("generatingimage", handleGeneratingImage);
+        socketRef.current.off("workflow:node:new");
+        socketRef.current.off("workflow:ai:status");
         socketRef.current.disconnect();
         socketRef.current = null;
       }
@@ -430,6 +491,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     designTypeId?: string,
     orientation?: string | null,
     customSize?: { width: string; height: string } | null,
+    metadata?: Record<string, any>,
   ) => {
     let category;
 
@@ -449,6 +511,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       category: category,
       orientation: orientation || undefined,
       customSize: customSize || undefined,
+      metadata: metadata || undefined,
       analytics: {
         totalMessages: 0,
         totalGenerations: 0,
@@ -716,10 +779,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     files: File[] | null,
     projectId: string,
     selectedFiles?: string[], // e.g., ["https://example.com/image1.png", "video.mp4"]
+    metadata?: Record<string, any>,
   ) => {
     try {
       setIsGenerating(true);
       setIsTyping(true);
+      setAiStatus(null);
+      setStreamingContent("");
 
       console.log("⚡ Generating message...");
 
@@ -815,6 +881,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           },
         ],
         fileAttachments: attachedFiles.length > 0 ? attachedFiles : undefined,
+        metadata: metadata || {},
         createdAt: new Date(),
       };
 
@@ -839,6 +906,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       // Append selected file URLs (references) as JSON string
       if (selectedFiles && selectedFiles.length > 0) {
         formData.append("selectedFiles", JSON.stringify(selectedFiles));
+      }
+
+      // Append metadata as JSON string
+      if (metadata) {
+        formData.append("metadata", JSON.stringify(metadata));
       }
 
       // Debugging — see what's really inside FormData
@@ -1222,6 +1294,22 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         handleLocalStorageDraft,
         error,
         setError,
+        focusedGenerationId,
+        setFocusedGenerationId,
+        selectedColorScales,
+        setSelectedColorScales,
+        activeGenerationId,
+        setActiveGenerationId,
+        inputMode,
+        setInputMode,
+        generationMode,
+        setGenerationMode,
+        primaryFont,
+        setPrimaryFont,
+        liveNodes,
+        addLiveNode,
+        aiStatus,
+        setAiStatus,
       }}
     >
       {children}

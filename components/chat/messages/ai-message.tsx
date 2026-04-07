@@ -22,6 +22,10 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { useProjectDesign } from "@/context/DesignProject";
 
 import {
   Reasoning,
@@ -30,6 +34,7 @@ import {
 } from "@/components/ai-elements/reasoning";
 import { Response } from "@/components/ai-elements/response";
 import { DeleteConfirmation } from "./delete-confirmation";
+import { DesignInspirationResults } from "./design-inspiration-results";
 
 interface AIMessageProps {
   message: any;
@@ -43,6 +48,7 @@ interface AIMessageProps {
   onLike?: () => void;
   onDislike?: () => void;
   onDelete?: () => void;
+  onOptionClick?: (option: string) => void;
   generation: any;
   className?: string;
 }
@@ -61,8 +67,10 @@ export function AIMessage({
   onLike,
   onDislike,
   onDelete,
+  onOptionClick,
   className,
 }: AIMessageProps) {
+  const { project } = useProjectDesign();
   const [isAnalysisOpen, setIsAnalysisOpen] = useState(false);
   const [displayContent, setDisplayContent] = useState("");
   const [displayAnalysis, setDisplayAnalysis] = useState("");
@@ -120,6 +128,82 @@ export function AIMessage({
                     <ReasoningTrigger />
                     <ReasoningContent>{part.text}</ReasoningContent>
                   </Reasoning>
+                );
+              case "options":
+                const isProjectSelection = part.options?.some((opt: string) => 
+                  ["Flyer or Poster", "Logo or Branding", "Social Media Graphic", "Website Landing Page"].includes(opt)
+                );
+
+                if (isProjectSelection) {
+                  return (
+                    <div className="">
+                      <p className="mb-4">
+                        Select Project Type
+                      </p>
+                      <div
+                        key={`${message.id}-${i}`}
+                        className="mt-4 p-4 rounded-2xl bg-muted/30 border border-border/50 backdrop-blur-sm"
+                      >
+                        <RadioGroup
+                          onValueChange={(value) => !project?.category && onOptionClick?.(value)}
+                          disabled={!!project?.category}
+                          value={project?.category || undefined}
+                          className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                        >
+                          {part.options?.map((option: string, idx: number) => (
+                            <div key={idx} className="relative group">
+                              <RadioGroupItem
+                                value={option}
+                                id={`${message.id}-${idx}`}
+                                className="peer sr-only"
+                              />
+                              <Label
+                                htmlFor={`${message.id}-${idx}`}
+                                className={cn(
+                                  "flex items-center gap-3 p-3 rounded-xl border border-border/50 bg-background/50 cursor-pointer transition-all duration-200",
+                                  "hover:bg-muted/50 hover:border-primary/30",
+                                  "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 peer-data-[state=checked]:ring-1 peer-data-[state=checked]:ring-primary",
+                                  "group-hover:translate-x-1",
+                                )}
+                              >
+                                <div className="w-4 h-4 rounded-full border border-primary/20 flex items-center justify-center peer-data-[state=checked]:border-primary transition-colors">
+                                  <div className="w-2 h-2 rounded-full bg-primary opacity-0 peer-data-[state=checked]:opacity-100 transition-opacity" />
+                                </div>
+                                <span className="text-xs font-semibold text-foreground/80 group-hover:text-foreground">
+                                  {option}
+                                </span>
+                              </Label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div key={`${message.id}-${i}`} className="flex flex-wrap gap-2 mt-2">
+                    {part.options?.map((option: string, idx: number) => (
+                      <Button
+                        key={idx}
+                        variant="secondary"
+                        size="sm"
+                        className="rounded-full text-xs bg-primary/5 hover:bg-primary/10 border-primary/20"
+                        onClick={() => onOptionClick?.(option)}
+                      >
+                        {option}
+                      </Button>
+                    ))}
+                  </div>
+                );
+              case "search_results":
+                return (
+                  <DesignInspirationResults
+                    key={`${message.id}-${i}`}
+                    results={part.results}
+                    query={part.query}
+                    message={message}
+                  />
                 );
               default:
                 return null;

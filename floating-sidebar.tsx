@@ -73,6 +73,7 @@ export function FloatingSidebar({
     hasInstruction: false,
     duration: "",
     size: "",
+    alreadyInBrain: false,
   });
   const [selectedIntegrationType, setSelectedIntegrationType] = useState<
     string | null
@@ -662,6 +663,7 @@ export function FloatingSidebar({
           instruction: selectedItem.prompt || selectedItem.instruction || finalData.instruction,
           duration: selectedItem.duration || finalData.duration,
           size: selectedItem.size || finalData.size,
+          alreadyInBrain: true,
         };
         console.log("🎯 [Sidebar] Using merged selectedItem data:", finalData);
       } else {
@@ -689,6 +691,7 @@ export function FloatingSidebar({
       hasInstruction: false,
       duration: "",
       size: "",
+      alreadyInBrain: false,
     });
     setSelectedIntegrationType(null);
     setShowModal(false);

@@ -23,10 +23,13 @@ export enum MessageRole {
 }
 
 export interface IMessagePart {
-  type: "text" | "media";
+  type: "text" | "media" | "options" | "search_results";
   text?: string;
   url?: string;
   mediaType?: MediaType;
+  options?: string[];
+  results?: any[];
+  query?: string;
 }
 
 export interface IFeedback {
@@ -106,6 +109,7 @@ export interface IDesignProject {
     width: string;
     height: string;
   };
+  metadata?: Record<string, any>;
   collaborators: ICollaborator[];
   messages: IMessage[];
   analytics: IProjectAnalytics;
@@ -132,7 +136,8 @@ export interface IProjectDesignContext {
     selectedFiles?: string[],
     designTypeId?: string,
     orientation?: string | null,
-    customSize?: { width: string; height: string } | null
+    customSize?: { width: string; height: string } | null,
+    metadata?: Record<string, any>
   ) => Promise<{ type: boolean; message: string; id?: string }>;
   fetchProject: (projectId: string) => Promise<{
     success: boolean;
@@ -163,7 +168,8 @@ export interface IProjectDesignContext {
     messageContent: string,
     files: File[] | null,
     projectId: string,
-    selectedFiles?: string[]
+    selectedFiles?: string[],
+    metadata?: Record<string, any>
   ) => Promise<void>;
 
   isLiveMode: boolean;
@@ -238,4 +244,32 @@ export interface IProjectDesignContext {
   setMessages: any;
   error: string | null;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
+
+  focusedGenerationId: string | null;
+  setFocusedGenerationId: (id: string | null) => void;
+
+  selectedColorScales: Array<{
+    base: string;
+    shades: { [key: number]: string };
+  }>;
+  setSelectedColorScales: (
+    scales: Array<{ base: string; shades: { [key: number]: string } }>
+  ) => void;
+
+  activeGenerationId: string | null;
+  setActiveGenerationId: (id: string | null) => void;
+
+  inputMode: "text" | "color" | "file";
+  setInputMode: (mode: "text" | "color" | "file") => void;
+
+  generationMode: "auto" | "custom";
+  setGenerationMode: (mode: "auto" | "custom") => void;
+
+  primaryFont: string | null;
+  setPrimaryFont: (font: string | null) => void;
+
+  liveNodes: Array<{ id: string; filePath: string; name: string; prompt: string }>;
+  addLiveNode: (node: { id: string; filePath: string; name: string; prompt: string }) => void;
+  aiStatus: string | null;
+  setAiStatus: (status: string | null) => void;
 }

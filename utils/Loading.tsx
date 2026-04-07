@@ -5,8 +5,8 @@ import React from "react";
 
 const Loading = () => {
   return (
-    <div className="text-center flex flex-row items-center bg-white dark:bg-black">
-      <>
+    <div className="text-center flex flex-col gap-2 items-center">
+      {/* <>
         <div className="page">
           <span className="loading" />
         </div>
@@ -77,13 +77,35 @@ const Loading = () => {
             }
           }
         `}</style>
-      </>
+      </> */}
 
+      <div className="loader mb-4 size-10">
+        <div className="box red delay1"></div>
+        <div className="box"></div>
+      </div>
+      {/* 
       <span className="flex-none text-2xl lg:text-4xl animate-pulse font-semibold text-gray-300 dark:text-gray-200">
         Gennit
-      </span>
+      </span> */}
     </div>
   );
 };
 
+export function LoadingFileLoader() {
+  return (
+    // <div className="loader-con">
+    //   {Array.from({ length: 6 }).map((_, i) => (
+    //     <div
+    //       key={i}
+    //       className="pfile"
+    //       style={{ "--i": i } as React.CSSProperties}
+    //     />
+    //   ))}
+    // </div>
+    <div className="loader mb-4">
+      <div className="box red delay1"></div>
+      <div className="box"></div>
+    </div>
+  );
+}
 export default Loading;

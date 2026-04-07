@@ -119,7 +119,7 @@ export function PremiumInput({
           <label className="text-sm font-medium">Prompt</label>
         </div>
         <div className="flex items-center justify-between px-4 h-fit">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             {isGenerating && (
               <ShinyText
                 text="Thinking..."
@@ -128,7 +128,7 @@ export function PremiumInput({
                 className="text-xs font-medium"
               />
             )}
-          </div>
+          </div> */}
           {!isGenerating && (
             <div className="flex items-center gap-1 justify-between w-full">
               <div className="text-muted-foreground dark:text-zinc-400 flex items-center">

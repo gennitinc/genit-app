@@ -22,17 +22,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import ShinyText from "../ui/shiny-text";
 
-const models = [
-  {
-    name: "GPT 4o",
-    value: "openai/gpt-4o",
-  },
-  {
-    name: "Deepseek R1",
-    value: "deepseek/deepseek-r1",
-  },
-];
-
 interface ChatInterfaceProps {
   children?: React.ReactNode;
   placeholder?: string;
@@ -76,7 +65,6 @@ export function ChatInput({
   } = useProjectDesign();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const chatContentRef = useRef<HTMLDivElement>(null);
   const inputSectionRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useUserContext();
@@ -96,13 +84,8 @@ export function ChatInput({
     return null;
   }, []);
 
-  // Track if user has manually scrolled up
-  const [userScrolledUp, setUserScrolledUp] = useState(false);
-  const [isNearBottom, setIsNearBottom] = useState(true);
-  const [hasInitiallyScrolled, setHasInitiallyScrolled] = useState(false);
   const [initialInputValue, setInitialInputValue] = useState("");
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [selectedModel, setSelectedModel] = useState(models[0].value);
 
   const { isListening, startListening, stopListening, isSupported } =
     useSpeechToText({
@@ -131,92 +114,11 @@ export function ChatInput({
     }
   }, []);
 
-  // Enhanced scrollToBottom with force option for initial render
-  const scrollToBottom = useCallback((force = false) => {
-    if (chatContentRef.current) {
-      chatContentRef.current.scrollTo({
-        top: chatContentRef.current.scrollHeight,
-        behavior: force ? "auto" : "smooth",
-      });
-    }
-  }, []);
-
-  // Function to check scroll position and update showScrollButton
-  const checkScrollPosition = useCallback(() => {
-    if (chatContentRef.current) {
-      const { scrollHeight, clientHeight, scrollTop } = chatContentRef.current;
-      const threshold = 150;
-      const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-      const isAtBottom = distanceFromBottom <= 5;
-      const isNearBottomCheck = distanceFromBottom <= threshold;
-      const isScrollable = scrollHeight > clientHeight;
-
-      setIsNearBottom(isNearBottomCheck);
-      setUserScrolledUp(!isNearBottomCheck);
-      setShowScrollButton(isScrollable && distanceFromBottom > 50);
-    }
-  }, [setShowScrollButton]);
-
   // Effect to resize textarea on inputValue change
   useEffect(() => {
     autoResize();
   }, [inputValue, autoResize]);
 
-  // Enhanced effect for initial auto-scroll on first render
-  useEffect(() => {
-    if (!hasInitiallyScrolled && chatContentRef.current) {
-      const scrollAttempts = [0, 50, 100, 200, 500];
-      scrollAttempts.forEach((delay) => {
-        setTimeout(() => {
-          if (chatContentRef.current) {
-            scrollToBottom(true);
-            checkScrollPosition();
-          }
-        }, delay);
-      });
-
-      const resizeObserver = new ResizeObserver(() => {
-        if (chatContentRef.current && !hasInitiallyScrolled) {
-          scrollToBottom(true);
-          checkScrollPosition();
-        }
-      });
-
-      if (chatContentRef.current) {
-        resizeObserver.observe(chatContentRef.current);
-      }
-
-      const markScrolledTimer = setTimeout(() => {
-        setHasInitiallyScrolled(true);
-      }, 1000);
-
-      return () => {
-        resizeObserver.disconnect();
-        clearTimeout(markScrolledTimer);
-      };
-    }
-  }, [hasInitiallyScrolled, scrollToBottom, checkScrollPosition]);
-
-  // Effect to scroll to bottom when messages or streaming content changes
-  useEffect(() => {
-    if (hasInitiallyScrolled && (isNearBottom || isGenerating)) {
-      scrollToBottom();
-    }
-    const timer = setTimeout(checkScrollPosition, 150);
-    return () => clearTimeout(timer);
-  }, [
-    project?.messages,
-    isGenerating,
-    hasInitiallyScrolled,
-    isNearBottom,
-    scrollToBottom,
-    checkScrollPosition,
-  ]);
-
-  // Add scroll event listener to chat content area
-  // useEffect(() => {
-  //   const chatContentElement = chatContentRef.current;
-  //   if (chatContentElement) {
   //     let scrollTimeout: NodeJS.Timeout;
   //     const handleScroll = () => {
   //       clearTimeout(scrollTimeout);
@@ -277,9 +179,7 @@ export function ChatInput({
 
       // Force scroll to bottom when sending a new message
       setTimeout(() => {
-        scrollToBottom();
-        setUserScrolledUp(false);
-        setIsNearBottom(true);
+        window.dispatchEvent(new Event("scroll-chat-to-bottom"));
       }, 100);
     } catch (error) {
       console.error("Failed to send message:", error);
@@ -310,12 +210,8 @@ export function ChatInput({
   return (
     <div className={`h-full flex flex-col bg-transparent ${className}`}>
       {/* Chat Content Area with hover-only scrollbar */}
-      <div
-        ref={chatContentRef}
-        className="flex-1 overflow-y-auto custom-scrollbar"
-      >
-        {children}
-      </div>
+      {/* Chat Content Area with hover-only scrollbar */}
+      <div className="flex-1 custom-scrollbar">{children}</div>
 
       {/* Bottom Input Area - with drag and drop handlers */}
       <div
@@ -334,10 +230,7 @@ export function ChatInput({
         >
           <button
             onClick={() => {
-              // Dispatch a global event so the conversation container scrolls
               window.dispatchEvent(new Event("scroll-chat-to-bottom"));
-              setUserScrolledUp(false);
-              setIsNearBottom(true);
             }}
             className="bg-background/80 backdrop-blur-sm border border-border rounded-full p-1.5 transition-all duration-200 hover:scale-105 active:scale-95 shadow-md"
             style={{
@@ -387,16 +280,6 @@ export function ChatInput({
         <div className="w-full max-w-4xl mx-auto">
           {/* Thinking / Credits Status */}
           <div className="flex items-center justify-between mb-2 px-4 h-6">
-            <div className="flex items-center gap-2">
-              {isGenerating && (
-                <ShinyText
-                  text="Thinking..."
-                  disabled={false}
-                  speed={3}
-                  className="text-xs font-medium"
-                />
-              )}
-            </div>
             {!isGenerating && (
               <div className="flex items-center gap-1 justify-between w-full">
                 <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
