@@ -69,6 +69,7 @@ import { DocumentNode } from "@/nodes/document-node";
 import { TextNode } from "@/nodes/text-node";
 import { FloatingSidebar } from "@/floating-sidebar";
 import { PromptNode } from "@/nodes/prompt-node";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 // Import edge types
 const nodeTypes: NodeTypes = {
@@ -992,7 +993,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-background">
-        <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+        <LoadingFileLoader />
         <p className="text-muted-foreground animate-pulse">
           Loading your workflow...
         </p>
