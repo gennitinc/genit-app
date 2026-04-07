@@ -233,9 +233,7 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
       whileTap={{ scale: 0.95 }}
       className={cn(
         "flex flex-col items-center group relative",
-        item.id === "all-agents"
-          ? "sticky left-0 z-30 pr-4 md:pr-0"
-          : "z-10"
+        item.id === "all-agents" ? "sticky left-0 z-30 pr-4 md:pr-0" : "z-10",
       )}
     >
       {/* Background Glow for All Apps when sticky */}
@@ -252,21 +250,26 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
             "relative w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300",
             "border border-white/10 dark:border-white/5 shadow-lg overflow-hidden backdrop-blur-md",
             "group-hover:shadow-xl group-hover:border-white/20 dark:group-hover:border-white/10",
-            item.id === "all-agents" ? "bg-zinc-800/80 dark:bg-zinc-800/60" : "bg-white/5"
+            item.id === "all-agents"
+              ? "bg-zinc-800/80 dark:bg-zinc-800/60"
+              : "bg-white/5",
           )}
-          style={{ 
+          style={{
             backgroundColor: item.id === "all-agents" ? undefined : item.bg,
-            boxShadow: `0 8px 16px -4px ${item.bg === "rgba(96, 99, 102, 0.15)" ? "rgba(0,0,0,0.1)" : item.bg.replace("0.3", "0.2")}`
+            boxShadow: `0 8px 16px -4px ${item.bg === "rgba(96, 99, 102, 0.15)" ? "rgba(0,0,0,0.1)" : item.bg.replace("0.3", "0.2")}`,
           }}
         >
           {/* Internal Glow */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          
+
           {isImage ? (
-            <img 
-              src={Icon as string} 
-              className={cn("w-7 h-7 object-contain transition-transform duration-300 group-hover:scale-110", item.imageClass)} 
-              alt={item.label} 
+            <img
+              src={Icon as string}
+              className={cn(
+                "w-7 h-7 object-contain transition-transform duration-300 group-hover:scale-110",
+                item.imageClass,
+              )}
+              alt={item.label}
             />
           ) : (
             <Icon className="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-300" />
@@ -277,7 +280,11 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
           )}
 
           {/* Border Beam Effect on Hover */}
-          <BorderBeam size={60} duration={4} className="opacity-0 group-hover:opacity-100" />
+          <BorderBeam
+            size={60}
+            duration={4}
+            className="opacity-0 group-hover:opacity-100"
+          />
         </div>
 
         <span className="mt-3 text-[12px] font-medium text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors whitespace-nowrap">
@@ -1595,7 +1602,7 @@ export function IdeaSection() {
 
         <div className="relative w-full max-w-4xl mx-auto mt-8 px-4">
           {/* Scroll Area */}
-          <div className="flex flex-row items-start gap-6 overflow-x-auto pb-6 pt-2 scrollbar-hide pl-0 pr-2 lg:px-2">
+          <div className="flex flex-row items-start gap-6 overflow-x-auto pb-6 pt-2 scrollbar-hide px-2">
             {IDEA_ITEMS.map((item) => (
               <IdeaItem key={item.id} item={item} />
             ))}
