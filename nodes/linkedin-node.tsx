@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { LinkedInEmbed } from "react-social-media-embed";
-import { Linkedin, ExternalLink, Edit3, X, Lock, Unlock } from "lucide-react";
+import { Linkedin, ExternalLink, Edit3, X, Lock, Unlock, Sparkles, Loader2, MessageSquare, ListCheck, Search, Captions } from "lucide-react";
 
 interface LinkedInNodeData {
   instruction?: string;
@@ -24,7 +24,15 @@ interface LinkedInNodeData {
   username?: string;
   postId?: string;
   onRemoveNode?: (nodeId: string) => void;
+  onAnalyze?: () => void;
   nodeId?: string;
+  analyzed?: boolean;
+  analysis?: {
+    transcription?: string;
+    summary?: string;
+    description?: string;
+    tags?: string[];
+  };
 }
 
 export const LinkedInNode = memo(
@@ -34,7 +42,12 @@ export const LinkedInNode = memo(
       status = "public",
       url = "",
       username = "",
+      analyzed = false,
+      analysis = null,
+      onAnalyze,
     } = data;
+
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     const [editData, setEditData] = useState({
       instruction: instruction || "",
@@ -87,7 +100,36 @@ export const LinkedInNode = memo(
                     LinkedIn
                   </span>
                 </div>
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center space-x-2">
+                  {!analyzed && onAnalyze && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={async () => {
+                        setIsAnalyzing(true);
+                        try {
+                          await onAnalyze();
+                        } finally {
+                          setIsAnalyzing(false);
+                        }
+                      }}
+                      disabled={isAnalyzing}
+                      className="h-8 px-2 text-xs gap-1.5 border-primary/20 hover:border-primary/50 bg-primary/5 hover:bg-primary/10 text-primary transition-all duration-300"
+                    >
+                      {isAnalyzing ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Sparkles className="w-3.5 h-3.5" />
+                      )}
+                      Analyze
+                    </Button>
+                  )}
+                  {analyzed && (
+                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 text-[10px] font-medium">
+                      <ListCheck className="w-3 h-3" />
+                      Analyzed
+                    </div>
+                  )}
                   <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                     <DialogTrigger asChild>
                       <Button variant="ghost" size="sm" className="p-1 h-auto">
@@ -227,6 +269,44 @@ export const LinkedInNode = memo(
                   <p className="text-xs text-muted-foreground mt-1">
                     @{editData.username}
                   </p>
+                )}
+
+                {analyzed && analysis && (
+                  <div className="mt-4 space-y-3 pt-3 border-t border-border/50">
+                    {analysis.summary && (
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
+                          <MessageSquare className="w-3 h-3" />
+                          AI Summary
+                        </div>
+                        <p className="text-xs text-muted-foreground leading-relaxed italic bg-muted/30 p-2 rounded-lg border border-border/30">
+                          "{analysis.summary}"
+                        </p>
+                      </div>
+                    )}
+                    
+                    {analysis.transcription && (
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
+                          <Captions className="w-3 h-3" />
+                          Transcription
+                        </div>
+                        <p className="text-[11px] text-muted-foreground line-clamp-4 leading-relaxed bg-black/5 dark:bg-white/5 p-2 rounded-md font-mono">
+                          {analysis.transcription}
+                        </p>
+                      </div>
+                    )}
+
+                    {analysis.tags && analysis.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {analysis.tags.slice(0, 5).map((tag, i) => (
+                          <span key={i} className="px-1.5 py-0.5 rounded bg-muted text-[9px] text-muted-foreground border border-border/50">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             </CardContent>

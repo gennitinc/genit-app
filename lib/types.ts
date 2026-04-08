@@ -4,6 +4,7 @@ export interface NodeData {
   label: string
   description?: string
   required?: boolean
+  connectedItems?: string[]
 
   // Input node properties
   dataSource?: "manual" | "api" | "database" | "file"

@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { TwitterEmbed } from "react-social-media-embed";
-import { Twitter, ExternalLink, Edit3, X, Lock, Unlock } from "lucide-react";
+import { Twitter, ExternalLink, Edit3, X, Lock, Unlock, Sparkles, Loader2, MessageSquare, ListCheck, Search } from "lucide-react";
 
 interface TwitterNodeData {
   url?: string;
@@ -25,7 +25,15 @@ interface TwitterNodeData {
   username?: string;
   tweetId?: string;
   onRemoveNode?: (nodeId: string) => void;
+  onAnalyze?: () => void;
   nodeId?: string;
+  analyzed?: boolean;
+  analysis?: {
+    transcription?: string;
+    summary?: string;
+    description?: string;
+    tags?: string[];
+  };
 }
 
 export const TwitterNode = memo(
@@ -35,7 +43,12 @@ export const TwitterNode = memo(
       instruction = "Twitter Post",
       status = "public",
       username = "",
+      analyzed = false,
+      analysis = null,
+      onAnalyze,
     } = data;
+
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     const [editData, setEditData] = useState({
       url: url,
@@ -92,7 +105,36 @@ export const TwitterNode = memo(
                     Twitter
                   </span>
                 </div>
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center space-x-2">
+                  {!analyzed && onAnalyze && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={async () => {
+                        setIsAnalyzing(true);
+                        try {
+                          await onAnalyze();
+                        } finally {
+                          setIsAnalyzing(false);
+                        }
+                      }}
+                      disabled={isAnalyzing}
+                      className="h-8 px-2 text-xs gap-1.5 border-primary/20 hover:border-primary/50 bg-primary/5 hover:bg-primary/10 text-primary transition-all duration-300"
+                    >
+                      {isAnalyzing ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Sparkles className="w-3.5 h-3.5" />
+                      )}
+                      Analyze
+                    </Button>
+                  )}
+                  {analyzed && (
+                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 text-[10px] font-medium">
+                      <ListCheck className="w-3 h-3" />
+                      Analyzed
+                    </div>
+                  )}
                   <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                     <DialogTrigger asChild>
                       <Button variant="ghost" size="sm" className="p-1 h-auto">
@@ -209,9 +251,47 @@ export const TwitterNode = memo(
                   </div>
                 </div>
                 {editData.username && (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[10px] text-muted-foreground">
                     @{editData.username}
                   </p>
+                )}
+
+                {data.analyzed && data.analysis && (
+                  <div className="mt-4 space-y-3 pt-3 border-t border-border/50">
+                    {data.analysis.summary && (
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
+                          <MessageSquare className="w-3 h-3" />
+                          AI Summary
+                        </div>
+                        <p className="text-xs text-muted-foreground leading-relaxed italic bg-muted/30 p-2 rounded-lg border border-border/30">
+                          "{data.analysis.summary}"
+                        </p>
+                      </div>
+                    )}
+                    
+                    {(data.analysis.description || data.analysis.transcription) && (
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
+                          <Search className="w-3 h-3" />
+                          Context
+                        </div>
+                        <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                          {data.analysis.description || data.analysis.transcription}
+                        </p>
+                      </div>
+                    )}
+
+                    {data.analysis.tags && data.analysis.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {data.analysis.tags.slice(0, 5).map((tag, i) => (
+                          <span key={i} className="px-1.5 py-0.5 rounded bg-muted text-[9px] text-muted-foreground border border-border/50">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             </CardContent>

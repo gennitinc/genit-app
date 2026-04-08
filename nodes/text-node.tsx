@@ -2,7 +2,7 @@
 
 import { memo, useState, useEffect } from "react";
 import { Handle, Position, type NodeProps } from "reactflow";
-import { FileText, Edit3, Save, X, Lock, Unlock, Copy, CheckCheck } from "lucide-react";
+import { FileText, Edit3, Save, X, Lock, Unlock, Copy, CheckCheck, Sparkles, Loader2, MessageSquare, ListCheck, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,7 +23,13 @@ interface TextNodeData {
   status?: "public" | "private";
   type?: string;
   onRemoveNode?: (nodeId: string) => void;
+  onAnalyze?: () => void;
   nodeId?: string;
+  analyzed?: boolean;
+  analysis?: {
+    summary?: string;
+    tags?: string[];
+  };
 }
 
 export const TextNode = memo(
@@ -33,7 +39,12 @@ export const TextNode = memo(
       content = "",
       status = "public",
       type = "text",
+      analyzed = false,
+      analysis = null,
+      onAnalyze,
     } = data;
+
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     const [editData, setEditData] = useState({
       label: label || "",
@@ -102,18 +113,42 @@ export const TextNode = memo(
                     ? editData.label
                     : "Text Content"}
                 </h3>
-                <div className="flex items-center space-x-1 ml-2">
-                  {editData.status === "private" ? (
-                    <Lock className="w-3 h-3 text-red-500" />
-                  ) : (
-                    <Unlock className="w-3 h-3 text-green-500" />
-                  )}
                   <span className="text-xs text-muted-foreground">
                     {editData.status}
                   </span>
                 </div>
               </div>
-              <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+              <div className="flex items-center space-x-1 ml-auto">
+                {!analyzed && onAnalyze && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => {
+                      setIsAnalyzing(true);
+                      try {
+                        await onAnalyze();
+                      } finally {
+                        setIsAnalyzing(false);
+                      }
+                    }}
+                    disabled={isAnalyzing}
+                    className="h-7 px-2 text-[10px] gap-1 borber-primary/20 bg-primary/5 text-primary"
+                  >
+                    {isAnalyzing ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <Sparkles className="w-3 h-3" />
+                    )}
+                    Analyze
+                  </Button>
+                )}
+                {analyzed && (
+                  <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 text-[9px] font-medium">
+                    <ListCheck className="w-2.5 h-2.5" />
+                    Analyzed
+                  </div>
+                )}
+                <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="p-1 h-auto">
                     <Edit3 className="w-3 h-3 text-muted-foreground" />
@@ -270,6 +305,32 @@ export const TextNode = memo(
                 "No content available. Click edit to add text."
               )}
             </div>
+
+            {analyzed && analysis && (
+              <div className="mt-4 space-y-3 pt-3 border-t border-border/50">
+                {analysis.summary && (
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
+                      <MessageSquare className="w-3 h-3" />
+                      AI Summary
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed italic bg-muted/30 p-2 rounded-lg border border-border/30">
+                      "{analysis.summary}"
+                    </p>
+                  </div>
+                )}
+
+                {analysis.tags && analysis.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {analysis.tags.slice(0, 5).map((tag, i) => (
+                      <span key={i} className="px-1.5 py-0.5 rounded bg-muted text-[9px] text-muted-foreground border border-border/50">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

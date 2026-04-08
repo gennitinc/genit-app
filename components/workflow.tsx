@@ -14,6 +14,7 @@ import {
   History as HistoryIcon,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { io } from "socket.io-client";
@@ -240,17 +241,52 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     (connection: Connection) => {
       console.log("🔗 [GennittWorkflow] Connection:", connection);
       if (connection.source && connection.target) {
+        // Enforce 3-item limit
+        const incomingEdges = edgesRef.current.filter(
+          (e) => e.target === connection.target,
+        );
+        if (incomingEdges.length >= 3) {
+          toast.error("Maximum of 3 inputs reached");
+          return;
+        }
+
         const newEdge: Edge = {
           id: `edge-${Date.now()}`,
           source: connection.source,
           target: connection.target,
           animated: true,
         };
-        setEdges((prevEdges) => [...prevEdges, newEdge]);
-        addToHistory(nodesRef.current, [...edgesRef.current, newEdge]);
+
+        // Update target node's connectedItems array and add to history in one state update
+        setNodes((prevNodes) => {
+          const updatedNodes = prevNodes.map((node) => {
+            if (node.id === connection.target) {
+              const currentItems = node.data.connectedItems || [];
+              if (!currentItems.includes(connection.source!)) {
+                return {
+                  ...node,
+                  data: {
+                    ...node.data,
+                    connectedItems: [...currentItems, connection.source],
+                  },
+                };
+              }
+            }
+            return node;
+          });
+
+          // Sync edges state
+          setEdges((prevEdges) => {
+            const updatedEdges = [...prevEdges, newEdge];
+            addToHistory(updatedNodes, updatedEdges);
+            return updatedEdges;
+          });
+
+          return updatedNodes;
+        });
       }
     },
-    [setEdges, addToHistory],
+    [setEdges, setNodes, addToHistory],
   );
 
   // Node creation function - single source of truth
@@ -325,13 +361,21 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             );
             console.log("✅ [GennittWorkflow] Item saved to database");
             if (res.data.success) {
-              setBrainItems((prev) => [res.data.data, ...prev]);
+              const savedItem = res.data.data;
+              setBrainItems((prev) => [savedItem, ...prev]);
+              // Store DB ID and analysis status in node data
+              data.dbId = savedItem._id;
+              data.analyzed = savedItem.analyzed;
+              data.analysis = savedItem.analysis;
             }
           } catch (error) {
             console.error("Failed to save item to database:", error);
           }
         } else {
           console.log("ℹ️ [GennittWorkflow] Item already exists in brain, skipping save");
+          data.dbId = existingItem._id;
+          data.analyzed = existingItem.analyzed;
+          data.analysis = existingItem.analysis;
         }
       }
 
@@ -615,6 +659,32 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     [setNodes],
   );
 
+  const handleAnalyze = useCallback(async (nodeId: string) => {
+    const node = nodesRef.current.find(n => n.id === nodeId);
+    if (!node) return;
+    
+    const dbId = node.data.dbId;
+    if (!dbId) {
+      toast.error("Item must be saved to the brain before analysis");
+      return;
+    }
+
+    toast.loading("Analyzing content...", { id: "analyze" });
+    try {
+      const res = await apiResponse.post(`/apps/workflow/items/${dbId}/analyze`, {}, { withCredentials: true });
+      if (res.data.success) {
+        toast.success("Analysis complete", { id: "analyze" });
+        updateNodeData(nodeId, { 
+          analyzed: true, 
+          analysis: res.data.data 
+        });
+      }
+    } catch (error: any) {
+      console.error("Analysis failed:", error);
+      toast.error(error.response?.data?.message || "Analysis failed", { id: "analyze" });
+    }
+  }, [updateNodeData]);
+
   const applyAIActions = useCallback(
     async (sourceNodeId: string, actions: any[]): Promise<any[]> => {
       console.log("🤖 [Workflow] Applying AI actions:", actions);
@@ -674,6 +744,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           onRemoveNode: removeNode,
           onAIAction: applyAIActions,
           onDataChange: (newData: any) => updateNodeData(node.id, newData),
+          onAnalyze: () => handleAnalyze(node.id),
           onMaximize: () =>
             reactFlowInstance?.fitView({
               nodes: [{ id: node.id }],
@@ -682,6 +753,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             }),
           nodeId: node.id,
           projectId: (node as any).data?.projectId || projectId || slug,
+          analyzed: (node as any).data?.analyzed || false,
+          analysis: (node as any).data?.analysis || null,
+          dbId: (node as any).data?.dbId || null,
         },
       }));
     },
@@ -689,6 +763,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       removeNode,
       applyAIActions,
       updateNodeData,
+      handleAnalyze,
       reactFlowInstance,
       projectId,
       slug,
@@ -783,27 +858,89 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
   const onNodesDelete = useCallback(
     (deletedNodes: Node[]) => {
-      console.log("🗑️ [Workflow] Nodes deleted:", deletedNodes.map(n => n.id));
-      // useNodesState handles the deletion, but we need to capture the state AFTER deletion
-      // Since setNodes is async, we use the functional update to get the latest state
+      console.log(
+        "🗑️ [Workflow] Nodes deleted:",
+        deletedNodes.map((n) => n.id),
+      );
+      const deletedNodeIds = new Set(deletedNodes.map((n) => n.id));
+
+      // Find edges that are being removed because their source/target nodes were deleted
+      const deletedEdges = edgesRef.current.filter(
+        (e) => deletedNodeIds.has(e.source) || deletedNodeIds.has(e.target),
+      );
+
       setNodes((nds) => {
-        // ReactFlow already updated the state, but we need to push it
-        addToHistory(nds, edgesRef.current);
-        return nds;
+        const updatedNodes = nds.map((node) => {
+          // Find if this node was a target of any deleted edges
+          // But node itself must not be one of the deleted nodes
+          const relevantDeletedEdges = deletedEdges.filter(
+            (e) => e.target === node.id && !deletedNodeIds.has(node.id),
+          );
+
+          if (relevantDeletedEdges.length > 0) {
+            const deletedSourceIds = relevantDeletedEdges.map((e) => e.source);
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                connectedItems: (node.data.connectedItems || []).filter(
+                  (id) => !deletedSourceIds.includes(id),
+                ),
+              },
+            };
+          }
+          return node;
+        });
+
+        // The edges will be updated by ReactFlow, but we need to push to history correctly
+        const remainingEdges = edgesRef.current.filter(
+          (e) => !deletedNodeIds.has(e.source) && !deletedNodeIds.has(e.target),
+        );
+
+        addToHistory(updatedNodes, remainingEdges);
+        return updatedNodes;
       });
     },
-    [setNodes, addToHistory],
+    [setNodes, setEdges, addToHistory],
   );
 
   const onEdgesDelete = useCallback(
     (deletedEdges: Edge[]) => {
-      console.log("✂️ [Workflow] Edges deleted:", deletedEdges.map(e => e.id));
-      setEdges((eds) => {
-        addToHistory(nodesRef.current, eds);
-        return eds;
+      console.log(
+        "✂️ [Workflow] Edges deleted:",
+        deletedEdges.map((e) => e.id),
+      );
+
+      setNodes((prevNodes) => {
+        const updatedNodes = prevNodes.map((node) => {
+          // Find if this node was a target of any deleted edges
+          const relevantDeletedEdges = deletedEdges.filter(
+            (e) => e.target === node.id,
+          );
+          if (relevantDeletedEdges.length > 0) {
+            const deletedSourceIds = relevantDeletedEdges.map((e) => e.source);
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                connectedItems: (node.data.connectedItems || []).filter(
+                  (id) => !deletedSourceIds.includes(id),
+                ),
+              },
+            };
+          }
+          return node;
+        });
+
+        setEdges((eds) => {
+          addToHistory(updatedNodes, eds);
+          return eds;
+        });
+
+        return updatedNodes;
       });
     },
-    [setEdges, addToHistory],
+    [setEdges, setNodes, addToHistory],
   );
 
   // Undo/Redo/Zoom functions

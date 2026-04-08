@@ -2,7 +2,7 @@
 
 import { memo, useState, useEffect } from "react";
 import { Handle, Position, type NodeProps } from "reactflow";
-import { Image, ExternalLink, X, Edit3, Lock, Unlock, Download } from "lucide-react";
+import { Image, ExternalLink, X, Edit3, Lock, Unlock, Download, Sparkles, Loader2, MessageSquare, ListCheck, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,14 @@ interface ImageNodeData {
   size?: string;
   onRemoveNode?: (nodeId: string) => void;
   onDataChange?: (newData: any) => void;
+  onAnalyze?: () => void;
   nodeId?: string;
+  analyzed?: boolean;
+  analysis?: {
+    summary?: string;
+    description?: string;
+    tags?: string[];
+  };
 }
 
 export const ImageNode = memo(
@@ -35,7 +42,12 @@ export const ImageNode = memo(
       url = "",
       type = "image",
       size = "",
+      analyzed = false,
+      analysis = null,
+      onAnalyze,
     } = data;
+
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     const [editData, setEditData] = useState({
       instruction: instruction || "",
@@ -109,18 +121,41 @@ export const ImageNode = memo(
                     ? editData.instruction
                     : "Image"}
                 </h3>
-                <div className="flex items-center space-x-1 ml-2">
-                  {editData.status === "private" ? (
-                    <Lock className="w-3 h-3 text-red-500" />
-                  ) : (
-                    <Unlock className="w-3 h-3 text-green-500" />
-                  )}
                   <span className="text-xs text-muted-foreground">
                     {editData.status}
                   </span>
-                </div>
               </div>
-              <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+              <div className="flex items-center space-x-1 ml-auto">
+                {!analyzed && onAnalyze && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => {
+                      setIsAnalyzing(true);
+                      try {
+                        await onAnalyze();
+                      } finally {
+                        setIsAnalyzing(false);
+                      }
+                    }}
+                    disabled={isAnalyzing}
+                    className="h-7 px-2 text-[10px] gap-1 borber-primary/20 bg-primary/5 text-primary"
+                  >
+                    {isAnalyzing ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <Sparkles className="w-3 h-3" />
+                    )}
+                    Analyze
+                  </Button>
+                )}
+                {analyzed && (
+                  <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 text-[9px] font-medium">
+                    <ListCheck className="w-2.5 h-2.5" />
+                    Analyzed
+                  </div>
+                )}
+                <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="p-1 h-auto">
                     <Edit3 className="w-3 h-3 text-muted-foreground" />
@@ -234,6 +269,7 @@ export const ImageNode = memo(
                 </DialogContent>
               </Dialog>
             </div>
+          </div>
 
             {size && (
               <div className="text-xs text-muted-foreground mb-2">
@@ -242,38 +278,65 @@ export const ImageNode = memo(
             )}
 
             {(editData.url || url) && (
-              <div className="mb-3 overflow-hidden rounded-md border border-border bg-muted/30">
-                <img
-                  src={editData.url || url}
-                  alt={editData.instruction || instruction}
-                  className="w-full h-auto max-h-[300px] object-contain"
-                  loading="lazy"
-                  onError={(e) => {
-                    console.error("Image failed to load:", editData.url || url);
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-              </div>
-            )}
-
-            {editData.url && (
-              <div className="flex items-center justify-end gap-2">
-                <div
-                  className="text-xs h-7 bg-transparent border border-border rounded-md flex items-center justify-center cursor-pointer hover:bg-muted px-2"
-                  onClick={handleDownload}
-                  title="Download image"
-                >
-                  <Download className="w-3 h-3 mr-1" />
-                  Download
+              <div className="space-y-2 mb-3">
+                <div className="overflow-hidden rounded-md border border-border bg-muted/30">
+                  <img
+                    src={editData.url || url}
+                    alt={editData.instruction || instruction}
+                    className="w-full h-auto max-h-[300px] object-contain"
+                    loading="lazy"
+                    onError={(e) => {
+                      console.error("Image failed to load:", editData.url || url);
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
                 </div>
                 <div
                   className="text-xs h-7 bg-transparent border border-border rounded-md flex items-center justify-center cursor-pointer hover:bg-muted px-2"
-                  onClick={() => window.open(editData.url, "_blank")}
+                  onClick={() => window.open(editData.url || url, "_blank")}
                   title="Open image in new tab"
                 >
                   <ExternalLink className="w-3 h-3 mr-1" />
                   Open
                 </div>
+              </div>
+            )}
+
+            {analyzed && analysis && (
+              <div className="mt-4 space-y-3 pt-3 border-t border-border/50">
+                {analysis.summary && (
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
+                      <MessageSquare className="w-3 h-3" />
+                      AI Summary
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed italic bg-muted/30 p-2 rounded-lg border border-border/30">
+                      "{analysis.summary}"
+                    </p>
+                  </div>
+                )}
+                
+                {analysis.description && (
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
+                      <Search className="w-3 h-3" />
+                      Visual Description
+                    </div>
+                    <p className="text-xs text-muted-foreground line-clamp-4 leading-relaxed bg-black/5 dark:bg-white/5 p-2 rounded-md">
+                      {analysis.description}
+                    </p>
+                  </div>
+                )}
+
+                {analysis.tags && analysis.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {analysis.tags.slice(0, 5).map((tag, i) => (
+                      <span key={i} className="px-1.5 py-0.5 rounded bg-muted text-[9px] text-muted-foreground border border-border/50">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
