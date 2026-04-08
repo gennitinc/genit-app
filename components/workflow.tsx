@@ -884,7 +884,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               data: {
                 ...node.data,
                 connectedItems: (node.data.connectedItems || []).filter(
-                  (id) => !deletedSourceIds.includes(id),
+                  (id: any) => !deletedSourceIds.includes(id),
                 ),
               },
             };
@@ -924,7 +924,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               data: {
                 ...node.data,
                 connectedItems: (node.data.connectedItems || []).filter(
-                  (id) => !deletedSourceIds.includes(id),
+                  (id: any) => !deletedSourceIds.includes(id),
                 ),
               },
             };
