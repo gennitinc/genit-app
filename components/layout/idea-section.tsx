@@ -118,6 +118,9 @@ interface IdeaItemData {
   href: string;
   icon: any;
   bg: string;
+  lightBg: string;
+  darkBg: string;
+  iconColor: string;
   hoverScale: string;
   isImage?: boolean;
   hasDot?: boolean;
@@ -142,17 +145,21 @@ const IDEA_ITEMS: IdeaItemData[] = [
     label: "All Apps",
     href: "/apps",
     icon: Grid2X2Plus,
-    bg: "rgba(148, 163, 184, 0.15)", // Slate
+    bg: "rgba(30, 30, 30, 30)",
+    lightBg: "rgba(255, 255, 255, 0.7)",
+    darkBg: "rgba(30, 30, 30, 30)",
+    iconColor: "text-black dark:text-white",
     hoverScale: "hover:scale-[1.2]",
-    isImage: false,
-    hasDot: false,
   },
   {
     id: "design-chat",
     label: "Design Chat",
     href: "/chat",
     icon: WandSparklesIcon,
-    bg: "rgba(245, 158, 11, 0.25)", // Amber
+    bg: "rgba(255, 183, 77, 0.45)",
+    lightBg: "rgba(255, 183, 77, 0.35)",
+    darkBg: "rgba(255, 183, 77, 0.55)",
+    iconColor: "text-black dark:text-white",
     hoverScale: "md:hover:scale-[1.2]",
   },
   {
@@ -160,7 +167,10 @@ const IDEA_ITEMS: IdeaItemData[] = [
     label: "AI Workflow",
     href: "/apps/workflow",
     icon: Workflow,
-    bg: "rgba(16, 185, 129, 0.25)", // Emerald
+    bg: "rgba(34, 197, 94, 0.45)",
+    lightBg: "rgba(34, 197, 94, 0.35)",
+    darkBg: "rgba(34, 197, 94, 0.55)",
+    iconColor: "text-black dark:text-white",
     hoverScale: "md:hover:scale-[1.2]",
   },
   {
@@ -168,7 +178,10 @@ const IDEA_ITEMS: IdeaItemData[] = [
     label: "AI Video",
     href: "/apps/video-generation",
     icon: Video,
-    bg: "rgba(249, 115, 22, 0.25)", // Orange
+    bg: "rgba(255, 99, 132, 0.45)",
+    lightBg: "rgba(255, 99, 132, 0.35)",
+    darkBg: "rgba(255, 99, 132, 0.55)",
+    iconColor: "text-black dark:text-white",
     hoverScale: "md:hover:scale-[1.2]",
   },
   {
@@ -176,7 +189,10 @@ const IDEA_ITEMS: IdeaItemData[] = [
     label: "AI Image",
     href: "/apps/image-generation",
     icon: Image,
-    bg: "rgba(99, 102, 241, 0.25)", // Indigo
+    bg: "rgba(99, 102, 241, 0.5)",
+    lightBg: "rgba(99, 102, 241, 0.4)",
+    darkBg: "rgba(99, 102, 241, 0.6)",
+    iconColor: "text-black dark:text-white",
     hoverScale: "md:hover:scale-[1.2]",
   },
   {
@@ -184,7 +200,10 @@ const IDEA_ITEMS: IdeaItemData[] = [
     label: "AI Character",
     href: "/apps/character",
     icon: User,
-    bg: "rgba(139, 92, 246, 0.25)", // Violet
+    bg: "rgba(168, 85, 247, 0.5)",
+    lightBg: "rgba(168, 85, 247, 0.4)",
+    darkBg: "rgba(168, 85, 247, 0.6)",
+    iconColor: "text-black dark:text-white",
     hoverScale: "md:hover:scale-[1.2]",
   },
   {
@@ -192,7 +211,10 @@ const IDEA_ITEMS: IdeaItemData[] = [
     label: "AI Enhancer",
     href: "/apps/skin-enhancer",
     icon: Paintbrush,
-    bg: "rgba(59, 130, 246, 0.25)", // Blue
+    bg: "rgba(59, 130, 246, 0.5)",
+    lightBg: "rgba(59, 130, 246, 0.4)",
+    darkBg: "rgba(59, 130, 246, 0.6)",
+    iconColor: "text-black dark:text-white",
     hoverScale: "md:hover:scale-[1.2]",
   },
   {
@@ -200,7 +222,10 @@ const IDEA_ITEMS: IdeaItemData[] = [
     label: "Angle Reshape",
     href: "/apps/angles-reshape",
     icon: Camera,
-    bg: "rgba(245, 158, 11, 0.2)", // Amber-ish
+    bg: "rgba(255, 204, 0, 0.5)",
+    lightBg: "rgba(255, 204, 0, 0.4)",
+    darkBg: "rgba(255, 204, 0, 0.6)",
+    iconColor: "text-black dark:text-white",
     hoverScale: "md:hover:scale-[1.2]",
   },
   {
@@ -208,7 +233,10 @@ const IDEA_ITEMS: IdeaItemData[] = [
     label: "AI Animation",
     href: "/apps/logo-animation2",
     icon: Play,
-    bg: "rgba(37, 99, 235, 0.25)", // Strong Blue
+    bg: "rgba(0, 122, 255, 0.5)",
+    lightBg: "rgba(0, 122, 255, 0.4)",
+    darkBg: "rgba(0, 122, 255, 0.6)",
+    iconColor: "text-black dark:text-white",
     hoverScale: "md:hover:scale-[1.2]",
   },
   {
@@ -216,10 +244,11 @@ const IDEA_ITEMS: IdeaItemData[] = [
     label: "Text to Speech",
     href: "/apps/text-to-speech",
     icon: Volume2,
-    bg: "rgba(20, 184, 166, 0.25)", // Teal
+    bg: "rgba(20, 184, 166, 0.5)",
+    lightBg: "rgba(20, 184, 166, 0.4)",
+    darkBg: "rgba(20, 184, 166, 0.6)",
+    iconColor: "text-black dark:text-white",
     hoverScale: "md:hover:scale-[1.2]",
-    isImage: false,
-    hasDot: false,
   },
 ];
 
@@ -248,35 +277,45 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
         <div
           className={cn(
             "relative w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300",
-            "border border-white/10 dark:border-white/5 shadow-lg overflow-hidden backdrop-blur-md",
-            "group-hover:shadow-xl group-hover:border-white/20 dark:group-hover:border-white/10",
-            item.id === "all-agents"
-              ? "bg-zinc-800/80 dark:bg-zinc-800/60"
-              : "bg-white/5",
+            "shadow-md overflow-hidden",
+            "group-hover:shadow-lg",
           )}
           style={{
-            backgroundColor: item.id === "all-agents" ? undefined : item.bg,
-            boxShadow: `0 8px 16px -4px ${item.bg === "rgba(96, 99, 102, 0.15)" ? "rgba(0,0,0,0.1)" : item.bg.replace("0.3", "0.2")}`,
+            backgroundColor: item.lightBg,
           }}
         >
-          {/* Internal Glow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          {/* Dark-mode override via a pseudo-layer — swap background inline */}
+          <div
+            className="absolute inset-0 opacity-0 dark:opacity-100 transition-opacity duration-300"
+            style={{ backgroundColor: item.darkBg }}
+          />
+
+          {/* Subtle inner highlight */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-60 dark:opacity-30 pointer-events-none" />
+
+          {/* Border: visible in light, subtle in dark */}
+          <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/[0.07] dark:ring-white/[0.06]" />
 
           {isImage ? (
             <img
               src={Icon as string}
               className={cn(
-                "w-7 h-7 object-contain transition-transform duration-300 group-hover:scale-110",
+                "relative z-10 w-7 h-7 object-contain transition-transform duration-300 group-hover:scale-110",
                 item.imageClass,
               )}
               alt={item.label}
             />
           ) : (
-            <Icon className="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-300" />
+            <Icon
+              className={cn(
+                "relative z-10 w-6 h-6 transition-transform duration-300 group-hover:scale-110",
+                item.iconColor,
+              )}
+            />
           )}
 
           {item.hasDot && (
-            <div className="absolute top-2 right-2 w-2 h-2 bg-[#0F7FFF] rounded-full shadow-[0_0_8px_#0F7FFF]" />
+            <div className="absolute top-2 right-2 w-2 h-2 bg-[#0F7FFF] rounded-full shadow-[0_0_8px_#0F7FFF] z-10" />
           )}
 
           {/* Border Beam Effect on Hover */}
@@ -1600,9 +1639,9 @@ export function IdeaSection() {
           </motion.div>
         </div>
 
-        <div className="relative w-full max-w-4xl mx-auto mt-8 px-4">
+        <div className="relative w-full max-w-4xl mx-auto mb-8 px-4">
           {/* Scroll Area */}
-          <div className="flex flex-row items-start gap-6 overflow-x-auto pb-6 pt-2 scrollbar-hide px-2">
+          <div className="flex flex-row items-start gap-2 lg:gap-6 overflow-x-auto pb-6 pt-2 scrollbar-hide px-2">
             {IDEA_ITEMS.map((item) => (
               <IdeaItem key={item.id} item={item} />
             ))}

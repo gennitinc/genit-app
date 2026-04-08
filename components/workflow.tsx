@@ -884,7 +884,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               data: {
                 ...node.data,
                 connectedItems: (node.data.connectedItems || []).filter(
-                  (id: any) => !deletedSourceIds.includes(id),
+                  (id: string) => !deletedSourceIds.includes(id),
                 ),
               },
             };
@@ -900,8 +900,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         addToHistory(updatedNodes, remainingEdges);
         return updatedNodes;
       });
+      
     },
-    [setNodes, setEdges, addToHistory],
+    [setNodes, addToHistory],
   );
 
   const onEdgesDelete = useCallback(
@@ -1224,11 +1225,30 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               onNodeDrag={onNodeDrag}
               onNodeDragStop={onNodeDragStop}
               onEdgeClick={(event, edge) => {
-                // Enable edge disconnection by clicking
-                setEdges((eds) => {
-                  const newEdges = eds.filter((e) => e.id !== edge.id);
-                  addToHistory(nodesRef.current, newEdges);
-                  return newEdges;
+                // Enable edge disconnection by clicking — also sync connectedItems
+                setNodes((prevNodes) => {
+                  const updatedNodes = prevNodes.map((node) => {
+                    if (node.id === edge.target) {
+                      return {
+                        ...node,
+                        data: {
+                          ...node.data,
+                          connectedItems: (node.data.connectedItems || []).filter(
+                            (id: string) => id !== edge.source,
+                          ),
+                        },
+                      };
+                    }
+                    return node;
+                  });
+
+                  setEdges((eds) => {
+                    const newEdges = eds.filter((e) => e.id !== edge.id);
+                    addToHistory(updatedNodes, newEdges);
+                    return newEdges;
+                  });
+
+                  return updatedNodes;
                 });
               }}
               onInit={setReactFlowInstance}
