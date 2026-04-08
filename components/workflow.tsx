@@ -894,7 +894,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
         // The edges will be updated by ReactFlow, but we need to push to history correctly
         const remainingEdges = edgesRef.current.filter(
-          (e) => !deletedNodeIds.has(e.source) && !deletedNodeIds.has(e.target),
+          (e: any) => !deletedNodeIds.has(e.source) && !deletedNodeIds.has(e.target),
         );
 
         addToHistory(updatedNodes, remainingEdges);
