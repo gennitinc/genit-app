@@ -19,7 +19,6 @@ import {
   IProjectDesignContext,
   IDesignProject,
   ProjectStatus,
-  MessageRole,
 } from "@/types/ProjectTypes";
 
 const ProjectDesignContext = createContext<IProjectDesignContext | undefined>(
@@ -106,62 +105,69 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       return [];
     }
 
-    const transformed = messages.map((msg, index) => {
-      try {
-        if (!msg) {
-          console.warn(`[DesignProject] msg at index ${index} is null/undefined`);
-          return null;
-        }
-
-        // Normalize roles and types
-        const isUser = msg.role === "user" || msg.type === "user" || msg.role === MessageRole.USER;
-        
-        // Comprehensive parts normalization
-        let parts = [];
-        if (msg.parts && Array.isArray(msg.parts) && msg.parts.length > 0) {
-          parts = msg.parts.map((part: any) => ({
-            ...part,
-            type: part.type || "text",
-          }));
-        } else if (msg.text || msg.analysis) {
-          // Fallback for older message formats or parts-less responses
-          if (isUser) {
-            parts = [{ type: "text", text: msg.text || "" }];
-          } else {
-            parts = [
-              msg.analysis ? { type: "reasoning", text: msg.analysis } : null,
-              msg.text ? { type: "text", text: msg.text } : null
-            ].filter(Boolean) as any[];
-          }
-        }
-
-        const transformedMsg = {
-          ...msg,
-          id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
-          role: isUser ? "user" : "assistant",
-          type: isUser ? "user" : "ai",
-          parts: parts.length > 0 ? parts : [{ type: "text", text: "" }], // Ensure parts is never empty
-          attachedFiles: msg.attachedFiles || msg.fileAttachments || [],
-          generationGroups: msg.generationGroups || [],
-          versionId: msg.versionId || msg.id || msg._id,
-          createdAt: msg.createdAt || new Date().toISOString(),
-          feedback: msg.feedback || null,
-          metadata: msg.metadata || {},
-        };
-
-        return transformedMsg;
-      } catch (err) {
-        console.error(`[DesignProject] Failed to transform message at index ${index}:`, err);
+    return messages.map((msg, index) => {
+      if (!msg) {
+        console.warn(`[DesignProject] msg at index ${index} is null/undefined`);
         return null;
       }
+
+      if (msg.parts && Array.isArray(msg.parts)) {
+        return {
+          ...msg,
+          id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
+          // Normalize role and type
+          role: (msg.type === "user" ? "user" : "assistant") as
+            | "user"
+            | "assistant",
+          type: msg.type === "user" ? "user" : "ai",
+          parts: msg.parts,
+          ...(msg.type === "user" &&
+            msg.fileAttachments && {
+              attachedFiles: msg.fileAttachments.map((file: any) => ({
+                id: file.id || `file-${Date.now()}`,
+                name: file.name || "Untitled",
+                type: file.type || "unknown",
+                filePath: file.url || file.filePath || "",
+                status: "uploaded" as const,
+              })),
+            }),
+        };
+      }
+
+      // Fallback for older message format or missing parts
+      console.log(`[DesignProject] Message at index ${index} missing parts, using fallback transformation`, msg);
+      return {
+        ...msg,
+        id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
+        // Normalize role and type
+        role: (msg.type === "user" ? "user" : "assistant") as
+          | "user"
+          | "assistant",
+        type: msg.type === "user" ? "user" : "ai",
+        parts:
+          msg.type === "user"
+            ? [
+                {
+                  type: "text" as const,
+                  text: msg.text || "",
+                },
+              ]
+            : [
+                { type: "reasoning" as const, text: msg.analysis || "" },
+                { type: "text" as const, text: msg.text || "" },
+              ],
+        ...(msg.type === "user" &&
+          msg.fileAttachments && {
+            attachedFiles: msg.fileAttachments.map((file: any) => ({
+              id: file.id || `file-${Date.now()}`,
+              name: file.name || "Untitled",
+              type: file.type || "unknown",
+              filePath: file.url || file.filePath || "",
+              status: "uploaded" as const,
+            })),
+          }),
+      };
     }).filter(Boolean);
-
-    console.log(`[DesignProject] transformMessages complete. Input: ${messages.length}, Output: ${transformed.length}`);
-    if (messages.length > 0 && transformed.length === 0) {
-      console.warn("[DesignProject] WARNING: Input messages existed but all were filtered out during transformation.");
-    }
-
-    return transformed;
   }, []);
 
   const dataURLtoFile = (dataUrl: string, filename: string) => {
@@ -179,11 +185,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Update project ID ref when project changes
   useEffect(() => {
-    const newProjectId = project?._id || null;
+    const newProjectIdStr = project?._id ? String(project._id) : null;
     
     // If project has changed, reset project-specific states to ensure isolation
-    if (newProjectId !== projectIdRef.current) {
-      console.log(`🔄 Project switching detected: ${projectIdRef.current} -> ${newProjectId}. Resetting state...`);
+    if (newProjectIdStr !== projectIdRef.current) {
+      console.log(`🔄 [DesignProject] Project switching detected: ${projectIdRef.current} -> ${newProjectIdStr}. Resetting state...`);
       setMessages([]);
       setLiveNodes([]);
       setAiStatus(null);
@@ -195,9 +201,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       
       // Update the processed draft ref so new project can process its own draft
       hasProcessedDraftRef.current = false;
+      
+      // Update the refractory ref immediately to signal we've processed this switch
+      projectIdRef.current = newProjectIdStr;
     }
-    
-    projectIdRef.current = newProjectId;
   }, [project?._id]);
 
   // Update messages ref when messages change
@@ -640,6 +647,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           // If switching to a different project, reset UI message state first
           if (lastFetchedProjectIdRef.current !== currentIdStr) {
             console.log(`[DesignProject] Project ID mismatch. Resetting messages for new project: ${currentIdStr}`);
+            // Update the ref immediately to prevent the isolation useEffect from wiping out these messages
+            projectIdRef.current = currentIdStr;
             lastFetchedProjectIdRef.current = currentIdStr;
             setMessages([]);
             setStreamingContent("");
