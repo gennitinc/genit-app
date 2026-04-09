@@ -14,6 +14,12 @@ import { GraphicsCanvas } from "./graphics-canvas";
 export const PreviewPanel = () => {
   const { project, isLoadingProject } = useProjectDesign();
 
+  React.useEffect(() => {
+    if (project) {
+      console.log("[PreviewPanel] Project Category used for branch choice:", project.category);
+    }
+  }, [project]);
+
   if (isLoadingProject) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4 bg-muted/10">
