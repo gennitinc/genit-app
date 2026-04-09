@@ -209,9 +209,10 @@ export function ChatInput({
 
   return (
     <div className={`h-full flex flex-col bg-transparent ${className}`}>
-      {/* Chat Content Area with hover-only scrollbar */}
-      {/* Chat Content Area with hover-only scrollbar */}
-      <div className="flex-1 custom-scrollbar">{children}</div>
+      {/* Chat Content Area */}
+      <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
+        {children}
+      </div>
 
       {/* Bottom Input Area - with drag and drop handlers */}
       <div

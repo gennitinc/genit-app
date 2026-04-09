@@ -22,6 +22,7 @@ import { useSidebar } from "../ui/sidebar";
 import { cn } from "@/lib/utils";
 import UserPopOver from "../user/userPopOver";
 import Link from "next/link";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface TopNavWithAuroraProps {
   scrollContainerRef?: RefObject<HTMLDivElement>;
@@ -94,43 +95,46 @@ export default function TopNavWithAurora({
     setMounted(true);
   }, []);
 
+  const isMobile = useIsMobile();
+
   const params = useParams();
   const isChatIdPage = !!params.id && pathName.startsWith("/chat");
 
   return (
-   
-      <header
-        className={cn(
-          "sticky top-0 z-30 transition-all duration-300 bg-transparent",
-          pathName == "/chat" ? "backdrop-blur-sm" : "backdrop-blur-md",
-          "h-fit shrink-0 w-full"
-        )}
-      >
-        <div className="flex px-4 py-1.5 items-center justify-between w-full">
-          <div className="flex z-20 items-center flex-1 gap-4">
-            {!isChatIdPage && <SidebarTrigger className="-ml-2 z-20" />}
-            <Link href="/" className="lg:hidden flex items-center gap-1">
-              <Logo className="w-9 h-9" />
-              <span className="font-semibold text-lg">Gennit</span>
-            </Link>
-          </div>
-          <div className="flex z-20 items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
-            >
-              {theme === "dark" ? (
-                <Sun className="w-4 h-4" />
-              ) : (
-                <Moon className="w-4 h-4" />
-              )}
-            </Button>
-
-            <UserPopOver />
-          </div>
+    <header
+      className={cn(
+        "sticky top-0 z-30 transition-all duration-300 bg-transparent",
+        pathName == "/chat" ? "backdrop-blur-sm" : "backdrop-blur-md",
+        "h-fit shrink-0 w-full",
+      )}
+    >
+      <div className="flex px-4 py-1.5 items-center justify-between w-full">
+        <div className="flex z-20 items-center flex-1">
+          {(!isChatIdPage || isMobile) && (
+            <SidebarTrigger className="-ml-2 z-20" />
+          )}
+          <Link href="/" className="lg:hidden flex items-center gap-1">
+            <Logo className="w-9 h-9" />
+            <span className="font-semibold text-lg">Gennit</span>
+          </Link>
         </div>
-      </header>
+        <div className="flex z-20 items-center gap-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
+          >
+            {theme === "dark" ? (
+              <Sun className="w-4 h-4" />
+            ) : (
+              <Moon className="w-4 h-4" />
+            )}
+          </Button>
+
+          <UserPopOver />
+        </div>
+      </div>
+    </header>
   );
 }
