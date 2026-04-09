@@ -57,9 +57,9 @@ export function ChatLayout() {
               </div>
             </ResizablePanel>
 
-            <ResizableHandle
+            {/* <ResizableHandle
               className="w-0.5 bg-border/50 hover:bg-primary/20 transition-colors z-30"
-            />
+            /> */}
 
             <ResizablePanel
               defaultSize={70}
@@ -68,7 +68,7 @@ export function ChatLayout() {
               className="block"
             >
               <div className="h-full relative overflow-hidden bg-[#fafafa] dark:bg-[#09090b] p-4 ">
-                <PreviewPanel />
+                {/* <PreviewPanel /> */}
               </div>
             </ResizablePanel>
           </ResizablePanelGroup>
