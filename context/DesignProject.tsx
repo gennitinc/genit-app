@@ -105,11 +105,16 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       return [];
     }
 
-    return messages.map((msg) => {
+    return messages.map((msg, index) => {
+      if (!msg) {
+        console.warn(`[DesignProject] msg at index ${index} is null/undefined`);
+        return null;
+      }
+
       if (msg.parts && Array.isArray(msg.parts)) {
         return {
           ...msg,
-          id: msg.id || msg._id,
+          id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
           // Normalize role and type
           role: (msg.type === "user" ? "user" : "assistant") as
             | "user"
@@ -120,18 +125,20 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             msg.fileAttachments && {
               attachedFiles: msg.fileAttachments.map((file: any) => ({
                 id: file.id || `file-${Date.now()}`,
-                name: file.name,
-                type: file.type,
-                filePath: file.url || file.filePath,
+                name: file.name || "Untitled",
+                type: file.type || "unknown",
+                filePath: file.url || file.filePath || "",
                 status: "uploaded" as const,
               })),
             }),
         };
       }
 
+      // Fallback for older message format or missing parts
+      console.log(`[DesignProject] Message at index ${index} missing parts, using fallback transformation`, msg);
       return {
         ...msg,
-        id: msg.id || msg._id,
+        id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
         // Normalize role and type
         role: (msg.type === "user" ? "user" : "assistant") as
           | "user"
@@ -142,7 +149,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             ? [
                 {
                   type: "text" as const,
-                  text: msg.text,
+                  text: msg.text || "",
                 },
               ]
             : [
@@ -153,14 +160,14 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           msg.fileAttachments && {
             attachedFiles: msg.fileAttachments.map((file: any) => ({
               id: file.id || `file-${Date.now()}`,
-              name: file.name,
-              type: file.type,
-              filePath: file.url || file.filePath,
+              name: file.name || "Untitled",
+              type: file.type || "unknown",
+              filePath: file.url || file.filePath || "",
               status: "uploaded" as const,
             })),
           }),
       };
-    });
+    }).filter(Boolean);
   }, []);
 
   const dataURLtoFile = (dataUrl: string, filename: string) => {
@@ -630,8 +637,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         });
 
         if (response.status == 200) {
-          console.log("suc", response.data.project);
-
           const projectData = response.data.project;
 
           // If switching to a different project, reset UI message state first
@@ -644,13 +649,16 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           }
 
           setProject(projectData);
+          console.log(`[DesignProject] Project State Updated:`, projectData?._id);
 
           // If server has messages, merge with any existing optimistic ones
           if (Array.isArray(projectData?.messages)) {
+            console.log(`[DesignProject] Processing ${projectData.messages.length} messages`);
             if (projectData.messages.length >= 1) {
               const serverMessages = transformMessages(
                 projectData.messages || [],
               );
+              console.log(`[DesignProject] Transformed ${serverMessages.length} messages`);
               setMessages((prev: any[]) => {
                 const serverIds = new Set(
                   serverMessages.map((m: any) => String(m.id || m._id)),

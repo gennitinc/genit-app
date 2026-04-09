@@ -45,17 +45,19 @@ export function AppSidebar({
   const user = useUserContext().user;
   const { setUrlState } = useUrlState();
   const isTablet = useMediaQuery("(max-width: 1024px)");
+  const isLargeDesktop = useMediaQuery("(min-width: 1280px)");
   const pathname = usePathname();
   const params = useParams();
 
   const isChatIdPage = !!params.id && pathname.startsWith("/chat");
 
   useEffect(() => {
-    // Only auto-collapse on desktop — mobile users should still be able to open the sidebar
-    if (isChatIdPage && state === "expanded" && !isMobile) {
+    // Auto-collapse on desktop and tablets if on the chat ID page
+    // Mobile users (Sheet version) should have it handled by the Sidebar component
+    if (isChatIdPage && state === "expanded" && !isMobile && !isLargeDesktop) {
       setOpen(false);
     }
-  }, [isChatIdPage, state, setOpen, isMobile]);
+  }, [isChatIdPage, state, setOpen, isMobile, isLargeDesktop]);
 
   // Calculate credit stats from user data
   const creditsRemaining = user?.creditsRemaining || 0;

@@ -13,18 +13,19 @@ import TopNavWithAurora from "./top-nav-with-aurora";
 import { useRef } from "react";
 import { PreviewPanel } from "../chat/preview-panel";
 import React from "react";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function ChatLayout() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const isMobile = useIsMobile();
+  const isDesktop = !isMobile;
 
   return (
     <div className="flex relative w-full h-[100vh] overflow-hidden bg-white dark:bg-[#09090b]">
       <AppSidebar />
       <div
         ref={scrollContainerRef}
-        className="relative flex-1 flex flex-col h-full overflow-hidden"
+        className="relative flex-1 flex flex-col h-full overflow-hidden min-w-0"
       >
         <div className="flex-none">
           <TopNavWithAurora
