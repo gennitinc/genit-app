@@ -1038,7 +1038,7 @@ export function VersioningMessage({
                           handleSetAsActive(item.id);
                           if (setFocusedGenerationId) setFocusedGenerationId(item.id);
                         }}
-                        className="h-7.5 px-2 text-xs gap-1.5 w-fit border-primary/30 text-primary hover:bg-primary/5 hidden lg:block"
+                        className="h-7.5 px-2 text-xs gap-1.5 w-fit border-primary/30 text-primary hover:bg-primary/5 hidden lg:flex"
                       >
                         <LayoutGrid className="w-3 h-3" />
                         View
