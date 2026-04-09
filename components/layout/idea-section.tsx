@@ -926,7 +926,7 @@ export function IdeaSection() {
     <div className="w-full md:px-4">
       <div className="w-full mx-auto space-y-2 lg:space-y-6 items-center justify-center flex flex-col ">
         {/* Header */}
-        <div className="text-center space-y-2 mt-14 lg:mt-0">
+        <div className="text-center space-y-2 mt-7 lg:mt-0">
           {/* <AnimatedTooltipPreview /> */}
           <motion.div
             className="mt-2 mb-2 md:mt-8 lg:mb-2 lg:mt-24 flex flex-col items-center justify-center"
