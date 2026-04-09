@@ -459,7 +459,7 @@ export function TextChatContent() {
               ))}
 
             {(!messages || messages.length === 0) && !isTyping && (
-              <div className="flex-1 mt-32 flex items-center justify-center">
+              <div className="flex-1 flex flex-col items-center justify-center min-h-[40vh]">
                 <div className="text-center text-gray-500 dark:text-gray-400 mb-8">
                   <p className="text-lg font-medium mb-2">
                     Start a conversation
