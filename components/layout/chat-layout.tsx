@@ -13,9 +13,11 @@ import TopNavWithAurora from "./top-nav-with-aurora";
 import { useRef } from "react";
 import { PreviewPanel } from "../chat/preview-panel";
 import React from "react";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export function ChatLayout() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   return (
     <div className="flex relative w-full h-[100vh] overflow-hidden bg-white dark:bg-[#09090b]">
@@ -32,46 +34,49 @@ export function ChatLayout() {
           />
         </div>
 
-        <ResizablePanelGroup
-          id="chat-canvas-split"
-          orientation="horizontal"
-          className="hidden lg:flex w-full"
-        >
-          {/* Left Panel: Glassmorphic Chat Panel */}
-          <ResizablePanel
-            defaultSize={30}
-            minSize={20}
-            maxSize={35}
-            className="group/panel relative flex flex-col backdrop-blur-xl z-20 min-w-0 overflow-hidden"
+        {isDesktop ? (
+          <ResizablePanelGroup
+            id="chat-canvas-split"
+            orientation="horizontal"
+            className="flex w-full h-full"
           >
-            <div className="flex-1 h-full custom-scrollbar min-w-0">
-              <div className="w-full h-full flex flex-col">
-                <TextChatContent />
+            {/* Left Panel: Glassmorphic Chat Panel */}
+            <ResizablePanel
+              defaultSize={30}
+              minSize={20}
+              maxSize={35}
+              className="group/panel relative flex flex-col backdrop-blur-xl z-20 min-w-0 overflow-hidden"
+            >
+              <div className="flex-1 h-full custom-scrollbar min-w-0">
+                <div className="w-full h-full flex flex-col">
+                  <TextChatContent />
+                </div>
               </div>
+            </ResizablePanel>
+
+            <ResizableHandle
+              className="w-0.5 bg-border/50 hover:bg-primary/20 transition-colors z-30"
+            />
+
+            {/* Right Panel: Infinite Design Interface */}
+            <ResizablePanel
+              defaultSize={70}
+              minSize={20}
+              maxSize={65}
+              className="block"
+            >
+              <div className="h-full relative overflow-hidden bg-[#fafafa] dark:bg-[#09090b] p-4 ">
+                <PreviewPanel />
+              </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        ) : (
+          <div className="w-full h-full flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-hidden">
+              <TextChatContent />
             </div>
-          </ResizablePanel>
-
-          {/* <ResizableHandle
-            withHandle
-            className="w-1.5 bg-transparent group-hover/panel:bg-primary/20 hover:bg-primary/40 transition-all duration-300 z-30"
-          /> */}
-
-          {/* Right Panel: Infinite Design Interface */}
-          <ResizablePanel
-            defaultSize={70}
-            minSize={20}
-            maxSize={65}
-            className="hidden lg:block"
-          >
-            <div className="h-full relative overflow-hidden bg-[#fafafa] dark:bg-[#09090b] p-4 ">
-              <PreviewPanel />
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-
-        <div className="w-full lg:max-w-[600px] lg:mx-auto h-full flex flex-col lg:hidden">
-          <TextChatContent />
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

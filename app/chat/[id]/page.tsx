@@ -19,20 +19,8 @@ const ChatIdPage = () => {
       return;
     }
 
-    console.log("p-id", projectId);
-
-    let didRun = false;
-    const run = async () => {
-      if (didRun) return;
-      didRun = true;
-      await fetchProject(projectId);
-    };
-    run();
-
-    return () => {
-      didRun = true;
-    };
-  }, [projectId]);
+    fetchProject(projectId);
+  }, [projectId, fetchProject, router]);
 
   if (isLoadingProject) {
     return (

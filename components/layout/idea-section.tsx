@@ -926,7 +926,7 @@ export function IdeaSection() {
     <div className="w-full md:px-4">
       <div className="w-full mx-auto space-y-2 lg:space-y-6 items-center justify-center flex flex-col ">
         {/* Header */}
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-2 mt-14 lg:mt-0">
           {/* <AnimatedTooltipPreview /> */}
           <motion.div
             className="mt-2 mb-2 md:mt-8 lg:mb-2 lg:mt-24 flex flex-col items-center justify-center"
@@ -1641,7 +1641,7 @@ export function IdeaSection() {
 
         <div className="relative w-full max-w-4xl mx-auto mb-8 px-4">
           {/* Scroll Area */}
-          <div className="flex flex-row items-start gap-2 lg:gap-6 overflow-x-auto pb-6 pt-2 scrollbar-hide px-2">
+          <div className="flex flex-row items-start gap-2 lg:gap-6 overflow-x-auto pb-6 pt-2 scrollbar-hide px-0 pl-0 pr-2 md:px-2">
             {IDEA_ITEMS.map((item) => (
               <IdeaItem key={item.id} item={item} />
             ))}

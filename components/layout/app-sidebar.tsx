@@ -51,10 +51,11 @@ export function AppSidebar({
   const isChatIdPage = !!params.id && pathname.startsWith("/chat");
 
   useEffect(() => {
-    if (isChatIdPage && state === "expanded") {
+    // Only auto-collapse on desktop — mobile users should still be able to open the sidebar
+    if (isChatIdPage && state === "expanded" && !isMobile) {
       setOpen(false);
     }
-  }, [isChatIdPage, state, setOpen]);
+  }, [isChatIdPage, state, setOpen, isMobile]);
 
   // Calculate credit stats from user data
   const creditsRemaining = user?.creditsRemaining || 0;

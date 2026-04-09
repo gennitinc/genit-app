@@ -284,13 +284,13 @@ export function TextChatContent() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <ChatInput placeholder="Ask a follow up message..." className="h-full">
       <div
         ref={localConversationRef}
-        className="flex-1 px-2 md:px-6 overflow-y-auto scroll-container custom-scrollbar overflow-x-hidden"
+        className="px-2 md:px-6 overflow-y-auto scroll-container custom-scrollbar overflow-x-hidden h-full"
       >
         <Conversation className="px-0 m-0">
-          <ConversationContent className="px-0 m-0 space-y-4 overflow-x-hidden pb-2 min-h-[70dvh]">
+          <ConversationContent className="px-0 m-0 space-y-4 overflow-x-hidden pb-10 min-h-full">
             {messages?.map((message: any, index: number) => {
               if (message.type === "user") {
                 const imageAttachment = message.fileAttachments?.find(
@@ -454,17 +454,6 @@ export function TextChatContent() {
                 <AIThinkingContent status={aiStatus} />
               ))}
 
-            {/* {isGeneratingImage && (
-              <div ref={skeletonRef} className="flex flex-col items-center gap-3 mt-2">
-                <Skeleton className="h-[500px] w-[500px] rounded-xl" />
-                {aiStatus && (
-                  <p className="text-xs text-muted-foreground italic animate-pulse">
-                    {aiStatus}
-                  </p>
-                )}
-              </div>
-            )} */}
-
             {(!messages || messages.length === 0) && !isTyping && (
               <div className="flex-1 mt-32 flex items-end justify-center">
                 <div className="text-center text-gray-500 dark:text-gray-400 mb-8">
@@ -480,10 +469,6 @@ export function TextChatContent() {
           </ConversationContent>
         </Conversation>
       </div>
-
-      <div className="sticky bottom-0 z-30 bg-white/90 dark:bg-[#09090B] backdrop-blur">
-        <ChatInput placeholder="Ask a follow up message..." />
-      </div>
-    </div>
+    </ChatInput>
   );
 }
