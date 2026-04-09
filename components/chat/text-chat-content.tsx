@@ -463,6 +463,7 @@ export function TextChatContent() {
                 <div className="text-center text-gray-500 dark:text-gray-400 mb-8">
                   <p className="text-lg font-medium mb-2">
                     Start a conversation
+                    {project?.title}
                   </p>
                   <p className="text-sm">
                     Ask me anything or describe what you'd like to create

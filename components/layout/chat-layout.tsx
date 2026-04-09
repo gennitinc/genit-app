@@ -52,6 +52,7 @@ export function ChatLayout() {
             >
               <div className="flex-1 h-full custom-scrollbar min-w-0">
                 <div className="w-full h-full flex flex-col">
+                  
                   <TextChatContent />
                 </div>
               </div>
@@ -68,7 +69,7 @@ export function ChatLayout() {
               className="block"
             >
               <div className="h-full relative overflow-hidden bg-[#fafafa] dark:bg-[#09090b] p-4 ">
-                {/* <PreviewPanel /> */}
+                <PreviewPanel />
               </div>
             </ResizablePanel>
           </ResizablePanelGroup>
