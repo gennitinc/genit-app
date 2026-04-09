@@ -42,6 +42,10 @@ export function TextChatContent() {
     aiStatus,
   } = useProjectDesign();
 
+  useEffect(() => {
+    console.log("[TextChatContent] Messages State Updated:", messages?.length, messages);
+  }, [messages]);
+
   const skeletonRef = useRef<HTMLDivElement | null>(null);
   const scrollElRef = useRef<HTMLElement | null>(null);
   const localConversationRef = useRef<HTMLDivElement | null>(null);

@@ -19,6 +19,8 @@ export function ChatLayout() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const isDesktop = !isMobile;
+  
+  console.log("[ChatLayout] Rendering. isMobile:", isMobile, "isDesktop:", isDesktop);
 
   return (
     <div className="flex relative w-full h-[100vh] overflow-hidden bg-white dark:bg-[#09090b]">
@@ -41,7 +43,7 @@ export function ChatLayout() {
             orientation="horizontal"
             className="flex w-full h-full"
           >
-            {/* Left Panel: Glassmorphic Chat Panel */}
+
             <ResizablePanel
               defaultSize={30}
               minSize={20}
@@ -59,7 +61,6 @@ export function ChatLayout() {
               className="w-0.5 bg-border/50 hover:bg-primary/20 transition-colors z-30"
             />
 
-            {/* Right Panel: Infinite Design Interface */}
             <ResizablePanel
               defaultSize={70}
               minSize={20}

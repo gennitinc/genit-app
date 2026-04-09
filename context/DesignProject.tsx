@@ -638,10 +638,15 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
         if (response.status == 200) {
           const projectData = response.data.project;
+          
+          // Use string normalization for safer comparisons with Object IDs
+          const currentIdStr = String(projectData?._id || projectData?.id || "");
+          console.log(`[DesignProject] Fetched ID: ${currentIdStr}, Last ID: ${lastFetchedProjectIdRef.current}`);
 
           // If switching to a different project, reset UI message state first
-          if (lastFetchedProjectIdRef.current !== projectData._id) {
-            lastFetchedProjectIdRef.current = projectData._id;
+          if (lastFetchedProjectIdRef.current !== currentIdStr) {
+            console.log(`[DesignProject] Project ID mismatch. Resetting messages for new project: ${currentIdStr}`);
+            lastFetchedProjectIdRef.current = currentIdStr;
             setMessages([]);
             setStreamingContent("");
             setStreamingAnalysis("");
@@ -650,6 +655,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
           setProject(projectData);
           console.log(`[DesignProject] Project State Updated:`, projectData?._id);
+          console.log(`[DesignProject] raw messages count:`, projectData?.messages?.length || 0);
 
           // If server has messages, merge with any existing optimistic ones
           if (Array.isArray(projectData?.messages)) {
@@ -696,6 +702,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                   }
                   return true;
                 });
+                console.log(`[DesignProject] Final setMessages called with ${serverMessages.length} items`);
                 return [...optimistic, ...serverMessages];
               });
               setIsTyping(false);
