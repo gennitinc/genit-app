@@ -198,13 +198,13 @@ const appSections = [
     href: "/apps/enhance-style",
     apps: [
       {
-        id: "angles-reshape",
-        href: "/apps/angles-reshape",
-        title: "Angle Reshape",
+        id: "design-chat",
+        href: "/chat",
+        title: "Design Chat",
         description: "Transform perspective and camera angles with precision",
         type: "image",
         imageSrc:
-          "https://i.pinimg.com/736x/1d/e5/29/1de52947cf871b610fb4276053dd137f.jpg",
+          "https://cdn.dribbble.com/users/4874/screenshots/3252414/interncomms-final.gif?utm_source=Pinterest&utm_medium=organic",
       },
       {
         id: "workflow",
@@ -220,6 +220,16 @@ const appSections = [
           textColor: "rgb(255, 255, 255)",
         },
       },
+      {
+        id: "angles-reshape",
+        href: "/apps/angles-reshape",
+        title: "Angle Reshape",
+        description: "Transform perspective and camera angles with precision",
+        type: "image",
+        imageSrc:
+          "https://i.pinimg.com/736x/1d/e5/29/1de52947cf871b610fb4276053dd137f.jpg",
+      },
+
       {
         id: "video-generation",
         href: "/apps/video-generation",
