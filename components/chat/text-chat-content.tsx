@@ -288,7 +288,7 @@ export function TextChatContent() {
   };
 
   return (
-    <ChatInput placeholder="Ask a follow up message..." className="">
+    <ChatInput placeholder="Ask a follow up message..." className="h-full">
       <div
         ref={localConversationRef}
         className="flex-1 px-2 md:px-6 overflow-y-auto scroll-container custom-scrollbar overflow-x-hidden min-w-0"

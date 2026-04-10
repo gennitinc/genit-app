@@ -23,11 +23,11 @@ export function ChatLayout() {
   console.log("[ChatLayout] Rendering. isMobile:", isMobile, "isDesktop:", isDesktop);
 
   return (
-    <div className="flex relative w-full h-[100vh] overflow-hidden bg-white dark:bg-[#09090b]">
+    <div className="flex relative w-full h-[100dvh] overflow-hidden bg-white dark:bg-[#09090b]">
       <AppSidebar />
       <div
         ref={scrollContainerRef}
-        className="relative flex-1 flex flex-col h-screen overflow-hidden min-w-0"
+        className="relative flex-1 flex flex-col h-full overflow-hidden min-w-0"
       >
         <div className="flex-none">
           <TopNavWithAurora
@@ -74,11 +74,11 @@ export function ChatLayout() {
             </ResizablePanel>
           </ResizablePanelGroup>
         ) : (
-          // <div className="w-full flex-1 flex flex-col overflow-hidden min-h-0">
-          //   <div className="flex-1 overflow-hidden">
-          //   </div>
-          // </div>
-              <TextChatContent />
+          <div className="w-full flex-1 flex flex-col overflow-hidden min-h-0">
+            <div className="flex-1 overflow-hidden">
+               <TextChatContent />
+            </div>
+          </div>
         )}
       </div>
     </div>

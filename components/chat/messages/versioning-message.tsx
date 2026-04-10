@@ -1301,6 +1301,7 @@ export function VersioningMessage({
 
   return (
     <div className={cn("ml-6 sm:ml-12 group", className)}>
+      
       <div className="border border-border rounded-xl overflow-hidden bg-background shadow-sm hover:shadow-md transition-shadow duration-200">
         {/* Generation Header */}
         <div
@@ -1393,7 +1394,7 @@ export function VersioningMessage({
                       Latest
                     </Badge>
                   )}
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground line-clamp-1 truncate hidden lg:flex">
                     {formatTimestamp(generation.timestamp)}
                   </p>
                 </div>
