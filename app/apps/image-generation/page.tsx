@@ -313,7 +313,7 @@ function ImageGenerationPage() {
                     <span>view</span>
                   </button>
                 </DrawerTrigger>
-                <DrawerContent className="h-[85vh] px-4">
+                <DrawerContent className="h-[85vh] px-1">
                   <DrawerHeader className="px-0">
                     <DrawerTitle>Explore & Results</DrawerTitle>
                   </DrawerHeader>
