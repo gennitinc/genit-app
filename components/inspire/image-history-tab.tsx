@@ -159,7 +159,7 @@ export function ImageHistoryTab({
 
   return (
     <>
-      <section className="p-4">
+      <section className="p-4 px-0">
         {/* Masonry Grid */}
         <div className="columns-2 lg:columns-4 gap-4">
           {images.map((image, index) => {

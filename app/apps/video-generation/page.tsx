@@ -782,7 +782,7 @@ function VideoGenerationPage() {
                         <span>view</span>
                       </button>
                     </DrawerTrigger>
-                    <DrawerContent className="h-[85vh] px-1">
+                    <DrawerContent className="h-[85vh] px-2">
                       <DrawerHeader className="px-0">
                         <DrawerTitle>Explore & Results</DrawerTitle>
                       </DrawerHeader>

@@ -377,7 +377,7 @@ export function ImageTemplatesTab({
 
   return (
     <>
-      <section className="p-4">
+      <section className="p-4 px-0">
         <div className="space-y-8">
           {categories.map((category) => (
             <div key={category.id}>

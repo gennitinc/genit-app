@@ -305,7 +305,7 @@ export function ImagePreviewTab({
   };
 
   return (
-    <section className="p-4">
+    <section className="p-4 px-0">
       {/* Main Preview Area */}
       <div className="flex flex-col">
         {/* Preview Container */}

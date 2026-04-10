@@ -415,7 +415,7 @@ export function VideoCommunityTab({
 
   return (
     <>
-      <section className="p-4">
+      <section className="p-4 px-0">
         <div
           className={cn(
             "columns-2 lg:columns-4 gap-4",

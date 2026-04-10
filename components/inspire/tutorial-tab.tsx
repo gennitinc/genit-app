@@ -105,7 +105,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
   }
 
   return (
-    <section className="p-4">
+    <section className="p-4 px-0">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-1">
