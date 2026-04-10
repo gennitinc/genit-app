@@ -74,11 +74,11 @@ export function ChatLayout() {
             </ResizablePanel>
           </ResizablePanelGroup>
         ) : (
-          <div className="w-full flex-1 flex flex-col overflow-hidden min-h-0">
-            <div className="flex-1 overflow-hidden">
+          // <div className="w-full flex-1 flex flex-col overflow-hidden min-h-0">
+          //   <div className="flex-1 overflow-hidden">
+          //   </div>
+          // </div>
               <TextChatContent />
-            </div>
-          </div>
         )}
       </div>
     </div>
