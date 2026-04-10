@@ -404,11 +404,198 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     };
   }, [transformMessages]);
 
+  const generateMessage = useCallback(
+    async (
+      messageContent: string,
+      files: File[] | null,
+      projectId: string,
+      selectedFiles?: string[], // e.g., ["https://example.com/image1.png", "video.mp4"]
+      metadata?: Record<string, any>,
+    ) => {
+      try {
+        setIsGenerating(true);
+        setIsTyping(true);
+        setAiStatus(null);
+        setStreamingContent("");
+
+        console.log("⚡ Generating message...");
+
+        const now = Date.now();
+        const generateId = () =>
+          `file-${now}-${Math.random().toString(36).substr(2, 9)}`;
+
+        // Array to hold all attached file metadata
+        const attachedFiles: {
+          id: string;
+          name: string;
+          type: string;
+          filePath: string;
+          status: "uploaded";
+        }[] = [];
+
+        // Holds real File/Blob objects for upload
+        const blobFilesToUpload: File[] = [];
+
+        // --- 1. Handle raw File uploads from input[type="file"] ---
+        if (files && files.length > 0) {
+          for (const file of files as any[]) {
+            const isBlob =
+              typeof window !== "undefined" && file instanceof Blob;
+
+            if (isBlob) {
+              attachedFiles.push({
+                id: generateId(),
+                name: (file as File).name || "file",
+                type: (file as File).type || "application/octet-stream",
+                filePath: URL.createObjectURL(file as File),
+                status: "uploaded",
+              });
+              blobFilesToUpload.push(file as File);
+            } else if (file && (file.filePath || file.url)) {
+              const name =
+                file.name ||
+                String(file.filePath || file.url)
+                  .split("/")
+                  .pop() ||
+                "file";
+              const type = file.type || "application/octet-stream";
+              attachedFiles.push({
+                id: generateId(),
+                name,
+                type,
+                filePath: file.filePath || file.url,
+                status: "uploaded",
+              });
+            }
+          }
+        }
+
+        // --- 2. Handle selectedFiles (pre-stored URLs) ---
+        if (selectedFiles && selectedFiles.length > 0) {
+          for (const filePath of selectedFiles) {
+            const name = filePath.split("/").pop() || "selected-file";
+            const ext = name.split(".").pop()?.toLowerCase();
+            let type = "application/octet-stream";
+
+            if (ext) {
+              if (["png", "jpg", "jpeg", "gif", "webp"].includes(ext)) {
+                type = `image/${ext === "jpg" ? "jpeg" : ext}`;
+              } else if (["mp4", "mov", "avi", "mkv"].includes(ext)) {
+                type = `video/${ext}`;
+              } else if (ext === "pdf") {
+                type = "application/pdf";
+              }
+            }
+
+            attachedFiles.push({
+              id: generateId(),
+              name,
+              type,
+              filePath,
+              status: "uploaded",
+            });
+          }
+        }
+
+        // --- 3. Create user message object ---
+        const userMessageId = `msg-${Date.now()}-${Math.random()
+          .toString(36)
+          .substr(2, 9)}`;
+
+        const userMessage = {
+          id: userMessageId,
+          role: "user" as const,
+          type: "user" as const,
+          parts: [
+            {
+              type: "text" as const,
+              text: messageContent,
+            },
+          ],
+          fileAttachments: attachedFiles.length > 0 ? attachedFiles : undefined,
+          metadata: metadata || {},
+          createdAt: new Date(),
+        };
+
+        // Update UI immediately
+        const transformedUserMessage = transformMessages([userMessage])[0];
+        setMessages((prev) => [...prev, transformedUserMessage]);
+
+        // --- 4. Build FormData for backend upload ---
+        const formData = new FormData();
+        formData.append("prompt", messageContent);
+        formData.append("mediaType", "image");
+
+        // Append actual binary files
+        if (blobFilesToUpload.length > 0) {
+          blobFilesToUpload.forEach((file) => {
+            if (file instanceof Blob) {
+              formData.append("files", file); // backend must expect `files`
+            }
+          });
+        }
+
+        // Append selected file URLs (references) as JSON string
+        if (selectedFiles && selectedFiles.length > 0) {
+          formData.append("selectedFiles", JSON.stringify(selectedFiles));
+        }
+
+        // Append metadata as JSON string
+        if (metadata) {
+          formData.append("metadata", JSON.stringify(metadata));
+        }
+
+        // Debugging — see what's really inside FormData
+        console.group("📦 FormData Content");
+        console.log("Files to upload:", blobFilesToUpload.length);
+        console.log("Selected files:", selectedFiles?.length || 0);
+        for (const [key, value] of formData.entries()) {
+          // Fix: Use typeof for correct instanceof check in TS
+          if (
+            (typeof File !== "undefined" && value instanceof File) ||
+            (typeof Blob !== "undefined" && value instanceof Blob)
+          ) {
+            console.log(
+              key,
+              `[File: ${(value as File).name}, size: ${(value as File).size}]`,
+            );
+          } else {
+            console.log(key, value);
+          }
+        }
+        console.groupEnd();
+
+        // --- 5. Send to backend ---
+        // DO NOT set Content-Type header manually - axios will set it with boundary
+        const response = await apiResponseFileUpload.post(
+          `/project/generate/${projectId}`,
+          formData,
+          {
+            withCredentials: true,
+            // Remove manual Content-Type header - let axios set it automatically with boundary
+          },
+        );
+
+        console.log("✅ Server response:", response.data);
+      } catch (error) {
+        console.error("❌ Error sending message:", error);
+        setError(
+          error instanceof Error ? error.message : "Failed to send message",
+        );
+      } finally {
+        setIsGenerating(false);
+        setIsTyping(false);
+      }
+    },
+    [transformMessages],
+  );
+
   const handleLocalStorageDraft = useCallback(
     async (project: IDesignProject) => {
+      // Use a local guard to prevent concurrent execution even if state hasn't updated yet
       if (
         !project ||
-        project.messages.length > 0 ||
+        (project.messages && project.messages.length > 0) ||
         isProcessingDraft ||
         hasProcessedDraftRef.current
       ) {
@@ -424,6 +611,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         hasProcessedDraftRef.current = true;
         const parsed = JSON.parse(draft);
         const prompt = parsed.prompt;
+        const metadata = parsed.metadata || {};
 
         const filesFromStorage = parsed.files || [];
         const selectedFiles = parsed.selectedFiles || [];
@@ -468,6 +656,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           restoredFiles.length > 0 ? restoredFiles : null,
           project._id,
           selectedFiles,
+          metadata,
         );
         // Remove draft after successful generation
         localStorage.removeItem("newData");
@@ -478,9 +667,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsProcessingDraft(false);
         clearInput();
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [isProcessingDraft, setAttachedFiles],
+    [setAttachedFiles, generateMessage],
   );
 
   const clearError = () => setError(null);
@@ -590,6 +778,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             selectedFiles: selectedFiles || [],
             designType: designTypeId || null,
             projectId,
+            metadata: metadata || {},
           }),
         );
 
@@ -625,9 +814,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         return { success: false, error: "not_found" };
       }
 
-      // Reset draft processing flags when fetching a new project
-      hasProcessedDraftRef.current = false;
-      setIsProcessingDraft(false);
+      // Reset draft processing flags only when switching to a DIFFERENT project
+      if (projectId !== lastFetchedProjectIdRef.current) {
+        hasProcessedDraftRef.current = false;
+        setIsProcessingDraft(false);
+      }
 
       setIsLoadingProject(true);
       setError(null);
@@ -794,187 +985,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const generateMessage = async (
-    messageContent: string,
-    files: File[] | null,
-    projectId: string,
-    selectedFiles?: string[], // e.g., ["https://example.com/image1.png", "video.mp4"]
-    metadata?: Record<string, any>,
-  ) => {
-    try {
-      setIsGenerating(true);
-      setIsTyping(true);
-      setAiStatus(null);
-      setStreamingContent("");
 
-      console.log("⚡ Generating message...");
-
-      const now = Date.now();
-      const generateId = () =>
-        `file-${now}-${Math.random().toString(36).substr(2, 9)}`;
-
-      // Array to hold all attached file metadata
-      const attachedFiles: {
-        id: string;
-        name: string;
-        type: string;
-        filePath: string;
-        status: "uploaded";
-      }[] = [];
-
-      // Holds real File/Blob objects for upload
-      const blobFilesToUpload: File[] = [];
-
-      // --- 1. Handle raw File uploads from input[type="file"] ---
-      if (files && files.length > 0) {
-        for (const file of files as any[]) {
-          const isBlob = typeof window !== "undefined" && file instanceof Blob;
-
-          if (isBlob) {
-            attachedFiles.push({
-              id: generateId(),
-              name: (file as File).name || "file",
-              type: (file as File).type || "application/octet-stream",
-              filePath: URL.createObjectURL(file as File),
-              status: "uploaded",
-            });
-            blobFilesToUpload.push(file as File);
-          } else if (file && (file.filePath || file.url)) {
-            const name =
-              file.name ||
-              String(file.filePath || file.url)
-                .split("/")
-                .pop() ||
-              "file";
-            const type = file.type || "application/octet-stream";
-            attachedFiles.push({
-              id: generateId(),
-              name,
-              type,
-              filePath: file.filePath || file.url,
-              status: "uploaded",
-            });
-          }
-        }
-      }
-
-      // --- 2. Handle selectedFiles (pre-stored URLs) ---
-      if (selectedFiles && selectedFiles.length > 0) {
-        for (const filePath of selectedFiles) {
-          const name = filePath.split("/").pop() || "selected-file";
-          const ext = name.split(".").pop()?.toLowerCase();
-          let type = "application/octet-stream";
-
-          if (ext) {
-            if (["png", "jpg", "jpeg", "gif", "webp"].includes(ext)) {
-              type = `image/${ext === "jpg" ? "jpeg" : ext}`;
-            } else if (["mp4", "mov", "avi", "mkv"].includes(ext)) {
-              type = `video/${ext}`;
-            } else if (ext === "pdf") {
-              type = "application/pdf";
-            }
-          }
-
-          attachedFiles.push({
-            id: generateId(),
-            name,
-            type,
-            filePath,
-            status: "uploaded",
-          });
-        }
-      }
-
-      // --- 3. Create user message object ---
-      const userMessageId = `msg-${Date.now()}-${Math.random()
-        .toString(36)
-        .substr(2, 9)}`;
-
-      const userMessage = {
-        id: userMessageId,
-        role: "user" as const,
-        type: "user" as const,
-        parts: [
-          {
-            type: "text" as const,
-            text: messageContent,
-          },
-        ],
-        fileAttachments: attachedFiles.length > 0 ? attachedFiles : undefined,
-        metadata: metadata || {},
-        createdAt: new Date(),
-      };
-
-      // Update UI immediately
-      const transformedUserMessage = transformMessages([userMessage])[0];
-      setMessages((prev) => [...prev, transformedUserMessage]);
-
-      // --- 4. Build FormData for backend upload ---
-      const formData = new FormData();
-      formData.append("prompt", messageContent);
-      formData.append("mediaType", "image");
-
-      // Append actual binary files
-      if (blobFilesToUpload.length > 0) {
-        blobFilesToUpload.forEach((file) => {
-          if (file instanceof Blob) {
-            formData.append("files", file); // backend must expect `files`
-          }
-        });
-      }
-
-      // Append selected file URLs (references) as JSON string
-      if (selectedFiles && selectedFiles.length > 0) {
-        formData.append("selectedFiles", JSON.stringify(selectedFiles));
-      }
-
-      // Append metadata as JSON string
-      if (metadata) {
-        formData.append("metadata", JSON.stringify(metadata));
-      }
-
-      // Debugging — see what's really inside FormData
-      console.group("📦 FormData Content");
-      console.log("Files to upload:", blobFilesToUpload.length);
-      console.log("Selected files:", selectedFiles?.length || 0);
-      for (const [key, value] of formData.entries()) {
-        // Fix: Use typeof for correct instanceof check in TS
-        if (
-          (typeof File !== "undefined" && value instanceof File) ||
-          (typeof Blob !== "undefined" && value instanceof Blob)
-        ) {
-          console.log(
-            key,
-            `[File: ${(value as File).name}, size: ${(value as File).size}]`,
-          );
-        } else {
-          console.log(key, value);
-        }
-      }
-      console.groupEnd();
-
-      // --- 5. Send to backend ---
-      // DO NOT set Content-Type header manually - axios will set it with boundary
-      const response = await apiResponseFileUpload.post(
-        `/project/generate/${projectId}`,
-        formData,
-        {
-          withCredentials: true,
-          // Remove manual Content-Type header - let axios set it automatically with boundary
-        },
-      );
-
-      console.log("✅ Server response:", response.data);
-    } catch (error) {
-      console.error("❌ Error sending message:", error);
-      setError(
-        error instanceof Error ? error.message : "Failed to send message",
-      );
-    } finally {
-      setIsGenerating(false);
-      setIsTyping(false);
-    }
-  };
 
   const deleteMessage = async (messageId: string) => {
     try {
