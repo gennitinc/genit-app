@@ -41,7 +41,7 @@ export function ChatLayout() {
           <ResizablePanelGroup
             id="chat-canvas-split"
             orientation="horizontal"
-            className="flex w-full h-full"
+            className="flex-1 w-full min-h-0"
           >
 
             <ResizablePanel
@@ -74,7 +74,7 @@ export function ChatLayout() {
             </ResizablePanel>
           </ResizablePanelGroup>
         ) : (
-          <div className="w-full h-full flex flex-col overflow-hidden">
+          <div className="w-full flex-1 flex flex-col overflow-hidden min-h-0">
             <div className="flex-1 overflow-hidden">
               <TextChatContent />
             </div>
