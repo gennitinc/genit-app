@@ -27,7 +27,7 @@ export function ChatLayout() {
       <AppSidebar />
       <div
         ref={scrollContainerRef}
-        className="relative flex-1 flex flex-col h-full overflow-hidden min-w-0"
+        className="relative flex-1 flex flex-col h-screen overflow-hidden min-w-0"
       >
         <div className="flex-none">
           <TopNavWithAurora
