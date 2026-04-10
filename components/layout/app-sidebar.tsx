@@ -12,6 +12,7 @@ import {
   Crown,
   TrendingUp,
   Plus,
+  Bolt,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -33,7 +34,7 @@ import { Logo } from "@/components/logo"; // Updated import
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useUrlState } from "@/hooks/use-url-state";
 import Link from "next/link";
-import { usePathname, useParams } from "next/navigation";
+import { usePathname, useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export function AppSidebar({
@@ -67,6 +68,8 @@ export function AppSidebar({
     totalCredits > 0 ? (creditsRemaining / totalCredits) * 100 : 20;
   const usedCreditsDisplay = totalCredits > 0 ? creditsUsed : 0;
   const currentCredits = creditsRemaining;
+
+  const router = useRouter()
 
   return (
     <Sidebar
@@ -172,6 +175,21 @@ export function AppSidebar({
                     <span>{user?.userPlan || "Basic"}</span>
                   </div>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (user?.userPlan === "Basic") {
+                      router.push("/pricing");
+                    } else {
+                      router.push("/user/settings?tab=billing");
+                    }
+                  }}
+                  className="group w-full inline-flex items-center justify-center gap-2 px-5 py-2 rounded-md cursor-pointer text-xs font-medium bg-black text-white border border-black hover:bg-neutral-800 hover:border-neutral-800 transition-all duration-200 ease-in-out dark:bg-white dark:text-black dark:border-white dark:hover:bg-neutral-200 dark:hover:border-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white mt-2"
+                >
+                  <Bolt className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
+                  {user?.userPlan === "Basic" && user?.creditsRemaining && user?.creditsRemaining <= 20 ? "Upgrade Account" : "Get More Credits"}
+                </button>
               </div>
             </div>
           </div>
@@ -181,7 +199,13 @@ export function AppSidebar({
           <div className="flex justify-center mb-4 mt-2 w-full">
             <div
               className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center shadow-lg hover:bg-cyan-500/90 transition-colors cursor-pointer"
-              onClick={() => setOpen(true)}
+              onClick={() => {
+                if (user?.userPlan === "Basic") {
+                  router.push("/pricing");
+                } else {
+                  router.push("/user/settings?tab=billing");
+                }
+              }}
             >
               <Crown className="w-4 h-4 text-white" strokeWidth={1.5} />
             </div>
