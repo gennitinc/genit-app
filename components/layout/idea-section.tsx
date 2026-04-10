@@ -1341,7 +1341,7 @@ export function IdeaSection() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black border border-border rounded-xl shadow-md z-50 max-h-[300px] w-fit overflow-hidden"
+                  className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black border border-border rounded-xl shadow-md z-50 max-h-[300px] w-full lg:w-fit overflow-hidden"
                 >
                   <div className="flex flex-col p-4">
                     {/* Header */}
