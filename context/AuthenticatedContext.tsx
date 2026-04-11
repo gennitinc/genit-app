@@ -56,6 +56,7 @@ export interface User {
     ];
   };
   userPlan: Plan;
+  role: "user" | "admin";
   creditsRemaining?: number;
   creditsUsed?: number;
   status: {

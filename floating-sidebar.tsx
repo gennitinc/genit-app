@@ -41,6 +41,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { apiResponse } from "@/utils/apiResponse";
+import { toast } from "sonner";
 
 interface FloatingSidebarProps {
   onAddIntegration: (type: string, data?: any) => void;
@@ -78,6 +79,7 @@ export function FloatingSidebar({
   const [selectedIntegrationType, setSelectedIntegrationType] = useState<
     string | null
   >(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
   const [addSubTab, setAddSubTab] = useState("url");
   const [searchQuery, setSearchQuery] = useState("");
@@ -369,6 +371,32 @@ export function FloatingSidebar({
       setDbItems((prev) => prev.filter((item) => item._id !== id));
     } catch (error) {
       console.error("Failed to delete database item:", error);
+    }
+  };
+
+  const uploadFile = async (file: File) => {
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await apiResponse.post("/apps/workflow/upload", formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (res.data.success) {
+        return res.data.data.url;
+      }
+      throw new Error(res.data.message || "Upload failed");
+    } catch (error: any) {
+      console.error("Upload failed:", error);
+      toast.error(error.response?.data?.message || "Failed to upload file");
+      return null;
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -858,17 +886,21 @@ export function FloatingSidebar({
     }
   };
 
-  const handleFileUpload = (file: File, type: string) => {
+  const handleFileUpload = async (file: File, type: string) => {
     if (!validateFileType(file, type)) {
-      alert(`Please select a valid ${type} file.`);
+      toast.error(`Please select a valid ${type} file.`);
       return null;
     }
+
+    // Upload to storage (S3) instead of creating a blob URL
+    const s3Url = await uploadFile(file);
+    if (!s3Url) return null;
 
     const newFile = {
       id: `user-${Date.now()}`,
       name: file.name,
       type: type,
-      url: URL.createObjectURL(file),
+      url: s3Url,
       size: `${(file.size / 1024 / 1024).toFixed(1)}MB`,
       date: "Just now",
     };
@@ -934,14 +966,14 @@ export function FloatingSidebar({
     }
   };
 
-  const handleFileInputChange = (
+  const handleFileInputChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
     type: string,
   ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       const file = files[0];
-      const uploadedFile = handleFileUpload(file, type);
+      const uploadedFile = await handleFileUpload(file, type);
       if (uploadedFile) {
         handleFileSelect(uploadedFile);
       }
@@ -949,12 +981,12 @@ export function FloatingSidebar({
     }
   };
 
-  const handleDrop = (event: React.DragEvent, type: string) => {
+  const handleDrop = async (event: React.DragEvent, type: string) => {
     event.preventDefault();
     const files = event.dataTransfer.files;
     if (files && files.length > 0) {
       const file = files[0];
-      const uploadedFile = handleFileUpload(file, type);
+      const uploadedFile = await handleFileUpload(file, type);
       if (uploadedFile) {
         handleFileSelect(uploadedFile);
       }
@@ -1784,7 +1816,9 @@ export function FloatingSidebar({
                 </div>
 
                 <div
-                  className="border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors"
+                  className={`border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors ${
+                    isUploading ? "bg-primary/5 border-primary/30 pointer-events-none" : ""
+                  }`}
                   onDrop={(e) => handleDrop(e, "audio")}
                   onDragOver={handleDragOver}
                 >
@@ -1794,15 +1828,27 @@ export function FloatingSidebar({
                     onChange={(e) => handleFileInputChange(e, "audio")}
                     className="hidden"
                     id="audio-upload"
+                    disabled={isUploading}
                   />
                   <label htmlFor="audio-upload" className="cursor-pointer">
-                    <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Drop audio files here or click to browse
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      MP3, WAV, M4A up to 50MB
-                    </p>
+                    {isUploading ? (
+                      <div className="flex flex-col items-center">
+                        <Loader2 className="w-8 h-8 text-primary animate-spin mb-2" />
+                        <p className="text-sm text-primary font-medium">
+                          Uploading audio...
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                        <p className="text-sm text-muted-foreground mb-2">
+                          Drop audio files here or click to browse
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          MP3, WAV, M4A up to 50MB
+                        </p>
+                      </>
+                    )}
                   </label>
                 </div>
               </TabsContent>
@@ -2133,7 +2179,9 @@ export function FloatingSidebar({
             </div>
 
             <div
-              className="border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors"
+              className={`border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors ${
+                isUploading ? "bg-primary/5 border-primary/30 pointer-events-none" : ""
+              }`}
               onDrop={(e) => handleDrop(e, "image")}
               onDragOver={handleDragOver}
             >
@@ -2143,15 +2191,27 @@ export function FloatingSidebar({
                 onChange={(e) => handleFileInputChange(e, "image")}
                 className="hidden"
                 id="image-upload"
+                disabled={isUploading}
               />
               <label htmlFor="image-upload" className="cursor-pointer">
-                <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground mb-2">
-                  Drop image files here or click to browse
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  JPG, PNG, GIF up to 10MB
-                </p>
+                {isUploading ? (
+                  <div className="flex flex-col items-center">
+                    <Loader2 className="w-8 h-8 text-primary animate-spin mb-2" />
+                    <p className="text-sm text-primary font-medium">
+                      Uploading image...
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Drop image files here or click to browse
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      JPG, PNG, GIF up to 10MB
+                    </p>
+                  </>
+                )}
               </label>
             </div>
           </div>
@@ -2516,7 +2576,9 @@ export function FloatingSidebar({
             </div>
 
             <div
-              className="border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors"
+              className={`border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors ${
+                isUploading ? "bg-primary/5 border-primary/30 pointer-events-none" : ""
+              }`}
               onDrop={(e) => handleDrop(e, "video")}
               onDragOver={handleDragOver}
             >
@@ -2526,15 +2588,27 @@ export function FloatingSidebar({
                 onChange={(e) => handleFileInputChange(e, "video")}
                 className="hidden"
                 id="video-upload"
+                disabled={isUploading}
               />
               <label htmlFor="video-upload" className="cursor-pointer">
-                <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground mb-2">
-                  Drop video files here or click to browse
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  MP4, MOV, AVI up to 100MB
-                </p>
+                {isUploading ? (
+                  <div className="flex flex-col items-center">
+                    <Loader2 className="w-8 h-8 text-primary animate-spin mb-2" />
+                    <p className="text-sm text-primary font-medium">
+                      Uploading video...
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Drop video files here or click to browse
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      MP4, MOV, AVI up to 100MB
+                    </p>
+                  </>
+                )}
               </label>
             </div>
           </div>
@@ -4014,17 +4088,27 @@ export function FloatingSidebar({
                 <Button
                   onClick={handleIntegrationAdd}
                   disabled={
-                    selectedIntegrationType === "text"
+                    isUploading ||
+                    (selectedIntegrationType === "text"
                       ? !inputData.content.trim() && !selectedItem
                       : !inputData.url.trim() &&
                         !selectedItem &&
-                        activeTab !== "all"
+                        activeTab !== "all")
                   }
                   size="sm"
                   className="flex-1 h-8 text-xs bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
-                  <Plus className="w-3 h-3 mr-1" />
-                  Add to Canvas
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-3 h-3 mr-1" />
+                      Add to Canvas
+                    </>
+                  )}
                 </Button>
               </div>
             </div>
