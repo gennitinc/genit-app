@@ -123,7 +123,7 @@ export default function ActivityPage() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="font-medium">{act.value.toLocaleString()}</span>
+                    <span className="font-medium">{act.value}</span>
                   </TableCell>
                   <TableCell>
                     <span className="text-xs font-medium text-emerald-500">+{Math.floor(Math.random() * 20)}%</span>
