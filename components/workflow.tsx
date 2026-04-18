@@ -182,6 +182,8 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     Array<{ nodes: Node[]; edges: Edge[] }>
   >([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  // Ref mirrors historyIndex so addToHistory never needs it as a dep (prevents cascade)
+  const historyIndexRef = React.useRef(-1);
 
   // Add current state to history
   const addToHistory = useCallback(
@@ -195,21 +197,20 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       const currentState = { nodes: safeNodes, edges: safeEdges };
 
       setHistory((prevHistory) => {
-        // Remove any future history if we're not at the end
-        const trimmedHistory = prevHistory.slice(0, historyIndex + 1);
+        // Use ref so this callback does not depend on historyIndex state
+        const trimmedHistory = prevHistory.slice(0, historyIndexRef.current + 1);
         const newHistory = [...trimmedHistory, currentState];
-
-        // Limit history to 50 states to prevent memory issues
         return newHistory.slice(-50);
       });
 
       setHistoryIndex((prevIndex) => {
         const nextIndex = Math.min(prevIndex + 1, 49);
+        historyIndexRef.current = nextIndex; // keep ref in sync immediately
         console.log("📜 [History] Added state. New index:", nextIndex);
         return nextIndex;
       });
     },
-    [historyIndex, isUndoRedoAction],
+    [isUndoRedoAction], // historyIndex removed — we read it from historyIndexRef
   );
 
   const addNode = useCallback(
@@ -239,54 +240,66 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   // Handle connections
   const handleConnect = useCallback(
     (connection: Connection) => {
-      console.log("🔗 [GennittWorkflow] Connection:", connection);
-      if (connection.source && connection.target) {
-        // Enforce 3-item limit
-        const incomingEdges = edgesRef.current.filter(
-          (e) => e.target === connection.target,
+      if (!connection.source || !connection.target) return;
+      console.log("🔗 [GennittWorkflow] Connection attempt:", connection);
+
+      const edgeId = `edge-${connection.source}-${connection.target}-${connection.sourceHandle || "default"}-${connection.targetHandle || "default"}`;
+
+      // Use functional setEdges so we ALWAYS check the true latest edge list
+      // (edgesRef.current can be stale within the same render cycle)
+      setEdges((prevEdges) => {
+        // Check for any existing edge between same source+target+handles
+        const isDuplicate = prevEdges.some(
+          (edge) =>
+            edge.source === connection.source &&
+            edge.target === connection.target &&
+            edge.sourceHandle === connection.sourceHandle &&
+            edge.targetHandle === connection.targetHandle,
         );
+        if (isDuplicate) {
+          console.log("🚫 [GennittWorkflow] Connection ignored (duplicate)");
+          return prevEdges;
+        }
+
+        // Enforce 3-item limit
+        const incomingEdges = prevEdges.filter((e) => e.target === connection.target);
         if (incomingEdges.length >= 3) {
           toast.error("Maximum of 3 inputs reached");
-          return;
+          return prevEdges;
         }
 
         const newEdge: Edge = {
-          id: `edge-${Date.now()}`,
-          source: connection.source,
-          target: connection.target,
+          id: edgeId,
+          source: connection.source!,
+          target: connection.target!,
+          sourceHandle: connection.sourceHandle,
+          targetHandle: connection.targetHandle,
           animated: true,
         };
 
-        // Update target node's connectedItems array and add to history in one state update
-        setNodes((prevNodes) => {
-          const updatedNodes = prevNodes.map((node) => {
-            if (node.id === connection.target) {
-              const currentItems = node.data.connectedItems || [];
-              if (!currentItems.includes(connection.source!)) {
-                return {
-                  ...node,
-                  data: {
-                    ...node.data,
-                    connectedItems: [...currentItems, connection.source],
-                  },
-                };
-              }
+        return [...prevEdges, newEdge];
+      });
+
+      // Update target node's connectedItems (separate, non-cascading update)
+      setNodes((prevNodes) =>
+        prevNodes.map((node) => {
+          if (node.id === connection.target) {
+            const currentItems = node.data.connectedItems || [];
+            if (!currentItems.includes(connection.source!)) {
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  connectedItems: [...currentItems, connection.source],
+                },
+              };
             }
-            return node;
-          });
-
-          // Sync edges state
-          setEdges((prevEdges) => {
-            const updatedEdges = [...prevEdges, newEdge];
-            addToHistory(updatedNodes, updatedEdges);
-            return updatedEdges;
-          });
-
-          return updatedNodes;
-        });
-      }
+          }
+          return node;
+        }),
+      );
     },
-    [setEdges, setNodes, addToHistory],
+    [setEdges, setNodes], // addToHistory removed — breaks the cascade that causes re-registration
   );
 
   // Node creation function - single source of truth
@@ -833,20 +846,16 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   }, []);
 
   const onNodeDrag = useCallback((event: any, node: Node) => {
-    console.log("🎯 [GennittWorkflow] Node dragging:", node.id, node.position);
+    // No-op: React Flow handles position updates via onNodesChange
   }, []);
 
   const onNodeDragStop = useCallback(
     (event: any, node: Node) => {
-      setNodes((nds) => {
-        const newNodes = nds.map((n) =>
-          n.id === node.id ? { ...n, position: node.position } : n,
-        );
-        addToHistory(newNodes, edgesRef.current);
-        return newNodes;
-      });
+      // React Flow already updated node positions via onNodesChange.
+      // We only need to capture a history snapshot here.
+      addToHistory(nodesRef.current, edgesRef.current);
     },
-    [setNodes, addToHistory],
+    [addToHistory],
   );
 
   const onMoveEnd = useCallback(
@@ -1105,6 +1114,11 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   }, [undo, redo]);
 
   // Socket.IO for real-time AI updates
+  // Stable ref so the socket listener always calls the latest applyAIActions
+  // without needing to re-register every time applyAIActions recreates
+  const applyAIActionsRef = React.useRef<typeof applyAIActions>(applyAIActions);
+  applyAIActionsRef.current = applyAIActions;
+
   useEffect(() => {
     if (!projectId) return;
 
@@ -1116,17 +1130,18 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
     socket.emit("join", projectId);
 
+    // Use ref so the handler is never stale but the effect only runs when projectId changes
     socket.on("workflow:ai:update", (data: any) => {
       console.log("📡 [Workflow] Received real-time AI update:", data);
       if (data.actions && data.actions.length > 0) {
-        applyAIActions(data.nodeId, data.actions);
+        applyAIActionsRef.current(data.nodeId, data.actions);
       }
     });
 
     return () => {
       socket.off("workflow:ai:update");
     };
-  }, [projectId, applyAIActions]);
+  }, [projectId]); // removed applyAIActions — prevents listener re-registration on every drag
 
   if (isLoading) {
     return (

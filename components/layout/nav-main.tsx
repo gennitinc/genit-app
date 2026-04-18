@@ -94,9 +94,9 @@ export function NavMain() {
        href: `/creator/${user?.username}`,
      },
      {
-       title: "Billing",
+       title: "Pricing",
        icon: CreditCard,
-       href: "/user/settings?tab=billing",
+       href: "/pricing",
      },
    ];
 
