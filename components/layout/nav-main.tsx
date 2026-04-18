@@ -93,14 +93,15 @@ export function NavMain() {
        icon: UserPlus,
        href: `/creator/${user?.username}`,
      },
+ 
+   ];
+
+   const secondaryNavItems = [
      {
        title: "Pricing",
        icon: CreditCard,
        href: "/pricing",
      },
-   ];
-
-   const secondaryNavItems = [
      {
        title: "Settings",
        icon: Settings,
