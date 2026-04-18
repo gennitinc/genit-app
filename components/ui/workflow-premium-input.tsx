@@ -91,7 +91,7 @@ interface PremiumInputProps {
 }
 
 const ASPECT_RATIOS = [
-  { value: "auto", label: "Auto" },
+  { value: "auto", label: "Auto Layout" },
   { value: "16:9", label: "Landscape 16:9" },
   { value: "9:16", label: "Portrait 9:16" },
   { value: "1:1", label: "Square 1:1" },
