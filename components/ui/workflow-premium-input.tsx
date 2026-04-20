@@ -84,19 +84,11 @@ interface PremiumInputProps {
   contentType?: keyof typeof MODELS_BY_TYPE;
   selectedModel?: string;
   onModelChange?: (modelId: string) => void;
+  aspectRatio?: string;
+  onAspectRatioChange?: (ratio: string) => void;
   availableModels?: Model[];
   onSelectHistoryItem?: (item: any) => void;
-  aspectRatio?: string;
-  onAspectRatioChange?: (value: string) => void;
 }
-
-const ASPECT_RATIOS = [
-  { value: "auto", label: "Auto Layout" },
-  { value: "16:9", label: "Landscape 16:9" },
-  { value: "9:16", label: "Portrait 9:16" },
-  { value: "1:1", label: "Square 1:1" },
-  { value: "4:3", label: "Standard 4:3" },
-];
 
 interface HistoryItem {
   id: string;
@@ -125,10 +117,10 @@ export function WorkflowPremiumInput({
   contentType = "text",
   selectedModel,
   onModelChange,
-  availableModels: propModels,
-  onSelectHistoryItem,
   aspectRatio,
   onAspectRatioChange,
+  availableModels: propModels,
+  onSelectHistoryItem,
 }: PremiumInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [serverModels, setServerModels] = useState<Model[]>([]);
@@ -502,22 +494,44 @@ export function WorkflowPremiumInput({
               </div>
             </PopoverContent>
           </Popover>
-
-          {onAspectRatioChange && (contentType === "video" || contentType === "image") && (
-            <div className="flex items-center gap-1 ml-1 px-2 py-1 rounded-md hover:bg-muted transition-colors w-fit">
-              <Monitor className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-              <select
-                value={aspectRatio}
-                onChange={(e) => onAspectRatioChange(e.target.value)}
-                className="text-[11px] font-medium text-muted-foreground bg-transparent border-none outline-none cursor-pointer hover:text-foreground transition-colors pr-1 w-fit"
-              >
-                {ASPECT_RATIOS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+          
+          {(contentType === "image" || contentType === "video") && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-muted transition-colors text-xs font-medium text-muted-foreground hover:text-foreground">
+                  <Monitor className="h-3.5 w-3.5 opacity-70" />
+                  {aspectRatio === "auto" ? "Auto" : aspectRatio || "16:9"}
+                  <ChevronDown className="h-3 w-3 opacity-50" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[180px] p-1" align="start">
+                <div className="space-y-1">
+                  {[
+                    { value: "auto", label: "Auto Orientation" },
+                    { value: "16:9", label: "Landscape 16:9" },
+                    { value: "9:16", label: "Portrait 9:16" },
+                    { value: "1:1", label: "Square 1:1" },
+                    { value: "4:3", label: "Standard 4:3" },
+                  ].map((ratio) => (
+                    <button
+                      key={ratio.value}
+                      onClick={() => onAspectRatioChange?.(ratio.value)}
+                      className={cn(
+                        "flex items-center justify-between w-full px-2 py-1.5 rounded-sm text-xs transition-colors",
+                        aspectRatio === ratio.value
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "hover:bg-muted",
+                      )}
+                    >
+                      {ratio.label}
+                      {aspectRatio === ratio.value && (
+                        <Check className="h-3 w-3" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
           )}
 
           {leftContent}

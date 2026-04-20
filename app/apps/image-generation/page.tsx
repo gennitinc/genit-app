@@ -175,7 +175,19 @@ function ImageGenerationPage() {
   }, [projectId, user?._id]);
 
   const handleLoadFromHistory = useCallback(
-    (image: { _id: string; imageData: { url: string; thumbnail: string; prompt: string; aspectRatio: string; resolution: string; style?: string; referenceImageUrls?: string[] }; createdAt: string }) => {
+    (image: {
+      _id: string;
+      imageData: {
+        url: string;
+        thumbnail: string;
+        prompt: string;
+        aspectRatio: string;
+        resolution: string;
+        style?: string;
+        referenceImageUrls?: string[];
+      };
+      createdAt: string;
+    }) => {
       const { imageData } = image;
       const loadedImage = {
         id: image._id,
@@ -193,8 +205,10 @@ function ImageGenerationPage() {
       setGeneratedImages([loadedImage]);
       setSelectedImageIndex(0);
       setPrompt(imageData.prompt || "");
-      if (imageData.aspectRatio) setSelectedAspectRatio(imageData.aspectRatio as AspectRatio);
-      if (imageData.resolution) setSelectedResolution(imageData.resolution as Resolution);
+      if (imageData.aspectRatio)
+        setSelectedAspectRatio(imageData.aspectRatio as AspectRatio);
+      if (imageData.resolution)
+        setSelectedResolution(imageData.resolution as Resolution);
       if (imageData.style) setSelectedImageStyle(imageData.style as ImageStyle);
       updateContentTab("preview");
     },

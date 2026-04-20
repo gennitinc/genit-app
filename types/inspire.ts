@@ -1,5 +1,5 @@
 // types/inspire.ts
-export type AspectRatio = "1:1" | "4:3" | "3:4" | "16:9" | "9:16";
+export type AspectRatio = "1:1" | "4:3" | "3:4" | "16:9" | "9:16" | "auto";
 export type Resolution = "1080p" | "720p" | "480p" | "4K";
 
 // ============================================
@@ -316,6 +316,7 @@ export interface Voice {
   language: string;
   gender: "male" | "female";
   accent: string;
+  imageUrl: string;
   sampleUrl: string;
   provider?: string;
   providerVoiceId?: string;

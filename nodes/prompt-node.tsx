@@ -17,7 +17,13 @@ const CONTENT_TYPES = [
   { id: "audio", label: "Audio" },
 ];
 
-// No longer needed here as it is built into WorkflowPremiumInput
+const ASPECT_RATIOS = [
+  { value: "auto", label: "Auto Orientation" },
+  { value: "16:9", label: "Landscape 16:9" },
+  { value: "9:16", label: "Portrait 9:16" },
+  { value: "1:1", label: "Square 1:1" },
+  { value: "4:3", label: "Standard 4:3" },
+];
 
 interface PromptNodeData {
   title?: string;
@@ -247,10 +253,10 @@ export function PromptNode({
             contentType={contentType as any}
             selectedModel={selectedModel}
             onModelChange={setSelectedModel}
-            availableModels={filteredModels}
-            onSelectHistoryItem={handleSelectHistoryItem}
             aspectRatio={aspectRatio}
             onAspectRatioChange={setAspectRatio}
+            availableModels={filteredModels}
+            onSelectHistoryItem={handleSelectHistoryItem}
             className="border-none shadow-none bg-transparent"
             minHeight="120px"
           />

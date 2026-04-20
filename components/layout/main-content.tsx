@@ -10,7 +10,7 @@ import CommunityComp from "../landing/CommunityComp";
 export function MainContent() {
   return (
     <div className="w-full  overflow-x-hidden sm:px-2  lg:px-8 py-8">
-      <div className="relative w-full flex flex-col items-center justify-center">
+      <div className="relative w-full flex flex-col items-center justify-center" >
         {/* <svg
           width={960}
           height={960}
@@ -867,6 +867,8 @@ export function MainContent() {
             </clipPath>
           </defs>
         </svg> */}
+
+        
         <IdeaSection />
       </div>
 
