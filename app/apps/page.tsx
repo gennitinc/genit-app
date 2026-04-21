@@ -367,35 +367,6 @@ const Apps = () => {
   const pathname = usePathname();
 
   return (
-    // <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
-    //   <LandingPageBanner />
-    //   {/* <LandingNavbar /> */}
-
-    //   {/* <LandingFooter /> */}
-
-    //   <Toaster />
-    //   <AppSidebar />
-    //   <div
-    //     // ref={scrollContainerRef}
-    //     className="flex-1 flex flex-col overflow-auto will-change-scroll scroll-container"
-    //   >
-    //     <TopNavWithAurora
-    //       // scrollContainerRef={
-    //       //   scrollContainerRef as React.RefObject<HTMLDivElement>
-    //       // }
-    //     />
-    //     <div
-    //       id="main-content"
-    //       className="flex-1"
-    //       style={{
-    //         transform: "translateZ(0)",
-    //         willChange: "transform",
-    //       }}
-    //     >
-
-    //     </div>
-    //   </div>
-    // </div>
 
     <div className="flex relative w-full h-[100dvh] overflow-hidden bg-white dark:bg-black">
       <Toaster />

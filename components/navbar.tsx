@@ -150,7 +150,7 @@ export function Navbar({ title }: NavbarProps) {
   };
 
   return (
-    <nav className="flex items-center justify-between px-2 sm:px-6 sm:pr-1 py-2 bg-background/95 backdrop-blur-sm border-b border-border relative lg:pr-4">
+    <nav className="flex items-center justify-between px-2 sm:px-6 sm:pr-1 bg-background/95 backdrop-blur-sm border-b border-border relative lg:pr-4">
       {/* Left Section */}
       <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
         {/* Mobile Menu Button */}
@@ -189,7 +189,7 @@ export function Navbar({ title }: NavbarProps) {
             </div>
             {/* Project name with visibility - Truncated on mobile */}
             <div className="flex items-center gap-1 sm:gap-2 min-w-0">
-              <span className="text-xs sm:text-sm text-muted-foreground/50 font-medium relative group truncate">
+              <span className="text-xs sm:text-sm text-muted-foreground/50 font-medium relative group truncate lowercase">
                 {projectTitle || "Loading Project..."}
                 <div className="absolute inset-x-0 -bottom-0.5 h-px bg-gradient-to-r from-transparent via-muted-foreground/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </span>
