@@ -1639,7 +1639,7 @@ export function IdeaSection() {
           </motion.div>
         </div>
 
-        <div className="relative w-full max-w-4xl mx-auto mb-8 px-4">
+        <div className="relative w-full max-w-4xl mx-auto mt-10 px-4">
           {/* Scroll Area */}
           <div className="flex flex-row items-start gap-2 lg:gap-6 overflow-x-auto pb-6 pt-2 scrollbar-hide px-0 pl-0 pr-2 md:px-2">
             {IDEA_ITEMS.map((item) => (
