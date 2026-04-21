@@ -239,17 +239,17 @@ const IDEA_ITEMS: IdeaItemData[] = [
     iconColor: "text-black dark:text-white",
     hoverScale: "md:hover:scale-[1.2]",
   },
-  {
-    id: "text-to-speech",
-    label: "Text to Speech",
-    href: "/apps/text-to-speech",
-    icon: Volume2,
-    bg: "rgba(20, 184, 166, 0.5)",
-    lightBg: "rgba(20, 184, 166, 0.4)",
-    darkBg: "rgba(20, 184, 166, 0.6)",
-    iconColor: "text-black dark:text-white",
-    hoverScale: "md:hover:scale-[1.2]",
-  },
+  // {
+  //   id: "text-to-speech",
+  //   label: "Text to Speech",
+  //   href: "/apps/text-to-speech",
+  //   icon: Volume2,
+  //   bg: "rgba(20, 184, 166, 0.5)",
+  //   lightBg: "rgba(20, 184, 166, 0.4)",
+  //   darkBg: "rgba(20, 184, 166, 0.6)",
+  //   iconColor: "text-black dark:text-white",
+  //   hoverScale: "md:hover:scale-[1.2]",
+  // },
 ];
 
 const IdeaItem = ({ item }: { item: IdeaItemData }) => {

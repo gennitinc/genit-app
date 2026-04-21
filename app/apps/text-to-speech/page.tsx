@@ -48,7 +48,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { SlidersHorizontal, Star } from "lucide-react";
 
-/* ─────────────────────── Animated Waveform ─────────────────────── */
 function WaveformVisualizer({
   isPlaying,
   progress,
@@ -83,7 +82,7 @@ function WaveformVisualizer({
   );
 }
 
-/* ─────────────────── Custom TTS Slider ──────────────────── */
+
 function TTSSlider({
   label,
   tooltip,
@@ -443,12 +442,12 @@ function TextToSpeechPage() {
       <div className="flex-1 flex flex-col overflow-hidden relative">
         <TopNavWithAurora />
 
-        {/* ═══════════════════ MAIN CONTENT ═══════════════════ */}
+    
         <div
           id="main-content"
           className="flex-1 flex overflow-hidden relative pt-10 lg:pt-0"
         >
-          {/* ─────────── LEFT: Text Editor ─────────── */}
+      
           <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
             {/* Editor */}
             <div className="flex-1 overflow-y-auto px-6 sm:px-10 lg:px-12">
@@ -479,7 +478,7 @@ function TextToSpeechPage() {
                           key={idx}
                           onClick={() => handleExampleClick(example.content)}
                           className={cn(
-                            "inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                            "inline-flex items-center gap-2 px-3.5 py-2 rounded-md text-sm font-mono transition-all duration-200",
                             "border border-border/60 bg-background",
                             "hover:bg-accent hover:border-border text-foreground/70 hover:text-foreground",
                             "active:scale-95",
@@ -638,9 +637,9 @@ function TextToSpeechPage() {
             </div>
           </div>
 
-          {/* ─────────── RIGHT: Settings Panel ─────────── */}
+       
           <div className="hidden md:flex flex-col w-[340px] lg:w-[380px] border border-border rounded-l-2xl bg-background overflow-hidden flex-shrink-0">
-            {/* Sticky Tabs Header */}
+           
             <div className="sticky top-0 z-10 bg-background px-5 pt-2">
               <div className="flex items-center gap-4 h-11 border-b border-border">
                 <button
@@ -909,7 +908,7 @@ function TextToSpeechPage() {
           </div>
         </div>
 
-        {/* ═══════════════ VOICE SELECTOR DIALOG ═══════════════ */}
+   
         <Dialog
           open={isVoiceSelectorOpen}
           onOpenChange={setIsVoiceSelectorOpen}
@@ -1119,7 +1118,7 @@ function TextToSpeechPage() {
           </DialogContent>
         </Dialog>
 
-        {/* Hidden Audio Element */}
+
         <audio
           ref={audioRef}
           src={audioUrl || ""}

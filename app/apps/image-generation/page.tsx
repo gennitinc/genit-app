@@ -7,7 +7,7 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { apiResponse } from "@/utils/apiResponse";
 import { PremiumInput } from "@/components/ui/premium-input";
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+
 import {
   Loader2,
   Image as ImageIcon,
