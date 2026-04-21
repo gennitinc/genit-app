@@ -593,13 +593,27 @@ export default function TemplateGridAll() {
               (h, idx) => (
                 <div
                   key={`skeleton-${idx}`}
-                  className="mb-4 inline-block w-full align-top"
+                  className="mb-4 inline-block w-full align-top border border-border/50 rounded-lg overflow-hidden bg-muted/5 group"
                   style={{ breakInside: "avoid" }}
                 >
-                  <Skeleton
-                    className="w-full rounded-lg bg-muted/70"
-                    style={{ height: h }}
-                  />
+                  <div className="relative">
+                    {/* Image Placeholder */}
+                    <Skeleton
+                      className="w-full bg-muted/50 transition-colors"
+                      style={{ height: h }}
+                    />
+                    
+                    {/* Creator Info Skeleton (Bottom) */}
+                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/20 to-transparent flex items-center gap-2">
+                       <Skeleton className="w-5 h-5 rounded-full bg-muted-foreground/20" />
+                       <Skeleton className="h-2 w-16 bg-muted-foreground/20 rounded" />
+                    </div>
+
+                    {/* Action Button Skeleton (Center) */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-40">
+                       <Skeleton className="h-9 w-9 rounded-full bg-muted-foreground/20" />
+                    </div>
+                  </div>
                 </div>
               ),
             )}
