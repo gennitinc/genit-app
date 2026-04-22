@@ -237,28 +237,28 @@
 
 /* From Uiverse.io by jonas_5925 */ 
 .loader {
-  height: 150px;
-  width: 150px;
+  height: 80px;
+  width: 80px;
   background-color: rgb(221, 219, 219);
-  border-radius: 39px;
+  border-radius: 20px;
 }
 .loader::before {
   content: "";
   position: absolute;
-  height: 65px;
-  width: 65px;
+  height: 35px;
+  width: 35px;
 }
 
 .box {
   position: absolute;
-  height: 65px;
-  width: 65px;
+  height: 35px;
+  width: 35px;
   background-color: rgb(20, 102, 128);
   animation: move 3s infinite;
-  border-radius: 10px;
-  border-top-left-radius: 32.5px;
-  margin-top: 5px;
-  margin-left: 5px;
+  border-radius: 5px;
+  border-top-left-radius: 17.5px;
+  margin-top: 3px;
+  margin-left: 3px;
 }
 
 .box.gold {
@@ -287,76 +287,76 @@
 
 @keyframes move {
   0% {
-    width: 65;
-    height: 65;
-    margin-top: 5px;
-    margin-left: 5px;
-    border-top-left-radius: 32.5px;
+    width: 35px;
+    height: 35px;
+    margin-top: 3px;
+    margin-left: 3px;
+    border-top-left-radius: 17.5px;
   }
   12.5% {
-    width: 140px;
-    height: 65px;
-    margin-top: 5px;
-    margin-left: 5px;
-    border-top-left-radius: 32.5px;
-    border-top-right-radius: 32.5px;
+    width: 74px;
+    height: 35px;
+    margin-top: 3px;
+    margin-left: 3px;
+    border-top-left-radius: 17.5px;
+    border-top-right-radius: 17.5px;
   }
   25% {
-    width: 65px;
-    height: 65px;
-    margin-top: 5px;
-    margin-left: 80px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 32.5px;
-    border-bottom-right-radius: 10px;
+    width: 35px;
+    height: 35px;
+    margin-top: 3px;
+    margin-left: 42px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 17.5px;
+    border-bottom-right-radius: 5px;
   }
   37.5% {
-    width: 65px;
-    height: 140px;
-    margin-top: 5px;
-    margin-left: 80px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 32.5px;
-    border-bottom-right-radius: 32.5px;
+    width: 35px;
+    height: 74px;
+    margin-top: 3px;
+    margin-left: 42px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 17.5px;
+    border-bottom-right-radius: 17.5px;
   }
   50% {
-    width: 65px;
-    height: 65px;
-    margin-top: 80px;
-    margin-left: 80px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 32.5px;
-    border-bottom-left-radius: 10px;
+    width: 35px;
+    height: 35px;
+    margin-top: 42px;
+    margin-left: 42px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 17.5px;
+    border-bottom-left-radius: 5px;
   }
   62.5% {
-    width: 140px;
-    height: 65px;
-    margin-top: 80px;
-    margin-left: 5px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 32.5px;
-    border-bottom-left-radius: 32.5px;
+    width: 74px;
+    height: 35px;
+    margin-top: 42px;
+    margin-left: 3px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 17.5px;
+    border-bottom-left-radius: 17.5px;
   }
   75% {
-    width: 65px;
-    height: 65px;
-    margin-top: 80px;
-    margin-left: 5px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 32.5px;
+    width: 35px;
+    height: 35px;
+    margin-top: 42px;
+    margin-left: 3px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 17.5px;
   }
   87.5% {
-    width: 65px;
-    height: 140px;
-    margin-top: 5px;
-    margin-left: 5px;
-    border-top-left-radius: 32.5px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 32.5px;
+    width: 35px;
+    height: 74px;
+    margin-top: 3px;
+    margin-left: 3px;
+    border-top-left-radius: 17.5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 17.5px;
   }
 }
