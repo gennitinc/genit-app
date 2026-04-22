@@ -69,6 +69,14 @@ import { BorderBeam } from "../ui/border-beam";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { div } from "three/src/nodes/math/OperatorNode.js";
 import { cn } from "@/lib/utils";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
 
 interface TypewriterEffectProps {
   words: string[];
@@ -1639,19 +1647,100 @@ export function IdeaSection() {
           </motion.div>
         </div>
 
-        <div className="relative w-full max-w-4xl mx-auto mt-10 px-4">
-          {/* Scroll Area */}
+        {/* <div className="relative w-full max-w-4xl mx-auto mt-10 px-4">
+       
           <div className="flex flex-row items-start gap-2 lg:gap-6 overflow-x-auto pb-6 pt-2 scrollbar-hide px-0 pl-0 pr-2 md:px-2">
             {IDEA_ITEMS.map((item) => (
               <IdeaItem key={item.id} item={item} />
             ))}
           </div>
 
-          {/* Right Edge Fade */}
           <div className="absolute top-0 right-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-20 pointer-events-none rounded-r-3xl" />
-        </div>
+        </div> */}
 
-        
+        <div className="max-w-4xl mx-auto w-full px-4 min-w-0 mt-8">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-sm font-bold text-black dark:text-white lg:ml-4 lg:text-lg">
+              Feature Agents
+            </h2>
+            <Link
+              href="/apps"
+              className="text-[11px] font-mono font-bold text-primary hover:underline transition-all"
+            >
+              View all →
+            </Link>
+          </div>
+          <div className="grid w-full min-w-0">
+            <div
+              aria-hidden="false"
+              className="col-start-1 row-start-1 w-full min-w-0 pointer-events-auto"
+              style={{ transform: "none", opacity: 1 }}
+            >
+              <div className="relative w-full min-w-0">
+                <div className="py-4 relative">
+                  <div className="flex flex-row items-start gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    {APP_SECTIONS.flatMap((section) => section.apps).map(
+                      (app) => (
+                        <Link key={app.id} href={app.href} className="shrink-0">
+                          <div
+                            className="focus-visible:ring-f-primary/30 group flex flex-col items-center rounded-xl bg-transparent p-0 text-center focus-visible:outline-none focus-visible:ring-2 justify-center gap-2"
+                            style={{ width: 128 }}
+                          >
+                            <span className="support-hover:group-hover:-translate-y-3 flex w-full flex-col items-center gap-2 transition-transform duration-300 active:-translate-y-3">
+                              <div className="liquid-glass-border bg-f-other-3 relative w-full overflow-hidden rounded-xl p-1 shadow-sm backdrop-blur-md border border-white/10 dark:border-white/5">
+                                <div className="relative w-full overflow-hidden rounded-lg aspect-[60/50]">
+                                  {app.badge && (
+                                    // <div className="absolute top-0 left-1.5 z-20">
+                                    //   <span
+                                    //     className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-mono shadow-sm"
+                                    //     style={{
+                                    //       backgroundColor: app.badge.bgColor,
+                                    //       color: app.badge.textColor,
+                                    //     }}
+                                    //   >
+                                    //     {app.badge.text}
+                                    //   </span>
+                                    // </div>
+                                    <div className="flex flex-wrap gap-2 absolute top-1 left-2 z-10">
+                                      <span
+                                        className="inline-flex items-center justify-center px-1.5 text-[10px] text-white relative overflow-hidden skew-x-[-10deg] rounded"
+                                        style={{
+                                          fontFamily: '"Space Grotesk"',
+                                          backgroundColor: app.badge.bgColor,
+                                          color: app.badge.textColor,
+                                        }}
+                                      >
+                                        <span>{app.badge.text}</span>
+                                      </span>
+                                    </div>
+                                  )}
+                                  <img
+                                    alt={app.title}
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="relative w-full h-full object-cover rounded-lg"
+                                    src={app.imageSrc}
+                                  />
+                                </div>
+                              </div>
+                              <span className="support-hover:group-hover:text-primary support-hover:group-hover:font-semibold w-full truncate text-[10px] leading-4 md:text-sm text-f-text block font-mono">
+                                {app.title}
+                              </span>
+                            </span>
+                          </div>
+                        </Link>
+                      ),
+                    )}
+                  </div>
+
+                  {/* Edge Fades */}
+                  <div className="absolute top-0 left-0 bottom-0 w-12 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+                  <div className="absolute top-0 right-0 bottom-0 w-12 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Presentation Organization Drawer */}
