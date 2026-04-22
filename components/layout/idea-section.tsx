@@ -1687,7 +1687,7 @@ export function IdeaSection() {
                             style={{ width: 128 }}
                           >
                             <span className="support-hover:group-hover:-translate-y-3 flex w-full flex-col items-center gap-2 transition-transform duration-300 active:-translate-y-3">
-                              <div className="liquid-glass-border bg-f-other-3 relative w-full overflow-hidden rounded-xl p-1 shadow-sm backdrop-blur-md border border-gray-800 dark:border-gray-500 border-dotted">
+                              <div className="liquid-glass-border bg-f-other-3 relative w-full overflow-hidden rounded-xl p-1 shadow-sm backdrop-blur-md border-[1.8px] border-gray-500 dark:border-gray-600 border-dotted">
                                 <div className="relative w-full overflow-hidden rounded-lg aspect-[60/50]">
                                   {app.badge && (
                                     // <div className="absolute top-0 left-1.5 z-20">
