@@ -1784,7 +1784,7 @@ const LandingHero = () => {
               </div>
             </div>
           </div>
-          <div className="h-full w-full absolute z-20"></div>
+          <div className="h-full w-full absolute z-20 bg-transparent"></div>
         </div>
       </div>
     </section>

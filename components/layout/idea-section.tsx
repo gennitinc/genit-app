@@ -1650,6 +1650,8 @@ export function IdeaSection() {
           {/* Right Edge Fade */}
           <div className="absolute top-0 right-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-20 pointer-events-none rounded-r-3xl" />
         </div>
+
+        
       </div>
 
       {/* Presentation Organization Drawer */}
