@@ -103,7 +103,7 @@
 //       const urlParams = new URLSearchParams(searchParams.toString());
 //       urlParams.set("tab", tab);
 //       if (projectId) urlParams.set("projectId", projectId);
-//       router.replace(`/apps/image-generation?${urlParams.toString()}`, {
+//       router.replace(`/agents/image-generation?${urlParams.toString()}`, {
 //         scroll: false,
 //       });
 //     },
