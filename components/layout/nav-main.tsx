@@ -47,30 +47,30 @@ export function NavMain() {
        href: "/chat",
      },
      {
-       title: "Apps",
+       title: "Agents",
        icon: Grid2X2Plus,
-       href: "/apps",
+       href: "/agents",
      },
       {
         title: "Workflow",
         icon: Workflow,
-        href: "/apps/workflow",
+        href: "/agents/workflow",
         badge: "New",
       },
      // {
      //   title: "Image Generation",
      //   icon: ImageIcon,
-     //   href: "/apps/image-generation",
+     //   href: "/agents/image-generation",
      // },
      // {
      //   title: "Video Generation",
      //   icon: Video,
-     //   href: "/apps/video-generation",
+     //   href: "/agents/video-generation",
      // },
      // {
      //   title: "Presenter",
      //   icon: UserPlus,
-     //   href: "/apps/presenter",
+     //   href: "/agents/presenter",
      // },
 
      {

@@ -1079,7 +1079,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       if (res.data.success) {
         const newProject = res.data.data;
         setProjectId(newProject._id);
-        router.push(`/apps/workflow/${newProject.slug}`);
+        router.push(`/agents/workflow/${newProject.slug}`);
       }
     } catch (error) {
       console.error("Failed to create workflow:", error);

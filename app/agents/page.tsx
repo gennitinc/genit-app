@@ -164,16 +164,16 @@ const AppCard = ({
 };
 
 const categories = [
-  { name: "All", href: "/apps" },
-  { name: "Mockups", href: "/apps/mockups" },
-  { name: "Viral Trends", href: "/apps/trending-templates" },
-  // { name: "Director's Motion", href: "/apps/camera-motion" },
-  // { name: "Persona Shift", href: "/apps/face-identity" },
-  // { name: "Aesthetic FX", href: "/apps/enhance-style" },
-  // { name: "Production Suite", href: "/apps/video-editing" },
-  // { name: "Commercial Studio", href: "/apps/ads-products" },
-  // { name: "Digital Realms", href: "/apps/games-characters" },
-  // { name: "Creator Kit", href: "/apps/extras" },
+  { name: "All", href: "/agents" },
+  { name: "Mockups", href: "/agents/mockups" },
+  { name: "Viral Trends", href: "/agents/trending-templates" },
+  // { name: "Director's Motion", href: "/agents/camera-motion" },
+  // { name: "Persona Shift", href: "/agents/face-identity" },
+  // { name: "Aesthetic FX", href: "/agents/enhance-style" },
+  // { name: "Production Suite", href: "/agents/video-editing" },
+  // { name: "Commercial Studio", href: "/agents/ads-products" },
+  // { name: "Digital Realms", href: "/agents/games-characters" },
+  // { name: "Creator Kit", href: "/agents/extras" },
 ];
 
 const mediaTypes = ["All Types", "Video", "Image", "Audio"];

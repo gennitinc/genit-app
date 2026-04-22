@@ -150,8 +150,8 @@ const images = [
 const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "all-agents",
-    label: "All Apps",
-    href: "/apps",
+    label: "All Agents",
+    href: "/agents",
     icon: Grid2X2Plus,
     bg: "rgba(30, 30, 30, 30)",
     lightBg: "rgba(255, 255, 255, 0.7)",
@@ -173,7 +173,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "workflow",
     label: "AI Workflow",
-    href: "/apps/workflow",
+    href: "/agents/workflow",
     icon: Workflow,
     bg: "rgba(34, 197, 94, 0.45)",
     lightBg: "rgba(34, 197, 94, 0.35)",
@@ -184,7 +184,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "video",
     label: "AI Video",
-    href: "/apps/video-generation",
+    href: "/agents/video-generation",
     icon: Video,
     bg: "rgba(255, 99, 132, 0.45)",
     lightBg: "rgba(255, 99, 132, 0.35)",
@@ -195,7 +195,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "image",
     label: "AI Image",
-    href: "/apps/image-generation",
+    href: "/agents/image-generation",
     icon: Image,
     bg: "rgba(99, 102, 241, 0.5)",
     lightBg: "rgba(99, 102, 241, 0.4)",
@@ -206,7 +206,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "character",
     label: "AI Character",
-    href: "/apps/character",
+    href: "/agents/character",
     icon: User,
     bg: "rgba(168, 85, 247, 0.5)",
     lightBg: "rgba(168, 85, 247, 0.4)",
@@ -217,7 +217,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "skin-enhancer",
     label: "AI Enhancer",
-    href: "/apps/skin-enhancer",
+    href: "/agents/skin-enhancer",
     icon: Paintbrush,
     bg: "rgba(59, 130, 246, 0.5)",
     lightBg: "rgba(59, 130, 246, 0.4)",
@@ -228,7 +228,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "angles-reshape",
     label: "Angle Reshape",
-    href: "/apps/angles-reshape",
+    href: "/agents/angles-reshape",
     icon: Camera,
     bg: "rgba(255, 204, 0, 0.5)",
     lightBg: "rgba(255, 204, 0, 0.4)",
@@ -239,7 +239,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "logo-animation",
     label: "AI Animation",
-    href: "/apps/logo-animation2",
+    href: "/agents/logo-animation2",
     icon: Play,
     bg: "rgba(0, 122, 255, 0.5)",
     lightBg: "rgba(0, 122, 255, 0.4)",
@@ -1664,7 +1664,7 @@ export function IdeaSection() {
               Feature Agents
             </h2>
             <Link
-              href="/apps"
+              href="/agents"
               className="text-[11px] font-mono font-bold text-primary hover:underline transition-all"
             >
               View all →
@@ -1687,7 +1687,7 @@ export function IdeaSection() {
                             style={{ width: 128 }}
                           >
                             <span className="support-hover:group-hover:-translate-y-3 flex w-full flex-col items-center gap-2 transition-transform duration-300 active:-translate-y-3">
-                              <div className="liquid-glass-border bg-f-other-3 relative w-full overflow-hidden rounded-xl p-1 shadow-sm backdrop-blur-md border border-white/10 dark:border-white/5">
+                              <div className="liquid-glass-border bg-f-other-3 relative w-full overflow-hidden rounded-xl p-1 shadow-sm backdrop-blur-md border border-gray-800 dark:border-gray-500 border-dotted">
                                 <div className="relative w-full overflow-hidden rounded-lg aspect-[60/50]">
                                   {app.badge && (
                                     // <div className="absolute top-0 left-1.5 z-20">

@@ -66,7 +66,7 @@ export function LandingNavbar() {
 
   const navigation = [
     { name: "Design Chat", href: "/chat" },
-    { name: "Apps", href: "/apps" },
+    { name: "Agents", href: "/agents" },
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Community", href: "/community" },
     { name: "History", href: user ? "/chat/history" : "/signin" },
@@ -134,9 +134,9 @@ export function LandingNavbar() {
                       )}
                       <Link
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/apps"
+                        href="/agents"
                       >
-                        Apps
+                        Agents
                       </Link>
                       {/* <Link
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
@@ -317,9 +317,9 @@ export function LandingNavbar() {
                       )}
                       <Link
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/apps"
+                        href="/agents"
                       >
-                        Apps
+                        Agents
                       </Link>
                       {/* <Link
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
