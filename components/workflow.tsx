@@ -1375,7 +1375,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
                     <div
                       key={project._id}
                       onClick={() =>
-                        router.push(`/apps/workflow/${project.slug}`)
+                        router.push(`/agents/workflow/${project.slug}`)
                       }
                       className="group flex items-center justify-between p-3 rounded-xl border border-border bg-muted/30 hover:bg-muted/50 hover:border-primary/30 transition-all cursor-pointer"
                     >
