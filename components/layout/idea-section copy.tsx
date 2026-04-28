@@ -167,7 +167,7 @@ export function IdeaSection() {
   // Handle file processing with validation
   const handleFileProcess = useCallback(
     (files: File[]) => {
-      const maxFileSize = 10 * 1024 * 1024; // 10MB
+      const maxFileSize = 50 * 1024 * 1024; // 50MB
       const maxFiles = 10;
 
       if (attachedFiles.length + files.length > maxFiles) {
@@ -180,7 +180,7 @@ export function IdeaSection() {
           file.type?.startsWith("image/") || file.type?.startsWith("video/");
         if (!isImageOrVideo) return false;
         if (file.size > maxFileSize) {
-          setInputError(`${file.name} is too large (max 10MB)`);
+          setInputError(`${file.name} is too large (max 50MB)`);
           return false;
         }
         return true;
