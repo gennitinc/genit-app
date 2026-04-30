@@ -5,6 +5,7 @@ import { ColorManagement } from "../chat/messages/color-management";
 import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
 import { HomeInfoGrid } from "../common/homeInfoGrid";
 import HomeGrid from "../common/templateGrid";
+import { ModelSelector } from "../inspire/model-selector";
 import { BorderBeam } from "../ui/border-beam";
 import ShinyText from "../ui/shiny-text";
 import { PricingDialog } from "@/components/common/pricing-dialog";
@@ -397,6 +398,8 @@ export function IdeaSection() {
     removeAttachedFile,
     selectedColorScales,
     primaryFont,
+    imageModel,
+    setImageModel,
   } = useProjectDesign();
 
   const [beamPosition, setBeamPosition] = useState({ x: 50, y: 50 });
@@ -430,6 +433,7 @@ export function IdeaSection() {
     "illustration" | "photorealistic" | "abstract" | "3d" | "line-art"
   >("illustration");
   const [extraKeywords, setExtraKeywords] = useState<string>("");
+  const [selectedModel, setSelectedModel] = useState<any>(null);
   const [imageRotations] = useState(() =>
     images.map(() => Math.random() * 20 - 10)
   );
@@ -700,6 +704,7 @@ export function IdeaSection() {
             finalizedSelections: {
               selectedColorScales,
               primaryFont,
+              model: selectedModel,
             },
           }
         );
@@ -748,6 +753,7 @@ export function IdeaSection() {
       selectedDesignTypeId,
       generatePresentationOutline,
       toast,
+      selectedModel,
     ]
   );
 
@@ -1281,6 +1287,17 @@ export function IdeaSection() {
                       )}
 
                       <div className='ml-auto flex items-center gap-1.5'>
+                        <div className='flex items-center gap-1.5'>
+                          <ModelSelector
+                            type='image'
+                            selectedModel={selectedModel}
+                            onSelectModel={(model) => {
+                              setSelectedModel(model);
+                              setImageModel(model.modelId);
+                            }}
+                          />
+                        </div>
+
                         <button
                           className='focus-visible:ring-ring text-muted-foreground hover:text-foreground hover:bg-primary/5 relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5'
                           type='button'

@@ -114,6 +114,7 @@ export interface IDesignProject {
   messages: IMessage[];
   analytics: IProjectAnalytics;
   tags: string[];
+  imageModel?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -282,4 +283,7 @@ export interface IProjectDesignContext {
   }) => void;
   aiStatus: string | null;
   setAiStatus: (status: string | null) => void;
+  imageModel: string;
+  setImageModel: (model: string) => void;
+  updateProjectModel: (projectId: string, model: string) => Promise<void>;
 }

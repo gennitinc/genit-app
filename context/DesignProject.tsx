@@ -98,6 +98,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   );
   const [primaryFont, setPrimaryFont] = useState<string | null>(null);
   const [aiStatus, setAiStatus] = useState<string | null>(null);
+  const [imageModel, setImageModel] = useState<string>(
+    "gemini-3.1-flash-image-preview"
+  );
   const [liveNodes, setLiveNodes] = useState<
     Array<{ id: string; filePath: string; name: string; prompt: string }>
   >([]);
@@ -226,8 +229,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
       // Update the refractory ref immediately to signal we've processed this switch
       projectIdRef.current = newProjectIdStr;
+
+      // Update imageModel if present in the new project
+      if (project?.imageModel) {
+        setImageModel(project.imageModel);
+      }
     }
-  }, [project?._id]);
+  }, [project?._id, project?.imageModel]);
 
   // Update messages ref when messages change
   useEffect(() => {
@@ -627,6 +635,34 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     [transformMessages]
   );
 
+  const updateProjectModel = useCallback(
+    async (projectId: string, model: string) => {
+      try {
+        const response = await apiResponse.patch(
+          `/project/${projectId}/model`,
+          { imageModel: model },
+          { withCredentials: true }
+        );
+        if (response.data?.success) {
+          setProject((prev) => (prev ? { ...prev, imageModel: model } : null));
+          setImageModel(model);
+          toast({
+            title: "Model updated",
+            description: `Project is now using ${model}`,
+          });
+        }
+      } catch (err) {
+        console.error("Failed to update model:", err);
+        toast({
+          title: "Error",
+          description: "Failed to update model",
+          variant: "destructive",
+        });
+      }
+    },
+    []
+  );
+
   const handleLocalStorageDraft = useCallback(
     async (project: IDesignProject) => {
       // Use a local guard to prevent concurrent execution even if state hasn't updated yet
@@ -745,6 +781,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       orientation: orientation || undefined,
       customSize: customSize || undefined,
       metadata: metadata || undefined,
+      imageModel: imageModel || undefined,
       analytics: {
         totalMessages: 0,
         totalGenerations: 0,
@@ -1397,6 +1434,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         addLiveNode,
         aiStatus,
         setAiStatus,
+        imageModel,
+        setImageModel,
+        updateProjectModel,
       }}
     >
       {children}

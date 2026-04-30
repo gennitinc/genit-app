@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
+import { ModelSelector } from "../inspire/model-selector";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { trackEvent } from "@/lib/mixpanelClient";
 import { AnimatePresence, motion } from "framer-motion";
@@ -63,6 +64,9 @@ export function ChatInput({
     isGenerating,
     project,
     error,
+    imageModel,
+    setImageModel,
+    updateProjectModel,
   } = useProjectDesign();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -86,6 +90,7 @@ export function ChatInput({
 
   const [initialInputValue, setInitialInputValue] = useState("");
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [selectedModel, setSelectedModel] = useState<any>(null);
 
   const { isListening, startListening, stopListening, isSupported } =
     useSpeechToText({
@@ -398,6 +403,20 @@ export function ChatInput({
                 onChange={handleFileSelect}
                 className='hidden'
               />
+
+              <div className='flex items-center gap-1.5'>
+                <ModelSelector
+                  type='image'
+                  selectedModel={selectedModel}
+                  onSelectModel={(model) => {
+                    setSelectedModel(model);
+                    setImageModel(model.modelId);
+                    if (project?._id) {
+                      updateProjectModel(project._id, model.modelId);
+                    }
+                  }}
+                />
+              </div>
 
               <div className='ml-auto flex items-center gap-1.5'>
                 <button

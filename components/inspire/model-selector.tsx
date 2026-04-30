@@ -1,27 +1,21 @@
 "use client";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Model, ModelType } from "@/types/inspire";
 import { modelApi } from "@/utils/inspire-api";
-import {
-  Crown,
-  FileText,
-  Image as ImageIcon,
-  Loader2,
-  Music,
-  Share2,
-  Type as TypeIcon,
-  Video,
-} from "lucide-react";
+import { Crown, FileText, Image as ImageIcon, Loader2, Music, Share2, Type as TypeIcon, Video } from "lucide-react";
 import { useEffect, useState } from "react";
+
+
+
+
+
+
+
+
+
 
 interface ModelSelectorProps {
   type: ModelType;
@@ -167,31 +161,28 @@ export function ModelSelector({
   const selectedModelId = selectedModel?._id || selectedModel?.id || "";
 
   return (
-    <div className='space-y-2'>
-      <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-        Model
-      </label>
+    <div className=''>
       <Select value={selectedModelId} onValueChange={handleValueChange}>
-        <SelectTrigger className='w-full'>
-          <SelectValue>
+        <SelectTrigger className='w-fit border-none !bg-transparent p-0 shadow-none ring-0 outline-none focus:ring-0 focus:ring-offset-0'>
+          <SelectValue className=''>
             {selectedModel ? (
-              <div className='flex w-full items-center justify-between gap-2'>
+              <div className='flex w-full items-center justify-between'>
                 <div className='flex min-w-0 flex-1 items-center gap-2'>
                   <ModelIcon
                     icon={selectedModel.icon}
                     name={selectedModel.name}
                     type={selectedModel.type}
                   />
-                  <span className='truncate'>{selectedModel.name}</span>
+                  {/* <span className='truncate'>{selectedModel.name}</span> */}
                   {selectedModel.isDefault && (
                     <span className='rounded bg-neutral-200 px-1.5 py-0.5 text-xs text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400'>
                       Default
                     </span>
                   )}
                 </div>
-                {selectedModel.isPremium && (
+                {/* {selectedModel.isPremium && (
                   <Crown className='h-4 w-4 flex-shrink-0 text-yellow-500' />
-                )}
+                )} */}
               </div>
             ) : (
               "Select a model"
