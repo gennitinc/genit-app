@@ -70,7 +70,7 @@ export function ChatInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useUserContext();
   const router = useRouter();
-
+ const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 10;
   const validateInput = useCallback((value: string, files: File[]) => {
     if (!value.trim() && files.length === 0) {
@@ -146,7 +146,7 @@ export function ChatInput({
     const creditsRemaining = user?.creditsRemaining ?? 0;
     if (creditsRemaining <= 10) {
       const isBasic = String(user?.userPlan) === "Basic";
-      trackEvent("low_credits_prompt_shown", {
+      trackEvent(MIXPANEL_TOKEN, "low_credits_prompt_shown", {
         credits_remaining: creditsRemaining,
         user_plan: user?.userPlan,
       });
@@ -178,13 +178,13 @@ export function ChatInput({
 
     try {
       // Use projectId for proper server routing
-      trackEvent("generation_requested", {
+      trackEvent(MIXPANEL_TOKEN, "generation_requested", {
         prompt_length: inputValue.trim().length,
         attachment_count: attachedFiles.length,
         project_id: project._id,
       });
       await generateMessage(inputValue, attachedFiles, project._id);
-      trackEvent("generation_request_submitted", {
+      trackEvent(MIXPANEL_TOKEN, "generation_request_submitted", {
         project_id: project._id,
       });
 
@@ -196,7 +196,7 @@ export function ChatInput({
       }, 100);
     } catch (error) {
       console.error("Failed to send message:", error);
-      trackEvent("generation_request_failed", {
+      trackEvent(MIXPANEL_TOKEN, "generation_request_failed", {
         project_id: project?._id,
       });
     }
