@@ -117,6 +117,7 @@ export const LoginComp = () => {
         // Check verification and onboarding status, redirect accordingly
         const userData = await apiResponse.get("/user/active-user");
         const currentUser = userData.data.user;
+        console.log("currentUser", currentUser);
         identifyAndTrackAuth(
           {
             id: currentUser._id,

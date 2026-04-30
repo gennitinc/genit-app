@@ -2,6 +2,7 @@ import mixpanel from "mixpanel-browser";
 
 const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
 const APP_ENV =  process.env.NODE_ENV;
+const IS_PROD = process.env.NODE_ENV === "production";
 
 type MixpanelProps = Record<string, unknown>;
 
@@ -17,6 +18,7 @@ export type MixpanelUserProfile = {
 };
 
 let initialized = false;
+let initFailed = false;
 
 const isMixpanelEnabled = () =>
   typeof window !== "undefined" && Boolean(MIXPANEL_TOKEN);
@@ -30,19 +32,38 @@ const toIsoDate = (value?: number | string | Date) => {
 export const initMixpanel = () => {
   if (!isMixpanelEnabled()) {
     console.warn("Mixpanel token is missing! Check your .env file.");
-    return;
+    return false;
   }
 
-  if (initialized) return;
+  if (initialized && !initFailed) return true;
 
-  mixpanel.init(MIXPANEL_TOKEN as string, {
-    autocapture: true,
-    track_pageview: true,
-    persistence: "localStorage",
-    ignore_dnt: true,
-    debug: process.env.NODE_ENV !== "production",
-  });
-  initialized = true;
+  try {
+    mixpanel.init(MIXPANEL_TOKEN as string, {
+      autocapture: true,
+      track_pageview: true,
+      persistence: "localStorage",
+      ignore_dnt: true,
+      debug: !IS_PROD,
+      batch_requests: IS_PROD,
+      api_transport: "XHR",
+      loaded: (instance) => {
+        if (!IS_PROD) {
+          console.log("[mixpanel] initialized", {
+            distinct_id: instance.get_distinct_id?.(),
+            token: MIXPANEL_TOKEN,
+          });
+        }
+      },
+    });
+    initialized = true;
+    initFailed = false;
+    return true;
+  } catch (error) {
+    initialized = false;
+    initFailed = true;
+    console.error("Mixpanel initialization failed:", error);
+    return false;
+  }
 };
 
 const withDefaults = (properties?: MixpanelProps): MixpanelProps => ({
@@ -53,22 +74,40 @@ const withDefaults = (properties?: MixpanelProps): MixpanelProps => ({
 
 export const trackEvent = (eventName: string, properties?: MixpanelProps) => {
   if (!isMixpanelEnabled()) return;
-  mixpanel.track(eventName, withDefaults(properties));
+  const ready = initialized || initMixpanel();
+  if (!ready) return;
+  try {
+    mixpanel.track(eventName, withDefaults(properties), (response) => {
+      if (!IS_PROD) {
+        console.log("[mixpanel] track callback", { eventName, response });
+      }
+    });
+  } catch (error) {
+    console.error(`Mixpanel track failed for "${eventName}":`, error);
+  }
 };
 
 export const identifyUser = (profile: MixpanelUserProfile) => {
   if (!isMixpanelEnabled()) return;
-  mixpanel.identify(profile.id);
-  mixpanel.people.set({
-    $email: profile.email,
-    $name: profile.username,
-    plan: profile.plan,
-    role: profile.role,
-    email_verified: profile.emailVerified,
-    onboarding_completed: profile.onboardingCompleted,
-    signed_up_at: toIsoDate(profile.createdAt),
-    last_seen_at: new Date().toISOString(),
-  });
+  const ready = initialized || initMixpanel();
+  if (!ready) return;
+  try {
+    mixpanel.identify(profile.id);
+    if (mixpanel.people?.set) {
+      mixpanel.people.set({
+        $email: profile.email,
+        $name: profile.username,
+        plan: profile.plan,
+        role: profile.role,
+        email_verified: profile.emailVerified,
+        onboarding_completed: profile.onboardingCompleted,
+        signed_up_at: toIsoDate(profile.createdAt),
+        last_seen_at: new Date().toISOString(),
+      });
+    }
+  } catch (error) {
+    console.error(`Mixpanel identify failed for user "${profile.id}":`, error);
+  }
 };
 
 export const identifyAndTrackAuth = (
@@ -86,7 +125,13 @@ export const identifyAndTrackAuth = (
 
 export const resetMixpanelUser = () => {
   if (!isMixpanelEnabled()) return;
-  mixpanel.reset();
+  const ready = initialized || initMixpanel();
+  if (!ready) return;
+  try {
+    mixpanel.reset();
+  } catch (error) {
+    console.error("Mixpanel reset failed:", error);
+  }
 };
 
 export const trackPageView = (path: string, properties?: MixpanelProps) => {
