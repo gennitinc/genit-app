@@ -20,8 +20,8 @@ export default function CreateRedirectPage() {
     const params = searchParams.toString();
     const target =
       mode === "ai-video-gen"
-        ? `/apps/video-generation${params ? `?${params}` : ""}`
-        : `/apps/image-generation${params ? `?${params}` : ""}`;
+        ? `/agents/video-generation${params ? `?${params}` : ""}`
+        : `/agents/image-generation${params ? `?${params}` : ""}`;
 
     router.replace(target);
   }, [router, searchParams, mode]);
