@@ -79,6 +79,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const lastFetchedProjectIdRef = useRef<string | null>(null);
   const socketRef = useRef<any>(null);
   const projectIdRef = useRef<string | null>(null);
+  const isHydratingRef = useRef<boolean>(false);
   const messagesRef = useRef<any[]>([]);
   const [focusedGenerationId, setFocusedGenerationId] = useState<string | null>(
     null
@@ -98,6 +99,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   );
   const [primaryFont, setPrimaryFont] = useState<string | null>(null);
   const [aiStatus, setAiStatus] = useState<string | null>(null);
+  const [brandSaveStatus, setBrandSaveStatus] = useState<
+    "idle" | "saving" | "saved"
+  >("idle");
   const [imageModel, setImageModel] = useState<string>(
     "gemini-3.1-flash-image-preview"
   );
@@ -206,7 +210,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     return new File([u8arr], filename, { type: mime });
   };
 
-  // Update project ID ref when project changes
+  // Update project ID ref and hydrate brand identity when project changes
   useEffect(() => {
     const newProjectIdStr = project?._id ? String(project._id) : null;
 
@@ -235,7 +239,33 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setImageModel(project.imageModel);
       }
     }
-  }, [project?._id, project?.imageModel]);
+
+    // Hydrate brand identity from project metadata if available
+    if (project?.metadata?.finalizedSelections) {
+      const selections = project.metadata.finalizedSelections;
+      
+      if (selections.selectedColorScales && selections.selectedColorScales.length > 0) {
+        // Only set if different to avoid unnecessary re-renders
+        const currentHexes = selectedColorScales.map(s => s.base).join(',');
+        const newHexes = selections.selectedColorScales.map((s: any) => s.base).join(',');
+        
+        if (currentHexes !== newHexes) {
+          console.log("[DesignProject] Hydrating colors from project metadata");
+          setSelectedColorScales(selections.selectedColorScales);
+        }
+      }
+      
+      if (selections.primaryFont && selections.primaryFont !== primaryFont) {
+        console.log("[DesignProject] Hydrating font from project metadata");
+        setPrimaryFont(selections.primaryFont);
+      }
+    }
+  }, [project?._id, project?.imageModel, project?.metadata?.finalizedSelections]);
+
+  const isGeneratingImageRef = useRef(isGeneratingImage);
+  useEffect(() => {
+    isGeneratingImageRef.current = isGeneratingImage;
+  }, [isGeneratingImage]);
 
   // Update messages ref when messages change
   useEffect(() => {
@@ -285,10 +315,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setStreamingContent("");
         setStreamingAnalysis("");
         setIsTyping(false);
-        setAiStatus(null);
-        // If server sent a new message, stop any image-generating skeleton
-        setIsGeneratingImage(false);
-        setGeneratingForMessageId(null);
+        // Only clear status if we aren't generating an image in the background
+        if (!isGeneratingImageRef.current) {
+          setAiStatus(null);
+        }
       }
     };
 
@@ -396,6 +426,17 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     socket.on("textCompleted", handleTextCompleted);
     socket.on("generatingimage", handleGeneratingImage);
 
+    const handleBrandUpdate = (response: { success: boolean }) => {
+      if (response.success) {
+        setBrandSaveStatus("saved");
+        setTimeout(() => setBrandSaveStatus("idle"), 2000);
+      } else {
+        setBrandSaveStatus("idle");
+      }
+    };
+
+    socket.on("brand-identity-updated", handleBrandUpdate);
+
     // Real-time canvas node creation
     const handleWorkflowNodeNew = (data: any) => {
       const incomingProjectId = data?.projectId;
@@ -417,6 +458,25 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     };
     socket.on("workflow:node:new", handleWorkflowNodeNew);
 
+    const handleGeneratingImageStop = (data: any) => {
+      try {
+        const incomingProjectId = data?.projectId || data?.project_id;
+        const currentProjectId = projectIdRef.current;
+        if (
+          incomingProjectId &&
+          currentProjectId &&
+          incomingProjectId !== currentProjectId
+        ) {
+          return;
+        }
+        setIsGeneratingImage(false);
+        setGeneratingForMessageId(null);
+      } catch (e) {
+        console.error("Error handling generatingimage:stop event", e);
+      }
+    };
+    socket.on("generatingimage:stop", handleGeneratingImageStop);
+
     const handleWorkflowAIStatus = (data: any) => {
       const incomingProjectId = data?.projectId;
       const currentProjectId = projectIdRef.current;
@@ -428,6 +488,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       if (data?.text) {
         setAiStatus(data.text);
+      }
+      if (data?.done) {
+        setIsGeneratingImage(false);
+        setGeneratingForMessageId(null);
+        setTimeout(() => setAiStatus(null), 2000);
       }
     };
     socket.on("workflow:ai:status", handleWorkflowAIStatus);
@@ -441,13 +506,38 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         socketRef.current.off("textDelta", handleTextDelta);
         socketRef.current.off("textCompleted", handleTextCompleted);
         socketRef.current.off("generatingimage", handleGeneratingImage);
+        socketRef.current.off("generatingimage:stop", handleGeneratingImageStop);
         socketRef.current.off("workflow:node:new");
         socketRef.current.off("workflow:ai:status");
+        socketRef.current.off("brand-identity-updated", handleBrandUpdate);
         socketRef.current.disconnect();
         socketRef.current = null;
       }
     };
   }, [transformMessages]);
+
+  // Auto-save brand identity when it changes (Debounced)
+  useEffect(() => {
+    if (
+      project?._id &&
+      socketRef.current &&
+      !isHydratingRef.current &&
+      (selectedColorScales.length > 0 || primaryFont)
+    ) {
+      const timer = setTimeout(() => {
+        setBrandSaveStatus("saving");
+        socketRef.current.emit("update-brand-identity", {
+          projectId: project._id,
+          brandIdentity: {
+            selectedColorScales,
+            primaryFont,
+          },
+        });
+      }, 800); // 800ms debounce
+
+      return () => clearTimeout(timer);
+    }
+  }, [selectedColorScales, primaryFont, project?._id]);
 
   const generateMessage = useCallback(
     async (
@@ -925,6 +1015,21 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             setStreamingContent("");
             setStreamingAnalysis("");
             setIsTyping(false);
+          }
+
+          if (projectData.metadata?.finalizedSelections) {
+            const selections = projectData.metadata.finalizedSelections;
+            isHydratingRef.current = true;
+            if (selections.selectedColorScales) {
+              setSelectedColorScales(selections.selectedColorScales);
+            }
+            if (selections.primaryFont) {
+              setPrimaryFont(selections.primaryFont);
+            }
+            // Briefly wait for state updates to propagate
+            setTimeout(() => {
+              isHydratingRef.current = false;
+            }, 100);
           }
 
           setProject(projectData);
@@ -1430,6 +1535,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setGenerationMode,
         primaryFont,
         setPrimaryFont,
+        brandSaveStatus,
         liveNodes,
         addLiveNode,
         aiStatus,

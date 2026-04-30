@@ -1,6 +1,7 @@
 "use client";
 
 import { AIThinkingContent } from "../chat/messages";
+import { BrandIndicator } from "../common/brand-indicator";
 import { ColorManagement } from "../chat/messages/color-management";
 import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
 import { HomeInfoGrid } from "../common/homeInfoGrid";
@@ -68,12 +69,14 @@ import {
   Users,
   Video,
   Volume2,
+  Wand2,
   WandSparklesIcon,
   Workflow,
   X,
   XIcon,
   Youtube,
   Zap,
+  CheckCircle2,
 } from "lucide-react";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -400,6 +403,8 @@ export function IdeaSection() {
     primaryFont,
     imageModel,
     setImageModel,
+    project,
+    brandSaveStatus,
   } = useProjectDesign();
 
   const [beamPosition, setBeamPosition] = useState({ x: 50, y: 50 });
@@ -434,6 +439,10 @@ export function IdeaSection() {
   >("illustration");
   const [extraKeywords, setExtraKeywords] = useState<string>("");
   const [selectedModel, setSelectedModel] = useState<any>(null);
+
+  useEffect(() => {
+    setSelectedModel(null);
+  }, [project?._id]);
   const [imageRotations] = useState(() =>
     images.map(() => Math.random() * 20 - 10)
   );
@@ -693,13 +702,14 @@ export function IdeaSection() {
       setInputError(null);
 
       try {
+        const isAuto = selectedDesignTypeId === "auto";
         const res = await createProject(
           inputValue,
           attachedFiles as any,
           undefined,
           selectedDesignTypeId || undefined,
-          selectedOrientation || undefined,
-          customSize.width && customSize.height ? customSize : undefined,
+          isAuto || selectedOrientation === "auto" ? undefined : (selectedOrientation || undefined),
+          isAuto || selectedOrientation === "auto" ? undefined : (customSize.width && customSize.height ? customSize : undefined),
           {
             finalizedSelections: {
               selectedColorScales,
@@ -832,6 +842,11 @@ export function IdeaSection() {
   // Design type items with clean design (no gradients)
   const designTypeItems = [
     {
+      id: "auto",
+      label: "Auto",
+      icon: Wand2,
+    },
+    {
       id: "flier",
       label: "Flier",
       icon: FileText,
@@ -908,7 +923,9 @@ export function IdeaSection() {
   const getOrientationOptions = (designTypeId: string | null) => {
     if (!designTypeId) return [];
 
-    const options: { id: string; label: string; dimensions?: string }[] = [];
+    const options: { id: string; label: string; dimensions?: string }[] = [
+      { id: "auto", label: "Auto" },
+    ];
 
     switch (designTypeId) {
       case "video":
@@ -1155,19 +1172,28 @@ export function IdeaSection() {
                   <div className='mx-4 mt-3 mb-2 flex items-center justify-between text-sm'>
                     {!isGenerating && (
                       <div className='flex w-full items-center justify-between gap-1'>
-                        <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
-                          <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
-                          {user ? (
-                            <span className='text-muted-foreground text-xs'>
-                              {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
-                              Credits left
-                            </span>
-                          ) : (
-                            <span className='text-muted-foreground text-xs'>
-                              Get a 50 free credit
-                            </span>
-                          )}
-                        </div>
+                         <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
+                           <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
+                           {user ? (
+                             <span className='text-muted-foreground text-xs'>
+                               {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
+                               Credits left
+                             </span>
+                           ) : (
+                             <span className='text-muted-foreground text-xs'>
+                               Get a 50 free credit
+                             </span>
+                           )}
+                         </div>
+
+                         <div className="flex items-center gap-3">
+                           <BrandIndicator
+                             onClick={() => {
+                               setIsBrandSettingsOpen(!isBrandSettingsOpen);
+                               setIsSettingsOpen(false);
+                             }}
+                           />
+                         </div>
 
                         {user && (user?.creditsRemaining ?? 0) === 0 && (
                           <div className='text-xs font-medium'>
@@ -1278,7 +1304,9 @@ export function IdeaSection() {
                           <selectedDesignType.icon className='h-3 w-3' />
                           {selectedDesignType.label}
                           {selectedOrientation &&
-                            selectedOrientation !== "custom" && (
+                            selectedOrientation !== "custom" &&
+                            selectedOrientation !== "auto" &&
+                            selectedDesignTypeId !== "auto" && (
                               <span className='font-normal opacity-60'>
                                 • {selectedOrientation}
                               </span>
@@ -1287,10 +1315,30 @@ export function IdeaSection() {
                       )}
 
                       <div className='ml-auto flex items-center gap-1.5'>
+                        {brandSaveStatus !== "idle" && (
+                          <div className='flex items-center gap-1.5 px-1.5 text-[10px] font-medium animate-in fade-in slide-in-from-right-1 duration-300'>
+                            {brandSaveStatus === "saving" ? (
+                              <>
+                                <Loader2 className='size-3 animate-spin text-primary' />
+                                <span className='text-muted-foreground/60'>
+                                  Saving...
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <CheckCircle2 className='size-3 text-green-500' />
+                                <span className='text-green-500 font-semibold'>
+                                  Saved
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        )}
                         <div className='flex items-center gap-1.5'>
                           <ModelSelector
                             type='image'
                             selectedModel={selectedModel}
+                            initialModelId={imageModel}
                             onSelectModel={(model) => {
                               setSelectedModel(model);
                               setImageModel(model.modelId);
@@ -1406,7 +1454,7 @@ export function IdeaSection() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className='border-border absolute top-full right-0 left-0 z-50 mt-2 max-h-[300px] w-full overflow-hidden rounded-xl border bg-white shadow-md lg:w-fit dark:bg-black'
+                  className='border-border absolute top-full right-0 left-0 z-50 mt-2 max-h-[450px] w-full overflow-y-auto rounded-xl border bg-white shadow-md dark:bg-black'
                 >
                   <div className='flex flex-col p-4'>
                     {/* Header */}
@@ -1430,7 +1478,7 @@ export function IdeaSection() {
                     </div>
 
                     {/* Design Type Selection or Orientation Selection */}
-                    <div className='max-h-[320px] overflow-y-auto'>
+                    <div className='flex-1'>
                       {!showOrientationSelection ? (
                         <div className='space-y-0.5'>
                           {designTypeItems.map((item) => {
@@ -1470,7 +1518,12 @@ export function IdeaSection() {
                                   else {
                                     setSelectedDesignTypeId(item.id);
                                     setSelectedOrientation(null);
-                                    setShowOrientationSelection(true);
+                                    if (item.id === "auto") {
+                                      setIsSettingsOpen(false);
+                                      setShowOrientationSelection(false);
+                                    } else {
+                                      setShowOrientationSelection(true);
+                                    }
                                   }
                                 }}
                                 disabled={isComingSoon}

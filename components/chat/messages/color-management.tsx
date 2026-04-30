@@ -7,7 +7,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Check, Lock, Plus, RefreshCw, Search, Unlock, X } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-// ─── Types ───────────────────────────────────────────────────────────────────
 
 type Tab = "brand" | "neutral" | "status" | "fonts";
 
@@ -216,12 +215,16 @@ export function ColorManagement({
   const {
     generationMode,
     setGenerationMode,
+    selectedColorScales,
     setSelectedColorScales,
     primaryFont,
     setPrimaryFont,
   } = useProjectDesign();
 
   const [activeTab, setActiveTab] = useState<Tab>("brand");
+
+  const hasSyncedFromContext = useRef(false);
+  const isInternalUpdate = useRef(false);
 
   // Brand
   const [brandScales, setBrandScales] = useState<ColorScale[]>(() => {
@@ -231,6 +234,15 @@ export function ColorManagement({
         label: idx === 0 ? "Primary" : "Secondary",
         base: s.base,
         shades: s.shades || generateShades(s.base),
+      }));
+    }
+    if (selectedColorScales && selectedColorScales.length > 0) {
+      hasSyncedFromContext.current = true;
+      return selectedColorScales.map((s, idx) => ({
+        id: idx === 0 ? "primary" : `secondary-${idx}`,
+        label: idx === 0 ? "Primary" : "Secondary",
+        base: s.base,
+        shades: s.shades,
       }));
     }
     return [
@@ -243,12 +255,50 @@ export function ColorManagement({
     ];
   });
 
-  // Sync to context whenever brandScales change (ONLY if not locked)
+  // Sync context to local state if context changes (e.g. after project fetch)
+  useEffect(() => {
+    if (selectedColorScales.length > 0 && !isLocked) {
+      // If this update came from our own internal change, skip syncing back
+      if (isInternalUpdate.current) {
+        isInternalUpdate.current = false;
+        return;
+      }
+
+      const currentContextHexes = selectedColorScales.map((s) => s.base).join(",");
+      const currentLocalHexes = brandScales.map((s) => s.base).join(",");
+      
+      if (currentContextHexes !== currentLocalHexes) {
+        hasSyncedFromContext.current = true;
+        setBrandScales(
+          selectedColorScales.map((s, idx) => ({
+            id: idx === 0 ? "primary" : `secondary-${idx}`,
+            label: idx === 0 ? "Primary" : "Secondary",
+            base: s.base,
+            shades: s.shades,
+          }))
+        );
+      }
+    }
+  }, [selectedColorScales, isLocked]);
+
+  // Sync local state to context whenever brandScales change (ONLY if not locked)
   useEffect(() => {
     if (!isLocked) {
-      setSelectedColorScales(
-        brandScales.map((s) => ({ base: s.base, shades: s.shades }))
-      );
+      // Prevent overwriting context with defaults on initial mount if context was empty
+      if (!hasSyncedFromContext.current && selectedColorScales.length === 0) {
+        const isDefault = brandScales.length === 1 && brandScales[0].base === "#6366f1";
+        if (isDefault) return;
+      }
+
+      const currentContextHexes = selectedColorScales.map((s) => s.base).join(",");
+      const currentLocalHexes = brandScales.map((s) => s.base).join(",");
+
+      if (currentContextHexes !== currentLocalHexes) {
+        isInternalUpdate.current = true;
+        setSelectedColorScales(
+          brandScales.map((s) => ({ base: s.base, shades: s.shades }))
+        );
+      }
     }
   }, [brandScales, setSelectedColorScales, isLocked]);
   const [brandLocked, setBrandLocked] = useState<Set<string>>(new Set());

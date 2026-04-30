@@ -268,6 +268,7 @@ export interface IProjectDesignContext {
 
   primaryFont: string | null;
   setPrimaryFont: (font: string | null) => void;
+  brandSaveStatus: "idle" | "saving" | "saved";
 
   liveNodes: Array<{
     id: string;

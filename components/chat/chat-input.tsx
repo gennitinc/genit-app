@@ -8,19 +8,25 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { ModelSelector } from "../inspire/model-selector";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { trackEvent } from "@/lib/mixpanelClient";
+import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
   ChevronDown,
   Loader2,
   Mic,
+  Palette,
   Paperclip,
   Plus,
   Settings,
+  X,
+  CheckCircle2,
   Zap,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { BrandIndicator } from "../common/brand-indicator";
+import { ColorManagement } from "./messages/color-management";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -67,6 +73,7 @@ export function ChatInput({
     imageModel,
     setImageModel,
     updateProjectModel,
+    brandSaveStatus,
   } = useProjectDesign();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -90,7 +97,12 @@ export function ChatInput({
 
   const [initialInputValue, setInitialInputValue] = useState("");
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isBrandSettingsOpen, setIsBrandSettingsOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState<any>(null);
+
+  useEffect(() => {
+    setSelectedModel(null);
+  }, [project?._id]);
 
   const { isListening, startListening, stopListening, isSupported } =
     useSpeechToText({
@@ -317,6 +329,15 @@ export function ChatInput({
                   )}
                 </div>
 
+                <div className="flex items-center gap-3">
+                  <BrandIndicator
+                    onClick={() => {
+                      setIsBrandSettingsOpen(!isBrandSettingsOpen);
+                      setIsSettingsOpen(false);
+                    }}
+                  />
+                </div>
+
                 {user && (user?.creditsRemaining ?? 0) === 0 && (
                   <div className='text-xs font-medium'>
                     {String(user?.userPlan) === "Basic" ? (
@@ -408,6 +429,7 @@ export function ChatInput({
                 <ModelSelector
                   type='image'
                   selectedModel={selectedModel}
+                  initialModelId={imageModel}
                   onSelectModel={(model) => {
                     setSelectedModel(model);
                     setImageModel(model.modelId);
@@ -419,6 +441,41 @@ export function ChatInput({
               </div>
 
               <div className='ml-auto flex items-center gap-1.5'>
+                {brandSaveStatus !== "idle" && (
+                  <div className='flex items-center gap-1.5 px-1.5 text-[10px] font-medium animate-in fade-in slide-in-from-right-1 duration-300'>
+                    {brandSaveStatus === "saving" ? (
+                      <>
+                        <Loader2 className='size-3 animate-spin text-primary' />
+                        <span className='text-muted-foreground'>Saving...</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className='size-3 text-green-500' />
+                        <span className='text-green-500 font-semibold'>Saved</span>
+                      </>
+                    )}
+                  </div>
+                )}
+                <button
+                  type='button'
+                  className={cn(
+                    "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+                    isBrandSettingsOpen
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
+                  )}
+                  aria-label='Brand settings'
+                  onClick={() => {
+                    setIsBrandSettingsOpen(!isBrandSettingsOpen);
+                    setIsSettingsOpen(false);
+                    trackEvent("chat_brand_settings_toggled", {
+                      is_opening: !isBrandSettingsOpen,
+                      project_id: project?._id,
+                    });
+                  }}
+                >
+                  <Palette className='size-4 shrink-0' />
+                </button>
                 <button
                   type='button'
                   className={`relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out ${
@@ -455,6 +512,43 @@ export function ChatInput({
               </div>
             </div>
           </form>
+
+          <AnimatePresence>
+            {isBrandSettingsOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className='border-border absolute bottom-full right-0 left-0 z-50 mx-auto mb-2 max-h-[500px] w-full max-w-md overflow-hidden rounded-xl border bg-white shadow-md md:mx-0 dark:bg-black'
+              >
+                <div className='flex flex-col p-4'>
+                  {/* Header */}
+                  <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
+                    <div className='flex items-center gap-2'>
+                      <Palette className='text-primary h-4 w-4' />
+                      <h3 className='text-foreground text-sm font-semibold'>
+                        Brand Identity
+                      </h3>
+                    </div>
+                    <button
+                      type='button'
+                      onClick={() => setIsBrandSettingsOpen(false)}
+                      className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-zinc-800 dark:hover:text-gray-300'
+                      aria-label='Close settings'
+                    >
+                      <X className='h-4 w-4' />
+                    </button>
+                  </div>
+
+                  {/* Brand Settings Content */}
+                  <div className='max-h-[400px] overflow-y-auto pr-1 custom-scrollbar'>
+                    <ColorManagement className='p-1' />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>

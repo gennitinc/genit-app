@@ -21,6 +21,7 @@ interface ModelSelectorProps {
   type: ModelType;
   selectedModel: Model | null;
   onSelectModel: (model: Model) => void;
+  initialModelId?: string;
 }
 
 // Helper function to render SVG icon
@@ -72,6 +73,7 @@ export function ModelSelector({
   type,
   selectedModel,
   onSelectModel,
+  initialModelId,
 }: ModelSelectorProps) {
   const [models, setModels] = useState<Model[]>([]);
   const [loading, setLoading] = useState(true);
@@ -90,6 +92,17 @@ export function ModelSelector({
           // Check if current selected model matches the type
           const currentModelMatchesType =
             selectedModel && selectedModel.type === type;
+
+          // If we have an initialModelId, try to find it first
+          if (initialModelId && !selectedModel) {
+            const initialModel = filteredModels.find(
+              (m) => (m.modelId || m._id || m.id) === initialModelId
+            );
+            if (initialModel) {
+              onSelectModel(initialModel);
+              return;
+            }
+          }
 
           // Auto-select default model if:
           // 1. No model is selected, OR
@@ -117,7 +130,7 @@ export function ModelSelector({
 
     fetchModels();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type]);
+  }, [type, initialModelId]);
 
   const handleValueChange = async (value: string) => {
     const model = models.find((m) => (m._id || m.id) === value);
@@ -135,9 +148,9 @@ export function ModelSelector({
   if (loading) {
     return (
       <div className='space-y-2'>
-        <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
+        {/* <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
           Model
-        </label>
+        </label> */}
         <div className='flex items-center justify-center py-2'>
           <Loader2 className='h-4 w-4 animate-spin text-neutral-400' />
         </div>
@@ -148,12 +161,12 @@ export function ModelSelector({
   if (models.length === 0) {
     return (
       <div className='space-y-2'>
-        <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
+        {/* <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
           Model
-        </label>
-        <div className='py-2 text-center text-sm text-neutral-500 dark:text-neutral-400'>
+        </label> */}
+        <span className='py-2 text-center text-sm text-neutral-500 dark:text-neutral-400'>
           No models available
-        </div>
+        </span>
       </div>
     );
   }

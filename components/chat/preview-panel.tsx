@@ -58,6 +58,7 @@ export const PreviewPanel = () => {
     project.category === "banner" ||
     project.category === "logo" ||
     project.category === "presentation" ||
+    project.category === "presentation" ||
     project.category === "generic_design";
 
   const isWebsite =
