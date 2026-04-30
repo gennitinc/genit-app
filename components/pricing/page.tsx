@@ -246,17 +246,17 @@ const plans = process.env.NODE_ENV == "production" ? plansProd : plansDev;
 export default function PricingComponent() {
   const [isYearly, setIsYearly] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
-
+ const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   useEffect(() => {
-    trackEvent("pricing_page_viewed", {
+    trackEvent(MIXPANEL_TOKEN, "pricing_page_viewed", {
       plans_count: plans.length,
     });
-    trackExperimentExposure("pricing_billing_cycle_toggle", "default_monthly");
+    trackExperimentExposure(MIXPANEL_TOKEN, "pricing_billing_cycle_toggle", "default_monthly");
   }, []);
 
   const handleCheckout = async (plan: any) => {
     const billing = isYearly ? "yearly" : "monthly";
-    trackEvent("pricing_plan_selected", {
+    trackEvent(MIXPANEL_TOKEN, "pricing_plan_selected", {
       plan_id: plan.id,
       plan_name: plan.name,
       billing_cycle: billing,
@@ -265,7 +265,7 @@ export default function PricingComponent() {
 
     if (plan.monthlyPrice === 0) {
       // Handle free plan - redirect to signup or dashboard
-      trackEvent("checkout_intent", {
+      trackEvent(MIXPANEL_TOKEN, "checkout_intent", {
         plan_id: plan.id,
         plan_name: plan.name,
         billing_cycle: billing,
@@ -279,7 +279,7 @@ export default function PricingComponent() {
 
     try {
       const productId = plan.productIds[billing];
-      trackEvent("checkout_started", {
+      trackEvent(MIXPANEL_TOKEN, "checkout_started", {
         plan_id: plan.id,
         plan_name: plan.name,
         billing_cycle: billing,
@@ -298,7 +298,7 @@ export default function PricingComponent() {
 
       if (response.data && response.data.checkoutUrl) {
         // Redirect to Polar checkout
-        trackEvent("checkout_redirected", {
+        trackEvent(MIXPANEL_TOKEN, "checkout_redirected", {
           plan_id: plan.id,
           plan_name: plan.name,
           billing_cycle: billing,
@@ -306,7 +306,7 @@ export default function PricingComponent() {
         window.location.href = response.data.checkoutUrl;
       } else {
         console.error("Checkout failed - no checkout URL received");
-        trackEvent("checkout_failed", {
+        trackEvent(MIXPANEL_TOKEN, "checkout_failed", {
           plan_id: plan.id,
           plan_name: plan.name,
           billing_cycle: billing,
@@ -315,7 +315,7 @@ export default function PricingComponent() {
       }
     } catch (error) {
       console.error("Error initiating checkout:", error);
-      trackEvent("checkout_failed", {
+      trackEvent(MIXPANEL_TOKEN, "checkout_failed", {
         plan_id: plan.id,
         plan_name: plan.name,
         billing_cycle: billing,
@@ -402,10 +402,11 @@ export default function PricingComponent() {
                 onChange={(e) => {
                   const nextValue = e.target.checked;
                   setIsYearly(nextValue);
-                  trackEvent("pricing_billing_toggled", {
+                  trackEvent(MIXPANEL_TOKEN, "pricing_billing_toggled", {
                     billing_cycle: nextValue ? "yearly" : "monthly",
                   });
                   trackExperimentExposure(
+                    MIXPANEL_TOKEN,
                     "pricing_billing_cycle_toggle",
                     nextValue ? "yearly" : "monthly",
                   );
@@ -635,7 +636,7 @@ export default function PricingComponent() {
                     onClick={() =>
                       plan.id === "enterprise"
                         ? (() => {
-                            trackEvent("enterprise_contact_intent", {
+                            trackEvent(MIXPANEL_TOKEN, "enterprise_contact_intent", {
                               source: "pricing_page",
                             });
                             window.location.href = "mailto:sales@gennit.com";

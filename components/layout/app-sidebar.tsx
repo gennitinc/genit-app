@@ -52,7 +52,7 @@ export function AppSidebar({
   const params = useParams();
 
   const isChatIdPage = !!params.id && pathname.startsWith("/chat");
-
+ const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   useEffect(() => {
     // Auto-collapse on desktop and tablets if on the chat ID page
     // Mobile users (Sheet version) should have it handled by the Sidebar component
@@ -181,13 +181,13 @@ export function AppSidebar({
                   type="button"
                   onClick={() => {
                     if (user?.userPlan === "Basic") {
-                      trackEvent("upgrade_cta_clicked", {
+                      trackEvent(MIXPANEL_TOKEN, "upgrade_cta_clicked", {
                         source: "sidebar_card",
                         destination: "/pricing",
                       });
                       router.push("/pricing");
                     } else {
-                      trackEvent("buy_credits_cta_clicked", {
+                      trackEvent(MIXPANEL_TOKEN, "buy_credits_cta_clicked", {
                         source: "sidebar_card",
                         destination: "/user/settings?tab=billing",
                       });
@@ -210,13 +210,13 @@ export function AppSidebar({
               className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center shadow-lg hover:bg-cyan-500/90 transition-colors cursor-pointer"
               onClick={() => {
                 if (user?.userPlan === "Basic") {
-                  trackEvent("upgrade_cta_clicked", {
+                  trackEvent(MIXPANEL_TOKEN, "upgrade_cta_clicked", {
                     source: "sidebar_collapsed",
                     destination: "/pricing",
                   });
                   router.push("/pricing");
                 } else {
-                  trackEvent("buy_credits_cta_clicked", {
+                  trackEvent(MIXPANEL_TOKEN, "buy_credits_cta_clicked", {
                     source: "sidebar_collapsed",
                     destination: "/user/settings?tab=billing",
                   });
