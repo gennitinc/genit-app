@@ -1,7 +1,7 @@
 import mixpanel from "mixpanel-browser";
 
 const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
-const APP_ENV = process.env.NEXT_PUBLIC_APP_ENV || process.env.NODE_ENV;
+const APP_ENV =  process.env.NODE_ENV;
 
 type MixpanelProps = Record<string, unknown>;
 
