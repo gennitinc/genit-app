@@ -7,9 +7,10 @@ import { initMixpanel, trackPageView } from "../lib/mixpanelClient";
 export default function MixpanelProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
 
   useEffect(() => {
-    initMixpanel();
+    initMixpanel(MIXPANEL_TOKEN as string);
   }, []);
 
   useEffect(() => {

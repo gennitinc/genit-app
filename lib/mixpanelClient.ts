@@ -29,7 +29,7 @@ const toIsoDate = (value?: number | string | Date) => {
   return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
 };
 
-export const initMixpanel = () => {
+export const initMixpanel = (MIXPANEL_TOKEN_VALUE: string) => {
   if (!isMixpanelEnabled()) {
     console.warn("Mixpanel token is missing! Check your .env file.");
     return false;
@@ -38,7 +38,7 @@ export const initMixpanel = () => {
   if (initialized && !initFailed) return true;
 
   try {
-    mixpanel.init(MIXPANEL_TOKEN as string, {
+    mixpanel.init(MIXPANEL_TOKEN_VALUE as string, {
       autocapture: true,
       track_pageview: true,
       persistence: "localStorage",
@@ -50,7 +50,7 @@ export const initMixpanel = () => {
         if (!IS_PROD) {
           console.log("[mixpanel] initialized", {
             distinct_id: instance.get_distinct_id?.(),
-            token: MIXPANEL_TOKEN,
+            token: MIXPANEL_TOKEN_VALUE,
           });
         }
       },
@@ -74,7 +74,7 @@ const withDefaults = (properties?: MixpanelProps): MixpanelProps => ({
 
 export const trackEvent = (eventName: string, properties?: MixpanelProps) => {
   if (!isMixpanelEnabled()) return;
-  const ready = initialized || initMixpanel();
+  const ready = initialized || initMixpanel(MIXPANEL_TOKEN as string);
   if (!ready) return;
   try {
     mixpanel.track(eventName, withDefaults(properties), (response) => {
@@ -89,7 +89,7 @@ export const trackEvent = (eventName: string, properties?: MixpanelProps) => {
 
 export const identifyUser = (profile: MixpanelUserProfile) => {
   if (!isMixpanelEnabled()) return;
-  const ready = initialized || initMixpanel();
+  const ready = initialized || initMixpanel(MIXPANEL_TOKEN as string);
   if (!ready) return;
   try {
     mixpanel.identify(profile.id);
@@ -125,7 +125,7 @@ export const identifyAndTrackAuth = (
 
 export const resetMixpanelUser = () => {
   if (!isMixpanelEnabled()) return;
-  const ready = initialized || initMixpanel();
+  const ready = initialized || initMixpanel(MIXPANEL_TOKEN as string);
   if (!ready) return;
   try {
     mixpanel.reset();
