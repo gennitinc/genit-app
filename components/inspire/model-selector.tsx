@@ -227,9 +227,9 @@ export function ModelSelector({
                         </div> */}
                       </div>
                     </div>
-                    {model.isPremium && (
+                    {/* {model.isPremium && (
                       <Crown className='h-4 w-4 flex-shrink-0 text-yellow-500' />
-                    )}
+                    )} */}
                   </div>
                 </SelectItem>
               );
