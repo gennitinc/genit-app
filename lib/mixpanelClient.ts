@@ -46,6 +46,7 @@ export const initMixpanel = (MIXPANEL_TOKEN_VALUE: string) => {
       debug: !IS_PROD,
       batch_requests: IS_PROD,
       api_transport: "XHR",
+      api_host: "https://api-eu.mixpanel.com",
       loaded: (instance) => {
         if (!IS_PROD) {
           console.log("[mixpanel] initialized", {

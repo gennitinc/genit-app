@@ -458,12 +458,6 @@ export function IdeaSection() {
     delay: 1000,
   });
 
-  // Effect to resize textarea on inputValue change
-  useEffect(() => {
-    trackEvent(MIXPANEL_TOKEN,  "idea_section_viewed", {
-      available_apps: APP_SECTIONS.reduce((acc, section) => acc + section.apps.length, 0),
-    });
-  }, []);
 
   useEffect(() => {
     if (textareaRef.current) {
