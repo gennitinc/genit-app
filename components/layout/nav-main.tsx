@@ -41,6 +41,7 @@ export function NavMain() {
 
    const user = useUserContext().user;
 
+   const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
    const navItems = [
      {
        title: "Design Chat",
@@ -175,10 +176,11 @@ export function NavMain() {
                 onClick={() => {
                   handleLinkClick();
                   trackAppOpened(
+                    MIXPANEL_TOKEN,
                     item.href.replace(/\//g, "-") || "home",
                     item.title,
                     "sidebar_nav",
-                    { href: item.href },
+                    { href: item.href || "" },
                   );
                 }}
               >
@@ -242,8 +244,8 @@ export function NavMain() {
                 )}
                 onClick={() => {
                   handleLinkClick();
-                  trackFeatureUsed("secondary_nav_clicked", {
-                    nav_item: item.title,
+                  trackFeatureUsed(MIXPANEL_TOKEN, "secondary_nav_clicked", {
+                    nav_item: item.title || "",
                     href: item.href,
                   });
                 }}

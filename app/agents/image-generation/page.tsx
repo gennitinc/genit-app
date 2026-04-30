@@ -63,6 +63,7 @@ export type ImageStyle =
   | "watercolor"
   | "threeDRrender";
 
+const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
 function ImageGenerationPage() {
   const router = useRouter();
   const { user } = useUserContext();
@@ -119,7 +120,7 @@ function ImageGenerationPage() {
   const updateContentTab = useCallback(
     (tab: "preview" | "history" | "community" | "templates" | "tutorial") => {
       setActiveContentTab(tab);
-      trackFeatureUsed("image_gen_tab_switched", { tab });
+      trackFeatureUsed(MIXPANEL_TOKEN, "image_gen_tab_switched", { tab });
       const urlParams = new URLSearchParams(searchParams.toString());
       urlParams.set("tab", tab);
       if (projectId) urlParams.set("projectId", projectId);
@@ -230,7 +231,7 @@ function ImageGenerationPage() {
 
     setIsGenerating(true);
     updateContentTab("preview");
-    trackEvent("image_generation_started", {
+    trackEvent(MIXPANEL_TOKEN, "image_generation_started", {
       model_id: selectedImageModel?._id,
       style: selectedImageStyle,
       image_count: imageCount,
@@ -274,7 +275,7 @@ function ImageGenerationPage() {
         setGeneratedImages((prev) => [...newImages, ...prev]);
         setSelectedImageIndex(0);
         toast(`Successfully generated ${newImages.length} image(s)`);
-        trackEvent("image_generation_succeeded", {
+        trackEvent(MIXPANEL_TOKEN, "image_generation_succeeded", {
           generated_count: newImages.length,
           model_id: selectedImageModel?._id,
         });
@@ -283,7 +284,7 @@ function ImageGenerationPage() {
       }
     } catch (error: any) {
       console.error("Generation error:", error);
-      trackEvent("image_generation_failed", {
+      trackEvent(MIXPANEL_TOKEN,  "image_generation_failed", {
         reason: error?.message || "unknown",
         model_id: selectedImageModel?._id,
       });
@@ -434,7 +435,7 @@ function ImageGenerationPage() {
                     selectedModel={selectedImageModel}
                     onSelectModel={(model) => {
                       setSelectedImageModel(model);
-                      trackFeatureUsed("image_model_selected", {
+                      trackFeatureUsed(MIXPANEL_TOKEN, "image_model_selected", {
                         model_id: model?._id,
                         model_name: model?.name,
                       });

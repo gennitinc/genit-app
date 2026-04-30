@@ -19,6 +19,7 @@ import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
 import { trackAppOpened, trackFeatureUsed, trackEvent } from "@/lib/mixpanelClient";
 
+const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
 const TryNowButton = ({ onClick }: { onClick?: () => void }) => (
   <button
     type="button"
@@ -87,7 +88,7 @@ const AppCard = ({
       e.stopPropagation();
     }
 
-    trackAppOpened(id, title, "agents_directory", {
+    trackAppOpened(MIXPANEL_TOKEN, id, title, "agents_directory", {
       app_type: type,
       href,
     });
@@ -192,7 +193,7 @@ const Apps = () => {
   const pathname = usePathname();
 
   React.useEffect(() => {
-    trackEvent("agents_directory_viewed", {
+    trackEvent(MIXPANEL_TOKEN, "agents_directory_viewed", {
       total_sections: APP_SECTIONS.length,
       total_apps: APP_SECTIONS.reduce((acc, section) => acc + section.apps.length, 0),
     });
@@ -233,7 +234,7 @@ const Apps = () => {
                             key={category.name}
                             onClick={() => {
                               setActiveCategory(category.name);
-                              trackFeatureUsed("agents_category_filter_changed", {
+                              trackFeatureUsed(MIXPANEL_TOKEN, "agents_category_filter_changed", {
                                 category: category.name,
                               });
                             }}
@@ -288,7 +289,7 @@ const Apps = () => {
                               key={mType}
                               onClick={() => {
                                 setActiveType(mType);
-                                trackFeatureUsed("agents_type_filter_changed", {
+                                trackFeatureUsed(MIXPANEL_TOKEN, "agents_type_filter_changed", {
                                   media_type: mType,
                                 });
                               }}
@@ -340,7 +341,7 @@ const Apps = () => {
                                   className="flex items-center gap-1 text-sm-semi transition-colors shrink-0 text-white p-[10px]"
                                   onClick={() => {
                                     setActiveCategory(section.title);
-                                    trackFeatureUsed("agents_section_see_all_clicked", {
+                                    trackFeatureUsed(MIXPANEL_TOKEN, "agents_section_see_all_clicked", {
                                       section_title: section.title,
                                     });
                                   }}

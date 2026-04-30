@@ -145,7 +145,7 @@ export function AuthenticatedContextProvider({
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [dataFetched, setDataFetched] = useState(false);
-
+ const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   const fetchCurrentUser = async () => {
     setLoading(true);
     setIsNetworkError(false);
@@ -208,7 +208,7 @@ export function AuthenticatedContextProvider({
             } as User["preferences"],
           };
         });
-        trackEvent("user_preferences_updated", {
+        trackEvent(MIXPANEL_TOKEN, "user_preferences_updated", {
           changed_fields: Object.keys(preferences ?? {}),
         });
       }
@@ -226,7 +226,8 @@ export function AuthenticatedContextProvider({
   useEffect(() => {
     if (!user?._id) return;
     identifyAndTrackAuth(
-      {
+      MIXPANEL_TOKEN,
+        {
         id: user._id,
         email: user.email,
         username: user.username,

@@ -275,10 +275,11 @@ function VideoGenerationPage() {
     }));
   };
 
+  const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   const updateContentTab = useCallback(
     (tab: any) => {
       setActiveContentTab(tab);
-      trackFeatureUsed("video_gen_tab_switched", {
+      trackFeatureUsed(MIXPANEL_TOKEN, "video_gen_tab_switched", {
         tab,
         generation_mode: generationMode,
       });
@@ -580,7 +581,7 @@ function VideoGenerationPage() {
       }
       setIsGenerating(true);
       updateContentTab("preview");
-      trackEvent("inspire_image_generation_started", {
+      trackEvent(MIXPANEL_TOKEN, "inspire_image_generation_started", {
         model_id: selectedImageModel?._id,
         style: selectedImageStyle,
         image_count: imageCount,
@@ -614,7 +615,7 @@ function VideoGenerationPage() {
           setGeneratedImages((prev) => [...newImages, ...prev]);
           setSelectedImageIndex(0);
           toast(`Generated ${newImages.length} image(s)`);
-          trackEvent("inspire_image_generation_succeeded", {
+          trackEvent(MIXPANEL_TOKEN, "inspire_image_generation_succeeded", {
             generated_count: newImages.length,
             model_id: selectedImageModel?._id,
           });
@@ -623,7 +624,7 @@ function VideoGenerationPage() {
         }
       } catch (error: any) {
         console.error(error);
-        trackEvent("inspire_image_generation_failed", {
+        trackEvent(MIXPANEL_TOKEN, "inspire_image_generation_failed", {
           reason: error?.message || "unknown",
           model_id: selectedImageModel?._id,
         });
@@ -641,7 +642,7 @@ function VideoGenerationPage() {
     setIsGenerating(true);
     setGenerationProgress(0);
     updateContentTab("preview");
-    trackEvent("video_generation_started", {
+    trackEvent(MIXPANEL_TOKEN, "video_generation_started", {
       model_id: selectedVideoModel?._id,
       duration,
       aspect_ratio: selectedAspectRatio,
@@ -698,7 +699,7 @@ function VideoGenerationPage() {
         setSelectedVideoIndex(0);
         setGenerationProgress(100);
         toast(`Successfully generated ${newVideos.length} video(s)`);
-        trackEvent("video_generation_succeeded", {
+        trackEvent(MIXPANEL_TOKEN, "video_generation_succeeded", {
           generated_count: newVideos.length,
           model_id: selectedVideoModel?._id,
         });
@@ -707,7 +708,7 @@ function VideoGenerationPage() {
       }
     } catch (error: any) {
       console.error(error);
-      trackEvent("video_generation_failed", {
+      trackEvent(MIXPANEL_TOKEN, "video_generation_failed", {
         reason: error?.message || "unknown",
         model_id: selectedVideoModel?._id,
       });
@@ -766,7 +767,7 @@ function VideoGenerationPage() {
                       type="button"
                       onClick={() => {
                         setGenerationMode("video");
-                        trackFeatureUsed("generation_mode_switched", {
+                        trackFeatureUsed(MIXPANEL_TOKEN, "generation_mode_switched", {
                           mode: "video",
                           source: "video_page_toggle",
                         });
@@ -792,7 +793,7 @@ function VideoGenerationPage() {
                       type="button"
                       onClick={() => {
                         setGenerationMode("image");
-                        trackFeatureUsed("generation_mode_switched", {
+                        trackFeatureUsed(MIXPANEL_TOKEN,  "generation_mode_switched", {
                           mode: "image",
                           source: "video_page_toggle",
                         });
@@ -968,14 +969,14 @@ function VideoGenerationPage() {
                       onSelectModel={(model) => {
                         if (generationMode === "image") {
                           setSelectedImageModel(model);
-                          trackFeatureUsed("inspire_image_model_selected", {
+                          trackFeatureUsed(MIXPANEL_TOKEN, "inspire_image_model_selected", {
                             model_id: model?._id,
                             model_name: model?.name,
                           });
                           return;
                         }
                         setSelectedVideoModel(model);
-                        trackFeatureUsed("video_model_selected", {
+                        trackFeatureUsed(MIXPANEL_TOKEN, "video_model_selected", {
                           model_id: model?._id,
                           model_name: model?.name,
                         });

@@ -143,7 +143,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   const nodesRef = React.useRef(nodes);
   const edgesRef = React.useRef(edges);
   const [brainItems, setBrainItems] = useState<any[]>([]);
-
+  const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   // Fetch user's brain items for duplicate checking
   useEffect(() => {
     const fetchBrainItems = async () => {
@@ -217,7 +217,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   const addNode = useCallback(
     (node: Node) => {
       console.log("🎯 [GennittWorkflow] Adding node:", node);
-      trackFeatureUsed("workflow_node_added", {
+      trackFeatureUsed(MIXPANEL_TOKEN, "workflow_node_added", {
         node_type: node.type,
       });
       setNodes((prevNodes) => {
@@ -246,7 +246,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     (connection: Connection) => {
       if (!connection.source || !connection.target) return;
       console.log("🔗 [GennittWorkflow] Connection attempt:", connection);
-      trackFeatureUsed("workflow_node_connection_attempted", {
+      trackFeatureUsed(MIXPANEL_TOKEN,  "workflow_node_connection_attempted", {
         source: connection.source,
         target: connection.target,
       });
@@ -807,7 +807,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   // Undo function
   const undo = useCallback(() => {
     if (historyIndex > 0 && history.length > 0) {
-      trackFeatureUsed("workflow_undo_used");
+      trackFeatureUsed(MIXPANEL_TOKEN, "workflow_undo_used");
       const previousState = history[historyIndex - 1];
       if (previousState && previousState.nodes && previousState.edges) {
         setIsUndoRedoAction(true);
@@ -827,7 +827,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   // Redo function
   const redo = useCallback(() => {
     if (historyIndex < history.length - 1 && history.length > 0) {
-      trackFeatureUsed("workflow_redo_used");
+      trackFeatureUsed(MIXPANEL_TOKEN, "workflow_redo_used");
       const nextState = history[historyIndex + 1];
       if (nextState && nextState.nodes && nextState.edges) {
         setIsUndoRedoAction(true);
@@ -1080,7 +1080,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   const handleCreateWorkflow = async () => {
     if (!projectName.trim()) return;
     setIsCreating(true);
-    trackEvent("workflow_create_attempted", {
+    trackEvent(MIXPANEL_TOKEN, "workflow_create_attempted", {
       has_name: Boolean(projectName.trim()),
     });
     try {
@@ -1091,7 +1091,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       );
       if (res.data.success) {
         const newProject = res.data.data;
-        trackEvent("workflow_create_succeeded", {
+        trackEvent(MIXPANEL_TOKEN, "workflow_create_succeeded", {
           workflow_id: newProject._id,
           workflow_slug: newProject.slug,
         });
@@ -1100,7 +1100,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       }
     } catch (error) {
       console.error("Failed to create workflow:", error);
-      trackEvent("workflow_create_failed");
+      trackEvent(MIXPANEL_TOKEN, "workflow_create_failed", {
+       
+      });
     } finally {
       setIsCreating(false);
     }

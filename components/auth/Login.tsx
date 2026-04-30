@@ -59,7 +59,7 @@ export const LoginComp = () => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
 
   const router = useRouter();
-
+  const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   const handleInputChange = (Event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = Event.target;
 
@@ -92,7 +92,7 @@ export const LoginComp = () => {
   ) => {
     event.preventDefault();
     setLoading(true);
-    trackEvent("login_attempted", { auth_method: "password" });
+    trackEvent(MIXPANEL_TOKEN, "login_attempted", { auth_method: "password" });
 
     try {
       const response = await apiResponse.post("/auth/sign-in", formData, {
@@ -119,6 +119,7 @@ export const LoginComp = () => {
         const currentUser = userData.data.user;
         console.log("currentUser", currentUser);
         identifyAndTrackAuth(
+          MIXPANEL_TOKEN,
           {
             id: currentUser._id,
             email: currentUser.email,
@@ -149,7 +150,7 @@ export const LoginComp = () => {
     } catch (error: any) {
       setLoading(false);
       console.log(error?.message);
-      trackEvent("login_failed", {
+      trackEvent(MIXPANEL_TOKEN, "login_failed", {
         auth_method: "password",
         reason: error?.response?.data?.message || error?.message,
       });
@@ -162,7 +163,7 @@ export const LoginComp = () => {
 
   const handleGoogleSignIn = async (provider: string, data: any) => {
     setLoading2(true);
-    trackEvent("login_attempted", { auth_method: "google" });
+    trackEvent(MIXPANEL_TOKEN, "login_attempted", { auth_method: "google" });
 
     const Formdata = {
       email: data.email,
@@ -205,19 +206,18 @@ export const LoginComp = () => {
           const userData = await apiResponse.get("/user/active-user");
           const currentUser = userData.data.user;
           identifyAndTrackAuth(
+            MIXPANEL_TOKEN,
             {
-              id: currentUser._id,
-              email: currentUser.email,
-              username: currentUser.username,
-              plan: currentUser.userPlan,
-              createdAt: currentUser.createdAt,
-              emailVerified: currentUser.emailVerified,
-              onboardingCompleted: currentUser.onboarding?.onboardingCompleted,
-              role: currentUser.role,
-            },
-            "login_completed",
-            { auth_method: "google" },
-          );
+                id: currentUser._id,
+                email: currentUser.email,
+                username: currentUser.username,
+                plan: currentUser.userPlan,
+                createdAt: currentUser.createdAt,
+                emailVerified: currentUser.emailVerified,
+                onboardingCompleted: currentUser.onboarding?.onboardingCompleted,
+                role: currentUser.role,
+              },
+            "login_completed", { auth_method: "google" },);
 
           if (!currentUser.emailVerified) {
             // Not verified - redirect to verification
@@ -235,7 +235,7 @@ export const LoginComp = () => {
       } catch (error: any) {
         setLoading2(false);
         console.log(error?.message);
-        trackEvent("login_failed", {
+        trackEvent(MIXPANEL_TOKEN, "login_failed", {
           auth_method: "google",
           reason: error?.response?.data?.message || error?.message,
         });

@@ -10,14 +10,16 @@ export default function MixpanelProvider({ children }: { children: React.ReactNo
   const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
 
   useEffect(() => {
-    initMixpanel(MIXPANEL_TOKEN as string);
+    if (MIXPANEL_TOKEN) {
+      initMixpanel(MIXPANEL_TOKEN);
+    }
   }, []);
 
   useEffect(() => {
     const query = searchParams.toString();
     const pathWithQuery = query ? `${pathname}?${query}` : pathname;
-    trackPageView(pathWithQuery, { source: "router" });
-  }, [pathname, searchParams]);
+    trackPageView(MIXPANEL_TOKEN as string, pathWithQuery, { source: "router" });
+  }, [pathname, searchParams, MIXPANEL_TOKEN]);
 
   return <>{children}</>;
 }

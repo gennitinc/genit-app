@@ -1,6 +1,6 @@
 import mixpanel from "mixpanel-browser";
 
-const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
+
 const APP_ENV =  process.env.NODE_ENV;
 const IS_PROD = process.env.NODE_ENV === "production";
 
@@ -20,8 +20,8 @@ export type MixpanelUserProfile = {
 let initialized = false;
 let initFailed = false;
 
-const isMixpanelEnabled = () =>
-  typeof window !== "undefined" && Boolean(MIXPANEL_TOKEN);
+const isMixpanelEnabled = (MIXPANEL_TOKEN_VALUE: string) =>
+  typeof window !== "undefined" && Boolean(MIXPANEL_TOKEN_VALUE);
 
 const toIsoDate = (value?: number | string | Date) => {
   if (!value) return undefined;
@@ -30,7 +30,7 @@ const toIsoDate = (value?: number | string | Date) => {
 };
 
 export const initMixpanel = (MIXPANEL_TOKEN_VALUE: string) => {
-  if (!isMixpanelEnabled()) {
+  if (!isMixpanelEnabled(MIXPANEL_TOKEN_VALUE as string)) {
     console.warn("Mixpanel token is missing! Check your .env file.");
     return false;
   }
@@ -38,16 +38,16 @@ export const initMixpanel = (MIXPANEL_TOKEN_VALUE: string) => {
   if (initialized && !initFailed) return true;
 
   try {
-    mixpanel.init(MIXPANEL_TOKEN_VALUE as string, {
+    mixpanel.init(MIXPANEL_TOKEN_VALUE, {
       autocapture: true,
       track_pageview: true,
       persistence: "localStorage",
       ignore_dnt: true,
-      debug: IS_PROD,
+      debug: !IS_PROD,
       batch_requests: IS_PROD,
       api_transport: "XHR",
       loaded: (instance) => {
-        if (IS_PROD) {
+        if (!IS_PROD) {
           console.log("[mixpanel] initialized", {
             distinct_id: instance.get_distinct_id?.(),
             token: MIXPANEL_TOKEN_VALUE,
@@ -72,13 +72,13 @@ const withDefaults = (properties?: MixpanelProps): MixpanelProps => ({
   ...properties,
 });
 
-export const trackEvent = (eventName: string, properties?: MixpanelProps) => {
-  if (!isMixpanelEnabled()) return;
-  const ready = initialized || initMixpanel(MIXPANEL_TOKEN as string);
+export const trackEvent = (MIXPANEL_TOKEN_VALUE: string, eventName: string, properties?: MixpanelProps) => {
+  if (!isMixpanelEnabled(MIXPANEL_TOKEN_VALUE)) return;
+  const ready = initialized || initMixpanel(MIXPANEL_TOKEN_VALUE);
   if (!ready) return;
   try {
     mixpanel.track(eventName, withDefaults(properties), (response) => {
-      if (IS_PROD) {
+      if (!IS_PROD) {
         console.log("[mixpanel] track callback", { eventName, response });
       }
     });
@@ -87,9 +87,9 @@ export const trackEvent = (eventName: string, properties?: MixpanelProps) => {
   }
 };
 
-export const identifyUser = (profile: MixpanelUserProfile) => {
-  if (!isMixpanelEnabled()) return;
-  const ready = initialized || initMixpanel(MIXPANEL_TOKEN as string);
+export const identifyUser = (MIXPANEL_TOKEN_VALUE: string, profile: MixpanelUserProfile) => {
+  if (!isMixpanelEnabled(MIXPANEL_TOKEN_VALUE)) return;
+  const ready = initialized || initMixpanel(MIXPANEL_TOKEN_VALUE);
   if (!ready) return;
   try {
     mixpanel.identify(profile.id);
@@ -111,21 +111,22 @@ export const identifyUser = (profile: MixpanelUserProfile) => {
 };
 
 export const identifyAndTrackAuth = (
+  MIXPANEL_TOKEN_VALUE: string,
   profile: MixpanelUserProfile,
   eventName: "signup_completed" | "login_completed",
   properties?: MixpanelProps,
 ) => {
-  identifyUser(profile);
-  trackEvent(eventName, {
+  identifyUser(MIXPANEL_TOKEN_VALUE, profile);
+  trackEvent(MIXPANEL_TOKEN_VALUE, eventName, {
     auth_method: properties?.auth_method || "password",
     plan: profile.plan,
     ...properties,
   });
 };
 
-export const resetMixpanelUser = () => {
-  if (!isMixpanelEnabled()) return;
-  const ready = initialized || initMixpanel(MIXPANEL_TOKEN as string);
+export const resetMixpanelUser = (MIXPANEL_TOKEN_VALUE: string) => {
+  if (!isMixpanelEnabled(MIXPANEL_TOKEN_VALUE)) return;
+  const ready = initialized || initMixpanel(MIXPANEL_TOKEN_VALUE);
   if (!ready) return;
   try {
     mixpanel.reset();
@@ -134,19 +135,20 @@ export const resetMixpanelUser = () => {
   }
 };
 
-export const trackPageView = (path: string, properties?: MixpanelProps) => {
-  trackEvent("page_viewed", {
+export const trackPageView = (MIXPANEL_TOKEN_VALUE: string,   path: string, properties?: MixpanelProps) => {
+  trackEvent(MIXPANEL_TOKEN_VALUE, "page_viewed", {
     path,
     ...properties,
   });
 };
 
 export const trackExperimentExposure = (
+  MIXPANEL_TOKEN_VALUE: string,
   experimentKey: string,
   variant: string,
   properties?: MixpanelProps,
 ) => {
-  trackEvent("ab_experiment_exposed", {
+  trackEvent(MIXPANEL_TOKEN_VALUE, "ab_experiment_exposed", {
     experiment_key: experimentKey,
     variant,
     ...properties,
@@ -154,12 +156,13 @@ export const trackExperimentExposure = (
 };
 
 export const trackAppOpened = (
+  MIXPANEL_TOKEN_VALUE: string,
   appId: string,
   appName: string,
   source: string,
   properties?: MixpanelProps,
 ) => {
-  trackEvent("app_opened", {
+  trackEvent(MIXPANEL_TOKEN_VALUE, "app_opened", {
     app_id: appId,
     app_name: appName,
     source,
@@ -168,10 +171,11 @@ export const trackAppOpened = (
 };
 
 export const trackFeatureUsed = (
+  MIXPANEL_TOKEN_VALUE: string,
   featureName: string,
   properties?: MixpanelProps,
 ) => {
-  trackEvent("feature_used", {
+  trackEvent(MIXPANEL_TOKEN_VALUE, "feature_used", {
     feature_name: featureName,
     ...properties,
   });

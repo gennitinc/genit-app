@@ -45,7 +45,7 @@ export const SignupComp = () => {
   const [provider, setProvider] = useState("");
   const router = useRouter();
   const { fetchCurrentUser } = useUserContext();
-
+ const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   // Extract referral code from URL hash (e.g., #/?creator=@username)
   const getReferralCode = () => {
     if (typeof window !== "undefined") {
@@ -153,7 +153,7 @@ export const SignupComp = () => {
     setBackgroundColor(getRandomColor());
 
     setLoading(true);
-    trackEvent("signup_attempted", { auth_method: "password" });
+    trackEvent(MIXPANEL_TOKEN, "signup_attempted", { auth_method: "password" });
     try {
       // Add referral code if present in URL
       const referralCode = getReferralCode();
@@ -187,6 +187,7 @@ export const SignupComp = () => {
         const userData = await apiResponse.get("/user/active-user");
         const currentUser = userData.data.user;
         identifyAndTrackAuth(
+          MIXPANEL_TOKEN,
           {
             id: currentUser._id,
             email: currentUser.email,
@@ -217,7 +218,7 @@ export const SignupComp = () => {
     } catch (error: any) {
       setLoading(false);
       console.log(error);
-      trackEvent("signup_failed", {
+        trackEvent(MIXPANEL_TOKEN, "signup_failed", {
         auth_method: "password",
         reason: error?.response?.data?.message || error?.message,
       });
@@ -230,7 +231,7 @@ export const SignupComp = () => {
 
   const handleGoogleSignUp = async (provider: string, data: any) => {
     console.log("data", data);
-    trackEvent("signup_attempted", { auth_method: "google" });
+    trackEvent(MIXPANEL_TOKEN, "signup_attempted", { auth_method: "google" });
 
     const referralCode = getReferralCode();
     const Formdata = {
@@ -268,6 +269,7 @@ export const SignupComp = () => {
           const userData = await apiResponse.get("/user/active-user");
           const currentUser = userData.data.user;
           identifyAndTrackAuth(
+            MIXPANEL_TOKEN,
             {
               id: currentUser._id,
               email: currentUser.email,
@@ -298,7 +300,7 @@ export const SignupComp = () => {
       } catch (error: any) {
         setLoading2(false);
         console.log(error);
-        trackEvent("signup_failed", {
+        trackEvent(MIXPANEL_TOKEN, "signup_failed", {
           auth_method: "google",
           reason: error?.response?.data?.message || error?.message,
         });
