@@ -43,11 +43,11 @@ export const initMixpanel = (MIXPANEL_TOKEN_VALUE: string) => {
       track_pageview: true,
       persistence: "localStorage",
       ignore_dnt: true,
-      debug: !IS_PROD,
+      debug: IS_PROD,
       batch_requests: IS_PROD,
       api_transport: "XHR",
       loaded: (instance) => {
-        if (!IS_PROD) {
+        if (IS_PROD) {
           console.log("[mixpanel] initialized", {
             distinct_id: instance.get_distinct_id?.(),
             token: MIXPANEL_TOKEN_VALUE,
@@ -78,7 +78,7 @@ export const trackEvent = (eventName: string, properties?: MixpanelProps) => {
   if (!ready) return;
   try {
     mixpanel.track(eventName, withDefaults(properties), (response) => {
-      if (!IS_PROD) {
+      if (IS_PROD) {
         console.log("[mixpanel] track callback", { eventName, response });
       }
     });
