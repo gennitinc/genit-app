@@ -1,18 +1,18 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
-import Link from "@tiptap/extension-link";
-import { TextStyle } from "@tiptap/extension-text-style";
+import { TiptapToolbar } from "./tiptap-toolbar";
+import { cn } from "@/lib/utils";
 import Color from "@tiptap/extension-color";
-import TextAlign from "@tiptap/extension-text-align";
 import FontFamily from "@tiptap/extension-font-family";
 import FontSize from "@tiptap/extension-font-size";
-import Underline from "@tiptap/extension-underline";
 import Highlight from "@tiptap/extension-highlight";
-import { cn } from "@/lib/utils";
-import { TiptapToolbar } from "./tiptap-toolbar";
+import Link from "@tiptap/extension-link";
+import Placeholder from "@tiptap/extension-placeholder";
+import TextAlign from "@tiptap/extension-text-align";
+import { TextStyle } from "@tiptap/extension-text-style";
+import Underline from "@tiptap/extension-underline";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 
 interface TiptapEditorProps {
   content: string;
@@ -83,12 +83,14 @@ export function TiptapEditor({
   }
 
   return (
-    <div className="relative w-full">
+    <div className='relative w-full'>
       <EditorContent
         editor={editor}
-        className={cn("w-full min-h-[100px]", className)}
+        className={cn("min-h-[100px] w-full", className)}
       />
-      {showToolbar && editable && <TiptapToolbar editor={editor} containerElement={containerElement} />}
+      {showToolbar && editable && (
+        <TiptapToolbar editor={editor} containerElement={containerElement} />
+      )}
     </div>
   );
 }

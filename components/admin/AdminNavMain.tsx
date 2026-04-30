@@ -1,17 +1,6 @@
 "use client";
 
 import {
-  LayoutDashboard,
-  Users,
-  Activity,
-  CreditCard,
-  Settings,
-  ExternalLink,
-  Layout,
-  Palette,
-  Sparkles,
-} from "lucide-react";
-import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
@@ -19,9 +8,20 @@ import {
 } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import {
+  Activity,
+  CreditCard,
+  ExternalLink,
+  Layout,
+  LayoutDashboard,
+  Palette,
+  Settings,
+  Sparkles,
+  Users,
+} from "lucide-react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
 
 export function AdminNavMain() {
   const { state, setOpenMobile, isMobile } = useSidebar();
@@ -104,7 +104,7 @@ export function AdminNavMain() {
                 )}
                 onClick={handleLinkClick}
               >
-                <Link href={item.href} className="flex items-center w-full">
+                <Link href={item.href} className='flex w-full items-center'>
                   <item.icon
                     className={cn(
                       "h-5 w-5 flex-shrink-0",
@@ -119,8 +119,8 @@ export function AdminNavMain() {
         </SidebarMenu>
       </SidebarGroup>
 
-      <div className="px-4 py-2">
-        <div className="h-px bg-border/50" />
+      <div className='px-4 py-2'>
+        <div className='bg-border/50 h-px' />
       </div>
 
       <SidebarGroup>
@@ -139,7 +139,7 @@ export function AdminNavMain() {
                 )}
                 onClick={handleLinkClick}
               >
-                <Link href={item.href} className="flex items-center w-full">
+                <Link href={item.href} className='flex w-full items-center'>
                   <item.icon
                     className={cn(
                       "h-5 w-5 flex-shrink-0",

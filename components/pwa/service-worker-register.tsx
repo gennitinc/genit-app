@@ -38,9 +38,12 @@ export function ServiceWorkerRegister() {
         registration.update();
 
         // Check for updates every hour
-        const updateInterval = setInterval(() => {
-          registration.update();
-        }, 60 * 60 * 1000);
+        const updateInterval = setInterval(
+          () => {
+            registration.update();
+          },
+          60 * 60 * 1000
+        );
 
         // Cleanup interval on unmount
         return () => clearInterval(updateInterval);
@@ -54,7 +57,9 @@ export function ServiceWorkerRegister() {
     navigator.serviceWorker.addEventListener("controllerchange", () => {
       if (refreshing) return;
       refreshing = true;
-      console.log("[Service Worker] New service worker activated, reloading...");
+      console.log(
+        "[Service Worker] New service worker activated, reloading..."
+      );
       window.location.reload();
     });
 
@@ -66,4 +71,3 @@ export function ServiceWorkerRegister() {
 
   return null;
 }
-

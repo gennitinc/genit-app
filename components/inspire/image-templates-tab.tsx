@@ -1,9 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { ChevronRight, Loader2 } from "lucide-react";
-import { IconTemplate } from "@tabler/icons-react";
-import { toast } from "@/hooks/use-toast";
+import { GenerationParamsCallback } from "./image-community-tab";
 import {
   Dialog,
   DialogContent,
@@ -16,8 +13,12 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { imageGenTemplatesApi } from "@/utils/inspire-api";
+import { toast } from "@/hooks/use-toast";
 import { ImageGenTemplate, ImageGenTemplateGroup } from "@/types/inspire";
+import { imageGenTemplatesApi } from "@/utils/inspire-api";
+import { IconTemplate } from "@tabler/icons-react";
+import { ChevronRight, Loader2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
@@ -34,8 +35,6 @@ function useMediaQuery(query: string) {
 
   return matches;
 }
-
-import { GenerationParamsCallback } from "./image-community-tab";
 
 interface ImageTemplatesTabProps {
   onPromptSelect: (prompt: string) => void;
@@ -79,14 +78,14 @@ function CategoryTemplatesList({
 
   if (templates.length === 0 && !loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-8">
-        <div className="w-16 h-16 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
-          <IconTemplate className="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
+      <div className='flex min-h-[50vh] flex-col items-center justify-center p-8 text-center'>
+        <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
+          <IconTemplate className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
         </div>
-        <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+        <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
           No templates in this category
         </h3>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-sm">
+        <p className='max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
           This category doesn't have any templates yet. Try browsing other
           categories!
         </p>
@@ -97,7 +96,7 @@ function CategoryTemplatesList({
   return (
     <div
       ref={scrollRef}
-      className="grid grid-cols-2 md:grid-cols-3 gap-4 overflow-y-auto p-4 max-h-[60vh] md:max-h-[70vh]"
+      className='grid max-h-[60vh] grid-cols-2 gap-4 overflow-y-auto p-4 md:max-h-[70vh] md:grid-cols-3'
     >
       {templates.map((template) => (
         <TemplateCard
@@ -107,15 +106,15 @@ function CategoryTemplatesList({
         />
       ))}
       {loading && (
-        <div className="col-span-3 flex items-center justify-center py-8">
-          <div className="text-sm text-neutral-500 dark:text-neutral-400">
+        <div className='col-span-3 flex items-center justify-center py-8'>
+          <div className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading more templates...
           </div>
         </div>
       )}
       {!hasMore && templates.length > 0 && (
-        <div className="col-span-3 flex items-center justify-center py-4">
-          <div className="text-sm text-neutral-500 dark:text-neutral-400">
+        <div className='col-span-3 flex items-center justify-center py-4'>
+          <div className='text-sm text-neutral-500 dark:text-neutral-400'>
             No more templates
           </div>
         </div>
@@ -162,9 +161,9 @@ function TemplateCard({
   return (
     <div
       onClick={onClick}
-      className="group relative flex-shrink-0 w-64 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer"
+      className='group relative w-64 flex-shrink-0 cursor-pointer overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800'
     >
-      <div className="relative aspect-video">
+      <div className='relative aspect-video'>
         {template.videoUrl ? (
           <video
             ref={videoRef}
@@ -173,24 +172,24 @@ function TemplateCard({
             loop
             muted
             playsInline
-            className="w-full h-full object-cover"
+            className='h-full w-full object-cover'
           />
         ) : (
           <img
             src={template.thumbnailUrl}
             alt={template.title}
-            className="w-full h-full object-cover"
+            className='h-full w-full object-cover'
           />
         )}
         {/* Use Button */}
-        <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button className="px-3 py-1.5 rounded-lg bg-white text-neutral-900 text-sm font-medium hover:bg-neutral-100 transition-colors">
+        <div className='absolute right-2 bottom-2 opacity-0 transition-opacity group-hover:opacity-100'>
+          <button className='rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-100'>
             Use
           </button>
         </div>
       </div>
-      <div className="p-3">
-        <h3 className="text-sm font-medium text-neutral-900 dark:text-white line-clamp-1">
+      <div className='p-3'>
+        <h3 className='line-clamp-1 text-sm font-medium text-neutral-900 dark:text-white'>
           {template.title}
         </h3>
       </div>
@@ -339,10 +338,10 @@ export function ImageTemplatesTab({
 
   if (loading) {
     return (
-      <section className="p-4">
-        <div className="flex flex-col items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-6 h-6 text-neutral-400 dark:text-neutral-500 animate-spin mb-3" />
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+      <section className='p-4'>
+        <div className='flex min-h-[60vh] flex-col items-center justify-center'>
+          <Loader2 className='mb-3 h-6 w-6 animate-spin text-neutral-400 dark:text-neutral-500' />
+          <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading templates
           </p>
         </div>
@@ -352,21 +351,21 @@ export function ImageTemplatesTab({
 
   if (categories.length === 0) {
     return (
-      <section className="p-4">
-        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-          <div className="w-16 h-16 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
-            <IconTemplate className="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
+      <section className='p-4'>
+        <div className='flex min-h-[60vh] flex-col items-center justify-center text-center'>
+          <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
+            <IconTemplate className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
           </div>
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+          <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
             No templates available
           </h3>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-sm mb-6">
+          <p className='mb-6 max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
             Templates are being added regularly. Check back soon!
           </p>
           <button
-            type="button"
+            type='button'
             onClick={() => onTabChange("preview")}
-            className="px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-sm font-medium text-white dark:text-neutral-900 transition-colors"
+            className='rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
           >
             Start Creating
           </button>
@@ -377,28 +376,28 @@ export function ImageTemplatesTab({
 
   return (
     <>
-      <section className="p-4 px-0">
-        <div className="space-y-8">
+      <section className='p-4 px-0'>
+        <div className='space-y-8'>
           {categories.map((category) => (
             <div key={category.id}>
               {/* Category Header */}
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
+              <div className='mb-4 flex items-center justify-between'>
+                <h2 className='text-lg font-semibold text-neutral-900 dark:text-white'>
                   {category.title}
                 </h2>
                 {category.templates.length > 4 && (
                   <button
                     onClick={() => handleCategoryOpen(category)}
-                    className="flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                    className='flex items-center gap-1 text-sm text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
                   >
                     See all
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight className='h-4 w-4' />
                   </button>
                 )}
               </div>
 
               {/* Horizontal Scrolling Templates */}
-              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+              <div className='scrollbar-hide flex gap-4 overflow-x-auto pb-2'>
                 {category.templates.map((template) => (
                   <TemplateCard
                     key={template._id}
@@ -428,11 +427,11 @@ export function ImageTemplatesTab({
           open={!!selectedCategory}
           onOpenChange={() => setSelectedCategory(null)}
         >
-          <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogContent className='flex max-h-[80vh] max-w-4xl flex-col overflow-hidden'>
             {selectedCategory && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-xl font-semibold">
+                  <DialogTitle className='text-xl font-semibold'>
                     {selectedCategory.title} Templates
                   </DialogTitle>
                 </DialogHeader>
@@ -457,7 +456,7 @@ export function ImageTemplatesTab({
             {selectedCategory && (
               <>
                 <DrawerHeader>
-                  <DrawerTitle className="text-xl font-semibold">
+                  <DrawerTitle className='text-xl font-semibold'>
                     {selectedCategory.title} Templates
                   </DrawerTitle>
                 </DrawerHeader>

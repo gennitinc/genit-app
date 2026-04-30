@@ -1,22 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { presenterApi } from "@/utils/inspire-api";
-import { Presenter } from "@/types/inspire";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  Trash2,
-  Search,
-  Loader2,
-  Plus,
-  Edit,
-  X,
-  User,
-  Users,
-} from "lucide-react";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -25,6 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -32,9 +19,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Presenter } from "@/types/inspire";
 import { apiResponse } from "@/utils/apiResponse";
+import { presenterApi } from "@/utils/inspire-api";
+import {
+  Edit,
+  Loader2,
+  Plus,
+  Search,
+  Trash2,
+  User,
+  Users,
+  X,
+} from "lucide-react";
+import { toast } from "sonner";
+import { useCallback, useEffect, useState } from "react";
 
 export default function AdminPresentersPage() {
   const [presenters, setPresenters] = useState<Presenter[]>([]);
@@ -181,15 +181,12 @@ export default function AdminPresentersPage() {
     setIsSubmitting(true);
     try {
       if (isEdit && editingPresenter) {
-        const response = await presenterApi.update(
-          editingPresenter._id,
-          {
-            name: formData.name,
-            category: formData.category,
-            isPublic: formData.isPublic,
-            image: imageFile || undefined,
-          }
-        );
+        const response = await presenterApi.update(editingPresenter._id, {
+          name: formData.name,
+          category: formData.category,
+          isPublic: formData.isPublic,
+          image: imageFile || undefined,
+        });
         if (response.success) {
           toast.success("Presenter updated successfully");
           setEditDialogOpen(false);
@@ -223,9 +220,7 @@ export default function AdminPresentersPage() {
       }
     } catch (error: any) {
       console.error("Failed to save presenter:", error);
-      toast.error(
-        error.response?.data?.message || "Failed to save presenter"
-      );
+      toast.error(error.response?.data?.message || "Failed to save presenter");
     } finally {
       setIsSubmitting(false);
     }
@@ -239,69 +234,69 @@ export default function AdminPresentersPage() {
   });
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-6 flex items-center justify-between">
+    <div className='container mx-auto px-4 py-8'>
+      <div className='mb-6 flex items-center justify-between'>
         <div>
-          <h1 className="text-3xl font-bold mb-2">Avatar Management</h1>
-          <p className="text-muted-foreground">
+          <h1 className='mb-2 text-3xl font-bold'>Avatar Management</h1>
+          <p className='text-muted-foreground'>
             Manage AI avatars/presenters for video generation
           </p>
         </div>
         <Button onClick={handleCreateClick}>
-          <Plus className="w-4 h-4 mr-2" />
+          <Plus className='mr-2 h-4 w-4' />
           Create Avatar
         </Button>
       </div>
 
-      <div className="mb-6 flex gap-4 items-center flex-wrap">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+      <div className='mb-6 flex flex-wrap items-center gap-4'>
+        <div className='relative max-w-md flex-1'>
+          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
-            placeholder="Search avatars..."
+            placeholder='Search avatars...'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className='pl-10'
           />
         </div>
         <Select
           value={filterGender}
           onValueChange={(v: "all" | "male" | "female") => setFilterGender(v)}
         >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by gender" />
+          <SelectTrigger className='w-[180px]'>
+            <SelectValue placeholder='Filter by gender' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Genders</SelectItem>
-            <SelectItem value="male">Male</SelectItem>
-            <SelectItem value="female">Female</SelectItem>
+            <SelectItem value='all'>All Genders</SelectItem>
+            <SelectItem value='male'>Male</SelectItem>
+            <SelectItem value='female'>Female</SelectItem>
           </SelectContent>
         </Select>
-        <div className="text-sm text-muted-foreground">
+        <div className='text-muted-foreground text-sm'>
           {filteredPresenters.length} avatar
           {filteredPresenters.length !== 1 ? "s" : ""}
         </div>
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+        <div className='flex items-center justify-center py-12'>
+          <Loader2 className='text-muted-foreground h-8 w-8 animate-spin' />
         </div>
       ) : filteredPresenters.length === 0 ? (
-        <div className="text-center py-12 text-muted-foreground">
+        <div className='text-muted-foreground py-12 text-center'>
           No avatars found
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
           {filteredPresenters.map((presenter) => (
             <div
               key={presenter._id}
-              className="group relative border rounded-lg overflow-hidden bg-card hover:shadow-lg transition-shadow"
+              className='group bg-card relative overflow-hidden rounded-lg border transition-shadow hover:shadow-lg'
             >
-              <div className="aspect-square relative bg-muted">
+              <div className='bg-muted relative aspect-square'>
                 <img
                   src={presenter.imageUrl}
                   alt={presenter.name}
-                  className="w-full h-full object-cover"
+                  className='h-full w-full object-cover'
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.style.display = "none";
@@ -312,35 +307,35 @@ export default function AdminPresentersPage() {
                     );
                   }}
                 />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-                  <div className="flex gap-2">
+                <div className='absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-colors group-hover:bg-black/30 group-hover:opacity-100'>
+                  <div className='flex gap-2'>
                     <Button
-                      variant="secondary"
-                      size="icon"
+                      variant='secondary'
+                      size='icon'
                       onClick={() => handleEditClick(presenter)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                      className='opacity-0 transition-opacity group-hover:opacity-100'
                     >
-                      <Edit className="w-4 h-4" />
+                      <Edit className='h-4 w-4' />
                     </Button>
                     <Button
-                      variant="destructive"
-                      size="icon"
+                      variant='destructive'
+                      size='icon'
                       onClick={() => handleDeleteClick(presenter)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                      className='opacity-0 transition-opacity group-hover:opacity-100'
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className='h-4 w-4' />
                     </Button>
                   </div>
                 </div>
               </div>
-              <div className="p-3 space-y-2">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-medium truncate">
+              <div className='space-y-2 p-3'>
+                <div className='flex items-start justify-between gap-2'>
+                  <div className='min-w-0 flex-1'>
+                    <h3 className='truncate text-sm font-medium'>
                       {presenter.name}
                     </h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Badge variant="outline" className="text-xs">
+                    <div className='mt-1 flex items-center gap-2'>
+                      <Badge variant='outline' className='text-xs'>
                         {presenter.gender}
                       </Badge>
                       <Badge
@@ -349,19 +344,19 @@ export default function AdminPresentersPage() {
                             ? "default"
                             : "secondary"
                         }
-                        className="text-xs"
+                        className='text-xs'
                       >
                         {presenter.status}
                       </Badge>
                       {presenter.isPublic && (
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant='outline' className='text-xs'>
                           Public
                         </Badge>
                       )}
                     </div>
                   </div>
                 </div>
-                <div className="text-xs text-muted-foreground">
+                <div className='text-muted-foreground text-xs'>
                   Usage: {presenter.usageCount || 0} times
                 </div>
               </div>
@@ -372,7 +367,7 @@ export default function AdminPresentersPage() {
 
       {/* Create Dialog */}
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>Create New Avatar</DialogTitle>
             <DialogDescription>
@@ -380,22 +375,22 @@ export default function AdminPresentersPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name *</Label>
+          <div className='space-y-4 py-4'>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='name'>Name *</Label>
                 <Input
-                  id="name"
+                  id='name'
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  placeholder="e.g., Sarah"
+                  placeholder='e.g., Sarah'
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="gender">Gender *</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='gender'>Gender *</Label>
                 <Select
                   value={formData.gender}
                   onValueChange={(v: "male" | "female") =>
@@ -406,15 +401,15 @@ export default function AdminPresentersPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value='male'>Male</SelectItem>
+                    <SelectItem value='female'>Female</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
+            <div className='space-y-2'>
+              <Label htmlFor='category'>Category</Label>
               <Select
                 value={formData.category}
                 onValueChange={(v: "popular" | "new" | "custom") =>
@@ -425,68 +420,68 @@ export default function AdminPresentersPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="popular">Popular</SelectItem>
-                  <SelectItem value="new">New</SelectItem>
-                  <SelectItem value="custom">Custom</SelectItem>
+                  <SelectItem value='popular'>Popular</SelectItem>
+                  <SelectItem value='new'>New</SelectItem>
+                  <SelectItem value='custom'>Custom</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="image">Avatar Image *</Label>
-              <div className="flex items-center gap-4">
+            <div className='space-y-2'>
+              <Label htmlFor='image'>Avatar Image *</Label>
+              <div className='flex items-center gap-4'>
                 {imagePreview && (
-                  <div className="relative w-32 h-32 border rounded-lg overflow-hidden">
+                  <div className='relative h-32 w-32 overflow-hidden rounded-lg border'>
                     <img
                       src={imagePreview}
-                      alt="Preview"
-                      className="w-full h-full object-cover"
+                      alt='Preview'
+                      className='h-full w-full object-cover'
                     />
                   </div>
                 )}
-                <div className="flex-1">
+                <div className='flex-1'>
                   <Input
-                    id="image"
-                    type="file"
-                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    id='image'
+                    type='file'
+                    accept='image/jpeg,image/jpg,image/png,image/webp'
                     onChange={handleImageChange}
-                    className="cursor-pointer"
+                    className='cursor-pointer'
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className='text-muted-foreground mt-1 text-xs'>
                     Upload an avatar image (JPEG, PNG, WebP)
                   </p>
                 </div>
                 {imagePreview && (
                   <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
+                    type='button'
+                    variant='outline'
+                    size='sm'
                     onClick={() => {
                       setImageFile(null);
                       setImagePreview(null);
                     }}
                   >
-                    <X className="w-4 h-4" />
+                    <X className='h-4 w-4' />
                   </Button>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               <Switch
-                id="isPublic"
+                id='isPublic'
                 checked={formData.isPublic}
                 onCheckedChange={(checked) =>
                   setFormData({ ...formData, isPublic: checked })
                 }
               />
-              <Label htmlFor="isPublic">Make Public</Label>
+              <Label htmlFor='isPublic'>Make Public</Label>
             </div>
           </div>
 
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => {
                 setCreateDialogOpen(false);
                 setImageFile(null);
@@ -498,7 +493,7 @@ export default function AdminPresentersPage() {
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Creating...
                 </>
               ) : (
@@ -511,7 +506,7 @@ export default function AdminPresentersPage() {
 
       {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>Edit Avatar</DialogTitle>
             <DialogDescription>
@@ -519,11 +514,11 @@ export default function AdminPresentersPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-name">Name *</Label>
+          <div className='space-y-4 py-4'>
+            <div className='space-y-2'>
+              <Label htmlFor='edit-name'>Name *</Label>
               <Input
-                id="edit-name"
+                id='edit-name'
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
@@ -531,8 +526,8 @@ export default function AdminPresentersPage() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="edit-category">Category</Label>
+            <div className='space-y-2'>
+              <Label htmlFor='edit-category'>Category</Label>
               <Select
                 value={formData.category}
                 onValueChange={(v: "popular" | "new" | "custom") =>
@@ -543,69 +538,69 @@ export default function AdminPresentersPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="popular">Popular</SelectItem>
-                  <SelectItem value="new">New</SelectItem>
-                  <SelectItem value="custom">Custom</SelectItem>
+                  <SelectItem value='popular'>Popular</SelectItem>
+                  <SelectItem value='new'>New</SelectItem>
+                  <SelectItem value='custom'>Custom</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="edit-image">Avatar Image</Label>
-              <div className="flex items-center gap-4">
+            <div className='space-y-2'>
+              <Label htmlFor='edit-image'>Avatar Image</Label>
+              <div className='flex items-center gap-4'>
                 {imagePreview && (
-                  <div className="relative w-32 h-32 border rounded-lg overflow-hidden">
+                  <div className='relative h-32 w-32 overflow-hidden rounded-lg border'>
                     <img
                       src={imagePreview}
-                      alt="Preview"
-                      className="w-full h-full object-cover"
+                      alt='Preview'
+                      className='h-full w-full object-cover'
                     />
                   </div>
                 )}
-                <div className="flex-1">
+                <div className='flex-1'>
                   <Input
-                    id="edit-image"
-                    type="file"
-                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    id='edit-image'
+                    type='file'
+                    accept='image/jpeg,image/jpg,image/png,image/webp'
                     onChange={handleImageChange}
-                    className="cursor-pointer"
+                    className='cursor-pointer'
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className='text-muted-foreground mt-1 text-xs'>
                     Upload a new image to replace the current one (JPEG, PNG,
                     WebP)
                   </p>
                 </div>
                 {imagePreview && editingPresenter && (
                   <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
+                    type='button'
+                    variant='outline'
+                    size='sm'
                     onClick={() => {
                       setImageFile(null);
                       setImagePreview(editingPresenter.imageUrl || null);
                     }}
                   >
-                    <X className="w-4 h-4" />
+                    <X className='h-4 w-4' />
                   </Button>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               <Switch
-                id="edit-isPublic"
+                id='edit-isPublic'
                 checked={formData.isPublic}
                 onCheckedChange={(checked) =>
                   setFormData({ ...formData, isPublic: checked })
                 }
               />
-              <Label htmlFor="edit-isPublic">Make Public</Label>
+              <Label htmlFor='edit-isPublic'>Make Public</Label>
             </div>
           </div>
 
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => {
                 setEditDialogOpen(false);
                 setEditingPresenter(null);
@@ -618,7 +613,7 @@ export default function AdminPresentersPage() {
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Updating...
                 </>
               ) : (
@@ -641,7 +636,7 @@ export default function AdminPresentersPage() {
           </DialogHeader>
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => {
                 setDeleteDialogOpen(false);
                 setPresenterToDelete(null);
@@ -650,13 +645,13 @@ export default function AdminPresentersPage() {
               Cancel
             </Button>
             <Button
-              variant="destructive"
+              variant='destructive'
               onClick={handleDeleteConfirm}
               disabled={isDeleting}
             >
               {isDeleting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Deleting...
                 </>
               ) : (
@@ -669,4 +664,3 @@ export default function AdminPresentersPage() {
     </div>
   );
 }
-

@@ -1,20 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import {
-  Copy,
-  RefreshCw,
-  Heart,
-  User,
-  Users,
-  Loader2,
-  Eye,
-  Check,
-  ChevronDown,
-  ChevronUp,
-  Download,
-} from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import TemplateGrid from "../common/templateGrid";
+import TemplateGridAll from "../common/templateGridAll";
+import { Skeleton } from "../ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -27,17 +15,29 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { communityApi } from "@/utils/inspire-api";
-import { CommunityContent } from "@/types/inspire";
-import { io, Socket } from "socket.io-client";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
+import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import TemplateGrid from "../common/templateGrid";
-import TemplateGridAll from "../common/templateGridAll";
-import { Skeleton } from "../ui/skeleton";
+import { CommunityContent } from "@/types/inspire";
 import GridLoading from "@/utils/girdLoading";
+import { communityApi } from "@/utils/inspire-api";
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  Copy,
+  Download,
+  Eye,
+  Heart,
+  Loader2,
+  RefreshCw,
+  User,
+  Users,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { Socket, io } from "socket.io-client";
+import { useEffect, useRef, useState } from "react";
 
 export interface GenerationParamsCallback {
   // Common
@@ -227,12 +227,10 @@ export function DesignsCommunityTab({
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasMore, loadingMore]);
- 
-   if (loading) {
-     return (
-       <GridLoading />
-     );
-   }
+
+  if (loading) {
+    return <GridLoading />;
+  }
 
   return <TemplateGridAll />;
 }

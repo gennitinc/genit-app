@@ -1,36 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { apiResponse } from "@/utils/apiResponse";
-import { creatorApi } from "@/utils/inspire-api";
-import { toast } from "@/hooks/use-toast";
-import {
-  User,
-  Users,
-  Heart,
-  Eye,
-  Check,
-  Instagram,
-  Twitter,
-  Github,
-  Linkedin,
-  Loader2,
-  Image as ImageIcon,
-  Video,
-  ArrowLeft,
-  Settings,
-  Camera,
-  X,
-  Plus,
-  Trash2,
-  Share2,
-  Copy,
-  Facebook,
-} from "lucide-react";
+import { CreatorProfileContent } from "@/components/creator/creator-profile-content";
+import { LandingFooter } from "@/components/landing/landing-footer";
+import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -41,11 +14,18 @@ import {
 import {
   Drawer,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-  DrawerFooter,
 } from "@/components/ui/drawer";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -58,18 +38,38 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useIsMobile } from "@/components/ui/use-mobile";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { CommunityContent } from "@/types/inspire";
-import { CreatorProfileContent } from "@/components/creator/creator-profile-content";
-import { LandingNavbar } from "@/components/landing/landing-navbar";
-import { LandingFooter } from "@/components/landing/landing-footer";
-import { useIsMobile } from "@/components/ui/use-mobile";
+import { apiResponse } from "@/utils/apiResponse";
+import { creatorApi } from "@/utils/inspire-api";
+import {
+  ArrowLeft,
+  Camera,
+  Check,
+  Copy,
+  Eye,
+  Facebook,
+  Github,
+  Heart,
+  Image as ImageIcon,
+  Instagram,
+  Linkedin,
+  Loader2,
+  Plus,
+  Settings,
+  Share2,
+  Trash2,
+  Twitter,
+  User,
+  Users,
+  Video,
+  X,
+} from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 interface CreatorProfile {
   _id: string;
@@ -485,11 +485,11 @@ export default function CreatorProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col">
+      <div className='flex min-h-screen flex-col bg-neutral-50 dark:bg-neutral-950'>
         <LandingNavbar />
 
-        <div className="h-74 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-neutral-400" />
+        <div className='flex h-74 items-center justify-center'>
+          <Loader2 className='h-8 w-8 animate-spin text-neutral-400' />
         </div>
 
         {/* Profile Header Card - Desktop */}
@@ -501,8 +501,8 @@ export default function CreatorProfilePage() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
+      <div className='flex min-h-screen flex-col items-center justify-center p-4'>
+        <h1 className='mb-4 text-2xl font-bold text-neutral-900 dark:text-white'>
           Creator not found
         </h1>
         <Button onClick={() => router.back()}>Go back</Button>
@@ -570,21 +570,21 @@ export default function CreatorProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col">
+    <div className='flex min-h-screen flex-col bg-neutral-50 dark:bg-neutral-950'>
       <LandingNavbar />
 
       {/* Profile Header Card - Desktop */}
-      <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 lg:pb-8 w-full">
-        <div className="shadow-xs overflow-hidden">
+      <div className='mx-auto w-full max-w-6xl px-2 sm:px-6 lg:px-8 lg:pb-8'>
+        <div className='overflow-hidden shadow-xs'>
           {/* Banner/Cover Photo - Full width with top border only */}
-          <div className="relative h-40 md:h-40 w-full border-t border-neutral-200 dark:border-neutral-800">
+          <div className='relative h-40 w-full border-t border-neutral-200 md:h-40 dark:border-neutral-800'>
             <img
               src={profile.coverPhoto || fallbackCoverPhoto}
-              alt="Cover"
-              className="w-full h-full object-cover"
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
+              alt='Cover'
+              className='h-full w-full object-cover'
+              loading='eager'
+              fetchPriority='high'
+              decoding='async'
               style={{
                 imageRendering: "-webkit-optimize-contrast",
               }}
@@ -595,32 +595,32 @@ export default function CreatorProfilePage() {
               <TooltipTrigger asChild>
                 <button
                   onClick={() => router.back()}
-                  className="absolute top-4 left-4 w-10 h-10 rounded-full bg-white dark:bg-neutral-900 flex items-center justify-center shadow-md hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors z-10 cursor-pointer"
-                  aria-label="Previous page"
+                  className='absolute top-4 left-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white shadow-md transition-colors hover:bg-neutral-50 dark:bg-neutral-900 dark:hover:bg-neutral-800'
+                  aria-label='Previous page'
                 >
                   <svg
-                    fill="currentColor"
-                    height="200px"
-                    width="200px"
-                    version="1.1"
-                    id="Capa_1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlnsXlink="http://www.w3.org/1999/xlink"
-                    viewBox="0 0 26.676 26.676"
-                    xmlSpace="preserve"
-                    className="w-5 h-5 text-neutral-700 dark:text-neutral-300"
+                    fill='currentColor'
+                    height='200px'
+                    width='200px'
+                    version='1.1'
+                    id='Capa_1'
+                    xmlns='http://www.w3.org/2000/svg'
+                    xmlnsXlink='http://www.w3.org/1999/xlink'
+                    viewBox='0 0 26.676 26.676'
+                    xmlSpace='preserve'
+                    className='h-5 w-5 text-neutral-700 dark:text-neutral-300'
                   >
-                    <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+                    <g id='SVGRepo_bgCarrier' strokeWidth={0} />
                     <g
-                      id="SVGRepo_tracerCarrier"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      id='SVGRepo_tracerCarrier'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
                     />
-                    <g id="SVGRepo_iconCarrier">
+                    <g id='SVGRepo_iconCarrier'>
                       {" "}
                       <g>
                         {" "}
-                        <path d="M26.105,21.891c-0.229,0-0.439-0.131-0.529-0.346l0,0c-0.066-0.156-1.716-3.857-7.885-4.59 c-1.285-0.156-2.824-0.236-4.693-0.25v4.613c0,0.213-0.115,0.406-0.304,0.508c-0.188,0.098-0.413,0.084-0.588-0.033L0.254,13.815 C0.094,13.708,0,13.528,0,13.339c0-0.191,0.094-0.365,0.254-0.477l11.857-7.979c0.175-0.121,0.398-0.129,0.588-0.029 c0.19,0.102,0.303,0.295,0.303,0.502v4.293c2.578,0.336,13.674,2.33,13.674,11.674c0,0.271-0.191,0.508-0.459,0.562 C26.18,21.891,26.141,21.891,26.105,21.891z" />{" "}
+                        <path d='M26.105,21.891c-0.229,0-0.439-0.131-0.529-0.346l0,0c-0.066-0.156-1.716-3.857-7.885-4.59 c-1.285-0.156-2.824-0.236-4.693-0.25v4.613c0,0.213-0.115,0.406-0.304,0.508c-0.188,0.098-0.413,0.084-0.588-0.033L0.254,13.815 C0.094,13.708,0,13.528,0,13.339c0-0.191,0.094-0.365,0.254-0.477l11.857-7.979c0.175-0.121,0.398-0.129,0.588-0.029 c0.19,0.102,0.303,0.295,0.303,0.502v4.293c2.578,0.336,13.674,2.33,13.674,11.674c0,0.271-0.191,0.508-0.459,0.562 C26.18,21.891,26.141,21.891,26.105,21.891z' />{" "}
                         <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g>{" "}
                         <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g>{" "}
                         <g> </g> <g> </g> <g> </g>{" "}
@@ -636,23 +636,23 @@ export default function CreatorProfilePage() {
 
             {/* Cover Photo Upload Button */}
             {isOwnProfile && (
-              <div className="absolute bottom-4 right-4">
+              <div className='absolute right-4 bottom-4'>
                 <input
                   ref={coverPhotoInputRef}
-                  type="file"
-                  accept="image/*"
+                  type='file'
+                  accept='image/*'
                   onChange={handleCoverPhotoUpload}
-                  className="hidden"
+                  className='hidden'
                 />
                 <button
                   onClick={() => coverPhotoInputRef.current?.click()}
                   disabled={isUploadingCover}
-                  className="w-10 h-10 rounded-full bg-black/70 hover:bg-black/80 flex items-center justify-center transition-colors"
+                  className='flex h-10 w-10 items-center justify-center rounded-full bg-black/70 transition-colors hover:bg-black/80'
                 >
                   {isUploadingCover ? (
-                    <Loader2 className="w-5 h-5 text-white animate-spin" />
+                    <Loader2 className='h-5 w-5 animate-spin text-white' />
                   ) : (
-                    <Camera className="w-5 h-5 text-white" />
+                    <Camera className='h-5 w-5 text-white' />
                   )}
                 </button>
               </div>
@@ -660,45 +660,45 @@ export default function CreatorProfilePage() {
           </div>
 
           {/* Profile Content */}
-          <div className="px-6 pb-6 mt-4">
+          <div className='mt-4 px-6 pb-6'>
             {/* Profile Picture and Settings Row (Mobile/Tablet) */}
-            <div className="relative md:hidden -mt-16 mb-4">
+            <div className='relative -mt-16 mb-4 md:hidden'>
               {/* Profile Picture - Centered */}
-              <div className="flex justify-center">
-                <div className="relative">
-                  <div className="w-32 h-32 rounded-full border-4 border-white dark:border-neutral-900 bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
+              <div className='flex justify-center'>
+                <div className='relative'>
+                  <div className='h-32 w-32 overflow-hidden rounded-full border-4 border-white bg-neutral-200 dark:border-neutral-900 dark:bg-neutral-800'>
                     {profile.userdp ? (
                       <img
                         src={profile.userdp}
                         alt={profile.username}
-                        className="w-full h-full object-cover"
+                        className='h-full w-full object-cover'
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <User className="w-16 h-16 text-neutral-400" />
+                      <div className='flex h-full w-full items-center justify-center'>
+                        <User className='h-16 w-16 text-neutral-400' />
                       </div>
                     )}
                   </div>
 
                   {/* Profile Pic Upload Button */}
                   {isOwnProfile && (
-                    <div className="absolute bottom-0 right-0">
+                    <div className='absolute right-0 bottom-0'>
                       <input
                         ref={profilePicInputRef}
-                        type="file"
-                        accept="image/*"
+                        type='file'
+                        accept='image/*'
                         onChange={handleProfilePicUpload}
-                        className="hidden"
+                        className='hidden'
                       />
                       <button
                         onClick={() => profilePicInputRef.current?.click()}
                         disabled={isUploadingProfile}
-                        className="w-10 h-10 rounded-full bg-black/70 hover:bg-black/80 flex items-center justify-center transition-colors z-10"
+                        className='z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/70 transition-colors hover:bg-black/80'
                       >
                         {isUploadingProfile ? (
-                          <Loader2 className="w-5 h-5 text-white animate-spin" />
+                          <Loader2 className='h-5 w-5 animate-spin text-white' />
                         ) : (
-                          <Camera className="w-5 h-5 text-white" />
+                          <Camera className='h-5 w-5 text-white' />
                         )}
                       </button>
                     </div>
@@ -708,43 +708,43 @@ export default function CreatorProfilePage() {
 
               {/* Share and Settings Buttons (Mobile/Tablet - Icon Only) - Positioned at top right */}
               {isMobile && (
-                <div className="absolute top-2 right-0 z-20 flex gap-2">
+                <div className='absolute top-2 right-0 z-20 flex gap-2'>
                   {/* Share Button (Mobile) */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
-                        variant="ghost"
-                        size="icon"
-                        className="w-10 h-10 mt-14"
+                        variant='ghost'
+                        size='icon'
+                        className='mt-14 h-10 w-10'
                       >
-                        <Share2 className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
+                        <Share2 className='h-5 w-5 text-neutral-700 dark:text-neutral-300' />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuContent align='end' className='w-56'>
                       <DropdownMenuItem onClick={handleCopyLink}>
-                        <Copy className="w-4 h-4 mr-2" />
+                        <Copy className='mr-2 h-4 w-4' />
                         {copiedLink ? "Copied!" : "Copy Link"}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("x")}>
-                        <X className="w-4 h-4 mr-2" />
+                        <X className='mr-2 h-4 w-4' />
                         Share on X
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("facebook")}>
-                        <Facebook className="w-4 h-4 mr-2" />
+                        <Facebook className='mr-2 h-4 w-4' />
                         Share on Facebook
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("linkedin")}>
-                        <Linkedin className="w-4 h-4 mr-2" />
+                        <Linkedin className='mr-2 h-4 w-4' />
                         Share on LinkedIn
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
                         <svg
-                          className="w-4 h-4 mr-2"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
+                          className='mr-2 h-4 w-4'
+                          fill='currentColor'
+                          viewBox='0 0 24 24'
+                          xmlns='http://www.w3.org/2000/svg'
                         >
-                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                          <path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z' />
                         </svg>
                         Share on WhatsApp
                       </DropdownMenuItem>
@@ -759,39 +759,39 @@ export default function CreatorProfilePage() {
                     >
                       <DrawerTrigger asChild>
                         <Button
-                          variant="outline"
-                          size="icon"
-                          className="w-10 h-10 rounded-full bg-white dark:bg-neutral-900 border-2 border-neutral-200 dark:border-neutral-700 shadow-md hover:bg-neutral-50 dark:hover:bg-neutral-800 mt-14"
+                          variant='outline'
+                          size='icon'
+                          className='mt-14 h-10 w-10 rounded-full border-2 border-neutral-200 bg-white shadow-md hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800'
                         >
-                          <Settings className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
+                          <Settings className='h-5 w-5 text-neutral-700 dark:text-neutral-300' />
                         </Button>
                       </DrawerTrigger>
-                      <DrawerContent className="max-h-[85dvh]">
+                      <DrawerContent className='max-h-[85dvh]'>
                         <DrawerHeader>
                           <DrawerTitle>Edit Profile</DrawerTitle>
                         </DrawerHeader>
-                        <div className="px-4 pb-4 overflow-y-auto">
-                          <div className="space-y-4">
+                        <div className='overflow-y-auto px-4 pb-4'>
+                          <div className='space-y-4'>
                             <div>
-                              <label className="text-sm font-medium mb-2 block">
+                              <label className='mb-2 block text-sm font-medium'>
                                 Bio
                               </label>
                               <textarea
                                 value={settingsBio}
                                 onChange={(e) => setSettingsBio(e.target.value)}
-                                placeholder="Tell us about yourself..."
-                                className="w-full min-h-[100px] px-3 py-2 border rounded-md resize-none"
+                                placeholder='Tell us about yourself...'
+                                className='min-h-[100px] w-full resize-none rounded-md border px-3 py-2'
                                 maxLength={115}
                               />
-                              <p className="text-xs text-neutral-500 mt-1">
+                              <p className='mt-1 text-xs text-neutral-500'>
                                 {settingsBio.length}/115
                               </p>
                             </div>
                             <div>
-                              <label className="text-sm font-medium mb-2 block">
+                              <label className='mb-2 block text-sm font-medium'>
                                 Social Media Links (Max 4)
                               </label>
-                              <div className="space-y-3">
+                              <div className='space-y-3'>
                                 {/* Selected Socials */}
                                 {selectedSocials.map((socialKey) => {
                                   const social = socialMediaOptions.find(
@@ -799,13 +799,13 @@ export default function CreatorProfilePage() {
                                   );
                                   if (!social) return null;
                                   return (
-                                    <div key={socialKey} className="flex gap-2">
-                                      <div className="flex-1">
-                                        <label className="text-xs text-neutral-500 mb-1 block">
+                                    <div key={socialKey} className='flex gap-2'>
+                                      <div className='flex-1'>
+                                        <label className='mb-1 block text-xs text-neutral-500'>
                                           {social.label}
                                         </label>
                                         <Input
-                                          type="url"
+                                          type='url'
                                           value={
                                             settingsSocials[
                                               socialKey as keyof typeof settingsSocials
@@ -821,15 +821,15 @@ export default function CreatorProfilePage() {
                                         />
                                       </div>
                                       <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="icon"
+                                        type='button'
+                                        variant='outline'
+                                        size='icon'
                                         onClick={() =>
                                           handleRemoveSocial(socialKey)
                                         }
-                                        className="mt-6 h-9 w-9 shrink-0"
+                                        className='mt-6 h-9 w-9 shrink-0'
                                       >
-                                        <Trash2 className="w-4 h-4" />
+                                        <Trash2 className='h-4 w-4' />
                                       </Button>
                                     </div>
                                   );
@@ -840,9 +840,9 @@ export default function CreatorProfilePage() {
                                   availableSocials.length > 0 && (
                                     <div>
                                       <Select onValueChange={handleAddSocial}>
-                                        <SelectTrigger className="w-full">
-                                          <Plus className="w-4 h-4 mr-2" />
-                                          <SelectValue placeholder="Add social media" />
+                                        <SelectTrigger className='w-full'>
+                                          <Plus className='mr-2 h-4 w-4' />
+                                          <SelectValue placeholder='Add social media' />
                                         </SelectTrigger>
                                         <SelectContent>
                                           {availableSocials.map((option) => (
@@ -858,7 +858,7 @@ export default function CreatorProfilePage() {
                                     </div>
                                   )}
                                 {selectedSocials.length >= 4 && (
-                                  <p className="text-xs text-neutral-500">
+                                  <p className='text-xs text-neutral-500'>
                                     Maximum of 4 social media links allowed
                                   </p>
                                 )}
@@ -867,9 +867,9 @@ export default function CreatorProfilePage() {
                           </div>
                         </div>
                         <DrawerFooter>
-                          <div className="flex justify-end gap-2 w-full">
+                          <div className='flex w-full justify-end gap-2'>
                             <Button
-                              variant="outline"
+                              variant='outline'
                               onClick={() => setIsSettingsDrawerOpen(false)}
                             >
                               Cancel
@@ -879,7 +879,7 @@ export default function CreatorProfilePage() {
                               disabled={isSavingSettings}
                             >
                               {isSavingSettings ? (
-                                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                               ) : null}
                               Save
                             </Button>
@@ -893,44 +893,44 @@ export default function CreatorProfilePage() {
             </div>
 
             {/* Desktop Layout */}
-            <div className="hidden md:flex md:flex-row md:items-start md:justify-between gap-6">
+            <div className='hidden gap-6 md:flex md:flex-row md:items-start md:justify-between'>
               {/* Left: Profile Picture and Info */}
-              <div className="flex flex-col md:flex-row items-start gap-6">
+              <div className='flex flex-col items-start gap-6 md:flex-row'>
                 {/* Profile Picture */}
-                <div className="relative -mt-20">
-                  <div className="w-40 h-40 rounded-full border-4 border-white dark:border-neutral-900 bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
+                <div className='relative -mt-20'>
+                  <div className='h-40 w-40 overflow-hidden rounded-full border-4 border-white bg-neutral-200 dark:border-neutral-900 dark:bg-neutral-800'>
                     {profile.userdp ? (
                       <img
                         src={profile.userdp}
                         alt={profile.username}
-                        className="w-full h-full object-cover"
+                        className='h-full w-full object-cover'
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <User className="w-20 h-20 text-neutral-400" />
+                      <div className='flex h-full w-full items-center justify-center'>
+                        <User className='h-20 w-20 text-neutral-400' />
                       </div>
                     )}
                   </div>
 
                   {/* Profile Pic Upload Button */}
                   {isOwnProfile && (
-                    <div className="absolute bottom-0 right-0">
+                    <div className='absolute right-0 bottom-0'>
                       <input
                         ref={profilePicInputRef}
-                        type="file"
-                        accept="image/*"
+                        type='file'
+                        accept='image/*'
                         onChange={handleProfilePicUpload}
-                        className="hidden"
+                        className='hidden'
                       />
                       <button
                         onClick={() => profilePicInputRef.current?.click()}
                         disabled={isUploadingProfile}
-                        className="w-10 h-10 rounded-full bg-black/70 hover:bg-black/80 flex items-center justify-center transition-colors"
+                        className='flex h-10 w-10 items-center justify-center rounded-full bg-black/70 transition-colors hover:bg-black/80'
                       >
                         {isUploadingProfile ? (
-                          <Loader2 className="w-5 h-5 text-white animate-spin" />
+                          <Loader2 className='h-5 w-5 animate-spin text-white' />
                         ) : (
-                          <Camera className="w-5 h-5 text-white" />
+                          <Camera className='h-5 w-5 text-white' />
                         )}
                       </button>
                     </div>
@@ -938,22 +938,22 @@ export default function CreatorProfilePage() {
                 </div>
 
                 {/* User Info */}
-                <div className="flex-1 mt-0">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h1 className="text-3xl font-bold text-neutral-900 dark:text-white">
+                <div className='mt-0 flex-1'>
+                  <div className='mb-2 flex items-center gap-2'>
+                    <h1 className='text-3xl font-bold text-neutral-900 dark:text-white'>
                       {profile.username}
                     </h1>
                     {profile.isVerified && (
                       <svg
-                        viewBox="0 0 22 22"
-                        aria-label="Verified account"
-                        role="img"
-                        className="w-6 h-6 flex-shrink-0"
-                        data-testid="icon-verified"
-                        fill="#3b82f6"
+                        viewBox='0 0 22 22'
+                        aria-label='Verified account'
+                        role='img'
+                        className='h-6 w-6 flex-shrink-0'
+                        data-testid='icon-verified'
+                        fill='#3b82f6'
                       >
                         <g>
-                          <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                          <path d='M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z' />
                         </g>
                       </svg>
                     )}
@@ -961,33 +961,33 @@ export default function CreatorProfilePage() {
 
                   {/* Bio */}
                   {profile.bio && (
-                    <p className="text-neutral-600 dark:text-neutral-400 mb-4 max-w-2xl">
+                    <p className='mb-4 max-w-2xl text-neutral-600 dark:text-neutral-400'>
                       {profile.bio}
                     </p>
                   )}
 
                   {/* Stats and Social Links Container - Desktop */}
-                  <div className="flex flex-row justify-between items-center gap-4 mb-4 w-full">
+                  <div className='mb-4 flex w-full flex-row items-center justify-between gap-4'>
                     {/* Stats */}
-                    <div className="flex flex-wrap items-center gap-6">
-                      <div className="flex items-center gap-2">
-                        <Users className="w-5 h-5 text-neutral-500" />
-                        <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                          <span className="font-bold">{profile.followers}</span>{" "}
+                    <div className='flex flex-wrap items-center gap-6'>
+                      <div className='flex items-center gap-2'>
+                        <Users className='h-5 w-5 text-neutral-500' />
+                        <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
+                          <span className='font-bold'>{profile.followers}</span>{" "}
                           followers
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <User className="w-5 h-5 text-neutral-500" />
-                        <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                          <span className="font-bold">{profile.following}</span>{" "}
+                      <div className='flex items-center gap-2'>
+                        <User className='h-5 w-5 text-neutral-500' />
+                        <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
+                          <span className='font-bold'>{profile.following}</span>{" "}
                           following
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <ImageIcon className="w-5 h-5 text-neutral-500" />
-                        <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                          <span className="font-bold">
+                      <div className='flex items-center gap-2'>
+                        <ImageIcon className='h-5 w-5 text-neutral-500' />
+                        <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
+                          <span className='font-bold'>
                             {profile.stats.totalPosts}
                           </span>{" "}
                           posts
@@ -1005,137 +1005,137 @@ export default function CreatorProfilePage() {
                       profile.socials?.dribbble ||
                       profile.socials?.behance ||
                       profile.socials?.tiktok) && (
-                      <div className="flex flex-col gap-2">
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                      <div className='flex flex-col gap-2'>
+                        <p className='text-sm text-neutral-500 dark:text-neutral-400'>
                           Follow me on
                         </p>
-                        <div className="flex items-center gap-3 flex-wrap">
+                        <div className='flex flex-wrap items-center gap-3'>
                           {profile.socials?.instagram && (
                             <a
                               href={profile.socials.instagram}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                              title="Instagram"
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                              title='Instagram'
                             >
-                              <Instagram className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
+                              <Instagram className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                             </a>
                           )}
                           {profile.socials?.twitter && (
                             <a
                               href={profile.socials.twitter}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                              title="Twitter/X"
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                              title='Twitter/X'
                             >
-                              <Twitter className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
+                              <Twitter className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                             </a>
                           )}
                           {profile.socials?.github && (
                             <a
                               href={profile.socials.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                              title="GitHub"
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                              title='GitHub'
                             >
-                              <Github className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
+                              <Github className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                             </a>
                           )}
                           {profile.socials?.linkedin && (
                             <a
                               href={profile.socials.linkedin}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                              title="LinkedIn"
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                              title='LinkedIn'
                             >
-                              <Linkedin className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
+                              <Linkedin className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                             </a>
                           )}
                           {profile.socials?.facebook && (
                             <a
                               href={profile.socials.facebook}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                              title="Facebook"
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                              title='Facebook'
                             >
                               <svg
-                                className="w-4 h-4 text-neutral-700 dark:text-neutral-300"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
+                                className='h-4 w-4 text-neutral-700 dark:text-neutral-300'
+                                fill='currentColor'
+                                viewBox='0 0 24 24'
                               >
-                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                <path d='M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z' />
                               </svg>
                             </a>
                           )}
                           {profile.socials?.youtube && (
                             <a
                               href={profile.socials.youtube}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                              title="YouTube"
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                              title='YouTube'
                             >
                               <svg
-                                className="w-4 h-4 text-neutral-700 dark:text-neutral-300"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
+                                className='h-4 w-4 text-neutral-700 dark:text-neutral-300'
+                                fill='currentColor'
+                                viewBox='0 0 24 24'
                               >
-                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                                <path d='M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z' />
                               </svg>
                             </a>
                           )}
                           {profile.socials?.dribbble && (
                             <a
                               href={profile.socials.dribbble}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                              title="Dribbble"
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                              title='Dribbble'
                             >
                               <svg
-                                className="w-4 h-4 text-neutral-700 dark:text-neutral-300"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
+                                className='h-4 w-4 text-neutral-700 dark:text-neutral-300'
+                                fill='currentColor'
+                                viewBox='0 0 24 24'
                               >
-                                <path d="M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 2.224 2.006 4.811 2.006 6.387 0 1.103-.183 2.16-.512 3.07 2.52-.78 4.549-2.923 5.142-5.597-.57-.542-1.252-1.422-1.252-1.422zm-6.115 7.808c-.153-.9-.75-4.032-2.19-7.77l-.066.02c-5.79 2.015-7.86 6.12-7.86 6.12 1.663 1.158 3.915 1.863 6.519 1.863 1.785 0 3.397-.366 4.597-1.233zm-9.791-4.403c1.205-.524 3.05-.986 4.908-.986.07 0 .15.008.22.013-1.024 3.528-2.378 6.652-3.986 8.876-1.214-1.67-1.142-4.05-.142-7.903zM2.344 15.6c1.266 1.988 3.375 3.302 5.757 3.884-.536-1.877-1.185-3.74-1.948-5.565-.33-.06-.66-.112-.99-.15-1.048-.096-1.948-.14-2.82-.14-.49 0-.973.027-1.44.08.18 1.2.7 2.4 1.44 3.89zm18.24-3.93c.58 1.084.95 2.28.95 3.55 0 2.5-1.135 4.745-2.92 6.245-1.24-.883-2.673-1.65-4.292-2.256 1.27-1.638 2.29-3.599 2.963-5.703.22-.07.44-.14.66-.2 1.21-.18 2.4-.405 3.57-.68.05-.36.07-.72.07-1.08 0-.25-.02-.5-.03-.75-.18-.12-.43-.28-.67-.45-.25-.18-.5-.35-.75-.52zm-4.28 3.16c-.28 1.193-.75 2.34-1.38 3.407a10.772 10.772 0 0 1-3.05-.894c.93-2.37 1.66-4.835 2.16-7.27.12-.6.22-1.19.3-1.77 2.34.42 4.7.98 6.97 1.68-.4.9-.84 1.76-1.32 2.58-.48.82-1 1.62-1.54 2.39-.18.24-.36.48-.55.7-.19.22-.38.43-.58.63z" />
+                                <path d='M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 2.224 2.006 4.811 2.006 6.387 0 1.103-.183 2.16-.512 3.07 2.52-.78 4.549-2.923 5.142-5.597-.57-.542-1.252-1.422-1.252-1.422zm-6.115 7.808c-.153-.9-.75-4.032-2.19-7.77l-.066.02c-5.79 2.015-7.86 6.12-7.86 6.12 1.663 1.158 3.915 1.863 6.519 1.863 1.785 0 3.397-.366 4.597-1.233zm-9.791-4.403c1.205-.524 3.05-.986 4.908-.986.07 0 .15.008.22.013-1.024 3.528-2.378 6.652-3.986 8.876-1.214-1.67-1.142-4.05-.142-7.903zM2.344 15.6c1.266 1.988 3.375 3.302 5.757 3.884-.536-1.877-1.185-3.74-1.948-5.565-.33-.06-.66-.112-.99-.15-1.048-.096-1.948-.14-2.82-.14-.49 0-.973.027-1.44.08.18 1.2.7 2.4 1.44 3.89zm18.24-3.93c.58 1.084.95 2.28.95 3.55 0 2.5-1.135 4.745-2.92 6.245-1.24-.883-2.673-1.65-4.292-2.256 1.27-1.638 2.29-3.599 2.963-5.703.22-.07.44-.14.66-.2 1.21-.18 2.4-.405 3.57-.68.05-.36.07-.72.07-1.08 0-.25-.02-.5-.03-.75-.18-.12-.43-.28-.67-.45-.25-.18-.5-.35-.75-.52zm-4.28 3.16c-.28 1.193-.75 2.34-1.38 3.407a10.772 10.772 0 0 1-3.05-.894c.93-2.37 1.66-4.835 2.16-7.27.12-.6.22-1.19.3-1.77 2.34.42 4.7.98 6.97 1.68-.4.9-.84 1.76-1.32 2.58-.48.82-1 1.62-1.54 2.39-.18.24-.36.48-.55.7-.19.22-.38.43-.58.63z' />
                               </svg>
                             </a>
                           )}
                           {profile.socials?.behance && (
                             <a
                               href={profile.socials.behance}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                              title="Behance"
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                              title='Behance'
                             >
                               <svg
-                                className="w-4 h-4 text-neutral-700 dark:text-neutral-300"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
+                                className='h-4 w-4 text-neutral-700 dark:text-neutral-300'
+                                fill='currentColor'
+                                viewBox='0 0 24 24'
                               >
-                                <path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.12 1.185.12 2.07H12.855c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4.588h-6.147c.09 2.544 2.529 2.544 3.074 2.544 2.835 0 3.074-2.544.073-2.544zM0 11h4.021v2.151H0V11zm6.057-1.192c-1.49 0-2.688-1.21-2.688-2.701C3.369 5.816 4.558 4.605 6.057 4.605c1.49 0 2.688 1.21 2.688 2.701 0 1.491-1.198 2.701-2.688 2.701zm-1.36-3.536c.495 0 .891.402.891.899 0 .496-.396.899-.891.899-.495 0-.891-.403-.891-.899 0-.497.396-.899.891-.899z" />
+                                <path d='M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.12 1.185.12 2.07H12.855c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4.588h-6.147c.09 2.544 2.529 2.544 3.074 2.544 2.835 0 3.074-2.544.073-2.544zM0 11h4.021v2.151H0V11zm6.057-1.192c-1.49 0-2.688-1.21-2.688-2.701C3.369 5.816 4.558 4.605 6.057 4.605c1.49 0 2.688 1.21 2.688 2.701 0 1.491-1.198 2.701-2.688 2.701zm-1.36-3.536c.495 0 .891.402.891.899 0 .496-.396.899-.891.899-.495 0-.891-.403-.891-.899 0-.497.396-.899.891-.899z' />
                               </svg>
                             </a>
                           )}
                           {profile.socials?.tiktok && (
                             <a
                               href={profile.socials.tiktok}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                              title="TikTok"
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                              title='TikTok'
                             >
                               <svg
-                                className="w-4 h-4 text-neutral-700 dark:text-neutral-300"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
+                                className='h-4 w-4 text-neutral-700 dark:text-neutral-300'
+                                fill='currentColor'
+                                viewBox='0 0 24 24'
                               >
-                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                                <path d='M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z' />
                               </svg>
                             </a>
                           )}
@@ -1147,39 +1147,39 @@ export default function CreatorProfilePage() {
               </div>
 
               {/* Right: Share, Settings/Follow Button (Desktop) */}
-              <div className="flex items-start gap-3">
+              <div className='flex items-start gap-3'>
                 {/* Share Button */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-9 w-9">
-                      <Share2 className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
+                    <Button variant='ghost' size='icon' className='h-9 w-9'>
+                      <Share2 className='h-5 w-5 text-neutral-700 dark:text-neutral-300' />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuContent align='end' className='w-56'>
                     <DropdownMenuItem onClick={handleCopyLink}>
-                      <Copy className="w-4 h-4 mr-2" />
+                      <Copy className='mr-2 h-4 w-4' />
                       {copiedLink ? "Copied!" : "Copy Link"}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("x")}>
-                      <X className="w-4 h-4 mr-2" />
+                      <X className='mr-2 h-4 w-4' />
                       Share on X
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("facebook")}>
-                      <Facebook className="w-4 h-4 mr-2" />
+                      <Facebook className='mr-2 h-4 w-4' />
                       Share on Facebook
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("linkedin")}>
-                      <Linkedin className="w-4 h-4 mr-2" />
+                      <Linkedin className='mr-2 h-4 w-4' />
                       Share on LinkedIn
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
                       <svg
-                        className="w-4 h-4 mr-2"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
+                        className='mr-2 h-4 w-4'
+                        fill='currentColor'
+                        viewBox='0 0 24 24'
+                        xmlns='http://www.w3.org/2000/svg'
                       >
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                        <path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z' />
                       </svg>
                       Share on WhatsApp
                     </DropdownMenuItem>
@@ -1193,38 +1193,38 @@ export default function CreatorProfilePage() {
                   >
                     <DialogTrigger asChild>
                       <Button
-                        variant="outline"
-                        className="px-4 py-2 rounded-lg "
+                        variant='outline'
+                        className='rounded-lg px-4 py-2'
                       >
-                        <Settings className="w-4 h-4 mr-2" />
+                        <Settings className='mr-2 h-4 w-4' />
                         Settings
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-md max-h-[80dvh] overflow-y-auto [&>button]:hidden">
+                    <DialogContent className='max-h-[80dvh] max-w-md overflow-y-auto [&>button]:hidden'>
                       <DialogHeader>
                         <DialogTitle>Edit Profile</DialogTitle>
                       </DialogHeader>
-                      <div className="space-y-4 mt-4">
+                      <div className='mt-4 space-y-4'>
                         <div>
-                          <label className="text-sm font-medium mb-2 block">
+                          <label className='mb-2 block text-sm font-medium'>
                             Bio
                           </label>
                           <textarea
                             value={settingsBio}
                             onChange={(e) => setSettingsBio(e.target.value)}
-                            placeholder="Tell us about yourself..."
-                            className="w-full min-h-[100px] px-3 py-2 border rounded-md resize-none"
+                            placeholder='Tell us about yourself...'
+                            className='min-h-[100px] w-full resize-none rounded-md border px-3 py-2'
                             maxLength={115}
                           />
-                          <p className="text-xs text-neutral-500 mt-1">
+                          <p className='mt-1 text-xs text-neutral-500'>
                             {settingsBio.length}/115
                           </p>
                         </div>
                         <div>
-                          <label className="text-sm font-medium mb-2 block">
+                          <label className='mb-2 block text-sm font-medium'>
                             Social Media Links (Max 4)
                           </label>
-                          <div className="space-y-3">
+                          <div className='space-y-3'>
                             {/* Selected Socials */}
                             {selectedSocials.map((socialKey) => {
                               const social = socialMediaOptions.find(
@@ -1232,13 +1232,13 @@ export default function CreatorProfilePage() {
                               );
                               if (!social) return null;
                               return (
-                                <div key={socialKey} className="flex gap-2">
-                                  <div className="flex-1">
-                                    <label className="text-xs text-neutral-500 mb-1 block">
+                                <div key={socialKey} className='flex gap-2'>
+                                  <div className='flex-1'>
+                                    <label className='mb-1 block text-xs text-neutral-500'>
                                       {social.label}
                                     </label>
                                     <Input
-                                      type="url"
+                                      type='url'
                                       value={
                                         settingsSocials[
                                           socialKey as keyof typeof settingsSocials
@@ -1254,15 +1254,15 @@ export default function CreatorProfilePage() {
                                     />
                                   </div>
                                   <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="icon"
+                                    type='button'
+                                    variant='outline'
+                                    size='icon'
                                     onClick={() =>
                                       handleRemoveSocial(socialKey)
                                     }
-                                    className="mt-6 h-9 w-9 shrink-0"
+                                    className='mt-6 h-9 w-9 shrink-0'
                                   >
-                                    <Trash2 className="w-4 h-4" />
+                                    <Trash2 className='h-4 w-4' />
                                   </Button>
                                 </div>
                               );
@@ -1273,9 +1273,9 @@ export default function CreatorProfilePage() {
                               availableSocials.length > 0 && (
                                 <div>
                                   <Select onValueChange={handleAddSocial}>
-                                    <SelectTrigger className="w-full">
-                                      <Plus className="w-4 h-4 mr-2" />
-                                      <SelectValue placeholder="Add social media" />
+                                    <SelectTrigger className='w-full'>
+                                      <Plus className='mr-2 h-4 w-4' />
+                                      <SelectValue placeholder='Add social media' />
                                     </SelectTrigger>
                                     <SelectContent>
                                       {availableSocials.map((option) => (
@@ -1291,15 +1291,15 @@ export default function CreatorProfilePage() {
                                 </div>
                               )}
                             {selectedSocials.length >= 4 && (
-                              <p className="text-xs text-neutral-500">
+                              <p className='text-xs text-neutral-500'>
                                 Maximum of 4 social media links allowed
                               </p>
                             )}
                           </div>
                         </div>
-                        <div className="flex justify-end gap-2 pt-4">
+                        <div className='flex justify-end gap-2 pt-4'>
                           <Button
-                            variant="outline"
+                            variant='outline'
                             onClick={() => setIsSettingsDialogOpen(false)}
                           >
                             Cancel
@@ -1309,7 +1309,7 @@ export default function CreatorProfilePage() {
                             disabled={isSavingSettings}
                           >
                             {isSavingSettings ? (
-                              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                             ) : null}
                             Save
                           </Button>
@@ -1322,14 +1322,14 @@ export default function CreatorProfilePage() {
                     onClick={handleFollow}
                     disabled={following}
                     className={cn(
-                      "px-6 py-2 rounded-lg font-medium transition-colors",
+                      "rounded-lg px-6 py-2 font-medium transition-colors",
                       isFollowing
-                        ? "bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100"
-                        : "bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
+                        ? "bg-neutral-200 text-neutral-900 hover:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700"
+                        : "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
                     )}
                   >
                     {following ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className='h-4 w-4 animate-spin' />
                     ) : isFollowing ? (
                       "Following"
                     ) : (
@@ -1342,23 +1342,23 @@ export default function CreatorProfilePage() {
             {/* End Desktop Layout */}
 
             {/* Mobile/Tablet: Centered Content */}
-            <div className="md:hidden flex flex-col items-center text-center">
+            <div className='flex flex-col items-center text-center md:hidden'>
               {/* Username and Verification */}
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <div className='mb-2 flex items-center justify-center gap-2'>
+                <h1 className='text-2xl font-bold text-neutral-900 dark:text-white'>
                   {profile.username}
                 </h1>
                 {profile.isVerified && (
                   <svg
-                    viewBox="0 0 22 22"
-                    aria-label="Verified account"
-                    role="img"
-                    className="w-5 h-5 flex-shrink-0"
-                    data-testid="icon-verified"
-                    fill="#3b82f6"
+                    viewBox='0 0 22 22'
+                    aria-label='Verified account'
+                    role='img'
+                    className='h-5 w-5 flex-shrink-0'
+                    data-testid='icon-verified'
+                    fill='#3b82f6'
                   >
                     <g>
-                      <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                      <path d='M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z' />
                     </g>
                   </svg>
                 )}
@@ -1366,33 +1366,33 @@ export default function CreatorProfilePage() {
 
               {/* Bio */}
               {profile.bio && (
-                <p className="text-neutral-600 dark:text-neutral-400 mb-4 max-w-2xl">
+                <p className='mb-4 max-w-2xl text-neutral-600 dark:text-neutral-400'>
                   {profile.bio}
                 </p>
               )}
 
               {/* Stats and Social Links Container - Mobile/Tablet */}
-              <div className="flex flex-col items-center gap-4 mb-4 w-full">
+              <div className='mb-4 flex w-full flex-col items-center gap-4'>
                 {/* Stats */}
-                <div className="flex flex-wrap items-center justify-center gap-6">
-                  <div className="flex items-center gap-2">
-                    <Users className="w-5 h-5 text-neutral-500" />
-                    <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                      <span className="font-bold">{profile.followers}</span>{" "}
+                <div className='flex flex-wrap items-center justify-center gap-6'>
+                  <div className='flex items-center gap-2'>
+                    <Users className='h-5 w-5 text-neutral-500' />
+                    <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
+                      <span className='font-bold'>{profile.followers}</span>{" "}
                       followers
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <User className="w-5 h-5 text-neutral-500" />
-                    <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                      <span className="font-bold">{profile.following}</span>{" "}
+                  <div className='flex items-center gap-2'>
+                    <User className='h-5 w-5 text-neutral-500' />
+                    <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
+                      <span className='font-bold'>{profile.following}</span>{" "}
                       following
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <ImageIcon className="w-5 h-5 text-neutral-500" />
-                    <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                      <span className="font-bold">
+                  <div className='flex items-center gap-2'>
+                    <ImageIcon className='h-5 w-5 text-neutral-500' />
+                    <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
+                      <span className='font-bold'>
                         {profile.stats.totalPosts}
                       </span>{" "}
                       posts
@@ -1408,10 +1408,10 @@ export default function CreatorProfilePage() {
                   >
                     <DrawerTrigger asChild>
                       <Button
-                        variant="outline"
-                        className="px-6 py-2 rounded-lg hidden"
+                        variant='outline'
+                        className='hidden rounded-lg px-6 py-2'
                       >
-                        <Settings className="w-4 h-4 mr-2" />
+                        <Settings className='mr-2 h-4 w-4' />
                         Settings
                       </Button>
                     </DrawerTrigger>
@@ -1419,27 +1419,27 @@ export default function CreatorProfilePage() {
                       <DrawerHeader>
                         <DrawerTitle>Edit Profile</DrawerTitle>
                       </DrawerHeader>
-                      <div className="space-y-4 mt-4 px-4">
+                      <div className='mt-4 space-y-4 px-4'>
                         <div>
-                          <label className="text-sm font-medium mb-2 block">
+                          <label className='mb-2 block text-sm font-medium'>
                             Bio
                           </label>
                           <textarea
                             value={settingsBio}
                             onChange={(e) => setSettingsBio(e.target.value)}
-                            placeholder="Tell us about yourself..."
-                            className="w-full min-h-[100px] px-3 py-2 border rounded-md resize-none"
+                            placeholder='Tell us about yourself...'
+                            className='min-h-[100px] w-full resize-none rounded-md border px-3 py-2'
                             maxLength={115}
                           />
-                          <p className="text-xs text-neutral-500 mt-1">
+                          <p className='mt-1 text-xs text-neutral-500'>
                             {settingsBio.length}/115
                           </p>
                         </div>
                         <div>
-                          <label className="text-sm font-medium mb-2 block">
+                          <label className='mb-2 block text-sm font-medium'>
                             Social Media Links (Max 4)
                           </label>
-                          <div className="space-y-3">
+                          <div className='space-y-3'>
                             {/* Selected Socials */}
                             {selectedSocials.map((socialKey) => {
                               const social = socialMediaOptions.find(
@@ -1447,13 +1447,13 @@ export default function CreatorProfilePage() {
                               );
                               if (!social) return null;
                               return (
-                                <div key={socialKey} className="flex gap-2">
-                                  <div className="flex-1">
-                                    <label className="text-xs text-neutral-500 mb-1 block">
+                                <div key={socialKey} className='flex gap-2'>
+                                  <div className='flex-1'>
+                                    <label className='mb-1 block text-xs text-neutral-500'>
                                       {social.label}
                                     </label>
                                     <Input
-                                      type="url"
+                                      type='url'
                                       value={
                                         settingsSocials[
                                           socialKey as keyof typeof settingsSocials
@@ -1469,15 +1469,15 @@ export default function CreatorProfilePage() {
                                     />
                                   </div>
                                   <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="icon"
+                                    type='button'
+                                    variant='outline'
+                                    size='icon'
                                     onClick={() =>
                                       handleRemoveSocial(socialKey)
                                     }
-                                    className="mt-6 h-9 w-9 shrink-0"
+                                    className='mt-6 h-9 w-9 shrink-0'
                                   >
-                                    <Trash2 className="w-4 h-4" />
+                                    <Trash2 className='h-4 w-4' />
                                   </Button>
                                 </div>
                               );
@@ -1488,9 +1488,9 @@ export default function CreatorProfilePage() {
                               availableSocials.length > 0 && (
                                 <div>
                                   <Select onValueChange={handleAddSocial}>
-                                    <SelectTrigger className="w-full">
-                                      <Plus className="w-4 h-4 mr-2" />
-                                      <SelectValue placeholder="Add social media" />
+                                    <SelectTrigger className='w-full'>
+                                      <Plus className='mr-2 h-4 w-4' />
+                                      <SelectValue placeholder='Add social media' />
                                     </SelectTrigger>
                                     <SelectContent>
                                       {availableSocials.map((option) => (
@@ -1506,15 +1506,15 @@ export default function CreatorProfilePage() {
                                 </div>
                               )}
                             {selectedSocials.length >= 4 && (
-                              <p className="text-xs text-neutral-500">
+                              <p className='text-xs text-neutral-500'>
                                 Maximum of 4 social media links allowed
                               </p>
                             )}
                           </div>
                         </div>
-                        <div className="flex justify-end gap-2 pt-4">
+                        <div className='flex justify-end gap-2 pt-4'>
                           <Button
-                            variant="outline"
+                            variant='outline'
                             onClick={() => setIsSettingsDrawerOpen(false)}
                           >
                             Cancel
@@ -1524,7 +1524,7 @@ export default function CreatorProfilePage() {
                             disabled={isSavingSettings}
                           >
                             {isSavingSettings ? (
-                              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                             ) : null}
                             Save
                           </Button>
@@ -1537,14 +1537,14 @@ export default function CreatorProfilePage() {
                     onClick={handleFollow}
                     disabled={following}
                     className={cn(
-                      "px-6 py-2 rounded-lg font-medium transition-colors",
+                      "rounded-lg px-6 py-2 font-medium transition-colors",
                       isFollowing
-                        ? "bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100"
-                        : "bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
+                        ? "bg-neutral-200 text-neutral-900 hover:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700"
+                        : "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
                     )}
                   >
                     {following ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className='h-4 w-4 animate-spin' />
                     ) : isFollowing ? (
                       "Following"
                     ) : (
@@ -1563,137 +1563,137 @@ export default function CreatorProfilePage() {
                   profile.socials?.dribbble ||
                   profile.socials?.behance ||
                   profile.socials?.tiktok) && (
-                  <div className="flex flex-col gap-2 items-center">
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                  <div className='flex flex-col items-center gap-2'>
+                    <p className='text-sm text-neutral-500 dark:text-neutral-400'>
                       Follow me on
                     </p>
-                    <div className="flex items-center gap-3 flex-wrap justify-center">
+                    <div className='flex flex-wrap items-center justify-center gap-3'>
                       {profile.socials?.instagram && (
                         <a
                           href={profile.socials.instagram}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                          title="Instagram"
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                          title='Instagram'
                         >
-                          <Instagram className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
+                          <Instagram className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                         </a>
                       )}
                       {profile.socials?.twitter && (
                         <a
                           href={profile.socials.twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                          title="Twitter/X"
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                          title='Twitter/X'
                         >
-                          <Twitter className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
+                          <Twitter className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                         </a>
                       )}
                       {profile.socials?.github && (
                         <a
                           href={profile.socials.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                          title="GitHub"
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                          title='GitHub'
                         >
-                          <Github className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
+                          <Github className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                         </a>
                       )}
                       {profile.socials?.linkedin && (
                         <a
                           href={profile.socials.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                          title="LinkedIn"
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                          title='LinkedIn'
                         >
-                          <Linkedin className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
+                          <Linkedin className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                         </a>
                       )}
                       {profile.socials?.facebook && (
                         <a
                           href={profile.socials.facebook}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                          title="Facebook"
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                          title='Facebook'
                         >
                           <svg
-                            className="w-4 h-4 text-neutral-700 dark:text-neutral-300"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
+                            className='h-4 w-4 text-neutral-700 dark:text-neutral-300'
+                            fill='currentColor'
+                            viewBox='0 0 24 24'
                           >
-                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                            <path d='M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z' />
                           </svg>
                         </a>
                       )}
                       {profile.socials?.youtube && (
                         <a
                           href={profile.socials.youtube}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                          title="YouTube"
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                          title='YouTube'
                         >
                           <svg
-                            className="w-4 h-4 text-neutral-700 dark:text-neutral-300"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
+                            className='h-4 w-4 text-neutral-700 dark:text-neutral-300'
+                            fill='currentColor'
+                            viewBox='0 0 24 24'
                           >
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                            <path d='M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z' />
                           </svg>
                         </a>
                       )}
                       {profile.socials?.dribbble && (
                         <a
                           href={profile.socials.dribbble}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                          title="Dribbble"
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                          title='Dribbble'
                         >
                           <svg
-                            className="w-4 h-4 text-neutral-700 dark:text-neutral-300"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
+                            className='h-4 w-4 text-neutral-700 dark:text-neutral-300'
+                            fill='currentColor'
+                            viewBox='0 0 24 24'
                           >
-                            <path d="M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 2.224 2.006 4.811 2.006 6.387 0 1.103-.183 2.16-.512 3.07 2.52-.78 4.549-2.923 5.142-5.597-.57-.542-1.252-1.422-1.252-1.422zm-6.115 7.808c-.153-.9-.75-4.032-2.19-7.77l-.066.02c-5.79 2.015-7.86 6.12-7.86 6.12 1.663 1.158 3.915 1.863 6.519 1.863 1.785 0 3.397-.366 4.597-1.233zm-9.791-4.403c1.205-.524 3.05-.986 4.908-.986.07 0 .15.008.22.013-1.024 3.528-2.378 6.652-3.986 8.876-1.214-1.67-1.142-4.05-.142-7.903zM2.344 15.6c1.266 1.988 3.375 3.302 5.757 3.884-.536-1.877-1.185-3.74-1.948-5.565-.33-.06-.66-.112-.99-.15-1.048-.096-1.948-.14-2.82-.14-.49 0-.973.027-1.44.08.18 1.2.7 2.4 1.44 3.89zm18.24-3.93c.58 1.084.95 2.28.95 3.55 0 2.5-1.135 4.745-2.92 6.245-1.24-.883-2.673-1.65-4.292-2.256 1.27-1.638 2.29-3.599 2.963-5.703.22-.07.44-.14.66-.2 1.21-.18 2.4-.405 3.57-.68.05-.36.07-.72.07-1.08 0-.25-.02-.5-.03-.75-.18-.12-.43-.28-.67-.45-.25-.18-.5-.35-.75-.52zm-4.28 3.16c-.28 1.193-.75 2.34-1.38 3.407a10.772 10.772 0 0 1-3.05-.894c.93-2.37 1.66-4.835 2.16-7.27.12-.6.22-1.19.3-1.77 2.34.42 4.7.98 6.97 1.68-.4.9-.84 1.76-1.32 2.58-.48.82-1 1.62-1.54 2.39-.18.24-.36.48-.55.7-.19.22-.38.43-.58.63z" />
+                            <path d='M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 2.224 2.006 4.811 2.006 6.387 0 1.103-.183 2.16-.512 3.07 2.52-.78 4.549-2.923 5.142-5.597-.57-.542-1.252-1.422-1.252-1.422zm-6.115 7.808c-.153-.9-.75-4.032-2.19-7.77l-.066.02c-5.79 2.015-7.86 6.12-7.86 6.12 1.663 1.158 3.915 1.863 6.519 1.863 1.785 0 3.397-.366 4.597-1.233zm-9.791-4.403c1.205-.524 3.05-.986 4.908-.986.07 0 .15.008.22.013-1.024 3.528-2.378 6.652-3.986 8.876-1.214-1.67-1.142-4.05-.142-7.903zM2.344 15.6c1.266 1.988 3.375 3.302 5.757 3.884-.536-1.877-1.185-3.74-1.948-5.565-.33-.06-.66-.112-.99-.15-1.048-.096-1.948-.14-2.82-.14-.49 0-.973.027-1.44.08.18 1.2.7 2.4 1.44 3.89zm18.24-3.93c.58 1.084.95 2.28.95 3.55 0 2.5-1.135 4.745-2.92 6.245-1.24-.883-2.673-1.65-4.292-2.256 1.27-1.638 2.29-3.599 2.963-5.703.22-.07.44-.14.66-.2 1.21-.18 2.4-.405 3.57-.68.05-.36.07-.72.07-1.08 0-.25-.02-.5-.03-.75-.18-.12-.43-.28-.67-.45-.25-.18-.5-.35-.75-.52zm-4.28 3.16c-.28 1.193-.75 2.34-1.38 3.407a10.772 10.772 0 0 1-3.05-.894c.93-2.37 1.66-4.835 2.16-7.27.12-.6.22-1.19.3-1.77 2.34.42 4.7.98 6.97 1.68-.4.9-.84 1.76-1.32 2.58-.48.82-1 1.62-1.54 2.39-.18.24-.36.48-.55.7-.19.22-.38.43-.58.63z' />
                           </svg>
                         </a>
                       )}
                       {profile.socials?.behance && (
                         <a
                           href={profile.socials.behance}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                          title="Behance"
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                          title='Behance'
                         >
                           <svg
-                            className="w-4 h-4 text-neutral-700 dark:text-neutral-300"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
+                            className='h-4 w-4 text-neutral-700 dark:text-neutral-300'
+                            fill='currentColor'
+                            viewBox='0 0 24 24'
                           >
-                            <path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.12 1.185.12 2.07H12.855c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4.588h-6.147c.09 2.544 2.529 2.544 3.074 2.544 2.835 0 3.074-2.544.073-2.544zM0 11h4.021v2.151H0V11zm6.057-1.192c-1.49 0-2.688-1.21-2.688-2.701C3.369 5.816 4.558 4.605 6.057 4.605c1.49 0 2.688 1.21 2.688 2.701 0 1.491-1.198 2.701-2.688 2.701zm-1.36-3.536c.495 0 .891.402.891.899 0 .496-.396.899-.891.899-.495 0-.891-.403-.891-.899 0-.497.396-.899.891-.899z" />
+                            <path d='M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.12 1.185.12 2.07H12.855c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4.588h-6.147c.09 2.544 2.529 2.544 3.074 2.544 2.835 0 3.074-2.544.073-2.544zM0 11h4.021v2.151H0V11zm6.057-1.192c-1.49 0-2.688-1.21-2.688-2.701C3.369 5.816 4.558 4.605 6.057 4.605c1.49 0 2.688 1.21 2.688 2.701 0 1.491-1.198 2.701-2.688 2.701zm-1.36-3.536c.495 0 .891.402.891.899 0 .496-.396.899-.891.899-.495 0-.891-.403-.891-.899 0-.497.396-.899.891-.899z' />
                           </svg>
                         </a>
                       )}
                       {profile.socials?.tiktok && (
                         <a
                           href={profile.socials.tiktok}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
-                          title="TikTok"
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
+                          title='TikTok'
                         >
                           <svg
-                            className="w-4 h-4 text-neutral-700 dark:text-neutral-300"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
+                            className='h-4 w-4 text-neutral-700 dark:text-neutral-300'
+                            fill='currentColor'
+                            viewBox='0 0 24 24'
                           >
-                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                            <path d='M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z' />
                           </svg>
                         </a>
                       )}
@@ -1707,9 +1707,9 @@ export default function CreatorProfilePage() {
       </div>
 
       {/* Content Tabs */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="sticky top-0 z-10 bg-neutral-50/80 dark:bg-neutral-950/80 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-800 mb-6">
-          <div className="flex gap-1 pt-3 pb-0">
+      <div className='mx-auto max-w-6xl px-4 sm:px-6 lg:px-8'>
+        <div className='sticky top-0 z-10 mb-6 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-950/80'>
+          <div className='flex gap-1 pt-3 pb-0'>
             <button
               onClick={() => {
                 // Use requestAnimationFrame to prevent hanging
@@ -1719,17 +1719,17 @@ export default function CreatorProfilePage() {
               }}
               disabled={contentLoading}
               className={cn(
-                "relative px-4 py-2.5 font-medium text-sm transition-all duration-200 rounded-t-lg",
+                "relative rounded-t-lg px-4 py-2.5 text-sm font-medium transition-all duration-200",
                 "flex items-center gap-2",
                 activeTab === "images"
-                  ? "text-neutral-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 shadow-sm border-b-1 border-neutral-100 dark:border-neutral-800"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/50",
-                contentLoading && "opacity-50 cursor-not-allowed"
+                  ? "border-b-1 border-neutral-100 bg-white text-neutral-900 shadow-sm dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100"
+                  : "text-neutral-500 hover:bg-neutral-100/50 hover:text-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-800/50 dark:hover:text-neutral-300",
+                contentLoading && "cursor-not-allowed opacity-50"
               )}
             >
               <ImageIcon
                 className={cn(
-                  "w-4 h-4 transition-colors",
+                  "h-4 w-4 transition-colors",
                   activeTab === "images"
                     ? "text-neutral-900 dark:text-neutral-100"
                     : "text-neutral-500 dark:text-neutral-400"
@@ -1738,10 +1738,10 @@ export default function CreatorProfilePage() {
               <span>Images</span>
               <span
                 className={cn(
-                  "ml-1 px-1.5 py-0.5 rounded-full text-xs font-semibold transition-colors",
+                  "ml-1 rounded-full px-1.5 py-0.5 text-xs font-semibold transition-colors",
                   activeTab === "images"
-                    ? "bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100"
-                    : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
+                    ? "bg-neutral-200 text-neutral-900 dark:bg-neutral-700 dark:text-neutral-100"
+                    : "bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400"
                 )}
               >
                 {content.images.length}
@@ -1756,17 +1756,17 @@ export default function CreatorProfilePage() {
               }}
               disabled={contentLoading}
               className={cn(
-                "relative px-4 py-2.5 font-medium text-sm transition-all duration-200 rounded-t-lg",
+                "relative rounded-t-lg px-4 py-2.5 text-sm font-medium transition-all duration-200",
                 "flex items-center gap-2",
                 activeTab === "videos"
-                  ? "text-neutral-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 shadow-sm border-b-2 border-neutral-100 dark:border-neutral-800"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/50",
-                contentLoading && "opacity-50 cursor-not-allowed"
+                  ? "border-b-2 border-neutral-100 bg-white text-neutral-900 shadow-sm dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100"
+                  : "text-neutral-500 hover:bg-neutral-100/50 hover:text-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-800/50 dark:hover:text-neutral-300",
+                contentLoading && "cursor-not-allowed opacity-50"
               )}
             >
               <Video
                 className={cn(
-                  "w-4 h-4 transition-colors",
+                  "h-4 w-4 transition-colors",
                   activeTab === "videos"
                     ? "text-neutral-900 dark:text-neutral-100"
                     : "text-neutral-500 dark:text-neutral-400"
@@ -1775,10 +1775,10 @@ export default function CreatorProfilePage() {
               <span>Videos</span>
               <span
                 className={cn(
-                  "ml-1 px-1.5 py-0.5 rounded-full text-xs font-semibold transition-colors",
+                  "ml-1 rounded-full px-1.5 py-0.5 text-xs font-semibold transition-colors",
                   activeTab === "videos"
-                    ? "bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100"
-                    : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
+                    ? "bg-neutral-200 text-neutral-900 dark:bg-neutral-700 dark:text-neutral-100"
+                    : "bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400"
                 )}
               >
                 {content.videos.length}

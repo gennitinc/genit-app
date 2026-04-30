@@ -121,29 +121,29 @@ export function BrowserViewer({
   return (
     <div>
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50 z-10">
-          <div className="flex flex-col items-center gap-2">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <p className="text-sm text-gray-600">Loading preview...</p>
+        <div className='bg-opacity-50 absolute inset-0 z-10 flex items-center justify-center bg-gray-100'>
+          <div className='flex flex-col items-center gap-2'>
+            <Loader2 className='text-primary h-8 w-8 animate-spin' />
+            <p className='text-sm text-gray-600'>Loading preview...</p>
           </div>
         </div>
       )}
 
       {loadError && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 z-10">
-          <div className="text-center p-4 max-w-md">
-            <p className="text-red-500 font-medium mb-2">
+        <div className='absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-100'>
+          <div className='max-w-md p-4 text-center'>
+            <p className='mb-2 font-medium text-red-500'>
               Failed to load preview in iframe
             </p>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className='mb-4 text-sm text-gray-600'>
               This may be due to CORS restrictions or the WebContainer not being
               fully initialized.
             </p>
             <a
               href={finalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
+              target='_blank'
+              rel='noopener noreferrer'
+              className='bg-primary hover:bg-primary-600 rounded-md px-4 py-2 text-white transition-colors'
             >
               Open in new tab
             </a>
@@ -155,9 +155,9 @@ export function BrowserViewer({
         <iframe
           ref={iframeRef}
           src={finalUrl}
-          className="w-full h-full border rounded-md"
-          allow="accelerometer; camera; encrypted-media; geolocation; gyroscope; microphone; midi; payment; usb; xr-spatial-tracking"
-          sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+          className='h-full w-full rounded-md border'
+          allow='accelerometer; camera; encrypted-media; geolocation; gyroscope; microphone; midi; payment; usb; xr-spatial-tracking'
+          sandbox='allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts'
           onLoad={handleIframeLoad}
         />
       )}

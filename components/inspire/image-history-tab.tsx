@@ -1,10 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Loader2, Trash2, ImageIcon, X } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
-import { apiResponse } from "@/utils/apiResponse";
-import { cn } from "@/lib/utils";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,6 +10,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { apiResponse } from "@/utils/apiResponse";
+import { ImageIcon, Loader2, Trash2, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface HistoryImage {
   _id: string;
@@ -33,7 +33,7 @@ interface HistoryImage {
 interface ImageHistoryTabProps {
   onLoadToEditor: (image: HistoryImage) => void;
   onTabChange?: (
-    tab: "preview" | "history" | "community" | "templates" | "tutorial",
+    tab: "preview" | "history" | "community" | "templates" | "tutorial"
   ) => void;
 }
 
@@ -56,7 +56,7 @@ export function ImageHistoryTab({
       setLoading(true);
       const response = await apiResponse.get(
         `/project/myprojects?type=ai-image-gen&limit=50`,
-        { withCredentials: true },
+        { withCredentials: true }
       );
 
       if (response.status === 200) {
@@ -90,12 +90,12 @@ export function ImageHistoryTab({
       // Use the direct delete endpoint for generated images
       const response = await apiResponse.delete(
         `/inspire/generate/image/${imageToDelete._id}`,
-        { withCredentials: true },
+        { withCredentials: true }
       );
 
       if (response.status === 200 && response.data.success) {
         setImages((prev) =>
-          prev.filter((img) => img._id !== imageToDelete._id),
+          prev.filter((img) => img._id !== imageToDelete._id)
         );
         toast({
           title: "Deleted",
@@ -126,10 +126,10 @@ export function ImageHistoryTab({
 
   if (loading) {
     return (
-      <section className="p-4">
-        <div className="flex flex-col items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-6 h-6 text-neutral-400 dark:text-neutral-500 animate-spin mb-3" />
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+      <section className='p-4'>
+        <div className='flex min-h-[60vh] flex-col items-center justify-center'>
+          <Loader2 className='mb-3 h-6 w-6 animate-spin text-neutral-400 dark:text-neutral-500' />
+          <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading history images
           </p>
         </div>
@@ -139,16 +139,16 @@ export function ImageHistoryTab({
 
   if (images.length === 0) {
     return (
-      <section className="p-4">
-        <div className="relative w-full rounded-xl overflow-hidden min-h-[400px]">
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-            <div className="w-16 h-16 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
-              <ImageIcon className="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
+      <section className='p-4'>
+        <div className='relative min-h-[400px] w-full overflow-hidden rounded-xl'>
+          <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
+            <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
+              <ImageIcon className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
             </div>
-            <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+            <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
               No history yet
             </h3>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            <p className='text-sm text-neutral-500 dark:text-neutral-400'>
               Your generated images will appear here
             </p>
           </div>
@@ -159,9 +159,9 @@ export function ImageHistoryTab({
 
   return (
     <>
-      <section className="p-4 px-0">
+      <section className='p-4 px-0'>
         {/* Masonry Grid */}
-        <div className="columns-2 lg:columns-4 gap-4">
+        <div className='columns-2 gap-4 lg:columns-4'>
           {images.map((image, index) => {
             // Use aspectRatio from image data or predefined array (same as community cards)
             const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "3/2"];
@@ -172,40 +172,40 @@ export function ImageHistoryTab({
             return (
               <div
                 key={image._id}
-                className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4"
+                className='group relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800'
                 onClick={(e) => {
-                  e.stopPropagation()
+                  e.stopPropagation();
                   onTabChange?.("preview");
                   onLoadToEditor(image);
                 }}
               >
-                <div className="relative">
+                <div className='relative'>
                   <img
                     src={image.imageData.thumbnail || image.imageData.url}
                     alt={image.imageData.prompt || "Generated image"}
-                    className="w-full object-cover"
+                    className='w-full object-cover'
                     style={{ aspectRatio }}
-                    loading="lazy"
+                    loading='lazy'
                   />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className='absolute inset-0 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100' />
+                  <div className='absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100'>
                     <button
-                      type="button"
+                      type='button'
                       onClick={(e) => openDeleteDialog(image, e)}
-                      className="w-10 h-10 rounded-lg bg-black/70 hover:bg-black/80 flex items-center justify-center text-white transition-colors shadow-lg"
-                      title="Delete"
+                      className='flex h-10 w-10 items-center justify-center rounded-lg bg-black/70 text-white shadow-lg transition-colors hover:bg-black/80'
+                      title='Delete'
                     >
                       {deletingId === image._id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Loader2 className='h-4 w-4 animate-spin' />
                       ) : (
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className='h-4 w-4' />
                       )}
                     </button>
                   </div>
                 </div>
                 {image.imageData.prompt && (
-                  <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p className="text-white text-sm font-medium line-clamp-2">
+                  <div className='absolute right-0 bottom-0 left-0 p-3 opacity-0 transition-opacity group-hover:opacity-100'>
+                    <p className='line-clamp-2 text-sm font-medium text-white'>
                       {image.imageData.prompt}
                     </p>
                   </div>
@@ -229,7 +229,7 @@ export function ImageHistoryTab({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
-              className="bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
+              className='bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
             >
               Delete
             </AlertDialogAction>

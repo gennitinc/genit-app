@@ -1,13 +1,7 @@
 "use client";
 
-import { memo } from "react";
-import { Handle, Position, NodeResizer, type NodeProps } from "reactflow";
-import { Globe, ExternalLink, Edit3, Trash2, X, Sparkles, Loader2, MessageSquare, ListCheck, Search, Lock, Unlock } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +9,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Edit3,
+  ExternalLink,
+  Globe,
+  ListCheck,
+  Loader2,
+  Lock,
+  MessageSquare,
+  Search,
+  Sparkles,
+  Trash2,
+  Unlock,
+  X,
+} from "lucide-react";
+import { Handle, type NodeProps, NodeResizer, Position } from "reactflow";
+import { memo } from "react";
 import { useState } from "react";
 
 interface WebsiteNodeData {
@@ -67,25 +80,25 @@ export const WebsiteNode = memo(
     };
 
     return (
-      <div className="relative rounded-[1.5rem]">
+      <div className='relative rounded-[1.5rem]'>
         <NodeResizer
-          color="#3b82f6"
+          color='#3b82f6'
           isVisible={selected}
           minWidth={150}
           minHeight={80}
-          handleClassName="w-3 h-3 bg-primary border-2 border-white rounded shadow-lg"
+          handleClassName='w-3 h-3 bg-primary border-2 border-white rounded shadow-lg'
         />
         <div
-          className={`bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-4 w-80 min-w-[150px] min-h-[80px] relative ${
+          className={`bg-card border-border relative min-h-[80px] w-80 min-w-[150px] rounded-lg border p-4 shadow-sm transition-all duration-200 hover:shadow-md ${
             selected
-              ? "ring-2 ring-primary ring-offset-2"
-              : "hover:ring-1 hover:ring-primary/50"
+              ? "ring-primary ring-2 ring-offset-2"
+              : "hover:ring-primary/50 hover:ring-1"
           }`}
         >
           <Handle
-            type="target"
+            type='target'
             position={Position.Left}
-            className="w-3 h-3 bg-primary"
+            className='bg-primary h-3 w-3'
             isConnectable={isConnectable}
           />
 
@@ -93,33 +106,33 @@ export const WebsiteNode = memo(
           {data.onRemoveNode && data.nodeId && (
             <button
               onClick={() => data.onRemoveNode!(data.nodeId!)}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-lg z-10"
-              title="Remove node"
+              className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
+              title='Remove node'
             >
-              <X className="w-3 h-3" />
+              <X className='h-3 w-3' />
             </button>
           )}
 
-          <div className="flex items-start space-x-3">
-            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-              <Globe className="w-5 h-5 text-blue-600" />
+          <div className='flex items-start space-x-3'>
+            <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-blue-500/10'>
+              <Globe className='h-5 w-5 text-blue-600' />
             </div>
 
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between mb-2 gap-2">
-                <div className="flex items-center space-x-2 flex-1 min-w-0">
-                  <h3 className="font-semibold text-sm truncate">
+            <div className='min-w-0 flex-1'>
+              <div className='mb-2 flex items-center justify-between gap-2'>
+                <div className='flex min-w-0 flex-1 items-center space-x-2'>
+                  <h3 className='truncate text-sm font-semibold'>
                     {editData.title}
                   </h3>
-                  <Badge variant="secondary" className="text-[10px] h-4 px-1">
+                  <Badge variant='secondary' className='h-4 px-1 text-[10px]'>
                     Website
                   </Badge>
                 </div>
-                <div className="flex items-center space-x-1">
+                <div className='flex items-center space-x-1'>
                   {!analyzed && onAnalyze && (
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant='outline'
+                      size='sm'
                       onClick={async (e) => {
                         e.stopPropagation();
                         setIsAnalyzing(true);
@@ -130,37 +143,37 @@ export const WebsiteNode = memo(
                         }
                       }}
                       disabled={isAnalyzing}
-                      className="h-7 px-2 text-[10px] gap-1 borber-primary/20 bg-primary/5 text-primary"
+                      className='borber-primary/20 bg-primary/5 text-primary h-7 gap-1 px-2 text-[10px]'
                     >
                       {isAnalyzing ? (
-                        <Loader2 className="w-3 h-3 animate-spin" />
+                        <Loader2 className='h-3 w-3 animate-spin' />
                       ) : (
-                        <Sparkles className="w-3 h-3" />
+                        <Sparkles className='h-3 w-3' />
                       )}
                       Analyze
                     </Button>
                   )}
                   {analyzed && (
-                    <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 text-[9px] font-medium">
-                      <ListCheck className="w-2.5 h-2.5" />
+                    <div className='flex items-center gap-1 rounded-full border border-green-500/20 bg-green-500/10 px-1.5 py-0.5 text-[9px] font-medium text-green-600'>
+                      <ListCheck className='h-2.5 w-2.5' />
                       Analyzed
                     </div>
                   )}
                   <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="ghost" size="sm" className="p-1 h-auto">
-                        <Edit3 className="w-3 h-3 text-muted-foreground" />
+                      <Button variant='ghost' size='sm' className='h-auto p-1'>
+                        <Edit3 className='text-muted-foreground h-3 w-3' />
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-md">
+                    <DialogContent className='sm:max-w-md'>
                       <DialogHeader>
                         <DialogTitle>Edit Website</DialogTitle>
                       </DialogHeader>
-                      <div className="space-y-4">
+                      <div className='space-y-4'>
                         <div>
-                          <Label htmlFor="url">Website URL</Label>
+                          <Label htmlFor='url'>Website URL</Label>
                           <Input
-                            id="url"
+                            id='url'
                             value={editData.url}
                             onChange={(e) =>
                               setEditData((prev) => ({
@@ -168,13 +181,13 @@ export const WebsiteNode = memo(
                                 url: e.target.value,
                               }))
                             }
-                            placeholder="https://example.com"
+                            placeholder='https://example.com'
                           />
                         </div>
                         <div>
-                          <Label htmlFor="title">Title</Label>
+                          <Label htmlFor='title'>Title</Label>
                           <Input
-                            id="title"
+                            id='title'
                             value={editData.title}
                             onChange={(e) =>
                               setEditData((prev) => ({
@@ -182,13 +195,13 @@ export const WebsiteNode = memo(
                                 title: e.target.value,
                               }))
                             }
-                            placeholder="Website title"
+                            placeholder='Website title'
                           />
                         </div>
                         <div>
-                          <Label htmlFor="description">Description</Label>
+                          <Label htmlFor='description'>Description</Label>
                           <Textarea
-                            id="description"
+                            id='description'
                             value={editData.description}
                             onChange={(e) =>
                               setEditData((prev) => ({
@@ -196,13 +209,13 @@ export const WebsiteNode = memo(
                                 description: e.target.value,
                               }))
                             }
-                            placeholder="Website description"
+                            placeholder='Website description'
                             rows={3}
                           />
                         </div>
-                        <div className="flex justify-end space-x-2">
+                        <div className='flex justify-end space-x-2'>
                           <Button
-                            variant="outline"
+                            variant='outline'
                             onClick={() => setIsEditOpen(false)}
                           >
                             Cancel
@@ -216,57 +229,60 @@ export const WebsiteNode = memo(
               </div>
 
               {editData.url && (
-                <div className="text-xs text-muted-foreground mb-2 truncate">
+                <div className='text-muted-foreground mb-2 truncate text-xs'>
                   {getDomain(editData.url)}
                 </div>
               )}
 
-              <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
+              <p className='text-muted-foreground mb-3 line-clamp-2 text-xs'>
                 {editData.description}
               </p>
 
               {editData.url && (
                 <Button
-                  size="sm"
-                  variant="outline"
-                  className="w-full text-[10px] h-7 bg-transparent"
+                  size='sm'
+                  variant='outline'
+                  className='h-7 w-full bg-transparent text-[10px]'
                   onClick={() => window.open(editData.url, "_blank")}
                 >
-                  <ExternalLink className="w-3 h-3 mr-1" />
+                  <ExternalLink className='mr-1 h-3 w-3' />
                   Visit Site
                 </Button>
               )}
 
               {analyzed && analysis && (
-                <div className="mt-4 space-y-3 pt-3 border-t border-border/50">
+                <div className='border-border/50 mt-4 space-y-3 border-t pt-3'>
                   {analysis.summary && (
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
-                        <MessageSquare className="w-3 h-3" />
+                    <div className='space-y-1'>
+                      <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
+                        <MessageSquare className='h-3 w-3' />
                         AI Summary
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed italic bg-muted/30 p-2 rounded-lg border border-border/30">
+                      <p className='text-muted-foreground bg-muted/30 border-border/30 rounded-lg border p-2 text-xs leading-relaxed italic'>
                         "{analysis.summary}"
                       </p>
                     </div>
                   )}
-                  
+
                   {analysis.description && (
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
-                        <Search className="w-3 h-3" />
+                    <div className='space-y-1'>
+                      <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
+                        <Search className='h-3 w-3' />
                         Key Insights
                       </div>
-                      <p className="text-xs text-muted-foreground line-clamp-4 leading-relaxed bg-black/5 dark:bg-white/5 p-2 rounded-md">
+                      <p className='text-muted-foreground line-clamp-4 rounded-md bg-black/5 p-2 text-xs leading-relaxed dark:bg-white/5'>
                         {analysis.description}
                       </p>
                     </div>
                   )}
 
                   {analysis.tags && analysis.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-1">
+                    <div className='mt-1 flex flex-wrap gap-1'>
                       {analysis.tags.slice(0, 5).map((tag, i) => (
-                        <span key={i} className="px-1.5 py-0.5 rounded bg-muted text-[9px] text-muted-foreground border border-border/50">
+                        <span
+                          key={i}
+                          className='bg-muted text-muted-foreground border-border/50 rounded border px-1.5 py-0.5 text-[9px]'
+                        >
                           #{tag}
                         </span>
                       ))}
@@ -280,21 +296,21 @@ export const WebsiteNode = memo(
           {/* Delete Button - Only show when selected */}
           {selected && data.onRemoveNode && data.nodeId && (
             <Button
-              variant="ghost"
-              size="sm"
+              variant='ghost'
+              size='sm'
               onClick={() => data.onRemoveNode!(data.nodeId!)}
-              className="absolute -top-2 -right-2 w-6 h-6 p-0 rounded-full bg-destructive hover:bg-destructive/90 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-              title="Delete Node"
+              className='bg-destructive hover:bg-destructive/90 absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 text-white shadow-lg transition-all duration-200 hover:shadow-xl'
+              title='Delete Node'
             >
-              <Trash2 className="w-3 h-3" />
+              <Trash2 className='h-3 w-3' />
             </Button>
           )}
         </div>
 
         <Handle
-          type="source"
+          type='source'
           position={Position.Right}
-          className="w-3 h-3 bg-primary"
+          className='bg-primary h-3 w-3'
           isConnectable={isConnectable}
         />
       </div>

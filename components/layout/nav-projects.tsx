@@ -1,14 +1,6 @@
 "use client";
 
 import {
-  Folder,
-  Forward,
-  MoreHorizontal,
-  Trash2,
-  type LucideIcon,
-} from "lucide-react";
-
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -25,6 +17,13 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import {
+  Folder,
+  Forward,
+  type LucideIcon,
+  MoreHorizontal,
+  Trash2,
+} from "lucide-react";
 
 export function NavProjects({
   projects,
@@ -58,18 +57,18 @@ export function NavProjects({
             >
               <a
                 href={item.url}
-                className="flex items-center"
+                className='flex items-center'
                 onClick={handleLinkClick}
               >
                 <item.icon
-                  className={cn(state === "collapsed" ? "w-5 h-5" : "w-4 h-4")}
+                  className={cn(state === "collapsed" ? "h-5 w-5" : "h-4 w-4")}
                 />
                 <span
                   className={cn(
                     "transition-all",
                     state === "collapsed"
-                      ? "opacity-0 w-0"
-                      : "opacity-100 w-auto ml-2"
+                      ? "w-0 opacity-0"
+                      : "ml-2 w-auto opacity-100"
                   )}
                 >
                   {item.name}
@@ -83,25 +82,25 @@ export function NavProjects({
                   className={cn(state === "collapsed" && "hidden")}
                 >
                   <MoreHorizontal />
-                  <span className="sr-only">More</span>
+                  <span className='sr-only'>More</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-48 rounded-lg"
+                className='w-48 rounded-lg'
                 side={isMobile ? "bottom" : "right"}
                 align={isMobile ? "end" : "start"}
               >
                 <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
+                  <Folder className='text-muted-foreground' />
                   <span>View Project</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Forward className="text-muted-foreground" />
+                  <Forward className='text-muted-foreground' />
                   <span>Share Project</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
+                  <Trash2 className='text-muted-foreground' />
                   <span>Delete Project</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -110,18 +109,18 @@ export function NavProjects({
         ))}
         <SidebarMenuItem>
           <SidebarMenuButton
-            className="text-sidebar-foreground/70"
+            className='text-sidebar-foreground/70'
             tooltip={state === "collapsed" ? "More" : undefined}
           >
             <MoreHorizontal
-              className={cn(state === "collapsed" ? "w-5 h-5" : "w-4 h-4")}
+              className={cn(state === "collapsed" ? "h-5 w-5" : "h-4 w-4")}
             />
             <span
               className={cn(
                 "transition-all",
                 state === "collapsed"
-                  ? "opacity-0 w-0"
-                  : "opacity-100 w-auto ml-2"
+                  ? "w-0 opacity-0"
+                  : "ml-2 w-auto opacity-100"
               )}
             >
               More

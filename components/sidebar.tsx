@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Play } from "lucide-react";
+import { Play, Search } from "lucide-react";
+import { useState } from "react";
 
 interface SidebarProps {
   selectedItems: string[];
@@ -46,32 +46,32 @@ export function Sidebar({ selectedItems, onItemSelect }: SidebarProps) {
   };
 
   return (
-    <div className="w-80 bg-background border-r border-border flex flex-col">
+    <div className='bg-background border-border flex w-80 flex-col border-r'>
       {/* Header */}
-      <div className="p-4 border-b border-border">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-bold">🧠</span>
+      <div className='border-border border-b p-4'>
+        <div className='mb-4 flex items-center justify-between'>
+          <div className='flex items-center gap-2'>
+            <div className='flex h-8 w-8 items-center justify-center rounded-full bg-orange-500'>
+              <span className='text-sm font-bold text-white'>🧠</span>
             </div>
-            <span className="font-semibold text-foreground">Boards</span>
+            <span className='text-foreground font-semibold'>Boards</span>
           </div>
-          <span className="text-sm text-muted-foreground">Welcome</span>
+          <span className='text-muted-foreground text-sm'>Welcome</span>
         </div>
 
         {/* Navigation */}
-        <div className="flex gap-4 text-sm">
+        <div className='flex gap-4 text-sm'>
           <Button
-            variant="ghost"
-            size="sm"
-            className="text-yellow-600 hover:text-yellow-700"
+            variant='ghost'
+            size='sm'
+            className='text-yellow-600 hover:text-yellow-700'
           >
             ⭐ Affiliate
           </Button>
           <Button
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hover:text-foreground"
+            variant='ghost'
+            size='sm'
+            className='text-muted-foreground hover:text-foreground'
           >
             📚 Learn
           </Button>
@@ -79,52 +79,52 @@ export function Sidebar({ selectedItems, onItemSelect }: SidebarProps) {
       </div>
 
       {/* Search */}
-      <div className="p-4 border-b border-border">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+      <div className='border-border border-b p-4'>
+        <div className='relative'>
+          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
-            placeholder="Search knowledge..."
+            placeholder='Search knowledge...'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className='pl-10'
           />
         </div>
       </div>
 
       {/* Knowledge Items */}
-      <div className="flex-1 overflow-y-auto p-4">
-        <div className="space-y-4">
+      <div className='flex-1 overflow-y-auto p-4'>
+        <div className='space-y-4'>
           {knowledgeItems.map((item) => (
             <div
               key={item.id}
-              className={`p-3 rounded-lg border cursor-pointer transition-all ${
+              className={`cursor-pointer rounded-lg border p-3 transition-all ${
                 selectedItems.includes(item.id)
                   ? "border-primary bg-primary/5"
                   : "border-border hover:border-border/60"
               }`}
               onClick={() => toggleItem(item.id)}
             >
-              <div className="flex gap-3">
-                <div className="relative">
+              <div className='flex gap-3'>
+                <div className='relative'>
                   <img
                     src={item.thumbnail || "/placeholder.svg"}
                     alt={item.title}
-                    className="w-16 h-12 object-cover rounded-lg bg-muted"
+                    className='bg-muted h-12 w-16 rounded-lg object-cover'
                   />
                   {item.type === "video" && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-6 h-6 bg-black/70 rounded-full flex items-center justify-center">
-                        <Play className="w-3 h-3 text-white fill-current" />
+                    <div className='absolute inset-0 flex items-center justify-center'>
+                      <div className='flex h-6 w-6 items-center justify-center rounded-full bg-black/70'>
+                        <Play className='h-3 w-3 fill-current text-white' />
                       </div>
                     </div>
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-sm text-foreground line-clamp-2 mb-1">
+                <div className='min-w-0 flex-1'>
+                  <h3 className='text-foreground mb-1 line-clamp-2 text-sm font-medium'>
                     {item.title}
                   </h3>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span className="capitalize">{item.type}</span>
+                  <div className='text-muted-foreground flex items-center gap-2 text-xs'>
+                    <span className='capitalize'>{item.type}</span>
                     <span>•</span>
                     <span>{item.duration || item.readTime}</span>
                   </div>

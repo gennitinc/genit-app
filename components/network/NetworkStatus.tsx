@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
-import { Wifi, WifiOff, Check } from "lucide-react";
-import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Check, Wifi, WifiOff } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function NetworkStatus({
   isError,
@@ -65,47 +65,47 @@ export function NetworkStatus({
   const showErrorMessage = !showOnlineMessage && (showError || !isOnline);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col items-center justify-center p-4">
-      <AnimatePresence mode="wait">
+    <div className='flex min-h-screen flex-col items-center justify-center bg-white p-4 dark:bg-gray-950'>
+      <AnimatePresence mode='wait'>
         {showOnlineMessage && (
           <motion.div
-            key="online"
+            key='online'
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5 }}
-            className="text-center p-8 rounded-lg bg-green-50 dark:bg-green-900/20"
+            className='rounded-lg bg-green-50 p-8 text-center dark:bg-green-900/20'
           >
             <motion.div
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 0.5, times: [0, 0.5, 1] }}
-              className="inline-block mb-8 bg-green-500 rounded-full p-2"
+              className='mb-8 inline-block rounded-full bg-green-500 p-2'
             >
-              <Check className="size-16 text-white" />
+              <Check className='size-16 text-white' />
             </motion.div>
-            <h1 className="text-xl font-bold text-green-600 dark:text-green-400 mb-4">
+            <h1 className='mb-4 text-xl font-bold text-green-600 dark:text-green-400'>
               You&apos;re Back Online!
             </h1>
-            <p className="text-base text-gray-700 dark:text-gray-300 mb-8">
+            <p className='mb-8 text-base text-gray-700 dark:text-gray-300'>
               Your connection has been restored successfully.
             </p>
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: "100%" }}
               transition={{ duration: 1.5, ease: "easeInOut" }}
-              className="h-1 bg-green-500 rounded-full mb-8"
+              className='mb-8 h-1 rounded-full bg-green-500'
             />
           </motion.div>
         )}
 
         {showErrorMessage && (
           <motion.div
-            key="error"
+            key='error'
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.5 }}
-            className="text-center p-8 rounded-lg bg-red-50 dark:bg-red-900/20"
+            className='rounded-lg bg-red-50 p-8 text-center dark:bg-red-900/20'
           >
             <motion.div
               animate={{ rotate: isRetrying ? 360 : 0 }}
@@ -114,18 +114,18 @@ export function NetworkStatus({
                 ease: "linear",
                 repeat: isRetrying ? Number.POSITIVE_INFINITY : 0,
               }}
-              className="inline-block mb-8"
+              className='mb-8 inline-block'
             >
               {isRetrying ? (
-                <Wifi className="size-16 text-red-500 dark:text-red-400" />
+                <Wifi className='size-16 text-red-500 dark:text-red-400' />
               ) : (
-                <WifiOff className="size-16 text-red-500 dark:text-red-400" />
+                <WifiOff className='size-16 text-red-500 dark:text-red-400' />
               )}
             </motion.div>
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className='mb-4 text-xl font-bold text-gray-900 dark:text-white'>
               {isOnline ? "Data Fetch Error" : "Network Error"}
             </h1>
-            <p className="text-base text-gray-700 dark:text-gray-300 mb-8">
+            <p className='mb-8 text-base text-gray-700 dark:text-gray-300'>
               {isOnline
                 ? "We couldn't fetch your information."
                 : "Your network connection is currently offline."}
@@ -133,7 +133,7 @@ export function NetworkStatus({
             <Button
               onClick={handleRetry}
               disabled={isRetrying}
-              className="bg-white dark:bg-gray-800 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 font-bold py-2 px-6 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105"
+              className='transform rounded-full bg-white px-6 py-2 font-bold text-black transition-all duration-300 ease-in-out hover:scale-105 hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'
             >
               {isRetrying ? "Retrying..." : "Try Again"}
             </Button>
@@ -141,7 +141,7 @@ export function NetworkStatus({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              className="mt-8 text-gray-500 dark:text-gray-400 text-sm"
+              className='mt-8 text-sm text-gray-500 dark:text-gray-400'
             >
               {isOnline
                 ? "If the issue persists, please try again later."

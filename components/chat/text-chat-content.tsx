@@ -1,21 +1,21 @@
 "use client";
 
-import {
-  AIMessage,
-  UserMessage,
-  VersioningMessage,
-  type GenerationGroup,
-  AIThinkingContent,
-} from "@/components/chat/messages";
-import { useState, useEffect, useRef, useCallback } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Loader } from "@/components/ai-elements/loader";
+import { ChatInput } from "./chat-input";
 import {
   Conversation,
   ConversationContent,
 } from "@/components/ai-elements/conversation";
+import { Loader } from "@/components/ai-elements/loader";
+import {
+  AIMessage,
+  AIThinkingContent,
+  type GenerationGroup,
+  UserMessage,
+  VersioningMessage,
+} from "@/components/chat/messages";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useProjectDesign } from "@/context/DesignProject";
-import { ChatInput } from "./chat-input";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export function TextChatContent() {
   const {
@@ -43,7 +43,11 @@ export function TextChatContent() {
   } = useProjectDesign();
 
   useEffect(() => {
-    console.log("[TextChatContent] Messages State Updated:", messages?.length, messages);
+    console.log(
+      "[TextChatContent] Messages State Updated:",
+      messages?.length,
+      messages
+    );
   }, [messages]);
 
   const skeletonRef = useRef<HTMLDivElement | null>(null);
@@ -79,7 +83,7 @@ export function TextChatContent() {
         });
       });
     },
-    [],
+    []
   );
 
   const scrollSkeleton = useCallback(() => {
@@ -118,12 +122,12 @@ export function TextChatContent() {
       scrollElRef.current = localConversationRef.current;
       const el = localConversationRef.current;
       el.addEventListener("scroll", onScroll, { passive: true });
-      
+
       // Auto scroll on first mount
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
           doScrollToBottom({ behavior: "auto" });
-        }),
+        })
       );
     }
 
@@ -206,14 +210,14 @@ export function TextChatContent() {
     return () =>
       window.removeEventListener(
         "scroll-chat-to-bottom",
-        handler as EventListener,
+        handler as EventListener
       );
   }, [doScrollToBottom]);
 
   const handleEditMessage = async (
     messageId: string,
     newContent: string,
-    files?: File[],
+    files?: File[]
   ) => {
     try {
       const projectId = project?._id || "";
@@ -235,7 +239,7 @@ export function TextChatContent() {
   const handleLikeToggle = async (messageId: string) => {
     try {
       const message = messages?.find(
-        (m: any) => m.id === messageId || m._id === messageId,
+        (m: any) => m.id === messageId || m._id === messageId
       );
       const isLiked = message?.feedback?.userReaction === "like";
 
@@ -256,7 +260,7 @@ export function TextChatContent() {
   const handleDislikeToggle = async (messageId: string) => {
     try {
       const message = messages?.find(
-        (m: any) => m.id === messageId || m._id === messageId,
+        (m: any) => m.id === messageId || m._id === messageId
       );
       const isDisliked = message?.feedback?.userReaction === "dislike";
 
@@ -288,21 +292,21 @@ export function TextChatContent() {
   };
 
   return (
-    <ChatInput placeholder="Ask a follow up message..." className="h-full">
+    <ChatInput placeholder='Ask a follow up message...' className='h-full'>
       <div
         ref={localConversationRef}
-        className="flex-1 px-2 md:px-6 overflow-y-auto scroll-container custom-scrollbar overflow-x-hidden min-w-0"
+        className='scroll-container custom-scrollbar min-w-0 flex-1 overflow-x-hidden overflow-y-auto px-2 md:px-6'
       >
-        <Conversation className="px-0 m-0">
-          <ConversationContent className="px-0 m-0 space-y-4 overflow-x-hidden pb-10 min-h-full">
+        <Conversation className='m-0 px-0'>
+          <ConversationContent className='m-0 min-h-full space-y-4 overflow-x-hidden px-0 pb-10'>
             {messages?.map((message: any, index: number) => {
               if (message.type === "user") {
                 const imageAttachment = message.fileAttachments?.find(
-                  (f: any) => f.type?.startsWith("image/"),
+                  (f: any) => f.type?.startsWith("image/")
                 )?.url;
 
                 const fileAttachment = message.fileAttachments?.find(
-                  (f: any) => !f.type?.startsWith("image/"),
+                  (f: any) => !f.type?.startsWith("image/")
                 )?.url;
 
                 return (
@@ -331,8 +335,8 @@ export function TextChatContent() {
                       onCopy={() =>
                         handleCopyMessage(
                           message.parts?.find(
-                            (part: any) => part.type === "text",
-                          )?.text || "",
+                            (part: any) => part.type === "text"
+                          )?.text || ""
                         )
                       }
                     />
@@ -343,13 +347,13 @@ export function TextChatContent() {
               if (message.type === "ai") {
                 // Find the first AI message index
                 const firstAIMessageIndex = messages?.findIndex(
-                  (msg: any) => msg.type === "ai",
+                  (msg: any) => msg.type === "ai"
                 );
                 const isFirstAIResponse =
                   firstAIMessageIndex !== -1 && index === firstAIMessageIndex;
 
                 return (
-                  <div key={message.id || index} className="space-y-4">
+                  <div key={message.id || index} className='space-y-4'>
                     <AIMessage
                       message={message}
                       totalTime={message.totalTime}
@@ -368,8 +372,8 @@ export function TextChatContent() {
                       onCopy={() =>
                         handleCopyMessage(
                           message.parts?.find(
-                            (part: any) => part.type === "text",
-                          )?.text || "",
+                            (part: any) => part.type === "text"
+                          )?.text || ""
                         )
                       }
                       onLike={() => handleLikeToggle(message.id)}
@@ -382,7 +386,7 @@ export function TextChatContent() {
                     {message.generationGroups?.map((group: GenerationGroup) => {
                       // Extract original prompt from message parts
                       const originalPrompt = message.parts?.find(
-                        (part: any) => part.type === "text",
+                        (part: any) => part.type === "text"
                       )?.text;
 
                       return (
@@ -408,18 +412,18 @@ export function TextChatContent() {
                                               ...g,
                                               isCollapsed: !g.isCollapsed,
                                             }
-                                          : g,
+                                          : g
                                     ),
                                   };
                                 }
                                 return msg;
-                              }),
+                              })
                             );
                           }}
                           onRetry={retryLoading}
                           onCopy={() =>
                             handleCopyMessage(
-                              JSON.stringify(group.items, null, 2),
+                              JSON.stringify(group.items, null, 2)
                             )
                           }
                           onLike={() => handleLikeToggle(message.id)}
@@ -459,13 +463,13 @@ export function TextChatContent() {
               ))}
 
             {(!messages || messages.length === 0) && !isTyping && (
-              <div className="flex-1 flex flex-col items-center justify-center min-h-[40vh]">
-                <div className="text-center text-gray-500 dark:text-gray-400 mb-8">
-                  <p className="text-lg font-medium mb-2">
+              <div className='flex min-h-[40vh] flex-1 flex-col items-center justify-center'>
+                <div className='mb-8 text-center text-gray-500 dark:text-gray-400'>
+                  <p className='mb-2 text-lg font-medium'>
                     Start a conversation
                     {/* {project?.title} */}
                   </p>
-                  <p className="text-sm">
+                  <p className='text-sm'>
                     Ask me anything or describe what you'd like to create
                   </p>
                 </div>

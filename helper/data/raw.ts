@@ -214,6 +214,4 @@ const industries = [
   "Other",
 ];
 
-export {
-countries, industries
-}
+export { countries, industries };

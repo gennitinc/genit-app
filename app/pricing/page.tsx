@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import PricingComponent from "@/components/pricing/page";
+import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Pricing – Gennit AI | Affordable Plans for Media Design",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 
 export default function Pricing() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className='bg-background min-h-screen'>
       <LandingNavbar />
       <PricingComponent />
       <LandingFooter />

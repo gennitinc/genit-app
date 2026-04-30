@@ -1,23 +1,23 @@
 "use client";
-import { IdeaSection } from "../layout/idea-section";
-import { LandingNavbar } from "./landing-navbar";
-import { LandingFooter } from "./landing-footer";
-import PartnerLogos from "./Partners-Logos";
 // import Communityproject from "../layout/community-project";
 
 import TemplateGrid from "../common/templateGrid";
-import { Toaster } from "@/components/ui/sonner";
-import LandingPageBanner from "./landing-banner";
+import { IdeaSection } from "../layout/idea-section";
+import PartnerLogos from "./Partners-Logos";
 import ContactCtaLanding from "./contact-cta-landing";
-import LandingCreator from "./landing-creator";
-import LandingHero from "./landing-hero";
-import LandingCommunityVideos from "./landing-community-videos";
 import { LandingAvatar } from "./landing-avatar";
+import LandingPageBanner from "./landing-banner";
+import LandingCommunityVideos from "./landing-community-videos";
+import LandingCreator from "./landing-creator";
+import { LandingFooter } from "./landing-footer";
+import LandingHero from "./landing-hero";
+import { LandingNavbar } from "./landing-navbar";
 import { LandingVoiceClone } from "./landing-voice-clone";
+import { Toaster } from "@/components/ui/sonner";
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
+    <div className='flex min-h-screen w-full flex-col bg-white dark:bg-black'>
       <Toaster />
       <LandingPageBanner />
       <LandingNavbar />

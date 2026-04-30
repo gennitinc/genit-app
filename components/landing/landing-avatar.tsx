@@ -48,12 +48,12 @@ export function LandingAvatar() {
   ];
 
   return (
-    <div className="mt-20">
-      <div className="text-center mb-12 md:mb-16 space-y-4">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+    <div className='mt-20'>
+      <div className='mb-12 space-y-4 text-center md:mb-16'>
+        <h2 className='text-foreground text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl'>
           Generate AI-Human Avatars
         </h2>
-        <p className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto">
+        <p className='text-muted-foreground mx-auto max-w-2xl text-base md:text-base'>
           Generate stunning AI-Human avatars with AI.
         </p>
       </div>
@@ -75,23 +75,23 @@ export function LandingAvatar() {
             `}</style>
 
         <div
-          className="overflow-hidden w-full relative max-w-6xl mx-auto"
+          className='relative mx-auto w-full max-w-6xl overflow-hidden'
           onMouseEnter={() => setStopScroll(true)}
           onMouseLeave={() => setStopScroll(false)}
         >
-          <div className="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none bg-gradient-to-r from-background to-transparent dark:from-background" />
+          <div className='from-background dark:from-background pointer-events-none absolute top-0 left-0 z-10 h-full w-20 bg-gradient-to-r to-transparent' />
           <div
-            className="marquee-inner flex w-fit"
+            className='marquee-inner flex w-fit'
             style={{
               animationPlayState: stopScroll ? "paused" : "running",
               animationDuration: cardData.length * 2500 + "ms",
             }}
           >
-            <div className="flex">
+            <div className='flex'>
               {[...cardData, ...cardData].map((card, index) => (
                 <div
                   key={index}
-                  className="w-56 mx-4 h-[20rem] relative group hover:scale-90 transition-all duration-300 rounded-none border border-primary/10 overflow-hidden"
+                  className='group border-primary/10 relative mx-4 h-[20rem] w-56 overflow-hidden rounded-none border transition-all duration-300 hover:scale-90'
                 >
                   {/* Top gradient line */}
                   <div
@@ -109,7 +109,7 @@ export function LandingAvatar() {
                         maskComposite: "exclude",
                       } as React.CSSProperties
                     }
-                    className="absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] top-0"
+                    className='absolute top-0 left-[calc(var(--offset)/2*-1)] z-30 h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
                   ></div>
 
                   {/* Bottom gradient line */}
@@ -128,7 +128,7 @@ export function LandingAvatar() {
                         maskComposite: "exclude",
                       } as React.CSSProperties
                     }
-                    className="absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] top-auto bottom-0"
+                    className='absolute top-auto bottom-0 left-[calc(var(--offset)/2*-1)] z-30 h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
                   ></div>
 
                   {/* Left gradient line */}
@@ -147,7 +147,7 @@ export function LandingAvatar() {
                         maskComposite: "exclude",
                       } as React.CSSProperties
                     }
-                    className="absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] left-0"
+                    className='absolute top-[calc(var(--offset)/2*-1)] left-0 z-30 h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
                   ></div>
 
                   {/* Right gradient line */}
@@ -166,16 +166,16 @@ export function LandingAvatar() {
                         maskComposite: "exclude",
                       } as React.CSSProperties
                     }
-                    className="absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] right-0 left-auto"
+                    className='absolute top-[calc(var(--offset)/2*-1)] right-0 left-auto z-30 h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
                   ></div>
 
                   <img
                     src={card.image}
                     alt={card.title}
-                    className="w-full h-full object-cover"
+                    className='h-full w-full object-cover'
                   />
-                  <div className="flex items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-all duration-300 absolute bottom-0 backdrop-blur-md left-0 w-full h-full bg-black/40 dark:bg-black/60">
-                    <p className="text-white text-lg font-semibold text-center">
+                  <div className='absolute bottom-0 left-0 flex h-full w-full items-center justify-center bg-black/40 px-4 opacity-0 backdrop-blur-md transition-all duration-300 group-hover:opacity-100 dark:bg-black/60'>
+                    <p className='text-center text-lg font-semibold text-white'>
                       {card.title}
                     </p>
                   </div>
@@ -183,7 +183,7 @@ export function LandingAvatar() {
               ))}
             </div>
           </div>
-          <div className="absolute right-0 top-0 h-full w-20 md:w-40 z-10 pointer-events-none bg-gradient-to-l from-background to-transparent dark:from-background" />
+          <div className='from-background dark:from-background pointer-events-none absolute top-0 right-0 z-10 h-full w-20 bg-gradient-to-l to-transparent md:w-40' />
         </div>
       </>
     </div>

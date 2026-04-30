@@ -1,17 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { toast } from "sonner";
-
-import Loading from "@/utils/Loading";
-import { apiResponse } from "@/utils/apiResponse";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+import { Logo } from "../logo";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,7 +8,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Logo } from "../logo";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import Loading from "@/utils/Loading";
+import { apiResponse } from "@/utils/apiResponse";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import React, { useEffect, useState } from "react";
 
 const VerifyEmailComp = () => {
   const router = useRouter();
@@ -92,7 +91,7 @@ const VerifyEmailComp = () => {
 
   if (!email) {
     return (
-      <div className="flex justify-center items-center min-h-[100vh] overflow-hidden w-full bg-white dark:bg-black">
+      <div className='flex min-h-[100vh] w-full items-center justify-center overflow-hidden bg-white dark:bg-black'>
         <Loading />
       </div>
     );
@@ -100,16 +99,16 @@ const VerifyEmailComp = () => {
 
   return (
     <div>
-      <div className="flex flex-col justify-center items-center min-h-[100vh] overflow-hidden w-full bg-white dark:bg-black">
-        <Card className="w-full max-w-md mx-4">
-          <CardHeader className="text-center">
-            <div className="flex justify-center items-center">
-              <Logo className="w-14 h-14" />
-              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+      <div className='flex min-h-[100vh] w-full flex-col items-center justify-center overflow-hidden bg-white dark:bg-black'>
+        <Card className='mx-4 w-full max-w-md'>
+          <CardHeader className='text-center'>
+            <div className='flex items-center justify-center'>
+              <Logo className='h-14 w-14' />
+              <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
                 Gennit
               </h1>
             </div>
-            <CardTitle className="text-2xl font-bold">
+            <CardTitle className='text-2xl font-bold'>
               Verify Your Email
             </CardTitle>
             <CardDescription>
@@ -117,8 +116,8 @@ const VerifyEmailComp = () => {
               <strong>{email}</strong>
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="flex justify-center">
+          <CardContent className='space-y-6'>
+            <div className='flex justify-center'>
               <InputOTP
                 maxLength={6}
                 value={otpValue}
@@ -139,43 +138,43 @@ const VerifyEmailComp = () => {
               </InputOTP>
             </div>
 
-            <div className="space-y-3">
+            <div className='space-y-3'>
               <Button
                 onClick={handleVerifyEmail}
                 disabled={otpValue.length !== 6 || isVerifying}
-                className="w-full"
+                className='w-full'
               >
                 {isVerifying ? "Verifying..." : "Verify Email"}
               </Button>
 
               <Button
-                variant="outline"
+                variant='outline'
                 onClick={handleResendCode}
                 disabled={isResending}
-                className="w-full"
+                className='w-full'
               >
                 {isResending ? "Sending..." : "Resend Code"}
               </Button>
             </div>
 
-            <div className="text-center text-sm text-muted-foreground">
+            <div className='text-muted-foreground text-center text-sm'>
               <p>Didn't receive the code? Check your spam folder or</p>
               <button
                 onClick={handleResendCode}
                 disabled={isResending}
-                className="text-primary hover:underline disabled:opacity-50"
+                className='text-primary hover:underline disabled:opacity-50'
               >
                 request a new one
               </button>
             </div>
           </CardContent>
         </Card>
-        <div className="mt-5 max-w-[26rem] w-full space-y-3">
-          <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
+        <div className='mt-5 w-full max-w-[26rem] space-y-3'>
+          <p className='text-center text-xs leading-relaxed text-gray-600 dark:text-gray-400'>
             This site is protected by reCAPTCHA and our{" "}
             <a
-              href="#"
-              className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
+              href='#'
+              className='text-TextLight1 dark:text-TextDark1 underline hover:no-underline'
             >
               Policy
             </a>{" "}
@@ -187,11 +186,11 @@ const VerifyEmailComp = () => {
                   Terms of Service
                 </a> */}
           </p>
-          <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
+          <p className='text-center text-xs text-gray-600 dark:text-gray-400'>
             ©2026 Gennit. A product of{" "}
             <a
-              className="text-gray-800 dark:text-white font-medium hover:text-blue-600"
-              href="#"
+              className='font-medium text-gray-800 hover:text-blue-600 dark:text-white'
+              href='#'
             >
               Klip Inc.
             </a>{" "}

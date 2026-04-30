@@ -1,22 +1,22 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  Search,
-  Plus,
-  Database,
-  Settings,
-  FileOutput,
-  GitBranch,
   Code,
-  MessageCircle,
-  Youtube,
+  Database,
+  FileOutput,
   FileText,
   FolderOpen,
+  GitBranch,
+  MessageCircle,
+  Plus,
+  Search,
+  Settings,
+  Youtube,
 } from "lucide-react";
+import { useState } from "react";
 
 interface NodePaletteProps {
   onAddNode: (nodeType: string, position: { x: number; y: number }) => void;
@@ -112,66 +112,68 @@ export function NodePalette({ onAddNode }: NodePaletteProps) {
   };
 
   return (
-    <div className="w-80 bg-background border-r border-border flex flex-col">
+    <div className='bg-background border-border flex w-80 flex-col border-r'>
       {/* Header */}
-      <div className="p-4 border-b border-border">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <Plus className="w-4 h-4 text-white" />
+      <div className='border-border border-b p-4'>
+        <div className='mb-4 flex items-center justify-between'>
+          <div className='flex items-center gap-2'>
+            <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600'>
+              <Plus className='h-4 w-4 text-white' />
             </div>
-            <span className="font-semibold text-foreground">Node Palette</span>
+            <span className='text-foreground font-semibold'>Node Palette</span>
           </div>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className='text-muted-foreground text-sm'>
           Drag or click to add nodes to your workflow
         </p>
       </div>
 
       {/* Search */}
-      <div className="p-4 border-b border-border">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+      <div className='border-border border-b p-4'>
+        <div className='relative'>
+          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
-            placeholder="Search nodes..."
+            placeholder='Search nodes...'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className='pl-10'
           />
         </div>
       </div>
 
       {/* Node Types */}
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-3">
+      <ScrollArea className='flex-1 p-4'>
+        <div className='space-y-3'>
           {filteredNodes.map((node) => {
             const IconComponent = node.icon;
             return (
               <div
                 key={node.id}
-                className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md group ${
+                className={`group cursor-pointer rounded-lg border p-4 transition-all hover:shadow-md ${
                   node.bgColor
                 } border-border hover:border-primary/50 hover:scale-[1.02] active:scale-[0.98]`}
                 onClick={() => handleAddNode(node.id)}
               >
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-lg ${node.bgColor} flex items-center justify-center transition-transform group-hover:scale-110`}>
-                    <IconComponent className={`w-5 h-5 ${node.color}`} />
+                <div className='flex items-center gap-3'>
+                  <div
+                    className={`h-10 w-10 rounded-lg ${node.bgColor} flex items-center justify-center transition-transform group-hover:scale-110`}
+                  >
+                    <IconComponent className={`h-5 w-5 ${node.color}`} />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-sm text-foreground mb-1">
+                  <div className='min-w-0 flex-1'>
+                    <h3 className='text-foreground mb-1 text-sm font-medium'>
                       {node.name}
                     </h3>
-                    <p className="text-xs text-muted-foreground">
+                    <p className='text-muted-foreground text-xs'>
                       {node.description}
                     </p>
                   </div>
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    className="p-1 h-auto opacity-0 group-hover:opacity-100 transition-all duration-200 bg-primary/10 hover:bg-primary/20"
+                    variant='ghost'
+                    size='sm'
+                    className='bg-primary/10 hover:bg-primary/20 h-auto p-1 opacity-0 transition-all duration-200 group-hover:opacity-100'
                   >
-                    <Plus className="w-4 h-4 text-primary" />
+                    <Plus className='text-primary h-4 w-4' />
                   </Button>
                 </div>
               </div>
@@ -181,8 +183,8 @@ export function NodePalette({ onAddNode }: NodePaletteProps) {
       </ScrollArea>
 
       {/* Footer */}
-      <div className="p-4 border-t border-border">
-        <div className="text-xs text-muted-foreground text-center">
+      <div className='border-border border-t p-4'>
+        <div className='text-muted-foreground text-center text-xs'>
           {filteredNodes.length} node types available
         </div>
       </div>

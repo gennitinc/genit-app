@@ -1,33 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { Button } from "@/components/ui/button";
-import {
-  Sparkles,
-  Upload,
-  Play,
-  ImageIcon,
-  RefreshCw,
-  HistoryIcon,
-  Trash2,
-  X,
-  Download,
-  CheckCircle2,
-} from "lucide-react";
-import { PremiumInput } from "@/components/ui/premium-input";
-
-import { cn } from "@/lib/utils";
 import { GridPattern } from "@/components/ui/grid-pattern";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { PremiumInput } from "@/components/ui/premium-input";
 import {
   Select,
   SelectContent,
@@ -35,7 +13,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
+import {
+  CheckCircle2,
+  Download,
+  HistoryIcon,
+  ImageIcon,
+  Play,
+  RefreshCw,
+  Sparkles,
+  Trash2,
+  Upload,
+  X,
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 interface LogoAnimationJob {
   _id: string;
@@ -56,7 +55,7 @@ const LogoAnimationPage = () => {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const [generatedVideoUrl, setGeneratedVideoUrl] = useState<string | null>(
-    null,
+    null
   );
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
   const [history, setHistory] = useState<LogoAnimationJob[]>([]);
@@ -110,7 +109,7 @@ const LogoAnimationPage = () => {
     formData.append("file", file);
     formData.append(
       "prompt",
-      prompt || "Smooth motion graphics lifecycle animation",
+      prompt || "Smooth motion graphics lifecycle animation"
     );
     formData.append("exportFormat", exportFormat);
 
@@ -121,7 +120,7 @@ const LogoAnimationPage = () => {
         {
           headers: { "Content-Type": "multipart/form-data" },
           withCredentials: true,
-        },
+        }
       );
 
       if (res.data.success) {
@@ -160,103 +159,103 @@ const LogoAnimationPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
+    <div className='flex min-h-screen w-full flex-col bg-white dark:bg-black'>
       <LandingPageBanner />
       <LandingNavbar />
 
-      <main className="flex-grow mt-12 md:mb-20 relative">
-        <div className="text-center animate-fadeInUp mb-10 px-2 md:px-4">
-          <h1 className="font-bold tracking-tight text-2xl lg:text-5xl">
+      <main className='relative mt-12 flex-grow md:mb-20'>
+        <div className='animate-fadeInUp mb-10 px-2 text-center md:px-4'>
+          <h1 className='text-2xl font-bold tracking-tight lg:text-5xl'>
             Logo{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
               Animator
             </span>
           </h1>
           <p
-            className="my-5 text-muted-foreground text-sm md:text-lg animate-fadeInUp"
+            className='text-muted-foreground animate-fadeInUp my-5 text-sm md:text-lg'
             style={{ animationDelay: "0.2s" }}
           >
             Breathe life into your brand with professional lifecycle animations.
           </p>
         </div>
 
-        <div className="relative w-full border-y border-black/5 dark:border-white/10 overflow-hidden">
+        <div className='relative w-full overflow-hidden border-y border-black/5 dark:border-white/10'>
           <GridPattern
             width={30}
             height={30}
             x={-1}
             y={-1}
             strokeDasharray={"4 2"}
-            className="absolute inset-0 z-0 opacity-90 dark:opacity-50"
+            className='absolute inset-0 z-0 opacity-90 dark:opacity-50'
           />
 
-          <section className="sm:px-2 lg:px-8 lg:py-10 grid grid-cols-1 md:grid-cols-[1fr_1.4fr] gap-6 lg:gap-16 max-w-6xl mx-auto px-4 gap-y-6 items-center relative z-10">
+          <section className='relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-center gap-6 gap-y-6 px-4 sm:px-2 md:grid-cols-[1fr_1.4fr] lg:gap-16 lg:px-8 lg:py-10'>
             {/* Left Column: Controls */}
-            <div className="flex flex-col gap-4 lg:gap-5">
-              <div className="rounded-2xl bg-white/80 dark:bg-[#141415]/80 backdrop-blur-xl border border-black/5 dark:border-white/5 flex flex-col shadow-2xl overflow-hidden p-6 gap-6">
-                <div className="space-y-6">
+            <div className='flex flex-col gap-4 lg:gap-5'>
+              <div className='flex flex-col gap-6 overflow-hidden rounded-2xl border border-black/5 bg-white/80 p-6 shadow-2xl backdrop-blur-xl dark:border-white/5 dark:bg-[#141415]/80'>
+                <div className='space-y-6'>
                   {/* Upload Section */}
-                  <div className="space-y-2">
+                  <div className='space-y-2'>
                     <label
-                      htmlFor="logo-upload"
-                      className="group relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-muted-foreground/25 rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer"
+                      htmlFor='logo-upload'
+                      className='group border-muted-foreground/25 hover:border-primary/50 hover:bg-primary/5 relative flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed transition-all'
                     >
                       {previewUrl ? (
-                        <div className="relative size-full p-2">
+                        <div className='relative size-full p-2'>
                           <img
                             src={previewUrl}
-                            alt="Logo preview"
-                            className="size-full object-contain rounded-lg"
+                            alt='Logo preview'
+                            className='size-full rounded-lg object-contain'
                           />
-                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
-                            <Upload className="size-6 text-white" />
+                          <div className='absolute inset-0 flex items-center justify-center rounded-lg bg-black/40 opacity-0 transition-opacity group-hover:opacity-100'>
+                            <Upload className='size-6 text-white' />
                           </div>
                         </div>
                       ) : (
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <div className="p-2 rounded-full bg-primary/10 mb-2 group-hover:scale-110 transition-transform">
-                            <Upload className="size-5 text-primary" />
+                        <div className='flex flex-col items-center justify-center pt-5 pb-6'>
+                          <div className='bg-primary/10 mb-2 rounded-full p-2 transition-transform group-hover:scale-110'>
+                            <Upload className='text-primary size-5' />
                           </div>
-                          <p className="text-sm font-medium">Click to upload</p>
-                          <p className="text-[10px] text-muted-foreground mt-1">
+                          <p className='text-sm font-medium'>Click to upload</p>
+                          <p className='text-muted-foreground mt-1 text-[10px]'>
                             SVG, PNG, JPG (Max 5MB)
                           </p>
                         </div>
                       )}
                       <input
-                        id="logo-upload"
-                        type="file"
-                        className="hidden"
-                        accept="image/*"
+                        id='logo-upload'
+                        type='file'
+                        className='hidden'
+                        accept='image/*'
                         onChange={handleFileUpload}
                       />
                     </label>
                   </div>
 
                   {/* Prompt Section */}
-                  <div className="space-y-2">
+                  <div className='space-y-2'>
                     <PremiumInput
                       value={prompt}
                       onChange={setPrompt}
                       onSubmit={handleGenerate}
                       isGenerating={isGenerating}
-                      placeholder="Describe how your logo should move..."
-                      minHeight="50px"
+                      placeholder='Describe how your logo should move...'
+                      minHeight='50px'
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className='space-y-2'>
                     <Select
                       value={exportFormat}
                       onValueChange={(val: any) => setExportFormat(val)}
                     >
-                      <SelectTrigger className="w-full bg-secondary/50 border-black/10 dark:border-white/10 h-10">
-                        <SelectValue placeholder="Select format" />
+                      <SelectTrigger className='bg-secondary/50 h-10 w-full border-black/10 dark:border-white/10'>
+                        <SelectValue placeholder='Select format' />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Video">
-                          <div className="flex items-center gap-2">
-                            <Play className="size-3.5" />
+                        <SelectItem value='Video'>
+                          <div className='flex items-center gap-2'>
+                            <Play className='size-3.5' />
                             <span>Video (MP4)</span>
                           </div>
                         </SelectItem>
@@ -272,24 +271,24 @@ const LogoAnimationPage = () => {
                 </div>
 
                 {error && (
-                  <p className="text-xs text-red-500 font-medium animate-pulse">
+                  <p className='animate-pulse text-xs font-medium text-red-500'>
                     {error}
                   </p>
                 )}
 
                 <Button
-                  className="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all flex flex-row items-center justify-center gap-2"
+                  className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-gradient-to-bl focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800'
                   disabled={!file || isGenerating}
                   onClick={handleGenerate}
                 >
                   {isGenerating ? (
                     <>
-                      <RefreshCw className="size-5 animate-spin" />
+                      <RefreshCw className='size-5 animate-spin' />
                       Animating...
                     </>
                   ) : (
                     <>
-                      <Sparkles className="size-5" />
+                      <Sparkles className='size-5' />
                       Generate Animation
                     </>
                   )}
@@ -298,40 +297,40 @@ const LogoAnimationPage = () => {
             </div>
 
             {/* Right Column: Preview/Result */}
-            <div className="relative rounded-2xl overflow-hidden flex flex-col items-stretch min-h-[50vh] border border-black/5 dark:border-white/5 bg-black">
-              <div className="h-16 flex items-center justify-between px-8 shrink-0 border-b border-white/5 bg-[#0A0A0A]/50 backdrop-blur z-20">
-                <div className="flex items-center gap-3">
-                  <span className="text-base font-bold text-white">Result</span>
+            <div className='relative flex min-h-[50vh] flex-col items-stretch overflow-hidden rounded-2xl border border-black/5 bg-black dark:border-white/5'>
+              <div className='z-20 flex h-16 shrink-0 items-center justify-between border-b border-white/5 bg-[#0A0A0A]/50 px-8 backdrop-blur'>
+                <div className='flex items-center gap-3'>
+                  <span className='text-base font-bold text-white'>Result</span>
                   {generatedVideoUrl && (
-                    <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-[10px] rounded-full font-medium flex items-center gap-1">
-                      <CheckCircle2 className="size-2.5" /> Ready
+                    <span className='flex items-center gap-1 rounded-full bg-green-500/20 px-2 py-0.5 text-[10px] font-medium text-green-400'>
+                      <CheckCircle2 className='size-2.5' /> Ready
                     </span>
                   )}
                 </div>
                 <button
                   onClick={() => setIsHistoryOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full bg-white/[0.05] border border-white/10 text-neutral-300 hover:bg-white/[0.08] hover:text-white transition-colors"
+                  className='inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1.5 text-xs font-medium text-neutral-300 transition-colors hover:bg-white/[0.08] hover:text-white'
                 >
-                  <HistoryIcon className="size-3.5" />
+                  <HistoryIcon className='size-3.5' />
                   History
                 </button>
               </div>
 
-              <div className="flex-1 relative flex items-center justify-center p-6">
+              <div className='relative flex flex-1 items-center justify-center p-6'>
                 {!generatedVideoUrl && !isGenerating && !previewUrl && (
-                  <div className="flex flex-col items-center text-center gap-4">
-                    <div className="relative isolate">
+                  <div className='flex flex-col items-center gap-4 text-center'>
+                    <div className='relative isolate'>
                       <img
-                        src="https://i.pinimg.com/originals/46/5b/c4/465bc4bc137942ccd0a2a8ecb96387e8.gif"
-                        alt="Demo"
-                        className="w-fit object-cover max-h-[55vh] rounded-2xl"
+                        src='https://i.pinimg.com/originals/46/5b/c4/465bc4bc137942ccd0a2a8ecb96387e8.gif'
+                        alt='Demo'
+                        className='max-h-[55vh] w-fit rounded-2xl object-cover'
                       />
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-sm font-bold text-white/50 uppercase tracking-widest">
+                    <div className='space-y-1'>
+                      <p className='text-sm font-bold tracking-widest text-white/50 uppercase'>
                         Breathe Life Into Your Logo
                       </p>
-                      <p className="text-xs text-white/30 italic">
+                      <p className='text-xs text-white/30 italic'>
                         Upload your logo and let AI do the rest
                       </p>
                     </div>
@@ -339,16 +338,16 @@ const LogoAnimationPage = () => {
                 )}
 
                 {isGenerating && (
-                  <div className="flex flex-col items-center gap-6">
-                    <div className="relative size-20">
-                      <div className="absolute inset-0 rounded-full border-2 border-cyan-500/30 animate-ping" />
-                      <div className="absolute inset-0 rounded-full border-2 border-t-cyan-500 animate-spin" />
+                  <div className='flex flex-col items-center gap-6'>
+                    <div className='relative size-20'>
+                      <div className='absolute inset-0 animate-ping rounded-full border-2 border-cyan-500/30' />
+                      <div className='absolute inset-0 animate-spin rounded-full border-2 border-t-cyan-500' />
                     </div>
-                    <div className="text-center">
-                      <p className="text-sm font-bold text-white">
+                    <div className='text-center'>
+                      <p className='text-sm font-bold text-white'>
                         Animating Lifecycle
                       </p>
-                      <p className="mt-1 text-xs text-white/40 italic">
+                      <p className='mt-1 text-xs text-white/40 italic'>
                         This usually takes about 30-40 seconds...
                       </p>
                     </div>
@@ -356,38 +355,38 @@ const LogoAnimationPage = () => {
                 )}
 
                 {!isGenerating && generatedVideoUrl && (
-                  <div className="relative w-full max-w-lg aspect-square rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40">
+                  <div className='relative aspect-square w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-black/40 shadow-2xl'>
                     <video
                       src={generatedVideoUrl}
                       controls
                       autoPlay
                       loop
-                      className="size-full object-contain"
+                      className='size-full object-contain'
                     />
-                    <div className="absolute bottom-4 right-4 flex gap-2">
+                    <div className='absolute right-4 bottom-4 flex gap-2'>
                       <a
                         href={generatedVideoUrl}
-                        download="logo-animation.mp4"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="p-2 rounded-full bg-black/60 backdrop-blur hover:bg-blue-600 text-white transition-all shadow-xl"
+                        download='logo-animation.mp4'
+                        target='_blank'
+                        rel='noreferrer'
+                        className='rounded-full bg-black/60 p-2 text-white shadow-xl backdrop-blur transition-all hover:bg-blue-600'
                       >
-                        <Download className="size-4" />
+                        <Download className='size-4' />
                       </a>
                     </div>
                   </div>
                 )}
 
                 {!isGenerating && !generatedVideoUrl && previewUrl && (
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="relative w-64 h-64 rounded-xl border border-white/10 overflow-hidden bg-white/5">
+                  <div className='flex flex-col items-center gap-4'>
+                    <div className='relative h-64 w-64 overflow-hidden rounded-xl border border-white/10 bg-white/5'>
                       <img
                         src={previewUrl}
-                        alt="Preview"
-                        className="size-full object-contain p-4"
+                        alt='Preview'
+                        className='size-full object-contain p-4'
                       />
                     </div>
-                    <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest">
+                    <p className='text-[10px] font-bold tracking-widest text-white/50 uppercase'>
                       Source Preview
                     </p>
                   </div>
@@ -400,40 +399,40 @@ const LogoAnimationPage = () => {
 
       {/* History Sheet */}
       <Sheet open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
-          <SheetHeader className="mb-6">
-            <SheetTitle className="flex items-center gap-2">
-              <HistoryIcon className="size-5" /> Animation History
+        <SheetContent className='w-full overflow-y-auto sm:max-w-md'>
+          <SheetHeader className='mb-6'>
+            <SheetTitle className='flex items-center gap-2'>
+              <HistoryIcon className='size-5' /> Animation History
             </SheetTitle>
           </SheetHeader>
 
-          <div className="space-y-4">
+          <div className='space-y-4'>
             {isLoadingHistory ? (
-              <div className="flex justify-center p-12">
-                <RefreshCw className="size-6 animate-spin text-muted-foreground" />
+              <div className='flex justify-center p-12'>
+                <RefreshCw className='text-muted-foreground size-6 animate-spin' />
               </div>
             ) : history.length === 0 ? (
-              <div className="text-center p-12 text-muted-foreground text-sm">
+              <div className='text-muted-foreground p-12 text-center text-sm'>
                 No past animations found.
               </div>
             ) : (
               history.map((job) => (
                 <div
                   key={job._id}
-                  className="rounded-xl border border-border bg-card p-3 space-y-3 relative group cursor-pointer hover:border-primary/50 transition-colors"
+                  className='border-border bg-card group hover:border-primary/50 relative cursor-pointer space-y-3 rounded-xl border p-3 transition-colors'
                   onClick={() => handleSelectJob(job)}
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3 min-w-0">
+                  <div className='flex items-center justify-between gap-3'>
+                    <div className='flex min-w-0 items-center gap-3'>
                       <img
                         src={job.sourceImageUrl}
-                        className="size-10 rounded object-contain bg-muted p-1 border"
+                        className='bg-muted size-10 rounded border object-contain p-1'
                       />
-                      <div className="min-w-0">
-                        <p className="text-xs font-bold truncate pr-8">
+                      <div className='min-w-0'>
+                        <p className='truncate pr-8 text-xs font-bold'>
                           {job.prompt}
                         </p>
-                        <p className="text-[10px] text-muted-foreground">
+                        <p className='text-muted-foreground text-[10px]'>
                           {new Date(job.createdAt).toLocaleDateString()}
                         </p>
                       </div>
@@ -443,22 +442,22 @@ const LogoAnimationPage = () => {
                         e.stopPropagation();
                         handleDeleteJob(job._id);
                       }}
-                      className="absolute top-3 right-3 p-1.5 rounded-lg bg-red-500/10 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/20"
+                      className='absolute top-3 right-3 rounded-lg bg-red-500/10 p-1.5 text-red-500 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-500/20'
                     >
-                      <Trash2 className="size-3.5" />
+                      <Trash2 className='size-3.5' />
                     </button>
                   </div>
 
                   {job.generatedVideoUrl && (
-                    <div className="relative aspect-video rounded-lg overflow-hidden border">
+                    <div className='relative aspect-video overflow-hidden rounded-lg border'>
                       <video
                         src={job.generatedVideoUrl}
-                        className="size-full object-cover"
+                        className='size-full object-cover'
                         controls
                         muted
                       />
-                      <div className="absolute top-2 right-2 flex gap-1.5">
-                        <div className="text-[10px] font-medium px-2 py-1 bg-black/60 text-white rounded-md">
+                      <div className='absolute top-2 right-2 flex gap-1.5'>
+                        <div className='rounded-md bg-black/60 px-2 py-1 text-[10px] font-medium text-white'>
                           {job.exportFormat}
                         </div>
                       </div>

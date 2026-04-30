@@ -1,4 +1,5 @@
 import React from "react";
+
 export type AuthTypes = {
   username?: string;
   email: string;
@@ -20,5 +21,3 @@ export type OnboardingTypes = {
   businessbio: string;
   businessimage: React.ImgHTMLAttributes<HTMLImageElement>;
 };
-
-

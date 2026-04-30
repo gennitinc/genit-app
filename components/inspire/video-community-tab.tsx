@@ -1,23 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import {
-  Copy,
-  RefreshCw,
-  Heart,
-  Eye,
-  User,
-  Users,
-  Loader2,
-  Play,
-  Pause,
-  Check,
-  ChevronDown,
-  ChevronUp,
-  Download,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { toast } from "@/hooks/use-toast";
+import { Skeleton } from "../ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -30,14 +13,31 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { communityApi } from "@/utils/inspire-api";
-import { CommunityContent } from "@/types/inspire";
-import { io, Socket } from "socket.io-client";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
-import { Skeleton } from "../ui/skeleton";
+import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { CommunityContent } from "@/types/inspire";
 import GridLoading from "@/utils/girdLoading";
+import { communityApi } from "@/utils/inspire-api";
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  Copy,
+  Download,
+  Eye,
+  Heart,
+  Loader2,
+  Pause,
+  Play,
+  RefreshCw,
+  User,
+  Users,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { Socket, io } from "socket.io-client";
+import { useEffect, useRef, useState } from "react";
 
 export interface VideoGenerationParamsCallback {
   // Common
@@ -56,14 +56,14 @@ export interface VideoGenerationParamsCallback {
 
   // Switch to preview tab
   onTabChange: (
-    tab: "preview" | "community" | "templates" | "tutorial",
+    tab: "preview" | "community" | "templates" | "tutorial"
   ) => void;
 }
 
 interface VideoCommunityTabProps {
   onPromptSelect: (prompt: string) => void;
   onTabChange: (
-    tab: "preview" | "community" | "templates" | "tutorial",
+    tab: "preview" | "community" | "templates" | "tutorial"
   ) => void;
   onParamsRestore?: VideoGenerationParamsCallback;
 }
@@ -94,7 +94,7 @@ export function VideoCommunityTab({
   const [videos, setVideos] = useState<CommunityContent[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState<CommunityContent | null>(
-    null,
+    null
   );
   const [likedVideos, setLikedVideos] = useState<Set<string>>(new Set());
   const [likingVideoId, setLikingVideoId] = useState<string | null>(null);
@@ -110,7 +110,7 @@ export function VideoCommunityTab({
       process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000",
       {
         transports: ["websocket", "polling"],
-      },
+      }
     );
 
     socketRef.current = socket;
@@ -126,10 +126,10 @@ export function VideoCommunityTab({
           prev.map((vid) =>
             vid.id === data.contentId
               ? { ...vid, likes: data.likes, isLiked: data.liked }
-              : vid,
-          ),
+              : vid
+          )
         );
-      },
+      }
     );
 
     return () => {
@@ -263,7 +263,7 @@ export function VideoCommunityTab({
                 return new File([blob], `reference-${index}.jpg`, {
                   type: blob.type,
                 });
-              }),
+              })
             );
             onParamsRestore.setReferenceImages(imageFiles);
           } catch (error) {
@@ -328,13 +328,13 @@ export function VideoCommunityTab({
 
         setVideos((prev) =>
           prev.map((vid) =>
-            vid.id === videoId ? { ...vid, likes, isLiked: isLiked } : vid,
-          ),
+            vid.id === videoId ? { ...vid, likes, isLiked: isLiked } : vid
+          )
         );
 
         if (selectedVideo?.id === videoId) {
           setSelectedVideo((prev) =>
-            prev ? { ...prev, likes, isLiked: isLiked } : null,
+            prev ? { ...prev, likes, isLiked: isLiked } : null
           );
         }
 
@@ -381,29 +381,29 @@ export function VideoCommunityTab({
 
   if (videos.length === 0 && !loading) {
     return (
-      <section className="">
-        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-          <div className="w-16 h-16 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
-            <Users className="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
+      <section className=''>
+        <div className='flex min-h-[60vh] flex-col items-center justify-center text-center'>
+          <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
+            <Users className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
           </div>
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+          <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
             No community videos yet
           </h3>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-sm mb-6">
+          <p className='mb-6 max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
             Generate a video and publish it to share with others
           </p>
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className='flex flex-col gap-3 sm:flex-row'>
             <button
-              type="button"
+              type='button'
               onClick={() => onTabChange("preview")}
-              className="px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-sm font-medium text-white dark:text-neutral-900 transition-colors"
+              className='rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
             >
               Create Video
             </button>
             <button
-              type="button"
+              type='button'
               onClick={() => onTabChange("templates")}
-              className="px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-sm font-medium text-neutral-700 dark:text-neutral-300 transition-colors"
+              className='rounded-lg bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
             >
               Browse Templates
             </button>
@@ -415,11 +415,11 @@ export function VideoCommunityTab({
 
   return (
     <>
-      <section className="p-4 px-0">
+      <section className='p-4 px-0'>
         <div
           className={cn(
-            "columns-2 lg:columns-4 gap-4",
-            isCommunityPage ? "md:columns-3 lg:columns-4" : "",
+            "columns-2 gap-4 lg:columns-4",
+            isCommunityPage ? "md:columns-3 lg:columns-4" : ""
           )}
         >
           {videos.map((video, index) => (
@@ -444,7 +444,7 @@ export function VideoCommunityTab({
           open={!!selectedVideo}
           onOpenChange={() => setSelectedVideo(null)}
         >
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden flex flex-col p-0">
+          <DialogContent className='flex max-h-[90vh] max-w-2xl flex-col overflow-hidden p-0'>
             {selectedVideo && (
               <VideoDetailContent
                 video={selectedVideo}
@@ -468,7 +468,7 @@ export function VideoCommunityTab({
           open={!!selectedVideo}
           onOpenChange={() => setSelectedVideo(null)}
         >
-          <DrawerContent className="max-h-[85vh] overflow-hidden flex flex-col">
+          <DrawerContent className='flex max-h-[85vh] flex-col overflow-hidden'>
             {selectedVideo && (
               <VideoDetailContent
                 video={selectedVideo}
@@ -561,7 +561,7 @@ function VideoCard({
           }
         });
       },
-      { threshold: 0.1 },
+      { threshold: 0.1 }
     );
 
     observer.observe(videoElement);
@@ -627,10 +627,10 @@ function VideoCard({
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4 border border-neutral-200 dark:border-neutral-700"
+      className='group relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800'
     >
       <div
-        className="relative"
+        className='relative'
         onClick={(e) => {
           e.stopPropagation();
           onView();
@@ -656,8 +656,8 @@ function VideoCard({
               poster={video.thumbnailUrl}
               muted
               playsInline
-              preload="metadata"
-              className="w-full object-cover"
+              preload='metadata'
+              className='w-full object-cover'
               style={{ aspectRatio }}
             />
           </div>
@@ -665,31 +665,31 @@ function VideoCard({
           <img
             src={video.thumbnailUrl}
             alt={video.prompt}
-            className="w-full object-cover"
+            className='w-full object-cover'
             style={{ aspectRatio }}
           />
         )}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className='absolute inset-0 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100' />
 
         {/* Likes count and heart icon - Top right, centered together */}
-        <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
+        <div className='absolute top-3 right-3 z-10 flex items-center gap-1.5'>
           {video.likes > 0 && (
-            <span className="text-white text-xs font-medium">
+            <span className='text-xs font-medium text-white'>
               {video.likes}
             </span>
           )}
           <button
-            type="button"
+            type='button'
             onClick={(e) => {
               e.stopPropagation();
               onLike?.(e, video.id);
             }}
             disabled={!onLike || isLiking}
-            className="w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className='flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all hover:bg-black/70 disabled:cursor-not-allowed disabled:opacity-50'
             title={isLiked ? "Unlike" : "Like"}
           >
             <Heart
-              className={`w-4 h-4 transition-all ${
+              className={`h-4 w-4 transition-all ${
                 isLiked ? "fill-red-500 text-red-500" : "fill-none text-white"
               }`}
             />
@@ -697,62 +697,62 @@ function VideoCard({
         </div>
 
         {video && (
-          <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10">
+          <div className='absolute top-3 left-3 z-10 flex items-center gap-1.5'>
             <span>{video.duration}s</span>
           </div>
         )}
       </div>
-      <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-        <div className="mb-2 hidden">
-          <p className="text-white text-sm font-medium line-clamp-2">
+      <div className='absolute right-0 bottom-0 left-0 p-3 opacity-0 transition-opacity group-hover:opacity-100'>
+        <div className='mb-2 hidden'>
+          <p className='line-clamp-2 text-sm font-medium text-white'>
             {video.prompt}
           </p>
         </div>
-        <div className="hidden md:flex lg:flex-col gap-2">
+        <div className='hidden gap-2 md:flex lg:flex-col'>
           <Link
             href={`/creator/${video.author.name}`}
             onClick={(e) => e.stopPropagation()}
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity w-fit"
+            className='flex w-fit items-center gap-2 transition-opacity hover:opacity-80'
           >
             {video.author.avatar ? (
               <img
                 src={video.author.avatar}
                 alt={video.author.name}
-                className="w-5 h-5 rounded-full object-cover"
+                className='h-5 w-5 rounded-full object-cover'
               />
             ) : (
-              <div className="w-5 h-5 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-                <User className="w-3 h-3 text-neutral-600 dark:text-neutral-400" />
+              <div className='flex h-5 w-5 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+                <User className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
               </div>
             )}
-            <span className="text-xs text-white/80 font-medium">
+            <span className='text-xs font-medium text-white/80'>
               {video.author.name}
             </span>
             {video.author.isVerified && (
               <svg
-                viewBox="0 0 22 22"
-                aria-label="Verified account"
-                role="img"
-                className="w-3.5 h-3.5 flex-shrink-0"
-                data-testid="icon-verified"
-                fill="#3b82f6"
+                viewBox='0 0 22 22'
+                aria-label='Verified account'
+                role='img'
+                className='h-3.5 w-3.5 flex-shrink-0'
+                data-testid='icon-verified'
+                fill='#3b82f6'
               >
                 <g>
-                  <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                  <path d='M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z' />
                 </g>
               </svg>
             )}
           </Link>
           <button
-            type="button"
+            type='button'
             onClick={(e) => {
               e.stopPropagation();
               onRecreate();
             }}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-medium transition-colors w-fit"
+            className='flex w-fit items-center gap-1 rounded-lg bg-cyan-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-cyan-600'
           >
-            <RefreshCw className="w-3 h-3" />
-            <span className="hidden md:block">Recreate</span>
+            <RefreshCw className='h-3 w-3' />
+            <span className='hidden md:block'>Recreate</span>
           </button>
         </div>
       </div>
@@ -802,10 +802,10 @@ function VideoDetailContent({
   }, [video.videoUrl]);
 
   return (
-    <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
-      <div className="flex-1 overflow-y-auto min-h-0">
+    <div className='flex h-full max-h-[90vh] flex-col overflow-hidden'>
+      <div className='min-h-0 flex-1 overflow-y-auto'>
         {/* Video Preview */}
-        <div className="relative w-full bg-neutral-100 dark:bg-neutral-800">
+        <div className='relative w-full bg-neutral-100 dark:bg-neutral-800'>
           {video.videoUrl ? (
             <video
               ref={videoDetailRef}
@@ -813,23 +813,23 @@ function VideoDetailContent({
               poster={video.thumbnailUrl}
               controls
               playsInline
-              preload="auto"
+              preload='auto'
               autoPlay
-              className="w-full h-auto object-contain"
+              className='h-auto w-full object-contain'
             />
           ) : (
             <img
               src={video.thumbnailUrl}
               alt={video.prompt}
-              className="w-full h-auto object-contain"
+              className='h-auto w-full object-contain'
             />
           )}
         </div>
 
-        <div className="px-6 space-y-4">
+        <div className='space-y-4 px-6'>
           {/* Prompt */}
           <div>
-            <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-1">
+            <h3 className='mb-1 text-sm font-medium text-neutral-500 dark:text-neutral-400'>
               Prompt
             </h3>
             <div>
@@ -843,17 +843,17 @@ function VideoDetailContent({
               {(video.prompt.split("\n").length > 2 ||
                 (video.prompt.length > 200 && !showFullPrompt)) && (
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => setShowFullPrompt(!showFullPrompt)}
-                  className="text-neutral-500 dark:text-neutral-400 text-xs font-medium mt-1 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors flex items-center gap-1"
+                  className='mt-1 flex items-center gap-1 text-xs font-medium text-neutral-500 transition-colors hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300'
                 >
                   {showFullPrompt ? (
                     <>
-                      View less <ChevronUp className="w-3 h-3" />
+                      View less <ChevronUp className='h-3 w-3' />
                     </>
                   ) : (
                     <>
-                      View more <ChevronDown className="w-3 h-3" />
+                      View more <ChevronDown className='h-3 w-3' />
                     </>
                   )}
                 </button>
@@ -864,53 +864,53 @@ function VideoDetailContent({
           {/* Creator Info */}
           <Link
             href={`/creator/${video.author.name}`}
-            className="flex items-center gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            className='flex items-center gap-3 rounded-lg bg-neutral-50 p-3 transition-colors hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800'
           >
             {video.author.avatar ? (
               <img
                 src={video.author.avatar}
                 alt={video.author.name}
-                className="w-10 h-10 rounded-full object-cover"
+                className='h-10 w-10 rounded-full object-cover'
               />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-                <User className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+                <User className='h-5 w-5 text-neutral-600 dark:text-neutral-400' />
               </div>
             )}
-            <div className="flex-1">
-              <div className="flex items-center gap-1.5">
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">
+            <div className='flex-1'>
+              <div className='flex items-center gap-1.5'>
+                <p className='text-sm font-medium text-neutral-900 dark:text-white'>
                   {video.author.name}
                 </p>
                 {video.author.isVerified && (
                   <svg
-                    viewBox="0 0 22 22"
-                    aria-label="Verified account"
-                    role="img"
-                    className="w-4 h-4 flex-shrink-0"
-                    data-testid="icon-verified"
-                    fill="#3b82f6"
+                    viewBox='0 0 22 22'
+                    aria-label='Verified account'
+                    role='img'
+                    className='h-4 w-4 flex-shrink-0'
+                    data-testid='icon-verified'
+                    fill='#3b82f6'
                   >
                     <g>
-                      <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                      <path d='M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z' />
                     </g>
                   </svg>
                 )}
               </div>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400">
+              <p className='text-xs text-neutral-500 dark:text-neutral-400'>
                 Creator
               </p>
             </div>
           </Link>
 
           {/* Stats */}
-          <div className="flex items-center gap-4 m-2">
-            <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-              <Heart className="w-4 h-4" />
+          <div className='m-2 flex items-center gap-4'>
+            <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
+              <Heart className='h-4 w-4' />
               <span>{video.likes} likes</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-              <Eye className="w-4 h-4" />
+            <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
+              <Eye className='h-4 w-4' />
               <span>{video.views} views</span>
             </div>
           </div>
@@ -918,18 +918,18 @@ function VideoDetailContent({
       </div>
 
       {/* Actions - Fixed at bottom */}
-      <div className="shrink-0 px-6 py-4 border-t bg-neutral-50 dark:bg-neutral-900">
-        <div className="flex gap-2">
+      <div className='shrink-0 border-t bg-neutral-50 px-6 py-4 dark:bg-neutral-900'>
+        <div className='flex gap-2'>
           <button
-            type="button"
+            type='button'
             onClick={onRecreate}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white font-medium transition-colors"
+            className='flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-500 px-4 py-2.5 font-medium text-white transition-colors hover:bg-cyan-600'
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className='h-4 w-4' />
             Recreate
           </button>
           <button
-            type="button"
+            type='button'
             onClick={() => {
               navigator.clipboard.writeText(video.prompt);
               setCopied(true);
@@ -939,16 +939,16 @@ function VideoDetailContent({
               });
               setTimeout(() => setCopied(false), 2000);
             }}
-            className="px-4 py-2.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-colors"
+            className='rounded-lg bg-neutral-100 px-4 py-2.5 text-neutral-900 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'
           >
             {copied ? (
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className='h-4 w-4 text-green-500' />
             ) : (
-              <Copy className="w-4 h-4" />
+              <Copy className='h-4 w-4' />
             )}
           </button>
           <button
-            type="button"
+            type='button'
             onClick={async () => {
               try {
                 const url =
@@ -984,9 +984,9 @@ function VideoDetailContent({
                 });
               }
             }}
-            className="px-4 py-2.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-colors"
+            className='rounded-lg bg-neutral-100 px-4 py-2.5 text-neutral-900 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'
           >
-            <Download className="w-4 h-4" />
+            <Download className='h-4 w-4' />
           </button>
         </div>
       </div>

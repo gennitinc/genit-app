@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { X, Download, ZoomIn, ZoomOut } from "lucide-react";
+import { Download, X, ZoomIn, ZoomOut } from "lucide-react";
+import { useState } from "react";
 
 interface ImagePreviewDialogProps {
   isOpen: boolean;
@@ -46,57 +46,57 @@ export function ImagePreviewDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden">
-        <DialogHeader className="p-4 pb-2 border-b border-gray-200">
-          <div className="flex items-center justify-between">
+      <DialogContent className='max-h-[90vh] max-w-4xl overflow-hidden p-0'>
+        <DialogHeader className='border-b border-gray-200 p-4 pb-2'>
+          <div className='flex items-center justify-between'>
             <div>
-              <DialogTitle className="text-lg font-semibold text-gray-900 truncate max-w-md">
+              <DialogTitle className='max-w-md truncate text-lg font-semibold text-gray-900'>
                 {fileName}
               </DialogTitle>
               {fileSize && (
-                <p className="text-sm text-gray-500 mt-1">{fileSize}</p>
+                <p className='mt-1 text-sm text-gray-500'>{fileSize}</p>
               )}
             </div>
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={handleZoomOut}
                 disabled={zoom <= 0.5}
-                className="p-2"
+                className='p-2'
               >
-                <ZoomOut className="w-4 h-4" />
+                <ZoomOut className='h-4 w-4' />
               </Button>
-              <span className="text-sm text-gray-600 min-w-[3rem] text-center">
+              <span className='min-w-[3rem] text-center text-sm text-gray-600'>
                 {Math.round(zoom * 100)}%
               </span>
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={handleZoomIn}
                 disabled={zoom >= 3}
-                className="p-2"
+                className='p-2'
               >
-                <ZoomIn className="w-4 h-4" />
+                <ZoomIn className='h-4 w-4' />
               </Button>
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={handleDownload}
-                className="p-2"
+                className='p-2'
               >
-                <Download className="w-4 h-4" />
+                <Download className='h-4 w-4' />
               </Button>
             </div>
           </div>
         </DialogHeader>
 
-        <div className="flex-1 overflow-auto p-4 bg-gray-50">
-          <div className="flex items-center justify-center min-h-[400px]">
+        <div className='flex-1 overflow-auto bg-gray-50 p-4'>
+          <div className='flex min-h-[400px] items-center justify-center'>
             <img
               src={imageSrc || "/placeholder.svg"}
               alt={fileName}
-              className="max-w-full max-h-full object-contain rounded-lg shadow-lg transition-transform duration-200"
+              className='max-h-full max-w-full rounded-lg object-contain shadow-lg transition-transform duration-200'
               style={{
                 transform: `scale(${zoom})`,
                 transformOrigin: "center",

@@ -1,22 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import {
   Globe,
-  Upload,
-  Play,
-  Sparkles,
-  Monitor,
-  Smartphone,
   Layers,
+  Monitor,
+  Play,
+  Smartphone,
+  Sparkles,
+  Upload,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import React, { useState } from "react";
 
 const WebsiteMockupPage = () => {
   const [url, setUrl] = useState("");
@@ -29,13 +29,11 @@ const WebsiteMockupPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-background flex flex-col text-foreground">
+    <div className='bg-background text-foreground flex min-h-screen w-full flex-col'>
       <LandingPageBanner />
       <LandingNavbar />
 
-      <main className="flex-grow pt-12 md:pt-20">
-        
-      </main>
+      <main className='flex-grow pt-12 md:pt-20'></main>
 
       <LandingFooter />
     </div>

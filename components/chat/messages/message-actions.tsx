@@ -6,7 +6,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Copy, ThumbsUp, ThumbsDown, Check, Trash2 } from "lucide-react";
+import { Check, Copy, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 interface MessageActionsProps {
@@ -15,7 +15,7 @@ interface MessageActionsProps {
   onDislike?: () => void;
   onDelete?: () => void;
   isLiked?: boolean;
-  disabled?: boolean
+  disabled?: boolean;
   isDisliked?: boolean;
   className?: string;
 }
@@ -57,16 +57,16 @@ export function MessageActions({
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            variant="ghost"
-            size="sm"
-            className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
+            variant='ghost'
+            size='sm'
+            className='text-muted-foreground hover:text-foreground p-1.5 transition-colors'
             onClick={handleCopy}
             disabled={copied}
           >
             {copied ? (
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className='h-4 w-4 text-green-500' />
             ) : (
-              <Copy className="w-4 h-4" />
+              <Copy className='h-4 w-4' />
             )}
           </Button>
         </TooltipTrigger>
@@ -79,13 +79,13 @@ export function MessageActions({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant="ghost"
-              size="sm"
-              className="p-1.5 text-muted-foreground hover:text-destructive transition-colors"
+              variant='ghost'
+              size='sm'
+              className='text-muted-foreground hover:text-destructive p-1.5 transition-colors'
               onClick={onDelete}
               disabled={disabled}
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className='h-4 w-4' />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
@@ -97,8 +97,8 @@ export function MessageActions({
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            variant="ghost"
-            size="sm"
+            variant='ghost'
+            size='sm'
             disabled={disabled}
             className={`p-1.5 transition-colors ${
               isLiked
@@ -107,7 +107,7 @@ export function MessageActions({
             }`}
             onClick={handleLike}
           >
-            <ThumbsUp className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
+            <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
           </Button>
         </TooltipTrigger>
         <TooltipContent>
@@ -118,8 +118,8 @@ export function MessageActions({
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            variant="ghost"
-            size="sm"
+            variant='ghost'
+            size='sm'
             className={`p-1.5 transition-colors ${
               isDisliked
                 ? "text-red-500 hover:text-red-600"
@@ -127,7 +127,9 @@ export function MessageActions({
             }`}
             onClick={handleDislike}
           >
-            <ThumbsDown className={`w-4 h-4 ${isDisliked ? "fill-current" : ""}`} />
+            <ThumbsDown
+              className={`h-4 w-4 ${isDisliked ? "fill-current" : ""}`}
+            />
           </Button>
         </TooltipTrigger>
         <TooltipContent>

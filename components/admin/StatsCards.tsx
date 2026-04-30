@@ -1,7 +1,13 @@
 "use client";
 
-import { Users, CreditCard, Layers, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { motion } from "framer-motion";
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  CreditCard,
+  Layers,
+  Users,
+} from "lucide-react";
 
 interface StatsCardsProps {
   stats: {
@@ -40,38 +46,38 @@ export const StatsCards = ({ stats }: StatsCardsProps) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
       {cards.map((card, index) => (
         <motion.div
           key={card.title}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
-          className="p-6 rounded-2xl bg-card border border-border/50 hover:border-primary/20 transition-all group overflow-hidden relative"
+          className='bg-card border-border/50 hover:border-primary/20 group relative overflow-hidden rounded-2xl border p-6 transition-all'
         >
-          <div className="flex justify-between items-start mb-4">
-            <div className={`p-3 rounded-xl ${card.bgColor} ${card.color}`}>
-              <card.icon className="w-6 h-6" />
+          <div className='mb-4 flex items-start justify-between'>
+            <div className={`rounded-xl p-3 ${card.bgColor} ${card.color}`}>
+              <card.icon className='h-6 w-6' />
             </div>
-            <div className="flex items-center text-emerald-500 text-xs font-medium bg-emerald-500/10 px-2 py-1 rounded-full">
-              <ArrowUpRight className="w-3 h-3 mr-1" />
+            <div className='flex items-center rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-500'>
+              <ArrowUpRight className='mr-1 h-3 w-3' />
               Active
             </div>
           </div>
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-1">
+            <h3 className='text-muted-foreground mb-1 text-sm font-medium'>
               {card.title}
             </h3>
-            <p className="text-3xl font-bold tracking-tight text-foreground">
+            <p className='text-foreground text-3xl font-bold tracking-tight'>
               {card.value}
             </p>
-            <p className="text-xs text-muted-foreground mt-2 font-medium">
+            <p className='text-muted-foreground mt-2 text-xs font-medium'>
               {card.change}
             </p>
           </div>
-          
+
           {/* Decorative Gradient Overlay */}
-          <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-gradient-to-br from-primary/5 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+          <div className='from-primary/5 absolute -right-4 -bottom-4 h-24 w-24 rounded-full bg-gradient-to-br to-transparent blur-2xl transition-transform duration-500 group-hover:scale-150' />
         </motion.div>
       ))}
     </div>

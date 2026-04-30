@@ -1,10 +1,5 @@
 "use client";
-import Link from "next/link";
-import React from "react";
 import { Logo } from "@/components/logo";
-import { EMAIL_REGEX } from "@/utils/Regex";
-import { apiResponse } from "@/utils/apiResponse";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,6 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
+import { EMAIL_REGEX } from "@/utils/Regex";
+import { apiResponse } from "@/utils/apiResponse";
+import Link from "next/link";
+import { toast } from "sonner";
+import React from "react";
 
 export const RecoverComp = () => {
   const [formData, setFormdata] = React.useState<AuthTypes>({
@@ -76,16 +76,16 @@ export const RecoverComp = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-[100vh] overflow-hidden w-full bg-white dark:bg-black">
-      <Card className="w-full max-w-md mx-4">
-        <CardHeader className="text-center">
-          <div className="flex justify-center items-center mt-4 gap-2">
+    <div className='flex min-h-[100vh] w-full flex-col items-center justify-center overflow-hidden bg-white dark:bg-black'>
+      <Card className='mx-4 w-full max-w-md'>
+        <CardHeader className='text-center'>
+          <div className='mt-4 flex items-center justify-center gap-2'>
             <Logo />
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+            <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
               Gennit
             </h1>
           </div>
-          <CardTitle className="text-2xl font-bold">
+          <CardTitle className='text-2xl font-bold'>
             Recover your account
           </CardTitle>
           <CardDescription>
@@ -93,14 +93,14 @@ export const RecoverComp = () => {
             you instructions to reset your password.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className='space-y-6'>
           {/* Form */}
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className='space-y-4' onSubmit={handleSubmit}>
             <div>
-              <div className="relative">
+              <div className='relative'>
                 <input
-                  type="email"
-                  name="email"
+                  type='email'
+                  name='email'
                   required
                   value={formData.email}
                   onChange={(event) => {
@@ -112,29 +112,29 @@ export const RecoverComp = () => {
                       regex: EMAIL_REGEX,
                     });
                   }}
-                  className="w-full py-3 px-4 pl-11 border border-gray-300 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-800 text-gray-900 dark:text-gray-100 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-colors"
-                  placeholder="Enter email"
+                  className='w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 pl-11 text-sm text-gray-900 transition-colors focus:border-transparent focus:ring-2 focus:ring-cyan-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-100'
+                  placeholder='Enter email'
                 />
-                <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4'>
                   <svg
-                    className="w-4 h-4 text-gray-500 dark:text-neutral-400"
-                    xmlns="http://www.w3.org/2000/svg"
+                    className='h-4 w-4 text-gray-500 dark:text-neutral-400'
+                    xmlns='http://www.w3.org/2000/svg'
                     width={24}
                     height={24}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
                     strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                   >
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <polyline points="22,6 12,13 2,6" />
+                    <path d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z' />
+                    <polyline points='22,6 12,13 2,6' />
                   </svg>
                 </div>
               </div>
               {errorMsg.email && formData.email && (
-                <p className="text-xs text-TextLight2 dark:text-TextDark2 mt-1">
+                <p className='text-TextLight2 dark:text-TextDark2 mt-1 text-xs'>
                   {errorMsg.email}
                 </p>
               )}
@@ -142,30 +142,30 @@ export const RecoverComp = () => {
 
             {/* Submit Button */}
             <Button
-              type="submit"
+              type='submit'
               disabled={!allFieldsValid || loading}
-              className="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all"
+              className='w-full rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-gradient-to-bl focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800'
             >
               {loading ? (
-                <div className="flex items-center justify-center">
+                <div className='flex items-center justify-center'>
                   <svg
-                    className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
+                    className='mr-3 -ml-1 h-4 w-4 animate-spin text-white'
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
                   >
                     <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
+                      className='opacity-25'
+                      cx='12'
+                      cy='12'
+                      r='10'
+                      stroke='currentColor'
+                      strokeWidth='4'
                     ></circle>
                     <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      className='opacity-75'
+                      fill='currentColor'
+                      d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                     ></path>
                   </svg>
                   Sending...
@@ -177,15 +177,15 @@ export const RecoverComp = () => {
           </form>
 
           {/* Divider */}
-          <hr className="border-t border-gray-300 dark:border-neutral-800 my-6" />
+          <hr className='my-6 border-t border-gray-300 dark:border-neutral-800' />
 
           {/* Sign In Link */}
-          <div className="text-center">
-            <span className="text-sm text-muted-foreground">
+          <div className='text-center'>
+            <span className='text-muted-foreground text-sm'>
               Remember your login details?{" "}
               <Link
-                href="/signin"
-                className="font-medium text-TextLight2 dark:text-TextDark2 underline hover:no-underline"
+                href='/signin'
+                className='text-TextLight2 dark:text-TextDark2 font-medium underline hover:no-underline'
                 prefetch={false}
               >
                 Sign In
@@ -195,12 +195,12 @@ export const RecoverComp = () => {
         </CardContent>
       </Card>
 
-      <div className="mt-5 max-w-[26rem] w-full space-y-3">
-        <p className="text-xs text-gray-600 dark:text-gray-400 text-center leading-relaxed">
+      <div className='mt-5 w-full max-w-[26rem] space-y-3'>
+        <p className='text-center text-xs leading-relaxed text-gray-600 dark:text-gray-400'>
           This site is protected by reCAPTCHA and our{" "}
           <a
-            href="#"
-            className="text-TextLight1 dark:text-TextDark1 underline hover:no-underline"
+            href='#'
+            className='text-TextLight1 dark:text-TextDark1 underline hover:no-underline'
           >
             Policy
           </a>{" "}
@@ -212,11 +212,11 @@ export const RecoverComp = () => {
                   Terms of Service
                 </a> */}
         </p>
-        <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
+        <p className='text-center text-xs text-gray-600 dark:text-gray-400'>
           ©2026 Gennit. A product of{" "}
           <a
-            className="text-gray-800 dark:text-white font-medium hover:text-blue-600"
-            href="#"
+            className='font-medium text-gray-800 hover:text-blue-600 dark:text-white'
+            href='#'
           >
             Klip Inc.
           </a>{" "}

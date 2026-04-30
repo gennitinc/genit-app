@@ -1,29 +1,29 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import {
-  Loader2,
-  Wand2,
-  Video as VideoIcon,
-  Download,
-  Share2,
-  RefreshCw,
-  Copy,
-  Monitor,
-  Clock,
-  Maximize2,
-  Play,
-  Upload,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { toast } from "@/hooks/use-toast";
-import { AspectRatio } from "@/types/inspire";
-import { communityApi } from "@/utils/inspire-api";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { AspectRatio } from "@/types/inspire";
+import { communityApi } from "@/utils/inspire-api";
+import {
+  Clock,
+  Copy,
+  Download,
+  Loader2,
+  Maximize2,
+  Monitor,
+  Play,
+  RefreshCw,
+  Share2,
+  Upload,
+  Video as VideoIcon,
+  Wand2,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface GeneratedVideo {
   id: string;
@@ -48,7 +48,7 @@ interface VideoPreviewTabProps {
   onVideoSelect: (index: number) => void;
   onPromptRestore: (prompt: string) => void;
   onTabChange?: (
-    tab: "preview" | "community" | "templates" | "tutorial",
+    tab: "preview" | "community" | "templates" | "tutorial"
   ) => void;
   onDrawerClose?: () => void;
 }
@@ -66,7 +66,7 @@ export function VideoPreviewTab({
 }: VideoPreviewTabProps) {
   const [publishing, setPublishing] = useState(false);
   const [publishedVideoIds, setPublishedVideoIds] = useState<Set<string>>(
-    new Set(),
+    new Set()
   );
   const [publishedContentMap, setPublishedContentMap] = useState<
     Map<string, string>
@@ -112,7 +112,7 @@ export function VideoPreviewTab({
   // Check if current video is published
   const isPublished = Boolean(
     currentVideo?.generatedVideoId &&
-      publishedVideoIds.has(currentVideo.generatedVideoId),
+    publishedVideoIds.has(currentVideo.generatedVideoId)
   );
 
   const handleDownload = async () => {
@@ -186,7 +186,7 @@ export function VideoPreviewTab({
       publishedVideoIds.has(currentVideo.generatedVideoId)
     ) {
       const communityContentId = publishedContentMap.get(
-        currentVideo.generatedVideoId,
+        currentVideo.generatedVideoId
       );
       if (communityContentId) {
         try {
@@ -248,10 +248,10 @@ export function VideoPreviewTab({
       // Update published status
       if (currentVideo.generatedVideoId && response.data?.id) {
         setPublishedVideoIds((prev) =>
-          new Set(prev).add(currentVideo.generatedVideoId!),
+          new Set(prev).add(currentVideo.generatedVideoId!)
         );
         setPublishedContentMap((prev) =>
-          new Map(prev).set(currentVideo.generatedVideoId!, response.data.id),
+          new Map(prev).set(currentVideo.generatedVideoId!, response.data.id)
         );
       }
 
@@ -290,28 +290,28 @@ export function VideoPreviewTab({
   };
 
   return (
-    <section className="p-4 px-0">
+    <section className='p-4 px-0'>
       {/* Main Preview Area */}
-      <div className="flex flex-col">
+      <div className='flex flex-col'>
         {/* Preview Container */}
         <div
           className={cn(
-            "relative w-full rounded-xl overflow-hidden min-h-[400px]",
+            "relative min-h-[400px] w-full overflow-hidden rounded-xl"
           )}
         >
           {/* Generating State */}
           {isGenerating && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-              <Loader2 className="w-8 h-8 text-neutral-400 dark:text-neutral-500 animate-spin mb-4" />
-              <h3 className="text-base font-semibold text-neutral-900 dark:text-white mb-2">
+            <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
+              <Loader2 className='mb-4 h-8 w-8 animate-spin text-neutral-400 dark:text-neutral-500' />
+              <h3 className='mb-2 text-base font-semibold text-neutral-900 dark:text-white'>
                 Generating video
               </h3>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+              <p className='mb-4 text-sm text-neutral-500 dark:text-neutral-400'>
                 {generationProgress}% complete
               </p>
-              <div className="w-48 h-1 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+              <div className='h-1 w-48 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700'>
                 <div
-                  className="h-full bg-neutral-900 dark:bg-neutral-100 rounded-full transition-all duration-300"
+                  className='h-full rounded-full bg-neutral-900 transition-all duration-300 dark:bg-neutral-100'
                   style={{ width: `${generationProgress}%` }}
                 />
               </div>
@@ -320,11 +320,11 @@ export function VideoPreviewTab({
 
           {/* Video Display */}
           {!isGenerating && generatedVideos.length > 0 && (
-            <div className="relative group flex items-center justify-center bg-black rounded-xl overflow-hidden">
+            <div className='group relative flex items-center justify-center overflow-hidden rounded-xl bg-black'>
               <video
                 ref={videoRef}
                 src={generatedVideos[selectedVideoIndex]?.url}
-                className="max-w-full max-h-[60vh] w-auto h-auto object-contain"
+                className='h-auto max-h-[60vh] w-auto max-w-full object-contain'
                 controls
                 loop
                 playsInline
@@ -337,14 +337,14 @@ export function VideoPreviewTab({
                   });
                 }}
               />
-              <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+              <div className='absolute top-3 right-3 z-20 flex gap-2 opacity-0 transition-opacity group-hover:opacity-100'>
                 <button
-                  type="button"
+                  type='button'
                   onClick={handleFullscreen}
-                  className="w-8 h-8 rounded-lg bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-colors"
-                  title="Fullscreen"
+                  className='flex h-8 w-8 items-center justify-center rounded-lg bg-black/50 text-white transition-colors hover:bg-black/70'
+                  title='Fullscreen'
                 >
-                  <Maximize2 className="w-4 h-4" />
+                  <Maximize2 className='h-4 w-4' />
                 </button>
               </div>
             </div>
@@ -352,34 +352,34 @@ export function VideoPreviewTab({
 
           {/* Empty State - only show when not generating and no videos */}
           {!isGenerating && generatedVideos.length === 0 && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-              <div className="w-16 h-16 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
-                <VideoIcon className="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
+            <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
+              <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
+                <VideoIcon className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
               </div>
-              <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+              <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
                 No videos yet
               </h3>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-sm mb-6">
+              <p className='mb-6 max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
                 Enter a prompt or upload an image in the left panel and click
                 Generate to create your video
               </p>
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className='flex flex-col gap-3 sm:flex-row'>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     onPromptRestore(
-                      "A cinematic shot of a woman walking through a neon-lit cyberpunk city at night, rain falling, reflections on wet streets",
+                      "A cinematic shot of a woman walking through a neon-lit cyberpunk city at night, rain falling, reflections on wet streets"
                     )
                   }
-                  className="px-4 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-sm font-medium text-neutral-700 dark:text-neutral-300 transition-colors"
+                  className='rounded-lg bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
                   Try Example Prompt
                 </button>
                 {onTabChange && (
                   <button
-                    type="button"
+                    type='button'
                     onClick={() => onTabChange("templates")}
-                    className="px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-sm font-medium text-white dark:text-neutral-900 transition-colors"
+                    className='rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
                   >
                     Browse Templates
                   </button>
@@ -391,32 +391,32 @@ export function VideoPreviewTab({
 
         {/* VIDEO THUMBNAILS */}
         {generatedVideos.length > 1 && (
-          <div className="mt-4">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
+          <div className='mt-4'>
+            <div className='mb-2 flex items-center justify-between'>
+              <p className='text-xs font-medium text-neutral-500 dark:text-neutral-400'>
                 Generated outputs ({generatedVideos.length})
               </p>
             </div>
-            <div className="flex gap-2 overflow-x-auto pb-2">
+            <div className='flex gap-2 overflow-x-auto pb-2'>
               {generatedVideos.map((video, index) => (
                 <button
                   key={video.id}
-                  type="button"
+                  type='button'
                   onClick={() => onVideoSelect(index)}
                   className={cn(
-                    "relative shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all",
+                    "relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border-2 transition-all",
                     selectedVideoIndex === index
-                      ? "border-neutral-900 dark:border-neutral-100 ring-2 ring-neutral-900/20 dark:ring-neutral-100/20"
-                      : "border-transparent hover:border-neutral-300 dark:hover:border-neutral-600",
+                      ? "border-neutral-900 ring-2 ring-neutral-900/20 dark:border-neutral-100 dark:ring-neutral-100/20"
+                      : "border-transparent hover:border-neutral-300 dark:hover:border-neutral-600"
                   )}
                 >
                   <img
                     src={video.thumbnail}
                     alt={`Output ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    className='h-full w-full object-cover'
                   />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                    <Play className="w-4 h-4 text-white" />
+                  <div className='absolute inset-0 flex items-center justify-center bg-black/20'>
+                    <Play className='h-4 w-4 text-white' />
                   </div>
                 </button>
               ))}
@@ -426,11 +426,11 @@ export function VideoPreviewTab({
 
         {/* VIDEO ACTION BUTTONS */}
         {generatedVideos.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2 items-center">
+          <div className='mt-4 flex flex-wrap items-center gap-2'>
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => {
                     if (currentVideo) {
                       onPromptRestore(currentVideo.prompt);
@@ -441,9 +441,9 @@ export function VideoPreviewTab({
                       });
                     }
                   }}
-                  className="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 transition-colors"
+                  className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <RefreshCw className="w-4 h-4" />
+                  <RefreshCw className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -453,7 +453,7 @@ export function VideoPreviewTab({
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => {
                     if (currentVideo) {
                       navigator.clipboard.writeText(currentVideo.prompt);
@@ -463,9 +463,9 @@ export function VideoPreviewTab({
                       });
                     }
                   }}
-                  className="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 transition-colors"
+                  className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <Copy className="w-4 h-4" />
+                  <Copy className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -475,11 +475,11 @@ export function VideoPreviewTab({
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  type="button"
+                  type='button'
                   onClick={handleDownload}
-                  className="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 transition-colors"
+                  className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <Download className="w-4 h-4" />
+                  <Download className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -489,11 +489,11 @@ export function VideoPreviewTab({
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  type="button"
+                  type='button'
                   onClick={handleShare}
-                  className="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 transition-colors"
+                  className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <Share2 className="w-4 h-4" />
+                  <Share2 className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -501,29 +501,29 @@ export function VideoPreviewTab({
               </TooltipContent>
             </Tooltip>
             <button
-              type="button"
+              type='button'
               onClick={handlePublish}
               disabled={publishing}
               className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+                "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50",
                 isPublished
-                  ? "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-300 dark:hover:bg-neutral-600"
-                  : "bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900",
+                  ? "bg-neutral-200 text-neutral-600 hover:bg-neutral-300 dark:bg-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-600"
+                  : "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
               )}
             >
               {publishing ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className='h-4 w-4 animate-spin' />
                   Publishing...
                 </>
               ) : isPublished ? (
                 <>
-                  <Upload className="w-4 h-4" />
+                  <Upload className='h-4 w-4' />
                   Published
                 </>
               ) : (
                 <>
-                  <Upload className="w-4 h-4" />
+                  <Upload className='h-4 w-4' />
                   Publish
                 </>
               )}
@@ -533,39 +533,39 @@ export function VideoPreviewTab({
 
         {/* VIDEO DETAILS */}
         {generatedVideos.length > 0 && (
-          <div className="mt-4 p-4 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-1">
+          <div className='mt-4 rounded-xl border border-neutral-200 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-800'>
+            <div className='flex items-start justify-between gap-4'>
+              <div className='min-w-0 flex-1'>
+                <p className='mb-1 text-xs font-medium tracking-wider text-neutral-500 uppercase dark:text-neutral-400'>
                   Prompt
                 </p>
-                <p className="text-sm text-neutral-900 dark:text-white line-clamp-2">
+                <p className='line-clamp-2 text-sm text-neutral-900 dark:text-white'>
                   {generatedVideos[selectedVideoIndex]?.prompt || "No prompt"}
                 </p>
               </div>
             </div>
-            <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700 flex flex-wrap gap-3">
-              <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
-                <Monitor className="w-3.5 h-3.5" />
+            <div className='mt-3 flex flex-wrap gap-3 border-t border-neutral-200 pt-3 dark:border-neutral-700'>
+              <div className='flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400'>
+                <Monitor className='h-3.5 w-3.5' />
                 {generatedVideos[selectedVideoIndex]?.resolution}
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
+              <div className='flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400'>
                 <svg
-                  className="w-3.5 h-3.5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
+                  className='h-3.5 w-3.5'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'
                 >
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <rect x='3' y='3' width='18' height='18' rx='2' />
                 </svg>
                 {generatedVideos[selectedVideoIndex]?.aspectRatio}
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
-                <Clock className="w-3.5 h-3.5" />
+              <div className='flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400'>
+                <Clock className='h-3.5 w-3.5' />
                 {generatedVideos[selectedVideoIndex]?.createdAt
                   ? new Date(
-                      generatedVideos[selectedVideoIndex].createdAt,
+                      generatedVideos[selectedVideoIndex].createdAt
                     ).toLocaleTimeString()
                   : "Just now"}
               </div>

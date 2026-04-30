@@ -1,13 +1,12 @@
 "use client";
 
 // import type { Metadata } from "next";
+import { LandingPage } from "@/components/landing/landing-page";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 // Onboarding removed: no onboarding redirect util needed
 import Loading from "@/utils/Loading";
-import { LandingPage } from "@/components/landing/landing-page";
-
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 function Page() {
   const { user, loading } = useUserContext();
@@ -22,7 +21,7 @@ function Page() {
       // If no user, show landing page (no redirect needed)
       if (!user) {
         setIsCheckingOnboarding(false);
-       
+
         return;
       }
 
@@ -37,7 +36,7 @@ function Page() {
   // Show loading while checking authentication and onboarding status
   if (loading || isCheckingOnboarding) {
     return (
-      <div className="flex items-center justify-center h-screen bg-white dark:bg-black w-full">
+      <div className='flex h-screen w-full items-center justify-center bg-white dark:bg-black'>
         <Loading />
       </div>
     );
@@ -50,7 +49,7 @@ function Page() {
 
   // This should not be reached as authenticated users get redirected
   return (
-    <div className="flex items-center justify-center h-screen bg-white dark:bg-black">
+    <div className='flex h-screen items-center justify-center bg-white dark:bg-black'>
       <Loading />
     </div>
   );

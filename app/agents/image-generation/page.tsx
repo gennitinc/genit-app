@@ -1,39 +1,5 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { AspectRatio, Resolution } from "@/types/inspire";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { apiResponse } from "@/utils/apiResponse";
-import { PremiumInput } from "@/components/ui/premium-input";
-
-
-import {
-  Loader2,
-  Image as ImageIcon,
-  Wand2,
-  History,
-  Users,
-  ViewIcon,
-  BookOpen,
-  LayoutDashboard,
-  Trash,
-  Plus,
-  Minus,
-} from "lucide-react";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import withAuth from "@/helper/hoc/withAuth";
-import { AppSidebar } from "@/components/layout/app-sidebar";
-import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { IconTemplate } from "@tabler/icons-react";
 import {
   ImageCommunityTab,
   ImagePreviewTab,
@@ -42,18 +8,50 @@ import {
 } from "@/components/inspire";
 import { ImageHistoryTab } from "@/components/inspire/image-history-tab";
 import { ModelSelector } from "@/components/inspire/model-selector";
-import { Model } from "@/types/inspire";
-import { imageGenApi } from "@/utils/inspire-api";
-import { Toaster } from "@/components/ui/sonner";
 import LandingPageBanner from "@/components/landing/landing-banner";
-import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
+import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { GridPattern } from "@/components/ui/grid-pattern";
-import { trackFeatureUsed, trackEvent } from "@/lib/mixpanelClient";
+import { PremiumInput } from "@/components/ui/premium-input";
+import { Toaster } from "@/components/ui/sonner";
 import {
   ASPECT_RATIOS,
   AspectRatioCard,
 } from "@/components/video/resolution-selector";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import withAuth from "@/helper/hoc/withAuth";
+import { trackEvent, trackFeatureUsed } from "@/lib/mixpanelClient";
+import { cn } from "@/lib/utils";
+import { AspectRatio, Resolution } from "@/types/inspire";
+import { Model } from "@/types/inspire";
+import { apiResponse } from "@/utils/apiResponse";
+import { imageGenApi } from "@/utils/inspire-api";
+import { IconTemplate } from "@tabler/icons-react";
+import {
+  BookOpen,
+  History,
+  Image as ImageIcon,
+  LayoutDashboard,
+  Loader2,
+  Minus,
+  Plus,
+  Trash,
+  Users,
+  ViewIcon,
+  Wand2,
+} from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type ImageStyle =
   | "realistic"
@@ -62,8 +60,6 @@ export type ImageStyle =
   | "oilPainting"
   | "watercolor"
   | "threeDRrender";
-
-const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
 function ImageGenerationPage() {
   const router = useRouter();
   const { user } = useUserContext();
@@ -105,7 +101,7 @@ function ImageGenerationPage() {
     useState<ImageStyle>("realistic");
   const [imageCount, setImageCount] = useState(1);
   const [selectedImageModel, setSelectedImageModel] = useState<Model | null>(
-    null,
+    null
   );
 
   const [prompt, setPrompt] = useState("");
@@ -120,7 +116,7 @@ function ImageGenerationPage() {
   const updateContentTab = useCallback(
     (tab: "preview" | "history" | "community" | "templates" | "tutorial") => {
       setActiveContentTab(tab);
-      trackFeatureUsed(MIXPANEL_TOKEN, "image_gen_tab_switched", { tab });
+      trackFeatureUsed("image_gen_tab_switched", { tab });
       const urlParams = new URLSearchParams(searchParams.toString());
       urlParams.set("tab", tab);
       if (projectId) urlParams.set("projectId", projectId);
@@ -128,7 +124,7 @@ function ImageGenerationPage() {
         scroll: false,
       });
     },
-    [searchParams, router, projectId],
+    [searchParams, router, projectId]
   );
 
   // Fetch project data if projectId is provided
@@ -215,7 +211,7 @@ function ImageGenerationPage() {
       if (imageData.style) setSelectedImageStyle(imageData.style as ImageStyle);
       updateContentTab("preview");
     },
-    [updateContentTab],
+    [updateContentTab]
   );
 
   const handleGenerate = async () => {
@@ -231,7 +227,7 @@ function ImageGenerationPage() {
 
     setIsGenerating(true);
     updateContentTab("preview");
-    trackEvent(MIXPANEL_TOKEN, "image_generation_started", {
+    trackEvent("image_generation_started", {
       model_id: selectedImageModel?._id,
       style: selectedImageStyle,
       image_count: imageCount,
@@ -252,7 +248,7 @@ function ImageGenerationPage() {
           style: selectedImageStyle,
           imageCount: imageCount,
         },
-        files.length > 0 ? files : undefined,
+        files.length > 0 ? files : undefined
       );
 
       if (response.success && response.data.images) {
@@ -275,7 +271,7 @@ function ImageGenerationPage() {
         setGeneratedImages((prev) => [...newImages, ...prev]);
         setSelectedImageIndex(0);
         toast(`Successfully generated ${newImages.length} image(s)`);
-        trackEvent(MIXPANEL_TOKEN, "image_generation_succeeded", {
+        trackEvent("image_generation_succeeded", {
           generated_count: newImages.length,
           model_id: selectedImageModel?._id,
         });
@@ -284,7 +280,7 @@ function ImageGenerationPage() {
       }
     } catch (error: any) {
       console.error("Generation error:", error);
-      trackEvent(MIXPANEL_TOKEN,  "image_generation_failed", {
+      trackEvent("image_generation_failed", {
         reason: error?.message || "unknown",
         model_id: selectedImageModel?._id,
       });
@@ -308,12 +304,12 @@ function ImageGenerationPage() {
   };
 
   return (
-    <div className="flex relative w-full h-[100dvh] overflow-hidden bg-white dark:bg-black">
+    <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>
       <Toaster />
       <AppSidebar />
       <div
         // ref={scrollContainerRef}
-        className="flex-1 flex flex-col overflow-auto will-change-scroll scroll-container"
+        className='scroll-container flex flex-1 flex-col overflow-auto will-change-scroll'
       >
         <TopNavWithAurora
         // scrollContainerRef={
@@ -321,18 +317,18 @@ function ImageGenerationPage() {
         // }
         />
         <div
-          id="main-content"
-          className="flex-1 mt-10 lg:mt-0"
+          id='main-content'
+          className='mt-10 flex-1 lg:mt-0'
           // style={{
           //   transform: "translateZ(0)",
           //   willChange: "transform",
           // }}
         >
-          <div className="flex flex-col md:h-[calc(100vh-4rem)] min-h-0 overflow-hidden px-2 md:px-6 lg:px-5">
-            <div className="flex flex-row items-center gap-2 justify-between px-2 py-2 shrink-0">
-              <h1 className="font-bold tracking-tight md:text-2xl lg:text-5xl lg:hidden">
+          <div className='flex min-h-0 flex-col overflow-hidden px-2 md:h-[calc(100vh-4rem)] md:px-6 lg:px-5'>
+            <div className='flex shrink-0 flex-row items-center justify-between gap-2 px-2 py-2'>
+              <h1 className='font-bold tracking-tight md:text-2xl lg:hidden lg:text-5xl'>
                 AI Image{" "}
-                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
                   Gen
                 </span>
               </h1>
@@ -341,17 +337,17 @@ function ImageGenerationPage() {
                 onOpenChange={setIsResultsDrawerOpen}
               >
                 <DrawerTrigger asChild>
-                  <button className="w-fit h-fit py-1 px-2 md:hidden bg-neutral-100 dark:bg-neutral-800 rounded-sm text-sm font-semibold flex items-center justify-center gap-2 border border-neutral-200 dark:border-neutral-700">
+                  <button className='flex h-fit w-fit items-center justify-center gap-2 rounded-sm border border-neutral-200 bg-neutral-100 px-2 py-1 text-sm font-semibold md:hidden dark:border-neutral-700 dark:bg-neutral-800'>
                     <LayoutDashboard size={16} />
                     <span>view</span>
                   </button>
                 </DrawerTrigger>
-                <DrawerContent className="h-[85vh] px-2">
-                  <DrawerHeader className="px-0">
+                <DrawerContent className='h-[85vh] px-2'>
+                  <DrawerHeader className='px-0'>
                     <DrawerTitle>Explore & Results</DrawerTitle>
                   </DrawerHeader>
-                  <div className="flex flex-col flex-1 min-h-0 overflow-hidden pb-6">
-                    <div className="flex overflow-x-auto hide-scrollbar gap-2 mb-4 shrink-0">
+                  <div className='flex min-h-0 flex-1 flex-col overflow-hidden pb-6'>
+                    <div className='hide-scrollbar mb-4 flex shrink-0 gap-2 overflow-x-auto'>
                       {[
                         { id: "preview", icon: ViewIcon, label: "Preview" },
                         { id: "history", icon: History, label: "History" },
@@ -367,10 +363,10 @@ function ImageGenerationPage() {
                           key={t.id}
                           onClick={() => updateContentTab(t.id as any)}
                           className={cn(
-                            "flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-full whitespace-nowrap transition-colors border",
+                            "flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium whitespace-nowrap transition-colors",
                             activeContentTab === t.id
                               ? "bg-primary text-primary-foreground border-primary"
-                              : "bg-neutral-50 dark:bg-neutral-900 text-neutral-500 border-neutral-200 dark:border-neutral-800",
+                              : "border-neutral-200 bg-neutral-50 text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900"
                           )}
                         >
                           <t.icon size={14} />
@@ -378,7 +374,7 @@ function ImageGenerationPage() {
                         </button>
                       ))}
                     </div>
-                    <div className="flex-1 overflow-y-auto">
+                    <div className='flex-1 overflow-y-auto'>
                       {activeContentTab === "preview" && (
                         <ImagePreviewTab
                           generatedImages={generatedImages}
@@ -420,59 +416,59 @@ function ImageGenerationPage() {
                         />
                       )}
                       {activeContentTab === "tutorial" && (
-                        <TutorialTab type="image" />
+                        <TutorialTab type='image' />
                       )}
                     </div>
                   </div>
                 </DrawerContent>
               </Drawer>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-[27rem_1fr] gap-6 relative w-full flex-1 min-h-0">
-              <div className="flex flex-col h-full min-h-0 pt-4 overflow-hidden bg-white dark:bg-black/20 rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-sm">
-                <div className="px-4 pb-4 shrink-0 overflow-y-auto hide-scrollbar space-y-4 flex-1">
+            <div className='relative grid min-h-0 w-full flex-1 grid-cols-1 gap-6 md:grid-cols-[27rem_1fr]'>
+              <div className='flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-neutral-100 bg-white pt-4 shadow-sm dark:border-neutral-800 dark:bg-black/20'>
+                <div className='hide-scrollbar flex-1 shrink-0 space-y-4 overflow-y-auto px-4 pb-4'>
                   <ModelSelector
-                    type="image"
+                    type='image'
                     selectedModel={selectedImageModel}
                     onSelectModel={(model) => {
                       setSelectedImageModel(model);
-                      trackFeatureUsed(MIXPANEL_TOKEN, "image_model_selected", {
+                      trackFeatureUsed("image_model_selected", {
                         model_id: model?._id,
                         model_name: model?.name,
                       });
                     }}
                   />
 
-                  <div className="space-y-2">
+                  <div className='space-y-2'>
                     <PremiumInput
                       value={prompt}
                       onChange={setPrompt}
                       onSubmit={handleGenerate}
                       isGenerating={isGenerating}
-                      placeholder="Describe your image..."
-                      minHeight="50px"
+                      placeholder='Describe your image...'
+                      minHeight='50px'
                     />
                   </div>
 
                   {/* Reference Images Section */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium">
+                  <div className='space-y-2'>
+                    <div className='flex items-center justify-between'>
+                      <label className='text-sm font-medium'>
                         Reference Images (Optional)
                       </label>
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className='flex flex-wrap gap-2'>
                       {promptImagePreviews.map((preview, index) => (
                         <div
                           key={index}
-                          className="relative w-16 h-16 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700"
+                          className='relative h-16 w-16 overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700'
                         >
                           <img
                             src={preview}
                             alt={`Reference ${index + 1}`}
-                            className="w-full h-full object-cover"
+                            className='h-full w-full object-cover'
                           />
                           <button
-                            type="button"
+                            type='button'
                             onClick={() => {
                               const newFiles = [...promptImages];
                               const newPreviews = [...promptImagePreviews];
@@ -481,18 +477,18 @@ function ImageGenerationPage() {
                               setPromptImages(newFiles);
                               setPromptImagePreviews(newPreviews);
                             }}
-                            className="absolute top-0.5 right-0.5 bg-black/50 text-white rounded-full p-0.5"
+                            className='absolute top-0.5 right-0.5 rounded-full bg-black/50 p-0.5 text-white'
                           >
                             <Trash size={10} />
                           </button>
                         </div>
                       ))}
                       {promptImagePreviews.length < 5 && (
-                        <label className="w-16 h-16 border border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg flex items-center justify-center cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
+                        <label className='flex h-16 w-16 cursor-pointer items-center justify-center rounded-lg border border-dashed border-neutral-300 transition-colors hover:bg-neutral-50 dark:border-neutral-600 dark:hover:bg-neutral-900'>
                           <input
-                            type="file"
-                            accept="image/*"
-                            className="sr-only"
+                            type='file'
+                            accept='image/*'
+                            className='sr-only'
                             onChange={(e) => {
                               const file = e.target.files?.[0];
                               if (file) {
@@ -504,17 +500,17 @@ function ImageGenerationPage() {
                               }
                             }}
                           />
-                          <ImageIcon className="w-4 h-4 text-neutral-400" />
+                          <ImageIcon className='h-4 w-4 text-neutral-400' />
                         </label>
                       )}
                     </div>
                   </div>
 
-                  <div className="space-y-2 ">
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium">Style</label>
+                  <div className='space-y-2'>
+                    <div className='flex items-center justify-between'>
+                      <label className='text-sm font-medium'>Style</label>
                     </div>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className='grid grid-cols-3 gap-2'>
                       {[
                         {
                           value: "realistic",
@@ -555,22 +551,22 @@ function ImageGenerationPage() {
                       ].map((style) => (
                         <button
                           key={style.value}
-                          type="button"
+                          type='button'
                           onClick={() =>
                             setSelectedImageStyle(style.value as ImageStyle)
                           }
                           className={cn(
-                            "relative rounded-xl overflow-hidden transition-all group",
+                            "group relative overflow-hidden rounded-xl transition-all",
                             selectedImageStyle === style.value
-                              ? "ring-2 ring-cyan-500 ring-offset-2 ring-offset-background"
-                              : "hover:ring-2 hover:ring-neutral-300 dark:hover:ring-neutral-600",
+                              ? "ring-offset-background ring-2 ring-cyan-500 ring-offset-2"
+                              : "hover:ring-2 hover:ring-neutral-300 dark:hover:ring-neutral-600"
                           )}
                         >
-                          <div className="aspect-square relative">
+                          <div className='relative aspect-square'>
                             <img
                               src={style.image}
                               alt={style.label}
-                              className="w-full h-full object-cover"
+                              className='h-full w-full object-cover'
                             />
                             {/* Overlay */}
                             <div
@@ -578,25 +574,25 @@ function ImageGenerationPage() {
                                 "absolute inset-0 transition-all",
                                 selectedImageStyle === style.value
                                   ? "bg-cyan-500/20"
-                                  : "bg-black/40 group-hover:bg-black/30",
+                                  : "bg-black/40 group-hover:bg-black/30"
                               )}
                             />
                             {/* Checkmark for selected */}
                             {selectedImageStyle === style.value && (
-                              <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-neutral-500 flex items-center justify-center">
+                              <div className='absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-neutral-500'>
                                 <svg
-                                  width="12"
-                                  height="12"
-                                  viewBox="0 0 12 12"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
+                                  width='12'
+                                  height='12'
+                                  viewBox='0 0 12 12'
+                                  fill='none'
+                                  xmlns='http://www.w3.org/2000/svg'
                                 >
                                   <path
-                                    d="M10 3L4.5 8.5L2 6"
-                                    stroke="white"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
+                                    d='M10 3L4.5 8.5L2 6'
+                                    stroke='white'
+                                    strokeWidth='2'
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
                                   />
                                 </svg>
                               </div>
@@ -605,51 +601,51 @@ function ImageGenerationPage() {
                           {/* Label */}
                           <div
                             className={cn(
-                              "absolute bottom-0 left-0 right-0 p-2 text-center",
+                              "absolute right-0 bottom-0 left-0 p-2 text-center",
                               selectedImageStyle === style.value
                                 ? "bg-black/60"
-                                : "bg-black/60",
+                                : "bg-black/60"
                             )}
                           >
-                            <span className="text-xs font-medium text-white">
+                            <span className='text-xs font-medium text-white'>
                               {style.label}
                             </span>
                           </div>
                         </button>
                       ))}
                     </div>
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium mt-4">
+                    <div className='flex items-center justify-between'>
+                      <label className='mt-4 text-sm font-medium'>
                         No of Images
                       </label>
                     </div>
-                    <div className="flex items-center gap-1.5 pt-2 border-t w-[40%]">
+                    <div className='flex w-[40%] items-center gap-1.5 border-t pt-2'>
                       <button
                         onClick={() =>
                           setImageCount(Math.max(1, imageCount - 1))
                         }
-                        className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0"
+                        className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                       >
-                        <Minus className="size-2.5" />
+                        <Minus className='size-2.5' />
                       </button>
 
                       <div
-                        className="relative flex-1 h-[18px] rounded-md bg-neutral-100 dark:bg-neutral-800 overflow-hidden cursor-pointer"
+                        className='relative h-[18px] flex-1 cursor-pointer overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-800'
                         onClick={(e) => {
                           const rect = e.currentTarget.getBoundingClientRect();
                           const raw = Math.round(
-                            ((e.clientX - rect.left) / rect.width) * 3 + 1,
+                            ((e.clientX - rect.left) / rect.width) * 3 + 1
                           );
                           setImageCount(Math.max(1, Math.min(4, raw)));
                         }}
                       >
                         <div
-                          className="absolute left-0 top-0 h-full rounded-l-md bg-neutral-300 dark:bg-neutral-700 transition-[width] duration-100"
+                          className='absolute top-0 left-0 h-full rounded-l-md bg-neutral-300 transition-[width] duration-100 dark:bg-neutral-700'
                           style={{ width: `${((imageCount - 1) / 3) * 100}%` }}
                         />
 
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-[10px] font-medium tabular-nums text-neutral-700 dark:text-neutral-200">
+                        <div className='absolute inset-0 flex items-center justify-center'>
+                          <span className='text-[10px] font-medium text-neutral-700 tabular-nums dark:text-neutral-200'>
                             {imageCount}
                           </span>
                         </div>
@@ -659,19 +655,19 @@ function ImageGenerationPage() {
                         onClick={() =>
                           setImageCount(Math.min(4, imageCount + 1))
                         }
-                        className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0"
+                        className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                       >
-                        <Plus className="size-2.5" />
+                        <Plus className='size-2.5' />
                       </button>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium mt-4">
+                  <div className='flex items-center justify-between'>
+                    <label className='mt-4 text-sm font-medium'>
                       Aspect Ratio
                     </label>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className='grid grid-cols-2 gap-2'>
                     {ASPECT_RATIOS.map((ratio) => (
                       <AspectRatioCard
                         key={ratio.value}
@@ -685,14 +681,14 @@ function ImageGenerationPage() {
                   </div>
                 </div>
 
-                <div className="px-4 py-3 border-t bg-white dark:bg-black z-10 space-y-3">
+                <div className='z-10 space-y-3 border-t bg-white px-4 py-3 dark:bg-black'>
                   <button
                     onClick={handleGenerate}
                     disabled={isGenerating}
-                    className="w-full h-11 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-transform"
+                    className='flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-transform active:scale-95'
                   >
                     {isGenerating ? (
-                      <Loader2 className="animate-spin" size={16} />
+                      <Loader2 className='animate-spin' size={16} />
                     ) : (
                       <Wand2 size={16} />
                     )}
@@ -703,8 +699,8 @@ function ImageGenerationPage() {
                 </div>
               </div>
 
-              <div className="hidden md:flex flex-col flex-1 min-h-0 relative gap-2.5 pb-3 overflow-hidden">
-                <div className="flex justify-end gap-2 p-1 bg-neutral-100 dark:bg-neutral-900 rounded-xl self-end shrink-0">
+              <div className='relative hidden min-h-0 flex-1 flex-col gap-2.5 overflow-hidden pb-3 md:flex'>
+                <div className='flex shrink-0 justify-end gap-2 self-end rounded-xl bg-neutral-100 p-1 dark:bg-neutral-900'>
                   {[
                     { id: "preview", icon: ViewIcon, label: "Preview" },
                     { id: "history", icon: History, label: "History" },
@@ -716,10 +712,10 @@ function ImageGenerationPage() {
                       key={t.id}
                       onClick={() => updateContentTab(t.id as any)}
                       className={cn(
-                        "flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors",
+                        "flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
                         activeContentTab === t.id
-                          ? "bg-white dark:bg-neutral-800 shadow-sm"
-                          : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300",
+                          ? "bg-white shadow-sm dark:bg-neutral-800"
+                          : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
                       )}
                     >
                       <t.icon size={14} />
@@ -728,7 +724,7 @@ function ImageGenerationPage() {
                   ))}
                 </div>
 
-                <div className="flex-1 overflow-y-auto pr-1">
+                <div className='flex-1 overflow-y-auto pr-1'>
                   {activeContentTab === "preview" && (
                     <ImagePreviewTab
                       generatedImages={generatedImages}
@@ -756,7 +752,7 @@ function ImageGenerationPage() {
                     />
                   )}
                   {activeContentTab === "tutorial" && (
-                    <TutorialTab type="image" />
+                    <TutorialTab type='image' />
                   )}
                 </div>
               </div>
@@ -772,14 +768,14 @@ const XIcon = ({ size }: { size: number }) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    viewBox='0 0 24 24'
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='2'
+    strokeLinecap='round'
+    strokeLinejoin='round'
   >
-    <path d="M18 6 6 18M6 6l12 12" />
+    <path d='M18 6 6 18M6 6l12 12' />
   </svg>
 );
 

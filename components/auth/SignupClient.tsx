@@ -1,6 +1,6 @@
 "use client";
-import withAuth from "@/helper/hoc/withAuth";
 import { SignupComp } from "@/components/auth/Signup";
+import withAuth from "@/helper/hoc/withAuth";
 
 const SignupClient = () => {
   return <SignupComp />;

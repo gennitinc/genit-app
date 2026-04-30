@@ -1,20 +1,19 @@
 "use client";
 
-import type React from "react";
-
-import { useRef, useCallback } from "react";
+import { FilePreviewTooltip } from "@/components/chat/messages";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
-  Paperclip,
-  X,
+  File,
   FileText,
   ImageIcon,
-  File,
-  Video,
   Music,
+  Paperclip,
+  Video,
+  X,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { FilePreviewTooltip } from "@/components/chat/messages";
+import type React from "react";
+import { useCallback, useRef } from "react";
 
 interface FileUploadProps {
   files: File[];
@@ -47,20 +46,20 @@ export function FileUpload({
 
   const getFileIcon = (file: File) => {
     if (file.type.startsWith("image/"))
-      return <ImageIcon className="w-4 h-4 text-blue-500" />;
+      return <ImageIcon className='h-4 w-4 text-blue-500' />;
     if (file.type.startsWith("video/"))
-      return <Video className="w-4 h-4 text-purple-500" />;
+      return <Video className='h-4 w-4 text-purple-500' />;
     if (file.type.startsWith("audio/"))
-      return <Music className="w-4 h-4 text-green-500" />;
+      return <Music className='h-4 w-4 text-green-500' />;
     if (
       file.type.startsWith("text/") ||
       file.name.endsWith(".md") ||
       file.name.endsWith(".txt")
     )
-      return <FileText className="w-4 h-4 text-gray-500" />;
+      return <FileText className='h-4 w-4 text-gray-500' />;
     if (file.type === "application/pdf")
-      return <FileText className="w-4 h-4 text-red-500" />;
-    return <File className="w-4 h-4 text-gray-400" />;
+      return <FileText className='h-4 w-4 text-red-500' />;
+    return <File className='h-4 w-4 text-gray-400' />;
   };
 
   const getFileTypeLabel = (file: File) => {
@@ -141,19 +140,19 @@ export function FileUpload({
   return (
     <div className={cn("space-y-3", className)}>
       {/* File Upload Button */}
-      <div className="flex items-center gap-2">
+      <div className='flex items-center gap-2'>
         <Button
-          type="button"
-          variant="outline"
-          size="sm"
+          type='button'
+          variant='outline'
+          size='sm'
           onClick={() => fileInputRef.current?.click()}
           disabled={files.length >= maxFiles}
-          className="flex items-center gap-2"
+          className='flex items-center gap-2'
         >
-          <Paperclip className="w-4 h-4" />
+          <Paperclip className='h-4 w-4' />
           Attach Files
         </Button>
-        <span className="text-xs text-gray-500">
+        <span className='text-xs text-gray-500'>
           {files.length}/{maxFiles} files • Max {maxSizeInMB}MB each
         </span>
       </div>
@@ -161,11 +160,11 @@ export function FileUpload({
       {/* Hidden File Input */}
       <input
         ref={fileInputRef}
-        type="file"
+        type='file'
         multiple
         accept={acceptedTypes.join(",")}
         onChange={handleFileSelect}
-        className="hidden"
+        className='hidden'
       />
 
       {/* Drag & Drop Zone */}
@@ -173,12 +172,12 @@ export function FileUpload({
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
-          className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center text-sm text-gray-500 hover:border-gray-400 transition-colors cursor-pointer"
+          className='cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-6 text-center text-sm text-gray-500 transition-colors hover:border-gray-400'
           onClick={() => fileInputRef.current?.click()}
         >
-          <Paperclip className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-          <p className="font-medium">Drop files here or click to browse</p>
-          <p className="text-xs mt-1">
+          <Paperclip className='mx-auto mb-2 h-8 w-8 text-gray-400' />
+          <p className='font-medium'>Drop files here or click to browse</p>
+          <p className='mt-1 text-xs'>
             Supports images, documents, videos, and audio files
           </p>
         </div>
@@ -186,40 +185,40 @@ export function FileUpload({
 
       {/* File List with Previews */}
       {files.length > 0 && (
-        <div className="space-y-2">
-          <h4 className="text-sm font-medium text-gray-700">
+        <div className='space-y-2'>
+          <h4 className='text-sm font-medium text-gray-700'>
             Attached Files ({files.length})
           </h4>
-          <div className="grid gap-2 max-h-48 overflow-y-auto scrollbar-hover">
+          <div className='scrollbar-hover grid max-h-48 gap-2 overflow-y-auto'>
             {files.map((file, index) => (
               <FilePreviewTooltip key={`${file.name}-${index}`} file={file}>
-                <div className="flex items-center gap-3 p-3 bg-muted-foreground rounded-lg border hover:bg-gray-100 transition-colors cursor-pointer group">
-                  <div className="flex-shrink-0">{getFileIcon(file)}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium text-gray-900 truncate">
+                <div className='bg-muted-foreground group flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-gray-100'>
+                  <div className='flex-shrink-0'>{getFileIcon(file)}</div>
+                  <div className='min-w-0 flex-1'>
+                    <div className='flex items-center gap-2'>
+                      <p className='truncate text-sm font-medium text-gray-900'>
                         {file.name}
                       </p>
-                      <span className="text-xs px-2 py-0.5 bg-background rounded-full text-muted-foreground border">
+                      <span className='bg-background text-muted-foreground rounded-full border px-2 py-0.5 text-xs'>
                         {getFileTypeLabel(file)}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className='mt-0.5 text-xs text-gray-500'>
                       {formatFileSize(file.size)} • Last modified{" "}
                       {new Date(file.lastModified).toLocaleDateString()}
                     </p>
                   </div>
                   <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
+                    type='button'
+                    variant='ghost'
+                    size='sm'
                     onClick={(e) => {
                       e.stopPropagation();
                       onFileRemove(index);
                     }}
-                    className="flex-shrink-0 p-1 h-auto text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className='h-auto flex-shrink-0 p-1 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100 hover:text-red-500'
                   >
-                    <X className="w-4 h-4" />
+                    <X className='h-4 w-4' />
                   </Button>
                 </div>
               </FilePreviewTooltip>

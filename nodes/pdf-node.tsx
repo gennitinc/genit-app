@@ -1,9 +1,19 @@
 "use client";
 
-import { Handle, Position, NodeResizer, type NodeProps } from "reactflow";
-import { FileText, Download, X, Sparkles, Loader2, MessageSquare, ListCheck, Search, Edit3 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Download,
+  Edit3,
+  FileText,
+  ListCheck,
+  Loader2,
+  MessageSquare,
+  Search,
+  Sparkles,
+  X,
+} from "lucide-react";
+import { Handle, type NodeProps, NodeResizer, Position } from "reactflow";
 import { useState } from "react";
 
 interface PDFNodeData {
@@ -40,51 +50,55 @@ export function PDFNode({ data, selected }: NodeProps<PDFNodeData>) {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   return (
-    <div className="relative rounded-[1.5rem]">
+    <div className='relative rounded-[1.5rem]'>
       <NodeResizer
-        color="#ef4444"
+        color='#ef4444'
         isVisible={selected}
         minWidth={320}
         minHeight={120}
-        handleClassName="w-2 h-2 bg-red-500 border border-white rounded"
+        handleClassName='w-2 h-2 bg-red-500 border border-white rounded'
       />
       <div
-        className={`relative bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-4 w-80 min-w-[320px] min-h-[120px] ${selected ? "ring-2 ring-primary" : ""}`}
+        className={`bg-card border-border relative min-h-[120px] w-80 min-w-[320px] rounded-lg border p-4 shadow-sm transition-all duration-200 hover:shadow-md ${selected ? "ring-primary ring-2" : ""}`}
       >
-        <Handle type="target" position={Position.Left} className="w-3 h-3 bg-blue-500 border-2 border-white" />
+        <Handle
+          type='target'
+          position={Position.Left}
+          className='h-3 w-3 border-2 border-white bg-blue-500'
+        />
 
         {/* Remove Button */}
         {onRemoveNode && nodeId && (
           <button
             onClick={() => onRemoveNode(nodeId)}
-            className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-lg z-10"
-            title="Remove node"
+            className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
+            title='Remove node'
           >
-            <X className="w-3 h-3" />
+            <X className='h-3 w-3' />
           </button>
         )}
 
-        <div className="flex items-start space-x-3">
-          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center">
-            <FileText className="w-5 h-5 text-red-600" />
+        <div className='flex items-start space-x-3'>
+          <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-red-500/10'>
+            <FileText className='h-5 w-5 text-red-600' />
           </div>
 
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-2 gap-2">
-              <div className="flex items-center space-x-2 flex-1 min-w-0">
-                <h3 className="font-semibold text-sm truncate">{title}</h3>
+          <div className='min-w-0 flex-1'>
+            <div className='mb-2 flex items-center justify-between gap-2'>
+              <div className='flex min-w-0 flex-1 items-center space-x-2'>
+                <h3 className='truncate text-sm font-semibold'>{title}</h3>
                 <Badge
-                  variant="secondary"
-                  className="text-[10px] h-4 px-1 bg-red-50 text-red-700"
+                  variant='secondary'
+                  className='h-4 bg-red-50 px-1 text-[10px] text-red-700'
                 >
                   PDF
                 </Badge>
               </div>
-              <div className="flex items-center space-x-1">
+              <div className='flex items-center space-x-1'>
                 {!analyzed && onAnalyze && (
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={async (e) => {
                       e.stopPropagation();
                       setIsAnalyzing(true);
@@ -95,76 +109,79 @@ export function PDFNode({ data, selected }: NodeProps<PDFNodeData>) {
                       }
                     }}
                     disabled={isAnalyzing}
-                    className="h-7 px-2 text-[10px] gap-1 borber-primary/20 bg-primary/5 text-primary"
+                    className='borber-primary/20 bg-primary/5 text-primary h-7 gap-1 px-2 text-[10px]'
                   >
                     {isAnalyzing ? (
-                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <Loader2 className='h-3 w-3 animate-spin' />
                     ) : (
-                      <Sparkles className="w-3 h-3" />
+                      <Sparkles className='h-3 w-3' />
                     )}
                     Analyze
                   </Button>
                 )}
                 {analyzed && (
-                  <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 text-[9px] font-medium">
-                    <ListCheck className="w-2.5 h-2.5" />
+                  <div className='flex items-center gap-1 rounded-full border border-green-500/20 bg-green-500/10 px-1.5 py-0.5 text-[9px] font-medium text-green-600'>
+                    <ListCheck className='h-2.5 w-2.5' />
                     Analyzed
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 text-xs text-muted-foreground mb-2">
+            <div className='text-muted-foreground mb-2 flex items-center space-x-3 text-xs'>
               {pages > 0 && <span>{pages} pages</span>}
               {size && <span>{size}</span>}
             </div>
 
-            <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
+            <p className='text-muted-foreground mb-3 line-clamp-2 text-xs'>
               {description}
             </p>
 
             {url && (
               <Button
-                size="sm"
-                variant="outline"
-                className="w-full text-xs h-7 bg-transparent"
+                size='sm'
+                variant='outline'
+                className='h-7 w-full bg-transparent text-xs'
                 onClick={() => window.open(url, "_blank")}
               >
-                <Download className="w-3 h-3 mr-1" />
+                <Download className='mr-1 h-3 w-3' />
                 Download PDF
               </Button>
             )}
 
             {analyzed && analysis && (
-              <div className="mt-4 space-y-3 pt-3 border-t border-border/50">
+              <div className='border-border/50 mt-4 space-y-3 border-t pt-3'>
                 {analysis.summary && (
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
-                      <MessageSquare className="w-3 h-3" />
+                  <div className='space-y-1'>
+                    <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
+                      <MessageSquare className='h-3 w-3' />
                       AI Summary
                     </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed italic bg-muted/30 p-2 rounded-lg border border-border/30">
+                    <p className='text-muted-foreground bg-muted/30 border-border/30 rounded-lg border p-2 text-xs leading-relaxed italic'>
                       "{analysis.summary}"
                     </p>
                   </div>
                 )}
-                
+
                 {analysis.description && (
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
-                      <Search className="w-3 h-3" />
+                  <div className='space-y-1'>
+                    <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
+                      <Search className='h-3 w-3' />
                       Key Insights
                     </div>
-                    <p className="text-xs text-muted-foreground line-clamp-4 leading-relaxed bg-black/5 dark:bg-white/5 p-2 rounded-md">
+                    <p className='text-muted-foreground line-clamp-4 rounded-md bg-black/5 p-2 text-xs leading-relaxed dark:bg-white/5'>
                       {analysis.description}
                     </p>
                   </div>
                 )}
 
                 {analysis.tags && analysis.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-1">
+                  <div className='mt-1 flex flex-wrap gap-1'>
                     {analysis.tags.slice(0, 5).map((tag, i) => (
-                      <span key={i} className="px-1.5 py-0.5 rounded bg-muted text-[9px] text-muted-foreground border border-border/50">
+                      <span
+                        key={i}
+                        className='bg-muted text-muted-foreground border-border/50 rounded border px-1.5 py-0.5 text-[9px]'
+                      >
                         #{tag}
                       </span>
                     ))}
@@ -175,7 +192,11 @@ export function PDFNode({ data, selected }: NodeProps<PDFNodeData>) {
           </div>
         </div>
 
-        <Handle type="source" position={Position.Right} className="w-3 h-3 bg-green-500 border-2 border-white" />
+        <Handle
+          type='source'
+          position={Position.Right}
+          className='h-3 w-3 border-2 border-white bg-green-500'
+        />
       </div>
     </div>
   );

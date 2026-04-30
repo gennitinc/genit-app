@@ -1,11 +1,10 @@
 "use client";
 
-import type React from "react";
-
-import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/chat/messages";
-import { AlertCircle, Loader } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useMessageEditor } from "@/hooks/message/use-message-editor";
+import { AlertCircle, Loader } from "lucide-react";
+import type React from "react";
 
 interface MessageEditorProps {
   initialContent: string;
@@ -61,7 +60,7 @@ export function MessageEditor({
   return (
     <div className={`space-y-3 ${className}`}>
       {/* Textarea */}
-      <div className="relative">
+      <div className='relative'>
         <textarea
           ref={textareaRef}
           value={text}
@@ -69,7 +68,7 @@ export function MessageEditor({
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
           placeholder={placeholder}
-          className="w-full min-h-[100px] max-h-[400px] p-3 border border-border rounded-lg resize-none focus:outline-none transition-all duration-200 overflow-y-auto scrollbar-hover"
+          className='border-border scrollbar-hover max-h-[400px] min-h-[100px] w-full resize-none overflow-y-auto rounded-lg border p-3 transition-all duration-200 focus:outline-none'
           disabled={isLoading}
           style={{
             lineHeight: "1.5",
@@ -78,12 +77,12 @@ export function MessageEditor({
         />
 
         {/* Character count */}
-        <div className="absolute bottom-2 right-2 text-xs text-muted-foreground bg-background px-1 rounded">
+        <div className='text-muted-foreground bg-background absolute right-2 bottom-2 rounded px-1 text-xs'>
           {text.length} characters
         </div>
 
         {/* Resize indicator */}
-        <div className="absolute bottom-2 left-2 text-xs text-muted-foreground bg-background px-1 rounded">
+        <div className='text-muted-foreground bg-background absolute bottom-2 left-2 rounded px-1 text-xs'>
           {text.split("\n").length} lines
         </div>
       </div>
@@ -97,68 +96,68 @@ export function MessageEditor({
 
       {/* Error Message */}
       {error && (
-        <div className="flex items-center gap-2 p-3 border border-red-200 rounded-lg text-red-700 bg-background">
-          <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          <span className="text-sm">{error}</span>
+        <div className='bg-background flex items-center gap-2 rounded-lg border border-red-200 p-3 text-red-700'>
+          <AlertCircle className='h-4 w-4 flex-shrink-0' />
+          <span className='text-sm'>{error}</span>
         </div>
       )}
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between">
-        <div className="text-xs text-muted-foreground">
+      <div className='flex items-center justify-between'>
+        <div className='text-muted-foreground text-xs'>
           Press{" "}
-          <kbd className="px-1 py-0.5 bg-muted-foreground/10 rounded text-xs">
+          <kbd className='bg-muted-foreground/10 rounded px-1 py-0.5 text-xs'>
             Esc
           </kbd>{" "}
           to cancel, or{" "}
-          <kbd className="px-1 py-0.5 bg-muted-foreground/10 rounded text-xs">
+          <kbd className='bg-muted-foreground/10 rounded px-1 py-0.5 text-xs'>
             Cmd+Enter
           </kbd>{" "}
           to save
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className='flex items-center gap-2'>
           <Button
-            type="button"
-            variant="ghost"
-            size="sm"
+            type='button'
+            variant='ghost'
+            size='sm'
             onClick={cancelEditing}
             disabled={isLoading}
-            className="relative bg-gradient-to-b from-muted-foreground/10 to-muted-foreground/20 hover:from-muted-foreground/20 hover:to-muted-foreground/30 text-muted-foreground px-4 py-2.5 rounded-lg text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200 border border-border hover:border-border"
+            className='from-muted-foreground/10 to-muted-foreground/20 hover:from-muted-foreground/20 hover:to-muted-foreground/30 text-muted-foreground border-border hover:border-border relative rounded-lg border bg-gradient-to-b px-4 py-2.5 text-sm font-semibold shadow-md transition-all duration-200 hover:shadow-lg'
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-muted-foreground/30 to-transparent rounded-lg pointer-events-none"></div>
-            <div className="relative flex items-center gap-2">
-              <span className="font-medium text-muted-foreground">Cancel</span>
+            <div className='from-muted-foreground/30 pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-b to-transparent'></div>
+            <div className='relative flex items-center gap-2'>
+              <span className='text-muted-foreground font-medium'>Cancel</span>
             </div>
-            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-muted-foreground/40 to-transparent"></div>
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-muted-foreground/60 to-transparent"></div>
+            <div className='via-muted-foreground/40 absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent to-transparent'></div>
+            <div className='via-muted-foreground/60 absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent to-transparent'></div>
           </Button>
 
           <Button
-            type="button"
-            size="sm"
+            type='button'
+            size='sm'
             onClick={saveChanges}
             disabled={isLoading || !text.trim()}
-            className="relative bg-gradient-to-b from-muted-foreground/10 to-muted-foreground/20 hover:from-muted-foreground/20 hover:to-muted-foreground/30 text-muted-foreground px-5 py-2.5 rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200 border border-border hover:border-border"
+            className='from-muted-foreground/10 to-muted-foreground/20 hover:from-muted-foreground/20 hover:to-muted-foreground/30 text-muted-foreground border-border hover:border-border relative rounded-lg border bg-gradient-to-b px-5 py-2.5 text-sm font-semibold shadow-lg transition-all duration-200 hover:shadow-xl'
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-muted-foreground/10 to-transparent rounded-lg pointer-events-none"></div>
-            <div className="relative flex items-center gap-2">
+            <div className='from-muted-foreground/10 pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-b to-transparent'></div>
+            <div className='relative flex items-center gap-2'>
               {isLoading ? (
                 <>
-                  <Loader className="w-4 h-4 animate-spin" />
-                  <span className="font-medium">Saving...</span>
+                  <Loader className='h-4 w-4 animate-spin' />
+                  <span className='font-medium'>Saving...</span>
                 </>
               ) : (
-                <span className="font-medium">Save</span>
+                <span className='font-medium'>Save</span>
               )}
             </div>
-            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-muted-foreground/20 to-transparent"></div>
+            <div className='via-muted-foreground/20 absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent to-transparent'></div>
           </Button>
         </div>
       </div>
 
       {/* Helper text for expandable textarea */}
-      <div className="text-xs text-muted-foreground bg-background rounded p-2">
+      <div className='text-muted-foreground bg-background rounded p-2 text-xs'>
         💡 <strong>Smart Editor:</strong> Textarea auto-expands as you type •
         Markdown formatting is converted to plain text for editing
       </div>

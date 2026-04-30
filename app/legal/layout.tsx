@@ -11,7 +11,5 @@ export default function LegalLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="">{children}</div>
-  );
+  return <div className=''>{children}</div>;
 }

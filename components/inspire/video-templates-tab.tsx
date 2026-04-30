@@ -1,9 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { ChevronRight, Loader2 } from "lucide-react";
-import { IconTemplate } from "@tabler/icons-react";
-import { toast } from "@/hooks/use-toast";
+import { VideoGenerationParamsCallback } from "./video-community-tab";
 import {
   Dialog,
   DialogContent,
@@ -16,8 +13,12 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { videoGenTemplatesApi } from "@/utils/inspire-api";
+import { toast } from "@/hooks/use-toast";
 import { VideoGenTemplate, VideoGenTemplateGroup } from "@/types/inspire";
+import { videoGenTemplatesApi } from "@/utils/inspire-api";
+import { IconTemplate } from "@tabler/icons-react";
+import { ChevronRight, Loader2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
@@ -34,8 +35,6 @@ function useMediaQuery(query: string) {
 
   return matches;
 }
-
-import { VideoGenerationParamsCallback } from "./video-community-tab";
 
 interface VideoTemplatesTabProps {
   onPromptSelect: (prompt: string) => void;
@@ -81,9 +80,9 @@ function TemplateCard({
   return (
     <div
       onClick={onClick}
-      className="group relative flex-shrink-0 w-64 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer"
+      className='group relative w-64 flex-shrink-0 cursor-pointer overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800'
     >
-      <div className="relative aspect-video">
+      <div className='relative aspect-video'>
         {template.videoUrl ? (
           <video
             ref={videoRef}
@@ -92,30 +91,30 @@ function TemplateCard({
             loop
             muted
             playsInline
-            className="w-full h-full object-cover"
+            className='h-full w-full object-cover'
           />
         ) : (
           <img
             src={template.thumbnailUrl}
             alt={template.title}
-            className="w-full h-full object-cover"
+            className='h-full w-full object-cover'
           />
         )}
         {/* Duration Badge */}
         {template.duration && (
-          <div className="absolute top-2 left-2 px-2 py-1 rounded bg-black/70 text-white text-xs font-medium">
+          <div className='absolute top-2 left-2 rounded bg-black/70 px-2 py-1 text-xs font-medium text-white'>
             {template.duration}
           </div>
         )}
         {/* Use Button */}
-        <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button className="px-3 py-1.5 rounded-lg bg-white text-neutral-900 text-sm font-medium hover:bg-neutral-100 transition-colors">
+        <div className='absolute right-2 bottom-2 opacity-0 transition-opacity group-hover:opacity-100'>
+          <button className='rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-100'>
             Use
           </button>
         </div>
       </div>
-      <div className="p-3">
-        <h3 className="text-sm font-medium text-neutral-900 dark:text-white line-clamp-1">
+      <div className='p-3'>
+        <h3 className='line-clamp-1 text-sm font-medium text-neutral-900 dark:text-white'>
           {template.title}
         </h3>
       </div>
@@ -130,7 +129,8 @@ export function VideoTemplatesTab({
 }: VideoTemplatesTabProps) {
   const [categories, setCategories] = useState<VideoGenTemplateGroup[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<VideoGenTemplateGroup | null>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<VideoGenTemplateGroup | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   useEffect(() => {
@@ -160,12 +160,12 @@ export function VideoTemplatesTab({
     try {
       // Track usage
       await videoGenTemplatesApi.trackUsage(template._id);
-      
+
       // Restore all generation parameters from metadata if available
       if (onParamsRestore && template.metadata?.generationParams) {
         const params = template.metadata.generationParams;
         onParamsRestore.setPrompt(params.prompt || template.prompt);
-        
+
         if (params.aspectRatio && onParamsRestore.setAspectRatio) {
           onParamsRestore.setAspectRatio(params.aspectRatio);
         }
@@ -175,13 +175,14 @@ export function VideoTemplatesTab({
         if (params.duration && onParamsRestore.setDuration) {
           onParamsRestore.setDuration(params.duration);
         }
-        
+
         // Switch to preview tab
         onParamsRestore.onTabChange("preview");
-        
+
         toast({
           title: "Template loaded",
-          description: "All generation parameters have been loaded. Click Generate to create your video.",
+          description:
+            "All generation parameters have been loaded. Click Generate to create your video.",
         });
       } else {
         // Fallback to just setting prompt
@@ -203,10 +204,10 @@ export function VideoTemplatesTab({
 
   if (loading) {
     return (
-      <section className="p-4">
-        <div className="flex flex-col items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-6 h-6 text-neutral-400 dark:text-neutral-500 animate-spin mb-3" />
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+      <section className='p-4'>
+        <div className='flex min-h-[60vh] flex-col items-center justify-center'>
+          <Loader2 className='mb-3 h-6 w-6 animate-spin text-neutral-400 dark:text-neutral-500' />
+          <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading templates
           </p>
         </div>
@@ -216,21 +217,21 @@ export function VideoTemplatesTab({
 
   if (categories.length === 0) {
     return (
-      <section className="p-4">
-        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-          <div className="w-16 h-16 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
-            <IconTemplate className="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
+      <section className='p-4'>
+        <div className='flex min-h-[60vh] flex-col items-center justify-center text-center'>
+          <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
+            <IconTemplate className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
           </div>
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+          <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
             No templates available
           </h3>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-sm mb-6">
+          <p className='mb-6 max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
             Templates are being added regularly. Check back soon!
           </p>
           <button
-            type="button"
+            type='button'
             onClick={() => onTabChange("preview")}
-            className="px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-sm font-medium text-white dark:text-neutral-900 transition-colors"
+            className='rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
           >
             Start Creating
           </button>
@@ -241,76 +242,79 @@ export function VideoTemplatesTab({
 
   return (
     <>
-      <section className="p-4 px-0">
-        <div className="space-y-8">
+      <section className='p-4 px-0'>
+        <div className='space-y-8'>
           {categories.map((category) => (
             <div key={category.id}>
               {/* Category Header */}
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
+              <div className='mb-4 flex items-center justify-between'>
+                <h2 className='text-lg font-semibold text-neutral-900 dark:text-white'>
                   {category.title}
                 </h2>
                 {category.templates.length > 4 && (
                   <button
                     onClick={() => setSelectedCategory(category)}
-                    className="flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                    className='flex items-center gap-1 text-sm text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
                   >
                     See all
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight className='h-4 w-4' />
                   </button>
                 )}
               </div>
 
-            {/* Horizontal Scrolling Templates */}
-            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-              {category.templates.map((template) => (
-                <TemplateCard
-                  key={template._id}
-                  template={template}
-                  onClick={() => handleTemplateClick(template)}
-                />
-              ))}
+              {/* Horizontal Scrolling Templates */}
+              <div className='scrollbar-hide flex gap-4 overflow-x-auto pb-2'>
+                {category.templates.map((template) => (
+                  <TemplateCard
+                    key={template._id}
+                    template={template}
+                    onClick={() => handleTemplateClick(template)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      <style jsx global>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
-    </section>
+        <style jsx global>{`
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
+      </section>
 
       {/* Desktop Dialog */}
       {isDesktop ? (
-        <Dialog open={!!selectedCategory} onOpenChange={() => setSelectedCategory(null)}>
-          <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
+        <Dialog
+          open={!!selectedCategory}
+          onOpenChange={() => setSelectedCategory(null)}
+        >
+          <DialogContent className='flex max-h-[80vh] max-w-4xl flex-col overflow-hidden'>
             {selectedCategory && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-xl font-semibold">
+                  <DialogTitle className='text-xl font-semibold'>
                     {selectedCategory.title} Templates
                   </DialogTitle>
                 </DialogHeader>
                 {selectedCategory.templates.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center min-h-[40vh] text-center p-8">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-100 to-blue-100 dark:from-cyan-900/30 dark:to-blue-900/30 flex items-center justify-center mb-4">
-                      <IconTemplate className="w-8 h-8 text-cyan-500 dark:text-cyan-400" />
+                  <div className='flex min-h-[40vh] flex-col items-center justify-center p-8 text-center'>
+                    <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-100 to-blue-100 dark:from-cyan-900/30 dark:to-blue-900/30'>
+                      <IconTemplate className='h-8 w-8 text-cyan-500 dark:text-cyan-400' />
                     </div>
-                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+                    <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
                       No Templates in This Category
                     </h3>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400 max-w-sm">
+                    <p className='max-w-sm text-sm text-neutral-600 dark:text-neutral-400'>
                       This category doesn't have any templates yet.
                     </p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-3 gap-4 overflow-y-auto p-4">
+                  <div className='grid grid-cols-3 gap-4 overflow-y-auto p-4'>
                     {selectedCategory.templates.map((template) => (
                       <TemplateCard
                         key={template._id}
@@ -326,29 +330,32 @@ export function VideoTemplatesTab({
         </Dialog>
       ) : (
         /* Mobile/Tablet Drawer */
-        <Drawer open={!!selectedCategory} onOpenChange={() => setSelectedCategory(null)}>
+        <Drawer
+          open={!!selectedCategory}
+          onOpenChange={() => setSelectedCategory(null)}
+        >
           <DrawerContent>
             {selectedCategory && (
               <>
                 <DrawerHeader>
-                  <DrawerTitle className="text-xl font-semibold">
+                  <DrawerTitle className='text-xl font-semibold'>
                     {selectedCategory.title} Templates
                   </DrawerTitle>
                 </DrawerHeader>
                 {selectedCategory.templates.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center min-h-[40vh] text-center p-8">
-                    <div className="w-16 h-16 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
-                      <IconTemplate className="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
+                  <div className='flex min-h-[40vh] flex-col items-center justify-center p-8 text-center'>
+                    <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
+                      <IconTemplate className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
                     </div>
-                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+                    <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
                       No templates in this category
                     </h3>
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-sm">
+                    <p className='max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
                       This category doesn't have any templates yet.
                     </p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-4 overflow-y-auto p-4 max-h-[60vh]">
+                  <div className='grid max-h-[60vh] grid-cols-2 gap-4 overflow-y-auto p-4'>
                     {selectedCategory.templates.map((template) => (
                       <TemplateCard
                         key={template._id}

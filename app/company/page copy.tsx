@@ -1,46 +1,46 @@
-import Image from "next/image";
+import { HoverVideoPlayer } from "@/components/features/hover-video-player";
+import { LandingFooter } from "@/components/landing/landing-footer";
+import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { Button } from "@/components/ui/button";
 import {
   ArrowUpRight,
-  Users,
+  Award,
   Briefcase,
-  Zap,
-  Trophy,
-  Layers,
-  Target,
+  ChevronRight,
   Clock,
   Globe,
-  Award,
-  ChevronRight,
+  Layers,
   Sparkles,
+  Target,
+  Trophy,
+  Users,
+  Zap,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { LandingNavbar } from "@/components/landing/landing-navbar";
-import { LandingFooter } from "@/components/landing/landing-footer";
-import { HoverVideoPlayer } from "@/components/features/hover-video-player";
+import Image from "next/image";
 
 export default function About2() {
   return (
-    <div className="dark:bg-black bg-white">
+    <div className='bg-white dark:bg-black'>
       <LandingNavbar />
 
       {/* Hero Section with Timeline */}
 
       <>
-        <div className="max-w-3xl px-4 pt-6 lg:pt-10 pb-12 sm:px-6 lg:px-8 mx-auto my-20">
-          <div className="max-w-2xl">
+        <div className='mx-auto my-20 max-w-3xl px-4 pt-6 pb-12 sm:px-6 lg:px-8 lg:pt-10'>
+          <div className='max-w-2xl'>
             {/* Avatar Media */}
 
             {/* End Avatar Media */}
             {/* Content */}
-            <div className="space-y-5 md:space-y-8">
-              <div className="space-y-3">
-                <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
+            <div className='space-y-5 md:space-y-8'>
+              <div className='space-y-3'>
+                <h1 className='text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl'>
                   AI‑Powered{" "}
-                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
                     Design
                   </span>
                 </h1>
-                <p className="text-lg text-gray-800 dark:text-neutral-200">
+                <p className='text-lg text-gray-800 dark:text-neutral-200'>
                   At preline, our mission has always been focused on bringing
                   openness and transparency to the design process. We've always
                   believed that by providing a space where designers can share
@@ -48,21 +48,21 @@ export default function About2() {
                   it also helps them grow.
                 </p>
               </div>
-              <p className="text-lg text-gray-800 dark:text-neutral-200">
+              <p className='text-lg text-gray-800 dark:text-neutral-200'>
                 We're proud to be a part of creating a more open culture and to
                 continue building a product that supports this vision.
               </p>
               <figure>
                 <img
-                  className="w-full object-cover rounded-xl"
-                  src="https://images.unsplash.com/photo-1670272505340-d906d8d77d03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80"
-                  alt="Blog Image"
+                  className='w-full rounded-xl object-cover'
+                  src='https://images.unsplash.com/photo-1670272505340-d906d8d77d03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80'
+                  alt='Blog Image'
                 />
-                <figcaption className="mt-3 text-sm text-center text-gray-500 dark:text-neutral-500">
+                <figcaption className='mt-3 text-center text-sm text-gray-500 dark:text-neutral-500'>
                   A woman sitting at a table.
                 </figcaption>
               </figure>
-              <p className="text-lg text-gray-800 dark:text-neutral-200">
+              <p className='text-lg text-gray-800 dark:text-neutral-200'>
                 As we've grown, we've seen how Preline has helped companies such
                 as Spotify, Microsoft, Airbnb, Facebook, and Intercom bring
                 their designers closer together to create amazing things. We've
@@ -70,42 +70,42 @@ export default function About2() {
                 earlier, the better teams adapt and communicate with one
                 another.
               </p>
-              <p className="text-lg text-gray-800 dark:text-neutral-200">
+              <p className='text-lg text-gray-800 dark:text-neutral-200'>
                 That's why we are excited to share that we now have a{" "}
                 <a
-                  className="text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-                  href="#"
+                  className='font-medium text-blue-600 decoration-2 hover:underline focus:underline focus:outline-hidden dark:text-blue-500'
+                  href='#'
                 >
                   free version of Preline
                 </a>
                 , which will allow individual designers, startups and other
                 small teams a chance to create a culture of openness early on.
               </p>
-              <blockquote className="text-center p-4 sm:px-7">
-                <p className="text-xl font-medium text-gray-800 md:text-2xl md:leading-normal xl:text-2xl xl:leading-normal dark:text-neutral-200">
+              <blockquote className='p-4 text-center sm:px-7'>
+                <p className='text-xl font-medium text-gray-800 md:text-2xl md:leading-normal xl:text-2xl xl:leading-normal dark:text-neutral-200'>
                   To say that switching to Preline has been life-changing is an
                   understatement. My business has tripled and I got my life
                   back.
                 </p>
-                <p className="mt-5 text-gray-800 dark:text-neutral-200">
+                <p className='mt-5 text-gray-800 dark:text-neutral-200'>
                   Nicole Grazioso
                 </p>
               </blockquote>
               <figure>
                 <img
-                  className="w-full object-cover rounded-xl"
-                  src="https://images.unsplash.com/photo-1670272498380-eb330b61f3cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80"
-                  alt="Blog Image"
+                  className='w-full rounded-xl object-cover'
+                  src='https://images.unsplash.com/photo-1670272498380-eb330b61f3cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80'
+                  alt='Blog Image'
                 />
-                <figcaption className="mt-3 text-sm text-center text-gray-500 dark:text-neutral-500">
+                <figcaption className='mt-3 text-center text-sm text-gray-500 dark:text-neutral-500'>
                   A man and a woman looking at a cell phone.
                 </figcaption>
               </figure>
-              <div className="space-y-3">
-                <h3 className="text-2xl font-semibold dark:text-white">
+              <div className='space-y-3'>
+                <h3 className='text-2xl font-semibold dark:text-white'>
                   Bringing the culture of sharing to everyone
                 </h3>
-                <p className="text-lg text-gray-800 dark:text-neutral-200">
+                <p className='text-lg text-gray-800 dark:text-neutral-200'>
                   We know the power of sharing is real, and we want to create an
                   opportunity for everyone to try Preline and explore how
                   transformative open communication can be. Now you can have a
@@ -114,33 +114,33 @@ export default function About2() {
                   design process earlier.
                 </p>
               </div>
-              <ul className="list-disc list-outside space-y-5 ps-5 text-lg text-gray-800 dark:text-neutral-200">
-                <li className="ps-2">
+              <ul className='list-outside list-disc space-y-5 ps-5 text-lg text-gray-800 dark:text-neutral-200'>
+                <li className='ps-2'>
                   Preline allows us to collaborate in real time and is a really
                   great way for leadership on the team to stay up-to-date with
                   what everybody is working on,"{" "}
                   <a
-                    className="text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-                    href="#"
+                    className='font-medium text-blue-600 decoration-2 hover:underline focus:underline focus:outline-hidden dark:text-blue-500'
+                    href='#'
                   >
                     said
                   </a>{" "}
                   Stewart Scott-Curran, Intercom's Director of Brand Design.
                 </li>
-                <li className="ps-2">
+                <li className='ps-2'>
                   Preline opened a new way of sharing. It's a persistent way for
                   everyone to see and absorb each other's work," said David
                   Scott, Creative Director at{" "}
                   <a
-                    className="text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-                    href="#"
+                    className='font-medium text-blue-600 decoration-2 hover:underline focus:underline focus:outline-hidden dark:text-blue-500'
+                    href='#'
                   >
                     Eventbrite
                   </a>
                   .
                 </li>
               </ul>
-              <p className="text-lg text-gray-800 dark:text-neutral-200">
+              <p className='text-lg text-gray-800 dark:text-neutral-200'>
                 Small teams and individual designers need a space where they can
                 watch the design process unfold, both for themselves and for the
                 people they work with – no matter if it's a fellow designer,
@@ -152,26 +152,26 @@ export default function About2() {
               </p>
               <div>
                 <a
-                  className="m-1 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                  href="#"
+                  className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
+                  href='#'
                 >
                   Plan
                 </a>
                 <a
-                  className="m-1 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                  href="#"
+                  className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
+                  href='#'
                 >
                   Web development
                 </a>
                 <a
-                  className="m-1 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                  href="#"
+                  className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
+                  href='#'
                 >
                   Free
                 </a>
                 <a
-                  className="m-1 inline-flex items-center gap-1.5 py-2 px-3 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                  href="#"
+                  className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
+                  href='#'
                 >
                   Team
                 </a>

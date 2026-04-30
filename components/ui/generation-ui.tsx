@@ -1,26 +1,26 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Code2,
-  FileText,
-  Folder,
-  CheckCircle,
-  FileCode,
-  ChevronDown,
-  Terminal,
-  Layers,
-  Zap,
-  ArrowRight,
-  Cpu,
-  Braces,
-  ChevronUp,
-} from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowRight,
+  Braces,
+  CheckCircle,
+  ChevronDown,
+  ChevronUp,
+  Code2,
+  Cpu,
+  FileCode,
+  FileText,
+  Folder,
+  Layers,
+  Terminal,
+  Zap,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface StatusUpdate {
   type: string;
@@ -37,14 +37,14 @@ interface GenerationUIProps {
 
 // File type icons mapping
 const fileIcons: Record<string, React.ReactNode> = {
-  js: <FileCode className="h-4 w-4 text-yellow-500" />,
-  jsx: <FileCode className="h-4 w-4 text-blue-500" />,
-  ts: <FileCode className="h-4 w-4 text-blue-600" />,
-  tsx: <FileCode className="h-4 w-4 text-blue-500" />,
-  css: <FileCode className="h-4 w-4 text-purple-500" />,
-  html: <FileCode className="h-4 w-4 text-orange-500" />,
-  json: <Braces className="h-4 w-4 text-green-500" />,
-  md: <FileText className="h-4 w-4 text-gray-500" />,
+  js: <FileCode className='h-4 w-4 text-yellow-500' />,
+  jsx: <FileCode className='h-4 w-4 text-blue-500' />,
+  ts: <FileCode className='h-4 w-4 text-blue-600' />,
+  tsx: <FileCode className='h-4 w-4 text-blue-500' />,
+  css: <FileCode className='h-4 w-4 text-purple-500' />,
+  html: <FileCode className='h-4 w-4 text-orange-500' />,
+  json: <Braces className='h-4 w-4 text-green-500' />,
+  md: <FileText className='h-4 w-4 text-gray-500' />,
 };
 
 export function GenerationUI({
@@ -82,7 +82,7 @@ export function GenerationUI({
   const getFileIcon = (fileName: string) => {
     const extension = fileName.split(".").pop()?.toLowerCase() || "";
     return (
-      fileIcons[extension] || <FileText className="h-4 w-4 text-gray-500" />
+      fileIcons[extension] || <FileText className='h-4 w-4 text-gray-500' />
     );
   };
 
@@ -95,22 +95,22 @@ export function GenerationUI({
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: index * 0.05 }}
-        className={`flex items-center gap-2 py-2 px-2 rounded-md hover:bg-muted-foreground/10 transition-colors ${
+        className={`hover:bg-muted-foreground/10 flex items-center gap-2 rounded-md px-2 py-2 transition-colors ${
           level > 0 ? "ml-4" : ""
         }`}
       >
         {file.type === "folder" ? (
-          <Folder className="h-4 w-4 text-blue-500" />
+          <Folder className='h-4 w-4 text-blue-500' />
         ) : (
           getFileIcon(file.name)
         )}
-        <span className="text-sm font-medium text-muted-foreground flex-1 truncate">
+        <span className='text-muted-foreground flex-1 truncate text-sm font-medium'>
           {file.name}
         </span>
         {file.type === "file" && (
           <Badge
-            variant="outline"
-            className="text-xs font-mono bg-muted-foreground/10"
+            variant='outline'
+            className='bg-muted-foreground/10 font-mono text-xs'
           >
             {file.name.split(".").pop()?.toUpperCase()}
           </Badge>
@@ -120,25 +120,25 @@ export function GenerationUI({
   };
 
   return (
-    <div className="h-full w-full flex flex-col bg-muted-foreground/10">
-      <ScrollArea className="flex-1">
-        <div className="max-w-3xl w-full mx-auto p-8">
-          <AnimatePresence mode="wait">
+    <div className='bg-muted-foreground/10 flex h-full w-full flex-col'>
+      <ScrollArea className='flex-1'>
+        <div className='mx-auto w-full max-w-3xl p-8'>
+          <AnimatePresence mode='wait'>
             {isGenerating ? (
               <motion.div
-                key="generating"
+                key='generating'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="space-y-10"
+                className='space-y-10'
               >
                 {/* Header with custom spinner */}
-                <div className="relative flex flex-col items-center">
+                <div className='relative flex flex-col items-center'>
                   {/* Custom spinner */}
-                  <div className="relative w-14 h-14 mb-6">
+                  <div className='relative mb-6 h-14 w-14'>
                     {/* Outer spinning ring */}
                     <motion.div
-                      className="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-500 border-r-blue-500"
+                      className='absolute inset-0 rounded-full border-4 border-transparent border-t-blue-500 border-r-blue-500'
                       animate={{ rotate: 360 }}
                       transition={{
                         duration: 3,
@@ -149,7 +149,7 @@ export function GenerationUI({
 
                     {/* Middle spinning ring */}
                     <motion.div
-                      className="absolute inset-2 rounded-full border-4 border-transparent border-t-purple-500 border-l-purple-500"
+                      className='absolute inset-2 rounded-full border-4 border-transparent border-t-purple-500 border-l-purple-500'
                       animate={{ rotate: -360 }}
                       transition={{
                         duration: 4,
@@ -160,7 +160,7 @@ export function GenerationUI({
 
                     {/* Inner spinning ring */}
                     <motion.div
-                      className="absolute inset-4 rounded-full border-4 border-transparent border-b-teal-500 border-r-teal-500"
+                      className='absolute inset-4 rounded-full border-4 border-transparent border-r-teal-500 border-b-teal-500'
                       animate={{ rotate: 360 }}
                       transition={{
                         duration: 2.5,
@@ -170,7 +170,7 @@ export function GenerationUI({
                     />
 
                     {/* Center icon */}
-                    <div className="absolute inset-0 flex items-center justify-center">
+                    <div className='absolute inset-0 flex items-center justify-center'>
                       <motion.div
                         animate={{
                           scale: [1, 1.2, 1],
@@ -187,21 +187,21 @@ export function GenerationUI({
                     </div>
                   </div>
 
-                  <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+                  <h2 className='bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-3xl font-bold text-transparent dark:from-blue-400 dark:to-purple-400'>
                     Creating Your Application
                   </h2>
-                  <p className="text-muted-foreground/50 mt-3 text-center max-w-lg">
+                  <p className='text-muted-foreground/50 mt-3 max-w-lg text-center'>
                     Our AI is crafting your custom application with modern
                     technologies and best practices
                   </p>
                 </div>
 
                 {/* Status Card */}
-                <Card className="overflow-hidden border-0 shadow-lg bg-background">
-                  <CardContent className="p-0">
-                    <div className="p-6">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                <Card className='bg-background overflow-hidden border-0 shadow-lg'>
+                  <CardContent className='p-0'>
+                    <div className='p-6'>
+                      <div className='mb-4 flex items-center gap-3'>
+                        <div className='flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30'>
                           <motion.div
                             animate={{ rotate: 360 }}
                             transition={{
@@ -210,23 +210,23 @@ export function GenerationUI({
                               ease: "linear",
                             }}
                           >
-                            <Zap className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                            <Zap className='h-5 w-5 text-blue-600 dark:text-blue-400' />
                           </motion.div>
                         </div>
                         <div>
-                          <h3 className="font-medium text-gray-900 dark:text-white text-lg">
+                          <h3 className='text-lg font-medium text-gray-900 dark:text-white'>
                             {getStatusMessage()}
                           </h3>
-                          <p className="text-sm text-muted-foreground/50">
+                          <p className='text-muted-foreground/50 text-sm'>
                             {Math.round(animationProgress)}% complete
                           </p>
                         </div>
                       </div>
 
                       {/* Progress bar with animated gradient */}
-                      <div className="relative h-2 w-full bg-muted-foreground/10 rounded-full overflow-hidden">
+                      <div className='bg-muted-foreground/10 relative h-2 w-full overflow-hidden rounded-full'>
                         <motion.div
-                          className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 rounded-full"
+                          className='absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500'
                           style={{ width: `${animationProgress}%` }}
                           animate={{
                             backgroundPosition: [
@@ -245,8 +245,8 @@ export function GenerationUI({
                     </div>
 
                     {/* Generation Steps */}
-                    <div className="border-t border-border">
-                      <div className="grid grid-cols-3 divide-x divide-border">
+                    <div className='border-border border-t'>
+                      <div className='divide-border grid grid-cols-3 divide-x'>
                         {[
                           {
                             icon: Terminal,
@@ -281,15 +281,15 @@ export function GenerationUI({
                                   : "bg-transparent"
                               )}
                             >
-                              <div className="flex flex-col items-center">
+                              <div className='flex flex-col items-center'>
                                 <div
                                   className={cn(
-                                    "w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-colors",
+                                    "mb-2 flex h-10 w-10 items-center justify-center rounded-full transition-colors",
                                     isComplete
                                       ? "bg-green-100 dark:bg-green-900/30"
                                       : isActive
-                                      ? "bg-blue-100 dark:bg-blue-900/30"
-                                      : "bg-muted-foreground/10"
+                                        ? "bg-blue-100 dark:bg-blue-900/30"
+                                        : "bg-muted-foreground/10"
                                   )}
                                 >
                                   <step.icon
@@ -298,14 +298,14 @@ export function GenerationUI({
                                       isComplete
                                         ? "text-green-600 dark:text-green-400"
                                         : isActive
-                                        ? "text-blue-600 dark:text-blue-400"
-                                        : "text-gray-400 dark:text-gray-500"
+                                          ? "text-blue-600 dark:text-blue-400"
+                                          : "text-gray-400 dark:text-gray-500"
                                     )}
                                   />
                                 </div>
                                 <h3
                                   className={cn(
-                                    "font-medium text-sm transition-colors",
+                                    "text-sm font-medium transition-colors",
                                     isActive
                                       ? "text-muted-foreground"
                                       : "text-muted-foreground/50"
@@ -313,7 +313,7 @@ export function GenerationUI({
                                 >
                                   {step.title}
                                 </h3>
-                                <p className="text-xs text-muted-foreground/50 mt-1">
+                                <p className='text-muted-foreground/50 mt-1 text-xs'>
                                   {step.desc}
                                 </p>
                               </div>
@@ -327,19 +327,19 @@ export function GenerationUI({
               </motion.div>
             ) : (
               <motion.div
-                key="empty"
+                key='empty'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-center space-y-6"
+                className='space-y-6 text-center'
               >
-                <div className="w-24 h-24 mx-auto bg-muted-foreground/10 rounded-full flex items-center justify-center">
-                  <Code2 className="h-12 w-12 text-muted-foreground" />
+                <div className='bg-muted-foreground/10 mx-auto flex h-24 w-24 items-center justify-center rounded-full'>
+                  <Code2 className='text-muted-foreground h-12 w-12' />
                 </div>
-                <div className="space-y-2">
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <div className='space-y-2'>
+                  <h2 className='text-xl font-semibold text-gray-900 dark:text-white'>
                     Ready to Create
                   </h2>
-                  <p className="text-muted-foreground/50">
+                  <p className='text-muted-foreground/50'>
                     Start a conversation to generate your application
                   </p>
                 </div>
@@ -352,18 +352,18 @@ export function GenerationUI({
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-8 overflow-hidden rounded-xl border border-border bg-background shadow-sm"
+              className='border-border bg-background mt-8 overflow-hidden rounded-xl border shadow-sm'
             >
-              <div className="flex items-center justify-between p-4 border-b border-border">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                    <Layers className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <div className='border-border flex items-center justify-between border-b p-4'>
+                <div className='flex items-center gap-2'>
+                  <div className='flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30'>
+                    <Layers className='h-4 w-4 text-blue-600 dark:text-blue-400' />
                   </div>
                   <div>
-                    <h3 className="font-medium text-muted-foreground">
+                    <h3 className='text-muted-foreground font-medium'>
                       Generated Files
                     </h3>
-                    <p className="text-xs text-muted-foreground/50">
+                    <p className='text-muted-foreground/50 text-xs'>
                       {generatedFiles.length} files created
                     </p>
                   </div>
@@ -371,40 +371,40 @@ export function GenerationUI({
 
                 {onNavigateToCode && (
                   <Button
-                    variant="default"
-                    size="sm"
+                    variant='default'
+                    size='sm'
                     onClick={onNavigateToCode}
-                    className="gap-1 bg-blue-600 hover:bg-blue-700 text-white"
+                    className='gap-1 bg-blue-600 text-white hover:bg-blue-700'
                   >
-                    <Code2 className="h-3.5 w-3.5" />
+                    <Code2 className='h-3.5 w-3.5' />
                     <span>View Code</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
+                    <ArrowRight className='h-3.5 w-3.5' />
                   </Button>
                 )}
               </div>
 
-              <div className="p-2">
-                <div className="rounded-md border border-border bg-muted-foreground/10 overflow-hidden">
-                  <div className="max-h-60 overflow-y-auto divide-y divide-border">
+              <div className='p-2'>
+                <div className='border-border bg-muted-foreground/10 overflow-hidden rounded-md border'>
+                  <div className='divide-border max-h-60 divide-y overflow-y-auto'>
                     {renderFileStructure(generatedFiles)}
                   </div>
 
                   {generatedFiles.length > maxFilesToShow && (
-                    <div className="border-t border-border">
+                    <div className='border-border border-t'>
                       <Button
-                        variant="ghost"
-                        size="sm"
+                        variant='ghost'
+                        size='sm'
                         onClick={() => setShowAllFiles(!showAllFiles)}
-                        className="w-full flex items-center justify-center gap-1 py-2 text-xs text-muted-foreground/50 hover:bg-muted-foreground/10"
+                        className='text-muted-foreground/50 hover:bg-muted-foreground/10 flex w-full items-center justify-center gap-1 py-2 text-xs'
                       >
                         {showAllFiles ? (
                           <>
-                            <ChevronUp className="h-3.5 w-3.5" />
+                            <ChevronUp className='h-3.5 w-3.5' />
                             <span>Show Less</span>
                           </>
                         ) : (
                           <>
-                            <ChevronDown className="h-3.5 w-3.5" />
+                            <ChevronDown className='h-3.5 w-3.5' />
                             <span>Show All {generatedFiles.length} Files</span>
                           </>
                         )}

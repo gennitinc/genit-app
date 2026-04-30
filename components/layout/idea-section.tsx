@@ -1,74 +1,15 @@
 "use client";
 
-import type React from "react";
-import { useState, useEffect, useRef, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
-import { PointerHighlight } from "@/components/ui/pointer-highlight";
-
-import {
-  X,
-  PaperclipIcon,
-  XIcon,
-  MessageSquare,
-  Image,
-  TrendingUp,
-  Users,
-  Sparkles,
-  Zap,
-  AlertCircle,
-  Mic,
-  Loader2,
-  WandSparklesIcon,
-  Settings,
-  Settings2,
-  Camera,
-  Video,
-  Image as ImageIcon,
-  FileText,
-  Youtube,
-  Layout,
-  Type,
-  Presentation,
-  Palette,
-  Table,
-  Music,
-  Workflow,
-  User,
-  Volume2,
-  Play,
-  Grid2X2Plus,
-  Paintbrush,
-} from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { motion, AnimatePresence } from "framer-motion";
-import { PricingDialog } from "@/components/common/pricing-dialog";
-import { useProjectDesign } from "@/context/DesignProject";
-import ShinyText from "../ui/shiny-text";
-import HomeGrid from "../common/templateGrid";
-import { HomeInfoGrid } from "../common/homeInfoGrid";
-import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
 import { AIThinkingContent } from "../chat/messages";
 import { ColorManagement } from "../chat/messages/color-management";
-import { toast } from "sonner";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerDescription,
-  DrawerFooter,
-} from "@/components/ui/drawer";
-import { apiResponse } from "@/utils/apiResponse";
-import { GripVertical, Plus, Trash2 } from "lucide-react";
+import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
+import { HomeInfoGrid } from "../common/homeInfoGrid";
+import HomeGrid from "../common/templateGrid";
 import { BorderBeam } from "../ui/border-beam";
-import { useSpeechToText } from "@/hooks/use-speech-to-text";
-import { div } from "three/src/nodes/math/OperatorNode.js";
-import { cn } from "@/lib/utils";
+import ShinyText from "../ui/shiny-text";
+import { PricingDialog } from "@/components/common/pricing-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Carousel,
   CarouselContent,
@@ -76,8 +17,70 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { Input } from "@/components/ui/input";
+import { PointerHighlight } from "@/components/ui/pointer-highlight";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { useProjectDesign } from "@/context/DesignProject";
+import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
-import { trackAppOpened, trackFeatureUsed, trackEvent } from "@/lib/mixpanelClient";
+import {
+  trackAppOpened,
+  trackEvent,
+  trackFeatureUsed,
+} from "@/lib/mixpanelClient";
+import { cn } from "@/lib/utils";
+import { apiResponse } from "@/utils/apiResponse";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  AlertCircle,
+  Camera,
+  FileText,
+  Grid2X2Plus,
+  Image,
+  Image as ImageIcon,
+  Layout,
+  Loader2,
+  MessageSquare,
+  Mic,
+  Music,
+  Paintbrush,
+  Palette,
+  PaperclipIcon,
+  Play,
+  Presentation,
+  Settings,
+  Settings2,
+  Sparkles,
+  Table,
+  TrendingUp,
+  Type,
+  User,
+  Users,
+  Video,
+  Volume2,
+  WandSparklesIcon,
+  Workflow,
+  X,
+  XIcon,
+  Youtube,
+  Zap,
+} from "lucide-react";
+import { GripVertical, Plus, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { div } from "three/src/nodes/math/OperatorNode.js";
+import type React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface TypewriterEffectProps {
   words: string[];
@@ -260,8 +263,6 @@ const IDEA_ITEMS: IdeaItemData[] = [
   //   hoverScale: "md:hover:scale-[1.2]",
   // },
 ];
-
-const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
 const IdeaItem = ({ item }: { item: IdeaItemData }) => {
   const Icon = item.icon;
   const isImage = item.isImage;
@@ -271,29 +272,29 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
       whileTap={{ scale: 0.95 }}
       className={cn(
-        "flex flex-col items-center group relative",
-        item.id === "all-agents" ? "sticky left-0 z-30 pr-4 md:pr-0" : "z-10",
+        "group relative flex flex-col items-center",
+        item.id === "all-agents" ? "sticky left-0 z-30 pr-4 md:pr-0" : "z-10"
       )}
     >
       {/* Background Glow for All Apps when sticky */}
       {item.id === "all-agents" && (
-        <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-background via-background to-transparent md:hidden -my-2" />
+        <div className='from-background via-background absolute inset-y-0 left-0 -my-2 w-full bg-gradient-to-r to-transparent md:hidden' />
       )}
 
       <Link
         href={item.href || "#"}
         onClick={() => {
-          trackAppOpened(MIXPANEL_TOKEN, item.id, item.label, "idea_section_quick_apps", {
+          trackAppOpened(item.id, item.label, "idea_section_quick_apps", {
             href: item.href,
           });
         }}
-        className="flex flex-col items-center relative z-20"
+        className='relative z-20 flex flex-col items-center'
       >
         <div
           className={cn(
-            "relative w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300",
-            "shadow-md overflow-hidden",
-            "group-hover:shadow-lg",
+            "relative flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-300",
+            "overflow-hidden shadow-md",
+            "group-hover:shadow-lg"
           )}
           style={{
             backgroundColor: item.lightBg,
@@ -301,54 +302,54 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
         >
           {/* Dark-mode override via a pseudo-layer — swap background inline */}
           <div
-            className="absolute inset-0 opacity-0 dark:opacity-100 transition-opacity duration-300"
+            className='absolute inset-0 opacity-0 transition-opacity duration-300 dark:opacity-100'
             style={{ backgroundColor: item.darkBg }}
           />
 
           {/* Subtle inner highlight */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-60 dark:opacity-30 pointer-events-none" />
+          <div className='pointer-events-none absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-60 dark:opacity-30' />
 
           {/* Border: visible in light, subtle in dark */}
-          <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/[0.07] dark:ring-white/[0.06]" />
+          <div className='absolute inset-0 rounded-2xl ring-1 ring-black/[0.07] ring-inset dark:ring-white/[0.06]' />
 
           {isImage ? (
             <img
               src={Icon as string}
               className={cn(
-                "relative z-10 w-7 h-7 object-contain transition-transform duration-300 group-hover:scale-110",
-                item.imageClass,
+                "relative z-10 h-7 w-7 object-contain transition-transform duration-300 group-hover:scale-110",
+                item.imageClass
               )}
               alt={item.label}
             />
           ) : (
             <Icon
               className={cn(
-                "relative z-10 w-6 h-6 transition-transform duration-300 group-hover:scale-110",
-                item.iconColor,
+                "relative z-10 h-6 w-6 transition-transform duration-300 group-hover:scale-110",
+                item.iconColor
               )}
             />
           )}
 
           {item.hasDot && (
-            <div className="absolute top-2 right-2 w-2 h-2 bg-[#0F7FFF] rounded-full shadow-[0_0_8px_#0F7FFF] z-10" />
+            <div className='absolute top-2 right-2 z-10 h-2 w-2 rounded-full bg-[#0F7FFF] shadow-[0_0_8px_#0F7FFF]' />
           )}
 
           {/* Border Beam Effect on Hover */}
           <BorderBeam
             size={60}
             duration={4}
-            className="opacity-0 group-hover:opacity-100"
+            className='opacity-0 group-hover:opacity-100'
           />
         </div>
 
-        <span className="mt-3 text-[12px] font-medium text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors whitespace-nowrap">
+        <span className='mt-3 text-[12px] font-medium whitespace-nowrap text-zinc-500 transition-colors group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100'>
           {item.label}
         </span>
       </Link>
 
       {item.badge && (
-        <div className="absolute -top-1 -right-1 z-30">
-          <Badge className="bg-[#FFCB0F] text-black text-[9px] px-1.5 py-0 border-none shadow-sm">
+        <div className='absolute -top-1 -right-1 z-30'>
+          <Badge className='border-none bg-[#FFCB0F] px-1.5 py-0 text-[9px] text-black shadow-sm'>
             {item.badge}
           </Badge>
         </div>
@@ -405,7 +406,7 @@ export function IdeaSection() {
   const [selectedDesignTypeId, setSelectedDesignTypeId] =
     useState<string>("flier");
   const [selectedOrientation, setSelectedOrientation] = useState<string | null>(
-    "portrait",
+    "portrait"
   );
   const [customSize, setCustomSize] = useState<{
     width: string;
@@ -430,7 +431,7 @@ export function IdeaSection() {
   >("illustration");
   const [extraKeywords, setExtraKeywords] = useState<string>("");
   const [imageRotations] = useState(() =>
-    images.map(() => Math.random() * 20 - 10),
+    images.map(() => Math.random() * 20 - 10)
   );
 
   const [initialInputValue, setInitialInputValue] = useState("");
@@ -439,7 +440,7 @@ export function IdeaSection() {
     useSpeechToText({
       onTranscript: (transcript) => {
         setInputValue(
-          initialInputValue ? `${initialInputValue} ${transcript}` : transcript,
+          initialInputValue ? `${initialInputValue} ${transcript}` : transcript
         );
       },
     });
@@ -457,7 +458,6 @@ export function IdeaSection() {
     typingSpeed: 40,
     delay: 1000,
   });
-
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -495,7 +495,7 @@ export function IdeaSection() {
           Math.min(textareaRef.current.scrollHeight, 300) + "px";
       }
     },
-    [setInputValue],
+    [setInputValue]
   );
 
   const handleMicClick = useCallback(() => {
@@ -534,7 +534,7 @@ export function IdeaSection() {
         setInputError(null);
       }
     },
-    [attachedFiles.length, processFiles],
+    [attachedFiles.length, processFiles]
   );
 
   // Handle file input change
@@ -544,7 +544,7 @@ export function IdeaSection() {
       handleFileProcess(files);
       e.target.value = "";
     },
-    [handleFileProcess],
+    [handleFileProcess]
   );
 
   // Handle drag and drop
@@ -560,7 +560,7 @@ export function IdeaSection() {
       const files = Array.from(e.dataTransfer.files);
       handleFileProcess(files);
     },
-    [handleFileProcess],
+    [handleFileProcess]
   );
 
   // Generate presentation outline using AI
@@ -571,7 +571,7 @@ export function IdeaSection() {
         const response = await apiResponse.post(
           "/presentation/generate-outline",
           { prompt },
-          { withCredentials: true },
+          { withCredentials: true }
         );
 
         if (response.data && response.data.outline) {
@@ -580,7 +580,7 @@ export function IdeaSection() {
               id: `slide-${index + 1}`,
               title: slide.title || `Slide ${index + 1}`,
               content: slide.content || slide.bulletPoints || [],
-            }),
+            })
           );
           setPresentationOutline(outline);
           setIsPresentationDrawerOpen(true);
@@ -613,7 +613,7 @@ export function IdeaSection() {
         setIsGeneratingOutline(false);
       }
     },
-    [toast],
+    [toast]
   );
 
   // Handle form submission
@@ -623,7 +623,9 @@ export function IdeaSection() {
 
       // Check if user is authenticated
       if (!user) {
-        trackFeatureUsed(MIXPANEL_TOKEN, "idea_submit_requires_auth", { source: "idea_section" });
+        trackFeatureUsed("idea_submit_requires_auth", {
+          source: "idea_section",
+        });
         router.push("/signin");
         return;
       }
@@ -632,7 +634,7 @@ export function IdeaSection() {
       const creditsRemaining = user?.creditsRemaining ?? 0;
       if (creditsRemaining <= 10) {
         const isBasic = String(user?.userPlan) === "Basic";
-        trackFeatureUsed(MIXPANEL_TOKEN, "idea_low_credits_blocked_submit", {
+        trackFeatureUsed("idea_low_credits_blocked_submit", {
           credits_remaining: creditsRemaining,
           user_plan: user?.userPlan,
         });
@@ -650,7 +652,7 @@ export function IdeaSection() {
 
       const validationError = validateInput(inputValue, attachedFiles);
       if (validationError) {
-        trackFeatureUsed(MIXPANEL_TOKEN, "idea_submit_validation_failed", {
+        trackFeatureUsed("idea_submit_validation_failed", {
           reason: validationError,
         });
         setInputError(validationError);
@@ -659,10 +661,10 @@ export function IdeaSection() {
 
       // Check if selected design type is coming soon
       const selectedItem = designTypeItems.find(
-        (item) => item.id === selectedDesignTypeId,
+        (item) => item.id === selectedDesignTypeId
       );
       if (selectedItem && (selectedItem as any).comingSoon) {
-        trackFeatureUsed(MIXPANEL_TOKEN, "idea_coming_soon_feature_clicked", {
+        trackFeatureUsed("idea_coming_soon_feature_clicked", {
           design_type: selectedDesignTypeId,
         });
         toast(`${selectedItem.label} is coming soon.`);
@@ -673,7 +675,7 @@ export function IdeaSection() {
 
       // Handle presentation projects differently
       if (selectedDesignTypeId === "presentation") {
-        trackFeatureUsed(MIXPANEL_TOKEN, "idea_presentation_outline_requested", {
+        trackFeatureUsed("idea_presentation_outline_requested", {
           prompt_length: inputValue.trim().length,
         });
         setIsSubmitting(true);
@@ -699,11 +701,11 @@ export function IdeaSection() {
               selectedColorScales,
               primaryFont,
             },
-          },
+          }
         );
 
         console.log("Project creation result:", res);
-        trackEvent(MIXPANEL_TOKEN, "idea_project_created", {
+        trackEvent("idea_project_created", {
           design_type: selectedDesignTypeId,
           orientation: selectedOrientation,
           has_custom_size: Boolean(customSize.width && customSize.height),
@@ -723,12 +725,12 @@ export function IdeaSection() {
         }
       } catch (error: any) {
         console.error("Failed to create project:", error);
-        trackEvent(MIXPANEL_TOKEN, "idea_project_creation_failed", {
+        trackEvent("idea_project_creation_failed", {
           design_type: selectedDesignTypeId || "",
           reason: error?.message || "unknown",
         });
         setInputError(
-          error.message || "Failed to create project. Please try again.",
+          error.message || "Failed to create project. Please try again."
         );
       } finally {
         setIsSubmitting(false);
@@ -746,7 +748,7 @@ export function IdeaSection() {
       selectedDesignTypeId,
       generatePresentationOutline,
       toast,
-    ],
+    ]
   );
 
   // Handle quick task selection
@@ -757,7 +759,7 @@ export function IdeaSection() {
       setInputError(null);
       textareaRef.current?.focus();
     },
-    [setInputValue],
+    [setInputValue]
   );
 
   // Handle file removal
@@ -766,7 +768,7 @@ export function IdeaSection() {
       removeAttachedFile(index);
       setInputError(null);
     },
-    [removeAttachedFile],
+    [removeAttachedFile]
   );
 
   // Handle key press
@@ -776,7 +778,7 @@ export function IdeaSection() {
         handleSubmit(e as any);
       }
     },
-    [handleSubmit],
+    [handleSubmit]
   );
 
   useEffect(() => {
@@ -893,7 +895,7 @@ export function IdeaSection() {
   ];
 
   const selectedDesignType = designTypeItems.find(
-    (item) => item.id === selectedDesignTypeId,
+    (item) => item.id === selectedDesignTypeId
   );
 
   // Orientation options for different design types
@@ -908,14 +910,14 @@ export function IdeaSection() {
           { id: "reels", label: "Reels", dimensions: "9:16" },
           { id: "video", label: "Video", dimensions: "16:9" },
           { id: "square", label: "Square", dimensions: "1:1" },
-          { id: "story", label: "Story", dimensions: "9:16" },
+          { id: "story", label: "Story", dimensions: "9:16" }
         );
         break;
       case "instagram_post":
         options.push(
           { id: "square", label: "Square", dimensions: "1:1" },
           { id: "portrait", label: "Portrait", dimensions: "4:5" },
-          { id: "landscape", label: "Landscape", dimensions: "1.91:1" },
+          { id: "landscape", label: "Landscape", dimensions: "1.91:1" }
         );
         break;
       case "youtube_thumbnail":
@@ -925,7 +927,7 @@ export function IdeaSection() {
       case "facebook_cover":
         options.push(
           { id: "landscape", label: "Landscape", dimensions: "16:9" },
-          { id: "square", label: "Square", dimensions: "1:1" },
+          { id: "square", label: "Square", dimensions: "1:1" }
         );
         break;
       case "poster":
@@ -933,27 +935,27 @@ export function IdeaSection() {
         options.push(
           { id: "portrait", label: "Portrait", dimensions: "2:3" },
           { id: "landscape", label: "Landscape", dimensions: "3:2" },
-          { id: "square", label: "Square", dimensions: "1:1" },
+          { id: "square", label: "Square", dimensions: "1:1" }
         );
         break;
       case "presentation":
         options.push(
           { id: "standard", label: "Standard", dimensions: "16:9" },
           { id: "widescreen", label: "Widescreen", dimensions: "16:10" },
-          { id: "square", label: "Square", dimensions: "1:1" },
+          { id: "square", label: "Square", dimensions: "1:1" }
         );
         break;
       case "flier":
         options.push(
           { id: "portrait", label: "Portrait", dimensions: "8.5:11" },
-          { id: "landscape", label: "Landscape", dimensions: "11:8.5" },
+          { id: "landscape", label: "Landscape", dimensions: "11:8.5" }
         );
         break;
       default:
         options.push(
           { id: "portrait", label: "Portrait", dimensions: "2:3" },
           { id: "landscape", label: "Landscape", dimensions: "3:2" },
-          { id: "square", label: "Square", dimensions: "1:1" },
+          { id: "square", label: "Square", dimensions: "1:1" }
         );
     }
 
@@ -963,19 +965,19 @@ export function IdeaSection() {
   const orientationOptions = getOrientationOptions(selectedDesignTypeId);
 
   return (
-    <div className="w-full md:px-4">
-      <div className="w-full mx-auto space-y-2 lg:space-y-6 items-center justify-center flex flex-col ">
+    <div className='w-full md:px-4'>
+      <div className='mx-auto flex w-full flex-col items-center justify-center space-y-2 lg:space-y-6'>
         {/* Header */}
-        <div className="text-center space-y-2 mt-7 lg:mt-0">
+        <div className='mt-7 space-y-2 text-center lg:mt-0'>
           {/* <AnimatedTooltipPreview /> */}
           <motion.div
-            className="mt-2 mb-2 md:mt-8 lg:mb-2 lg:mt-24 flex flex-col items-center justify-center"
+            className='mt-2 mb-2 flex flex-col items-center justify-center md:mt-8 lg:mt-24 lg:mb-2'
             // initial={{ opacity: 0, y: 20 }}
             // animate={{ opacity: 1, y: 0 }}
             // transition={{ duration: 0.6 }}
           >
             <motion.h1
-              className="mb-2 flex items-center gap-1 text-3xl font-semibold leading-none text-foreground sm:text-3xl md:mb-2.5 md:gap-0 md:text-5xl mt-8"
+              className='text-foreground mt-8 mb-2 flex items-center gap-1 text-3xl leading-none font-semibold sm:text-3xl md:mb-2.5 md:gap-0 md:text-5xl'
               custom={1}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -988,21 +990,21 @@ export function IdeaSection() {
                   },
                 }),
               }}
-              initial="hidden"
-              animate="visible"
+              initial='hidden'
+              animate='visible'
             >
               Idea to
               <PointerHighlight
-                rectangleClassName="bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700 leading-loose"
-                pointerClassName="text-blue-500 h-3 w-3"
-                containerClassName="inline-block mx-1"
+                rectangleClassName='bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700 leading-loose'
+                pointerClassName='text-blue-500 h-3 w-3'
+                containerClassName='inline-block mx-1'
               >
-                <span className="relative z-10"> Design </span>
+                <span className='relative z-10'> Design </span>
               </PointerHighlight>{" "}
               in 10.s
             </motion.h1>
             <motion.p
-              className="mb-6 max-w-[25ch] text-center text-lg leading-tight text-foreground/65 md:max-w-full md:text-xl"
+              className='text-foreground/65 mb-6 max-w-[25ch] text-center text-lg leading-tight md:max-w-full md:text-xl'
               custom={2}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -1015,97 +1017,97 @@ export function IdeaSection() {
                   },
                 }),
               }}
-              initial="hidden"
-              animate="visible"
+              initial='hidden'
+              animate='visible'
             >
               Design graphics, videos, and assets with AI.
             </motion.p>
           </motion.div>
         </div>
 
-        <div className="flex flex-row items-center justify-center w-full">
+        <div className='flex w-full flex-row items-center justify-center'>
           <motion.div
-            className="flex flex-col relative w-full max-w-2xl mx-auto"
+            className='relative mx-auto flex w-full max-w-2xl flex-col'
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <div className="relative">
+            <div className='relative'>
               {/* File Attachments */}
               {attachedFiles.length > 0 && !isGenerating && (
-                <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal">
+                <div className='custom-scrollbar-horizontal mb-3 flex flex-wrap gap-2'>
                   {attachedFiles.map((file: any, index: number) => {
                     const fileKey = file.fileKey || `${file.name}-${index}`;
                     return (
                       <div
                         key={fileKey}
-                        className="relative group bg-muted-foreground/5 border border-border rounded-lg p-2 flex items-center gap-2 hover:bg-background/50 transition-colors max-w-[200px]"
+                        className='group bg-muted-foreground/5 border-border hover:bg-background/50 relative flex max-w-[200px] items-center gap-2 rounded-lg border p-2 transition-colors'
                       >
-                        <div className="w-8 h-8 bg-background border border-border rounded flex items-center justify-center flex-shrink-0 relative">
+                        <div className='bg-background border-border relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border'>
                           {file.type && file.type.startsWith("image/") ? (
                             <img
                               src={
                                 URL.createObjectURL(file) || "/placeholder.svg"
                               }
                               alt={file.name}
-                              className="w-full h-full object-cover rounded"
+                              className='h-full w-full rounded object-cover'
                               onLoad={(e) =>
                                 URL.revokeObjectURL(
-                                  (e.target as HTMLImageElement).src,
+                                  (e.target as HTMLImageElement).src
                                 )
                               }
                             />
                           ) : file.type && file.type.startsWith("video/") ? (
-                            <div className="w-full h-full grid place-items-center text-[10px] text-muted-foreground">
+                            <div className='text-muted-foreground grid h-full w-full place-items-center text-[10px]'>
                               🎬
                             </div>
                           ) : (
                             <svg
-                              className="w-4 h-4 text-muted-foreground"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
+                              className='text-muted-foreground h-4 w-4'
+                              fill='none'
+                              stroke='currentColor'
+                              viewBox='0 0 24 24'
                             >
                               <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
                                 strokeWidth={2}
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
                               />
                             </svg>
                           )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium truncate text-foreground">
+                        <div className='min-w-0 flex-1'>
+                          <p className='text-foreground truncate text-xs font-medium'>
                             {file.name && file.name.length > 15
                               ? `${file.name.substring(0, 15)}...`
                               : file.name || "Unknown file"}
                           </p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className='text-muted-foreground text-xs'>
                             {formatFileSize(file.size)}
                           </p>
                         </div>
                         <button
                           onClick={() => handleFileRemove(index)}
-                          className="absolute -top-1 -right-1 w-4 h-4 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity text-xs"
+                          className='bg-muted-foreground absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-xs text-white opacity-100 transition-opacity group-hover:opacity-100 hover:bg-red-500 lg:opacity-0'
                           disabled={isGenerating}
                           aria-label={`Remove ${file.name}`}
                         >
                           &times;
                         </button>
                         {file.type && file.type.startsWith("image/") && (
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                            <div className="bg-background border border-border rounded-lg shadow-md p-2">
+                          <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
+                            <div className='bg-background border-border rounded-lg border p-2 shadow-md'>
                               <img
                                 src={
                                   URL.createObjectURL(file) ||
                                   "/placeholder.svg"
                                 }
                                 alt={file.name}
-                                className="max-w-[200px] max-h-[150px] object-contain rounded"
+                                className='max-h-[150px] max-w-[200px] rounded object-contain'
                                 onLoad={(e) =>
                                   URL.revokeObjectURL(
-                                    (e.target as HTMLImageElement).src,
+                                    (e.target as HTMLImageElement).src
                                   )
                                 }
                               />
@@ -1123,13 +1125,13 @@ export function IdeaSection() {
             </div>
             <div
               ref={chatContainerRef}
-              className="relative flex w-full max-w-3xl mx-auto"
+              className='relative mx-auto flex w-full max-w-3xl'
               onDragOver={handleDragOver}
               onDrop={handleDrop}
             >
               {/* Animated beam with smoother transitions */}
               <motion.div
-                className="absolute w-full md:w-40 h-40 rounded-full bg-neutral-400/20 dark:bg-neutral-500/20 blur-3xl pointer-events-none z-0"
+                className='pointer-events-none absolute z-0 h-40 w-full rounded-full bg-neutral-400/20 blur-3xl md:w-40 dark:bg-neutral-500/20'
                 animate={{
                   left: `${beamPosition.x}%`,
                   top: `${beamPosition.y}%`,
@@ -1141,38 +1143,38 @@ export function IdeaSection() {
                 style={{ transform: "translate(-50%, -50%)" }}
               />
 
-              <div className="flex w-full flex-col items-center z-10">
-                <div className="relative size-full">
+              <div className='z-10 flex w-full flex-col items-center'>
+                <div className='relative size-full'>
                   {/* Credit info and typing indicator */}
-                  <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2">
+                  <div className='mx-4 mt-3 mb-2 flex items-center justify-between text-sm'>
                     {!isGenerating && (
-                      <div className="flex items-center gap-1 justify-between w-full">
-                        <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                          <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
+                      <div className='flex w-full items-center justify-between gap-1'>
+                        <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
+                          <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                           {user ? (
-                            <span className="text-xs text-muted-foreground">
+                            <span className='text-muted-foreground text-xs'>
                               {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
                               Credits left
                             </span>
                           ) : (
-                            <span className="text-xs text-muted-foreground">
+                            <span className='text-muted-foreground text-xs'>
                               Get a 50 free credit
                             </span>
                           )}
                         </div>
 
                         {user && (user?.creditsRemaining ?? 0) === 0 && (
-                          <div className="text-xs font-medium">
+                          <div className='text-xs font-medium'>
                             {String(user?.userPlan) === "Basic" ? (
                               <span
-                                className="cursor-pointer text-blue-500 hover:underline"
+                                className='cursor-pointer text-blue-500 hover:underline'
                                 onClick={() => router.push("/pricing")}
                               >
                                 Upgrade
                               </span>
                             ) : (
                               <span
-                                className="cursor-pointer text-blue-500 hover:underline"
+                                className='cursor-pointer text-blue-500 hover:underline'
                                 onClick={() =>
                                   router.push("/user/settings?tab=billing")
                                 }
@@ -1186,10 +1188,10 @@ export function IdeaSection() {
                     )}
                     {isGenerating && (
                       <ShinyText
-                        text="Thinking..."
+                        text='Thinking...'
                         disabled={false}
                         speed={3}
-                        className="custom-class"
+                        className='custom-class'
                       />
                     )}
                   </div>
@@ -1197,15 +1199,15 @@ export function IdeaSection() {
                   {/* Error message */}
                   <AnimatePresence>
                     {(inputError || error) && (
-                      <p className="text-xs text-red-500 font-medium flex items-center mb-2 mx-4">
-                        <AlertCircle className="size-3.5 mr-2" />
+                      <p className='mx-4 mb-2 flex items-center text-xs font-medium text-red-500'>
+                        <AlertCircle className='mr-2 size-3.5' />
                         {inputError || error}
                       </p>
                     )}
                   </AnimatePresence>
 
                   <form
-                    id="chat-input"
+                    id='chat-input'
                     onSubmit={
                       user
                         ? handleSubmit
@@ -1214,17 +1216,17 @@ export function IdeaSection() {
                             router.push("/signin");
                           }
                     }
-                    className="group flex flex-col gap-2 p-3 w-full rounded-lg border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-md ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out relative"
+                    className='group relative flex w-full flex-col gap-2 rounded-lg border border-white bg-white/80 p-3 text-base shadow-md ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
                   >
-                    <div className="min-w-0 w-full">
-                      <div className="relative flex flex-1 items-center">
+                    <div className='w-full min-w-0'>
+                      <div className='relative flex flex-1 items-center'>
                         <textarea
                           ref={textareaRef}
-                          id="chatinput"
+                          id='chatinput'
                           value={isGenerating ? "" : inputValue}
                           onChange={handleInputChange}
                           onKeyDown={handleKeyPress}
-                          className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 min-h-[95px] max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
+                          className='placeholder:text-muted-foreground/60 scrollbar-none flex max-h-[300px] min-h-[95px] w-full flex-1 resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                           placeholder={
                             isGenerating
                               ? ""
@@ -1238,87 +1240,87 @@ export function IdeaSection() {
                         />
                       </div>
                     </div>
-                    <div className="flex-wrap gap-1 flex items-center">
+                    <div className='flex flex-wrap items-center gap-1'>
                       <button
-                        className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(0,0,0,0.2),0_1px_2px_0_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.05)] active:brightness-[0.65] disabled:brightness-100 px-4 py-2 rounded-full !p-0 bg-secondary text-primary h-8 w-8"
-                        type="button"
-                        aria-label="Attach files"
+                        className='focus-visible:ring-ring bg-secondary text-primary relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(0,0,0,0.2),0_1px_2px_0_rgba(0,0,0,0.05)] brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none active:brightness-[0.65] disabled:cursor-not-allowed disabled:opacity-50 disabled:brightness-100 dark:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.05)]'
+                        type='button'
+                        aria-label='Attach files'
                         onClick={() => fileInputRef.current?.click()}
                         disabled={isGenerating || isSubmitting}
                       >
-                        <Plus className="shrink-0 size-5" />
+                        <Plus className='size-5 shrink-0' />
                       </button>
                       <Input
                         ref={fileInputRef}
-                        type="file"
+                        type='file'
                         multiple
                         onChange={handleFileInputChange}
                         disabled={isGenerating || isSubmitting}
-                        className="hidden"
-                        accept="image/*,video/*"
+                        className='hidden'
+                        accept='image/*,video/*'
                       />
 
                       {selectedDesignType && (
                         <Badge
-                          variant="secondary"
-                          className="text-[10px] md:text-xs px-2 py-0.5 h-7 font-medium flex items-center gap-1.5 bg-zinc-100 dark:bg-white/5 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-white/10 cursor-pointer hover:bg-neutral-200 dark:hover:bg-white/10 transition-colors rounded-full"
+                          variant='secondary'
+                          className='flex h-7 cursor-pointer items-center gap-1.5 rounded-full border border-neutral-200 bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-neutral-700 transition-colors hover:bg-neutral-200 md:text-xs dark:border-white/10 dark:bg-white/5 dark:text-neutral-300 dark:hover:bg-white/10'
                           onClick={() => {
                             setIsSettingsOpen(true);
                             setShowOrientationSelection(false);
                           }}
                         >
-                          <selectedDesignType.icon className="w-3 h-3" />
+                          <selectedDesignType.icon className='h-3 w-3' />
                           {selectedDesignType.label}
                           {selectedOrientation &&
                             selectedOrientation !== "custom" && (
-                              <span className="opacity-60 font-normal">
+                              <span className='font-normal opacity-60'>
                                 • {selectedOrientation}
                               </span>
                             )}
                         </Badge>
                       )}
 
-                      <div className="ml-auto flex items-center gap-1.5">
+                      <div className='ml-auto flex items-center gap-1.5'>
                         <button
-                          className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-transparent px-4 py-2 rounded-full !p-0 text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5 h-8 w-8"
-                          type="button"
-                          aria-label="Settings"
+                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground hover:bg-primary/5 relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5'
+                          type='button'
+                          aria-label='Settings'
                           onClick={() => {
                             setIsSettingsOpen(!isSettingsOpen);
                             setShowOrientationSelection(true);
-                            trackFeatureUsed(MIXPANEL_TOKEN, "idea_advanced_settings_opened", {
+                            trackFeatureUsed("idea_advanced_settings_opened", {
                               source: "input_toolbar",
                             });
                           }}
                         >
-                          <Settings className="shrink-0 size-4" />
+                          <Settings className='size-4 shrink-0' />
                         </button>
                         <button
                           className={cn(
-                            "relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-transparent px-4 py-2 rounded-full !p-0 h-8 w-8",
+                            "focus-visible:ring-ring relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
                             isBrandSettingsOpen
                               ? "text-primary bg-primary/10"
-                              : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5",
+                              : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
                           )}
-                          type="button"
-                          aria-label="Brand settings"
+                          type='button'
+                          aria-label='Brand settings'
                           onClick={() => {
                             setIsBrandSettingsOpen(!isBrandSettingsOpen);
                             setIsSettingsOpen(false);
-                            trackFeatureUsed(MIXPANEL_TOKEN, "idea_brand_settings_toggled", {
+                            trackFeatureUsed("idea_brand_settings_toggled", {
                               is_opening: !isBrandSettingsOpen,
                             });
                           }}
                         >
-                          <Palette className="shrink-0 size-4" />
+                          <Palette className='size-4 shrink-0' />
                         </button>
                         <button
-                          className={`relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-transparent px-4 py-2 rounded-full !p-0 h-8 w-8 ${
+                          className={`focus-visible:ring-ring relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
                             isListening
-                              ? "text-red-500 bg-red-500/10 animate-pulse"
+                              ? "animate-pulse bg-red-500/10 text-red-500"
                               : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
                           }`}
-                          type="button"
+                          type='button'
                           aria-label={
                             isListening ? "Stop listening" : "Voice input"
                           }
@@ -1327,40 +1329,40 @@ export function IdeaSection() {
                             !isSupported || isGenerating || isSubmitting
                           }
                         >
-                          <Mic className="shrink-0 size-4" />
+                          <Mic className='size-4 shrink-0' />
                         </button>
                         <button
-                          className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(0,0,0,0.2),0_1px_2px_0_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.05)] active:brightness-[0.65] disabled:brightness-100 px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shrink-0 ml-1"
-                          type="submit"
+                          className='focus-visible:ring-ring bg-primary text-primary-foreground relative ml-1 box-border inline-flex h-8 w-8 min-w-fit shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(0,0,0,0.2),0_1px_2px_0_rgba(0,0,0,0.05)] brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none active:brightness-[0.65] disabled:cursor-not-allowed disabled:opacity-50 disabled:brightness-100 dark:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.05)]'
+                          type='submit'
                           disabled={isSubmitDisabled}
                         >
                           <BorderBeam
                             duration={6}
                             size={40}
-                            className="from-transparent via-red-500 to-transparent"
+                            className='from-transparent via-red-500 to-transparent'
                           />
                           <BorderBeam
                             duration={6}
                             delay={3}
                             size={40}
                             borderWidth={2}
-                            className="from-transparent via-blue-500 to-transparent"
+                            className='from-transparent via-blue-500 to-transparent'
                           />
                           {isGenerating || isSubmitting ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <Loader2 className='h-4 w-4 animate-spin' />
                           ) : (
                             <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="currentColor"
-                              viewBox="0 0 24 24"
-                              width="100%"
-                              height="100%"
-                              className="shrink-0 size-5"
-                              aria-hidden="true"
+                              xmlns='http://www.w3.org/2000/svg'
+                              fill='currentColor'
+                              viewBox='0 0 24 24'
+                              width='100%'
+                              height='100%'
+                              className='size-5 shrink-0'
+                              aria-hidden='true'
                             >
                               <path
-                                fill="currentColor"
-                                d="M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0"
+                                fill='currentColor'
+                                d='M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0'
                               />
                             </svg>
                           )}
@@ -1369,7 +1371,7 @@ export function IdeaSection() {
                     </div>
                     {!user && (
                       <div
-                        className="w-full h-full absolute top-0 left-0 right-0 bottom-0 z-50  bg-transparent"
+                        className='absolute top-0 right-0 bottom-0 left-0 z-50 h-full w-full bg-transparent'
                         onClick={() => router.push("/signin")}
                       ></div>
                     )}
@@ -1387,33 +1389,33 @@ export function IdeaSection() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black border border-border rounded-xl shadow-md z-50 max-h-[300px] w-full lg:w-fit overflow-hidden"
+                  className='border-border absolute top-full right-0 left-0 z-50 mt-2 max-h-[300px] w-full overflow-hidden rounded-xl border bg-white shadow-md lg:w-fit dark:bg-black'
                 >
-                  <div className="flex flex-col p-4">
+                  <div className='flex flex-col p-4'>
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-semibold text-foreground">
+                    <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
+                      <div className='flex items-center gap-2'>
+                        <h3 className='text-foreground text-sm font-semibold'>
                           Advanced Settings
                         </h3>
                       </div>
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => {
                           setIsSettingsOpen(false);
                           setShowOrientationSelection(false);
                         }}
-                        className="flex items-center justify-center w-6 h-6 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
-                        aria-label="Close settings"
+                        className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
+                        aria-label='Close settings'
                       >
-                        <X className="h-4 w-4" />
+                        <X className='h-4 w-4' />
                       </button>
                     </div>
 
                     {/* Design Type Selection or Orientation Selection */}
-                    <div className="overflow-y-auto max-h-[320px]">
+                    <div className='max-h-[320px] overflow-y-auto'>
                       {!showOrientationSelection ? (
-                        <div className="space-y-0.5">
+                        <div className='space-y-0.5'>
                           {designTypeItems.map((item) => {
                             const IconComponent = item.icon;
                             const isSelected = selectedDesignTypeId === item.id;
@@ -1421,18 +1423,26 @@ export function IdeaSection() {
                             return (
                               <button
                                 key={item.id}
-                                type="button"
+                                type='button'
                                 onClick={() => {
                                   if (isComingSoon) return;
-                                  trackFeatureUsed(MIXPANEL_TOKEN, "idea_design_type_selected", {
-                                    design_type: item.id,
-                                  });
-                                  if (item.id == "video") {
-                                    trackAppOpened(MIXPANEL_TOKEN, "video-generation", "AI Video", "idea_settings", {
+                                  trackFeatureUsed(
+                                    "idea_design_type_selected",
+                                    {
                                       design_type: item.id,
-                                    });
+                                    }
+                                  );
+                                  if (item.id == "video") {
+                                    trackAppOpened(
+                                      "video-generation",
+                                      "AI Video",
+                                      "idea_settings",
+                                      {
+                                        design_type: item.id,
+                                      }
+                                    );
                                     router.push(
-                                      "/inspire/create?mode=ai-video-gen",
+                                      "/inspire/create?mode=ai-video-gen"
                                     );
                                   }
                                   // else if (item.id == "image") {
@@ -1447,9 +1457,9 @@ export function IdeaSection() {
                                   }
                                 }}
                                 disabled={isComingSoon}
-                                className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors ${
+                                className={`flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors ${
                                   isComingSoon
-                                    ? "opacity-50 cursor-not-allowed"
+                                    ? "cursor-not-allowed opacity-50"
                                     : isSelected
                                       ? "text-foreground"
                                       : "text-muted-foreground hover:text-foreground"
@@ -1458,11 +1468,11 @@ export function IdeaSection() {
                                 <Checkbox
                                   checked={isSelected}
                                   disabled={isComingSoon}
-                                  className="flex-shrink-0"
+                                  className='flex-shrink-0'
                                   onCheckedChange={() => {}}
                                 />
                                 <IconComponent
-                                  className={`w-4 h-4 flex-shrink-0 ${
+                                  className={`h-4 w-4 flex-shrink-0 ${
                                     isComingSoon
                                       ? "text-muted-foreground/50"
                                       : isSelected
@@ -1470,13 +1480,13 @@ export function IdeaSection() {
                                         : "text-muted-foreground"
                                   }`}
                                 />
-                                <span className="text-sm font-normal flex-1">
+                                <span className='flex-1 text-sm font-normal'>
                                   {item.label}
                                 </span>
                                 {isComingSoon && (
                                   <Badge
-                                    variant="secondary"
-                                    className="text-xs px-2 py-0.5 bg-muted text-muted-foreground"
+                                    variant='secondary'
+                                    className='bg-muted text-muted-foreground px-2 py-0.5 text-xs'
                                   >
                                     Coming Soon
                                   </Badge>
@@ -1486,75 +1496,78 @@ export function IdeaSection() {
                           })}
                         </div>
                       ) : (
-                        <div className="space-y-4">
+                        <div className='space-y-4'>
                           {/* Back button */}
                           <button
-                            type="button"
+                            type='button'
                             onClick={() => {
                               setShowOrientationSelection(false);
                             }}
-                            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-2"
+                            className='text-muted-foreground hover:text-foreground mb-2 flex items-center gap-2 text-sm transition-colors'
                           >
                             <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
+                              className='h-4 w-4'
+                              fill='none'
+                              stroke='currentColor'
+                              viewBox='0 0 24 24'
                             >
                               <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
                                 strokeWidth={2}
-                                d="M15 19l-7-7 7-7"
+                                d='M15 19l-7-7 7-7'
                               />
                             </svg>
                             Change Design Type
                           </button>
-                          <div className="text-xs text-muted-foreground mb-3 px-3">
+                          <div className='text-muted-foreground mb-3 px-3 text-xs'>
                             {selectedDesignType?.label} Settings
                           </div>
 
                           {/* Orientation Options */}
-                          <div className="space-y-0.5">
+                          <div className='space-y-0.5'>
                             {orientationOptions.length > 0 && (
                               <>
-                                <p className="text-xs text-muted-foreground mb-2 px-3">
+                                <p className='text-muted-foreground mb-2 px-3 text-xs'>
                                   Select orientation
                                 </p>
                                 {orientationOptions.map((option) => (
                                   <button
                                     key={option.id}
-                                    type="button"
+                                    type='button'
                                     onClick={() => {
                                       setSelectedOrientation(option.id);
-                                    trackFeatureUsed(MIXPANEL_TOKEN, "idea_orientation_selected", {
-                                      orientation: option.id,
-                                      design_type: selectedDesignTypeId,
-                                    });
+                                      trackFeatureUsed(
+                                        "idea_orientation_selected",
+                                        {
+                                          orientation: option.id,
+                                          design_type: selectedDesignTypeId,
+                                        }
+                                      );
                                       setIsSettingsOpen(false);
                                       setShowOrientationSelection(false);
                                     }}
-                                    className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-colors ${
+                                    className={`flex w-full items-center justify-between px-3 py-2.5 text-left transition-colors ${
                                       selectedOrientation === option.id
                                         ? "text-foreground"
                                         : "text-muted-foreground hover:text-foreground"
                                     }`}
                                   >
-                                    <div className="flex items-center gap-3">
+                                    <div className='flex items-center gap-3'>
                                       <Checkbox
                                         checked={
                                           selectedOrientation === option.id
                                         }
-                                        className="flex-shrink-0"
+                                        className='flex-shrink-0'
                                         onCheckedChange={() => {}}
                                       />
-                                      <span className="text-sm font-normal">
+                                      <span className='text-sm font-normal'>
                                         {option.label}
                                       </span>
                                     </div>
-                                    <div className="flex items-center gap-2">
+                                    <div className='flex items-center gap-2'>
                                       {option.dimensions && (
-                                        <span className="text-xs text-muted-foreground">
+                                        <span className='text-muted-foreground text-xs'>
                                           {option.dimensions}
                                         </span>
                                       )}
@@ -1566,37 +1579,37 @@ export function IdeaSection() {
 
                             {/* Custom Size Option */}
                             <div
-                              className={`${orientationOptions.length > 0 ? "pt-2 border-t border-border mt-2" : ""}`}
+                              className={`${orientationOptions.length > 0 ? "border-border mt-2 border-t pt-2" : ""}`}
                             >
                               <button
-                                type="button"
+                                type='button'
                                 onClick={() => {
                                   setSelectedOrientation("custom");
                                 }}
-                                className={`w-full flex items-center justify-between px-3 py-2.5 text-left transition-colors ${
+                                className={`flex w-full items-center justify-between px-3 py-2.5 text-left transition-colors ${
                                   selectedOrientation === "custom"
                                     ? "text-foreground"
                                     : "text-muted-foreground hover:text-foreground"
                                 }`}
                               >
-                                <div className="flex items-center gap-3">
+                                <div className='flex items-center gap-3'>
                                   <Checkbox
                                     checked={selectedOrientation === "custom"}
-                                    className="flex-shrink-0"
+                                    className='flex-shrink-0'
                                     onCheckedChange={() => {}}
                                   />
-                                  <span className="text-sm font-normal">
+                                  <span className='text-sm font-normal'>
                                     Custom Size
                                   </span>
                                 </div>
                               </button>
 
                               {selectedOrientation === "custom" && (
-                                <div className="px-3 py-3 space-y-2">
-                                  <div className="flex items-center gap-2">
+                                <div className='space-y-2 px-3 py-3'>
+                                  <div className='flex items-center gap-2'>
                                     <Input
-                                      type="number"
-                                      placeholder="px width"
+                                      type='number'
+                                      placeholder='px width'
                                       value={customSize.width}
                                       onChange={(e) =>
                                         setCustomSize((prev) => ({
@@ -1604,15 +1617,15 @@ export function IdeaSection() {
                                           width: e.target.value,
                                         }))
                                       }
-                                      className="h-8 text-sm"
-                                      min="1"
+                                      className='h-8 text-sm'
+                                      min='1'
                                     />
-                                    <span className="text-xs text-muted-foreground">
+                                    <span className='text-muted-foreground text-xs'>
                                       ×
                                     </span>
                                     <Input
-                                      type="number"
-                                      placeholder="px height"
+                                      type='number'
+                                      placeholder='px height'
                                       value={customSize.height}
                                       onChange={(e) =>
                                         setCustomSize((prev) => ({
@@ -1620,12 +1633,12 @@ export function IdeaSection() {
                                           height: e.target.value,
                                         }))
                                       }
-                                      className="h-8 text-sm"
-                                      min="1"
+                                      className='h-8 text-sm'
+                                      min='1'
                                     />
                                   </div>
                                   <button
-                                    type="button"
+                                    type='button'
                                     onClick={() => {
                                       if (
                                         customSize.width &&
@@ -1635,7 +1648,7 @@ export function IdeaSection() {
                                         setShowOrientationSelection(false);
                                       }
                                     }}
-                                    className="w-full text-xs px-3 py-1.5 bg-foreground text-background rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className='bg-foreground text-background w-full rounded px-3 py-1.5 text-xs transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50'
                                     disabled={
                                       !customSize.width || !customSize.height
                                     }
@@ -1661,28 +1674,28 @@ export function IdeaSection() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black border border-border rounded-xl shadow-md z-50 max-h-[500px] w-full max-w-md mx-auto md:mx-0 overflow-hidden"
+                  className='border-border absolute top-full right-0 left-0 z-50 mx-auto mt-2 max-h-[500px] w-full max-w-md overflow-hidden rounded-xl border bg-white shadow-md md:mx-0 dark:bg-black'
                 >
-                  <div className="flex flex-col p-4">
+                  <div className='flex flex-col p-4'>
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
-                      <div className="flex items-center gap-2">
-                        <Palette className="h-4 w-4 text-primary" />
-                        <h3 className="text-sm font-semibold text-foreground">
+                    <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
+                      <div className='flex items-center gap-2'>
+                        <Palette className='text-primary h-4 w-4' />
+                        <h3 className='text-foreground text-sm font-semibold'>
                           Brand Identity
                         </h3>
                       </div>
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => setIsBrandSettingsOpen(false)}
-                        className="flex items-center justify-center w-6 h-6 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
-                        aria-label="Close brand settings"
+                        className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
+                        aria-label='Close brand settings'
                       >
-                        <X className="h-4 w-4" />
+                        <X className='h-4 w-4' />
                       </button>
                     </div>
 
-                    <div className="overflow-y-auto max-h-[400px] custom-scrollbar">
+                    <div className='custom-scrollbar max-h-[400px] overflow-y-auto'>
                       <ColorManagement />
                     </div>
                   </div>
@@ -1691,7 +1704,7 @@ export function IdeaSection() {
             </AnimatePresence>
 
             {/* Quick Task Search - only show when not generating and no input */}
-            <div className="absolute"></div>
+            <div className='absolute'></div>
           </motion.div>
         </div>
 
@@ -1706,93 +1719,98 @@ export function IdeaSection() {
           <div className="absolute top-0 right-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-20 pointer-events-none rounded-r-3xl" />
         </div> */}
 
-        <div className="max-w-4xl mx-auto w-full px-4 min-w-0 mt-8">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-sm font-bold text-black dark:text-white lg:ml-4 lg:text-lg">
+        <div className='mx-auto mt-8 w-full max-w-4xl min-w-0 px-4'>
+          <div className='mb-2 flex items-center justify-between'>
+            <h2 className='text-sm font-bold text-black lg:ml-4 lg:text-lg dark:text-white'>
               Feature Agents
             </h2>
             <Link
-              href="/agents"
-              className="text-[11px] font-mono font-bold text-primary hover:underline transition-all"
+              href='/agents'
+              className='text-primary font-mono text-[11px] font-bold transition-all hover:underline'
             >
               View all →
             </Link>
           </div>
-          <div className="grid w-full min-w-0">
+          <div className='grid w-full min-w-0'>
             <div
-              aria-hidden="false"
-              className="col-start-1 row-start-1 w-full min-w-0 pointer-events-auto"
+              aria-hidden='false'
+              className='pointer-events-auto col-start-1 row-start-1 w-full min-w-0'
               style={{ transform: "none", opacity: 1 }}
             >
-              <div className="relative w-full min-w-0">
-                <div className="py-4 relative">
-                  <div className="flex flex-row items-start gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className='relative w-full min-w-0'>
+                <div className='relative py-4'>
+                  <div className='flex flex-row items-start gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
                     {APP_SECTIONS.flatMap((section) => section.apps).map(
                       (app) => (
-                        <Link key={app.id} href={app.href} className="shrink-0">
+                        <Link key={app.id} href={app.href} className='shrink-0'>
                           <div
                             onClick={() =>
-                              trackAppOpened(MIXPANEL_TOKEN, app.id, app.title, "idea_feature_agents", {
-                                href: app.href,
-                                app_type: app.type,
-                              })
+                              trackAppOpened(
+                                app.id,
+                                app.title,
+                                "idea_feature_agents",
+                                {
+                                  href: app.href,
+                                  app_type: app.type,
+                                }
+                              )
                             }
                           >
-                          <div
-                            className="focus-visible:ring-f-primary/30 group flex flex-col items-center rounded-xl bg-transparent p-0 text-center focus-visible:outline-none focus-visible:ring-2 justify-center gap-2"
-                            style={{ width: 128 }}
-                          >
-                            <span className="support-hover:group-hover:-translate-y-3 flex w-full flex-col items-center gap-2 transition-transform duration-300 active:-translate-y-3">
-                              <div className="liquid-glass-border bg-f-other-3 relative w-full overflow-hidden rounded-xl p-1 shadow-sm backdrop-blur-md border-[1.8px] border-gray-500 dark:border-gray-600 border-dotted">
-                                <div className="relative w-full overflow-hidden rounded-lg aspect-[60/50]">
-                                  {app.badge && (
-                                    // <div className="absolute top-0 left-1.5 z-20">
-                                    //   <span
-                                    //     className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-mono shadow-sm"
-                                    //     style={{
-                                    //       backgroundColor: app.badge.bgColor,
-                                    //       color: app.badge.textColor,
-                                    //     }}
-                                    //   >
-                                    //     {app.badge.text}
-                                    //   </span>
-                                    // </div>
-                                    <div className="flex flex-wrap gap-2 absolute top-1 left-2 z-10">
-                                      <span
-                                        className="inline-flex items-center justify-center px-1.5 text-[10px] text-white relative overflow-hidden skew-x-[-10deg] rounded"
-                                        style={{
-                                          fontFamily: '"Space Grotesk"',
-                                          backgroundColor: app.badge.bgColor,
-                                          color: app.badge.textColor,
-                                        }}
-                                      >
-                                        <span>{app.badge.text}</span>
-                                      </span>
-                                    </div>
-                                  )}
-                                  <img
-                                    alt={app.title}
-                                    loading="lazy"
-                                    decoding="async"
-                                    className="relative w-full h-full object-cover rounded-lg"
-                                    src={app.imageSrc}
-                                  />
+                            <div
+                              className='focus-visible:ring-f-primary/30 group flex flex-col items-center justify-center gap-2 rounded-xl bg-transparent p-0 text-center focus-visible:ring-2 focus-visible:outline-none'
+                              style={{ width: 128 }}
+                            >
+                              <span className='support-hover:group-hover:-translate-y-3 flex w-full flex-col items-center gap-2 transition-transform duration-300 active:-translate-y-3'>
+                                <div className='liquid-glass-border bg-f-other-3 relative w-full overflow-hidden rounded-xl border-[1.8px] border-dotted border-gray-500 p-1 shadow-sm backdrop-blur-md dark:border-gray-600'>
+                                  <div className='relative aspect-[60/50] w-full overflow-hidden rounded-lg'>
+                                    {app.badge && (
+                                      // <div className="absolute top-0 left-1.5 z-20">
+                                      //   <span
+                                      //     className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-mono shadow-sm"
+                                      //     style={{
+                                      //       backgroundColor: app.badge.bgColor,
+                                      //       color: app.badge.textColor,
+                                      //     }}
+                                      //   >
+                                      //     {app.badge.text}
+                                      //   </span>
+                                      // </div>
+                                      <div className='absolute top-1 left-2 z-10 flex flex-wrap gap-2'>
+                                        <span
+                                          className='relative inline-flex skew-x-[-10deg] items-center justify-center overflow-hidden rounded px-1.5 text-[10px] text-white'
+                                          style={{
+                                            fontFamily: '"Space Grotesk"',
+                                            backgroundColor: app.badge.bgColor,
+                                            color: app.badge.textColor,
+                                          }}
+                                        >
+                                          <span>{app.badge.text}</span>
+                                        </span>
+                                      </div>
+                                    )}
+                                    <img
+                                      alt={app.title}
+                                      loading='lazy'
+                                      decoding='async'
+                                      className='relative h-full w-full rounded-lg object-cover'
+                                      src={app.imageSrc}
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                              <span className="support-hover:group-hover:text-primary support-hover:group-hover:font-semibold w-full truncate text-[10px] leading-4 md:text-sm text-f-text block font-mono">
-                                {app.title}
+                                <span className='support-hover:group-hover:text-primary support-hover:group-hover:font-semibold text-f-text block w-full truncate font-mono text-[10px] leading-4 md:text-sm'>
+                                  {app.title}
+                                </span>
                               </span>
-                            </span>
-                          </div>
+                            </div>
                           </div>
                         </Link>
-                      ),
+                      )
                     )}
                   </div>
 
                   {/* Edge Fades */}
-                  <div className="absolute top-0 left-0 bottom-0 w-12 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-                  <div className="absolute top-0 right-0 bottom-0 w-12 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+                  <div className='from-background pointer-events-none absolute top-0 bottom-0 left-0 z-10 w-12 bg-gradient-to-r to-transparent' />
+                  <div className='from-background pointer-events-none absolute top-0 right-0 bottom-0 z-10 w-12 bg-gradient-to-l to-transparent' />
                 </div>
               </div>
             </div>
@@ -1805,36 +1823,36 @@ export function IdeaSection() {
         open={isPresentationDrawerOpen}
         onOpenChange={setIsPresentationDrawerOpen}
       >
-        <DrawerContent className="max-h-[90vh] lg:px-82">
+        <DrawerContent className='max-h-[90vh] lg:px-82'>
           <DrawerHeader>
             <DrawerTitle>Organize Your Presentation</DrawerTitle>
             <DrawerDescription>
               Review and modify your presentation structure before generating
             </DrawerDescription>
           </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-4 space-y-4">
+          <div className='space-y-4 overflow-y-auto px-4 pb-4'>
             {isGeneratingOutline ? (
-              <div className="flex flex-col items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-muted-foreground mb-4" />
-                <p className="text-sm text-muted-foreground">
+              <div className='flex flex-col items-center justify-center py-12'>
+                <Loader2 className='text-muted-foreground mb-4 h-8 w-8 animate-spin' />
+                <p className='text-muted-foreground text-sm'>
                   Generating presentation outline...
                 </p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className='space-y-3'>
                 {presentationOutline.map((slide, index) => (
                   <div
                     key={slide.id}
-                    className="border border-border rounded-lg p-4 bg-muted/30"
+                    className='border-border bg-muted/30 rounded-lg border p-4'
                   >
-                    <div className="flex items-start gap-3">
-                      <div className="flex items-center gap-2 flex-shrink-0 pt-1">
-                        <GripVertical className="w-4 h-4 text-muted-foreground cursor-move" />
-                        <span className="text-xs font-medium text-muted-foreground w-8">
+                    <div className='flex items-start gap-3'>
+                      <div className='flex flex-shrink-0 items-center gap-2 pt-1'>
+                        <GripVertical className='text-muted-foreground h-4 w-4 cursor-move' />
+                        <span className='text-muted-foreground w-8 text-xs font-medium'>
                           {index + 1}
                         </span>
                       </div>
-                      <div className="flex-1 space-y-2">
+                      <div className='flex-1 space-y-2'>
                         <Input
                           value={slide.title}
                           onChange={(e) => {
@@ -1842,16 +1860,16 @@ export function IdeaSection() {
                             newOutline[index].title = e.target.value;
                             setPresentationOutline(newOutline);
                           }}
-                          className="font-medium"
-                          placeholder="Slide title"
+                          className='font-medium'
+                          placeholder='Slide title'
                         />
-                        <div className="space-y-1">
+                        <div className='space-y-1'>
                           {slide.content.map((point, pointIndex) => (
                             <div
                               key={pointIndex}
-                              className="flex items-center gap-2"
+                              className='flex items-center gap-2'
                             >
-                              <span className="text-muted-foreground text-xs">
+                              <span className='text-muted-foreground text-xs'>
                                 •
                               </span>
                               <Input
@@ -1862,56 +1880,56 @@ export function IdeaSection() {
                                     e.target.value;
                                   setPresentationOutline(newOutline);
                                 }}
-                                className="text-sm"
-                                placeholder="Bullet point"
+                                className='text-sm'
+                                placeholder='Bullet point'
                               />
                               <button
-                                type="button"
+                                type='button'
                                 onClick={() => {
                                   const newOutline = [...presentationOutline];
                                   newOutline[index].content.splice(
                                     pointIndex,
-                                    1,
+                                    1
                                   );
                                   setPresentationOutline(newOutline);
                                 }}
-                                className="text-muted-foreground hover:text-destructive transition-colors"
+                                className='text-muted-foreground hover:text-destructive transition-colors'
                               >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className='h-4 w-4' />
                               </button>
                             </div>
                           ))}
                           <button
-                            type="button"
+                            type='button'
                             onClick={() => {
                               const newOutline = [...presentationOutline];
                               newOutline[index].content.push("");
                               setPresentationOutline(newOutline);
                             }}
-                            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mt-2"
+                            className='text-muted-foreground hover:text-foreground mt-2 flex items-center gap-2 text-sm transition-colors'
                           >
-                            <Plus className="w-4 h-4" />
+                            <Plus className='h-4 w-4' />
                             Add bullet point
                           </button>
                         </div>
                       </div>
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => {
                           const newOutline = presentationOutline.filter(
-                            (_, i) => i !== index,
+                            (_, i) => i !== index
                           );
                           setPresentationOutline(newOutline);
                         }}
-                        className="text-muted-foreground hover:text-destructive transition-colors flex-shrink-0"
+                        className='text-muted-foreground hover:text-destructive flex-shrink-0 transition-colors'
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className='h-4 w-4' />
                       </button>
                     </div>
                   </div>
                 ))}
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => {
                     setPresentationOutline([
                       ...presentationOutline,
@@ -1922,25 +1940,25 @@ export function IdeaSection() {
                       },
                     ]);
                   }}
-                  className="w-full border-2 border-dashed border-border rounded-lg p-4 flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors"
+                  className='border-border text-muted-foreground hover:text-foreground hover:border-foreground/50 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 transition-colors'
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className='h-4 w-4' />
                   Add Slide
                 </button>
 
                 {/* Customization Sections */}
-                <div className="pt-6 border-t border-border space-y-6">
+                <div className='border-border space-y-6 border-t pt-6'>
                   {/* Text Content Section */}
-                  <div className="space-y-3">
+                  <div className='space-y-3'>
                     <div>
-                      <h3 className="text-sm font-semibold mb-1">
+                      <h3 className='mb-1 text-sm font-semibold'>
                         Text Content
                       </h3>
-                      <p className="text-xs text-muted-foreground">
+                      <p className='text-muted-foreground text-xs'>
                         Amount of text per card
                       </p>
                     </div>
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className='grid grid-cols-4 gap-2'>
                       {[
                         { id: "minimal", label: "Minimal", lines: 1 },
                         { id: "concise", label: "Concise", lines: 2 },
@@ -1949,23 +1967,23 @@ export function IdeaSection() {
                       ].map((option) => (
                         <button
                           key={option.id}
-                          type="button"
+                          type='button'
                           onClick={() =>
                             setTextAmount(
                               option.id as
                                 | "minimal"
                                 | "concise"
                                 | "detailed"
-                                | "extensive",
+                                | "extensive"
                             )
                           }
-                          className={`flex flex-col items-center gap-2 p-3 rounded-lg border transition-all ${
+                          className={`flex flex-col items-center gap-2 rounded-lg border p-3 transition-all ${
                             textAmount === option.id
                               ? "border-foreground bg-foreground/5"
                               : "border-border hover:border-foreground/50"
                           }`}
                         >
-                          <div className="flex flex-col gap-0.5">
+                          <div className='flex flex-col gap-0.5'>
                             {Array.from({ length: option.lines }).map(
                               (_, i) => (
                                 <div
@@ -1976,10 +1994,10 @@ export function IdeaSection() {
                                       : "bg-muted-foreground w-6"
                                   }`}
                                 />
-                              ),
+                              )
                             )}
                           </div>
-                          <span className="text-xs font-medium">
+                          <span className='text-xs font-medium'>
                             {option.label}
                           </span>
                         </button>
@@ -1988,12 +2006,12 @@ export function IdeaSection() {
                   </div>
 
                   {/* Theme Selection */}
-                  <div className="space-y-3">
+                  <div className='space-y-3'>
                     <div>
-                      <h3 className="text-sm font-semibold mb-1">Visuals</h3>
-                      <p className="text-xs text-muted-foreground">Theme</p>
+                      <h3 className='mb-1 text-sm font-semibold'>Visuals</h3>
+                      <p className='text-muted-foreground text-xs'>Theme</p>
                     </div>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className='grid grid-cols-3 gap-2'>
                       {[
                         {
                           id: "bubble-gum",
@@ -2034,42 +2052,42 @@ export function IdeaSection() {
                       ].map((theme) => (
                         <button
                           key={theme.id}
-                          type="button"
+                          type='button'
                           onClick={() => setSelectedTheme(theme.id)}
-                          className={`relative p-3 rounded-lg border-2 transition-all ${
+                          className={`relative rounded-lg border-2 p-3 transition-all ${
                             selectedTheme === theme.id
                               ? "border-foreground"
                               : "border-border hover:border-foreground/50"
                           }`}
                         >
                           <div
-                            className={`${theme.bg} rounded p-2 space-y-1 min-h-[60px]`}
+                            className={`${theme.bg} min-h-[60px] space-y-1 rounded p-2`}
                           >
                             <div
                               className={`${theme.text} text-xs font-medium`}
                             >
                               Title
                             </div>
-                            <div className="text-white text-xs">
+                            <div className='text-xs text-white'>
                               Body & <span className={theme.text}>link</span>
                             </div>
                           </div>
-                          <span className="text-xs font-medium mt-2 block text-center">
+                          <span className='mt-2 block text-center text-xs font-medium'>
                             {theme.label}
                           </span>
                           {selectedTheme === theme.id && (
-                            <div className="absolute -top-1 -right-1 w-5 h-5 bg-foreground rounded-full flex items-center justify-center">
+                            <div className='bg-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full'>
                               <svg
-                                className="w-3 h-3 text-background"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                                className='text-background h-3 w-3'
+                                fill='none'
+                                stroke='currentColor'
+                                viewBox='0 0 24 24'
                               >
                                 <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
+                                  strokeLinecap='round'
+                                  strokeLinejoin='round'
                                   strokeWidth={3}
-                                  d="M5 13l4 4L19 7"
+                                  d='M5 13l4 4L19 7'
                                 />
                               </svg>
                             </div>
@@ -2080,13 +2098,13 @@ export function IdeaSection() {
                   </div>
 
                   {/* Image Style Selection */}
-                  <div className="space-y-3">
+                  <div className='space-y-3'>
                     <div>
-                      <h3 className="text-sm font-semibold mb-1">
+                      <h3 className='mb-1 text-sm font-semibold'>
                         Image art style
                       </h3>
                     </div>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className='grid grid-cols-3 gap-2'>
                       {[
                         { id: "illustration", label: "Illustration" },
                         { id: "photorealistic", label: "Photorealistic" },
@@ -2096,7 +2114,7 @@ export function IdeaSection() {
                       ].map((style) => (
                         <button
                           key={style.id}
-                          type="button"
+                          type='button'
                           onClick={() =>
                             setImageStyle(
                               style.id as
@@ -2104,31 +2122,31 @@ export function IdeaSection() {
                                 | "photorealistic"
                                 | "abstract"
                                 | "3d"
-                                | "line-art",
+                                | "line-art"
                             )
                           }
-                          className={`flex items-center justify-center gap-2 p-3 rounded-lg border transition-all ${
+                          className={`flex items-center justify-center gap-2 rounded-lg border p-3 transition-all ${
                             imageStyle === style.id
                               ? "border-foreground bg-foreground/5"
                               : "border-border hover:border-foreground/50"
                           }`}
                         >
-                          <span className="text-sm font-medium">
+                          <span className='text-sm font-medium'>
                             {style.label}
                           </span>
                           {imageStyle === style.id && (
-                            <div className="w-4 h-4 rounded-full bg-foreground flex items-center justify-center">
+                            <div className='bg-foreground flex h-4 w-4 items-center justify-center rounded-full'>
                               <svg
-                                className="w-2.5 h-2.5 text-background"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                                className='text-background h-2.5 w-2.5'
+                                fill='none'
+                                stroke='currentColor'
+                                viewBox='0 0 24 24'
                               >
                                 <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
+                                  strokeLinecap='round'
+                                  strokeLinejoin='round'
                                   strokeWidth={3}
-                                  d="M5 13l4 4L19 7"
+                                  d='M5 13l4 4L19 7'
                                 />
                               </svg>
                             </div>
@@ -2139,12 +2157,12 @@ export function IdeaSection() {
                   </div>
 
                   {/* Extra Keywords */}
-                  <div className="space-y-2">
+                  <div className='space-y-2'>
                     <div>
-                      <h3 className="text-sm font-semibold mb-1">
+                      <h3 className='mb-1 text-sm font-semibold'>
                         Add extra keywords
                       </h3>
-                      <p className="text-xs text-muted-foreground">
+                      <p className='text-muted-foreground text-xs'>
                         Optional: Add keywords to maintain consistency in image
                         style
                       </p>
@@ -2152,8 +2170,8 @@ export function IdeaSection() {
                     <Input
                       value={extraKeywords}
                       onChange={(e) => setExtraKeywords(e.target.value)}
-                      placeholder="e.g. minimalism, colorful"
-                      className="text-sm"
+                      placeholder='e.g. minimalism, colorful'
+                      className='text-sm'
                     />
                   </div>
                 </div>
@@ -2187,7 +2205,7 @@ export function IdeaSection() {
                   const response = await apiResponse.post(
                     "/presentation/create",
                     presentationData,
-                    { withCredentials: true },
+                    { withCredentials: true }
                   );
 
                   if (response.data && response.data.project) {
@@ -2201,7 +2219,7 @@ export function IdeaSection() {
 
                     // Navigate to presentation studio
                     router.push(
-                      `/presentation/${response.data.project._id || response.data.project.id}/studio`,
+                      `/presentation/${response.data.project._id || response.data.project.id}/studio`
                     );
                   }
                 } catch (error: any) {
@@ -2211,17 +2229,17 @@ export function IdeaSection() {
                   setIsSubmitting(false);
                 }
               }}
-              className="w-full"
+              className='w-full'
               disabled={isSubmitting || presentationOutline.length === 0}
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Creating...
                 </>
               ) : (
                 <>
-                  <WandSparklesIcon className="w-4 h-4 mr-2" />
+                  <WandSparklesIcon className='mr-2 h-4 w-4' />
                   Generate Presentation
                 </>
               )}

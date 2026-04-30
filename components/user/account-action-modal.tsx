@@ -41,34 +41,35 @@ export const AccountActionModal = ({
   return (
     <Dialog open={open} onOpenChange={(value) => (!value ? onClose() : null)}>
       <DialogContent>
-        <DialogHeader className="space-y-3">
-          <div className="flex items-center gap-3">
+        <DialogHeader className='space-y-3'>
+          <div className='flex items-center gap-3'>
             <span
               className={cn(
-                "flex h-10 w-10 items-center justify-center rounded-full bg-muted",
-                variant === "destructive" && "bg-destructive/15 text-destructive"
+                "bg-muted flex h-10 w-10 items-center justify-center rounded-full",
+                variant === "destructive" &&
+                  "bg-destructive/15 text-destructive"
               )}
             >
-              {icon || <AlertTriangle className="h-5 w-5" />}
+              {icon || <AlertTriangle className='h-5 w-5' />}
             </span>
             <DialogTitle>{title}</DialogTitle>
           </div>
-          <DialogDescription className="text-left">
+          <DialogDescription className='text-left'>
             {description}
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex flex-col gap-2 md:flex-row justify-center md:items-center">
-          <Button variant="outline" onClick={onClose} disabled={loading}>
+        <DialogFooter className='flex flex-col justify-center gap-2 md:flex-row md:items-center'>
+          <Button variant='outline' onClick={onClose} disabled={loading}>
             {cancelLabel}
           </Button>
           <Button
             variant={variant}
             onClick={onConfirm}
             disabled={loading}
-            className="min-w-[120px]"
+            className='min-w-[120px]'
           >
             {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className='h-4 w-4 animate-spin' />
             ) : (
               confirmLabel
             )}
@@ -80,4 +81,3 @@ export const AccountActionModal = ({
 };
 
 export default AccountActionModal;
-

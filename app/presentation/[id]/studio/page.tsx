@@ -1,72 +1,72 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef, useMemo } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { apiResponse } from "@/utils/apiResponse";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import {
-  Loader2,
-  ChevronLeft,
-  Grid3x3,
-  List,
-  X,
-  Plus,
-  Type,
-  List as ListIcon,
-  Table,
-  MessageSquare,
-  Hash,
-  CheckSquare,
-  AlertCircle,
-  Info,
-  TriangleAlert,
-  HelpCircle,
-  CheckCircle2,
-  Columns,
-  Square,
-  ArrowRight,
-  Image as ImageIcon,
-  Layout,
-  GripVertical,
-  Save,
-  MoreVertical,
-  Trash2,
-  Copy,
-  FileText,
-  BarChart3,
-} from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
-import { PresentationNavbar } from "@/components/presentation/navbar";
-import { SlideCanvas } from "@/components/presentation/slide-canvas";
+import { ChartLibrary } from "@/components/presentation/chart-library";
 import { DraggableSlide } from "@/components/presentation/draggable-slide";
 import { IconLibrary } from "@/components/presentation/icon-library";
 import { ImageLibrary } from "@/components/presentation/image-library";
-import { ChartLibrary } from "@/components/presentation/chart-library";
+import { PresentationNavbar } from "@/components/presentation/navbar";
+import { SlideCanvas } from "@/components/presentation/slide-canvas";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import { PresentationBlock } from "@/types/presentation-schema";
-import { exportToPPTX, exportToPDF } from "@/utils/presentation-export";
-import { Download, Palette } from "lucide-react";
+import { apiResponse } from "@/utils/apiResponse";
+import { exportToPDF, exportToPPTX } from "@/utils/presentation-export";
 import {
   DndContext,
-  closestCenter,
+  DragEndEvent,
   KeyboardSensor,
   PointerSensor,
+  closestCenter,
   useSensor,
   useSensors,
-  DragEndEvent,
 } from "@dnd-kit/core";
 import {
-  arrayMove,
   SortableContext,
+  arrayMove,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
   useSortable,
+  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  AlertCircle,
+  ArrowRight,
+  BarChart3,
+  CheckCircle2,
+  CheckSquare,
+  ChevronLeft,
+  Columns,
+  Copy,
+  FileText,
+  Grid3x3,
+  GripVertical,
+  Hash,
+  HelpCircle,
+  Image as ImageIcon,
+  Info,
+  Layout,
+  List,
+  List as ListIcon,
+  Loader2,
+  MessageSquare,
+  MoreVertical,
+  Plus,
+  Save,
+  Square,
+  Table,
+  Trash2,
+  TriangleAlert,
+  Type,
+  X,
+} from "lucide-react";
+import { Download, Palette } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface Slide {
   id: string;
@@ -896,8 +896,8 @@ export default function PresentationStudioPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <Loader2 className="w-8 h-8 animate-spin text-foreground" />
+      <div className='bg-background flex min-h-screen items-center justify-center'>
+        <Loader2 className='text-foreground h-8 w-8 animate-spin' />
       </div>
     );
   }
@@ -1054,7 +1054,7 @@ export default function PresentationStudioPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
+    <div className='bg-background text-foreground flex min-h-screen flex-col'>
       {/* Top Navigation Bar */}
 
       <PresentationNavbar
@@ -1069,28 +1069,28 @@ export default function PresentationStudioPage() {
         canUndo={historyIndex > 0}
         canRedo={historyIndex < history.length - 1}
       />
-      <div className="flex-1 flex relative z-10">
+      <div className='relative z-10 flex flex-1'>
         {/* Left Toolbar - Floating Sidebar Pattern */}
-        <div className="fixed left-4 top-1/2 -translate-y-1/2 z-50 flex items-center">
+        <div className='fixed top-1/2 left-4 z-50 flex -translate-y-1/2 items-center'>
           {/* Main Toolbar */}
-          <div className="bg-background/80 dark:bg-gray-950/80 backdrop-blur-sm border border-border rounded-xl shadow-lg p-2 flex flex-col items-center space-y-2">
+          <div className='bg-background/80 border-border flex flex-col items-center space-y-2 rounded-xl border p-2 shadow-lg backdrop-blur-sm dark:bg-gray-950/80'>
             {/* Slides Section */}
-            <div className="flex flex-col items-center space-y-1">
+            <div className='flex flex-col items-center space-y-1'>
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={() => setSidebarOpen(!sidebarOpen)}
                 className={cn(
-                  "w-8 h-8 p-0 rounded-lg transition-all duration-200",
+                  "h-8 w-8 rounded-lg p-0 transition-all duration-200",
                   sidebarOpen
                     ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white"
                     : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
                 )}
-                title="Slides"
+                title='Slides'
               >
-                <FileText className="w-4 h-4" />
+                <FileText className='h-4 w-4' />
               </Button>
-              <span className="text-[10px] text-muted-foreground">Slides</span>
+              <span className='text-muted-foreground text-[10px]'>Slides</span>
             </div>
           </div>
 
@@ -1105,50 +1105,50 @@ export default function PresentationStudioPage() {
                   duration: 0.35,
                   ease: [0.4, 0, 0.2, 1],
                 }}
-                className="ml-3 w-80 bg-background/95 dark:bg-gray-950/95 backdrop-blur-xl border border-border rounded-xl shadow-2xl flex flex-col h-[600px] max-h-[calc(100vh-8rem)]"
+                className='bg-background/95 border-border ml-3 flex h-[600px] max-h-[calc(100vh-8rem)] w-80 flex-col rounded-xl border shadow-2xl backdrop-blur-xl dark:bg-gray-950/95'
               >
-                <div className="p-4 pb-0 flex-shrink-0">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-purple-500/10 dark:bg-purple-500/10">
-                        <FileText className="w-5 h-5 text-purple-500 dark:text-purple-400" />
+                <div className='flex-shrink-0 p-4 pb-0'>
+                  <div className='mb-4 flex items-center justify-between'>
+                    <div className='flex items-center gap-3'>
+                      <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 dark:bg-purple-500/10'>
+                        <FileText className='h-5 w-5 text-purple-500 dark:text-purple-400' />
                       </div>
                       <div>
-                        <h3 className="text-sm font-semibold text-foreground">
+                        <h3 className='text-foreground text-sm font-semibold'>
                           Slides
                         </h3>
-                        <p className="text-xs text-muted-foreground">
+                        <p className='text-muted-foreground text-xs'>
                           {slides.length} slide{slides.length !== 1 ? "s" : ""}
                         </p>
                       </div>
                     </div>
                     <Button
-                      variant="ghost"
-                      size="sm"
+                      variant='ghost'
+                      size='sm'
                       onClick={() => setSidebarOpen(false)}
-                      className="h-6 w-6 p-0 hover:bg-muted text-muted-foreground hover:text-foreground"
+                      className='hover:bg-muted text-muted-foreground hover:text-foreground h-6 w-6 p-0'
                     >
-                      <X className="w-3 h-3" />
+                      <X className='h-3 w-3' />
                     </Button>
                   </div>
                 </div>
-                <div className="flex-1 overflow-hidden px-4 pb-4 flex flex-col min-h-0">
+                <div className='flex min-h-0 flex-1 flex-col overflow-hidden px-4 pb-4'>
                   {/* Add Slide Button */}
-                  <div className="mb-3 flex-shrink-0">
+                  <div className='mb-3 flex-shrink-0'>
                     <Button
-                      variant="ghost"
+                      variant='ghost'
                       onClick={addSlide}
-                      className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-blue-500/10 h-9 text-sm font-medium rounded-lg border border-border hover:border-purple-500/30 transition-all duration-200 group relative overflow-hidden"
+                      className='text-muted-foreground hover:text-foreground border-border group relative h-9 w-full justify-start overflow-hidden rounded-lg border text-sm font-medium transition-all duration-200 hover:border-purple-500/30 hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-blue-500/10'
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-blue-500/0 group-hover:from-purple-500/10 group-hover:to-blue-500/10 transition-all duration-300" />
-                      <Plus className="w-4 h-4 mr-2 relative z-10 group-hover:rotate-90 transition-transform duration-300" />
-                      <span className="relative z-10">New Slide</span>
+                      <div className='absolute inset-0 bg-gradient-to-r from-purple-500/0 to-blue-500/0 transition-all duration-300 group-hover:from-purple-500/10 group-hover:to-blue-500/10' />
+                      <Plus className='relative z-10 mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-90' />
+                      <span className='relative z-10'>New Slide</span>
                     </Button>
                   </div>
 
                   {/* Slides List - Scrollable */}
-                  <ScrollArea className="flex-1 min-h-0 w-full">
-                    <div className="space-y-2 pb-4 pr-2">
+                  <ScrollArea className='min-h-0 w-full flex-1'>
+                    <div className='space-y-2 pr-2 pb-4'>
                       {slides.map((slide, index) => (
                         <motion.div
                           key={slide.id}
@@ -1156,28 +1156,28 @@ export default function PresentationStudioPage() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.02 }}
                           className={cn(
-                            "group relative rounded-lg w-fit transition-all duration-300 cursor-pointer overflow-hidden",
+                            "group relative w-fit cursor-pointer overflow-hidden rounded-lg transition-all duration-300",
                             selectedSlideIndex === index
-                              ? "bg-gradient-to-br from-purple-500/20 via-blue-500/10 to-purple-500/20 border-2 border-purple-500/40 shadow-lg shadow-purple-500/20"
-                              : "bg-muted/40 border border-border hover:border-foreground/20 hover:bg-muted/60"
+                              ? "border-2 border-purple-500/40 bg-gradient-to-br from-purple-500/20 via-blue-500/10 to-purple-500/20 shadow-lg shadow-purple-500/20"
+                              : "bg-muted/40 border-border hover:border-foreground/20 hover:bg-muted/60 border"
                           )}
                         >
                           {/* Selected Indicator Glow */}
                           {selectedSlideIndex === index && (
-                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-blue-500/5 to-purple-500/10 animate-pulse" />
+                            <div className='absolute inset-0 animate-pulse bg-gradient-to-br from-purple-500/10 via-blue-500/5 to-purple-500/10' />
                           )}
 
                           <button
                             onClick={() => setSelectedSlideIndex(index)}
-                            className="w-full p-2.5 text-left relative z-10"
+                            className='relative z-10 w-full p-2.5 text-left'
                           >
                             {/* Slide Number Badge */}
                             <div
                               className={cn(
-                                "absolute bottom-2.5 left-2.5 w-6 h-6 rounded-lg flex items-center justify-center text-xs font-semibold transition-all duration-300 z-20",
+                                "absolute bottom-2.5 left-2.5 z-20 flex h-6 w-6 items-center justify-center rounded-lg text-xs font-semibold transition-all duration-300",
                                 selectedSlideIndex === index
                                   ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg shadow-purple-500/30"
-                                  : "bg-muted backdrop-blur-sm text-muted-foreground border border-border group-hover:bg-muted/90 group-hover:text-foreground"
+                                  : "bg-muted text-muted-foreground border-border group-hover:bg-muted/90 group-hover:text-foreground border backdrop-blur-sm"
                               )}
                             >
                               {index + 1}
@@ -1186,7 +1186,7 @@ export default function PresentationStudioPage() {
                             {/* Slide Title */}
                             <p
                               className={cn(
-                                "text-xs font-semibold w-52 line-clamp-1 truncate mb-1.5 transition-colors pr-8",
+                                "mb-1.5 line-clamp-1 w-52 truncate pr-8 text-xs font-semibold transition-colors",
                                 selectedSlideIndex === index
                                   ? "text-foreground"
                                   : "text-muted-foreground group-hover:text-foreground"
@@ -1198,18 +1198,18 @@ export default function PresentationStudioPage() {
                             {/* Slide Preview - Compact Image Snapshot */}
                             <div
                               className={cn(
-                                "w-62 h-32 rounded-lg border overflow-hidden relative transition-all duration-300 bg-gradient-to-br",
+                                "relative h-32 w-62 overflow-hidden rounded-lg border bg-gradient-to-br transition-all duration-300",
                                 selectedSlideIndex === index
-                                  ? "border-purple-500/30 shadow-inner from-muted/60 to-muted/80"
+                                  ? "from-muted/60 to-muted/80 border-purple-500/30 shadow-inner"
                                   : "border-border group-hover:border-foreground/20 from-muted/30 to-muted/50"
                               )}
                             >
                               {/* Visual Snapshot Representation */}
                               {slide.title || slide.content.length > 0 ? (
-                                <div className="h-full p-2 flex flex-col gap-1">
+                                <div className='flex h-full flex-col gap-1 p-2'>
                                   {/* Title Bar */}
                                   {slide.title && (
-                                    <div className="h-2 bg-foreground/20 dark:bg-foreground/30 rounded w-3/4" />
+                                    <div className='bg-foreground/20 dark:bg-foreground/30 h-2 w-3/4 rounded' />
                                   )}
                                   {/* Content Lines */}
                                   {slide.content
@@ -1217,30 +1217,30 @@ export default function PresentationStudioPage() {
                                     .map((content, idx) => (
                                       <div
                                         key={idx}
-                                        className="h-1.5 bg-foreground/15 dark:bg-foreground/25 rounded"
+                                        className='bg-foreground/15 dark:bg-foreground/25 h-1.5 rounded'
                                         style={{
                                           width: `${Math.min(100, 60 + idx * 10)}%`,
                                         }}
                                       />
                                     ))}
                                   {slide.content.length === 0 && (
-                                    <div className="h-1.5 bg-foreground/10 dark:bg-foreground/20 rounded w-1/2" />
+                                    <div className='bg-foreground/10 dark:bg-foreground/20 h-1.5 w-1/2 rounded' />
                                   )}
                                 </div>
                               ) : (
-                                <div className="h-full flex items-center justify-center">
-                                  <div className="text-center">
-                                    <div className="w-6 h-6 mx-auto mb-1 rounded bg-muted border border-border flex items-center justify-center">
-                                      <Layout className="w-3 h-3 text-muted-foreground" />
+                                <div className='flex h-full items-center justify-center'>
+                                  <div className='text-center'>
+                                    <div className='bg-muted border-border mx-auto mb-1 flex h-6 w-6 items-center justify-center rounded border'>
+                                      <Layout className='text-muted-foreground h-3 w-3' />
                                     </div>
-                                    <span className="text-[9px] text-muted-foreground">
+                                    <span className='text-muted-foreground text-[9px]'>
                                       Empty
                                     </span>
                                   </div>
                                 </div>
                               )}
                               {/* Subtle gradient overlay */}
-                              <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent pointer-events-none" />
+                              <div className='from-background/30 pointer-events-none absolute inset-0 bg-gradient-to-t to-transparent' />
                             </div>
                           </button>
 
@@ -1249,27 +1249,27 @@ export default function PresentationStudioPage() {
                             <motion.div
                               initial={{ opacity: 0, scale: 0.8 }}
                               animate={{ opacity: 1, scale: 1 }}
-                              className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/90 dark:bg-gray-950/90 backdrop-blur-sm rounded-lg p-0.5 border border-border shadow-xl"
+                              className='bg-background/90 border-border absolute top-2 right-2 flex gap-1 rounded-lg border p-0.5 opacity-0 shadow-xl backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 dark:bg-gray-950/90'
                             >
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   duplicateSlide(index);
                                 }}
-                                className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-110"
-                                title="Duplicate"
+                                className='hover:bg-muted text-muted-foreground hover:text-foreground rounded p-1 transition-all duration-200 hover:scale-110'
+                                title='Duplicate'
                               >
-                                <Copy className="w-3 h-3" />
+                                <Copy className='h-3 w-3' />
                               </button>
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   deleteSlide(index);
                                 }}
-                                className="p-1 hover:bg-red-500/20 rounded text-muted-foreground hover:text-red-500 transition-all duration-200 hover:scale-110"
-                                title="Delete"
+                                className='text-muted-foreground rounded p-1 transition-all duration-200 hover:scale-110 hover:bg-red-500/20 hover:text-red-500'
+                                title='Delete'
                               >
-                                <Trash2 className="w-3 h-3" />
+                                <Trash2 className='h-3 w-3' />
                               </button>
                             </motion.div>
                           )}
@@ -1284,8 +1284,8 @@ export default function PresentationStudioPage() {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col relative bg-background">
-          <div ref={slideCanvasRef} className="flex-1 p-8">
+        <div className='bg-background relative flex flex-1 flex-col'>
+          <div ref={slideCanvasRef} className='flex-1 p-8'>
             <DndContext
               sensors={slideSensors}
               collisionDetection={closestCenter}
@@ -1295,7 +1295,7 @@ export default function PresentationStudioPage() {
                 items={slides.map((s) => s.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="lg:max-w-5xl mx-auto space-y-8">
+                <div className='mx-auto space-y-8 lg:max-w-5xl'>
                   {slides.map((slide, index) => {
                     // Calculate slide dimensions based on customSize/orientation
                     // Use fixed pixel dimensions to maintain consistent appearance across all devices
@@ -1353,7 +1353,7 @@ export default function PresentationStudioPage() {
                     const scale = Math.min(scaleX, scaleY, 1); // Don't scale up, only down
 
                     return (
-                      <div key={slide.id} className="relative group">
+                      <div key={slide.id} className='group relative'>
                         <DraggableSlide
                           slide={{
                             ...slide,
@@ -1366,7 +1366,7 @@ export default function PresentationStudioPage() {
                         >
                           <div
                             className={cn(
-                              "mx-auto transition-all duration-300 overflow-hidden",
+                              "mx-auto overflow-hidden transition-all duration-300",
                               // On desktop, constrain height to show ~20% of next slide
                               "lg:max-h-[65vh]"
                             )}
@@ -1391,7 +1391,7 @@ export default function PresentationStudioPage() {
                                   slideRefs.current.delete(index);
                                 }
                               }}
-                              className="transition-all duration-300 w-full h-full"
+                              className='h-full w-full transition-all duration-300'
                               style={{
                                 width: dimensions.width,
                                 height: dimensions.height,
@@ -1435,10 +1435,10 @@ export default function PresentationStudioPage() {
 
                         {/* Add Slide Button Between Slides */}
                         {index < slides.length - 1 && (
-                          <div className="flex justify-center -my-4 relative z-10">
+                          <div className='relative z-10 -my-4 flex justify-center'>
                             <Button
-                              variant="ghost"
-                              size="icon"
+                              variant='ghost'
+                              size='icon'
                               onClick={() => {
                                 const newSlide: Slide = {
                                   id: `slide-${Date.now()}`,
@@ -1453,15 +1453,15 @@ export default function PresentationStudioPage() {
                                 addToHistory(newSlides);
                               }}
                               className={cn(
-                                "rounded-full border border-border bg-background hover:bg-muted transition-all",
+                                "border-border bg-background hover:bg-muted rounded-full border transition-all",
                                 // Mobile/Tablet: always visible, tiny
-                                "h-5 w-5 md:h-6 md:w-6 opacity-100",
+                                "h-5 w-5 opacity-100 md:h-6 md:w-6",
                                 // Desktop: visible on hover, normal size
                                 "lg:h-8 lg:w-8 lg:opacity-0 lg:group-hover:opacity-100"
                               )}
-                              title="Add slide"
+                              title='Add slide'
                             >
-                              <Plus className="h-3 w-3 md:h-3.5 md:w-3.5 lg:h-4 lg:w-4" />
+                              <Plus className='h-3 w-3 md:h-3.5 md:w-3.5 lg:h-4 lg:w-4' />
                             </Button>
                           </div>
                         )}
@@ -1470,10 +1470,10 @@ export default function PresentationStudioPage() {
                   })}
 
                   {/* Add Slide Button After Last Slide */}
-                  <div className="relative group flex justify-center">
+                  <div className='group relative flex justify-center'>
                     <Button
-                      variant="ghost"
-                      size="icon"
+                      variant='ghost'
+                      size='icon'
                       onClick={() => {
                         const newSlide: Slide = {
                           id: `slide-${Date.now()}`,
@@ -1487,15 +1487,15 @@ export default function PresentationStudioPage() {
                         addToHistory(newSlides);
                       }}
                       className={cn(
-                        "rounded-full border border-border bg-background hover:bg-muted transition-all",
+                        "border-border bg-background hover:bg-muted rounded-full border transition-all",
                         // Mobile/Tablet: always visible, tiny
-                        "h-5 w-5 md:h-6 md:w-6 opacity-100",
+                        "h-5 w-5 opacity-100 md:h-6 md:w-6",
                         // Desktop: visible on hover, normal size
                         "lg:h-8 lg:w-8 lg:opacity-0 lg:group-hover:opacity-100"
                       )}
-                      title="Add slide"
+                      title='Add slide'
                     >
-                      <Plus className="h-3 w-3 md:h-3.5 md:w-3.5 lg:h-4 lg:w-4" />
+                      <Plus className='h-3 w-3 md:h-3.5 md:w-3.5 lg:h-4 lg:w-4' />
                     </Button>
                   </div>
                 </div>
@@ -1504,14 +1504,14 @@ export default function PresentationStudioPage() {
           </div>
 
           {/* Right Toolbar - Floating Sidebar Pattern */}
-          <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 flex items-center">
+          <div className='fixed top-1/2 right-4 z-50 flex -translate-y-1/2 items-center'>
             {/* Main Toolbar */}
-            <div className="bg-background/80 dark:bg-gray-950/80 backdrop-blur-sm border border-border rounded-xl shadow-lg p-2 flex flex-col items-center space-y-2">
+            <div className='bg-background/80 border-border flex flex-col items-center space-y-2 rounded-xl border p-2 shadow-lg backdrop-blur-sm dark:bg-gray-950/80'>
               {/* Text/Blocks Section */}
-              <div className="flex flex-col items-center space-y-1">
+              <div className='flex flex-col items-center space-y-1'>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={() => {
                     setBlocksMenuOpen(
                       !blocksMenuOpen || blocksMenuType !== "basic"
@@ -1519,23 +1519,23 @@ export default function PresentationStudioPage() {
                     setBlocksMenuType("basic");
                   }}
                   className={cn(
-                    "w-8 h-8 p-0 rounded-lg transition-all duration-200",
+                    "h-8 w-8 rounded-lg p-0 transition-all duration-200",
                     blocksMenuOpen && blocksMenuType === "basic"
                       ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white"
                       : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
                   )}
-                  title="Text & Blocks"
+                  title='Text & Blocks'
                 >
-                  <Type className="w-4 h-4" />
+                  <Type className='h-4 w-4' />
                 </Button>
-                <span className="text-[10px] text-muted-foreground">Text</span>
+                <span className='text-muted-foreground text-[10px]'>Text</span>
               </div>
 
               {/* Layout Section */}
-              <div className="flex flex-col items-center space-y-1">
+              <div className='flex flex-col items-center space-y-1'>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={() => {
                     setBlocksMenuOpen(
                       !blocksMenuOpen || blocksMenuType !== "smart-layouts"
@@ -1543,25 +1543,25 @@ export default function PresentationStudioPage() {
                     setBlocksMenuType("smart-layouts");
                   }}
                   className={cn(
-                    "w-8 h-8 p-0 rounded-lg transition-all duration-200",
+                    "h-8 w-8 rounded-lg p-0 transition-all duration-200",
                     blocksMenuOpen && blocksMenuType === "smart-layouts"
                       ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white"
                       : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
                   )}
-                  title="Layouts"
+                  title='Layouts'
                 >
-                  <Layout className="w-4 h-4" />
+                  <Layout className='h-4 w-4' />
                 </Button>
-                <span className="text-[10px] text-muted-foreground">
+                <span className='text-muted-foreground text-[10px]'>
                   Layout
                 </span>
               </div>
 
               {/* Templates Section */}
-              <div className="flex flex-col items-center space-y-1">
+              <div className='flex flex-col items-center space-y-1'>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={() => {
                     setBlocksMenuOpen(
                       !blocksMenuOpen || blocksMenuType !== "templates"
@@ -1569,25 +1569,25 @@ export default function PresentationStudioPage() {
                     setBlocksMenuType("templates");
                   }}
                   className={cn(
-                    "w-8 h-8 p-0 rounded-lg transition-all duration-200",
+                    "h-8 w-8 rounded-lg p-0 transition-all duration-200",
                     blocksMenuOpen && blocksMenuType === "templates"
                       ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white"
                       : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
                   )}
-                  title="Templates"
+                  title='Templates'
                 >
-                  <Grid3x3 className="w-4 h-4" />
+                  <Grid3x3 className='h-4 w-4' />
                 </Button>
-                <span className="text-[10px] text-muted-foreground">
+                <span className='text-muted-foreground text-[10px]'>
                   Templates
                 </span>
               </div>
 
               {/* Image Section */}
-              <div className="flex flex-col items-center space-y-1">
+              <div className='flex flex-col items-center space-y-1'>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={() => {
                     setBlocksMenuOpen(
                       !blocksMenuOpen || blocksMenuType !== "images"
@@ -1595,23 +1595,23 @@ export default function PresentationStudioPage() {
                     setBlocksMenuType("images");
                   }}
                   className={cn(
-                    "w-8 h-8 p-0 rounded-lg transition-all duration-200",
+                    "h-8 w-8 rounded-lg p-0 transition-all duration-200",
                     blocksMenuOpen && blocksMenuType === "images"
                       ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white"
                       : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
                   )}
-                  title="Images"
+                  title='Images'
                 >
-                  <ImageIcon className="w-4 h-4" />
+                  <ImageIcon className='h-4 w-4' />
                 </Button>
-                <span className="text-[10px] text-muted-foreground">Image</span>
+                <span className='text-muted-foreground text-[10px]'>Image</span>
               </div>
 
               {/* Icon Library Section */}
-              <div className="flex flex-col items-center space-y-1">
+              <div className='flex flex-col items-center space-y-1'>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={() => {
                     setBlocksMenuOpen(
                       !blocksMenuOpen || blocksMenuType !== "icons"
@@ -1619,23 +1619,23 @@ export default function PresentationStudioPage() {
                     setBlocksMenuType("icons");
                   }}
                   className={cn(
-                    "w-8 h-8 p-0 rounded-lg transition-all duration-200",
+                    "h-8 w-8 rounded-lg p-0 transition-all duration-200",
                     blocksMenuOpen && blocksMenuType === "icons"
                       ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white"
                       : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
                   )}
-                  title="Icons"
+                  title='Icons'
                 >
-                  <Palette className="w-4 h-4" />
+                  <Palette className='h-4 w-4' />
                 </Button>
-                <span className="text-[10px] text-muted-foreground">Icons</span>
+                <span className='text-muted-foreground text-[10px]'>Icons</span>
               </div>
 
               {/* Chart Library Section */}
-              <div className="flex flex-col items-center space-y-1">
+              <div className='flex flex-col items-center space-y-1'>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={() => {
                     setBlocksMenuOpen(
                       !blocksMenuOpen || blocksMenuType !== "charts"
@@ -1643,16 +1643,16 @@ export default function PresentationStudioPage() {
                     setBlocksMenuType("charts");
                   }}
                   className={cn(
-                    "w-8 h-8 p-0 rounded-lg transition-all duration-200",
+                    "h-8 w-8 rounded-lg p-0 transition-all duration-200",
                     blocksMenuOpen && blocksMenuType === "charts"
                       ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white"
                       : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
                   )}
-                  title="Charts"
+                  title='Charts'
                 >
-                  <BarChart3 className="w-4 h-4" />
+                  <BarChart3 className='h-4 w-4' />
                 </Button>
-                <span className="text-[10px] text-muted-foreground">
+                <span className='text-muted-foreground text-[10px]'>
                   Charts
                 </span>
               </div>
@@ -1669,21 +1669,21 @@ export default function PresentationStudioPage() {
                     duration: 0.35,
                     ease: [0.4, 0, 0.2, 1],
                   }}
-                  className="ml-3 w-80 bg-background/95 dark:bg-gray-950/95 backdrop-blur-xl border border-border rounded-xl shadow-2xl flex flex-col max-h-[600px]"
+                  className='bg-background/95 border-border ml-3 flex max-h-[600px] w-80 flex-col rounded-xl border shadow-2xl backdrop-blur-xl dark:bg-gray-950/95'
                 >
-                  <div className="p-4 pb-0 flex-shrink-0">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
+                  <div className='flex-shrink-0 p-4 pb-0'>
+                    <div className='mb-4 flex items-center justify-between'>
+                      <div className='flex items-center gap-3'>
                         {blocksMenuType === "basic" && (
                           <>
-                            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-purple-500/10 dark:bg-purple-500/10">
-                              <Type className="w-5 h-5 text-purple-500 dark:text-purple-400" />
+                            <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 dark:bg-purple-500/10'>
+                              <Type className='h-5 w-5 text-purple-500 dark:text-purple-400' />
                             </div>
                             <div>
-                              <h3 className="text-sm font-semibold text-foreground">
+                              <h3 className='text-foreground text-sm font-semibold'>
                                 Text & Blocks
                               </h3>
-                              <p className="text-xs text-muted-foreground">
+                              <p className='text-muted-foreground text-xs'>
                                 Add common elements
                               </p>
                             </div>
@@ -1691,14 +1691,14 @@ export default function PresentationStudioPage() {
                         )}
                         {blocksMenuType === "smart-layouts" && (
                           <>
-                            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-500/10 dark:bg-blue-500/10">
-                              <Layout className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+                            <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 dark:bg-blue-500/10'>
+                              <Layout className='h-5 w-5 text-blue-500 dark:text-blue-400' />
                             </div>
                             <div>
-                              <h3 className="text-sm font-semibold text-foreground">
+                              <h3 className='text-foreground text-sm font-semibold'>
                                 Smart Layouts
                               </h3>
-                              <p className="text-xs text-muted-foreground">
+                              <p className='text-muted-foreground text-xs'>
                                 Visual layouts
                               </p>
                             </div>
@@ -1706,14 +1706,14 @@ export default function PresentationStudioPage() {
                         )}
                         {blocksMenuType === "templates" && (
                           <>
-                            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-green-500/10 dark:bg-green-500/10">
-                              <Grid3x3 className="w-5 h-5 text-green-500 dark:text-green-400" />
+                            <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/10 dark:bg-green-500/10'>
+                              <Grid3x3 className='h-5 w-5 text-green-500 dark:text-green-400' />
                             </div>
                             <div>
-                              <h3 className="text-sm font-semibold text-foreground">
+                              <h3 className='text-foreground text-sm font-semibold'>
                                 Slide Templates
                               </h3>
-                              <p className="text-xs text-muted-foreground">
+                              <p className='text-muted-foreground text-xs'>
                                 Design patterns
                               </p>
                             </div>
@@ -1721,14 +1721,14 @@ export default function PresentationStudioPage() {
                         )}
                         {blocksMenuType === "icons" && (
                           <>
-                            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-orange-500/10 dark:bg-orange-500/10">
-                              <Palette className="w-5 h-5 text-orange-500 dark:text-orange-400" />
+                            <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500/10 dark:bg-orange-500/10'>
+                              <Palette className='h-5 w-5 text-orange-500 dark:text-orange-400' />
                             </div>
                             <div>
-                              <h3 className="text-sm font-semibold text-foreground">
+                              <h3 className='text-foreground text-sm font-semibold'>
                                 Icon Library
                               </h3>
-                              <p className="text-xs text-muted-foreground">
+                              <p className='text-muted-foreground text-xs'>
                                 Search and insert icons
                               </p>
                             </div>
@@ -1736,14 +1736,14 @@ export default function PresentationStudioPage() {
                         )}
                         {blocksMenuType === "charts" && (
                           <>
-                            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-purple-500/10 dark:bg-purple-500/10">
-                              <BarChart3 className="w-5 h-5 text-purple-500 dark:text-purple-400" />
+                            <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 dark:bg-purple-500/10'>
+                              <BarChart3 className='h-5 w-5 text-purple-500 dark:text-purple-400' />
                             </div>
                             <div>
-                              <h3 className="text-sm font-semibold text-foreground">
+                              <h3 className='text-foreground text-sm font-semibold'>
                                 Chart Library
                               </h3>
-                              <p className="text-xs text-muted-foreground">
+                              <p className='text-muted-foreground text-xs'>
                                 Create data visualizations
                               </p>
                             </div>
@@ -1751,14 +1751,14 @@ export default function PresentationStudioPage() {
                         )}
                         {blocksMenuType === "images" && (
                           <>
-                            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-500/10 dark:bg-blue-500/10">
-                              <ImageIcon className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+                            <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 dark:bg-blue-500/10'>
+                              <ImageIcon className='h-5 w-5 text-blue-500 dark:text-blue-400' />
                             </div>
                             <div>
-                              <h3 className="text-sm font-semibold text-foreground">
+                              <h3 className='text-foreground text-sm font-semibold'>
                                 Image Library
                               </h3>
-                              <p className="text-xs text-muted-foreground">
+                              <p className='text-muted-foreground text-xs'>
                                 Upload, browse, or generate
                               </p>
                             </div>
@@ -1766,28 +1766,28 @@ export default function PresentationStudioPage() {
                         )}
                       </div>
                       <Button
-                        variant="ghost"
-                        size="sm"
+                        variant='ghost'
+                        size='sm'
                         onClick={() => {
                           setBlocksMenuOpen(false);
                           setBlocksMenuType(null);
                         }}
-                        className="h-6 w-6 p-0 hover:bg-muted text-muted-foreground hover:text-foreground"
+                        className='hover:bg-muted text-muted-foreground hover:text-foreground h-6 w-6 p-0'
                       >
-                        <X className="w-3 h-3" />
+                        <X className='h-3 w-3' />
                       </Button>
                     </div>
                   </div>
-                  <div className="flex-1 overflow-hidden px-4">
-                    <ScrollArea className="flex-1 h-full">
-                      <div className="space-y-6 pb-4 pr-2">
+                  <div className='flex-1 overflow-hidden px-4'>
+                    <ScrollArea className='h-full flex-1'>
+                      <div className='space-y-6 pr-2 pb-4'>
                         {blocksMenuType === "basic" &&
                           basicBlocks.map((category) => (
                             <div
                               key={category.category}
-                              className="space-y-1.5"
+                              className='space-y-1.5'
                             >
-                              <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                              <h3 className='text-muted-foreground text-[10px] font-semibold tracking-wider uppercase'>
                                 {category.category}
                               </h3>
                               {category.items.map((item) => {
@@ -1798,15 +1798,15 @@ export default function PresentationStudioPage() {
                                     onClick={() =>
                                       insertBlock(item.id, item.id)
                                     }
-                                    className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-muted transition-colors text-left group"
+                                    className='hover:bg-muted group flex w-full items-center gap-2.5 rounded-lg p-2 text-left transition-colors'
                                   >
-                                    <Icon className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground flex-shrink-0" />
-                                    <div className="flex-1 min-w-0">
-                                      <p className="text-sm text-foreground">
+                                    <Icon className='text-muted-foreground group-hover:text-foreground h-3.5 w-3.5 flex-shrink-0' />
+                                    <div className='min-w-0 flex-1'>
+                                      <p className='text-foreground text-sm'>
                                         {item.label}
                                       </p>
                                       {item.shortcut && (
-                                        <p className="text-[10px] text-muted-foreground mt-0.5 font-mono">
+                                        <p className='text-muted-foreground mt-0.5 font-mono text-[10px]'>
                                           {item.shortcut}
                                         </p>
                                       )}
@@ -1821,9 +1821,9 @@ export default function PresentationStudioPage() {
                           smartLayouts.map((category) => (
                             <div
                               key={category.category}
-                              className="space-y-1.5"
+                              className='space-y-1.5'
                             >
-                              <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                              <h3 className='text-muted-foreground text-[10px] font-semibold tracking-wider uppercase'>
                                 {category.category}
                               </h3>
                               {category.items.map((item) => {
@@ -1831,10 +1831,10 @@ export default function PresentationStudioPage() {
                                 return (
                                   <button
                                     key={item.id}
-                                    className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-muted transition-colors text-left group"
+                                    className='hover:bg-muted group flex w-full items-center gap-2.5 rounded-lg p-2 text-left transition-colors'
                                   >
-                                    <Icon className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground flex-shrink-0" />
-                                    <p className="text-sm text-foreground">
+                                    <Icon className='text-muted-foreground group-hover:text-foreground h-3.5 w-3.5 flex-shrink-0' />
+                                    <p className='text-foreground text-sm'>
                                       {item.label}
                                     </p>
                                   </button>
@@ -1947,17 +1947,17 @@ export default function PresentationStudioPage() {
                         )}
 
                         {blocksMenuType === "templates" && (
-                          <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-3">
+                          <div className='space-y-4'>
+                            <div className='grid grid-cols-2 gap-3'>
                               {/* Title Only Template */}
                               <button
                                 onClick={() => applyTemplate("title-only")}
-                                className="group relative aspect-video rounded-lg border border-border hover:border-purple-500/50 bg-muted/30 hover:bg-muted/50 transition-all p-3 flex flex-col items-center justify-center overflow-hidden"
+                                className='group border-border bg-muted/30 hover:bg-muted/50 relative flex aspect-video flex-col items-center justify-center overflow-hidden rounded-lg border p-3 transition-all hover:border-purple-500/50'
                               >
-                                <div className="w-full space-y-2">
-                                  <div className="h-2 bg-foreground/30 rounded w-3/4 mx-auto" />
+                                <div className='w-full space-y-2'>
+                                  <div className='bg-foreground/30 mx-auto h-2 w-3/4 rounded' />
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mt-2 group-hover:text-foreground">
+                                <p className='text-muted-foreground group-hover:text-foreground mt-2 text-[10px]'>
                                   Title Only
                                 </p>
                               </button>
@@ -1965,15 +1965,15 @@ export default function PresentationStudioPage() {
                               {/* Title + Content Template */}
                               <button
                                 onClick={() => applyTemplate("title-content")}
-                                className="group relative aspect-video rounded-lg border border-border hover:border-purple-500/50 bg-muted/30 hover:bg-muted/50 transition-all p-3 flex flex-col overflow-hidden"
+                                className='group border-border bg-muted/30 hover:bg-muted/50 relative flex aspect-video flex-col overflow-hidden rounded-lg border p-3 transition-all hover:border-purple-500/50'
                               >
-                                <div className="w-full space-y-1.5">
-                                  <div className="h-2 bg-foreground/30 rounded w-2/3" />
-                                  <div className="h-1 bg-foreground/20 rounded w-full" />
-                                  <div className="h-1 bg-foreground/20 rounded w-5/6" />
-                                  <div className="h-1 bg-foreground/20 rounded w-4/5" />
+                                <div className='w-full space-y-1.5'>
+                                  <div className='bg-foreground/30 h-2 w-2/3 rounded' />
+                                  <div className='bg-foreground/20 h-1 w-full rounded' />
+                                  <div className='bg-foreground/20 h-1 w-5/6 rounded' />
+                                  <div className='bg-foreground/20 h-1 w-4/5 rounded' />
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mt-auto group-hover:text-foreground">
+                                <p className='text-muted-foreground group-hover:text-foreground mt-auto text-[10px]'>
                                   Title + Content
                                 </p>
                               </button>
@@ -1983,20 +1983,20 @@ export default function PresentationStudioPage() {
                                 onClick={() =>
                                   applyTemplate("title-two-columns")
                                 }
-                                className="group relative aspect-video rounded-lg border border-border hover:border-purple-500/50 bg-muted/30 hover:bg-muted/50 transition-all p-3 flex flex-col overflow-hidden"
+                                className='group border-border bg-muted/30 hover:bg-muted/50 relative flex aspect-video flex-col overflow-hidden rounded-lg border p-3 transition-all hover:border-purple-500/50'
                               >
-                                <div className="h-1.5 bg-foreground/30 rounded w-2/3 mb-2" />
-                                <div className="flex gap-2 flex-1">
-                                  <div className="flex-1 space-y-1">
-                                    <div className="h-1 bg-foreground/20 rounded w-full" />
-                                    <div className="h-1 bg-foreground/20 rounded w-3/4" />
+                                <div className='bg-foreground/30 mb-2 h-1.5 w-2/3 rounded' />
+                                <div className='flex flex-1 gap-2'>
+                                  <div className='flex-1 space-y-1'>
+                                    <div className='bg-foreground/20 h-1 w-full rounded' />
+                                    <div className='bg-foreground/20 h-1 w-3/4 rounded' />
                                   </div>
-                                  <div className="flex-1 space-y-1">
-                                    <div className="h-1 bg-foreground/20 rounded w-full" />
-                                    <div className="h-1 bg-foreground/20 rounded w-3/4" />
+                                  <div className='flex-1 space-y-1'>
+                                    <div className='bg-foreground/20 h-1 w-full rounded' />
+                                    <div className='bg-foreground/20 h-1 w-3/4 rounded' />
                                   </div>
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mt-auto group-hover:text-foreground">
+                                <p className='text-muted-foreground group-hover:text-foreground mt-auto text-[10px]'>
                                   Two Columns
                                 </p>
                               </button>
@@ -2004,13 +2004,13 @@ export default function PresentationStudioPage() {
                               {/* Quote Template */}
                               <button
                                 onClick={() => applyTemplate("quote")}
-                                className="group relative aspect-video rounded-lg border border-border hover:border-purple-500/50 bg-muted/30 hover:bg-muted/50 transition-all p-3 flex flex-col items-center justify-center overflow-hidden"
+                                className='group border-border bg-muted/30 hover:bg-muted/50 relative flex aspect-video flex-col items-center justify-center overflow-hidden rounded-lg border p-3 transition-all hover:border-purple-500/50'
                               >
-                                <div className="w-full space-y-2">
-                                  <div className="h-1.5 bg-foreground/25 rounded w-full" />
-                                  <div className="h-1.5 bg-foreground/25 rounded w-5/6 mx-auto" />
+                                <div className='w-full space-y-2'>
+                                  <div className='bg-foreground/25 h-1.5 w-full rounded' />
+                                  <div className='bg-foreground/25 mx-auto h-1.5 w-5/6 rounded' />
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mt-2 group-hover:text-foreground">
+                                <p className='text-muted-foreground group-hover:text-foreground mt-2 text-[10px]'>
                                   Quote
                                 </p>
                               </button>
@@ -2018,14 +2018,14 @@ export default function PresentationStudioPage() {
                               {/* Image + Title Template */}
                               <button
                                 onClick={() => applyTemplate("image-title")}
-                                className="group relative aspect-video rounded-lg border border-border hover:border-purple-500/50 bg-muted/30 hover:bg-muted/50 transition-all p-3 flex flex-col overflow-hidden"
+                                className='group border-border bg-muted/30 hover:bg-muted/50 relative flex aspect-video flex-col overflow-hidden rounded-lg border p-3 transition-all hover:border-purple-500/50'
                               >
-                                <div className="w-full h-12 bg-foreground/10 rounded mb-2 flex items-center justify-center">
-                                  <ImageIcon className="w-4 h-4 text-muted-foreground" />
+                                <div className='bg-foreground/10 mb-2 flex h-12 w-full items-center justify-center rounded'>
+                                  <ImageIcon className='text-muted-foreground h-4 w-4' />
                                 </div>
-                                <div className="h-1.5 bg-foreground/30 rounded w-2/3 mb-1" />
-                                <div className="h-1 bg-foreground/20 rounded w-full" />
-                                <p className="text-[10px] text-muted-foreground mt-auto group-hover:text-foreground">
+                                <div className='bg-foreground/30 mb-1 h-1.5 w-2/3 rounded' />
+                                <div className='bg-foreground/20 h-1 w-full rounded' />
+                                <p className='text-muted-foreground group-hover:text-foreground mt-auto text-[10px]'>
                                   Image + Title
                                 </p>
                               </button>
@@ -2033,27 +2033,27 @@ export default function PresentationStudioPage() {
                               {/* Stats Template */}
                               <button
                                 onClick={() => applyTemplate("number-stats")}
-                                className="group relative aspect-video rounded-lg border border-border hover:border-purple-500/50 bg-muted/30 hover:bg-muted/50 transition-all p-3 flex flex-col overflow-hidden"
+                                className='group border-border bg-muted/30 hover:bg-muted/50 relative flex aspect-video flex-col overflow-hidden rounded-lg border p-3 transition-all hover:border-purple-500/50'
                               >
-                                <div className="h-1.5 bg-foreground/30 rounded w-1/2 mb-2" />
-                                <div className="grid grid-cols-3 gap-1 flex-1">
-                                  <div className="bg-foreground/10 rounded flex items-center justify-center">
-                                    <span className="text-[8px] text-foreground">
+                                <div className='bg-foreground/30 mb-2 h-1.5 w-1/2 rounded' />
+                                <div className='grid flex-1 grid-cols-3 gap-1'>
+                                  <div className='bg-foreground/10 flex items-center justify-center rounded'>
+                                    <span className='text-foreground text-[8px]'>
                                       100%
                                     </span>
                                   </div>
-                                  <div className="bg-foreground/10 rounded flex items-center justify-center">
-                                    <span className="text-[8px] text-foreground">
+                                  <div className='bg-foreground/10 flex items-center justify-center rounded'>
+                                    <span className='text-foreground text-[8px]'>
                                       50%
                                     </span>
                                   </div>
-                                  <div className="bg-foreground/10 rounded flex items-center justify-center">
-                                    <span className="text-[8px] text-foreground">
+                                  <div className='bg-foreground/10 flex items-center justify-center rounded'>
+                                    <span className='text-foreground text-[8px]'>
                                       75%
                                     </span>
                                   </div>
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mt-auto group-hover:text-foreground">
+                                <p className='text-muted-foreground group-hover:text-foreground mt-auto text-[10px]'>
                                   Stats
                                 </p>
                               </button>
@@ -2061,24 +2061,24 @@ export default function PresentationStudioPage() {
                               {/* Timeline Template */}
                               <button
                                 onClick={() => applyTemplate("timeline")}
-                                className="group relative aspect-video rounded-lg border border-border hover:border-purple-500/50 bg-muted/30 hover:bg-muted/50 transition-all p-3 flex flex-col overflow-hidden"
+                                className='group border-border bg-muted/30 hover:bg-muted/50 relative flex aspect-video flex-col overflow-hidden rounded-lg border p-3 transition-all hover:border-purple-500/50'
                               >
-                                <div className="h-1.5 bg-foreground/30 rounded w-1/2 mb-2" />
-                                <div className="flex-1 space-y-1">
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-foreground/30" />
-                                    <div className="h-1 bg-foreground/20 rounded flex-1" />
+                                <div className='bg-foreground/30 mb-2 h-1.5 w-1/2 rounded' />
+                                <div className='flex-1 space-y-1'>
+                                  <div className='flex items-center gap-2'>
+                                    <div className='bg-foreground/30 h-1.5 w-1.5 rounded-full' />
+                                    <div className='bg-foreground/20 h-1 flex-1 rounded' />
                                   </div>
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-foreground/30" />
-                                    <div className="h-1 bg-foreground/20 rounded flex-1" />
+                                  <div className='flex items-center gap-2'>
+                                    <div className='bg-foreground/30 h-1.5 w-1.5 rounded-full' />
+                                    <div className='bg-foreground/20 h-1 flex-1 rounded' />
                                   </div>
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-foreground/30" />
-                                    <div className="h-1 bg-foreground/20 rounded flex-1" />
+                                  <div className='flex items-center gap-2'>
+                                    <div className='bg-foreground/30 h-1.5 w-1.5 rounded-full' />
+                                    <div className='bg-foreground/20 h-1 flex-1 rounded' />
                                   </div>
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mt-auto group-hover:text-foreground">
+                                <p className='text-muted-foreground group-hover:text-foreground mt-auto text-[10px]'>
                                   Timeline
                                 </p>
                               </button>
@@ -2086,21 +2086,21 @@ export default function PresentationStudioPage() {
                               {/* Comparison Template */}
                               <button
                                 onClick={() => applyTemplate("comparison")}
-                                className="group relative aspect-video rounded-lg border border-border hover:border-purple-500/50 bg-muted/30 hover:bg-muted/50 transition-all p-3 flex flex-col overflow-hidden"
+                                className='group border-border bg-muted/30 hover:bg-muted/50 relative flex aspect-video flex-col overflow-hidden rounded-lg border p-3 transition-all hover:border-purple-500/50'
                               >
-                                <div className="h-1.5 bg-foreground/30 rounded w-1/2 mb-2" />
-                                <div className="flex gap-2 flex-1">
-                                  <div className="flex-1 space-y-0.5">
-                                    <div className="h-1 bg-foreground/20 rounded w-full" />
-                                    <div className="h-1 bg-foreground/20 rounded w-3/4" />
+                                <div className='bg-foreground/30 mb-2 h-1.5 w-1/2 rounded' />
+                                <div className='flex flex-1 gap-2'>
+                                  <div className='flex-1 space-y-0.5'>
+                                    <div className='bg-foreground/20 h-1 w-full rounded' />
+                                    <div className='bg-foreground/20 h-1 w-3/4 rounded' />
                                   </div>
-                                  <div className="w-px bg-border" />
-                                  <div className="flex-1 space-y-0.5">
-                                    <div className="h-1 bg-foreground/20 rounded w-full" />
-                                    <div className="h-1 bg-foreground/20 rounded w-3/4" />
+                                  <div className='bg-border w-px' />
+                                  <div className='flex-1 space-y-0.5'>
+                                    <div className='bg-foreground/20 h-1 w-full rounded' />
+                                    <div className='bg-foreground/20 h-1 w-3/4 rounded' />
                                   </div>
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mt-auto group-hover:text-foreground">
+                                <p className='text-muted-foreground group-hover:text-foreground mt-auto text-[10px]'>
                                   Comparison
                                 </p>
                               </button>
@@ -2108,17 +2108,17 @@ export default function PresentationStudioPage() {
                               {/* Process Template */}
                               <button
                                 onClick={() => applyTemplate("process")}
-                                className="group relative aspect-video rounded-lg border border-border hover:border-purple-500/50 bg-muted/30 hover:bg-muted/50 transition-all p-3 flex flex-col overflow-hidden"
+                                className='group border-border bg-muted/30 hover:bg-muted/50 relative flex aspect-video flex-col overflow-hidden rounded-lg border p-3 transition-all hover:border-purple-500/50'
                               >
-                                <div className="h-1.5 bg-foreground/30 rounded w-1/2 mb-2" />
-                                <div className="flex-1 flex items-center gap-1">
-                                  <div className="flex-1 h-1 bg-foreground/20 rounded" />
-                                  <ArrowRight className="w-3 h-3 text-muted-foreground" />
-                                  <div className="flex-1 h-1 bg-foreground/20 rounded" />
-                                  <ArrowRight className="w-3 h-3 text-muted-foreground" />
-                                  <div className="flex-1 h-1 bg-foreground/20 rounded" />
+                                <div className='bg-foreground/30 mb-2 h-1.5 w-1/2 rounded' />
+                                <div className='flex flex-1 items-center gap-1'>
+                                  <div className='bg-foreground/20 h-1 flex-1 rounded' />
+                                  <ArrowRight className='text-muted-foreground h-3 w-3' />
+                                  <div className='bg-foreground/20 h-1 flex-1 rounded' />
+                                  <ArrowRight className='text-muted-foreground h-3 w-3' />
+                                  <div className='bg-foreground/20 h-1 flex-1 rounded' />
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mt-auto group-hover:text-foreground">
+                                <p className='text-muted-foreground group-hover:text-foreground mt-auto text-[10px]'>
                                   Process
                                 </p>
                               </button>
@@ -2126,13 +2126,13 @@ export default function PresentationStudioPage() {
                               {/* Thank You Template */}
                               <button
                                 onClick={() => applyTemplate("thank-you")}
-                                className="group relative aspect-video rounded-lg border border-border hover:border-purple-500/50 bg-muted/30 hover:bg-muted/50 transition-all p-3 flex flex-col items-center justify-center overflow-hidden"
+                                className='group border-border bg-muted/30 hover:bg-muted/50 relative flex aspect-video flex-col items-center justify-center overflow-hidden rounded-lg border p-3 transition-all hover:border-purple-500/50'
                               >
-                                <div className="w-full space-y-2">
-                                  <div className="h-2 bg-foreground/30 rounded w-2/3 mx-auto" />
-                                  <div className="h-1 bg-foreground/20 rounded w-1/2 mx-auto" />
+                                <div className='w-full space-y-2'>
+                                  <div className='bg-foreground/30 mx-auto h-2 w-2/3 rounded' />
+                                  <div className='bg-foreground/20 mx-auto h-1 w-1/2 rounded' />
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mt-2 group-hover:text-foreground">
+                                <p className='text-muted-foreground group-hover:text-foreground mt-2 text-[10px]'>
                                   Thank You
                                 </p>
                               </button>

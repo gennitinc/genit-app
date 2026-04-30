@@ -1,37 +1,19 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { cn } from "@/lib/utils";
-import {
-  Mic,
-  Play,
-  Square,
-  Loader2,
-  Check,
-  Plus,
-  Volume2,
-  Pause,
-  Trash2,
-  Upload,
-} from "lucide-react";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerContent,
+  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerDescription,
 } from "@/components/ui/drawer";
-import { Voice } from "@/types/inspire";
-import { voiceApi } from "@/utils/inspire-api";
-import { toast } from "@/hooks/use-toast";
 import {
   Select,
   SelectContent,
@@ -39,6 +21,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { Voice } from "@/types/inspire";
+import { voiceApi } from "@/utils/inspire-api";
+import {
+  Check,
+  Loader2,
+  Mic,
+  Pause,
+  Play,
+  Plus,
+  Square,
+  Trash2,
+  Upload,
+  Volume2,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 // Language and accent options
 const LANGUAGES = [
@@ -112,17 +112,17 @@ function VoiceCard({
   showDelete?: boolean;
 }) {
   return (
-    <div className="relative group">
+    <div className='group relative'>
       <button
         onClick={onSelect}
         className={cn(
-          "relative overflow-hidden rounded-lg transition-all w-full",
+          "relative w-full overflow-hidden rounded-lg transition-all",
           isSelected
             ? "ring-1 ring-neutral-500 dark:ring-neutral-500"
             : "ring-1 ring-neutral-500 dark:ring-neutral-400"
         )}
       >
-        <div className="aspect-[3/4] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800 flex flex-col items-center justify-center p-3 gap-2">
+        <div className='flex aspect-[3/4] w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-lg bg-neutral-100 p-3 dark:bg-neutral-800'>
           {/* Play Button */}
           <button
             onClick={(e) => {
@@ -130,32 +130,32 @@ function VoiceCard({
               onPlayToggle();
             }}
             className={cn(
-              "w-8 h-8 rounded-full flex items-center justify-center transition-colors shrink-0",
+              "flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors",
               isPlaying
-                ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-600 dark:hover:bg-neutral-200"
+                ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                : "bg-neutral-200 text-neutral-600 hover:bg-neutral-600 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-200"
             )}
           >
             {isPlaying ? (
-              <Pause className="w-3.5 h-3.5" />
+              <Pause className='h-3.5 w-3.5' />
             ) : (
-              <Play className="w-3.5 h-3.5 ml-0.5" />
+              <Play className='ml-0.5 h-3.5 w-3.5' />
             )}
           </button>
 
           {/* Voice Info */}
-          <div className="text-center flex-1 flex flex-col justify-center">
-            <p className="text-[10px] font-medium text-neutral-900 dark:text-white truncate w-full">
+          <div className='flex flex-1 flex-col justify-center text-center'>
+            <p className='w-full truncate text-[10px] font-medium text-neutral-900 dark:text-white'>
               {voice.name}
             </p>
-            <p className="text-[9px] text-neutral-500 dark:text-neutral-400 mt-0.5">
+            <p className='mt-0.5 text-[9px] text-neutral-500 dark:text-neutral-400'>
               {voice.language} • {voice.accent}
             </p>
           </div>
         </div>
         {isSelected && (
-          <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-neutral-900 dark:bg-neutral-100 rounded-full flex items-center justify-center">
-            <Check className="w-2.5 h-2.5 text-white dark:text-neutral-900" />
+          <div className='absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-900 dark:bg-neutral-100'>
+            <Check className='h-2.5 w-2.5 text-white dark:text-neutral-900' />
           </div>
         )}
       </button>
@@ -166,10 +166,10 @@ function VoiceCard({
             e.stopPropagation();
             onDelete();
           }}
-          className="absolute top-1.5 left-1.5 w-6 h-6 rounded flex items-center justify-center transition-colors text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm opacity-0 group-hover:opacity-100"
-          title="Delete voice"
+          className='absolute top-1.5 left-1.5 flex h-6 w-6 items-center justify-center rounded bg-white/90 text-neutral-600 opacity-0 backdrop-blur-sm transition-colors group-hover:opacity-100 hover:text-red-600 dark:bg-neutral-800/90 dark:text-neutral-400 dark:hover:text-red-400'
+          title='Delete voice'
         >
-          <Trash2 className="w-3 h-3" />
+          <Trash2 className='h-3 w-3' />
         </button>
       )}
     </div>
@@ -521,28 +521,28 @@ export function VoiceSelector({
   const MoreButton = () => (
     <button
       onClick={() => setIsOpen(true)}
-      className="relative overflow-hidden rounded-lg transition-all group aspect-[3/4] w-full bg-neutral-100 dark:bg-neutral-800 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-neutral-300 dark:border-neutral-600 hover:border-neutral-400 dark:hover:border-neutral-500"
+      className='group relative flex aspect-[3/4] w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border-2 border-dashed border-neutral-300 bg-neutral-100 transition-all hover:border-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:hover:border-neutral-500'
     >
-      <div className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-        <Plus className="w-4 h-4 text-neutral-600 dark:text-neutral-300" />
+      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+        <Plus className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
       </div>
-      <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">
+      <p className='text-xs font-medium text-neutral-600 dark:text-neutral-400'>
         View More
       </p>
     </button>
   );
 
   const FullVoiceList = () => (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-neutral-200 dark:border-neutral-700 ">
+      <div className='flex gap-2 border-b border-neutral-200 dark:border-neutral-700'>
         <button
           onClick={() => setActiveTab("voices")}
           className={cn(
-            "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+            "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
             activeTab === "voices"
-              ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-              : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+              ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+              : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
           AI Voices
@@ -550,10 +550,10 @@ export function VoiceSelector({
         <button
           onClick={() => setActiveTab("my-audio")}
           className={cn(
-            "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+            "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
             activeTab === "my-audio"
-              ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-              : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+              ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+              : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
           My Audio
@@ -561,10 +561,10 @@ export function VoiceSelector({
         <button
           onClick={() => setActiveTab("clone")}
           className={cn(
-            "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+            "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
             activeTab === "clone"
-              ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-              : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+              ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+              : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
           Clone Voice
@@ -572,17 +572,17 @@ export function VoiceSelector({
       </div>
 
       {activeTab === "voices" && (
-        <div className="max-h-[60vh] overflow-y-auto pr-2">
+        <div className='max-h-[60vh] overflow-y-auto pr-2'>
           {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 text-neutral-400 animate-spin" />
+            <div className='flex items-center justify-center py-8'>
+              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
             </div>
           ) : voices.length === 0 ? (
-            <div className="text-center py-8 text-sm text-neutral-500 dark:text-neutral-400">
+            <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
               No voices available
             </div>
           ) : (
-            <div className="grid grid-cols-5 gap-2">
+            <div className='grid grid-cols-5 gap-2'>
               {voices.map((voice) => {
                 const voiceId = voice._id || voice.id || "";
                 const selectedId = selectedVoice?._id || selectedVoice?.id;
@@ -608,17 +608,17 @@ export function VoiceSelector({
       )}
 
       {activeTab === "my-audio" && (
-        <div className="max-h-[60vh] overflow-y-auto pr-2">
+        <div className='max-h-[60vh] overflow-y-auto pr-2'>
           {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 text-neutral-400 animate-spin" />
+            <div className='flex items-center justify-center py-8'>
+              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
             </div>
           ) : userVoices.length === 0 ? (
-            <div className="text-center py-8 text-sm text-neutral-500 dark:text-neutral-400">
+            <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
               You haven't cloned or uploaded any voices yet
             </div>
           ) : (
-            <div className="grid grid-cols-5 gap-2">
+            <div className='grid grid-cols-5 gap-2'>
               {userVoices.map((voice) => {
                 const voiceId = voice._id || voice.id || "";
                 const selectedId = selectedVoice?._id || selectedVoice?.id;
@@ -646,59 +646,59 @@ export function VoiceSelector({
       )}
 
       {activeTab === "clone" && (
-        <div className="py-6 space-y-4">
-          <div className="text-center mb-4">
-            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-              <Mic className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
+        <div className='space-y-4 py-6'>
+          <div className='mb-4 text-center'>
+            <div className='mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+              <Mic className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
             </div>
-            <h4 className="text-sm font-medium text-neutral-900 dark:text-white">
+            <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
               Clone Your Voice
             </h4>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+            <p className='mt-1 text-xs text-neutral-500 dark:text-neutral-400'>
               Record or upload a sample to create your unique voice
             </p>
           </div>
 
           {/* Recording/Upload Controls */}
-          <div className="flex flex-col items-center gap-3">
+          <div className='flex flex-col items-center gap-3'>
             {!audioBlob && (
-              <div className="w-full grid grid-cols-2 gap-2">
+              <div className='grid w-full grid-cols-2 gap-2'>
                 <button
-                  type="button"
+                  type='button'
                   onClick={isRecording ? stopRecording : startRecording}
                   disabled={isProcessing}
                   className={cn(
-                    "w-full py-2.5 px-3 rounded-lg font-medium text-sm transition-all flex items-center justify-center gap-2",
+                    "flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
                     isRecording
-                      ? "bg-red-500 hover:bg-red-600 text-white"
-                      : "bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
+                      ? "bg-red-500 text-white hover:bg-red-600"
+                      : "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
                   )}
                 >
                   {isRecording ? (
                     <>
-                      <Square className="w-4 h-4" />
+                      <Square className='h-4 w-4' />
                       Stop ({formatTime(recordingTime)})
                     </>
                   ) : (
                     <>
-                      <Mic className="w-4 h-4" />
+                      <Mic className='h-4 w-4' />
                       Record
                     </>
                   )}
                 </button>
-                <label className="w-full">
+                <label className='w-full'>
                   <input
-                    type="file"
-                    accept="audio/*"
-                    className="hidden"
+                    type='file'
+                    accept='audio/*'
+                    className='hidden'
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) handleFileUpload(file);
                     }}
                     disabled={isProcessing}
                   />
-                  <span className="w-full py-2.5 px-3 rounded-lg font-medium text-sm bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-all flex items-center justify-center gap-2 cursor-pointer border border-neutral-300 dark:border-neutral-600">
-                    <Upload className="w-4 h-4" />
+                  <span className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-neutral-300 bg-neutral-100 px-3 py-2.5 text-sm font-medium text-neutral-900 transition-all hover:bg-neutral-200 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'>
+                    <Upload className='h-4 w-4' />
                     Upload
                   </span>
                 </label>
@@ -706,57 +706,57 @@ export function VoiceSelector({
             )}
 
             {isRecording && (
-              <div className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+              <div className='flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400'>
+                <div className='h-2 w-2 animate-pulse rounded-full bg-red-500' />
                 Speak clearly for at least 10 seconds
               </div>
             )}
 
             {audioBlob && !isRecording && (
-              <div className="w-full space-y-3">
-                <div className="flex items-center justify-between">
+              <div className='w-full space-y-3'>
+                <div className='flex items-center justify-between'>
                   <audio
                     src={URL.createObjectURL(audioBlob)}
                     controls
-                    className="flex-1 rounded-lg"
+                    className='flex-1 rounded-lg'
                   />
                   <button
-                    type="button"
+                    type='button'
                     onClick={() => {
                       setAudioBlob(null);
                       setRecordingTime(0);
                     }}
-                    className="ml-2 px-2 py-1 text-xs text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100"
+                    className='ml-2 px-2 py-1 text-xs text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
                   >
                     Remove
                   </button>
                 </div>
 
                 {/* Voice Name Input */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                <div className='space-y-2'>
+                  <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                     Voice Name *
                   </label>
                   <input
-                    type="text"
+                    type='text'
                     value={voiceName}
                     onChange={(e) => setVoiceName(e.target.value)}
-                    placeholder="e.g., My Professional Voice"
-                    className="w-full px-3 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    placeholder='e.g., My Professional Voice'
+                    className='w-full rounded-lg border border-neutral-300 bg-neutral-100 px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500 focus:border-transparent focus:ring-2 focus:ring-cyan-500 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'
                   />
                 </div>
 
                 {/* Language Select */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                <div className='space-y-2'>
+                  <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                     Language
                   </label>
                   <Select
                     value={voiceLanguage}
                     onValueChange={setVoiceLanguage}
                   >
-                    <SelectTrigger className="w-full bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white">
-                      <SelectValue placeholder="Select language" />
+                    <SelectTrigger className='w-full border border-neutral-300 bg-neutral-100 text-sm text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'>
+                      <SelectValue placeholder='Select language' />
                     </SelectTrigger>
                     <SelectContent>
                       {LANGUAGES.map((lang) => (
@@ -769,13 +769,13 @@ export function VoiceSelector({
                 </div>
 
                 {/* Accent Select */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                <div className='space-y-2'>
+                  <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                     Accent
                   </label>
                   <Select value={voiceAccent} onValueChange={setVoiceAccent}>
-                    <SelectTrigger className="w-full bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white">
-                      <SelectValue placeholder="Select accent" />
+                    <SelectTrigger className='w-full border border-neutral-300 bg-neutral-100 text-sm text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'>
+                      <SelectValue placeholder='Select accent' />
                     </SelectTrigger>
                     <SelectContent>
                       {ACCENTS.map((accent) => (
@@ -788,31 +788,31 @@ export function VoiceSelector({
                 </div>
 
                 {/* Gender Selection */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                <div className='space-y-2'>
+                  <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                     Gender
                   </label>
-                  <div className="flex gap-2">
+                  <div className='flex gap-2'>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() => setVoiceGender("male")}
                       className={cn(
-                        "flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                        "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                         voiceGender === "male"
-                          ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                          : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                          ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                          : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                       )}
                     >
                       Male
                     </button>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() => setVoiceGender("female")}
                       className={cn(
-                        "flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                        "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                         voiceGender === "female"
-                          ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                          : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                          ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                          : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                       )}
                     >
                       Female
@@ -821,19 +821,19 @@ export function VoiceSelector({
                 </div>
 
                 <button
-                  type="button"
+                  type='button'
                   onClick={handleCloneVoice}
                   disabled={isProcessing || !voiceName.trim()}
-                  className="w-full py-2 px-3 rounded-lg font-medium text-sm bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:bg-neutral-300 disabled:text-neutral-500 disabled:cursor-not-allowed text-white dark:text-neutral-900 transition-all flex items-center justify-center gap-2"
+                  className='flex w-full items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-500 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
                 >
                   {isProcessing ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className='h-4 w-4 animate-spin' />
                       Saving Voice...
                     </>
                   ) : (
                     <>
-                      <Mic className="w-4 h-4" />
+                      <Mic className='h-4 w-4' />
                       Save & Clone Voice
                     </>
                   )}
@@ -847,16 +847,16 @@ export function VoiceSelector({
   );
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-neutral-200 dark:border-neutral-700">
+      <div className='flex gap-2 border-b border-neutral-200 dark:border-neutral-700'>
         <button
           onClick={() => setActiveTab("voices")}
           className={cn(
-            "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+            "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
             activeTab === "voices"
-              ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-              : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+              ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+              : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
           AI Voices
@@ -864,10 +864,10 @@ export function VoiceSelector({
         <button
           onClick={() => setActiveTab("my-audio")}
           className={cn(
-            "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+            "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
             activeTab === "my-audio"
-              ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-              : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+              ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+              : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
           My Audio
@@ -875,10 +875,10 @@ export function VoiceSelector({
         <button
           onClick={() => setActiveTab("clone")}
           className={cn(
-            "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+            "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
             activeTab === "clone"
-              ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-              : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+              ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+              : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
           Clone Voice
@@ -887,20 +887,20 @@ export function VoiceSelector({
 
       {/* Voice Grid */}
       {activeTab === "voices" && (
-        <div className="space-y-3">
-          <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
+        <div className='space-y-3'>
+          <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
             Choose voice
           </h3>
           {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 text-neutral-400 animate-spin" />
+            <div className='flex items-center justify-center py-8'>
+              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
             </div>
           ) : voices.length === 0 ? (
-            <div className="text-center py-8 text-sm text-neutral-500 dark:text-neutral-400">
+            <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
               No voices available
             </div>
           ) : (
-            <div className="grid grid-cols-4 gap-2">
+            <div className='grid grid-cols-4 gap-2'>
               {voices.slice(0, 6).map((voice) => {
                 const voiceId = voice._id || voice.id || "";
                 const selectedId = selectedVoice?._id || selectedVoice?.id;
@@ -928,19 +928,19 @@ export function VoiceSelector({
 
       {/* My Audio Tab */}
       {activeTab === "my-audio" && (
-        <div className="py-4 space-y-4">
+        <div className='space-y-4 py-4'>
           {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 text-neutral-400 animate-spin" />
+            <div className='flex items-center justify-center py-8'>
+              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
             </div>
           ) : userVoices.length === 0 ? (
-            <div className="text-center py-4">
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            <div className='py-4 text-center'>
+              <p className='text-sm text-neutral-500 dark:text-neutral-400'>
                 You haven't cloned or uploaded any voices yet
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-4 gap-2">
+            <div className='grid grid-cols-4 gap-2'>
               {userVoices.map((voice) => {
                 const voiceId = voice._id || voice.id || "";
                 const selectedId = selectedVoice?._id || selectedVoice?.id;
@@ -969,59 +969,59 @@ export function VoiceSelector({
 
       {/* Clone Voice Tab */}
       {activeTab === "clone" && (
-        <div className="space-y-4">
-          <div className="text-center mb-4">
-            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-              <Mic className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
+        <div className='space-y-4'>
+          <div className='mb-4 text-center'>
+            <div className='mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+              <Mic className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
             </div>
-            <h4 className="text-sm font-medium text-neutral-900 dark:text-white">
+            <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
               Clone Your Voice
             </h4>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+            <p className='mt-1 text-xs text-neutral-500 dark:text-neutral-400'>
               Record or upload a sample to create your unique voice
             </p>
           </div>
 
           {/* Recording/Upload Controls */}
-          <div className="flex flex-col items-center gap-3">
+          <div className='flex flex-col items-center gap-3'>
             {!audioBlob && (
-              <div className="w-full grid grid-cols-2 gap-2">
+              <div className='grid w-full grid-cols-2 gap-2'>
                 <button
-                  type="button"
+                  type='button'
                   onClick={isRecording ? stopRecording : startRecording}
                   disabled={isProcessing}
                   className={cn(
-                    "w-full py-2.5 px-3 rounded-lg font-medium text-sm transition-all flex items-center justify-center gap-2",
+                    "flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
                     isRecording
-                      ? "bg-red-500 hover:bg-red-600 text-white"
-                      : "bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
+                      ? "bg-red-500 text-white hover:bg-red-600"
+                      : "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
                   )}
                 >
                   {isRecording ? (
                     <>
-                      <Square className="w-4 h-4" />
+                      <Square className='h-4 w-4' />
                       Stop ({formatTime(recordingTime)})
                     </>
                   ) : (
                     <>
-                      <Mic className="w-4 h-4" />
+                      <Mic className='h-4 w-4' />
                       Record
                     </>
                   )}
                 </button>
-                <label className="w-full">
+                <label className='w-full'>
                   <input
-                    type="file"
-                    accept="audio/*"
-                    className="hidden"
+                    type='file'
+                    accept='audio/*'
+                    className='hidden'
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) handleFileUpload(file);
                     }}
                     disabled={isProcessing}
                   />
-                  <span className="w-full py-2.5 px-3 rounded-lg font-medium text-sm bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-all flex items-center justify-center gap-2 cursor-pointer border border-neutral-300 dark:border-neutral-600">
-                    <Upload className="w-4 h-4" />
+                  <span className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-neutral-300 bg-neutral-100 px-3 py-2.5 text-sm font-medium text-neutral-900 transition-all hover:bg-neutral-200 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'>
+                    <Upload className='h-4 w-4' />
                     Upload
                   </span>
                 </label>
@@ -1029,57 +1029,57 @@ export function VoiceSelector({
             )}
 
             {isRecording && (
-              <div className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+              <div className='flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400'>
+                <div className='h-2 w-2 animate-pulse rounded-full bg-red-500' />
                 Speak clearly for at least 10 seconds
               </div>
             )}
 
             {audioBlob && !isRecording && (
-              <div className="w-full space-y-3">
-                <div className="flex items-center justify-between">
+              <div className='w-full space-y-3'>
+                <div className='flex items-center justify-between'>
                   <audio
                     src={URL.createObjectURL(audioBlob)}
                     controls
-                    className="flex-1 rounded-lg"
+                    className='flex-1 rounded-lg'
                   />
                   <button
-                    type="button"
+                    type='button'
                     onClick={() => {
                       setAudioBlob(null);
                       setRecordingTime(0);
                     }}
-                    className="ml-2 px-2 py-1 text-xs text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100"
+                    className='ml-2 px-2 py-1 text-xs text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
                   >
                     Remove
                   </button>
                 </div>
 
                 {/* Voice Name Input */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                <div className='space-y-2'>
+                  <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                     Voice Name *
                   </label>
                   <input
-                    type="text"
+                    type='text'
                     value={voiceName}
                     onChange={(e) => setVoiceName(e.target.value)}
-                    placeholder="e.g., My Professional Voice"
-                    className="w-full px-3 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    placeholder='e.g., My Professional Voice'
+                    className='w-full rounded-lg border border-neutral-300 bg-neutral-100 px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500 focus:border-transparent focus:ring-2 focus:ring-cyan-500 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'
                   />
                 </div>
 
                 {/* Language Select */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                <div className='space-y-2'>
+                  <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                     Language
                   </label>
                   <Select
                     value={voiceLanguage}
                     onValueChange={setVoiceLanguage}
                   >
-                    <SelectTrigger className="w-full bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white">
-                      <SelectValue placeholder="Select language" />
+                    <SelectTrigger className='w-full border border-neutral-300 bg-neutral-100 text-sm text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'>
+                      <SelectValue placeholder='Select language' />
                     </SelectTrigger>
                     <SelectContent>
                       {LANGUAGES.map((lang) => (
@@ -1092,13 +1092,13 @@ export function VoiceSelector({
                 </div>
 
                 {/* Accent Select */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                <div className='space-y-2'>
+                  <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                     Accent
                   </label>
                   <Select value={voiceAccent} onValueChange={setVoiceAccent}>
-                    <SelectTrigger className="w-full bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white">
-                      <SelectValue placeholder="Select accent" />
+                    <SelectTrigger className='w-full border border-neutral-300 bg-neutral-100 text-sm text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'>
+                      <SelectValue placeholder='Select accent' />
                     </SelectTrigger>
                     <SelectContent>
                       {ACCENTS.map((accent) => (
@@ -1111,31 +1111,31 @@ export function VoiceSelector({
                 </div>
 
                 {/* Gender Selection */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                <div className='space-y-2'>
+                  <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                     Gender
                   </label>
-                  <div className="flex gap-2">
+                  <div className='flex gap-2'>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() => setVoiceGender("male")}
                       className={cn(
-                        "flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                        "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                         voiceGender === "male"
                           ? "bg-cyan-500 text-white"
-                          : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                          : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                       )}
                     >
                       Male
                     </button>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() => setVoiceGender("female")}
                       className={cn(
-                        "flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                        "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                         voiceGender === "female"
                           ? "bg-cyan-500 text-white"
-                          : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                          : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                       )}
                     >
                       Female
@@ -1144,19 +1144,19 @@ export function VoiceSelector({
                 </div>
 
                 <button
-                  type="button"
+                  type='button'
                   onClick={handleCloneVoice}
                   disabled={isProcessing || !voiceName.trim()}
-                  className="w-full py-2 px-3 rounded-lg font-medium text-sm bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:bg-neutral-300 disabled:text-neutral-500 disabled:cursor-not-allowed text-white dark:text-neutral-900 transition-all flex items-center justify-center gap-2"
+                  className='flex w-full items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-500 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
                 >
                   {isProcessing ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className='h-4 w-4 animate-spin' />
                       Saving Voice...
                     </>
                   ) : (
                     <>
-                      <Mic className="w-4 h-4" />
+                      <Mic className='h-4 w-4' />
                       Save & Clone Voice
                     </>
                   )}
@@ -1170,28 +1170,28 @@ export function VoiceSelector({
       {/* Dialog for Desktop */}
       {isDesktop ? (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogContent className="max-w-3xl max-h-[85vh] flex flex-col">
+          <DialogContent className='flex max-h-[85vh] max-w-3xl flex-col'>
             <DialogHeader>
               <DialogTitle>Select Voice</DialogTitle>
               <DialogDescription>
                 Choose an AI voice or clone your own
               </DialogDescription>
             </DialogHeader>
-            <div className="flex-1 overflow-hidden">
+            <div className='flex-1 overflow-hidden'>
               <FullVoiceList />
             </div>
           </DialogContent>
         </Dialog>
       ) : (
         <Drawer open={isOpen} onOpenChange={setIsOpen}>
-          <DrawerContent className="max-h-[85vh] flex flex-col">
+          <DrawerContent className='flex max-h-[85vh] flex-col'>
             <DrawerHeader>
               <DrawerTitle>Select Voice</DrawerTitle>
               <DrawerDescription>
                 Choose an AI voice or clone your own
               </DrawerDescription>
             </DrawerHeader>
-            <div className="flex-1 overflow-y-auto px-4 pb-6">
+            <div className='flex-1 overflow-y-auto px-4 pb-6'>
               <FullVoiceList />
             </div>
           </DrawerContent>

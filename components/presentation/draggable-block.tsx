@@ -1,12 +1,12 @@
 "use client";
 
-import { useDraggable } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
-import { X, ArrowUp, ArrowDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { PresentationBlock } from "@/types/presentation-schema";
-import { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
+import { ArrowDown, ArrowUp, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface DraggableBlockProps {
   block: PresentationBlock;
@@ -14,7 +14,10 @@ interface DraggableBlockProps {
   isSelected?: boolean;
   isDragging?: boolean;
   onSelect?: () => void;
-  onUpdate?: (blockId: string, position: { x: number; y: number; width: number; height: number }) => void;
+  onUpdate?: (
+    blockId: string,
+    position: { x: number; y: number; width: number; height: number }
+  ) => void;
   onDelete?: (blockId: string) => void;
   onZIndexChange?: (blockId: string, direction: "front" | "back") => void;
 }
@@ -34,12 +37,7 @@ export function DraggableBlock({
   const blockRef = useRef<HTMLDivElement>(null);
   const startPosRef = useRef({ x: 0, y: 0, width: 0, height: 0 });
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-  } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: block.id,
     disabled: isResizing,
   });
@@ -190,51 +188,51 @@ export function DraggableBlock({
       {isSelected && (
         <div
           data-controls
-          className="absolute -top-8 left-0 flex items-center gap-1 bg-background border border-border rounded shadow-sm p-1 z-50"
+          className='bg-background border-border absolute -top-8 left-0 z-50 flex items-center gap-1 rounded border p-1 shadow-sm'
         >
           {/* Z-Index Controls */}
           {onZIndexChange && (
             <>
               <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0"
+                variant='ghost'
+                size='sm'
+                className='h-6 w-6 p-0'
                 onClick={(e) => {
                   e.stopPropagation();
                   onZIndexChange(block.id, "front");
                 }}
-                title="Bring to front"
+                title='Bring to front'
               >
-                <ArrowUp className="w-3 h-3" />
+                <ArrowUp className='h-3 w-3' />
               </Button>
               <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0"
+                variant='ghost'
+                size='sm'
+                className='h-6 w-6 p-0'
                 onClick={(e) => {
                   e.stopPropagation();
                   onZIndexChange(block.id, "back");
                 }}
-                title="Send to back"
-        >
-                <ArrowDown className="w-3 h-3" />
+                title='Send to back'
+              >
+                <ArrowDown className='h-3 w-3' />
               </Button>
             </>
-      )}
-      {/* Delete Button */}
+          )}
+          {/* Delete Button */}
           {onDelete && (
-        <Button
-          variant="ghost"
-          size="sm"
-              className="h-6 w-6 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete(block.id);
-          }}
-              title="Delete"
-        >
-          <X className="w-3 h-3" />
-        </Button>
+            <Button
+              variant='ghost'
+              size='sm'
+              className='text-destructive hover:text-destructive hover:bg-destructive/10 h-6 w-6 p-0'
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(block.id);
+              }}
+              title='Delete'
+            >
+              <X className='h-3 w-3' />
+            </Button>
           )}
         </div>
       )}
@@ -245,50 +243,50 @@ export function DraggableBlock({
           {/* Corner handles */}
           <div
             data-resize-handle
-            className="absolute -top-0.5 -left-0.5 w-2 h-2 bg-blue-500 border border-white cursor-nwse-resize z-20"
+            className='absolute -top-0.5 -left-0.5 z-20 h-2 w-2 cursor-nwse-resize border border-white bg-blue-500'
             onMouseDown={(e) => handleResizeStart(e, "nw")}
           />
           <div
             data-resize-handle
-            className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-blue-500 border border-white cursor-nesw-resize z-20"
+            className='absolute -top-0.5 -right-0.5 z-20 h-2 w-2 cursor-nesw-resize border border-white bg-blue-500'
             onMouseDown={(e) => handleResizeStart(e, "ne")}
           />
           <div
             data-resize-handle
-            className="absolute -bottom-0.5 -left-0.5 w-2 h-2 bg-blue-500 border border-white cursor-nesw-resize z-20"
+            className='absolute -bottom-0.5 -left-0.5 z-20 h-2 w-2 cursor-nesw-resize border border-white bg-blue-500'
             onMouseDown={(e) => handleResizeStart(e, "sw")}
           />
           <div
             data-resize-handle
-            className="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-blue-500 border border-white cursor-nwse-resize z-20"
+            className='absolute -right-0.5 -bottom-0.5 z-20 h-2 w-2 cursor-nwse-resize border border-white bg-blue-500'
             onMouseDown={(e) => handleResizeStart(e, "se")}
           />
           {/* Edge handles */}
           <div
             data-resize-handle
-            className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-2 h-2 bg-blue-500 border border-white cursor-ns-resize z-20"
+            className='absolute -top-0.5 left-1/2 z-20 h-2 w-2 -translate-x-1/2 cursor-ns-resize border border-white bg-blue-500'
             onMouseDown={(e) => handleResizeStart(e, "n")}
           />
           <div
             data-resize-handle
-            className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-2 h-2 bg-blue-500 border border-white cursor-ns-resize z-20"
+            className='absolute -bottom-0.5 left-1/2 z-20 h-2 w-2 -translate-x-1/2 cursor-ns-resize border border-white bg-blue-500'
             onMouseDown={(e) => handleResizeStart(e, "s")}
           />
           <div
             data-resize-handle
-            className="absolute -left-0.5 top-1/2 -translate-y-1/2 w-2 h-2 bg-blue-500 border border-white cursor-ew-resize z-20"
+            className='absolute top-1/2 -left-0.5 z-20 h-2 w-2 -translate-y-1/2 cursor-ew-resize border border-white bg-blue-500'
             onMouseDown={(e) => handleResizeStart(e, "w")}
           />
           <div
             data-resize-handle
-            className="absolute -right-0.5 top-1/2 -translate-y-1/2 w-2 h-2 bg-blue-500 border border-white cursor-ew-resize z-20"
+            className='absolute top-1/2 -right-0.5 z-20 h-2 w-2 -translate-y-1/2 cursor-ew-resize border border-white bg-blue-500'
             onMouseDown={(e) => handleResizeStart(e, "e")}
           />
         </>
       )}
 
       {/* Content */}
-      <div className="w-full h-full overflow-hidden">{children}</div>
+      <div className='h-full w-full overflow-hidden'>{children}</div>
     </div>
   );
 }

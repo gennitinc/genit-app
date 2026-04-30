@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRightIcon } from "lucide-react";
+import React, { useEffect, useRef } from "react";
 
 interface VideoCard {
   id: string;
@@ -129,8 +129,7 @@ const VideoCard = ({ video }: { video: VideoCard }) => {
   }, []);
 
   return (
-  
-    <div className="group isolate flex flex-col rounded-none border border-primary/10 bg-white shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] dark:bg-neutral-900 overflow-hidden transition-all duration-300 hover:shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04),0_0_0_1px_hsl(var(--primary)/10%)] hover:scale-[1.02] md:row-span-2 xl:row-span-2 relative">
+    <div className='group border-primary/10 relative isolate flex flex-col overflow-hidden rounded-none border bg-white shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04),0_0_0_1px_hsl(var(--primary)/10%)] md:row-span-2 xl:row-span-2 dark:bg-neutral-900'>
       {/* Top gradient line */}
       <div
         style={
@@ -147,7 +146,7 @@ const VideoCard = ({ video }: { video: VideoCard }) => {
             maskComposite: "exclude",
           } as React.CSSProperties
         }
-        className="absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] top-0"
+        className='absolute top-0 left-[calc(var(--offset)/2*-1)] z-30 h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
       ></div>
 
       {/* Bottom gradient line */}
@@ -166,7 +165,7 @@ const VideoCard = ({ video }: { video: VideoCard }) => {
             maskComposite: "exclude",
           } as React.CSSProperties
         }
-        className="absolute left-[calc(var(--offset)/2*-1)] h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] top-auto bottom-0"
+        className='absolute top-auto bottom-0 left-[calc(var(--offset)/2*-1)] z-30 h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
       ></div>
 
       {/* Left gradient line */}
@@ -185,7 +184,7 @@ const VideoCard = ({ video }: { video: VideoCard }) => {
             maskComposite: "exclude",
           } as React.CSSProperties
         }
-        className="absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] left-0"
+        className='absolute top-[calc(var(--offset)/2*-1)] left-0 z-30 h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
       ></div>
 
       {/* Right gradient line */}
@@ -204,45 +203,45 @@ const VideoCard = ({ video }: { video: VideoCard }) => {
             maskComposite: "exclude",
           } as React.CSSProperties
         }
-        className="absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] [mask-composite:exclude] z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] right-0 left-auto"
+        className='absolute top-[calc(var(--offset)/2*-1)] right-0 left-auto z-30 h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
       ></div>
-      <div className="relative aspect-[9/12] w-full">
+      <div className='relative aspect-[9/12] w-full'>
         <video
           ref={videoRef}
           src={video.videoUrl}
           poster={video.thumbnailUrl}
-          className="w-full h-full object-cover"
+          className='h-full w-full object-cover'
           muted
           playsInline
           loop
           autoPlay
-          preload="auto"
+          preload='auto'
         />
         {/* Gradient overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
       </div>
 
       {/* Profile info at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 p-3 flex items-center gap-2">
-        <div className="relative w-8 h-8 rounded-full border-2 border-white overflow-hidden flex-shrink-0">
+      <div className='absolute right-0 bottom-0 left-0 flex items-center gap-2 p-3'>
+        <div className='relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-full border-2 border-white'>
           <Image
             src={video.profilePic}
             alt={video.username}
             width={32}
             height={32}
-            className="w-full h-full object-cover"
+            className='h-full w-full object-cover'
           />
         </div>
-        <span className="text-white text-sm font-medium truncate">
+        <span className='truncate text-sm font-medium text-white'>
           {video.username}
         </span>
         {video.verified && (
           <Image
-            src="https://ext.same-assets.com/3322540528/871220803.png"
-            alt="Verified"
+            src='https://ext.same-assets.com/3322540528/871220803.png'
+            alt='Verified'
             width={14}
             height={14}
-            className="flex-shrink-0"
+            className='flex-shrink-0'
           />
         )}
       </div>
@@ -252,40 +251,24 @@ const VideoCard = ({ video }: { video: VideoCard }) => {
 
 const LandingCommunityVideos = () => {
   return (
-    <section className="relative mb-10 px-2 md:px-12 lg:px-20 xl:px-24">
-      <div className="relative z-10 max-w-7xl mx-auto">
+    <section className='relative mb-10 px-2 md:px-12 lg:px-20 xl:px-24'>
+      <div className='relative z-10 mx-auto max-w-7xl'>
         {/* Header */}
-        <div className="text-center mb-12 md:mb-16 space-y-4">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+        <div className='mb-12 space-y-4 text-center md:mb-16'>
+          <h2 className='text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl'>
             Creator community showcase
           </h2>
-          <p className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto px-2">
+          <p className='text-muted-foreground mx-auto max-w-2xl px-2 text-base md:text-base'>
             Discover AI-generated content from our talented community of
             creators.
           </p>
 
-       
           <Link
-            href="/community"
-            className="
-    text-base md:text-base
-    max-w-2xl mx-auto
-    flex items-center justify-center gap-2 w-fit
-    rounded-full
-    py-2 px-6
-
-    bg-white/10 dark:bg-white/5
-    backdrop-blur-md backdrop-saturate-150
-    border border-white/20
-    text-muted-foreground
-
-    shadow-lg shadow-black/5
-    hover:bg-white/20 dark:hover:bg-white/10
-    transition-all duration-300
-  "
+            href='/community'
+            className='text-muted-foreground mx-auto flex w-fit max-w-2xl items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-base shadow-lg shadow-black/5 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:bg-white/20 md:text-base dark:bg-white/5 dark:hover:bg-white/10'
           >
             <span>View All</span>
-            <ArrowRightIcon className="w-4 h-4" />
+            <ArrowRightIcon className='h-4 w-4' />
           </Link>
         </div>
 
@@ -305,9 +288,9 @@ const LandingCommunityVideos = () => {
             `,
           }}
         />
-        <div className="masonry-grid px-2 md:px-12 lg:px-20 xl:px-24">
+        <div className='masonry-grid px-2 md:px-12 lg:px-20 xl:px-24'>
           {videos.map((video) => (
-            <div key={video.id} className="break-inside-avoid mb-4">
+            <div key={video.id} className='mb-4 break-inside-avoid'>
               <VideoCard video={video} />
             </div>
           ))}

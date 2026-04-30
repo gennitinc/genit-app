@@ -1,17 +1,17 @@
 "use client";
-import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { apiResponse } from "@/utils/apiResponse";
-import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { apiResponse } from "@/utils/apiResponse";
+import React, { useState } from "react";
 
 export default function CreditTopUpModal({
   open,
@@ -56,7 +56,7 @@ export default function CreditTopUpModal({
 
   return (
     <Dialog open={open} onOpenChange={(val) => !val && onClose()}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className='sm:max-w-md'>
         <DialogHeader>
           <DialogTitle>Top up credits</DialogTitle>
           <DialogDescription>
@@ -64,17 +64,17 @@ export default function CreditTopUpModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-3 mt-4">
+        <div className='mt-4 space-y-3'>
           <div>
             <Label>Amount (USD)</Label>
             <Input
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="e.g. 10"
+              placeholder='e.g. 10'
             />
           </div>
-          <div className="flex justify-end gap-2 mt-4">
-            <Button variant="ghost" onClick={onClose} disabled={loading}>
+          <div className='mt-4 flex justify-end gap-2'>
+            <Button variant='ghost' onClick={onClose} disabled={loading}>
               Cancel
             </Button>
             <Button onClick={handleSubmit} disabled={loading}>

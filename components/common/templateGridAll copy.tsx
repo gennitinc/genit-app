@@ -1,30 +1,13 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import React, { useEffect, useMemo, useState } from "react";
+import { AIThinkingContent } from "../chat/messages";
+import ShinyText from "../ui/shiny-text";
+import AnimatedTooltipPreview from "./homeAgentsTooltip";
+import { HomeInfoGrid } from "./homeInfoGrid";
+import CategoryAndSearch from "@/components/common/category-and-search";
+import { PricingDialog } from "@/components/common/pricing-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  MessageSquare,
-  Users,
-  Sparkles,
-  TrendingUp,
-  Zap,
-  Image as ImageIcon,
-  ArrowRight,
-  Eye,
-  Pencil,
-  AlertCircle,
-  X,
-  XIcon,
-  Mic,
-  PaperclipIcon,
-  Loader,
-  User,
-} from "lucide-react";
-import Link from "next/link";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { useRouter, useSearchParams } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -34,24 +17,41 @@ import {
 import {
   Drawer,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerFooter,
 } from "@/components/ui/drawer";
-import { useRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { motion, AnimatePresence } from "framer-motion";
-import { PricingDialog } from "@/components/common/pricing-dialog";
-import ShinyText from "../ui/shiny-text";
-import { HomeInfoGrid } from "./homeInfoGrid";
-import AnimatedTooltipPreview from "./homeAgentsTooltip";
-import { apiResponse } from "@/utils/apiResponse";
-import CategoryAndSearch from "@/components/common/category-and-search";
-import { useProjectDesign } from "@/context/DesignProject";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AIThinkingContent } from "../chat/messages";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { useProjectDesign } from "@/context/DesignProject";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
+import { apiResponse } from "@/utils/apiResponse";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  AlertCircle,
+  ArrowRight,
+  Eye,
+  Image as ImageIcon,
+  Loader,
+  MessageSquare,
+  Mic,
+  PaperclipIcon,
+  Pencil,
+  Sparkles,
+  TrendingUp,
+  User,
+  Users,
+  X,
+  XIcon,
+  Zap,
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import React, { useEffect, useMemo, useState } from "react";
+import { useCallback, useRef } from "react";
 
 type TemplateItem = {
   id: string;
@@ -125,7 +125,7 @@ export default function TemplateGridAll() {
         `/templates/scrape/pins/search?q=${encodeURIComponent(randomDesignType)}&limit=12&category=${randomDesignType}`,
         {
           withCredentials: true,
-        },
+        }
       );
 
       const data = await res.data();
@@ -186,12 +186,12 @@ export default function TemplateGridAll() {
                 : undefined,
               author: template.author,
               isUserGenerated: template.isUserGenerated,
-            }),
+            })
           );
 
           if (append) {
             setTemplates((prev) =>
-              mapped.length ? [...prev, ...mapped] : prev,
+              mapped.length ? [...prev, ...mapped] : prev
             );
           } else {
             setTemplates(mapped.length > 0 ? mapped : []);
@@ -216,7 +216,7 @@ export default function TemplateGridAll() {
         }
       }
     },
-    [apiResponse],
+    [apiResponse]
   );
 
   // Initial and when search changes
@@ -248,7 +248,7 @@ export default function TemplateGridAll() {
           setPage((p) => p + 1);
         }
       },
-      { rootMargin: "200px" },
+      { rootMargin: "200px" }
     );
     observer.observe(el);
     return () => observer.unobserve(el);
@@ -341,7 +341,7 @@ export default function TemplateGridAll() {
           Math.min(textareaRef.current.scrollHeight, 300) + "px";
       }
     },
-    [setInputValue],
+    [setInputValue]
   );
 
   // Handle file processing with validation
@@ -369,7 +369,7 @@ export default function TemplateGridAll() {
         setInputError(null);
       }
     },
-    [attachedFiles.length, processFiles],
+    [attachedFiles.length, processFiles]
   );
 
   // Handle file input change
@@ -379,7 +379,7 @@ export default function TemplateGridAll() {
       handleFileProcess(files);
       e.target.value = "";
     },
-    [handleFileProcess],
+    [handleFileProcess]
   );
 
   // Handle drag and drop
@@ -395,7 +395,7 @@ export default function TemplateGridAll() {
       const files = Array.from(e.dataTransfer.files);
       handleFileProcess(files);
     },
-    [handleFileProcess],
+    [handleFileProcess]
   );
 
   // Handle form submission
@@ -445,7 +445,7 @@ export default function TemplateGridAll() {
         const result = await createProject(
           inputValue,
           attachedFiles,
-          selectedFiles,
+          selectedFiles
         );
 
         clearInput();
@@ -457,7 +457,7 @@ export default function TemplateGridAll() {
       } catch (error: any) {
         console.error("Failed to create project:", error);
         setInputError(
-          error.message || "Failed to create project. Please try again.",
+          error.message || "Failed to create project. Please try again."
         );
       } finally {
         setIsSubmitting(false);
@@ -473,7 +473,7 @@ export default function TemplateGridAll() {
       createProject,
       user,
       router,
-    ],
+    ]
   );
 
   // Handle file removal
@@ -482,7 +482,7 @@ export default function TemplateGridAll() {
       removeAttachedFile(index);
       setInputError(null);
     },
-    [removeAttachedFile],
+    [removeAttachedFile]
   );
 
   // Handle key press
@@ -492,7 +492,7 @@ export default function TemplateGridAll() {
         handleSubmit(e as any);
       }
     },
-    [handleSubmit],
+    [handleSubmit]
   );
 
   useEffect(() => {
@@ -548,7 +548,7 @@ export default function TemplateGridAll() {
 
   return (
     <motion.div
-      className="mt-2 mb-20 px-4 md:px-6 lg:px-8"
+      className='mt-2 mb-20 px-4 md:px-6 lg:px-8'
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.8 }}
@@ -556,41 +556,41 @@ export default function TemplateGridAll() {
       {/* <div className="mt-4 mb-4 flex flex-row items-center">
         <CategoryAndSearch />
       </div> */}
-      <div className="columns-2 md:columns-4 gap-4 [column-fill:_balance]">
+      <div className='columns-2 gap-4 [column-fill:_balance] md:columns-4'>
         {isLoading && templates.length === 0 && (
           <>
             {[220, 280, 200, 260, 240, 300, 210, 250, 230, 270, 190, 310].map(
               (h, idx) => (
                 <div
                   key={`skeleton-${idx}`}
-                  className="mb-4 inline-block w-full align-top"
+                  className='mb-4 inline-block w-full align-top'
                   style={{ breakInside: "avoid" }}
                 >
                   <Skeleton
-                    className="w-full rounded-lg bg-muted/70"
+                    className='bg-muted/70 w-full rounded-lg'
                     style={{ height: h }}
                   />
                 </div>
-              ),
+              )
             )}
           </>
         )}
         {templates.map((t) => (
           <div
             key={t.id}
-            className="group relative mb-4 inline-block w-full align-top border border-border rounded-lg"
+            className='group border-border relative mb-4 inline-block w-full rounded-lg border align-top'
             style={{ breakInside: "avoid" }}
           >
-            <div className="relative">
+            <div className='relative'>
               <img
-                className="h-auto max-w-full rounded-lg object-cover"
+                className='h-auto max-w-full rounded-lg object-cover'
                 src={t.src}
                 alt={t.alt || "Template"}
               />
               {t.category && (
                 <Badge
-                  variant="secondary"
-                  className="absolute top-2 left-2 text-xs pointer-events-none z-2 hidden lg:block"
+                  variant='secondary'
+                  className='pointer-events-none absolute top-2 left-2 z-2 hidden text-xs lg:block'
                 >
                   {t.category
                     .split("_")
@@ -598,173 +598,173 @@ export default function TemplateGridAll() {
                     .join(" ")}
                 </Badge>
               )}
-              <div className="pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:opacity-100 group-hover:bg-black/30" />
+              <div className='pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:bg-black/30 group-hover:opacity-100' />
               {/* Creator Info at Bottom */}
               {t.isUserGenerated && (t.userId || t.author) && (
-                <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 via-black/60 to-transparent rounded-b-lg opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity pointer-events-auto z-10 hidden lg:block">
+                <div className='pointer-events-auto absolute right-0 bottom-0 left-0 z-10 hidden rounded-b-lg bg-gradient-to-t from-black/80 via-black/60 to-transparent p-2 opacity-100 transition-opacity lg:block lg:opacity-0 lg:group-hover:opacity-100'>
                   <Link
                     href={`/creator/${t.userId?.username || t.author || ""}`}
                     onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-2 hover:opacity-80 transition-opacity w-fit"
+                    className='flex w-fit items-center gap-2 transition-opacity hover:opacity-80'
                   >
                     {t.userId?.profilePic ? (
                       <img
                         src={t.userId.profilePic}
                         alt={t.userId.username || t.author || "Creator"}
-                        className="w-5 h-5 rounded-full object-cover"
+                        className='h-5 w-5 rounded-full object-cover'
                       />
                     ) : (
-                      <div className="w-5 h-5 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-                        <User className="w-3 h-3 text-neutral-600 dark:text-neutral-400" />
+                      <div className='flex h-5 w-5 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+                        <User className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
                       </div>
                     )}
-                    <span className="text-xs text-white/80 font-medium">
+                    <span className='text-xs font-medium text-white/80'>
                       {t.userId?.username || t.author || "Creator"}
                     </span>
                     {t.userId?.isVerified && (
                       <svg
-                        viewBox="0 0 22 22"
-                        aria-label="Verified account"
-                        role="img"
-                        className="w-3.5 h-3.5 flex-shrink-0"
-                        data-testid="icon-verified"
-                        fill="#3b82f6"
+                        viewBox='0 0 22 22'
+                        aria-label='Verified account'
+                        role='img'
+                        className='h-3.5 w-3.5 flex-shrink-0'
+                        data-testid='icon-verified'
+                        fill='#3b82f6'
                       >
                         <g>
-                          <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                          <path d='M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z' />
                         </g>
                       </svg>
                     )}
                   </Link>
                 </div>
               )}
-              <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-100 lg:opacity-0 transition-opacity group-hover:opacity-100">
+              <div className='absolute inset-0 flex items-center justify-center gap-2 opacity-100 transition-opacity group-hover:opacity-100 lg:opacity-0'>
                 <Button
-                  size="icon"
+                  size='icon'
                   onClick={() => onEdit(t)}
-                  className="pointer-events-auto rounded-full h-9 w-9 p-0 bg-white/90 dark:bg-black/20 backdrop-blur-sm opacity-50"
-                  aria-label="Edit template"
+                  className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-50 backdrop-blur-sm dark:bg-black/20'
+                  aria-label='Edit template'
                 >
-                  <Pencil className="h-4 w-4 text-black dark:text-white" />
+                  <Pencil className='h-4 w-4 text-black dark:text-white' />
                 </Button>
               </div>
             </div>
           </div>
         ))}
         {/* Sentinel for infinite scroll */}
-        <div ref={loadMoreRef} className="col-span-full h-10"></div>
+        <div ref={loadMoreRef} className='col-span-full h-10'></div>
       </div>
 
       {isFetchingMore && (
-        <div className="mt-4 flex justify-center">
-          <Loader className="h-5 w-5 animate-spin" />
+        <div className='mt-4 flex justify-center'>
+          <Loader className='h-5 w-5 animate-spin' />
         </div>
       )}
 
       {/* Edit modal/drawer showing item and sticky action */}
       {selected && !isMobile && (
         <Dialog open={editOpen} onOpenChange={setEditOpen}>
-          <DialogContent className="max-w-3xl h-[85vh] p-0 flex flex-col overflow-hidden">
-            <DialogHeader className="px-4 py-3 border-b flex-shrink-0">
+          <DialogContent className='flex h-[85vh] max-w-3xl flex-col overflow-hidden p-0'>
+            <DialogHeader className='flex-shrink-0 border-b px-4 py-3'>
               <DialogTitle>Recreate</DialogTitle>
             </DialogHeader>
             <div
               className={cn(
-                "flex-shrink-0 overflow-hidden h-auto max-h-[58%]",
-                attachedFiles.length > 0 ? "h-[60%]" : "h-[63%]",
+                "h-auto max-h-[58%] flex-shrink-0 overflow-hidden",
+                attachedFiles.length > 0 ? "h-[60%]" : "h-[63%]"
               )}
             >
               <img
                 src={selected.src}
                 alt={selected.alt || "Template"}
-                className="w-full h-full object-contain rounded-md"
+                className='h-full w-full rounded-md object-contain'
               />
             </div>
             <motion.div
-              className="flex flex-col relative w-full flex-1 min-h-0 overflow-hidden pb-0"
+              className='relative flex min-h-0 w-full flex-1 flex-col overflow-hidden pb-0'
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               {/* File Attachments */}
               {attachedFiles.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal flex-shrink-0">
+                <div className='custom-scrollbar-horizontal mb-3 flex flex-shrink-0 flex-wrap gap-2'>
                   {attachedFiles.map((file: any, index: number) => {
                     const fileKey = file.fileKey || `${file.name}-${index}`;
                     return (
                       <div
                         key={fileKey}
-                        className="relative group bg-muted-foreground/5 border border-border rounded-lg p-2 flex items-center gap-2 hover:bg-background/50 transition-colors max-w-[200px]"
+                        className='group bg-muted-foreground/5 border-border hover:bg-background/50 relative flex max-w-[200px] items-center gap-2 rounded-lg border p-2 transition-colors'
                       >
-                        <div className="w-8 h-8 bg-background border border-border rounded flex items-center justify-center flex-shrink-0 relative">
+                        <div className='bg-background border-border relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border'>
                           {file.type && file.type.startsWith("image/") ? (
                             <img
                               src={
                                 URL.createObjectURL(file) || "/placeholder.svg"
                               }
                               alt={file.name}
-                              className="w-full h-full object-cover rounded"
+                              className='h-full w-full rounded object-cover'
                               onLoad={(e) =>
                                 URL.revokeObjectURL(
-                                  (e.target as HTMLImageElement).src,
+                                  (e.target as HTMLImageElement).src
                                 )
                               }
                             />
                           ) : file.type && file.type.startsWith("video/") ? (
-                            <div className="w-full h-full grid place-items-center text-[10px] text-muted-foreground">
+                            <div className='text-muted-foreground grid h-full w-full place-items-center text-[10px]'>
                               🎬
                             </div>
                           ) : (
                             <svg
-                              className="w-4 h-4 text-muted-foreground"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
+                              className='text-muted-foreground h-4 w-4'
+                              fill='none'
+                              stroke='currentColor'
+                              viewBox='0 0 24 24'
                             >
                               <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
                                 strokeWidth={2}
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
                               />
                             </svg>
                           )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium truncate text-foreground">
+                        <div className='min-w-0 flex-1'>
+                          <p className='text-foreground truncate text-xs font-medium'>
                             {file.name && file.name.length > 15
                               ? `${file.name.substring(0, 15)}...`
                               : file.name || "Unknown file"}
                           </p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className='text-muted-foreground text-xs'>
                             {formatFileSize(file.size)}
                           </p>
                         </div>
                         <button
                           onClick={() => handleFileRemove(index)}
-                          className="absolute -top-1 -right-1 w-5 h-5 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold"
+                          className='bg-muted-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-500'
                           disabled={isGenerating}
                           aria-label={`Remove ${file.name}`}
                         >
                           &times;
                         </button>
                         {file.type && file.type.startsWith("image/") && (
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                            <div className="bg-background border border-border rounded-lg shadow-lg p-2">
+                          <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
+                            <div className='bg-background border-border rounded-lg border p-2 shadow-lg'>
                               <img
                                 src={
                                   URL.createObjectURL(file) ||
                                   "/placeholder.svg"
                                 }
                                 alt={file.name}
-                                className="max-w-[200px] max-h-[150px] object-contain rounded"
+                                className='max-h-[150px] max-w-[200px] rounded object-contain'
                                 onLoad={(e) =>
                                   URL.revokeObjectURL(
-                                    (e.target as HTMLImageElement).src,
+                                    (e.target as HTMLImageElement).src
                                   )
                                 }
                               />
-                              <div className="mt-1 text-xs text-muted-foreground text-center">
+                              <div className='text-muted-foreground mt-1 text-center text-xs'>
                                 {file.name} • {formatFileSize(file.size)}
                               </div>
                             </div>
@@ -777,13 +777,13 @@ export default function TemplateGridAll() {
               )}
               <div
                 ref={chatContainerRef}
-                className="relative flex rounded-2xl p-[1.5px] overflow-hidden before:absolute before:content-[''] before:top-[-10px] before:left-[-10px] before:bg-radial-gradient md:before:w-[40vh] before:h-[30px] before:blur-[1px] w-full shadow-lg h-full flex-1 min-h-0"
+                className="before:bg-radial-gradient relative flex h-full min-h-0 w-full flex-1 overflow-hidden rounded-2xl p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh]"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
                 {/* Animated beam with smoother transitions */}
                 <motion.div
-                  className="absolute w-full h-40 rounded-full bg-blue-400/20 dark:bg-blue-500/20 blur-3xl pointer-events-none z-0"
+                  className='pointer-events-none absolute z-0 h-40 w-full rounded-full bg-blue-400/20 blur-3xl dark:bg-blue-500/20'
                   animate={{
                     left: `${beamPosition.x}%`,
                     top: `${beamPosition.y}%`,
@@ -794,16 +794,16 @@ export default function TemplateGridAll() {
                   }}
                   style={{ transform: "translate(-50%, -50%)" }}
                 />
-                <div className="flex flex-col bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-[15px] w-full overflow-hidden z-10 shadow-inner h-full flex-1 min-h-0">
-                  <div className="flex items-center mx-4 justify-between text-sm flex-shrink-0">
+                <div className='z-10 flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden rounded-[15px] bg-white/90 shadow-inner backdrop-blur-sm dark:bg-black/80'>
+                  <div className='mx-4 flex flex-shrink-0 items-center justify-between text-sm'>
                     {!isGenerating && (
-                      <div className="flex items-center gap-3 justify-between w-full">
-                        <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                          <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
+                      <div className='flex w-full items-center justify-between gap-3'>
+                        <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
+                          <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                           {user ? (
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
-                            <span className="ml-2 text-xs text-muted-foreground">
+                            <span className='text-muted-foreground ml-2 text-xs'>
                               Get a 50 free credit
                             </span>
                           )}
@@ -813,14 +813,14 @@ export default function TemplateGridAll() {
                           <div>
                             {(user?.userPlan as any) === "Basic" ? (
                               <span
-                                className="cursor-pointer text-sm font-medium hover:underline"
+                                className='cursor-pointer text-sm font-medium hover:underline'
                                 onClick={() => router.push("/pricing")}
                               >
                                 Upgrade
                               </span>
                             ) : (
                               <span
-                                className="cursor-pointer text-sm font-medium hover:underline"
+                                className='cursor-pointer text-sm font-medium hover:underline'
                                 onClick={() =>
                                   router.push("/user/settings?tab=billing")
                                 }
@@ -834,15 +834,15 @@ export default function TemplateGridAll() {
                     )}
                     {isGenerating && (
                       <ShinyText
-                        text="Thinking..."
+                        text='Thinking...'
                         disabled={false}
                         speed={3}
-                        className="custom-class"
+                        className='custom-class'
                       />
                     )}
                   </div>
 
-                  <div className="relative flex-1 min-h-0 flex flex-col px-4 pb-4">
+                  <div className='relative flex min-h-0 flex-1 flex-col px-4 pb-4'>
                     <form
                       onSubmit={
                         user
@@ -852,14 +852,14 @@ export default function TemplateGridAll() {
                               router.push("/signin");
                             }
                       }
-                      className="relative flex-1 min-h-0 flex flex-col"
+                      className='relative flex min-h-0 flex-1 flex-col'
                     >
-                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-1 focus:ring-transparent flex-1 min-h-0">
-                        <div className="flex-1 relative min-h-0 overflow-y-auto">
+                      <div className='bg-muted-foreground/5 border-border flex min-h-0 flex-1 flex-col gap-3 rounded-xl border p-3 shadow-sm transition-all duration-200 focus-within:ring-1 focus:ring-transparent'>
+                        <div className='relative min-h-0 flex-1 overflow-y-auto'>
                           <textarea
                             ref={textareaRef}
-                            id="chat_bot"
-                            name="chat_bot"
+                            id='chat_bot'
+                            name='chat_bot'
                             value={isGenerating ? "" : inputValue}
                             onChange={handleInputChange}
                             onKeyDown={handleKeyPress}
@@ -874,50 +874,50 @@ export default function TemplateGridAll() {
                               fontFamily: "inherit",
                               minHeight: "60px",
                             }}
-                            className="bg-transparent rounded-2xl border-none w-full text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
-                            aria-label="Enter your prompt"
+                            className='scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] w-full resize-none overflow-y-auto rounded-2xl border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 md:p-4 dark:text-white dark:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636]'
+                            aria-label='Enter your prompt'
                             aria-describedby={
                               inputError ? "input-error" : undefined
                             }
                           />
                         </div>
 
-                        <div className="flex justify-between items-center gap-2 flex-shrink-0 pt-2">
-                          <div className="flex gap-2">
+                        <div className='flex flex-shrink-0 items-center justify-between gap-2 pt-2'>
+                          <div className='flex gap-2'>
                             <button
-                              type="button"
-                              className="flex items-center justify-center w-9 h-9 text-gray-500 dark:text-gray-400 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/10 border border-border cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                              type='button'
+                              className='border-border flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border bg-transparent text-gray-500 transition-all duration-200 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-gray-400 dark:hover:bg-white/10'
                               onClick={() => fileInputRef.current?.click()}
                               disabled={isGenerating || isSubmitting}
-                              aria-label="Attach files"
+                              aria-label='Attach files'
                             >
-                              <PaperclipIcon className="h-4 w-4" />
+                              <PaperclipIcon className='h-4 w-4' />
                             </button>
                             <Input
                               ref={fileInputRef}
-                              type="file"
+                              type='file'
                               multiple
                               onChange={handleFileInputChange}
                               disabled={isGenerating || isSubmitting}
-                              className="hidden"
-                              id="file-upload"
-                              accept="image/*,.pdf,.txt,.md,.js,.jsx,.ts,.tsx,.css,.html,.json,.xml,.yaml,.yml"
-                              aria-label="Select files to upload"
+                              className='hidden'
+                              id='file-upload'
+                              accept='image/*,.pdf,.txt,.md,.js,.jsx,.ts,.tsx,.css,.html,.json,.xml,.yaml,.yml'
+                              aria-label='Select files to upload'
                             />
                           </div>
                           <button
-                            type="submit"
+                            type='submit'
                             disabled={isSubmitDisabled}
-                            className={`relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 transition-opacity ${
+                            className={`relative inline-flex h-9 overflow-hidden rounded-full p-[1px] transition-opacity focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 focus:outline-none ${
                               isSubmitDisabled
-                                ? "opacity-50 cursor-not-allowed"
+                                ? "cursor-not-allowed opacity-50"
                                 : "hover:opacity-90"
                             }`}
                           >
-                            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 dark:bg-slate-50 px-4 py-1 text-sm font-medium text-white dark:text-slate-950 backdrop-blur-3xl">
+                            <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]' />
+                            <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-4 py-1 text-sm font-medium text-white backdrop-blur-3xl dark:bg-slate-50 dark:text-slate-950'>
                               {isGenerating || isSubmitting ? (
-                                <Loader className="w-4 h-4 animate-spin" />
+                                <Loader className='h-4 w-4 animate-spin' />
                               ) : (
                                 "Recreate"
                               )}
@@ -936,107 +936,107 @@ export default function TemplateGridAll() {
 
       {selected && isMobile && (
         <Drawer open={editOpen} onOpenChange={setEditOpen}>
-          <DrawerContent className="h-[85vh] flex flex-col overflow-hidden">
-            <DrawerHeader className="flex-shrink-0">
+          <DrawerContent className='flex h-[85vh] flex-col overflow-hidden'>
+            <DrawerHeader className='flex-shrink-0'>
               <DrawerTitle>Recreate</DrawerTitle>
             </DrawerHeader>
             <div
               className={cn(
-                "flex-shrink-0 overflow-hidden h-auto max-h-[58%]",
-                attachedFiles.length > 0 ? "h-[61%]" : "h-[63%]",
+                "h-auto max-h-[58%] flex-shrink-0 overflow-hidden",
+                attachedFiles.length > 0 ? "h-[61%]" : "h-[63%]"
               )}
             >
               <img
                 src={selected.src}
                 alt={selected.alt || "Template"}
-                className="w-full h-full object-contain rounded-md"
+                className='h-full w-full rounded-md object-contain'
               />
             </div>
             <motion.div
-              className="flex flex-col relative w-full flex-1 min-h-0 overflow-hidden pb-0"
+              className='relative flex min-h-0 w-full flex-1 flex-col overflow-hidden pb-0'
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               {/* File Attachments */}
               {attachedFiles.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal flex-shrink-0">
+                <div className='custom-scrollbar-horizontal mb-3 flex flex-shrink-0 flex-wrap gap-2'>
                   {attachedFiles.map((file: any, index: number) => {
                     const fileKey = file.fileKey || `${file.name}-${index}`;
                     return (
                       <div
                         key={fileKey}
-                        className="relative group bg-muted-foreground/5 border border-border rounded-lg p-2 flex items-center gap-2 hover:bg-background/50 transition-colors max-w-[200px]"
+                        className='group bg-muted-foreground/5 border-border hover:bg-background/50 relative flex max-w-[200px] items-center gap-2 rounded-lg border p-2 transition-colors'
                       >
-                        <div className="w-8 h-8 bg-background border border-border rounded flex items-center justify-center flex-shrink-0 relative">
+                        <div className='bg-background border-border relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border'>
                           {file.type && file.type.startsWith("image/") ? (
                             <img
                               src={
                                 URL.createObjectURL(file) || "/placeholder.svg"
                               }
                               alt={file.name}
-                              className="w-full h-full object-cover rounded"
+                              className='h-full w-full rounded object-cover'
                               onLoad={(e) =>
                                 URL.revokeObjectURL(
-                                  (e.target as HTMLImageElement).src,
+                                  (e.target as HTMLImageElement).src
                                 )
                               }
                             />
                           ) : file.type && file.type.startsWith("video/") ? (
-                            <div className="w-full h-full grid place-items-center text-[10px] text-muted-foreground">
+                            <div className='text-muted-foreground grid h-full w-full place-items-center text-[10px]'>
                               🎬
                             </div>
                           ) : (
                             <svg
-                              className="w-4 h-4 text-muted-foreground"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
+                              className='text-muted-foreground h-4 w-4'
+                              fill='none'
+                              stroke='currentColor'
+                              viewBox='0 0 24 24'
                             >
                               <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
                                 strokeWidth={2}
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
                               />
                             </svg>
                           )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium truncate text-foreground">
+                        <div className='min-w-0 flex-1'>
+                          <p className='text-foreground truncate text-xs font-medium'>
                             {file.name && file.name.length > 15
                               ? `${file.name.substring(0, 15)}...`
                               : file.name || "Unknown file"}
                           </p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className='text-muted-foreground text-xs'>
                             {formatFileSize(file.size)}
                           </p>
                         </div>
                         <button
                           onClick={() => handleFileRemove(index)}
-                          className="absolute -top-1 -right-1 w-5 h-5 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold"
+                          className='bg-muted-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-500'
                           disabled={isGenerating}
                           aria-label={`Remove ${file.name}`}
                         >
                           &times;
                         </button>
                         {file.type && file.type.startsWith("image/") && (
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                            <div className="bg-background border border-border rounded-lg shadow-lg p-2">
+                          <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
+                            <div className='bg-background border-border rounded-lg border p-2 shadow-lg'>
                               <img
                                 src={
                                   URL.createObjectURL(file) ||
                                   "/placeholder.svg"
                                 }
                                 alt={file.name}
-                                className="max-w-[200px] max-h-[150px] object-contain rounded"
+                                className='max-h-[150px] max-w-[200px] rounded object-contain'
                                 onLoad={(e) =>
                                   URL.revokeObjectURL(
-                                    (e.target as HTMLImageElement).src,
+                                    (e.target as HTMLImageElement).src
                                   )
                                 }
                               />
-                              <div className="mt-1 text-xs text-muted-foreground text-center">
+                              <div className='text-muted-foreground mt-1 text-center text-xs'>
                                 {file.name} • {formatFileSize(file.size)}
                               </div>
                             </div>
@@ -1049,13 +1049,13 @@ export default function TemplateGridAll() {
               )}
               <div
                 ref={chatContainerRef}
-                className="relative flex rounded-2xl p-[1.5px] overflow-hidden before:absolute before:content-[''] before:top-[-10px] before:left-[-10px] before:bg-radial-gradient md:before:w-[40vh] before:h-[30px] before:blur-[1px] w-full shadow-lg h-full flex-1 min-h-0"
+                className="before:bg-radial-gradient relative flex h-full min-h-0 w-full flex-1 overflow-hidden rounded-2xl p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh]"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
                 {/* Animated beam with smoother transitions */}
                 <motion.div
-                  className="absolute w-full h-40 rounded-full bg-blue-400/20 dark:bg-blue-500/20 blur-3xl pointer-events-none z-0"
+                  className='pointer-events-none absolute z-0 h-40 w-full rounded-full bg-blue-400/20 blur-3xl dark:bg-blue-500/20'
                   animate={{
                     left: `${beamPosition.x}%`,
                     top: `${beamPosition.y}%`,
@@ -1066,16 +1066,16 @@ export default function TemplateGridAll() {
                   }}
                   style={{ transform: "translate(-50%, -50%)" }}
                 />
-                <div className="flex flex-col bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-[15px] w-full overflow-hidden z-10 shadow-inner h-full flex-1 min-h-0">
-                  <div className="flex items-center mx-4 justify-between text-sm flex-shrink-0">
+                <div className='z-10 flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden rounded-[15px] bg-white/90 shadow-inner backdrop-blur-sm dark:bg-black/80'>
+                  <div className='mx-4 flex flex-shrink-0 items-center justify-between text-sm'>
                     {!isGenerating && (
-                      <div className="flex items-center gap-3 justify-between w-full">
-                        <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                          <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
+                      <div className='flex w-full items-center justify-between gap-3'>
+                        <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
+                          <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                           {user ? (
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
-                            <span className="ml-2 text-xs text-muted-foreground">
+                            <span className='text-muted-foreground ml-2 text-xs'>
                               Get a 50 free credit
                             </span>
                           )}
@@ -1085,14 +1085,14 @@ export default function TemplateGridAll() {
                           <div>
                             {(user?.userPlan as any) === "Basic" ? (
                               <span
-                                className="cursor-pointer text-sm font-medium hover:underline"
+                                className='cursor-pointer text-sm font-medium hover:underline'
                                 onClick={() => router.push("/pricing")}
                               >
                                 Upgrade
                               </span>
                             ) : (
                               <span
-                                className="cursor-pointer text-sm font-medium hover:underline"
+                                className='cursor-pointer text-sm font-medium hover:underline'
                                 onClick={() =>
                                   router.push("/user/settings?tab=billing")
                                 }
@@ -1106,15 +1106,15 @@ export default function TemplateGridAll() {
                     )}
                     {isGenerating && (
                       <ShinyText
-                        text="Thinking..."
+                        text='Thinking...'
                         disabled={false}
                         speed={3}
-                        className="custom-class"
+                        className='custom-class'
                       />
                     )}
                   </div>
 
-                  <div className="relative flex-1 min-h-0 flex flex-col px-4 pb-4">
+                  <div className='relative flex min-h-0 flex-1 flex-col px-4 pb-4'>
                     <form
                       onSubmit={
                         user
@@ -1124,14 +1124,14 @@ export default function TemplateGridAll() {
                               router.push("/signin");
                             }
                       }
-                      className="relative flex-1 min-h-0 flex flex-col"
+                      className='relative flex min-h-0 flex-1 flex-col'
                     >
-                      <div className="flex flex-col gap-3 bg-muted-foreground/5 border border-border rounded-xl p-3 shadow-sm transition-all duration-200 focus-within:ring-1 focus:ring-transparent flex-1 min-h-0">
-                        <div className="flex-1 relative min-h-0 overflow-y-auto">
+                      <div className='bg-muted-foreground/5 border-border flex min-h-0 flex-1 flex-col gap-3 rounded-xl border p-3 shadow-sm transition-all duration-200 focus-within:ring-1 focus:ring-transparent'>
+                        <div className='relative min-h-0 flex-1 overflow-y-auto'>
                           <textarea
                             ref={textareaRef}
-                            id="chat_bot"
-                            name="chat_bot"
+                            id='chat_bot'
+                            name='chat_bot'
                             value={isGenerating ? "" : inputValue}
                             onChange={handleInputChange}
                             onKeyDown={handleKeyPress}
@@ -1146,50 +1146,50 @@ export default function TemplateGridAll() {
                               fontFamily: "inherit",
                               minHeight: "60px",
                             }}
-                            className="bg-transparent rounded-2xl border-none w-full text-gray-800 dark:text-white font-sans font-normal p-2 md:p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
-                            aria-label="Enter your prompt"
+                            className='scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] w-full resize-none overflow-y-auto rounded-2xl border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 md:p-4 dark:text-white dark:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636]'
+                            aria-label='Enter your prompt'
                             aria-describedby={
                               inputError ? "input-error" : undefined
                             }
                           />
                         </div>
 
-                        <div className="flex justify-between items-center gap-2 flex-shrink-0 pt-2">
-                          <div className="flex gap-2">
+                        <div className='flex flex-shrink-0 items-center justify-between gap-2 pt-2'>
+                          <div className='flex gap-2'>
                             <button
-                              type="button"
-                              className="flex items-center justify-center w-9 h-9 text-gray-500 dark:text-gray-400 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/10 border border-border cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                              type='button'
+                              className='border-border flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border bg-transparent text-gray-500 transition-all duration-200 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-gray-400 dark:hover:bg-white/10'
                               onClick={() => fileInputRef.current?.click()}
                               disabled={isGenerating || isSubmitting}
-                              aria-label="Attach files"
+                              aria-label='Attach files'
                             >
-                              <PaperclipIcon className="h-4 w-4" />
+                              <PaperclipIcon className='h-4 w-4' />
                             </button>
                             <Input
                               ref={fileInputRef}
-                              type="file"
+                              type='file'
                               multiple
                               onChange={handleFileInputChange}
                               disabled={isGenerating || isSubmitting}
-                              className="hidden"
-                              id="file-upload"
-                              accept="image/*,.pdf,.txt,.md,.js,.jsx,.ts,.tsx,.css,.html,.json,.xml,.yaml,.yml"
-                              aria-label="Select files to upload"
+                              className='hidden'
+                              id='file-upload'
+                              accept='image/*,.pdf,.txt,.md,.js,.jsx,.ts,.tsx,.css,.html,.json,.xml,.yaml,.yml'
+                              aria-label='Select files to upload'
                             />
                           </div>
                           <button
-                            type="submit"
+                            type='submit'
                             disabled={isSubmitDisabled}
-                            className={`relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 transition-opacity ${
+                            className={`relative inline-flex h-9 overflow-hidden rounded-full p-[1px] transition-opacity focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 focus:outline-none ${
                               isSubmitDisabled
-                                ? "opacity-50 cursor-not-allowed"
+                                ? "cursor-not-allowed opacity-50"
                                 : "hover:opacity-90"
                             }`}
                           >
-                            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 dark:bg-slate-50 px-4 py-1 text-sm font-medium text-white dark:text-slate-950 backdrop-blur-3xl">
+                            <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]' />
+                            <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-4 py-1 text-sm font-medium text-white backdrop-blur-3xl dark:bg-slate-50 dark:text-slate-950'>
                               {isGenerating || isSubmitting ? (
-                                <Loader className="w-4 h-4 animate-spin" />
+                                <Loader className='h-4 w-4 animate-spin' />
                               ) : (
                                 "Recreate"
                               )}

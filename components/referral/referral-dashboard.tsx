@@ -1,25 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Progress } from "@/components/ui/progress";
-import { Input } from "@/components/ui/input";
-import {
-  RefreshCw,
-  Copy,
-  Download,
-  Crown,
-  Medal,
-  Link as LinkIcon,
-  Code,
-} from "lucide-react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
-import { toast } from "sonner";
-import { apiResponse } from "@/utils/apiResponse";
-import { useUserContext } from "@/context/AuthenticatedContext";
 import { JoinReferralCard } from "./join-referral-card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { apiResponse } from "@/utils/apiResponse";
+import {
+  Code,
+  Copy,
+  Crown,
+  Download,
+  Link as LinkIcon,
+  Medal,
+  RefreshCw,
+} from "lucide-react";
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
 
 interface ReferredUser {
   _id: string;
@@ -234,25 +234,25 @@ export default function ReferralDashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className='flex h-full items-center justify-center'>
         <svg
-          className="animate-spin -ml-1 mr-3 h-4 w-4 text-black dark:text-white"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
+          className='mr-3 -ml-1 h-4 w-4 animate-spin text-black dark:text-white'
+          xmlns='http://www.w3.org/2000/svg'
+          fill='none'
+          viewBox='0 0 24 24'
         >
           <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
+            className='opacity-25'
+            cx='12'
+            cy='12'
+            r='10'
+            stroke='currentColor'
+            strokeWidth='4'
           ></circle>
           <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            className='opacity-75'
+            fill='currentColor'
+            d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
           ></path>
         </svg>
       </div>
@@ -265,15 +265,15 @@ export default function ReferralDashboard() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-6">
+    <div className='container mx-auto space-y-6 p-6'>
+      <div className='columns-1 gap-6 md:columns-2 lg:columns-3'>
         {/* Total Revenue Card */}
-        <Card className="break-inside-avoid mb-6">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+        <Card className='mb-6 break-inside-avoid'>
+          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+            <CardTitle className='text-sm font-medium'>Total Revenue</CardTitle>
             <Button
-              variant="ghost"
-              size="icon"
+              variant='ghost'
+              size='icon'
               onClick={handleRefresh}
               disabled={refreshing}
             >
@@ -283,28 +283,28 @@ export default function ReferralDashboard() {
             </Button>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">
+            <div className='text-3xl font-bold'>
               $
               {stats.totalRevenue.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
             </div>
-            <p className="text-xs text-green-600 mt-1">
+            <p className='mt-1 text-xs text-green-600'>
               +{stats.revenueChange}% from last month
             </p>
           </CardContent>
         </Card>
 
         {/* Total Supporters Card */}
-        <Card className="break-inside-avoid mb-6">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+        <Card className='mb-6 break-inside-avoid'>
+          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+            <CardTitle className='text-sm font-medium'>
               Referral Analytics
             </CardTitle>
             <Button
-              variant="ghost"
-              size="icon"
+              variant='ghost'
+              size='icon'
               onClick={handleRefresh}
               disabled={refreshing}
             >
@@ -314,16 +314,16 @@ export default function ReferralDashboard() {
             </Button>
           </CardHeader>
           <CardContent>
-            <div className="relative flex items-center justify-center h-[200px]">
-              <ResponsiveContainer width="100%" height="100%">
+            <div className='relative flex h-[200px] items-center justify-center'>
+              <ResponsiveContainer width='100%' height='100%'>
                 <PieChart>
                   <Pie
                     data={chartData}
-                    cx="50%"
-                    cy="50%"
+                    cx='50%'
+                    cy='50%'
                     innerRadius={60}
                     outerRadius={80}
-                    dataKey="value"
+                    dataKey='value'
                   >
                     {chartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
@@ -331,25 +331,25 @@ export default function ReferralDashboard() {
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="text-center">
-                  <div className="text-3xl font-bold">
+              <div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
+                <div className='text-center'>
+                  <div className='text-3xl font-bold'>
                     {stats.totalSupporters}
                   </div>
-                  <div className="text-xs text-muted-foreground">Total</div>
+                  <div className='text-muted-foreground text-xs'>Total</div>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-2 mt-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded bg-green-500"></div>
-                <span className="text-xs">
+            <div className='mt-4 flex flex-col gap-2'>
+              <div className='flex items-center gap-2'>
+                <div className='h-3 w-3 rounded bg-green-500'></div>
+                <span className='text-xs'>
                   Supporting &gt; 7 days: {stats.activeSupporters}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded bg-orange-500"></div>
-                <span className="text-xs">
+              <div className='flex items-center gap-2'>
+                <div className='h-3 w-3 rounded bg-orange-500'></div>
+                <span className='text-xs'>
                   Expiring in &lt; 7 days: {stats.expiringSupporters}
                 </span>
               </div>
@@ -358,42 +358,42 @@ export default function ReferralDashboard() {
         </Card>
 
         {/* Top Supporters Card */}
-        <Card className="h-fit break-inside-avoid mb-6">
+        <Card className='mb-6 h-fit break-inside-avoid'>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className='text-sm font-medium'>
               Total Referred Users: {stats.referredUsers.length}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className='space-y-4'>
               {stats.referredUsers.length > 0 ? (
                 stats.referredUsers.map((supporter, index) => (
-                  <div key={supporter._id} className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10">
+                  <div key={supporter._id} className='flex items-center gap-3'>
+                    <Avatar className='h-10 w-10'>
                       <AvatarImage src={supporter.userdp} />
                       <AvatarFallback>
                         {getInitials(supporter.username)}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium truncate">
+                    <div className='min-w-0 flex-1'>
+                      <div className='flex items-center gap-2'>
+                        <p className='truncate text-sm font-medium'>
                           @{supporter.username}
                         </p>
                         {index === 0 ? (
-                          <Crown className="h-4 w-4 text-yellow-500" />
+                          <Crown className='h-4 w-4 text-yellow-500' />
                         ) : (
-                          <Medal className="h-4 w-4 text-gray-400" />
+                          <Medal className='h-4 w-4 text-gray-400' />
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground">
+                      <p className='text-muted-foreground text-xs'>
                         {supporter.daysActive}d active
                       </p>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="text-sm text-muted-foreground text-center py-4">
+                <div className='text-muted-foreground py-4 text-center text-sm'>
                   No supporters yet
                 </div>
               )}
@@ -402,58 +402,58 @@ export default function ReferralDashboard() {
         </Card>
 
         {/* Share Link Card */}
-        <Card className="break-inside-avoid mb-6">
+        <Card className='mb-6 break-inside-avoid'>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className='text-sm font-medium'>
               Share your Link
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className='space-y-4'>
             {/* QR Code Section */}
-            <div className="space-y-3">
-              <div className="text-sm font-medium">QR code</div>
-              <div className="flex items-center justify-center p-4 bg-white rounded-lg border">
-                <img src={qrCodeUrl} alt="QR Code" className="w-48 h-48" />
+            <div className='space-y-3'>
+              <div className='text-sm font-medium'>QR code</div>
+              <div className='flex items-center justify-center rounded-lg border bg-white p-4'>
+                <img src={qrCodeUrl} alt='QR Code' className='h-48 w-48' />
               </div>
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 w-full">
+              <div className='grid w-full grid-cols-1 gap-3 xl:grid-cols-2'>
                 <Button
-                  variant="outline"
-                  size="sm"
+                  variant='outline'
+                  size='sm'
                   onClick={() => handleDownloadQR("png")}
-                  className="w-full flex items-center justify-center"
+                  className='flex w-full items-center justify-center'
                 >
-                  <Download className="h-4 w-4 mr-2" />
+                  <Download className='mr-2 h-4 w-4' />
                   Download PNG
                 </Button>
 
                 <Button
-                  variant="outline"
-                  size="sm"
+                  variant='outline'
+                  size='sm'
                   onClick={handleCopyCode}
-                  className="w-full flex items-center justify-center"
+                  className='flex w-full items-center justify-center'
                 >
-                  <Code className="h-4 w-4 mr-2" />
+                  <Code className='mr-2 h-4 w-4' />
                   Copy Code
                 </Button>
               </div>
             </div>
 
             {/* Share Link Section */}
-            <div className="space-y-3">
-              <div className="text-sm font-medium">Share Link</div>
-              <div className="flex items-center gap-2">
-                <LinkIcon className="h-4 w-4 text-muted-foreground" />
-                <Input value={stats.referralLink} readOnly className="flex-1" />
+            <div className='space-y-3'>
+              <div className='text-sm font-medium'>Share Link</div>
+              <div className='flex items-center gap-2'>
+                <LinkIcon className='text-muted-foreground h-4 w-4' />
+                <Input value={stats.referralLink} readOnly className='flex-1' />
               </div>
               <Button
                 onClick={handleCopyLink}
-                className="w-full"
-                variant="default"
+                className='w-full'
+                variant='default'
               >
-                <Copy className="h-4 w-4 mr-2" />
+                <Copy className='mr-2 h-4 w-4' />
                 Copy Link
               </Button>
-              <p className="text-xs text-muted-foreground">
+              <p className='text-muted-foreground text-xs'>
                 Users support you for 365 days after they select you as a
                 Creator. You should regularly remind them to maintain their
                 support.
@@ -463,25 +463,25 @@ export default function ReferralDashboard() {
         </Card>
 
         {/* Media Kit Card */}
-        <Card className="h-fit break-inside-avoid mb-6">
+        <Card className='mb-6 h-fit break-inside-avoid'>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Media Kit</CardTitle>
+            <CardTitle className='text-sm font-medium'>Media Kit</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className='space-y-4'>
             <div>
-              <div className="text-sm font-medium mb-2">Including:</div>
-              <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+              <div className='mb-2 text-sm font-medium'>Including:</div>
+              <ul className='text-muted-foreground list-inside list-disc space-y-1 text-sm'>
                 <li>Logo</li>
                 <li>Colors</li>
                 <li>Font</li>
                 <li>Elements</li>
               </ul>
             </div>
-            <Button variant="default" className="w-full">
-              <Download className="h-4 w-4 mr-2" />
+            <Button variant='default' className='w-full'>
+              <Download className='mr-2 h-4 w-4' />
               Download from Google Drive
             </Button>
-            <p className="text-xs text-muted-foreground">
+            <p className='text-muted-foreground text-xs'>
               Our Media Kit provides a comprehensive selection of resources to
               help you successfully apply as a Creator and gain more supporters.
             </p>

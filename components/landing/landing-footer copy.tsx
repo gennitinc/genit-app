@@ -1,11 +1,10 @@
 "use client";
 
-import type React from "react";
-
 import { Logo } from "@/components/logo";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -13,18 +12,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import {
   ArrowUp,
+  ChevronRight,
   Facebook,
+  Github,
+  Globe,
   Instagram,
   Linkedin,
   Mail,
@@ -35,14 +37,11 @@ import {
   Sun,
   Twitter,
   Youtube,
-  Github,
-  Globe,
-  ChevronRight,
 } from "lucide-react";
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
+import Link from "next/link";
+import type React from "react";
+import { useEffect, useState } from "react";
 
 export function LandingFooter() {
   const [email, setEmail] = useState("");
@@ -98,7 +97,7 @@ export function LandingFooter() {
   ];
 
   return (
-    <footer className="relative border-t border-border overflow-hidden transition-colors duration-300">
+    <footer className='border-border relative overflow-hidden border-t transition-colors duration-300'>
       {/* Background Pattern */}
       {/* <div
         className="absolute inset-0 z-0 opacity-[0.03]"
@@ -111,7 +110,7 @@ export function LandingFooter() {
       {/* Back to Top Button */}
       <div
         className={cn(
-          "fixed bottom-8 right-8 z-50 transition-all duration-500 transform",
+          "fixed right-8 bottom-8 z-50 transform transition-all duration-500",
           isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
         )}
       >
@@ -120,15 +119,15 @@ export function LandingFooter() {
             <TooltipTrigger asChild>
               <Button
                 onClick={scrollToTop}
-                size="icon"
-                variant="secondary"
-                className="rounded-full shadow-lg hover:shadow-xl hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+                size='icon'
+                variant='secondary'
+                className='hover:bg-primary hover:text-primary-foreground rounded-full shadow-lg transition-all duration-300 hover:shadow-xl'
               >
-                <ArrowUp className="h-5 w-5" />
-                <span className="sr-only">Back to top</span>
+                <ArrowUp className='h-5 w-5' />
+                <span className='sr-only'>Back to top</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="left">
+            <TooltipContent side='left'>
               <p>Back to top</p>
             </TooltipContent>
           </Tooltip>
@@ -136,34 +135,34 @@ export function LandingFooter() {
       </div>
 
       {/* Newsletter Banner */}
-      <div className="relative z-10 bg-background backdrop-blur-sm border-b border-primary/1">
-        <div className="container mx-auto py-10 px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="max-w-md">
-              <h2 className="text-2xl font-bold text-foreground mb-2">
+      <div className='bg-background border-primary/1 relative z-10 border-b backdrop-blur-sm'>
+        <div className='container mx-auto px-4 py-10'>
+          <div className='flex flex-col items-center justify-between gap-6 md:flex-row'>
+            <div className='max-w-md'>
+              <h2 className='text-foreground mb-2 text-2xl font-bold'>
                 Stay in the loop
               </h2>
-              <p className="text-muted-foreground">
+              <p className='text-muted-foreground'>
                 Subscribe to our newsletter for the latest updates, exclusive
                 offers, and insights.
               </p>
             </div>
             <form
               onSubmit={handleSubscribe}
-              className="w-full max-w-md flex flex-col sm:flex-row gap-3"
+              className='flex w-full max-w-md flex-col gap-3 sm:flex-row'
             >
-              <div className="flex-1">
+              <div className='flex-1'>
                 <Input
-                  type="email"
+                  type='email'
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder='Enter your email'
                   required
-                  className="w-full h-12 border-primary/20 focus:border-primary"
+                  className='border-primary/20 focus:border-primary h-12 w-full'
                 />
               </div>
-              <Button type="submit" size="lg" className="btn-gradient">
-                Subscribe <ChevronRight className="ml-2 h-4 w-4" />
+              <Button type='submit' size='lg' className='btn-gradient'>
+                Subscribe <ChevronRight className='ml-2 h-4 w-4' />
               </Button>
             </form>
           </div>
@@ -171,51 +170,51 @@ export function LandingFooter() {
       </div>
 
       {/* Main Footer Content */}
-      <div className="container mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8 relative z-10">
+      <div className='relative z-10 container mx-auto px-4 py-16 sm:px-6 lg:px-8 lg:py-20'>
         <div
           className={cn(
-            "grid grid-cols-1 gap-10 lg:grid-cols-9 transition-opacity duration-1000",
+            "grid grid-cols-1 gap-10 transition-opacity duration-1000 lg:grid-cols-9",
             isLoaded ? "opacity-100" : "opacity-0"
           )}
         >
           {/* Company Info */}
-          <div className="space-y-8 lg:col-span-3">
-            <div className="flex items-center gap-2">
-              <Logo className="w-12 h-12 flex-shrink-0" />
-              <Link href="/" className="mr-6 flex items-center space-x-2">
-                <span className="text-xl font-semibold">Gennit</span>
+          <div className='space-y-8 lg:col-span-3'>
+            <div className='flex items-center gap-2'>
+              <Logo className='h-12 w-12 flex-shrink-0' />
+              <Link href='/' className='mr-6 flex items-center space-x-2'>
+                <span className='text-xl font-semibold'>Gennit</span>
               </Link>
             </div>
-            <p className="text-base text-muted-foreground max-w-md">
+            <p className='text-muted-foreground max-w-md text-base'>
               Making the world a better place through constructing elegant
               hierarchies and innovative solutions for tomorrow's challenges.
             </p>
 
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2">
+            <div className='flex items-center space-x-3'>
+              <div className='flex items-center space-x-2'>
                 <Switch
-                  id="theme-mode"
+                  id='theme-mode'
                   checked={theme === "dark"}
                   onCheckedChange={toggleTheme}
                 />
-                <Label htmlFor="theme-mode" className="cursor-pointer">
+                <Label htmlFor='theme-mode' className='cursor-pointer'>
                   {theme === "dark" ? (
-                    <Moon className="h-4 w-4" />
+                    <Moon className='h-4 w-4' />
                   ) : (
-                    <Sun className="h-4 w-4" />
+                    <Sun className='h-4 w-4' />
                   )}
                 </Label>
               </div>
 
-              <Separator orientation="vertical" className="h-6" />
+              <Separator orientation='vertical' className='h-6' />
 
-              <Select defaultValue="en">
-                <SelectTrigger className="w-[110px] h-8 text-xs">
-                  <Globe className="mr-2 h-3.5 w-3.5" />
-                  <SelectValue placeholder="Language" />
+              <Select defaultValue='en'>
+                <SelectTrigger className='h-8 w-[110px] text-xs'>
+                  <Globe className='mr-2 h-3.5 w-3.5' />
+                  <SelectValue placeholder='Language' />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value='en'>English</SelectItem>
                   {/* <SelectItem value="es">Español</SelectItem>
                   <SelectItem value="fr">Français</SelectItem>
                   <SelectItem value="de">Deutsch</SelectItem>
@@ -224,10 +223,10 @@ export function LandingFooter() {
               </Select>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-primary mt-0.5" />
-                <span className="text-sm text-muted-foreground">
+            <div className='space-y-4'>
+              <div className='flex items-start space-x-3'>
+                <MapPin className='text-primary mt-0.5 h-5 w-5' />
+                <span className='text-muted-foreground text-sm'>
                   123 Innovation Drive, Tech City, TC 10101
                 </span>
               </div>
@@ -237,15 +236,15 @@ export function LandingFooter() {
                   +1 (555) 123-4567
                 </span>
               </div> */}
-              <div className="flex items-center space-x-3">
-                <Mail className="h-5 w-5 text-primary" />
-                <span className="text-sm text-muted-foreground">
+              <div className='flex items-center space-x-3'>
+                <Mail className='text-primary h-5 w-5' />
+                <span className='text-muted-foreground text-sm'>
                   contact@gennit.com
                 </span>
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-3 w-full">
+            <div className='flex w-full flex-wrap gap-3'>
               {[
                 { icon: Facebook, label: "Facebook" },
                 // { icon: Instagram, label: "Instagram" },
@@ -258,11 +257,11 @@ export function LandingFooter() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Link
-                        href="#"
-                        className="text-muted-foreground hover:text-primary transition-colors duration-200 p-2.5 rounded-full hover:bg-primary/10 border border-transparent hover:border-primary/20"
+                        href='#'
+                        className='text-muted-foreground hover:text-primary hover:bg-primary/10 hover:border-primary/20 rounded-full border border-transparent p-2.5 transition-colors duration-200'
                       >
-                        <span className="sr-only">{social.label}</span>
-                        <social.icon className="h-5 w-5" />
+                        <span className='sr-only'>{social.label}</span>
+                        <social.icon className='h-5 w-5' />
                       </Link>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -275,7 +274,7 @@ export function LandingFooter() {
           </div>
 
           {/* Links Sections */}
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:col-span-5 lg:col-start-5 w-full">
+          <div className='grid w-full grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:col-span-5 lg:col-start-5'>
             {/* <div className="space-y-6">
               <h3 className="text-sm font-semibold text-foreground tracking-wider uppercase">
                 Solutions
@@ -300,87 +299,87 @@ export function LandingFooter() {
                 ))}
               </ul>
             </div> */}
-            <div className="space-y-6">
-              <h3 className="text-sm font-semibold text-foreground tracking-wider uppercase">
+            <div className='space-y-6'>
+              <h3 className='text-foreground text-sm font-semibold tracking-wider uppercase'>
                 Support & Resources
               </h3>
-              <ul className="space-y-4">
+              <ul className='space-y-4'>
                 <li>
                   <Link
-                    href="/pricing"
-                    className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
+                    href='/pricing'
+                    className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
+                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Pricing Plans
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/documentation"
-                    className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
+                    href='/documentation'
+                    className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
+                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Documentation
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/help"
-                    className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
+                    href='/help'
+                    className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
+                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Implementation Guides
                   </Link>
                 </li>
               </ul>
             </div>
-            <div className="space-y-6">
-              <h3 className="text-sm font-semibold text-foreground tracking-wider uppercase">
+            <div className='space-y-6'>
+              <h3 className='text-foreground text-sm font-semibold tracking-wider uppercase'>
                 Company
               </h3>
-              <ul className="space-y-4">
+              <ul className='space-y-4'>
                 <li>
                   <Link
-                    href="/company"
-                    className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
+                    href='/company'
+                    className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
+                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Company
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/contact"
-                    className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
+                    href='/contact'
+                    className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
+                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Contact
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/company"
-                    className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
+                    href='/company'
+                    className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
+                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Company
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/features"
-                    className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
+                    href='/features'
+                    className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
+                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Features
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/community"
-                    className="group text-base text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
+                    href='/community'
+                    className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className="h-3 w-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200" />
+                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Market Place
                   </Link>
                 </li>
@@ -389,45 +388,45 @@ export function LandingFooter() {
           </div>
         </div>
 
-        <Separator className="my-10 opacity-30" />
+        <Separator className='my-10 opacity-30' />
 
         <div
           className={cn(
-            "flex flex-col md:flex-row justify-between items-center gap-4 transition-opacity duration-1000",
+            "flex flex-col items-center justify-between gap-4 transition-opacity duration-1000 md:flex-row",
             isLoaded ? "opacity-100" : "opacity-0"
           )}
         >
-          <p className="text-sm text-muted-foreground">
+          <p className='text-muted-foreground text-sm'>
             &copy; {currentYear} Gennit, Inc. All rights reserved.
           </p>
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+          <div className='flex flex-wrap justify-center gap-x-6 gap-y-2'>
             <Link
-              href="/privacy"
-              className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200"
+              href='/privacy'
+              className='text-muted-foreground hover:text-primary text-xs transition-colors duration-200'
             >
               Privacy Policy
             </Link>
             <Link
-              href="/terms"
-              className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200"
+              href='/terms'
+              className='text-muted-foreground hover:text-primary text-xs transition-colors duration-200'
             >
               Terms of Service
             </Link>
             <Link
-              href="/cookies"
-              className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200"
+              href='/cookies'
+              className='text-muted-foreground hover:text-primary text-xs transition-colors duration-200'
             >
               Cookie Settings
             </Link>
             <Link
-              href="/accessibility"
-              className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200"
+              href='/accessibility'
+              className='text-muted-foreground hover:text-primary text-xs transition-colors duration-200'
             >
               Accessibility
             </Link>
             <Link
-              href="/sitemap"
-              className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200"
+              href='/sitemap'
+              className='text-muted-foreground hover:text-primary text-xs transition-colors duration-200'
             >
               Sitemap
             </Link>

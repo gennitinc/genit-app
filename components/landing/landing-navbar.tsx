@@ -1,38 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight, PanelRight, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Logo } from "../logo";
-import { cn } from "@/lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PricingDialog } from "@/components/common/pricing-dialog";
-
-import {
-  Sparkles,
-  BadgeCheck,
-  CreditCard,
-  Bell,
-  LogOut,
-  Sun,
-  Moon,
-} from "lucide-react";
-import { useTheme } from "next-themes";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { useState, useEffect } from "react";
 import Aurora from "../ui/aurora";
-import { usePathname, useRouter } from "next/navigation";
 import UserPopOver from "../user/userPopOver";
+import CategoryAndSearch from "@/components/common/category-and-search";
+import { PricingDialog } from "@/components/common/pricing-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -45,8 +19,33 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import CategoryAndSearch from "@/components/common/category-and-search";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
+import { ArrowRight, PanelRight, Search } from "lucide-react";
+import {
+  BadgeCheck,
+  Bell,
+  CreditCard,
+  LogOut,
+  Moon,
+  Sparkles,
+  Sun,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function LandingNavbar() {
   const { theme, setTheme } = useTheme();
@@ -72,9 +71,7 @@ export function LandingNavbar() {
     { name: "History", href: user ? "/chat/history" : "/signin" },
     {
       name: "Creator Program",
-      href: user
-        ? `/user/referral`
-        : "/creators-program",
+      href: user ? `/user/referral` : "/creators-program",
     },
     // user && {
     //   name: "Profile",
@@ -104,37 +101,37 @@ export function LandingNavbar() {
 
   return (
     <>
-      <header className="bg-transparent w-full backdrop-blur-sm sticky z-30 top-0">
-        <nav className="mx-auto flex h-16 items-center z-50 justify-between px-2 md:px-12 lg:px-20 xl:px-24">
+      <header className='sticky top-0 z-30 w-full bg-transparent backdrop-blur-sm'>
+        <nav className='z-50 mx-auto flex h-16 items-center justify-between px-2 md:px-12 lg:px-20 xl:px-24'>
           {/* Replace <img> with new <Image> */}
-          <Link href="/" className="flex items-center z-40">
-            <Logo className="w-12 h-12 flex-shrink-0" />
+          <Link href='/' className='z-40 flex items-center'>
+            <Logo className='h-12 w-12 flex-shrink-0' />
             <span
-              className={`text-xl font-semibold transition-colors duration-300 text-foreground`}
+              className={`text-foreground text-xl font-semibold transition-colors duration-300`}
             >
               Gennit
             </span>
           </Link>
 
-          <div className="hidden items-center z-50 gap-4 md:flex">
+          <div className='z-50 hidden items-center gap-4 md:flex'>
             {user ? (
               <>
                 {/* Right Section - Desktop */}
                 {!isSmallScreen && (
-                  <div className="flex items-center gap-2 sm:gap-2">
+                  <div className='flex items-center gap-2 sm:gap-2'>
                     {/* Main user avatar with popover */}
-                    <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
+                    <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
                       {user && (
                         <Link
-                          className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                          href="/chat"
+                          className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                          href='/chat'
                         >
                           Design Chat
                         </Link>
                       )}
                       <Link
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/agents"
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                        href='/agents'
                       >
                         Agents
                       </Link>
@@ -145,9 +142,9 @@ export function LandingNavbar() {
                         Video & Image Gen
                       </Link> */}
                       <Link
-                        target=""
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/community"
+                        target=''
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                        href='/community'
                       >
                         Community
                       </Link>
@@ -159,107 +156,107 @@ export function LandingNavbar() {
                         Inspirations
                       </Link> */}
                       <Link
-                        target="__blank"
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
+                        target='__blank'
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                         href={user ? "/user/settings?tab=billing" : "/pricing"}
                       >
                         {user ? "Billing" : "Pricing"}
                       </Link>
                       <Link
-                        target=""
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
+                        target=''
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                         href={user ? "/chat/history" : "/signin"}
                       >
                         History
                       </Link>
                       <Link
-                        target="k"
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="https://discord.gg/ftZbQvCdN7"
+                        target='k'
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                        href='https://discord.gg/ftZbQvCdN7'
                       >
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
+                          xmlns='http://www.w3.org/2000/svg'
                           width={24}
                           height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
                           strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-4 w-4 text-neutral-500 dark:text-neutral-500"
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          className='h-4 w-4 text-neutral-500 dark:text-neutral-500'
                         >
-                          <path d="M8 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
-                          <path d="M14 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
-                          <path d="M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3" />
-                          <path d="M7 16.5c3.5 1 6.5 1 10 0" />
+                          <path d='M8 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
+                          <path d='M14 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
+                          <path d='M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3' />
+                          <path d='M7 16.5c3.5 1 6.5 1 10 0' />
                         </svg>
                       </Link>
                       <Link
-                        target="__blank"
-                        className="hover:text-foreground/80 text-foreground/60 text-sm font-medium transition-colors"
-                        href="https://twitter.com/gennit_ai"
+                        target='__blank'
+                        className='hover:text-foreground/80 text-foreground/60 text-sm font-medium transition-colors'
+                        href='https://twitter.com/gennit_ai'
                       >
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
+                          xmlns='http://www.w3.org/2000/svg'
                           width={24}
                           height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
                           strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-4 w-4 text-neutral-500 dark:text-neutral-500"
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          className='h-4 w-4 text-neutral-500 dark:text-neutral-500'
                         >
-                          <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-                          <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+                          <path d='M4 4l11.733 16h4.267l-11.733 -16z' />
+                          <path d='M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772' />
                         </svg>
                       </Link>
 
                       <button
                         onClick={() => setIsSearchOpen(true)}
-                        className="flex relative justify-start items-center text-sm text-muted-foreground dark:border-white/[0.2] py-2 w-fit border border-transparent shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] px-4 rounded-xl bg-muted"
+                        className='text-muted-foreground bg-muted relative flex w-fit items-center justify-start rounded-xl border border-transparent px-4 py-2 text-sm shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] dark:border-white/[0.2]'
                       >
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
+                          xmlns='http://www.w3.org/2000/svg'
                           width={24}
                           height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
                           strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-4 w-4 text-neutral-500"
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          className='h-4 w-4 text-neutral-500'
                         >
-                          <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                          <path d="M21 21l-6 -6" />
+                          <path d='M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0' />
+                          <path d='M21 21l-6 -6' />
                         </svg>
-                        <span className="transition-colors hover:text-foreground/80 text-foreground/60 rex text-xs sm:text-sm font-medium pl-2 pr-4">
+                        <span className='hover:text-foreground/80 text-foreground/60 rex pr-4 pl-2 text-xs font-medium transition-colors sm:text-sm'>
                           Search{" "}
-                          <span className="hidden xl:inline-block">
+                          <span className='hidden xl:inline-block'>
                             Inspirations
                           </span>
                         </span>
-                        <kbd className="pointer-events-none  hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-                          <span className="text-xs">⌘</span>K
+                        <kbd className='bg-muted pointer-events-none hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none sm:flex'>
+                          <span className='text-xs'>⌘</span>K
                         </kbd>
                       </button>
                     </div>
 
                     <Button
-                      variant="ghost"
-                      size="sm"
+                      variant='ghost'
+                      size='sm'
                       onClick={() =>
                         setTheme(theme === "dark" ? "light" : "dark")
                       }
-                      className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
+                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
                     >
                       {theme === "dark" ? (
-                        <Sun className="w-4 h-4" />
+                        <Sun className='h-4 w-4' />
                       ) : (
-                        <Moon className="w-4 h-4" />
+                        <Moon className='h-4 w-4' />
                       )}
                     </Button>
 
@@ -268,30 +265,30 @@ export function LandingNavbar() {
                 )}
                 {/* Mobile Right Section */}
                 {isSmallScreen && (
-                  <div className="flex items-center gap-2">
+                  <div className='flex items-center gap-2'>
                     {/* Search - Mobile/Tablet */}
                     <Button
-                      variant="ghost"
-                      size="icon"
+                      variant='ghost'
+                      size='icon'
                       onClick={() => setIsSearchOpen(true)}
-                      className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
-                      aria-label="Search"
+                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
+                      aria-label='Search'
                     >
-                      <Search className="w-4 h-4" />
+                      <Search className='h-4 w-4' />
                     </Button>
                     {/* Theme Toggle - Mobile */}
                     <Button
-                      variant="ghost"
-                      size="sm"
+                      variant='ghost'
+                      size='sm'
                       onClick={() =>
                         setTheme(theme === "dark" ? "light" : "dark")
                       }
-                      className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
+                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
                     >
                       {theme === "dark" ? (
-                        <Sun className="w-4 h-4" />
+                        <Sun className='h-4 w-4' />
                       ) : (
-                        <Moon className="w-4 h-4" />
+                        <Moon className='h-4 w-4' />
                       )}
                     </Button>
 
@@ -304,20 +301,20 @@ export function LandingNavbar() {
               <>
                 {/* Right Section - Desktop */}
                 {!isSmallScreen && (
-                  <div className="flex items-center gap-2 sm:gap-2">
+                  <div className='flex items-center gap-2 sm:gap-2'>
                     {/* Main user avatar with popover */}
-                    <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
+                    <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
                       {user && (
                         <Link
-                          className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                          href="/chat"
+                          className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                          href='/chat'
                         >
                           Design Chat
                         </Link>
                       )}
                       <Link
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/agents"
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                        href='/agents'
                       >
                         Agents
                       </Link>
@@ -328,9 +325,9 @@ export function LandingNavbar() {
                         Video & Image Gen
                       </Link> */}
                       <Link
-                        target="__blank"
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/community"
+                        target='__blank'
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                        href='/community'
                       >
                         Community
                       </Link>
@@ -342,166 +339,166 @@ export function LandingNavbar() {
                         Inspirations
                       </Link> */}
                       <Link
-                        target="__blank"
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
+                        target='__blank'
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                         href={user ? "/user/settings?tab=billing" : "/pricing"}
                       >
                         {user ? "Billing" : "Pricing"}
                       </Link>
 
                       <Link
-                        target="__blank"
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="https://discord.gg/ftZbQvCdN7"
+                        target='__blank'
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                        href='https://discord.gg/ftZbQvCdN7'
                       >
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
+                          xmlns='http://www.w3.org/2000/svg'
                           width={24}
                           height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
                           strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-4 w-4 text-neutral-500 dark:text-neutral-500"
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          className='h-4 w-4 text-neutral-500 dark:text-neutral-500'
                         >
-                          <path d="M8 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
-                          <path d="M14 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
-                          <path d="M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3" />
-                          <path d="M7 16.5c3.5 1 6.5 1 10 0" />
+                          <path d='M8 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
+                          <path d='M14 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
+                          <path d='M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3' />
+                          <path d='M7 16.5c3.5 1 6.5 1 10 0' />
                         </svg>
                       </Link>
                       <Link
-                        target="__blank"
-                        className="hover:text-foreground/80 text-foreground/60 text-sm font-medium transition-colors"
-                        href="https://twitter.com/gennit_ai"
+                        target='__blank'
+                        className='hover:text-foreground/80 text-foreground/60 text-sm font-medium transition-colors'
+                        href='https://twitter.com/gennit_ai'
                       >
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
+                          xmlns='http://www.w3.org/2000/svg'
                           width={24}
                           height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
                           strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-4 w-4 text-neutral-500 dark:text-neutral-500"
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          className='h-4 w-4 text-neutral-500 dark:text-neutral-500'
                         >
-                          <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-                          <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+                          <path d='M4 4l11.733 16h4.267l-11.733 -16z' />
+                          <path d='M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772' />
                         </svg>
                       </Link>
 
                       <button
                         onClick={() => setIsSearchOpen(true)}
-                        className="flex relative justify-start items-center text-sm text-muted-foreground dark:border-white/[0.2] py-2 w-fit border border-transparent shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] px-4 rounded-xl bg-muted"
+                        className='text-muted-foreground bg-muted relative flex w-fit items-center justify-start rounded-xl border border-transparent px-4 py-2 text-sm shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] dark:border-white/[0.2]'
                       >
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
+                          xmlns='http://www.w3.org/2000/svg'
                           width={24}
                           height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
                           strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-4 w-4 text-neutral-500"
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          className='h-4 w-4 text-neutral-500'
                         >
-                          <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                          <path d="M21 21l-6 -6" />
+                          <path d='M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0' />
+                          <path d='M21 21l-6 -6' />
                         </svg>
-                        <span className="transition-colors hover:text-foreground/80 text-foreground/60 rex text-xs sm:text-sm font-medium pl-2 pr-4">
+                        <span className='hover:text-foreground/80 text-foreground/60 rex pr-4 pl-2 text-xs font-medium transition-colors sm:text-sm'>
                           Search{" "}
-                          <span className="hidden xl:inline-block">
+                          <span className='hidden xl:inline-block'>
                             Templates
                           </span>
                         </span>
-                        <kbd className="pointer-events-none  hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-                          <span className="text-xs">⌘</span>K
+                        <kbd className='bg-muted pointer-events-none hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none sm:flex'>
+                          <span className='text-xs'>⌘</span>K
                         </kbd>
                       </button>
                     </div>
 
                     <Button
-                      variant="ghost"
-                      size="sm"
+                      variant='ghost'
+                      size='sm'
                       onClick={() =>
                         setTheme(theme === "dark" ? "light" : "dark")
                       }
-                      className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
+                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
                     >
                       {theme === "dark" ? (
-                        <Sun className="w-4 h-4" />
+                        <Sun className='h-4 w-4' />
                       ) : (
-                        <Moon className="w-4 h-4" />
+                        <Moon className='h-4 w-4' />
                       )}
                     </Button>
 
-                    <div className="flex gap-2 items-center">
+                    <div className='flex items-center gap-2'>
                       <Link
-                        className="relative items-center border justify-center select-none rounded-2xl disabled:cursor-not-allowed disabled:opacity-70 transition ease-in-out duration-200 bg-transparent border-transparent text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-4 focus-visible:ring-gray-a2 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold hidden lg:flex"
-                        data-state="closed"
-                        href="/signin"
+                        className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-2xl border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 lg:flex'
+                        data-state='closed'
+                        href='/signin'
                       >
                         Sign in
                       </Link>
                       <Link
-                        className="outline-hidden text-white relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out border-[2px] border-cyan-500/20 backdrop-blur-[25px] bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl shadow-sm shadow-cyan-500/10 hover:shadow-button transition-all duration-200 disabled:opacity-30 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold"
-                        href="/signup"
+                        className='hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] border-cyan-500/20 bg-gradient-to-r from-cyan-500 to-blue-500 px-4 text-sm font-semibold text-white shadow-sm shadow-cyan-500/10 outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-gradient-to-bl focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                        href='/signup'
                       >
                         <span>Start for $0</span>
-                        <ArrowRight className="w-4 h-4 ml-1" />
+                        <ArrowRight className='ml-1 h-4 w-4' />
                       </Link>
                     </div>
                   </div>
                 )}
                 {/* Mobile Right Section */}
                 {isSmallScreen && (
-                  <div className="flex items-center gap-2">
+                  <div className='flex items-center gap-2'>
                     {/* Search - Mobile/Tablet */}
                     <Button
-                      variant="ghost"
-                      size="icon"
+                      variant='ghost'
+                      size='icon'
                       onClick={() => setIsSearchOpen(true)}
-                      className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
-                      aria-label="Search"
+                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
+                      aria-label='Search'
                     >
-                      <Search className="w-4 h-4" />
+                      <Search className='h-4 w-4' />
                     </Button>
                     {/* Theme Toggle - Mobile */}
                     <Button
-                      variant="ghost"
-                      size="sm"
+                      variant='ghost'
+                      size='sm'
                       onClick={() =>
                         setTheme(theme === "dark" ? "light" : "dark")
                       }
-                      className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
+                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
                     >
                       {theme === "dark" ? (
-                        <Sun className="w-4 h-4" />
+                        <Sun className='h-4 w-4' />
                       ) : (
-                        <Moon className="w-4 h-4" />
+                        <Moon className='h-4 w-4' />
                       )}
                     </Button>
 
                     {/* User Avatar - Mobile */}
-                    <div className="flex gap-2 items-center">
+                    <div className='flex items-center gap-2'>
                       <Link
-                        className="relative items-center border justify-center select-none rounded-2xl disabled:cursor-not-allowed disabled:opacity-70 transition ease-in-out duration-200 bg-transparent border-transparent text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-4 focus-visible:ring-gray-a2 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold hidden md:flex"
-                        data-state="closed"
-                        href="/signin"
+                        className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-2xl border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 md:flex'
+                        data-state='closed'
+                        href='/signin'
                       >
                         Sign in
                       </Link>
                       <Link
-                        className="outline-hidden text-primary-foreground relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out  border-[2px] border-primary/20 backdrop-blur-[25px] bg-primary shadow-sm hover:bg-primary/90 hover:shadow-button transition-all duration-200 disabled:opacity-30 focus-visible:ring-4 focus-visible:ring-primary/30 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold"
-                        href="/signup"
+                        className='text-primary-foreground border-primary/20 bg-primary hover:bg-primary/90 hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                        href='/signup'
                       >
                         <span>Start for $0</span>
-                        <ArrowRight className="w-4 h-4 ml-1" />
+                        <ArrowRight className='ml-1 h-4 w-4' />
                       </Link>
                     </div>
                   </div>
@@ -511,58 +508,58 @@ export function LandingNavbar() {
           </div>
 
           {/* Mobile Menu Section */}
-          <div className="flex items-center gap-2 md:hidden">
+          <div className='flex items-center gap-2 md:hidden'>
             {user && <UserPopOver />}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="z-50">
-                  <PanelRight className="size-4 h-4 w-4 text-muted-foreground" />
-                  <span className="sr-only">Toggle menu</span>
+                <Button variant='ghost' size='icon' className='z-50'>
+                  <PanelRight className='text-muted-foreground size-4 h-4 w-4' />
+                  <span className='sr-only'>Toggle menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right">
-                <div className="mt-8 flex flex-col gap-4">
+              <SheetContent side='right'>
+                <div className='mt-8 flex flex-col gap-4'>
                   {navigation.map((item) => (
                     <Link
                       key={item.name}
                       href={item.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                     >
                       {item.name}
                     </Link>
                   ))}
-                  <hr className="my-4" />
+                  <hr className='my-4' />
                   {user ? (
                     <Link
                       href={`/creator/${user?.username}`}
-                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                      className='flex items-center gap-2 rounded-lg p-2 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800'
                     >
-                      <Avatar className="h-10 w-10">
+                      <Avatar className='h-10 w-10'>
                         <AvatarImage src={user?.userdp} alt={user?.username} />
                         <AvatarFallback>{user?.username[0]}</AvatarFallback>
                       </Avatar>
-                      <div className="flex flex-col">
-                        <span className="font-medium">{user?.username}</span>
-                        <span className="text-xs text-zinc-400">
+                      <div className='flex flex-col'>
+                        <span className='font-medium'>{user?.username}</span>
+                        <span className='text-xs text-zinc-400'>
                           {user?.email}
                         </span>
                       </div>
                     </Link>
                   ) : (
-                    <div className="flex flex-col gap-2 w-fit">
+                    <div className='flex w-fit flex-col gap-2'>
                       <Link
-                        className="relative items-center border justify-center select-none rounded-2xl disabled:cursor-not-allowed disabled:opacity-70 transition ease-in-out duration-200 bg-transparent border-transparent text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-4 focus-visible:ring-gray-a2 focus-visible:outline-hidden text-sm h-10 gap-0 px-4 font-semibold"
-                        data-state="closed"
-                        href="/signin"
+                        className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative h-10 items-center justify-center gap-0 rounded-2xl border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70'
+                        data-state='closed'
+                        href='/signin'
                       >
                         Sign in
                       </Link>
                       <Link
-                        className='outline-hidden text-foreground relative inline-flex items-center justify-center select-none rounded-2xl disabled:cursor-not-allowed ease-in-out border-[2px] border-white/5 backdrop-blur-[25px] bg-origin-border bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] shadow-sm not-disabled:hover:bg-white/90 not-disabled:hover:text-black not-disabled:hover:shadow-button transition-all duration-200 disabled:opacity-30 disabled:text-white/50 focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden focus-visible:bg-white/90 focus-visible:text-black after:absolute after:w-[calc(100%+4px)] after:h-[calc(100%+4px)] after:top-[-2px] after:left-[-2px] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat after:pointer-events-none text-sm h-10 gap-0 px-4 font-semibold'
-                        href="/signup"
+                        className='text-foreground not-disabled:hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] border-white/5 bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] bg-origin-border px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none after:pointer-events-none after:absolute after:top-[-2px] after:left-[-2px] after:h-[calc(100%+4px)] after:w-[calc(100%+4px)] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat not-disabled:hover:bg-white/90 not-disabled:hover:text-black focus-visible:bg-white/90 focus-visible:text-black focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:text-white/50 disabled:opacity-30'
+                        href='/signup'
                       >
                         <span>Start for $0</span>
-                        <ArrowRight className="w-4 h-4 ml-1" />
+                        <ArrowRight className='ml-1 h-4 w-4' />
                       </Link>
                     </div>
                   )}
@@ -575,22 +572,22 @@ export function LandingNavbar() {
       {/* Search experience: Drawer on mobile/tablet, Dialog on desktop */}
       {isSmallScreen ? (
         <Drawer open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-          <DrawerContent className="h-[85vh]">
-            <DrawerHeader className="px-4 py-2 border-b">
+          <DrawerContent className='h-[85vh]'>
+            <DrawerHeader className='border-b px-4 py-2'>
               <DrawerTitle>Search Inspirations</DrawerTitle>
             </DrawerHeader>
-            <div className="px-4 py-4">
+            <div className='px-4 py-4'>
               <CategoryAndSearch />
             </div>
           </DrawerContent>
         </Drawer>
       ) : (
         <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-          <DialogContent className="max-w-2xl p-0 overflow-hidden">
-            <DialogHeader className="px-4 py-3 border-b">
+          <DialogContent className='max-w-2xl overflow-hidden p-0'>
+            <DialogHeader className='border-b px-4 py-3'>
               <DialogTitle>Search Inspirations</DialogTitle>
             </DialogHeader>
-            <div className="px-4 py-4">
+            <div className='px-4 py-4'>
               <CategoryAndSearch />
             </div>
           </DialogContent>

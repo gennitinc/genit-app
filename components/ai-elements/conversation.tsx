@@ -3,18 +3,18 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowDownIcon } from "lucide-react";
+import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
 import type { ComponentProps } from "react";
 import { useCallback } from "react";
-import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
 
 export type ConversationProps = ComponentProps<typeof StickToBottom>;
 
 export const Conversation = ({ className, ...props }: ConversationProps) => (
   <StickToBottom
     className={cn("relative flex-1 overflow-y-auto", className)}
-    initial="smooth"
-    resize="smooth"
-    role="log"
+    initial='smooth'
+    resize='smooth'
+    role='log'
     {...props}
   />
 );
@@ -53,11 +53,11 @@ export const ConversationEmptyState = ({
   >
     {children ?? (
       <>
-        {icon && <div className="text-muted-foreground">{icon}</div>}
-        <div className="space-y-1">
-          <h3 className="font-medium text-sm">{title}</h3>
+        {icon && <div className='text-muted-foreground'>{icon}</div>}
+        <div className='space-y-1'>
+          <h3 className='text-sm font-medium'>{title}</h3>
           {description && (
-            <p className="text-muted-foreground text-sm">{description}</p>
+            <p className='text-muted-foreground text-sm'>{description}</p>
           )}
         </div>
       </>
@@ -81,16 +81,16 @@ export const ConversationScrollButton = ({
     !isAtBottom && (
       <Button
         className={cn(
-          "absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full ",
+          "absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full",
           className
         )}
         onClick={handleScrollToBottom}
-        size="icon"
-        type="button"
-        variant="outline"
+        size='icon'
+        type='button'
+        variant='outline'
         {...props}
       >
-        <ArrowDownIcon className="size-4" />
+        <ArrowDownIcon className='size-4' />
       </Button>
     )
   );

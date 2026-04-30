@@ -1,37 +1,34 @@
 "use client";
 import {
-  History,
-  Settings,
-  HelpCircle,
-  Palette,
-  CreditCard,
-  WandSparklesIcon,
-  GalleryHorizontal,
-  UserPlus,
-  Video,
-  Image as ImageIcon,
-  Users,
-  Gift,
-  Grid2X2Plus,
-  Workflow,
-} from "lucide-react";
-
-import {
   SidebarGroup,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuBadge,
 } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useTheme } from "next-themes";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { trackAppOpened, trackFeatureUsed } from "@/lib/mixpanelClient";
-
-
+import { cn } from "@/lib/utils";
+import {
+  CreditCard,
+  GalleryHorizontal,
+  Gift,
+  Grid2X2Plus,
+  HelpCircle,
+  History,
+  Image as ImageIcon,
+  Palette,
+  Settings,
+  UserPlus,
+  Users,
+  Video,
+  WandSparklesIcon,
+  Workflow,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export function NavMain() {
   const { state, setOpenMobile, isMobile } = useSidebar();
@@ -39,83 +36,79 @@ export function NavMain() {
   const searchParams = useSearchParams();
   const { theme } = useTheme();
 
-   const user = useUserContext().user;
+  const user = useUserContext().user;
+  const navItems = [
+    {
+      title: "Design Chat",
+      icon: WandSparklesIcon,
+      href: "/chat",
+    },
+    {
+      title: "Agents",
+      icon: Grid2X2Plus,
+      href: "/agents",
+    },
+    {
+      title: "Workflow",
+      icon: Workflow,
+      href: "/agents/workflow",
+      badge: "New",
+    },
+    // {
+    //   title: "Image Generation",
+    //   icon: ImageIcon,
+    //   href: "/agents/image-generation",
+    // },
+    // {
+    //   title: "Video Generation",
+    //   icon: Video,
+    //   href: "/agents/video-generation",
+    // },
+    // {
+    //   title: "Presenter",
+    //   icon: UserPlus,
+    //   href: "/agents/presenter",
+    // },
 
-   const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
-   const navItems = [
-     {
-       title: "Design Chat",
-       icon: WandSparklesIcon,
-       href: "/chat",
-     },
-     {
-       title: "Agents",
-       icon: Grid2X2Plus,
-       href: "/agents",
-     },
-      {
-        title: "Workflow",
-        icon: Workflow,
-        href: "/agents/workflow",
-        badge: "New",
-      },
-     // {
-     //   title: "Image Generation",
-     //   icon: ImageIcon,
-     //   href: "/agents/image-generation",
-     // },
-     // {
-     //   title: "Video Generation",
-     //   icon: Video,
-     //   href: "/agents/video-generation",
-     // },
-     // {
-     //   title: "Presenter",
-     //   icon: UserPlus,
-     //   href: "/agents/presenter",
-     // },
+    {
+      title: "Community",
+      icon: Users,
+      href: "/community",
+    },
+    {
+      title: "History",
+      icon: History,
+      href: "/chat/history",
+    },
+    {
+      title: "Creator Program",
+      icon: Gift,
+      href: `/user/referral`,
+    },
+    {
+      title: "Profile",
+      icon: UserPlus,
+      href: `/creator/${user?.username}`,
+    },
+  ];
 
-     {
-       title: "Community",
-       icon: Users,
-       href: "/community",
-     },
-     {
-       title: "History",
-       icon: History,
-       href: "/chat/history",
-     },
-     {
-       title: "Creator Program",
-       icon: Gift,
-       href: `/user/referral`,
-     },
-     {
-       title: "Profile",
-       icon: UserPlus,
-       href: `/creator/${user?.username}`,
-     },
- 
-   ];
-
-   const secondaryNavItems = [
-     {
-       title: "Pricing",
-       icon: CreditCard,
-       href: "/pricing",
-     },
-     {
-       title: "Settings",
-       icon: Settings,
-       href: "/user/settings",
-     },
-     {
-       title: "Help",
-       icon: HelpCircle,
-       href: "/contact",
-     },
-   ];
- 
+  const secondaryNavItems = [
+    {
+      title: "Pricing",
+      icon: CreditCard,
+      href: "/pricing",
+    },
+    {
+      title: "Settings",
+      icon: Settings,
+      href: "/user/settings",
+    },
+    {
+      title: "Help",
+      icon: HelpCircle,
+      href: "/contact",
+    },
+  ];
 
   const handleLinkClick = () => {
     // Close the mobile sidebar when a link is clicked
@@ -170,21 +163,20 @@ export function NavMain() {
                       ? "bg-zinc-800 text-white dark:text-white"
                       : "bg-gray-200 text-black dark:text-black"
                     : theme === "dark"
-                      ? "text-zinc-300 dark:text-zinc-300 hover:bg-zinc-800 hover:text-white dark:hover:bg-zinc-800 dark:hover:text-white"
-                      : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-neutral-700 dark:hover:text-neutral-300",
+                      ? "text-zinc-300 hover:bg-zinc-800 hover:text-white dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-gray-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
                 )}
                 onClick={() => {
                   handleLinkClick();
                   trackAppOpened(
-                    MIXPANEL_TOKEN,
                     item.href.replace(/\//g, "-") || "home",
                     item.title,
                     "sidebar_nav",
-                    { href: item.href || "" },
+                    { href: item.href || "" }
                   );
                 }}
               >
-                <Link href={item.href} className="flex items-center w-full">
+                <Link href={item.href} className='flex w-full items-center'>
                   <item.icon
                     className={cn(
                       "h-6 w-6 flex-shrink-0",
@@ -194,7 +186,7 @@ export function NavMain() {
                       // Theme responsive icon colors - explicit and strong
                       isRouteActive(item.href)
                         ? "text-black dark:text-white"
-                        : "text-gray-700 dark:text-zinc-300",
+                        : "text-gray-700 dark:text-zinc-300"
                     )}
                   />
                   {!shouldShowCollapsed && (
@@ -204,7 +196,7 @@ export function NavMain() {
                         // Theme responsive text colors - explicit and strong
                         isRouteActive(item.href)
                           ? "text-black dark:text-white"
-                          : "text-gray-800 dark:text-zinc-200",
+                          : "text-gray-800 dark:text-zinc-200"
                       )}
                     >
                       {item.title}
@@ -213,7 +205,7 @@ export function NavMain() {
                 </Link>
               </SidebarMenuButton>
               {(item as any).badge && !shouldShowCollapsed && (
-                <SidebarMenuBadge className="bg-emerald-500 text-white font-bold px-1.5 rounded-sm">
+                <SidebarMenuBadge className='rounded-sm bg-emerald-500 px-1.5 font-bold text-white'>
                   {(item as any).badge}
                 </SidebarMenuBadge>
               )}
@@ -221,8 +213,8 @@ export function NavMain() {
           ))}
         </SidebarMenu>
       </SidebarGroup>
-      <div className="px-2">
-        <hr className="flex-grow border-t border-muted/40" />
+      <div className='px-2'>
+        <hr className='border-muted/40 flex-grow border-t' />
       </div>
       <SidebarGroup>
         <SidebarMenu className={cn(shouldShowCollapsed ? "items-center" : "")}>
@@ -239,12 +231,12 @@ export function NavMain() {
                       ? "bg-zinc-800 text-white dark:text-white"
                       : "bg-gray-200 text-black dark:text-black"
                     : theme === "dark"
-                      ? "text-zinc-300 dark:text-zinc-300 hover:bg-zinc-800 hover:text-white dark:hover:bg-zinc-800 dark:hover:text-white"
-                      : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-neutral-700 dark:hover:text-neutral-300",
+                      ? "text-zinc-300 hover:bg-zinc-800 hover:text-white dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-gray-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
                 )}
                 onClick={() => {
                   handleLinkClick();
-                  trackFeatureUsed(MIXPANEL_TOKEN, "secondary_nav_clicked", {
+                  trackFeatureUsed("secondary_nav_clicked", {
                     nav_item: item.title || "",
                     href: item.href,
                   });
@@ -252,7 +244,7 @@ export function NavMain() {
               >
                 <Link
                   href={item.href}
-                  className="flex items-center w-full"
+                  className='flex w-full items-center'
                   {...(item.href === "/contact" ? { target: "_blank" } : {})}
                 >
                   <item.icon
@@ -264,7 +256,7 @@ export function NavMain() {
                       // Theme responsive icon colors - explicit and strong
                       isRouteActive(item.href)
                         ? "text-black dark:text-white"
-                        : "text-gray-700 dark:text-zinc-300",
+                        : "text-gray-700 dark:text-zinc-300"
                     )}
                   />
                   {!shouldShowCollapsed && (
@@ -274,7 +266,7 @@ export function NavMain() {
                         // Theme responsive text colors - explicit and strong
                         isRouteActive(item.href)
                           ? "text-black dark:text-white"
-                          : "text-gray-800 dark:text-zinc-200",
+                          : "text-gray-800 dark:text-zinc-200"
                       )}
                     >
                       {item.title}

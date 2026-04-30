@@ -1,7 +1,30 @@
 "use client";
 
-import Markdown from "react-markdown";
-import { useState, useEffect } from "react";
+import { DeleteConfirmation } from "./delete-confirmation";
+import { DesignInspirationResults } from "./design-inspiration-results";
+import {
+  Reasoning,
+  ReasoningContent,
+  ReasoningTrigger,
+} from "@/components/ai-elements/reasoning";
+import { Response } from "@/components/ai-elements/response";
+import {
+  MessageActions,
+  MessageContainer,
+  MessageContent,
+} from "@/components/chat/messages";
+import { AvatarDisplay } from "@/components/ui/avatar-display";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useProjectDesign } from "@/context/DesignProject";
+import { cn } from "@/lib/utils";
 import {
   ChevronDown,
   ChevronRight,
@@ -9,32 +32,8 @@ import {
   GitBranch,
   Loader2,
 } from "lucide-react";
-import {
-  MessageContainer,
-  MessageContent,
-  MessageActions,
-} from "@/components/chat/messages";
-import { AvatarDisplay } from "@/components/ui/avatar-display";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import { useProjectDesign } from "@/context/DesignProject";
-
-import {
-  Reasoning,
-  ReasoningContent,
-  ReasoningTrigger,
-} from "@/components/ai-elements/reasoning";
-import { Response } from "@/components/ai-elements/response";
-import { DeleteConfirmation } from "./delete-confirmation";
-import { DesignInspirationResults } from "./design-inspiration-results";
+import Markdown from "react-markdown";
+import { useEffect, useState } from "react";
 
 interface AIMessageProps {
   message: any;
@@ -96,7 +95,7 @@ export function AIMessage({
 
   return (
     <MessageContainer
-      avatar={<AvatarDisplay variant="ai" alt="AI Logo" fallback="AI" />}
+      avatar={<AvatarDisplay variant='ai' alt='AI Logo' fallback='AI' />}
       actions={
         <MessageActions
           onCopy={onCopy}
@@ -110,8 +109,8 @@ export function AIMessage({
       }
       className={className}
     >
-      <MessageContent variant="ai" className="bg-transparent">
-        <div className="space-y-4">
+      <MessageContent variant='ai' className='bg-transparent'>
+        <div className='space-y-4'>
           {message?.parts?.map((part: any, i: number) => {
             switch (part.type) {
               case "text":
@@ -122,7 +121,7 @@ export function AIMessage({
                 return (
                   <Reasoning
                     key={`${message.id}-${i}`}
-                    className="w-full"
+                    className='w-full'
                     isStreaming={isStreaming}
                   >
                     <ReasoningTrigger />
@@ -130,46 +129,51 @@ export function AIMessage({
                   </Reasoning>
                 );
               case "options":
-                const isProjectSelection = part.options?.some((opt: string) => 
-                  ["Flyer or Poster", "Logo or Branding", "Social Media Graphic", "Website Landing Page"].includes(opt)
+                const isProjectSelection = part.options?.some((opt: string) =>
+                  [
+                    "Flyer or Poster",
+                    "Logo or Branding",
+                    "Social Media Graphic",
+                    "Website Landing Page",
+                  ].includes(opt)
                 );
 
                 if (isProjectSelection) {
                   return (
-                    <div className="">
-                      <p className="mb-4">
-                        Select Project Type
-                      </p>
+                    <div className=''>
+                      <p className='mb-4'>Select Project Type</p>
                       <div
                         key={`${message.id}-${i}`}
-                        className="mt-4 p-4 rounded-2xl bg-muted/30 border border-border/50 backdrop-blur-sm"
+                        className='bg-muted/30 border-border/50 mt-4 rounded-2xl border p-4 backdrop-blur-sm'
                       >
                         <RadioGroup
-                          onValueChange={(value) => !project?.category && onOptionClick?.(value)}
+                          onValueChange={(value) =>
+                            !project?.category && onOptionClick?.(value)
+                          }
                           disabled={!!project?.category}
                           value={project?.category || undefined}
-                          className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                          className='grid grid-cols-1 gap-3 sm:grid-cols-2'
                         >
                           {part.options?.map((option: string, idx: number) => (
-                            <div key={idx} className="relative group">
+                            <div key={idx} className='group relative'>
                               <RadioGroupItem
                                 value={option}
                                 id={`${message.id}-${idx}`}
-                                className="peer sr-only"
+                                className='peer sr-only'
                               />
                               <Label
                                 htmlFor={`${message.id}-${idx}`}
                                 className={cn(
-                                  "flex items-center gap-3 p-3 rounded-xl border border-border/50 bg-background/50 cursor-pointer transition-all duration-200",
+                                  "border-border/50 bg-background/50 flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-all duration-200",
                                   "hover:bg-muted/50 hover:border-primary/30",
-                                  "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 peer-data-[state=checked]:ring-1 peer-data-[state=checked]:ring-primary",
-                                  "group-hover:translate-x-1",
+                                  "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 peer-data-[state=checked]:ring-primary peer-data-[state=checked]:ring-1",
+                                  "group-hover:translate-x-1"
                                 )}
                               >
-                                <div className="w-4 h-4 rounded-full border border-primary/20 flex items-center justify-center peer-data-[state=checked]:border-primary transition-colors">
-                                  <div className="w-2 h-2 rounded-full bg-primary opacity-0 peer-data-[state=checked]:opacity-100 transition-opacity" />
+                                <div className='border-primary/20 peer-data-[state=checked]:border-primary flex h-4 w-4 items-center justify-center rounded-full border transition-colors'>
+                                  <div className='bg-primary h-2 w-2 rounded-full opacity-0 transition-opacity peer-data-[state=checked]:opacity-100' />
                                 </div>
-                                <span className="text-xs font-semibold text-foreground/80 group-hover:text-foreground">
+                                <span className='text-foreground/80 group-hover:text-foreground text-xs font-semibold'>
                                   {option}
                                 </span>
                               </Label>
@@ -182,13 +186,16 @@ export function AIMessage({
                 }
 
                 return (
-                  <div key={`${message.id}-${i}`} className="flex flex-wrap gap-2 mt-2">
+                  <div
+                    key={`${message.id}-${i}`}
+                    className='mt-2 flex flex-wrap gap-2'
+                  >
                     {part.options?.map((option: string, idx: number) => (
                       <Button
                         key={idx}
-                        variant="secondary"
-                        size="sm"
-                        className="rounded-full text-xs bg-primary/5 hover:bg-primary/10 border-primary/20"
+                        variant='secondary'
+                        size='sm'
+                        className='bg-primary/5 hover:bg-primary/10 border-primary/20 rounded-full text-xs'
                         onClick={() => onOptionClick?.(option)}
                       >
                         {option}
@@ -211,11 +218,11 @@ export function AIMessage({
           })}
 
           {/* Footer with processing time and enhanced status */}
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <div className="flex items-center gap-4">
+          <div className='text-muted-foreground flex items-center justify-between text-xs'>
+            <div className='flex items-center gap-4'>
               {totalTime && totalTime > 0 && (
-                <div className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
+                <div className='flex items-center gap-1'>
+                  <Clock className='h-3 w-3' />
                   <span>Processed in {formatTime(totalTime)}</span>
                 </div>
               )}
@@ -228,7 +235,7 @@ export function AIMessage({
           open={showDeleteConfirm}
           onOpenChange={setShowDeleteConfirm}
           onConfirm={onDelete}
-          message="Are you sure you want to delete this? This will delete both the user prompt and AI response, along with all versions after this."
+          message='Are you sure you want to delete this? This will delete both the user prompt and AI response, along with all versions after this.'
         />
       )}
     </MessageContainer>

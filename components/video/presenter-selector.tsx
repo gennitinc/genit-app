@@ -1,27 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
-import { Check, Plus, Loader2, Upload, Trash2 } from "lucide-react";
-import { Presenter } from "@/types/inspire";
-import { presenterApi } from "@/utils/inspire-api";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { toast } from "@/hooks/use-toast";
-import { useUserContext } from "@/context/AuthenticatedContext";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerContent,
+  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerDescription,
 } from "@/components/ui/drawer";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { Presenter } from "@/types/inspire";
+import { presenterApi } from "@/utils/inspire-api";
+import { Check, Loader2, Plus, Trash2, Upload } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface PresenterSelectorProps {
   selectedPresenter: Presenter | null;
@@ -44,31 +44,31 @@ function PresenterCard({
 }) {
   const imageUrl = presenter.imageUrl || presenter.image;
   return (
-    <div className="relative group">
+    <div className='group relative'>
       <button
         onClick={onSelect}
         className={cn(
-          "relative overflow-hidden rounded-lg transition-all w-full",
+          "relative w-full overflow-hidden rounded-lg transition-all",
           isSelected
             ? "ring-2 ring-neutral-900 dark:ring-neutral-100"
             : "ring-1 ring-neutral-200 dark:ring-neutral-800"
         )}
       >
-        <div className="aspect-[3/4] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+        <div className='aspect-[3/4] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800'>
           <img
             src={imageUrl}
             alt={presenter.name}
-            className="h-full w-full object-cover object-top"
+            className='h-full w-full object-cover object-top'
           />
         </div>
-        <div className="absolute bottom-0 left-0 right-0 p-1.5 bg-neutral-900/80 dark:bg-neutral-100/80 backdrop-blur-sm">
-          <p className="text-[10px] font-medium text-white dark:text-neutral-900 text-center truncate">
+        <div className='absolute right-0 bottom-0 left-0 bg-neutral-900/80 p-1.5 backdrop-blur-sm dark:bg-neutral-100/80'>
+          <p className='truncate text-center text-[10px] font-medium text-white dark:text-neutral-900'>
             {presenter.name}
           </p>
         </div>
         {isSelected && (
-          <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-neutral-900 dark:bg-neutral-100 rounded-full flex items-center justify-center">
-            <Check className="w-2.5 h-2.5 text-white dark:text-neutral-900" />
+          <div className='absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-900 dark:bg-neutral-100'>
+            <Check className='h-2.5 w-2.5 text-white dark:text-neutral-900' />
           </div>
         )}
       </button>
@@ -78,10 +78,10 @@ function PresenterCard({
             e.stopPropagation();
             onDelete();
           }}
-          className="absolute top-1.5 left-1.5 w-6 h-6 rounded flex items-center justify-center transition-colors text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm opacity-0 group-hover:opacity-100"
-          title="Delete avatar"
+          className='absolute top-1.5 left-1.5 flex h-6 w-6 items-center justify-center rounded bg-white/90 text-neutral-600 opacity-0 backdrop-blur-sm transition-colors group-hover:opacity-100 hover:text-red-600 dark:bg-neutral-800/90 dark:text-neutral-400 dark:hover:text-red-400'
+          title='Delete avatar'
         >
-          <Trash2 className="w-3 h-3" />
+          <Trash2 className='h-3 w-3' />
         </button>
       )}
     </div>
@@ -235,7 +235,7 @@ export function PresenterSelector({
             description: "Failed to load your avatars. Please try again.",
             variant: "destructive",
           });
-          
+
           setUserPresenters([]);
         } finally {
           setLoading(false);
@@ -405,28 +405,28 @@ export function PresenterSelector({
   const MoreButton = () => (
     <button
       onClick={() => setIsOpen(true)}
-      className="relative overflow-hidden rounded-lg transition-all group aspect-[3/4] w-full bg-neutral-100 dark:bg-neutral-800 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-neutral-300 dark:border-neutral-600 hover:border-neutral-400 dark:hover:border-neutral-500"
+      className='group relative flex aspect-[3/4] w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border-2 border-dashed border-neutral-300 bg-neutral-100 transition-all hover:border-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:hover:border-neutral-500'
     >
-      <div className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-        <Plus className="w-4 h-4 text-neutral-600 dark:text-neutral-300" />
+      <div className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+        <Plus className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
       </div>
-      <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">
+      <p className='text-xs font-medium text-neutral-600 dark:text-neutral-400'>
         View More
       </p>
     </button>
   );
 
   const FullPresenterList = () => (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-neutral-200 dark:border-neutral-700">
+      <div className='flex gap-2 border-b border-neutral-200 dark:border-neutral-700'>
         <button
           onClick={() => setActiveTab("popular")}
           className={cn(
-            "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+            "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
             activeTab === "popular"
-              ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-              : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+              ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+              : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
           AI Avatar
@@ -436,10 +436,10 @@ export function PresenterSelector({
             <button
               onClick={() => setActiveTab("my-avatar")}
               className={cn(
-                "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+                "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
                 activeTab === "my-avatar"
-                  ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-                  : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+                  ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+                  : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
               )}
             >
               My Avatar
@@ -447,10 +447,10 @@ export function PresenterSelector({
             <button
               onClick={() => setActiveTab("upload")}
               className={cn(
-                "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+                "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
                 activeTab === "upload"
-                  ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-                  : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+                  ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+                  : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
               )}
             >
               Upload
@@ -460,13 +460,13 @@ export function PresenterSelector({
       </div>
 
       {activeTab === "popular" && (
-        <div className="max-h-[60vh] overflow-y-auto pr-2">
+        <div className='max-h-[60vh] overflow-y-auto pr-2'>
           {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 text-neutral-400 animate-spin" />
+            <div className='flex items-center justify-center py-8'>
+              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
             </div>
           ) : presenters.length === 0 ? (
-            <div className="text-center py-8 text-sm text-neutral-500 dark:text-neutral-400">
+            <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
               No presenters available
             </div>
           ) : (
@@ -481,23 +481,23 @@ export function PresenterSelector({
       )}
 
       {activeTab === "my-avatar" && (
-        <div className="py-6 space-y-4">
+        <div className='space-y-4 py-6'>
           {!isAuthenticated ? (
-            <div className="text-center py-8">
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+            <div className='py-8 text-center'>
+              <p className='mb-4 text-sm text-neutral-500 dark:text-neutral-400'>
                 Please sign in to view your avatars
               </p>
             </div>
           ) : loading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 text-neutral-400 animate-spin" />
+            <div className='flex items-center justify-center py-8'>
+              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
             </div>
           ) : (
             <>
               {/* User's Custom Avatars */}
               {userPresenters.length > 0 ? (
                 <div>
-                  <h4 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
+                  <h4 className='mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                     My Avatars
                   </h4>
                   <PresenterGrid
@@ -510,8 +510,8 @@ export function PresenterSelector({
                   />
                 </div>
               ) : (
-                <div className="text-center py-4">
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                <div className='py-4 text-center'>
+                  <p className='text-sm text-neutral-500 dark:text-neutral-400'>
                     You haven't uploaded any avatars yet
                   </p>
                 </div>
@@ -522,44 +522,44 @@ export function PresenterSelector({
       )}
 
       {activeTab === "upload" && (
-        <div className="py-6 space-y-4">
+        <div className='space-y-4 py-6'>
           {!isAuthenticated ? (
-            <div className="text-center py-8">
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+            <div className='py-8 text-center'>
+              <p className='mb-4 text-sm text-neutral-500 dark:text-neutral-400'>
                 Please sign in to upload avatars
               </p>
             </div>
           ) : (
             <>
               {/* Upload Section */}
-              <div className="text-center mb-4">
-                <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-                  <Upload className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
+              <div className='mb-4 text-center'>
+                <div className='mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+                  <Upload className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
                 </div>
-                <h4 className="text-sm font-medium text-neutral-900 dark:text-white">
+                <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
                   Upload Your Avatar
                 </h4>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                <p className='mt-1 text-xs text-neutral-500 dark:text-neutral-400'>
                   Select an image to create your custom avatar
                 </p>
               </div>
 
               {/* File Input */}
               {!selectedFile && (
-                <div className="flex flex-col items-center gap-3">
-                  <label className="w-full">
+                <div className='flex flex-col items-center gap-3'>
+                  <label className='w-full'>
                     <input
-                      type="file"
-                      accept="image/jpeg,image/jpg,image/png,image/webp"
-                      className="hidden"
+                      type='file'
+                      accept='image/jpeg,image/jpg,image/png,image/webp'
+                      className='hidden'
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) handleFileSelect(file);
                       }}
                       disabled={uploading}
                     />
-                    <span className="w-full py-2 px-3 rounded-lg font-medium text-sm bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900 transition-all flex items-center justify-center gap-2 cursor-pointer">
-                      <Upload className="w-4 h-4" />
+                    <span className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'>
+                      <Upload className='h-4 w-4' />
                       Select Image
                     </span>
                   </label>
@@ -568,62 +568,62 @@ export function PresenterSelector({
 
               {/* Form Fields After File Selection */}
               {selectedFile && filePreview && (
-                <div className="w-full space-y-3">
+                <div className='w-full space-y-3'>
                   {/* Image Preview */}
-                  <div className="flex flex-col md:flex-row md:items-center gap-2">
-                    <div className="w-16 h-16 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+                  <div className='flex flex-col gap-2 md:flex-row md:items-center'>
+                    <div className='h-16 w-16 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800'>
                       <img
                         src={filePreview}
-                        alt="Preview"
-                        className="w-full h-full max-h-full max-w-full object-cover"
+                        alt='Preview'
+                        className='h-full max-h-full w-full max-w-full object-cover'
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                    <div className='space-y-2'>
+                      <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                         Avatar Name *
                       </label>
                       <input
-                        type="text"
+                        type='text'
                         value={avatarName}
                         onChange={(e) => setAvatarName(e.target.value)}
-                        placeholder="e.g., John, Sarah"
-                        className="w-full px-3 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                        placeholder='e.g., John, Sarah'
+                        className='w-full rounded-lg border border-neutral-300 bg-neutral-100 px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500 focus:border-transparent focus:ring-2 focus:ring-cyan-500 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'
                         disabled={uploading}
                       />
                     </div>
                   </div>
 
                   {/* Gender Selection */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  <div className='space-y-2'>
+                    <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                       Gender *
                     </label>
-                    <div className="flex gap-2">
+                    <div className='flex gap-2'>
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => setAvatarGender("male")}
                         disabled={uploading}
                         className={cn(
-                          "flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                          "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                           avatarGender === "male"
-                            ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                            : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700",
-                          uploading && "opacity-50 cursor-not-allowed"
+                            ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                            : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700",
+                          uploading && "cursor-not-allowed opacity-50"
                         )}
                       >
                         Male
                       </button>
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => setAvatarGender("female")}
                         disabled={uploading}
                         className={cn(
-                          "flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                          "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                           avatarGender === "female"
-                            ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                            : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700",
-                          uploading && "opacity-50 cursor-not-allowed"
+                            ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                            : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700",
+                          uploading && "cursor-not-allowed opacity-50"
                         )}
                       >
                         Female
@@ -632,9 +632,9 @@ export function PresenterSelector({
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-2">
+                  <div className='flex gap-2'>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() => {
                         setSelectedFile(null);
                         setFilePreview(null);
@@ -642,24 +642,24 @@ export function PresenterSelector({
                         setAvatarGender("male");
                       }}
                       disabled={uploading}
-                      className="flex-1 px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className='flex-1 rounded-lg bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-700 transition-all hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                     >
                       Cancel
                     </button>
                     <button
-                      type="button"
+                      type='button'
                       onClick={handleUploadAvatar}
                       disabled={uploading || !avatarName.trim()}
-                      className="flex-1 px-3 py-2 rounded-lg text-sm font-medium bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:bg-neutral-300 disabled:text-neutral-500 disabled:cursor-not-allowed text-white dark:text-neutral-900 transition-all flex items-center justify-center gap-2"
+                      className='flex flex-1 items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-500 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
                     >
                       {uploading ? (
                         <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <Loader2 className='h-4 w-4 animate-spin' />
                           Saving...
                         </>
                       ) : (
                         <>
-                          <Upload className="w-4 h-4" />
+                          <Upload className='h-4 w-4' />
                           Save Avatar
                         </>
                       )}
@@ -675,16 +675,16 @@ export function PresenterSelector({
   );
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-neutral-200 dark:border-neutral-700">
+      <div className='flex gap-2 border-b border-neutral-200 dark:border-neutral-700'>
         <button
           onClick={() => setActiveTab("popular")}
           className={cn(
-            "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+            "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
             activeTab === "popular"
-              ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-              : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+              ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+              : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
           AI Avatar
@@ -694,10 +694,10 @@ export function PresenterSelector({
             <button
               onClick={() => setActiveTab("my-avatar")}
               className={cn(
-                "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+                "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
                 activeTab === "my-avatar"
-                  ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-                  : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+                  ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+                  : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
               )}
             >
               My Avatar
@@ -705,10 +705,10 @@ export function PresenterSelector({
             <button
               onClick={() => setActiveTab("upload")}
               className={cn(
-                "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+                "border-b-2 px-4 py-2 text-sm font-medium transition-colors",
                 activeTab === "upload"
-                  ? "border-neutral-900 dark:border-neutral-100 text-neutral-900 dark:text-neutral-100"
-                  : "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+                  ? "border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100"
+                  : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
               )}
             >
               Upload
@@ -719,20 +719,20 @@ export function PresenterSelector({
 
       {/* Presenter Grid */}
       {activeTab === "popular" && (
-        <div className="space-y-3">
-          <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
+        <div className='space-y-3'>
+          <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
             Choose avatar
           </h3>
           {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 text-neutral-400 animate-spin" />
+            <div className='flex items-center justify-center py-8'>
+              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
             </div>
           ) : presenters.length === 0 ? (
-            <div className="text-center py-8 text-sm text-neutral-500 dark:text-neutral-400">
+            <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
               No presenters available
             </div>
           ) : (
-            <div className="grid grid-cols-4 gap-2">
+            <div className='grid grid-cols-4 gap-2'>
               {presenters.slice(0, 5).map((presenter) => {
                 const presenterId = presenter._id || presenter.id;
                 const selectedId =
@@ -758,26 +758,26 @@ export function PresenterSelector({
       )}
 
       {activeTab === "my-avatar" && (
-        <div className="py-4 space-y-4">
+        <div className='space-y-4 py-4'>
           {!isAuthenticated ? (
-            <div className="text-center py-4">
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+            <div className='py-4 text-center'>
+              <p className='mb-4 text-sm text-neutral-500 dark:text-neutral-400'>
                 Please sign in to view your avatars
               </p>
             </div>
           ) : loading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 text-neutral-400 animate-spin" />
+            <div className='flex items-center justify-center py-8'>
+              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
             </div>
           ) : (
             <>
               {/* User's Custom Avatars */}
               {userPresenters.length > 0 ? (
                 <div>
-                  <h4 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
+                  <h4 className='mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                     My Avatars
                   </h4>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className='grid grid-cols-4 gap-2'>
                     {userPresenters.map((presenter) => {
                       const presenterId = presenter._id || presenter.id;
                       const selectedId =
@@ -801,8 +801,8 @@ export function PresenterSelector({
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-4">
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                <div className='py-4 text-center'>
+                  <p className='text-sm text-neutral-500 dark:text-neutral-400'>
                     You haven't uploaded any avatars yet
                   </p>
                 </div>
@@ -813,44 +813,44 @@ export function PresenterSelector({
       )}
 
       {activeTab === "upload" && (
-        <div className="py-4 space-y-4">
+        <div className='space-y-4 py-4'>
           {!isAuthenticated ? (
-            <div className="text-center py-4">
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+            <div className='py-4 text-center'>
+              <p className='mb-4 text-sm text-neutral-500 dark:text-neutral-400'>
                 Please sign in to upload avatars
               </p>
             </div>
           ) : (
             <>
               {/* Upload Section */}
-              <div className="text-center mb-4">
-                <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-                  <Upload className="w-4 h-4 text-neutral-600 dark:text-neutral-300" />
+              <div className='mb-4 text-center'>
+                <div className='mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+                  <Upload className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
                 </div>
-                <h4 className="text-sm font-medium text-neutral-900 dark:text-white">
+                <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
                   Upload Your Avatar
                 </h4>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                <p className='mt-1 text-xs text-neutral-500 dark:text-neutral-400'>
                   Select an image to create your custom avatar
                 </p>
               </div>
 
               {/* File Input */}
               {!selectedFile && (
-                <div className="flex flex-col items-center gap-3">
-                  <label className="w-full">
+                <div className='flex flex-col items-center gap-3'>
+                  <label className='w-full'>
                     <input
-                      type="file"
-                      accept="image/jpeg,image/jpg,image/png,image/webp"
-                      className="hidden"
+                      type='file'
+                      accept='image/jpeg,image/jpg,image/png,image/webp'
+                      className='hidden'
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) handleFileSelect(file);
                       }}
                       disabled={uploading}
                     />
-                    <span className="w-full py-2 px-3 rounded-lg text-sm font-medium bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900 transition-all flex items-center justify-center gap-2 cursor-pointer">
-                      <Upload className="w-4 h-4" />
+                    <span className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'>
+                      <Upload className='h-4 w-4' />
                       Select Image
                     </span>
                   </label>
@@ -859,62 +859,62 @@ export function PresenterSelector({
 
               {/* Form Fields After File Selection */}
               {selectedFile && filePreview && (
-                <div className="w-full space-y-3">
+                <div className='w-full space-y-3'>
                   {/* Image Preview */}
-                  <div className="flex flex-col md:flex-row md:items-center gap-2">
-                    <div className="w-16 h-16 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+                  <div className='flex flex-col gap-2 md:flex-row md:items-center'>
+                    <div className='h-16 w-16 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800'>
                       <img
                         src={filePreview}
-                        alt="Preview"
-                        className="w-full h-full max-h-full max-w-full object-cover"
+                        alt='Preview'
+                        className='h-full max-h-full w-full max-w-full object-cover'
                       />
                     </div>
                     {/* Avatar Name Input */}
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                    <div className='space-y-2'>
+                      <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                         Avatar Name *
                       </label>
                       <input
-                        type="text"
+                        type='text'
                         value={avatarName}
                         onChange={(e) => setAvatarName(e.target.value)}
-                        placeholder="e.g., John, Sarah"
-                        className="w-full px-3 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                        placeholder='e.g., John, Sarah'
+                        className='w-full rounded-lg border border-neutral-300 bg-neutral-100 px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-500 focus:border-transparent focus:ring-2 focus:ring-cyan-500 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'
                         disabled={uploading}
                       />
                     </div>
                   </div>
 
                   {/* Gender Selection */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  <div className='space-y-2'>
+                    <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                       Gender *
                     </label>
-                    <div className="flex gap-2">
+                    <div className='flex gap-2'>
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => setAvatarGender("male")}
                         disabled={uploading}
                         className={cn(
-                          "flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                          "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                           avatarGender === "male"
-                            ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                            : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700",
-                          uploading && "opacity-50 cursor-not-allowed"
+                            ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                            : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700",
+                          uploading && "cursor-not-allowed opacity-50"
                         )}
                       >
                         Male
                       </button>
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => setAvatarGender("female")}
                         disabled={uploading}
                         className={cn(
-                          "flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                          "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                           avatarGender === "female"
-                            ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                            : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700",
-                          uploading && "opacity-50 cursor-not-allowed"
+                            ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                            : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700",
+                          uploading && "cursor-not-allowed opacity-50"
                         )}
                       >
                         Female
@@ -923,9 +923,9 @@ export function PresenterSelector({
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-2">
+                  <div className='flex gap-2'>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() => {
                         setSelectedFile(null);
                         setFilePreview(null);
@@ -933,24 +933,24 @@ export function PresenterSelector({
                         setAvatarGender("male");
                       }}
                       disabled={uploading}
-                      className="flex-1 px-3 py-2 rounded-lg text-sm font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className='flex-1 rounded-lg bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-700 transition-all hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                     >
                       Cancel
                     </button>
                     <button
-                      type="button"
+                      type='button'
                       onClick={handleUploadAvatar}
                       disabled={uploading || !avatarName.trim()}
-                      className="flex-1 px-3 py-2 rounded-lg text-sm font-medium bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:bg-neutral-300 disabled:text-neutral-500 disabled:cursor-not-allowed text-white dark:text-neutral-900 transition-all flex items-center justify-center gap-2"
+                      className='flex flex-1 items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-500 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
                     >
                       {uploading ? (
                         <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <Loader2 className='h-4 w-4 animate-spin' />
                           Saving...
                         </>
                       ) : (
                         <>
-                          <Upload className="w-4 h-4" />
+                          <Upload className='h-4 w-4' />
                           Save Avatar
                         </>
                       )}
@@ -966,7 +966,7 @@ export function PresenterSelector({
       {/* Dialog for Desktop */}
       {isDesktop ? (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogContent className="max-w-3xl">
+          <DialogContent className='max-w-3xl'>
             <DialogHeader>
               <DialogTitle>Select Avatar</DialogTitle>
               {/* <DialogDescription>
@@ -978,14 +978,14 @@ export function PresenterSelector({
         </Dialog>
       ) : (
         <Drawer open={isOpen} onOpenChange={setIsOpen}>
-          <DrawerContent className="max-h-[85vh]">
+          <DrawerContent className='max-h-[85vh]'>
             <DrawerHeader>
               <DrawerTitle>Select Avatar</DrawerTitle>
               {/* <DrawerDescription>
                 Choose an AI avatar or upload your own
               </DrawerDescription> */}
             </DrawerHeader>
-            <div className="px-4 pb-6">
+            <div className='px-4 pb-6'>
               <FullPresenterList />
             </div>
           </DrawerContent>

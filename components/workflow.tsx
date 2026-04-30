@@ -1,77 +1,77 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
 import { Navbar } from "./navbar";
-import { createNode as createNodeUtil } from "@/lib/workflow-utils";
-import {
-  Maximize2,
-  Minus,
-  Plus,
-  Redo2,
-  Undo2,
-  FolderOpen,
-  PlusCircle,
-  Loader2,
-  History as HistoryIcon,
-} from "lucide-react";
 import { Button } from "./ui/button";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
-import { io } from "socket.io-client";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
-import ReactFlow, {
-  Background,
-  type EdgeTypes,
-  type Edge,
-  type Connection,
-  type NodeChange,
-  type EdgeChange,
-  type NodeMouseHandler,
-  useNodesState,
-  useEdgesState,
-  Node,
-  NodeTypes,
-  applyNodeChanges,
-  applyEdgeChanges,
-  Controls,
-} from "reactflow";
-import "reactflow/dist/style.css";
+import { FloatingSidebar } from "@/floating-sidebar";
+import { trackEvent, trackFeatureUsed } from "@/lib/mixpanelClient";
+import { createNode as createNodeUtil } from "@/lib/workflow-utils";
+import { AIChatNode } from "@/nodes/ai-chat-node";
+import { AudioNode } from "@/nodes/audio-node";
 import { BrandNode } from "@/nodes/brand-node";
+import { ChatNode } from "@/nodes/chat-node";
+import { CodeNode } from "@/nodes/code-node";
+import { ConditionalNode } from "@/nodes/conditional-node";
+import { DatabaseNode } from "@/nodes/database-node";
+import { DocumentNode } from "@/nodes/document-node";
+import { FacebookNode } from "@/nodes/facebook-node";
+import { FolderNode } from "@/nodes/folder-node";
+import { ImageNode } from "@/nodes/image-node";
 // Import all node types
 import { InputNode } from "@/nodes/input-node";
-import { ProcessNode } from "@/nodes/process-node";
-import { OutputNode } from "@/nodes/output-node";
-import { ConditionalNode } from "@/nodes/conditional-node";
-import { CodeNode } from "@/nodes/code-node";
-import { AIChatNode } from "@/nodes/ai-chat-node";
-import { YouTubeNode } from "@/nodes/youtube-node";
-import { PDFNode } from "@/nodes/pdf-node";
-import { ChatNode } from "@/nodes/chat-node";
-import { FolderNode } from "@/nodes/folder-node";
 import { InstagramNode } from "@/nodes/instagram-node";
-import { DatabaseNode } from "@/nodes/database-node";
 import { LinkedInNode } from "@/nodes/linkedin-node";
-import { TwitterNode } from "@/nodes/twitter-node";
-import { FacebookNode } from "@/nodes/facebook-node";
-import { TikTokNode } from "@/nodes/tiktok-node";
-import { WebsiteNode } from "@/nodes/website-node";
-import { ImageNode } from "@/nodes/image-node";
-import { AudioNode } from "@/nodes/audio-node";
-import { VideoNode } from "@/nodes/video-node";
-import { DocumentNode } from "@/nodes/document-node";
-import { TextNode } from "@/nodes/text-node";
-import { FloatingSidebar } from "@/floating-sidebar";
+import { OutputNode } from "@/nodes/output-node";
+import { PDFNode } from "@/nodes/pdf-node";
+import { ProcessNode } from "@/nodes/process-node";
 import { PromptNode } from "@/nodes/prompt-node";
+import { TextNode } from "@/nodes/text-node";
+import { TikTokNode } from "@/nodes/tiktok-node";
+import { TwitterNode } from "@/nodes/twitter-node";
+import { VideoNode } from "@/nodes/video-node";
+import { WebsiteNode } from "@/nodes/website-node";
+import { YouTubeNode } from "@/nodes/youtube-node";
 import { LoadingFileLoader } from "@/utils/Loading";
-import { trackFeatureUsed, trackEvent } from "@/lib/mixpanelClient";
+import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
+import {
+  FolderOpen,
+  History as HistoryIcon,
+  Loader2,
+  Maximize2,
+  Minus,
+  Plus,
+  PlusCircle,
+  Redo2,
+  Undo2,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import ReactFlow, {
+  Background,
+  type Connection,
+  Controls,
+  type Edge,
+  type EdgeChange,
+  type EdgeTypes,
+  Node,
+  type NodeChange,
+  type NodeMouseHandler,
+  NodeTypes,
+  applyEdgeChanges,
+  applyNodeChanges,
+  useEdgesState,
+  useNodesState,
+} from "reactflow";
+import "reactflow/dist/style.css";
+import { io } from "socket.io-client";
+import { toast } from "sonner";
+import React, { useCallback, useEffect, useState } from "react";
 
 // Import edge types
 const nodeTypes: NodeTypes = {
@@ -131,7 +131,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   const [projectId, setProjectId] = useState<string | null>(null);
   const [projectName, setProjectName] = useState("");
   const [isSetupDialogOpen, setIsSetupDialogOpen] = useState(
-    slug === "create" || !slug,
+    slug === "create" || !slug
   );
   const [isCreating, setIsCreating] = useState(false);
   const [isLoading, setIsLoading] = useState(!!slug && slug !== "create");
@@ -143,7 +143,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   const nodesRef = React.useRef(nodes);
   const edgesRef = React.useRef(edges);
   const [brainItems, setBrainItems] = useState<any[]>([]);
-  const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   // Fetch user's brain items for duplicate checking
   useEffect(() => {
     const fetchBrainItems = async () => {
@@ -153,7 +152,10 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         });
         if (res.data.success) {
           setBrainItems(res.data.data);
-          console.log("🧠 [Workflow] Loaded brain items:", res.data.data.length);
+          console.log(
+            "🧠 [Workflow] Loaded brain items:",
+            res.data.data.length
+          );
         }
       } catch (error) {
         console.error("Failed to fetch brain items:", error);
@@ -192,14 +194,21 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       if (isUndoRedoAction) return;
 
       // Ensure we have valid arrays and deep copy to prevent reference issues
-      const safeNodes = Array.isArray(newNodes) ? JSON.parse(JSON.stringify(newNodes)) : [];
-      const safeEdges = Array.isArray(newEdges) ? JSON.parse(JSON.stringify(newEdges)) : [];
+      const safeNodes = Array.isArray(newNodes)
+        ? JSON.parse(JSON.stringify(newNodes))
+        : [];
+      const safeEdges = Array.isArray(newEdges)
+        ? JSON.parse(JSON.stringify(newEdges))
+        : [];
 
       const currentState = { nodes: safeNodes, edges: safeEdges };
 
       setHistory((prevHistory) => {
         // Use ref so this callback does not depend on historyIndex state
-        const trimmedHistory = prevHistory.slice(0, historyIndexRef.current + 1);
+        const trimmedHistory = prevHistory.slice(
+          0,
+          historyIndexRef.current + 1
+        );
         const newHistory = [...trimmedHistory, currentState];
         return newHistory.slice(-50);
       });
@@ -211,13 +220,13 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         return nextIndex;
       });
     },
-    [isUndoRedoAction], // historyIndex removed — we read it from historyIndexRef
+    [isUndoRedoAction] // historyIndex removed — we read it from historyIndexRef
   );
 
   const addNode = useCallback(
     (node: Node) => {
       console.log("🎯 [GennittWorkflow] Adding node:", node);
-      trackFeatureUsed(MIXPANEL_TOKEN, "workflow_node_added", {
+      trackFeatureUsed("workflow_node_added", {
         node_type: node.type,
       });
       setNodes((prevNodes) => {
@@ -227,7 +236,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         return newNodes;
       });
     },
-    [setNodes, addToHistory],
+    [setNodes, addToHistory]
   );
 
   // Remove node from state
@@ -238,7 +247,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       setNodes(newNodes);
       addToHistory(newNodes, edgesRef.current);
     },
-    [setNodes, addToHistory],
+    [setNodes, addToHistory]
   );
 
   // Handle connections
@@ -246,7 +255,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     (connection: Connection) => {
       if (!connection.source || !connection.target) return;
       console.log("🔗 [GennittWorkflow] Connection attempt:", connection);
-      trackFeatureUsed(MIXPANEL_TOKEN,  "workflow_node_connection_attempted", {
+      trackFeatureUsed("workflow_node_connection_attempted", {
         source: connection.source,
         target: connection.target,
       });
@@ -262,7 +271,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             edge.source === connection.source &&
             edge.target === connection.target &&
             edge.sourceHandle === connection.sourceHandle &&
-            edge.targetHandle === connection.targetHandle,
+            edge.targetHandle === connection.targetHandle
         );
         if (isDuplicate) {
           console.log("🚫 [GennittWorkflow] Connection ignored (duplicate)");
@@ -270,7 +279,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         }
 
         // Enforce 3-item limit
-        const incomingEdges = prevEdges.filter((e) => e.target === connection.target);
+        const incomingEdges = prevEdges.filter(
+          (e) => e.target === connection.target
+        );
         if (incomingEdges.length >= 3) {
           toast.error("Maximum of 3 inputs reached");
           return prevEdges;
@@ -304,10 +315,10 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             }
           }
           return node;
-        }),
+        })
       );
     },
-    [setEdges, setNodes], // addToHistory removed — breaks the cascade that causes re-registration
+    [setEdges, setNodes] // addToHistory removed — breaks the cascade that causes re-registration
   );
 
   // Node creation function - single source of truth
@@ -329,7 +340,10 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             y: centerY + (Math.random() * 80 - 40),
           };
         } else {
-          position = { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 };
+          position = {
+            x: Math.random() * 400 + 100,
+            y: Math.random() * 300 + 100,
+          };
         }
       }
 
@@ -378,7 +392,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
                 projectId,
                 metadata: { ...data },
               },
-              { withCredentials: true },
+              { withCredentials: true }
             );
             console.log("✅ [GennittWorkflow] Item saved to database");
             if (res.data.success) {
@@ -393,7 +407,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             console.error("Failed to save item to database:", error);
           }
         } else {
-          console.log("ℹ️ [GennittWorkflow] Item already exists in brain, skipping save");
+          console.log(
+            "ℹ️ [GennittWorkflow] Item already exists in brain, skipping save"
+          );
           data.dbId = existingItem._id;
           data.analyzed = existingItem.analyzed;
           data.analysis = existingItem.analysis;
@@ -653,7 +669,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       addNode(newNode);
       return newNode;
     },
-    [projectId, slug, addNode, removeNode, brainItems],
+    [projectId, slug, addNode, removeNode, brainItems]
   );
 
   const updateNodeData = useCallback(
@@ -672,39 +688,48 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           return node;
         });
         // We don't necessarily want to add to history on EVERY keystroke if this is used for inputs
-        // but for "data" updates (like renaming), we should. 
+        // but for "data" updates (like renaming), we should.
         // For now, let's keep it manual or call it where needed.
         return newNodes;
       });
     },
-    [setNodes],
+    [setNodes]
   );
 
-  const handleAnalyze = useCallback(async (nodeId: string) => {
-    const node = nodesRef.current.find(n => n.id === nodeId);
-    if (!node) return;
-    
-    const dbId = node.data.dbId;
-    if (!dbId) {
-      toast.error("Item must be saved to the brain before analysis");
-      return;
-    }
+  const handleAnalyze = useCallback(
+    async (nodeId: string) => {
+      const node = nodesRef.current.find((n) => n.id === nodeId);
+      if (!node) return;
 
-    toast.loading("Analyzing content...", { id: "analyze" });
-    try {
-      const res = await apiResponse.post(`/apps/workflow/items/${dbId}/analyze`, {}, { withCredentials: true });
-      if (res.data.success) {
-        toast.success("Analysis complete", { id: "analyze" });
-        updateNodeData(nodeId, { 
-          analyzed: true, 
-          analysis: res.data.data 
+      const dbId = node.data.dbId;
+      if (!dbId) {
+        toast.error("Item must be saved to the brain before analysis");
+        return;
+      }
+
+      toast.loading("Analyzing content...", { id: "analyze" });
+      try {
+        const res = await apiResponse.post(
+          `/apps/workflow/items/${dbId}/analyze`,
+          {},
+          { withCredentials: true }
+        );
+        if (res.data.success) {
+          toast.success("Analysis complete", { id: "analyze" });
+          updateNodeData(nodeId, {
+            analyzed: true,
+            analysis: res.data.data,
+          });
+        }
+      } catch (error: any) {
+        console.error("Analysis failed:", error);
+        toast.error(error.response?.data?.message || "Analysis failed", {
+          id: "analyze",
         });
       }
-    } catch (error: any) {
-      console.error("Analysis failed:", error);
-      toast.error(error.response?.data?.message || "Analysis failed", { id: "analyze" });
-    }
-  }, [updateNodeData]);
+    },
+    [updateNodeData]
+  );
 
   const applyAIActions = useCallback(
     async (sourceNodeId: string, actions: any[]): Promise<any[]> => {
@@ -719,25 +744,27 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           const { type, data, position } = action.args;
 
           const sourceNode = nodesRef.current.find(
-            (n) => n.id === sourceNodeId,
+            (n) => n.id === sourceNodeId
           );
 
           // Place the generated node to the right of the source, with vertical offset
           const finalPosition = position || {
             x: (sourceNode?.position.x || 0) + 450,
-            y: (sourceNode?.position.y || 0) + (createIndex * 250),
+            y: (sourceNode?.position.y || 0) + createIndex * 250,
           };
 
           const newNode = await createNode(type, {
             ...data,
             position: finalPosition,
           });
-          
+
           if (newNode && sourceNodeId) {
-            console.log(`🔗 [Workflow] Auto-connecting ${sourceNodeId} -> ${newNode.id}`);
+            console.log(
+              `🔗 [Workflow] Auto-connecting ${sourceNodeId} -> ${newNode.id}`
+            );
             handleConnect({ source: sourceNodeId, target: newNode.id } as any);
           }
-          
+
           results.push(newNode);
           createIndex++;
         } else if (action.name === "connect_nodes") {
@@ -748,7 +775,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       }
       return results;
     },
-    [createNode, handleConnect],
+    [createNode, handleConnect]
   );
 
   // Helper to re-inject functional properties into nodes loaded from serializable state
@@ -756,7 +783,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     (nodesToInject: Node[]) => {
       console.log(
         "💉 [Workflow] Injecting callbacks into nodes:",
-        nodesToInject.length,
+        nodesToInject.length
       );
       return nodesToInject.map((node) => ({
         ...node,
@@ -788,14 +815,14 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       reactFlowInstance,
       projectId,
       slug,
-    ],
+    ]
   );
 
   // Re-inject callbacks when projectId is finally set (from loading or creation)
   useEffect(() => {
     if (projectId && nodes.length > 0) {
       const someNodeMissingId = nodes.some(
-        (n) => n.type === "prompt" && !n.data.projectId,
+        (n) => n.type === "prompt" && !n.data.projectId
       );
       if (someNodeMissingId) {
         console.log("🔄 [Workflow] Re-injecting project properties into nodes");
@@ -807,7 +834,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   // Undo function
   const undo = useCallback(() => {
     if (historyIndex > 0 && history.length > 0) {
-      trackFeatureUsed(MIXPANEL_TOKEN, "workflow_undo_used");
+      trackFeatureUsed("workflow_undo_used");
       const previousState = history[historyIndex - 1];
       if (previousState && previousState.nodes && previousState.edges) {
         setIsUndoRedoAction(true);
@@ -827,7 +854,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   // Redo function
   const redo = useCallback(() => {
     if (historyIndex < history.length - 1 && history.length > 0) {
-      trackFeatureUsed(MIXPANEL_TOKEN, "workflow_redo_used");
+      trackFeatureUsed("workflow_redo_used");
       const nextState = history[historyIndex + 1];
       if (nextState && nextState.nodes && nextState.edges) {
         setIsUndoRedoAction(true);
@@ -865,27 +892,27 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       // We only need to capture a history snapshot here.
       addToHistory(nodesRef.current, edgesRef.current);
     },
-    [addToHistory],
+    [addToHistory]
   );
 
   const onMoveEnd = useCallback(
     (event: any, viewport: { x: number; y: number; zoom: number }) => {
       setViewport(viewport);
     },
-    [],
+    []
   );
 
   const onNodesDelete = useCallback(
     (deletedNodes: Node[]) => {
       console.log(
         "🗑️ [Workflow] Nodes deleted:",
-        deletedNodes.map((n) => n.id),
+        deletedNodes.map((n) => n.id)
       );
       const deletedNodeIds = new Set(deletedNodes.map((n) => n.id));
 
       // Find edges that are being removed because their source/target nodes were deleted
       const deletedEdges = edgesRef.current.filter(
-        (e) => deletedNodeIds.has(e.source) || deletedNodeIds.has(e.target),
+        (e) => deletedNodeIds.has(e.source) || deletedNodeIds.has(e.target)
       );
 
       setNodes((nds) => {
@@ -893,7 +920,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           // Find if this node was a target of any deleted edges
           // But node itself must not be one of the deleted nodes
           const relevantDeletedEdges = deletedEdges.filter(
-            (e) => e.target === node.id && !deletedNodeIds.has(node.id),
+            (e) => e.target === node.id && !deletedNodeIds.has(node.id)
           );
 
           if (relevantDeletedEdges.length > 0) {
@@ -903,7 +930,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               data: {
                 ...node.data,
                 connectedItems: (node.data.connectedItems || []).filter(
-                  (id: string) => !deletedSourceIds.includes(id),
+                  (id: string) => !deletedSourceIds.includes(id)
                 ),
               },
             };
@@ -913,29 +940,29 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
         // The edges will be updated by ReactFlow, but we need to push to history correctly
         const remainingEdges = edgesRef.current.filter(
-          (e: any) => !deletedNodeIds.has(e.source) && !deletedNodeIds.has(e.target),
+          (e: any) =>
+            !deletedNodeIds.has(e.source) && !deletedNodeIds.has(e.target)
         );
 
         addToHistory(updatedNodes, remainingEdges);
         return updatedNodes;
       });
-      
     },
-    [setNodes, addToHistory],
+    [setNodes, addToHistory]
   );
 
   const onEdgesDelete = useCallback(
     (deletedEdges: Edge[]) => {
       console.log(
         "✂️ [Workflow] Edges deleted:",
-        deletedEdges.map((e) => e.id),
+        deletedEdges.map((e) => e.id)
       );
 
       setNodes((prevNodes) => {
         const updatedNodes = prevNodes.map((node) => {
           // Find if this node was a target of any deleted edges
           const relevantDeletedEdges = deletedEdges.filter(
-            (e) => e.target === node.id,
+            (e) => e.target === node.id
           );
           if (relevantDeletedEdges.length > 0) {
             const deletedSourceIds = relevantDeletedEdges.map((e) => e.source);
@@ -944,7 +971,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               data: {
                 ...node.data,
                 connectedItems: (node.data.connectedItems || []).filter(
-                  (id: any) => !deletedSourceIds.includes(id),
+                  (id: any) => !deletedSourceIds.includes(id)
                 ),
               },
             };
@@ -960,7 +987,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         return updatedNodes;
       });
     },
-    [setEdges, setNodes, addToHistory],
+    [setEdges, setNodes, addToHistory]
   );
 
   // Undo/Redo/Zoom functions
@@ -991,9 +1018,14 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             const loadedEdges = project.edges || [];
             setNodes(loadedNodes);
             setEdges(loadedEdges);
-            
+
             // Capture initial state in history
-            setHistory([{ nodes: JSON.parse(JSON.stringify(loadedNodes)), edges: JSON.parse(JSON.stringify(loadedEdges)) }]);
+            setHistory([
+              {
+                nodes: JSON.parse(JSON.stringify(loadedNodes)),
+                edges: JSON.parse(JSON.stringify(loadedEdges)),
+              },
+            ]);
             setHistoryIndex(0);
 
             if (project.viewport) {
@@ -1065,7 +1097,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           await apiResponse.put(
             `/apps/workflow/${slug}`,
             { nodes, edges, viewport },
-            { withCredentials: true },
+            { withCredentials: true }
           );
           console.log("💾 [Workflow] Auto-saved project state");
         } catch (error) {
@@ -1080,18 +1112,18 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   const handleCreateWorkflow = async () => {
     if (!projectName.trim()) return;
     setIsCreating(true);
-    trackEvent(MIXPANEL_TOKEN, "workflow_create_attempted", {
+    trackEvent("workflow_create_attempted", {
       has_name: Boolean(projectName.trim()),
     });
     try {
       const res = await apiResponse.post(
         "/apps/workflow",
         { name: projectName },
-        { withCredentials: true },
+        { withCredentials: true }
       );
       if (res.data.success) {
         const newProject = res.data.data;
-        trackEvent(MIXPANEL_TOKEN, "workflow_create_succeeded", {
+        trackEvent("workflow_create_succeeded", {
           workflow_id: newProject._id,
           workflow_slug: newProject.slug,
         });
@@ -1100,9 +1132,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       }
     } catch (error) {
       console.error("Failed to create workflow:", error);
-      trackEvent(MIXPANEL_TOKEN, "workflow_create_failed", {
-       
-      });
+      trackEvent("workflow_create_failed", {});
     } finally {
       setIsCreating(false);
     }
@@ -1165,9 +1195,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-background">
+      <div className='bg-background flex h-screen flex-col items-center justify-center'>
         <LoadingFileLoader />
-        <p className="text-muted-foreground animate-pulse">
+        <p className='text-muted-foreground animate-pulse'>
           Loading your workflow...
         </p>
       </div>
@@ -1175,10 +1205,10 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-background via-background to-muted/10">
+    <div className='from-background via-background to-muted/10 flex h-screen flex-col bg-gradient-to-br'>
       <Navbar title={projectName} />
 
-      <div className="flex flex-1 relative">
+      <div className='relative flex flex-1'>
         <FloatingSidebar
           onAddIntegration={createNode}
           onUndo={memoizedHandleUndo}
@@ -1187,60 +1217,60 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           slug={slug}
         />
 
-        <div className="flex flex-1 flex-col">
+        <div className='flex flex-1 flex-col'>
           {/* React Flow Canvas - All functionality moved here */}
-          <div className="flex-1 bg-background relative w-full h-full min-h-[600px]">
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex items-center space-x-2">
-              <div className="bg-muted/50 backdrop-blur-sm border border-border rounded-xl shadow-lg p-2 flex items-center space-x-1">
+          <div className='bg-background relative h-full min-h-[600px] w-full flex-1'>
+            <div className='absolute top-4 left-1/2 z-10 flex -translate-x-1/2 items-center space-x-2'>
+              <div className='bg-muted/50 border-border flex items-center space-x-1 rounded-xl border p-2 shadow-lg backdrop-blur-sm'>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={memoizedHandleUndo}
                   disabled={historyIndex <= 0}
-                  className="w-8 h-8 p-0 rounded-lg hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-                  title="Undo (Ctrl+Z)"
+                  className='hover:bg-accent h-8 w-8 rounded-lg p-0 disabled:cursor-not-allowed disabled:opacity-50'
+                  title='Undo (Ctrl+Z)'
                 >
-                  <Undo2 className="w-4 h-4" />
+                  <Undo2 className='h-4 w-4' />
                 </Button>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={memoizedHandleRedo}
                   disabled={historyIndex >= history.length - 1}
-                  className="w-8 h-8 p-0 rounded-lg hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-                  title="Redo (Ctrl+Y)"
+                  className='hover:bg-accent h-8 w-8 rounded-lg p-0 disabled:cursor-not-allowed disabled:opacity-50'
+                  title='Redo (Ctrl+Y)'
                 >
-                  <Redo2 className="w-4 h-4" />
+                  <Redo2 className='h-4 w-4' />
                 </Button>
-                <div className="w-px h-6 bg-border mx-1"></div>
+                <div className='bg-border mx-1 h-6 w-px'></div>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={() => reactFlowInstance?.zoomIn({ duration: 200 })}
-                  className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
-                  title="Zoom In"
+                  className='hover:bg-accent h-8 w-8 rounded-lg p-0'
+                  title='Zoom In'
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className='h-4 w-4' />
                 </Button>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={() => reactFlowInstance?.zoomOut({ duration: 200 })}
-                  className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
-                  title="Zoom Out"
+                  className='hover:bg-accent h-8 w-8 rounded-lg p-0'
+                  title='Zoom Out'
                 >
-                  <Minus className="w-4 h-4" />
+                  <Minus className='h-4 w-4' />
                 </Button>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant='ghost'
+                  size='sm'
                   onClick={() =>
                     reactFlowInstance?.fitView({ padding: 0.1, duration: 200 })
                   }
-                  className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
-                  title="Fit View"
+                  className='hover:bg-accent h-8 w-8 rounded-lg p-0'
+                  title='Fit View'
                 >
-                  <Maximize2 className="w-4 h-4" />
+                  <Maximize2 className='h-4 w-4' />
                 </Button>
               </div>
             </div>
@@ -1268,9 +1298,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
                         ...node,
                         data: {
                           ...node.data,
-                          connectedItems: (node.data.connectedItems || []).filter(
-                            (id: string) => id !== edge.source,
-                          ),
+                          connectedItems: (
+                            node.data.connectedItems || []
+                          ).filter((id: string) => id !== edge.source),
                         },
                       };
                     }
@@ -1322,7 +1352,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         }}
       >
         <DialogContent
-          className="sm:max-w-[500px] border-border bg-neutral-300 rounded-4xl dark:bg-neutral-900 backdrop-blur-xl"
+          className='border-border rounded-4xl bg-neutral-300 backdrop-blur-xl sm:max-w-[500px] dark:bg-neutral-900'
           onPointerDownOutside={(e) => {
             // Prevent closing by clicking outside if no project is active
             if (!slug || !projectId) e.preventDefault();
@@ -1334,8 +1364,8 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           hideDialogClose={!slug && !projectId}
         >
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-              <PlusCircle className="w-6 h-6 text-primary" />
+            <DialogTitle className='flex items-center gap-2 text-2xl font-bold'>
+              <PlusCircle className='text-primary h-6 w-6' />
               Workflow Engine
             </DialogTitle>
             <DialogDescription>
@@ -1343,25 +1373,25 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-6 py-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-muted-foreground px-1">
+          <div className='space-y-6 py-4'>
+            <div className='space-y-2'>
+              <label className='text-muted-foreground px-1 text-sm font-medium'>
                 New Project Name
               </label>
-              <div className="flex space-x-2">
+              <div className='flex space-x-2'>
                 <Input
-                  placeholder="e.g. My Awesome Workflow"
+                  placeholder='e.g. My Awesome Workflow'
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
-                  className="bg-muted/50 border-border"
+                  className='bg-muted/50 border-border'
                 />
                 <Button
                   onClick={handleCreateWorkflow}
                   disabled={!projectName.trim() || isCreating}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  className='bg-primary text-primary-foreground hover:bg-primary/90'
                 >
                   {isCreating ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className='h-4 w-4 animate-spin' />
                   ) : (
                     "Create"
                   )}
@@ -1369,26 +1399,26 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               </div>
             </div>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-border" />
+            <div className='relative'>
+              <div className='absolute inset-0 flex items-center'>
+                <span className='border-border w-full border-t' />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground rounded-full">
+              <div className='relative flex justify-center text-xs uppercase'>
+                <span className='bg-background text-muted-foreground rounded-full px-2'>
                   Or open existing
                 </span>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-muted-foreground px-1 flex items-center gap-2">
-                <HistoryIcon className="w-4 h-4" />
+            <div className='space-y-2'>
+              <label className='text-muted-foreground flex items-center gap-2 px-1 text-sm font-medium'>
+                <HistoryIcon className='h-4 w-4' />
                 Project History
               </label>
-              <div className="max-h-[200px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+              <div className='custom-scrollbar max-h-[200px] space-y-2 overflow-y-auto pr-1'>
                 {isHistoryLoading ? (
-                  <div className="flex justify-center p-4">
-                    <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+                  <div className='flex justify-center p-4'>
+                    <Loader2 className='text-muted-foreground h-6 w-6 animate-spin' />
                   </div>
                 ) : historyProjects.length > 0 ? (
                   historyProjects.map((project) => (
@@ -1397,27 +1427,27 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
                       onClick={() =>
                         router.push(`/agents/workflow/${project.slug}`)
                       }
-                      className="group flex items-center justify-between p-3 rounded-xl border border-border bg-muted/30 hover:bg-muted/50 hover:border-primary/30 transition-all cursor-pointer"
+                      className='group border-border bg-muted/30 hover:bg-muted/50 hover:border-primary/30 flex cursor-pointer items-center justify-between rounded-xl border p-3 transition-all'
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                          <HistoryIcon className="w-4 h-4 text-primary" />
+                      <div className='flex items-center gap-3'>
+                        <div className='bg-primary/10 flex h-8 w-8 items-center justify-center rounded-lg'>
+                          <HistoryIcon className='text-primary h-4 w-4' />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                          <p className='text-foreground group-hover:text-primary text-sm font-medium transition-colors'>
                             {project.name}
                           </p>
-                          <p className="text-[10px] text-muted-foreground">
+                          <p className='text-muted-foreground text-[10px]'>
                             Last edited{" "}
                             {new Date(project.updatedAt).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
-                      <FolderOpen className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      <FolderOpen className='text-muted-foreground group-hover:text-primary h-4 w-4 transition-colors' />
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-8 text-sm text-muted-foreground border border-dashed border-border rounded-xl">
+                  <div className='text-muted-foreground border-border rounded-xl border border-dashed py-8 text-center text-sm'>
                     No existing workflows found.
                   </div>
                 )}

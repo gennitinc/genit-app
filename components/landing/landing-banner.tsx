@@ -22,30 +22,30 @@ const LandingPageBanner = () => {
   return (
     <div>
       {showBanner && (
-        <div className="relative flex items-center px-2 justify-start md:items-center md:justify-center font-medium py-2 bg-gradient-to-r from-violet-500 via-[#560280] to-[#E0724A] text-sm text-white">
+        <div className='relative flex items-center justify-start bg-gradient-to-r from-violet-500 via-[#560280] to-[#E0724A] px-2 py-2 text-sm font-medium text-white md:items-center md:justify-center'>
           <p>
             Exclusive Price Drop! Hurry, 🎉{" "}
-            <span className="underline underline-offset-2 text-sm">
+            <span className='text-sm underline underline-offset-2'>
               Offer Ends Soon!
             </span>
           </p>
           <button
             onClick={dismissBanner}
-            aria-label="Dismiss banner"
-            className="absolute right-3 inline-flex h-6 w-6 items-center justify-center rounded-md hover:bg-white/10"
+            aria-label='Dismiss banner'
+            className='absolute right-3 inline-flex h-6 w-6 items-center justify-center rounded-md hover:bg-white/10'
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
+              xmlns='http://www.w3.org/2000/svg'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              className='h-4 w-4'
             >
-              <path d="M18 6 6 18" />
-              <path d="M6 6l12 12" />
+              <path d='M18 6 6 18' />
+              <path d='M6 6l12 12' />
             </svg>
           </button>
         </div>

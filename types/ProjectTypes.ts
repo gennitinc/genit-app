@@ -268,8 +268,18 @@ export interface IProjectDesignContext {
   primaryFont: string | null;
   setPrimaryFont: (font: string | null) => void;
 
-  liveNodes: Array<{ id: string; filePath: string; name: string; prompt: string }>;
-  addLiveNode: (node: { id: string; filePath: string; name: string; prompt: string }) => void;
+  liveNodes: Array<{
+    id: string;
+    filePath: string;
+    name: string;
+    prompt: string;
+  }>;
+  addLiveNode: (node: {
+    id: string;
+    filePath: string;
+    name: string;
+    prompt: string;
+  }) => void;
   aiStatus: string | null;
   setAiStatus: (status: string | null) => void;
 }

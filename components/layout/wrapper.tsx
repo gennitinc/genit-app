@@ -1,12 +1,12 @@
 "use client";
 
-import { useUrlState } from "@/hooks/use-url-state";
+import { PricingDialog } from "../common/pricing-dialog";
 // import { ProjectPreview } from "../community/project-preview";
 import { SidebarProvider } from "../ui/sidebar";
-import { PricingDialog } from "../common/pricing-dialog";
+import { useUrlState } from "@/hooks/use-url-state";
+import HEYO from "@heyo.so/js";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import HEYO from "@heyo.so/js";
 
 function Wrapper({ children }: { children: React.ReactNode }) {
   const { getUrlState } = useUrlState();
@@ -73,7 +73,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="h-full w-full custom-scrollbar">
+      <div className='custom-scrollbar h-full w-full'>
         {children}
 
         {/* {preview && <ProjectPreview new />} */}

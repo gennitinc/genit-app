@@ -1,12 +1,7 @@
 "use client";
 
-import { memo } from "react";
-import { Handle, Position, NodeResizer, type NodeProps } from "reactflow";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -14,24 +9,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
-  Youtube,
-  Play,
-  ExternalLink,
+  Captions,
   Edit3,
-  Trash2,
-  X,
-  Lock,
-  Unlock,
-  Sparkles,
-  Loader2,
-  MessageSquare,
+  ExternalLink,
   ListCheck,
+  Loader2,
+  Lock,
+  MessageSquare,
+  Play,
   Search,
-  Captions
+  Sparkles,
+  Trash2,
+  Unlock,
+  X,
+  Youtube,
 } from "lucide-react";
-import { useState } from "react";
 import { YouTubeEmbed } from "react-social-media-embed";
+import { Handle, type NodeProps, NodeResizer, Position } from "reactflow";
+import { memo } from "react";
+import { useState } from "react";
 
 interface YouTubeNodeData {
   instruction?: string;
@@ -105,11 +105,11 @@ export const YouTubeNode = memo(
 
     return (
       <>
-        <div className="relative rounded-[1.5rem]">
+        <div className='relative rounded-[1.5rem]'>
           <Handle
-            type="target"
+            type='target'
             position={Position.Left}
-            className="w-3 h-3 bg-red-600 border-2 border-white"
+            className='h-3 w-3 border-2 border-white bg-red-600'
             isConnectable={isConnectable}
           />
 
@@ -117,43 +117,43 @@ export const YouTubeNode = memo(
           {data.onRemoveNode && data.nodeId && (
             <button
               onClick={() => data.onRemoveNode!(data.nodeId!)}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-lg z-10"
-              title="Remove node"
+              className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
+              title='Remove node'
             >
-              <X className="w-3 h-3" />
+              <X className='h-3 w-3' />
             </button>
           )}
 
-          <Card className="bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-300 group">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center space-x-2">
+          <Card className='bg-card border-border group rounded-lg border shadow-sm transition-all duration-300 hover:shadow-md'>
+            <CardContent className='p-4'>
+              <div className='mb-3 flex items-center justify-between'>
+                <div className='flex items-center space-x-2'>
                   <svg
-                    className="w-6 h-6"
-                    viewBox="0 0 256 180"
-                    width="256"
-                    height="180"
-                    xmlns="http://www.w3.org/2000/svg"
-                    preserveAspectRatio="xMidYMid"
+                    className='h-6 w-6'
+                    viewBox='0 0 256 180'
+                    width='256'
+                    height='180'
+                    xmlns='http://www.w3.org/2000/svg'
+                    preserveAspectRatio='xMidYMid'
                   >
                     <path
-                      d="M250.346 28.075A32.18 32.18 0 0 0 227.69 5.418C207.824 0 127.87 0 127.87 0S47.912.164 28.046 5.582A32.18 32.18 0 0 0 5.39 28.24c-6.009 35.298-8.34 89.084.165 122.97a32.18 32.18 0 0 0 22.656 22.657c19.866 5.418 99.822 5.418 99.822 5.418s79.955 0 99.82-5.418a32.18 32.18 0 0 0 22.657-22.657c6.338-35.348 8.291-89.1-.164-123.134Z"
-                      fill="red"
+                      d='M250.346 28.075A32.18 32.18 0 0 0 227.69 5.418C207.824 0 127.87 0 127.87 0S47.912.164 28.046 5.582A32.18 32.18 0 0 0 5.39 28.24c-6.009 35.298-8.34 89.084.165 122.97a32.18 32.18 0 0 0 22.656 22.657c19.866 5.418 99.822 5.418 99.822 5.418s79.955 0 99.82-5.418a32.18 32.18 0 0 0 22.657-22.657c6.338-35.348 8.291-89.1-.164-123.134Z'
+                      fill='red'
                     />
                     <path
-                      fill="#FFF"
-                      d="m102.421 128.06 66.328-38.418-66.328-38.418z"
+                      fill='#FFF'
+                      d='m102.421 128.06 66.328-38.418-66.328-38.418z'
                     />
                   </svg>
-                  <span className="text-sm font-semibold text-foreground">
+                  <span className='text-foreground text-sm font-semibold'>
                     YouTube
                   </span>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className='flex items-center space-x-2'>
                   {!analyzed && onAnalyze && (
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant='outline'
+                      size='sm'
                       onClick={async () => {
                         setIsAnalyzing(true);
                         try {
@@ -163,37 +163,37 @@ export const YouTubeNode = memo(
                         }
                       }}
                       disabled={isAnalyzing}
-                      className="h-8 px-2 text-xs gap-1.5 border-primary/20 hover:border-primary/50 bg-primary/5 hover:bg-primary/10 text-primary transition-all duration-300"
+                      className='border-primary/20 hover:border-primary/50 bg-primary/5 hover:bg-primary/10 text-primary h-8 gap-1.5 px-2 text-xs transition-all duration-300'
                     >
                       {isAnalyzing ? (
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <Loader2 className='h-3.5 w-3.5 animate-spin' />
                       ) : (
-                        <Sparkles className="w-3.5 h-3.5" />
+                        <Sparkles className='h-3.5 w-3.5' />
                       )}
                       Analyze
                     </Button>
                   )}
                   {analyzed && (
-                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 text-[10px] font-medium">
-                      <ListCheck className="w-3 h-3" />
+                    <div className='flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 px-2 py-1 text-[10px] font-medium text-green-600 dark:text-green-400'>
+                      <ListCheck className='h-3 w-3' />
                       Analyzed
                     </div>
                   )}
                   <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="ghost" size="sm" className="p-1 h-auto">
-                        <Edit3 className="w-4 h-4 text-muted-foreground" />
+                      <Button variant='ghost' size='sm' className='h-auto p-1'>
+                        <Edit3 className='text-muted-foreground h-4 w-4' />
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-md">
+                    <DialogContent className='sm:max-w-md'>
                       <DialogHeader>
                         <DialogTitle>Edit YouTube Video</DialogTitle>
                       </DialogHeader>
-                      <div className="space-y-4">
+                      <div className='space-y-4'>
                         <div>
-                          <Label htmlFor="url">YouTube URL</Label>
+                          <Label htmlFor='url'>YouTube URL</Label>
                           <Input
-                            id="url"
+                            id='url'
                             value={editData.url}
                             onChange={(e) =>
                               setEditData((prev) => ({
@@ -201,13 +201,13 @@ export const YouTubeNode = memo(
                                 url: e.target.value,
                               }))
                             }
-                            placeholder="https://www.youtube.com/watch?v=..."
+                            placeholder='https://www.youtube.com/watch?v=...'
                           />
                         </div>
                         <div>
-                          <Label htmlFor="instruction">Instruction</Label>
+                          <Label htmlFor='instruction'>Instruction</Label>
                           <Textarea
-                            id="instruction"
+                            id='instruction'
                             value={editData.instruction}
                             onChange={(e) =>
                               setEditData((prev) => ({
@@ -215,18 +215,18 @@ export const YouTubeNode = memo(
                                 instruction: e.target.value,
                               }))
                             }
-                            placeholder="Document your file so you can remember them"
-                            className="min-h-[80px] resize-none"
+                            placeholder='Document your file so you can remember them'
+                            className='min-h-[80px] resize-none'
                           />
                         </div>
                         <div>
-                          <Label htmlFor="status">Status</Label>
-                          <div className="flex items-center space-x-3">
-                            <span className="text-xs text-muted-foreground">
+                          <Label htmlFor='status'>Status</Label>
+                          <div className='flex items-center space-x-3'>
+                            <span className='text-muted-foreground text-xs'>
                               Public
                             </span>
                             <button
-                              type="button"
+                              type='button'
                               onClick={() =>
                                 setEditData((prev) => ({
                                   ...prev,
@@ -236,7 +236,7 @@ export const YouTubeNode = memo(
                                       : "public",
                                 }))
                               }
-                              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none  ${
+                              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
                                 editData.status === "private"
                                   ? "bg-primary"
                                   : "bg-muted"
@@ -250,14 +250,14 @@ export const YouTubeNode = memo(
                                 }`}
                               />
                             </button>
-                            <span className="text-xs text-muted-foreground">
+                            <span className='text-muted-foreground text-xs'>
                               Private
                             </span>
                           </div>
                         </div>
-                        <div className="flex justify-end space-x-2">
+                        <div className='flex justify-end space-x-2'>
                           <Button
-                            variant="outline"
+                            variant='outline'
                             onClick={() => setIsEditOpen(false)}
                           >
                             Cancel
@@ -270,70 +270,73 @@ export const YouTubeNode = memo(
                   {editData.url && (
                     <button
                       onClick={handleVideoClick}
-                      className="p-1 hover:bg-muted rounded-md transition-colors"
+                      className='hover:bg-muted rounded-md p-1 transition-colors'
                     >
-                      <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                      <ExternalLink className='text-muted-foreground h-4 w-4' />
                     </button>
                   )}
                 </div>
               </div>
 
               {editData.url && (
-                <div className="mt-3">
-                  <YouTubeEmbed url={editData.url} width="100%" />
+                <div className='mt-3'>
+                  <YouTubeEmbed url={editData.url} width='100%' />
                 </div>
               )}
 
-              <div className="mt-3">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-medium text-foreground line-clamp-2 leading-relaxed">
+              <div className='mt-3'>
+                <div className='mb-2 flex items-center justify-between'>
+                  <p className='text-foreground line-clamp-2 text-sm leading-relaxed font-medium'>
                     {displayTitle}
                   </p>
-                  <div className="flex items-center space-x-1 ml-2">
+                  <div className='ml-2 flex items-center space-x-1'>
                     {editData.status === "private" ? (
-                      <Lock className="w-3 h-3 text-red-500" />
+                      <Lock className='h-3 w-3 text-red-500' />
                     ) : (
-                      <Unlock className="w-3 h-3 text-green-500" />
+                      <Unlock className='h-3 w-3 text-green-500' />
                     )}
-                    <span className="text-xs text-muted-foreground">
+                    <span className='text-muted-foreground text-xs'>
                       {editData.status}
                     </span>
                   </div>
                 </div>
-                <p className="text-xs text-muted-foreground mt-1 truncate">
+                <p className='text-muted-foreground mt-1 truncate text-xs'>
                   {videoId ? `Video ID: ${videoId}` : "YouTube Content"}
                 </p>
 
                 {analyzed && analysis && (
-                  <div className="mt-4 space-y-3 pt-3 border-t border-border/50">
+                  <div className='border-border/50 mt-4 space-y-3 border-t pt-3'>
                     {analysis.summary && (
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
-                          <MessageSquare className="w-3 h-3" />
+                      <div className='space-y-1'>
+                        <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
+                          <MessageSquare className='h-3 w-3' />
                           AI Summary
                         </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed italic bg-muted/30 p-2 rounded-lg border border-border/30">
+                        <p className='text-muted-foreground bg-muted/30 border-border/30 rounded-lg border p-2 text-xs leading-relaxed italic'>
                           "{analysis.summary}"
                         </p>
                       </div>
                     )}
-                    
+
                     {analysis.transcription && (
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
-                          <Captions className="w-3 h-3" />
+                      <div className='space-y-1'>
+                        <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
+                          <Captions className='h-3 w-3' />
                           Transcription
                         </div>
-                        <p className="text-[11px] text-muted-foreground line-clamp-4 leading-relaxed bg-black/5 dark:bg-white/5 p-2 rounded-md font-mono">
+                        <p className='text-muted-foreground line-clamp-4 rounded-md bg-black/5 p-2 font-mono text-[11px] leading-relaxed dark:bg-white/5'>
                           {analysis.transcription}
                         </p>
                       </div>
                     )}
 
                     {analysis.tags && analysis.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-1">
+                      <div className='mt-1 flex flex-wrap gap-1'>
                         {analysis.tags.slice(0, 5).map((tag, i) => (
-                          <span key={i} className="px-1.5 py-0.5 rounded bg-muted text-[9px] text-muted-foreground border border-border/50">
+                          <span
+                            key={i}
+                            className='bg-muted text-muted-foreground border-border/50 rounded border px-1.5 py-0.5 text-[9px]'
+                          >
                             #{tag}
                           </span>
                         ))}
@@ -346,22 +349,22 @@ export const YouTubeNode = memo(
           </Card>
 
           <Handle
-            type="source"
+            type='source'
             position={Position.Right}
-            className="w-3 h-3 bg-green-500 border-2 border-white"
+            className='h-3 w-3 border-2 border-white bg-green-500'
             isConnectable={isConnectable}
           />
 
           {/* Delete Button - Only show when selected */}
           {selected && data.onRemoveNode && data.nodeId && (
             <Button
-              variant="ghost"
-              size="sm"
+              variant='ghost'
+              size='sm'
               onClick={() => data.onRemoveNode!(data.nodeId!)}
-              className="absolute -top-2 -right-2 w-6 h-6 p-0 rounded-full bg-destructive hover:bg-destructive/90 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-              title="Delete Node"
+              className='bg-destructive hover:bg-destructive/90 absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 text-white shadow-lg transition-all duration-200 hover:shadow-xl'
+              title='Delete Node'
             >
-              <Trash2 className="w-3 h-3" />
+              <Trash2 className='h-3 w-3' />
             </Button>
           )}
         </div>

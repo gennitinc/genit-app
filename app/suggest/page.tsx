@@ -1,12 +1,10 @@
 "use client";
 
 // import type { Metadata } from "next";
-import { useState, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
-import { SnackbarProvider, enqueueSnackbar, closeSnackbar } from "notistack";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -16,8 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -26,9 +22,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AlertCircle, CheckCircle2, Upload } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
+import axios from "axios";
+import { AlertCircle, CheckCircle2, Upload } from "lucide-react";
+import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 // export const metadata: Metadata = {
 //   title: "Support & Suggestions – Gennit AI",
@@ -167,19 +167,19 @@ function Page() {
             <button onClick={() => closeSnackbar(key)}>
               {" "}
               <svg
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-                className=""
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+                width='1em'
+                height='1em'
+                viewBox='0 0 24 24'
+                className=''
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
               >
                 <path
-                  d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                  stroke="#fff"
+                  d='M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9'
+                  stroke='#fff'
                   strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
                 />
               </svg>
             </button>
@@ -208,19 +208,19 @@ function Page() {
           <button onClick={() => closeSnackbar(key)}>
             {" "}
             <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-              className=""
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+              width='1em'
+              height='1em'
+              viewBox='0 0 24 24'
+              className=''
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
             >
               <path
-                d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                stroke="#fff"
+                d='M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9'
+                stroke='#fff'
                 strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                strokeLinecap='round'
+                strokeLinejoin='round'
               />
             </svg>
           </button>
@@ -268,19 +268,19 @@ function Page() {
             <button onClick={() => closeSnackbar(key)}>
               {" "}
               <svg
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-                className=""
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+                width='1em'
+                height='1em'
+                viewBox='0 0 24 24'
+                className=''
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
               >
                 <path
-                  d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                  stroke="#fff"
+                  d='M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9'
+                  stroke='#fff'
                   strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
                 />
               </svg>
             </button>
@@ -309,19 +309,19 @@ function Page() {
           <button onClick={() => closeSnackbar(key)}>
             {" "}
             <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-              className=""
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+              width='1em'
+              height='1em'
+              viewBox='0 0 24 24'
+              className=''
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
             >
               <path
-                d="M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9"
-                stroke="#fff"
+                d='M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9'
+                stroke='#fff'
                 strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                strokeLinecap='round'
+                strokeLinejoin='round'
               />
             </svg>
           </button>
@@ -334,15 +334,15 @@ function Page() {
   };
 
   return (
-    <div className="bg-white dark:bg-black h-full">
+    <div className='h-full bg-white dark:bg-black'>
       <SnackbarProvider
         autoHideDuration={3000}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       />
-      <div className="sticky top-0 z-40">
+      <div className='sticky top-0 z-40'>
         <LandingNavbar />
       </div>
-      <div className="hidden lg:block">
+      <div className='hidden lg:block'>
         {/* <h1 className="text-3xl font-semibold text-center mx-auto">
           Powerful Features
         </h1>
@@ -350,125 +350,125 @@ function Page() {
           Everything you need to manage, track, and grow your finances, securely
           and efficiently.
         </p> */}
-        <div className="flex flex-wrap items-center justify-center gap-10 mt-16">
-          <div className="max-w-80 hover:-translate-y-0.5 transition duration-300">
+        <div className='mt-16 flex flex-wrap items-center justify-center gap-10'>
+          <div className='max-w-80 transition duration-300 hover:-translate-y-0.5'>
             <img
-              className="rounded-xl"
-              src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/image-1.png"
-              alt=""
+              className='rounded-xl'
+              src='https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/image-1.png'
+              alt=''
             />
-            <h3 className="text-base font-semibold text-neutral-300 mt-4">
+            <h3 className='mt-4 text-base font-semibold text-neutral-300'>
               Feedback analyser
             </h3>
-            <p className="text-sm text-neutral-400 mt-1">
+            <p className='mt-1 text-sm text-neutral-400'>
               Get instant insights into your finances with live dashboards.
             </p>
           </div>
-          <div className="max-w-80 hover:-translate-y-0.5 transition duration-300">
+          <div className='max-w-80 transition duration-300 hover:-translate-y-0.5'>
             <img
-              className="rounded-xl"
-              src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/image-2.png"
-              alt=""
+              className='rounded-xl'
+              src='https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/image-2.png'
+              alt=''
             />
-            <h3 className="text-base font-semibold text-neutral-300 mt-4">
+            <h3 className='mt-4 text-base font-semibold text-neutral-300'>
               User management
             </h3>
-            <p className="text-sm text-neutral-400 mt-1">
+            <p className='mt-1 text-sm text-neutral-400'>
               Get instant insights into your finances with live dashboards.
             </p>
           </div>
-          <div className="max-w-80 hover:-translate-y-0.5 transition duration-300">
+          <div className='max-w-80 transition duration-300 hover:-translate-y-0.5'>
             <img
-              className="rounded-xl"
-              src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/image-3.png"
-              alt=""
+              className='rounded-xl'
+              src='https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/image-3.png'
+              alt=''
             />
-            <h3 className="text-base font-semibold text-neutral-300 mt-4">
+            <h3 className='mt-4 text-base font-semibold text-neutral-300'>
               Better invoicing
             </h3>
-            <p className="text-sm text-neutral-400 mt-1">
+            <p className='mt-1 text-sm text-neutral-400'>
               Get instant insights into your finances with live dashboards.
             </p>
           </div>
         </div>
       </div>
 
-      <section className="flex flex-col md:flex-row items-center justify-center gap-10 max-md:px-4 mt-10 mb-20">
-        <div className="text-sm text-neutral-400 lg:max-w-[60%]">
-          <div className="flex items-center justify-center">
+      <section className='mt-10 mb-20 flex flex-col items-center justify-center gap-10 max-md:px-4 md:flex-row'>
+        <div className='text-sm text-neutral-400 lg:max-w-[60%]'>
+          <div className='flex items-center justify-center'>
             <Tabs
-              defaultValue="support"
-              className="w-full lg:max-w-5xl lg:px-16 flex flex-col items-center justify-center"
+              defaultValue='support'
+              className='flex w-full flex-col items-center justify-center lg:max-w-5xl lg:px-16'
             >
-              <div className="flex my-4 mt-2 sticky top-16 lg:top-14 py-2 z-10 bg-BackgroundDark dark:bg-BackgroundDark w-full items-center justify-center">
-                <TabsList className="bg-card p-1 mt-1 rounded-md bg-BackgroundDark dark:bg-BackgroundDark dark:border-neutral-900 w-fit sm:w-start sm:max-w-screen-lg lg:overscroll-none overflow-x-auto overflow-y-hidden flex gap-2 justify-start border border-neutral-900">
+              <div className='bg-BackgroundDark dark:bg-BackgroundDark sticky top-16 z-10 my-4 mt-2 flex w-full items-center justify-center py-2 lg:top-14'>
+                <TabsList className='bg-card bg-BackgroundDark dark:bg-BackgroundDark sm:w-start mt-1 flex w-fit justify-start gap-2 overflow-x-auto overflow-y-hidden rounded-md border border-neutral-900 p-1 sm:max-w-screen-lg lg:overscroll-none dark:border-neutral-900'>
                   <TabsTrigger
-                    value="support"
-                    className="data-[state=active]:bg-Primary data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 dark:data-[state=active]:bg-Primary px-4 py-2 text-TextDark1 dark:text-TextDark1 w-fit"
+                    value='support'
+                    className='data-[state=active]:bg-Primary data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 dark:data-[state=active]:bg-Primary text-TextDark1 dark:text-TextDark1 w-fit px-4 py-2'
                   >
                     Support
                   </TabsTrigger>
                   <TabsTrigger
-                    value="suggestion"
-                    className="data-[state=active]:bg-Primary data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 dark:data-[state=active]:bg-Primary px-4 py-2 text-TextDark1 dark:text-TextDark1 w-fit"
+                    value='suggestion'
+                    className='data-[state=active]:bg-Primary data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 dark:data-[state=active]:bg-Primary text-TextDark1 dark:text-TextDark1 w-fit px-4 py-2'
                   >
                     Suggestion
                   </TabsTrigger>
                 </TabsList>
               </div>
-              <TabsContent value="support">
-                <Card className="bg-BackgroundDark dark:bg-BackgroundDark border dark:border-neutral-900 border-neutral-900 w-full max-w-2xl">
+              <TabsContent value='support'>
+                <Card className='bg-BackgroundDark dark:bg-BackgroundDark w-full max-w-2xl border border-neutral-900 dark:border-neutral-900'>
                   <CardHeader>
                     {/* <CardTitle>Submit a Support Ticket</CardTitle> */}
-                    <CardDescription className="text-neutral-400">
+                    <CardDescription className='text-neutral-400'>
                       Need help? Submit a support ticket and we{`'`}ll get back
                       to you as soon as possible.
                     </CardDescription>
                   </CardHeader>
                   <form
                     onSubmit={onSupportSubmit}
-                    encType="multipart/form-data"
+                    encType='multipart/form-data'
                   >
-                    <CardContent className="space-y-4">
-                      <div className="space-y-2 w-full">
+                    <CardContent className='space-y-4'>
+                      <div className='w-full space-y-2'>
                         <Label
-                          className="text-neutral-400"
-                          htmlFor="support-name"
+                          className='text-neutral-400'
+                          htmlFor='support-name'
                         >
                           Name
                         </Label>
                         <Input
-                          className="bg-BackgroundDark2 dark:bg-BackgroundDark2 border text-TextDark2 dark:text-TextDark2 dark:border-neutral-900 border-neutral-900 w-full"
-                          id="support-name"
-                          name="name"
-                          placeholder="Your name"
+                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
+                          id='support-name'
+                          name='name'
+                          placeholder='Your name'
                           value={supportName}
                           onChange={handleSupportChange}
                           required
                         />
                       </div>
-                      <div className="space-y-2 w-full">
+                      <div className='w-full space-y-2'>
                         <Label
-                          className="text-neutral-400"
-                          htmlFor="support-email"
+                          className='text-neutral-400'
+                          htmlFor='support-email'
                         >
                           Email
                         </Label>
                         <Input
-                          className="bg-BackgroundDark2 dark:bg-BackgroundDark2 border text-TextDark2 dark:text-TextDark2 dark:border-neutral-900 border-neutral-900 w-full"
-                          id="support-email"
-                          name="email"
-                          type="email"
-                          placeholder="Your email"
+                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
+                          id='support-email'
+                          name='email'
+                          type='email'
+                          placeholder='Your email'
                           value={supportEmail}
                           onChange={handleSupportChange}
                           required
                         />
                       </div>
-                      <div className="space-y-2 w-full">
+                      <div className='w-full space-y-2'>
                         <Label
-                          className="text-neutral-400"
-                          htmlFor="support-type"
+                          className='text-neutral-400'
+                          htmlFor='support-type'
                         >
                           Ticket Type
                         </Label>
@@ -477,86 +477,86 @@ function Page() {
                           value={supportTicketType}
                         >
                           <SelectTrigger
-                            id="support-type"
-                            className="bg-BackgroundDark2 dark:bg-BackgroundDark2 border text-TextDark2 dark:text-TextDark2 dark:border-neutral-900 border-neutral-900 w-full"
+                            id='support-type'
+                            className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
                           >
-                            <SelectValue placeholder="Select ticket type" />
+                            <SelectValue placeholder='Select ticket type' />
                           </SelectTrigger>
-                          <SelectContent className="bg-BackgroundDark2 dark:bg-BackgroundDark2 border text-TextDark2 dark:text-TextDark2 dark:border-neutral-900 border-neutral-900">
-                            <SelectItem value="technical">
+                          <SelectContent className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 border border-neutral-900 dark:border-neutral-900'>
+                            <SelectItem value='technical'>
                               Technical Issue
                             </SelectItem>
-                            <SelectItem value="billing">
+                            <SelectItem value='billing'>
                               Billing Question
                             </SelectItem>
-                            <SelectItem value="feature">
+                            <SelectItem value='feature'>
                               Feature Request
                             </SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
+                            <SelectItem value='other'>Other</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-2 w-full">
+                      <div className='w-full space-y-2'>
                         <Label
-                          className="text-neutral-400"
-                          htmlFor="support-subject"
+                          className='text-neutral-400'
+                          htmlFor='support-subject'
                         >
                           Subject
                         </Label>
                         <Input
-                          className="bg-BackgroundDark2 dark:bg-BackgroundDark2 border text-TextDark2 dark:text-TextDark2 dark:border-neutral-900 border-neutral-900 w-full"
-                          id="support-subject"
-                          name="subject"
-                          placeholder="Brief description of the issue"
+                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
+                          id='support-subject'
+                          name='subject'
+                          placeholder='Brief description of the issue'
                           value={supportSubject}
                           onChange={handleSupportChange}
                           required
                         />
                       </div>
-                      <div className="space-y-2 w-full">
+                      <div className='w-full space-y-2'>
                         <Label
-                          className="text-neutral-400"
-                          htmlFor="support-description"
+                          className='text-neutral-400'
+                          htmlFor='support-description'
                         >
                           Description
                         </Label>
                         <Textarea
-                          id="support-description"
-                          name="description"
-                          placeholder="Please provide details about your issue"
+                          id='support-description'
+                          name='description'
+                          placeholder='Please provide details about your issue'
                           value={supportDescription}
-                          className="bg-BackgroundDark2 dark:bg-BackgroundDark2 border text-TextDark2 dark:text-TextDark2 dark:border-neutral-900 border-neutral-900 w-full"
+                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
                           onChange={handleSupportChange}
                           required
                         />
                       </div>
-                      <div className="space-y-2 w-full">
+                      <div className='w-full space-y-2'>
                         <Label
-                          className="text-neutral-400"
-                          htmlFor="support-file"
+                          className='text-neutral-400'
+                          htmlFor='support-file'
                         >
                           Attach File (optional)
                         </Label>
-                        <div className="flex items-center space-x-2 w-full">
+                        <div className='flex w-full items-center space-x-2'>
                           <Input
-                            id="support-file"
-                            name="support-file"
-                            type="file"
+                            id='support-file'
+                            name='support-file'
+                            type='file'
                             onChange={handleSupportFileChange}
-                            className="hidden"
+                            className='hidden'
                           />
                           <Button
-                            type="button"
-                            variant="outline"
+                            type='button'
+                            variant='outline'
                             onClick={() =>
                               document.getElementById("support-file")?.click()
                             }
-                            className="flex-shrink-0"
+                            className='flex-shrink-0'
                           >
-                            <Upload className="w-4 h-4 mr-2" />
+                            <Upload className='mr-2 h-4 w-4' />
                             Choose File
                           </Button>
-                          <span className="text-sm text-gray-500 flex-1">
+                          <span className='flex-1 text-sm text-gray-500'>
                             {supportFile ? supportFile.name : "No file chosen"}
                           </span>
                         </div>
@@ -564,8 +564,8 @@ function Page() {
                     </CardContent>
                     <CardFooter>
                       <Button
-                        type="submit"
-                        className="w-full bg-BackgroundLight2 text-black dark:bg-BackgroundLight2 dark:text-black hover:bg-BackgroundLight2 hover:dark:bg-BackgroundLight2 hover:text-black dark:hover:text-black"
+                        type='submit'
+                        className='bg-BackgroundLight2 dark:bg-BackgroundLight2 hover:bg-BackgroundLight2 hover:dark:bg-BackgroundLight2 w-full text-black hover:text-black dark:text-black dark:hover:text-black'
                         disabled={isSubmitting}
                       >
                         {isSubmitting
@@ -576,81 +576,81 @@ function Page() {
                   </form>
                 </Card>
               </TabsContent>
-              <TabsContent value="suggestion">
-                <Card className="bg-BackgroundDark dark:bg-BackgroundDark border dark:border-neutral-900 border-neutral-900 w-full max-w-2xl">
+              <TabsContent value='suggestion'>
+                <Card className='bg-BackgroundDark dark:bg-BackgroundDark w-full max-w-2xl border border-neutral-900 dark:border-neutral-900'>
                   <CardHeader>
                     {/* <CardTitle>Submit a Suggestion</CardTitle> */}
-                    <CardDescription className="text-neutral-400">
+                    <CardDescription className='text-neutral-400'>
                       Have an idea to improve our service? We{`'`}d love to hear
                       it!
                     </CardDescription>
                   </CardHeader>
                   <form onSubmit={onSuggestionSubmit}>
-                    <CardContent className="space-y-4">
-                      <div className="space-y-2 w-full">
+                    <CardContent className='space-y-4'>
+                      <div className='w-full space-y-2'>
                         <Label
-                          className="text-neutral-400"
-                          htmlFor="suggestion-name"
+                          className='text-neutral-400'
+                          htmlFor='suggestion-name'
                         >
                           Name
                         </Label>
                         <Input
-                          className="bg-BackgroundDark2 dark:bg-BackgroundDark2 border text-TextDark2 dark:text-TextDark2 dark:border-neutral-900 border-neutral-900 w-full"
-                          id="suggestion-name"
-                          name="name"
-                          placeholder="Your name"
+                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
+                          id='suggestion-name'
+                          name='name'
+                          placeholder='Your name'
                           value={suggestionName}
                           onChange={handleSuggestionChange}
                           required
                         />
                       </div>
-                      <div className="space-y-2 w-full">
+                      <div className='w-full space-y-2'>
                         <Label
-                          className="text-neutral-400"
-                          htmlFor="suggestion-email"
+                          className='text-neutral-400'
+                          htmlFor='suggestion-email'
                         >
                           Email
                         </Label>
                         <Input
-                          className="bg-BackgroundDark2 dark:bg-BackgroundDark2 border text-TextDark2 dark:text-TextDark2 dark:border-neutral-900 border-neutral-900 w-full"
-                          id="suggestion-email"
-                          name="email"
-                          type="email"
-                          placeholder="Your email"
+                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
+                          id='suggestion-email'
+                          name='email'
+                          type='email'
+                          placeholder='Your email'
                           value={suggestionEmail}
                           onChange={handleSuggestionChange}
                           required
                         />
                       </div>
-                      <div className="space-y-2 w-full">
+                      <div className='w-full space-y-2'>
                         <Label
-                          className="text-neutral-400"
-                          htmlFor="suggestion-subject"
+                          className='text-neutral-400'
+                          htmlFor='suggestion-subject'
                         >
                           Suggestion Title
                         </Label>
                         <Input
-                          className="bg-BackgroundDark2 dark:bg-BackgroundDark2 border text-TextDark2 dark:text-TextDark2 dark:border-neutral-900 border-neutral-900 w-full"
-                          id="suggestion-subject"
-                          name="subject"
-                          placeholder="Brief title for your suggestion"
+                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
+                          id='suggestion-subject'
+                          name='subject'
+                          placeholder='Brief title for your suggestion'
                           value={suggestionSubject}
                           onChange={handleSuggestionChange}
                           required
                         />
                       </div>
-                      <div className="space-y-2 w-full">
+                      <div className='w-full space-y-2'>
                         <Label
-                          className="text-neutral-400"
-                          htmlFor="suggestion-description"
+                          className='text-neutral-400'
+                          htmlFor='suggestion-description'
                         >
                           Description
                         </Label>
                         <Textarea
-                          id="suggestion-description"
-                          name="description"
-                          className="bg-BackgroundDark2 dark:bg-BackgroundDark2 border text-TextDark2 dark:text-TextDark2 dark:border-neutral-900 border-neutral-900 resize-none w-full"
-                          placeholder="Please provide details about your suggestion"
+                          id='suggestion-description'
+                          name='description'
+                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full resize-none border border-neutral-900 dark:border-neutral-900'
+                          placeholder='Please provide details about your suggestion'
                           value={suggestionDescription}
                           onChange={handleSuggestionChange}
                           required
@@ -659,8 +659,8 @@ function Page() {
                     </CardContent>
                     <CardFooter>
                       <Button
-                        type="submit"
-                        className="w-full bg-BackgroundLight2 text-black dark:bg-BackgroundLight2 dark:text-black hover:bg-BackgroundLight2 hover:dark:bg-BackgroundLight2 hover:text-black dark:hover:text-black"
+                        type='submit'
+                        className='bg-BackgroundLight2 dark:bg-BackgroundLight2 hover:bg-BackgroundLight2 hover:dark:bg-BackgroundLight2 w-full text-black hover:text-black dark:text-black dark:hover:text-black'
                         disabled={isSubmitting}
                       >
                         {isSubmitting ? "Submitting..." : "Submit Suggestion"}
@@ -680,4 +680,3 @@ function Page() {
 }
 
 export default Page;
-

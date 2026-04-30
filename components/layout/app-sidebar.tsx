@@ -1,24 +1,9 @@
 "use client";
 
-import type * as React from "react";
-import {
-  History,
-  Layout,
-  Users,
-  Sparkles,
-  Settings,
-  HelpCircle,
-  BookOpen,
-  Crown,
-  TrendingUp,
-  Plus,
-  Bolt,
-} from "lucide-react";
-import { useTheme } from "next-themes";
-import { useMediaQuery } from "@/hooks/use-media-query";
-
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
+import { Logo } from "@/components/logo";
+import { Button } from "@/components/ui/button";
 // import { TeamSwitcher } from "./team-switcher" // Removed import
 import {
   Sidebar,
@@ -28,15 +13,30 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/logo"; // Updated import
+// Updated import
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { useUrlState } from "@/hooks/use-url-state";
-import Link from "next/link";
-import { usePathname, useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { trackEvent } from "@/lib/mixpanelClient";
+import { cn } from "@/lib/utils";
+import {
+  Bolt,
+  BookOpen,
+  Crown,
+  HelpCircle,
+  History,
+  Layout,
+  Plus,
+  Settings,
+  Sparkles,
+  TrendingUp,
+  Users,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import type * as React from "react";
+import { useEffect } from "react";
 
 export function AppSidebar({
   className,
@@ -52,7 +52,6 @@ export function AppSidebar({
   const params = useParams();
 
   const isChatIdPage = !!params.id && pathname.startsWith("/chat");
- const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   useEffect(() => {
     // Auto-collapse on desktop and tablets if on the chat ID page
     // Mobile users (Sheet version) should have it handled by the Sidebar component
@@ -70,33 +69,33 @@ export function AppSidebar({
   const usedCreditsDisplay = totalCredits > 0 ? creditsUsed : 0;
   const currentCredits = creditsRemaining;
 
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <Sidebar
-      collapsible="icon"
+      collapsible='icon'
       className={cn(
-        "h-full border-border transition-colors duration-300 bg-white dark:bg-black [&_[data-sidebar=sidebar]]:bg-white dark:[&_[data-sidebar=sidebar]]:bg-black",
-        className,
+        "border-border h-full bg-white transition-colors duration-300 dark:bg-black [&_[data-sidebar=sidebar]]:bg-white dark:[&_[data-sidebar=sidebar]]:bg-black",
+        className
       )}
       {...props}
     >
-      <SidebarHeader className="flex-row justify-start">
+      <SidebarHeader className='flex-row justify-start'>
         <Link
-          href="/"
+          href='/'
           className={cn(
             "flex items-center pb-2",
-            state === "collapsed" && !isMobile && "justify-start",
+            state === "collapsed" && !isMobile && "justify-start"
           )}
         >
           {/* <Logo className="w-8 h-8 flex-shrink-0" /> */}
-          <Logo className="w-12 h-12 flex-shrink-0" />
+          <Logo className='h-12 w-12 flex-shrink-0' />
           <span
             className={cn(
-              "font-semibold text-lg transition-opacity duration-200",
+              "text-lg font-semibold transition-opacity duration-200",
               (state === "collapsed" && !isMobile) || isTablet
                 ? "hidden"
-                : "block",
+                : "block"
             )}
           >
             Gennit
@@ -108,18 +107,18 @@ export function AppSidebar({
       </SidebarContent>
 
       {state !== "collapsed" || isMobile ? (
-        <div className="mx-2 mb-4 border-t border-border pt-2">
-          <div className="relative bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl p-3 text-white overflow-hidden shadow-lg cursor-pointer hover:from-cyan-600/90 hover:to-blue-600/90 transition-all">
+        <div className='border-border mx-2 mb-4 border-t pt-2'>
+          <div className='relative cursor-pointer overflow-hidden rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 p-3 text-white shadow-lg transition-all hover:from-cyan-600/90 hover:to-blue-600/90'>
             {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-white rounded-full -translate-y-12 translate-x-12" />
-              <div className="absolute bottom-0 left-0 w-16 h-16 bg-white rounded-full translate-y-8 -translate-x-8" />
+            <div className='absolute inset-0 opacity-10'>
+              <div className='absolute top-0 right-0 h-24 w-24 translate-x-12 -translate-y-12 rounded-full bg-white' />
+              <div className='absolute bottom-0 left-0 h-16 w-16 -translate-x-8 translate-y-8 rounded-full bg-white' />
             </div>
 
             {/* Subtle Grid Pattern */}
-            <div className="absolute inset-0 opacity-5">
+            <div className='absolute inset-0 opacity-5'>
               <div
-                className="w-full h-full"
+                className='h-full w-full'
                 style={{
                   backgroundImage: `
                 linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
@@ -131,73 +130,77 @@ export function AppSidebar({
             </div>
 
             {/* Content */}
-            <div className="relative z-10">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm border border-white/10">
-                    <Crown className="w-3 h-3 text-white" strokeWidth={1.5} />
+            <div className='relative z-10'>
+              <div className='mb-3 flex items-center justify-between'>
+                <div className='flex items-center gap-2'>
+                  <div className='flex h-6 w-6 items-center justify-center rounded-lg border border-white/10 bg-white/20 backdrop-blur-sm'>
+                    <Crown className='h-3 w-3 text-white' strokeWidth={1.5} />
                   </div>
                   <div>
-                    <div className="text-xs font-semibold text-white">
+                    <div className='text-xs font-semibold text-white'>
                       Pro Plan
                     </div>
-                    <div className="text-xs text-white/70">Design Credits</div>
+                    <div className='text-xs text-white/70'>Design Credits</div>
                   </div>
                 </div>
               </div>
 
               {/* Usage Stats now */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-white/80">This month</span>
-                  <span className="text-xs font-semibold text-white">
+              <div className='space-y-2'>
+                <div className='flex items-center justify-between'>
+                  <span className='text-xs text-white/80'>This month</span>
+                  <span className='text-xs font-semibold text-white'>
                     {usedCreditsDisplay.toLocaleString()} /{" "}
                     {totalCredits.toLocaleString()}
                   </span>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="relative">
-                  <div className="w-full bg-white/20 rounded-full h-1.5 backdrop-blur-sm border border-white/10">
+                <div className='relative'>
+                  <div className='h-1.5 w-full rounded-full border border-white/10 bg-white/20 backdrop-blur-sm'>
                     <div
-                      className="bg-gradient-to-r from-cyan-500 to-blue-500 h-1.5 rounded-full transition-all duration-500 relative overflow-hidden shadow-sm"
+                      className='relative h-1.5 overflow-hidden rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 shadow-sm transition-all duration-500'
                       style={{ width: `${creditPercentage}%` }}
                     ></div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-1 text-white/70">
-                    <TrendingUp className="w-3 h-3" strokeWidth={1.5} />
+                <div className='flex items-center justify-between text-xs'>
+                  <div className='flex items-center gap-1 text-white/70'>
+                    <TrendingUp className='h-3 w-3' strokeWidth={1.5} />
                     <span>{currentCredits.toLocaleString()} left</span>
                   </div>
-                  <div className="flex items-center gap-1 text-white/70">
-                    <Sparkles className="w-3 h-3" strokeWidth={1.5} />
+                  <div className='flex items-center gap-1 text-white/70'>
+                    <Sparkles className='h-3 w-3' strokeWidth={1.5} />
                     <span>{user?.userPlan || "Basic"}</span>
                   </div>
                 </div>
 
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => {
                     if (user?.userPlan === "Basic") {
-                      trackEvent(MIXPANEL_TOKEN, "upgrade_cta_clicked", {
+                      trackEvent("upgrade_cta_clicked", {
                         source: "sidebar_card",
                         destination: "/pricing",
                       });
                       router.push("/pricing");
                     } else {
-                      trackEvent(MIXPANEL_TOKEN, "buy_credits_cta_clicked", {
+                      trackEvent("buy_credits_cta_clicked", {
                         source: "sidebar_card",
                         destination: "/user/settings?tab=billing",
                       });
                       router.push("/user/settings?tab=billing");
                     }
                   }}
-                  className="group w-full inline-flex items-center justify-center gap-2 px-5 py-2 rounded-md cursor-pointer text-xs font-medium bg-black text-white border border-black hover:bg-neutral-800 hover:border-neutral-800 transition-all duration-200 ease-in-out dark:bg-white dark:text-black dark:border-white dark:hover:bg-neutral-200 dark:hover:border-neutral-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white mt-2"
+                  className='group mt-2 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black bg-black px-5 py-2 text-xs font-medium text-white transition-all duration-200 ease-in-out hover:border-neutral-800 hover:bg-neutral-800 focus:ring-2 focus:ring-black focus:ring-offset-2 focus:outline-none dark:border-white dark:bg-white dark:text-black dark:hover:border-neutral-200 dark:hover:bg-neutral-200 dark:focus:ring-white'
                 >
-                  <Bolt className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
-                  {user?.userPlan === "Basic" && user?.creditsRemaining && user?.creditsRemaining <= 20 ? "Upgrade Account" : "Get More Credits"}
+                  <Bolt className='h-4 w-4 transition-transform duration-200 group-hover:scale-110' />
+                  {user?.userPlan === "Basic" &&
+                  user?.creditsRemaining &&
+                  user?.creditsRemaining <= 20
+                    ? "Upgrade Account"
+                    : "Get More Credits"}
                 </button>
               </div>
             </div>
@@ -205,18 +208,18 @@ export function AppSidebar({
         </div>
       ) : (
         !isChatIdPage && (
-          <div className="flex justify-center mb-4 mt-2 w-full">
+          <div className='mt-2 mb-4 flex w-full justify-center'>
             <div
-              className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center shadow-lg hover:bg-cyan-500/90 transition-colors cursor-pointer"
+              className='flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg bg-cyan-500 shadow-lg transition-colors hover:bg-cyan-500/90'
               onClick={() => {
                 if (user?.userPlan === "Basic") {
-                  trackEvent(MIXPANEL_TOKEN, "upgrade_cta_clicked", {
+                  trackEvent("upgrade_cta_clicked", {
                     source: "sidebar_collapsed",
                     destination: "/pricing",
                   });
                   router.push("/pricing");
                 } else {
-                  trackEvent(MIXPANEL_TOKEN, "buy_credits_cta_clicked", {
+                  trackEvent("buy_credits_cta_clicked", {
                     source: "sidebar_collapsed",
                     destination: "/user/settings?tab=billing",
                   });
@@ -224,16 +227,16 @@ export function AppSidebar({
                 }
               }}
             >
-              <Crown className="w-4 h-4 text-white" strokeWidth={1.5} />
+              <Crown className='h-4 w-4 text-white' strokeWidth={1.5} />
             </div>
           </div>
         )
       )}
 
-      <SidebarFooter className="border-t border-border pt-4">
+      <SidebarFooter className='border-border border-t pt-4'>
         <NavUser user={user} />
       </SidebarFooter>
-      <SidebarRail className="border-border" />
+      <SidebarRail className='border-border' />
     </Sidebar>
   );
 }

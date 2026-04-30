@@ -31,13 +31,13 @@ import {
   type ChangeEventHandler,
   Children,
   type ComponentProps,
-  createContext,
   type FormEvent,
   type FormEventHandler,
   Fragment,
   type HTMLAttributes,
   type KeyboardEventHandler,
   type RefObject,
+  createContext,
   useCallback,
   useContext,
   useEffect,
@@ -91,25 +91,25 @@ export function PromptInputAttachment({
       {data.mediaType?.startsWith("image/") && data.url ? (
         <img
           alt={data.filename || "attachment"}
-          className="size-full rounded-md object-cover"
+          className='size-full rounded-md object-cover'
           height={56}
           src={data.url}
           width={56}
         />
       ) : (
-        <div className="flex size-full items-center justify-center text-muted-foreground">
-          <PaperclipIcon className="size-4" />
+        <div className='text-muted-foreground flex size-full items-center justify-center'>
+          <PaperclipIcon className='size-4' />
         </div>
       )}
       <Button
-        aria-label="Remove attachment"
-        className="-right-1.5 -top-1.5 absolute h-6 w-6 rounded-full opacity-0 group-hover:opacity-100"
+        aria-label='Remove attachment'
+        className='absolute -top-1.5 -right-1.5 h-6 w-6 rounded-full opacity-0 group-hover:opacity-100'
         onClick={() => attachments.remove(data.id)}
-        size="icon"
-        type="button"
-        variant="outline"
+        size='icon'
+        type='button'
+        variant='outline'
       >
-        <XIcon className="h-3 w-3" />
+        <XIcon className='h-3 w-3' />
       </Button>
     </div>
   );
@@ -146,7 +146,7 @@ export function PromptInputAttachments({
 
   return (
     <div
-      aria-live="polite"
+      aria-live='polite'
       className={cn(
         "overflow-hidden transition-[height] duration-200 ease-out",
         className
@@ -154,7 +154,7 @@ export function PromptInputAttachments({
       style={{ height: attachments.files.length ? height : 0 }}
       {...props}
     >
-      <div className="flex flex-wrap gap-2 p-3 pt-3" ref={contentRef}>
+      <div className='flex flex-wrap gap-2 p-3 pt-3' ref={contentRef}>
         {attachments.files.map((file) => (
           <Fragment key={file.id}>{children(file)}</Fragment>
         ))}
@@ -183,7 +183,7 @@ export const PromptInputActionAddAttachments = ({
         attachments.openFileDialog();
       }}
     >
-      <ImageIcon className="mr-2 size-4" /> {label}
+      <ImageIcon className='mr-2 size-4' /> {label}
     </DropdownMenuItem>
   );
 };
@@ -423,18 +423,18 @@ export const PromptInput = ({
 
   return (
     <AttachmentsContext.Provider value={ctx}>
-      <span aria-hidden="true" className="hidden" ref={anchorRef} />
+      <span aria-hidden='true' className='hidden' ref={anchorRef} />
       <input
         accept={accept}
-        className="hidden"
+        className='hidden'
         multiple={multiple}
         onChange={handleChange}
         ref={inputRef}
-        type="file"
+        type='file'
       />
       <form
         className={cn(
-          "w-full divide-y overflow-hidden rounded-xl border bg-background shadow-sm",
+          "bg-background w-full divide-y overflow-hidden rounded-xl border shadow-sm",
           className
         )}
         onSubmit={handleSubmit}
@@ -485,13 +485,13 @@ export const PromptInputTextarea = ({
   return (
     <Textarea
       className={cn(
-        "w-full resize-none rounded-none border-none p-3 shadow-none outline-none ring-0",
+        "w-full resize-none rounded-none border-none p-3 shadow-none ring-0 outline-none",
         "field-sizing-content bg-transparent dark:bg-transparent",
         "max-h-48 min-h-16",
         "focus-visible:ring-0",
         className
       )}
-      name="message"
+      name='message'
       onChange={(e) => {
         onChange?.(e);
       }}
@@ -550,7 +550,7 @@ export const PromptInputButton = ({
         className
       )}
       size={newSize}
-      type="button"
+      type='button'
       variant={variant}
       {...props}
     />
@@ -572,7 +572,7 @@ export const PromptInputActionMenuTrigger = ({
 }: PromptInputActionMenuTriggerProps) => (
   <DropdownMenuTrigger asChild>
     <PromptInputButton className={className} {...props}>
-      {children ?? <PlusIcon className="size-4" />}
+      {children ?? <PlusIcon className='size-4' />}
     </PromptInputButton>
   </DropdownMenuTrigger>
 );
@@ -584,7 +584,7 @@ export const PromptInputActionMenuContent = ({
   className,
   ...props
 }: PromptInputActionMenuContentProps) => (
-  <DropdownMenuContent align="start" className={cn(className)} {...props} />
+  <DropdownMenuContent align='start' className={cn(className)} {...props} />
 );
 
 export type PromptInputActionMenuItemProps = ComponentProps<
@@ -612,21 +612,21 @@ export const PromptInputSubmit = ({
   children,
   ...props
 }: PromptInputSubmitProps) => {
-  let Icon = <SendIcon className="size-4" />;
+  let Icon = <SendIcon className='size-4' />;
 
   if (status === "submitted") {
-    Icon = <Loader2Icon className="size-4 animate-spin" />;
+    Icon = <Loader2Icon className='size-4 animate-spin' />;
   } else if (status === "streaming") {
-    Icon = <SquareIcon className="size-4" />;
+    Icon = <SquareIcon className='size-4' />;
   } else if (status === "error") {
-    Icon = <XIcon className="size-4" />;
+    Icon = <XIcon className='size-4' />;
   }
 
   return (
     <Button
       className={cn("gap-1.5 rounded-lg", className)}
       size={size}
-      type="submit"
+      type='submit'
       variant={variant}
       {...props}
     >
@@ -651,7 +651,7 @@ export const PromptInputModelSelectTrigger = ({
 }: PromptInputModelSelectTriggerProps) => (
   <SelectTrigger
     className={cn(
-      "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
+      "text-muted-foreground border-none bg-transparent font-medium shadow-none transition-colors",
       'hover:bg-accent hover:text-foreground [&[aria-expanded="true"]]:bg-accent [&[aria-expanded="true"]]:text-foreground',
       className
     )}

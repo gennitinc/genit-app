@@ -1,7 +1,7 @@
-import PptxGenJS from "pptxgenjs";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import { PresentationProject, Slide } from "@/types/presentation-schema";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import PptxGenJS from "pptxgenjs";
 
 // Export to PowerPoint (PPTX)
 export async function exportToPPTX(

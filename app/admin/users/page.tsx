@@ -1,21 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { apiResponse } from "@/utils/apiResponse";
-import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, MoreHorizontal, UserCheck, UserMinus, Mail } from "lucide-react";
-import { motion } from "framer-motion";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +10,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { apiResponse } from "@/utils/apiResponse";
+import { format } from "date-fns";
+import { motion } from "framer-motion";
+import {
+  Filter,
+  Mail,
+  MoreHorizontal,
+  Search,
+  UserCheck,
+  UserMinus,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<any[]>([]);
@@ -47,114 +54,152 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
-  const filteredUsers = users.filter(user => 
-    user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = users.filter(
+    (user) =>
+      user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="p-8 max-w-7xl mx-auto pb-20">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div className='mx-auto max-w-7xl p-8 pb-20'>
+      <div className='mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center'>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
-          <p className="text-muted-foreground text-sm mt-1">
+          <h1 className='text-3xl font-bold tracking-tight'>User Management</h1>
+          <p className='text-muted-foreground mt-1 text-sm'>
             Manage your platform's user base and their permissions.
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Filter className="w-4 h-4" /> Filter
+        <div className='flex gap-2'>
+          <Button variant='outline' size='sm' className='gap-2'>
+            <Filter className='h-4 w-4' /> Filter
           </Button>
-          <Button size="sm" className="gap-2">
+          <Button size='sm' className='gap-2'>
             New User
           </Button>
         </div>
       </div>
 
-      <div className="bg-card rounded-3xl border border-border/50 overflow-hidden">
-        <div className="p-6 border-b border-border/50 bg-muted/20 flex items-center gap-4">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search by username or email..." 
-              className="pl-10 h-10 rounded-xl bg-background border-border/50"
+      <div className='bg-card border-border/50 overflow-hidden rounded-3xl border'>
+        <div className='border-border/50 bg-muted/20 flex items-center gap-4 border-b p-6'>
+          <div className='relative max-w-md flex-1'>
+            <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+            <Input
+              placeholder='Search by username or email...'
+              className='bg-background border-border/50 h-10 rounded-xl pl-10'
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <p className="text-xs text-muted-foreground ml-auto uppercase tracking-widest font-bold">
+          <p className='text-muted-foreground ml-auto text-xs font-bold tracking-widest uppercase'>
             {filteredUsers.length} total users
           </p>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className='overflow-x-auto'>
           <Table>
-            <TableHeader className="bg-muted/30">
+            <TableHeader className='bg-muted/30'>
               <TableRow>
-                <TableHead className="py-4 text-xs font-bold uppercase tracking-wider">User</TableHead>
-                <TableHead className="py-4 text-xs font-bold uppercase tracking-wider">Plan</TableHead>
-                <TableHead className="py-4 text-xs font-bold uppercase tracking-wider">Status</TableHead>
-                <TableHead className="py-4 text-xs font-bold uppercase tracking-wider">Join Date</TableHead>
-                <TableHead className="py-4 text-xs font-bold uppercase tracking-wider text-right">Actions</TableHead>
+                <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
+                  User
+                </TableHead>
+                <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
+                  Plan
+                </TableHead>
+                <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
+                  Status
+                </TableHead>
+                <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
+                  Join Date
+                </TableHead>
+                <TableHead className='py-4 text-right text-xs font-bold tracking-wider uppercase'>
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
-                  <TableRow key={i} className="animate-pulse">
-                    <TableCell><div className="h-10 bg-muted rounded-lg" /></TableCell>
-                    <TableCell><div className="h-6 bg-muted rounded-full w-20" /></TableCell>
-                    <TableCell><div className="h-6 bg-muted rounded-full w-16" /></TableCell>
-                    <TableCell><div className="h-6 bg-muted rounded-lg w-24" /></TableCell>
-                    <TableCell><div className="h-8 bg-muted rounded-lg w-8 ml-auto" /></TableCell>
+                  <TableRow key={i} className='animate-pulse'>
+                    <TableCell>
+                      <div className='bg-muted h-10 rounded-lg' />
+                    </TableCell>
+                    <TableCell>
+                      <div className='bg-muted h-6 w-20 rounded-full' />
+                    </TableCell>
+                    <TableCell>
+                      <div className='bg-muted h-6 w-16 rounded-full' />
+                    </TableCell>
+                    <TableCell>
+                      <div className='bg-muted h-6 w-24 rounded-lg' />
+                    </TableCell>
+                    <TableCell>
+                      <div className='bg-muted ml-auto h-8 w-8 rounded-lg' />
+                    </TableCell>
                   </TableRow>
                 ))
               ) : filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
-                  <TableRow key={user.id} className="hover:bg-muted/20 transition-colors group">
+                  <TableRow
+                    key={user.id}
+                    className='hover:bg-muted/20 group transition-colors'
+                  >
                     <TableCell>
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-xs shrink-0 uppercase">
+                      <div className='flex items-center gap-3'>
+                        <div className='bg-primary/10 text-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold uppercase'>
                           {user.username[0]}
                         </div>
-                        <div className="flex flex-col">
-                          <span className="font-semibold text-sm">{user.username}</span>
-                          <span className="text-xs text-muted-foreground truncate max-w-[200px]">{user.email}</span>
+                        <div className='flex flex-col'>
+                          <span className='text-sm font-semibold'>
+                            {user.username}
+                          </span>
+                          <span className='text-muted-foreground max-w-[200px] truncate text-xs'>
+                            {user.email}
+                          </span>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-tighter bg-background">
+                      <Badge
+                        variant='outline'
+                        className='bg-background px-2 py-0.5 text-[10px] font-bold tracking-tighter uppercase'
+                      >
                         {user.userPlan}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                        <span className="text-xs font-medium">Active</span>
+                      <div className='flex items-center gap-1.5'>
+                        <div className='h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' />
+                        <span className='text-xs font-medium'>Active</span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
+                    <TableCell className='text-muted-foreground text-sm'>
                       {format(new Date(user.createdAt), "MMM d, yyyy")}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className='text-right'>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg group-hover:bg-background">
-                            <MoreHorizontal className="w-4 h-4" />
+                          <Button
+                            variant='ghost'
+                            size='icon'
+                            className='group-hover:bg-background h-8 w-8 rounded-lg'
+                          >
+                            <MoreHorizontal className='h-4 w-4' />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48 rounded-xl border-border shadow-xl">
+                        <DropdownMenuContent
+                          align='end'
+                          className='border-border w-48 rounded-xl shadow-xl'
+                        >
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem className="gap-2">
-                            <UserCheck className="w-4 h-4" /> Edit Profile
+                          <DropdownMenuItem className='gap-2'>
+                            <UserCheck className='h-4 w-4' /> Edit Profile
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="gap-2 text-primary">
-                            <Mail className="w-4 h-4" /> Send Email
+                          <DropdownMenuItem className='text-primary gap-2'>
+                            <Mail className='h-4 w-4' /> Send Email
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem className="gap-2 text-destructive focus:text-destructive">
-                            <UserMinus className="w-4 h-4" /> Suspend Account
+                          <DropdownMenuItem className='text-destructive focus:text-destructive gap-2'>
+                            <UserMinus className='h-4 w-4' /> Suspend Account
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -163,8 +208,10 @@ export default function UsersPage() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={5} className="h-64 text-center">
-                    <p className="text-muted-foreground">No users found matching your search.</p>
+                  <TableCell colSpan={5} className='h-64 text-center'>
+                    <p className='text-muted-foreground'>
+                      No users found matching your search.
+                    </p>
                   </TableCell>
                 </TableRow>
               )}

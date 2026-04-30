@@ -1,46 +1,46 @@
 "use client";
 
-import type React from "react";
-import { useState, useEffect, useRef } from "react";
-import {
-  Check,
-  AlertTriangle,
-  Edit,
-  ChevronRight,
-  ChevronLeft,
-  Square,
-  Loader,
-  Circle,
-  RefreshCw,
-  Eye,
-  RotateCcw,
-  Download,
-  Image as ImageIcon,
-  Video,
-  File,
-  Play,
-  Sparkles,
-  Trash2,
-  Wand2,
-  Send,
-  LayoutGrid,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { VideoPlayerMessage } from "../video-player-message";
+import { DeleteConfirmation } from "./delete-confirmation";
 import { MessageActions } from "@/components/chat/messages";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import ShinyText from "@/components/ui/shiny-text";
-import { serverUrlSocket, apiResponse } from "@/utils/apiResponse";
-import { templateApi } from "@/utils/inspire-api";
-import { toast } from "@/hooks/use-toast";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
-import { DeleteConfirmation } from "./delete-confirmation";
-import { VideoPlayerMessage } from "../video-player-message";
+import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
+import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
+import { templateApi } from "@/utils/inspire-api";
+import {
+  AlertTriangle,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Circle,
+  Download,
+  Edit,
+  Eye,
+  File,
+  Image as ImageIcon,
+  LayoutGrid,
+  Loader,
+  Play,
+  RefreshCw,
+  RotateCcw,
+  Send,
+  Sparkles,
+  Square,
+  Trash2,
+  Video,
+  Wand2,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
 import { MaskEditor, toMask } from "react-mask-editor";
 import "react-mask-editor/dist/style.css";
-import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface GenerationItem {
   id: string;
@@ -89,7 +89,7 @@ interface VersioningMessageProps {
 // Helper function to generate animation prompts based on design type
 const getAnimationPrompt = (
   designType: string | undefined,
-  originalPrompt: string | undefined,
+  originalPrompt: string | undefined
 ): string => {
   const basePrompt = originalPrompt || "Animate this design";
 
@@ -117,7 +117,7 @@ const formatTimestamp = (timestamp: string): string => {
     const date = new Date(timestamp);
     const now = new Date();
     const diffInMinutes = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60),
+      (now.getTime() - date.getTime()) / (1000 * 60)
     );
 
     if (diffInMinutes < 1) {
@@ -195,7 +195,7 @@ export function VersioningMessage({
             itemId: itemToDelete.itemId,
           },
           withCredentials: true,
-        },
+        }
       );
 
       if (response.data?.success) {
@@ -207,7 +207,7 @@ export function VersioningMessage({
         // Adjust slide index if we deleted the current slide or the last one
         if (currentSlideIndex >= (generation.items?.length || 0) - 1) {
           setCurrentSlideIndex(
-            Math.max(0, (generation.items?.length || 0) - 2),
+            Math.max(0, (generation.items?.length || 0) - 2)
           );
         }
       } else {
@@ -230,7 +230,7 @@ export function VersioningMessage({
     if (generation.items.length > 0) {
       // 1. Check if there's an explicitly active item
       const activeIndex = generation.items.findIndex(
-        (item: any) => item.isActive,
+        (item: any) => item.isActive
       );
       if (activeIndex !== -1) {
         setCurrentSlideIndex(activeIndex);
@@ -243,7 +243,7 @@ export function VersioningMessage({
 
   // Internal state for collapse if not controlled externally
   const [internalCollapsed, setInternalCollapsed] = useState(
-    generation.isCollapsed ?? false,
+    generation.isCollapsed ?? false
   );
 
   const isCollapsed = generation.isCollapsed ?? internalCollapsed;
@@ -274,7 +274,7 @@ export function VersioningMessage({
             // Check if this URL is already published by querying templates
             const response = await apiResponse.get(
               `/templates?mediaUrl=${encodeURIComponent(mediaUrl)}&limit=1`,
-              { withCredentials: true },
+              { withCredentials: true }
             );
 
             if (
@@ -297,7 +297,7 @@ export function VersioningMessage({
           } catch (error) {
             console.error(
               `Error checking publish status for ${mediaUrl}:`,
-              error,
+              error
             );
             return { mediaUrl, published: false };
           }
@@ -334,15 +334,15 @@ export function VersioningMessage({
 
   const getStatusIcon = (status: GenerationItem["status"]) => {
     const iconMap = {
-      generated: <Check className="w-2.5 h-2.5 text-green-500" />,
-      edited: <Edit className="w-2.5 h-2.5 text-blue-500" />,
-      stopped: <Square className="w-2.5 h-2.5 text-orange-500" />,
-      error: <AlertTriangle className="w-2.5 h-2.5 text-red-500" />,
-      generating: <Loader className="w-2.5 h-2.5 text-blue-500 animate-spin" />,
+      generated: <Check className='h-2.5 w-2.5 text-green-500' />,
+      edited: <Edit className='h-2.5 w-2.5 text-blue-500' />,
+      stopped: <Square className='h-2.5 w-2.5 text-orange-500' />,
+      error: <AlertTriangle className='h-2.5 w-2.5 text-red-500' />,
+      generating: <Loader className='h-2.5 w-2.5 animate-spin text-blue-500' />,
     };
     return (
       iconMap[status] || (
-        <Circle className="w-2.5 h-2.5 text-muted-foreground" />
+        <Circle className='text-muted-foreground h-2.5 w-2.5' />
       )
     );
   };
@@ -403,7 +403,7 @@ export function VersioningMessage({
 
   const handlePublishToInspiration = async (
     e: React.MouseEvent,
-    item: GenerationItem,
+    item: GenerationItem
   ) => {
     e.stopPropagation();
 
@@ -557,7 +557,7 @@ export function VersioningMessage({
       } catch (uploadError) {
         console.error(
           "Failed to upload reference image, using original URL:",
-          uploadError,
+          uploadError
         );
         // Continue with original URL if upload fails
       }
@@ -629,7 +629,7 @@ export function VersioningMessage({
         formData,
         {
           withCredentials: true,
-        },
+        }
       );
 
       if (response.data?.success) {
@@ -668,7 +668,7 @@ export function VersioningMessage({
           generationGroupId: generation.id,
           itemId,
         },
-        { withCredentials: true },
+        { withCredentials: true }
       );
 
       if (response.data?.success) {
@@ -697,37 +697,37 @@ export function VersioningMessage({
   const renderGenerationContent = () => {
     if (generation.isLoading) {
       return (
-        <div className="flex items-center gap-2 sm:gap-3 px-1.5 py-2 rounded-md relative z-10">
-          <div className="flex-shrink-0">
-            <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-blue-500/20 flex items-center justify-center border-2 border-blue-500/50 shadow-sm relative z-20">
-              <Loader className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-blue-500 animate-spin" />
+        <div className='relative z-10 flex items-center gap-2 rounded-md px-1.5 py-2 sm:gap-3'>
+          <div className='flex-shrink-0'>
+            <div className='relative z-20 flex h-4 w-4 items-center justify-center rounded-full border-2 border-blue-500/50 bg-blue-500/20 shadow-sm sm:h-5 sm:w-5'>
+              <Loader className='h-2 w-2 animate-spin text-blue-500 sm:h-2.5 sm:w-2.5' />
             </div>
           </div>
-          <div className="flex-1 min-w-0">
+          <div className='min-w-0 flex-1'>
             <svg
-              className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
+              className='mr-3 -ml-1 h-4 w-4 animate-spin text-white'
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
             >
               <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
+                className='opacity-25'
+                cx='12'
+                cy='12'
+                r='10'
+                stroke='currentColor'
+                strokeWidth='4'
               ></circle>
               <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                className='opacity-75'
+                fill='currentColor'
+                d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
               ></path>
             </svg>
-            <p className="text-xs text-muted-foreground">Fetching files...</p>
+            <p className='text-muted-foreground text-xs'>Fetching files...</p>
           </div>
-          <div className="flex-shrink-0">
-            <Badge variant="secondary" className="text-xs">
+          <div className='flex-shrink-0'>
+            <Badge variant='secondary' className='text-xs'>
               loading
             </Badge>
           </div>
@@ -737,28 +737,28 @@ export function VersioningMessage({
 
     if (generation.hasError) {
       return (
-        <div className="flex items-center gap-2 sm:gap-3 px-1.5 py-2 rounded-md relative z-10">
-          <div className="flex-shrink-0">
-            <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-red-500/20 flex items-center justify-center border-2 border-red-500/50 shadow-sm relative z-20">
-              <AlertTriangle className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-red-500" />
+        <div className='relative z-10 flex items-center gap-2 rounded-md px-1.5 py-2 sm:gap-3'>
+          <div className='flex-shrink-0'>
+            <div className='relative z-20 flex h-4 w-4 items-center justify-center rounded-full border-2 border-red-500/50 bg-red-500/20 shadow-sm sm:h-5 sm:w-5'>
+              <AlertTriangle className='h-2 w-2 text-red-500 sm:h-2.5 sm:w-2.5' />
             </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">
+          <div className='min-w-0 flex-1'>
+            <p className='text-muted-foreground truncate text-xs font-medium sm:text-sm'>
               Failed to load files
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className='text-muted-foreground text-xs'>
               Something went wrong while fetching the data
             </p>
           </div>
-          <div className="flex-shrink-0">
+          <div className='flex-shrink-0'>
             <Button
-              variant="ghost"
-              size="sm"
+              variant='ghost'
+              size='sm'
               onClick={handleRetry}
-              className="h-6 px-2 text-xs text-red-500 hover:text-red-700"
+              className='h-6 px-2 text-xs text-red-500 hover:text-red-700'
             >
-              <RefreshCw className="w-3 h-3 mr-1" />
+              <RefreshCw className='mr-1 h-3 w-3' />
               Retry
             </Button>
           </div>
@@ -771,7 +771,7 @@ export function VersioningMessage({
     };
 
     const getMediaType = (
-      mimeType: string,
+      mimeType: string
     ): "image" | "video" | "file" | "remotion" => {
       if (mimeType?.startsWith("image/")) return "image";
       if (mimeType?.startsWith("video/")) return "video";
@@ -793,23 +793,23 @@ export function VersioningMessage({
       if (item.status === "generating") {
         return (
           <>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs sm:text-sm font-medium text-foreground truncate">
+            <div className='min-w-0 flex-1'>
+              <p className='text-foreground truncate text-xs font-medium sm:text-sm'>
                 <ShinyText
                   text={item.name || "Generating..."}
                   speed={3}
-                  className="text-xs sm:text-sm font-medium"
+                  className='text-xs font-medium sm:text-sm'
                 />
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className='text-muted-foreground text-xs'>
                 {item.type} • {formatTimestamp(item.timestamp)}
               </p>
             </div>
-            <div className="flex-shrink-0">
+            <div className='flex-shrink-0'>
               <ShinyText
-                text="generating"
+                text='generating'
                 speed={3}
-                className="text-xs font-medium capitalize text-blue-500"
+                className='text-xs font-medium text-blue-500 capitalize'
               />
             </div>
           </>
@@ -819,15 +819,15 @@ export function VersioningMessage({
       // Check for Remotion Video Config
       if (item.videoConfig) {
         return (
-          <div className="flex-1 min-w-0 w-full">
+          <div className='w-full min-w-0 flex-1'>
             <VideoPlayerMessage videoConfig={item.videoConfig} />
-            <div className="flex-1 min-w-0 mt-2">
-              <p className="text-xs sm:text-sm font-medium text-foreground truncate">
+            <div className='mt-2 min-w-0 flex-1'>
+              <p className='text-foreground truncate text-xs font-medium sm:text-sm'>
                 {item.name}
               </p>
-              <div className="flex items-center gap-1 mt-0.5">
-                <Video className="w-3 h-3 text-muted-foreground" />
-                <p className="text-xs text-muted-foreground">
+              <div className='mt-0.5 flex items-center gap-1'>
+                <Video className='text-muted-foreground h-3 w-3' />
+                <p className='text-muted-foreground text-xs'>
                   Preview • Remotion
                 </p>
               </div>
@@ -838,18 +838,18 @@ export function VersioningMessage({
 
       return (
         <>
-          <div className="flex-1 min-w-0">
+          <div className='min-w-0 flex-1'>
             {mediaType === "image" && mediaUrl ? (
-              <div className="flex flex-col items-start gap-2 w-full">
+              <div className='flex w-full flex-col items-start gap-2'>
                 {/* Image container — relative so MaskEditor can overlay absolutely */}
                 <div
                   className={cn(
-                    "flex-shrink-0 w-full rounded-md overflow-hidden bg-muted relative transition-all duration-200",
+                    "bg-muted relative w-full flex-shrink-0 overflow-hidden rounded-md transition-all duration-200",
                     inpaintMode && inpaintItem?.id !== item.id
-                      ? "border-2 border-violet-400/50 cursor-crosshair opacity-80 hover:opacity-100 hover:border-violet-500"
+                      ? "cursor-crosshair border-2 border-violet-400/50 opacity-80 hover:border-violet-500 hover:opacity-100"
                       : inpaintMode && inpaintItem?.id === item.id
                         ? "border-2 border-violet-500 ring-2 ring-violet-500/30"
-                        : "border border-border",
+                        : "border-border border"
                   )}
                   onClick={(e) => {
                     if (!inpaintMode) return;
@@ -865,7 +865,7 @@ export function VersioningMessage({
                   <img
                     src={mediaUrl}
                     alt={item.name}
-                    className="w-full h-full object-cover block"
+                    className='block h-full w-full object-cover'
                     onError={(e) => {
                       e.currentTarget.style.display = "none";
                       const parent = e.currentTarget.parentElement;
@@ -877,7 +877,7 @@ export function VersioningMessage({
 
                   {/* MaskEditor canvas — absolute on top of image, transparent until painted */}
                   {inpaintMode && inpaintItem?.id === item.id && (
-                    <div className="absolute inset-0 w-full h-full z-10">
+                    <div className='absolute inset-0 z-10 h-full w-full'>
                       <MaskEditor
                         src={mediaUrl}
                         canvasRef={
@@ -886,19 +886,19 @@ export function VersioningMessage({
                         cursorSize={brushSize}
                         onCursorSizeChange={setBrushSize}
                         maskOpacity={0.65}
-                        maskColor="#7c3aed"
-                        maskBlendMode="normal"
+                        maskColor='#7c3aed'
+                        maskBlendMode='normal'
                       />
                     </div>
                   )}
 
                   {/* "Click to edit" hint — shown in inpaint mode before selection */}
                   {inpaintMode && inpaintItem?.id !== item.id && (
-                    <div className="absolute inset-0 bg-violet-500/10 flex items-center justify-center z-10 pointer-events-none">
-                      <div className="bg-violet-600/80 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1 backdrop-blur-sm">
-                        <Wand2 className="w-3 h-3" />
-                        <span className="hidden lg:block">Click to edit</span>
-                        <span className="lg:hidden">
+                    <div className='pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-violet-500/10'>
+                      <div className='flex items-center gap-1 rounded-full bg-violet-600/80 px-2 py-1 text-xs text-white backdrop-blur-sm'>
+                        <Wand2 className='h-3 w-3' />
+                        <span className='hidden lg:block'>Click to edit</span>
+                        <span className='lg:hidden'>
                           Only available on desktop
                         </span>
                       </div>
@@ -907,9 +907,9 @@ export function VersioningMessage({
 
                   {/* Painting badge */}
                   {inpaintMode && inpaintItem?.id === item.id && (
-                    <div className="absolute top-2 right-2 z-20">
-                      <div className="bg-violet-600 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <Wand2 className="w-3 h-3" />
+                    <div className='absolute top-2 right-2 z-20'>
+                      <div className='flex items-center gap-1 rounded-full bg-violet-600 px-2 py-0.5 text-xs text-white'>
+                        <Wand2 className='h-3 w-3' />
                         Painting
                       </div>
                     </div>
@@ -918,32 +918,32 @@ export function VersioningMessage({
 
                 {/* Brush + prompt controls — shown below image when active */}
                 {inpaintMode && inpaintItem?.id === item.id && (
-                  <div className="w-full space-y-3">
+                  <div className='w-full space-y-3'>
                     {/* Brush size */}
-                    <div className="flex items-center gap-2 px-1">
-                      <span className="text-xs text-violet-400 whitespace-nowrap">
+                    <div className='flex items-center gap-2 px-1'>
+                      <span className='text-xs whitespace-nowrap text-violet-400'>
                         Brush:
                       </span>
 
                       <input
-                        type="range"
+                        type='range'
                         min={4}
                         max={60}
                         value={brushSize}
                         onChange={(e) => setBrushSize(Number(e.target.value))}
-                        className="flex-1 accent-violet-500 h-1"
+                        className='h-1 flex-1 accent-violet-500'
                       />
 
-                      <span className="text-xs text-muted-foreground w-7 text-right">
+                      <span className='text-muted-foreground w-7 text-right text-xs'>
                         {brushSize}
                       </span>
                     </div>
 
                     {/* Prompt + Actions */}
-                    <div className="flex flex-col gap-3 w-full">
+                    <div className='flex w-full flex-col gap-3'>
                       {/* Prompt box */}
-                      <div className="flex items-start gap-2 rounded-xl border border-violet-500/40 bg-muted/60 px-3 py-2 focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500/30 transition-all w-full">
-                        <Wand2 className="w-4 h-4 text-violet-400 mt-1 flex-shrink-0" />
+                      <div className='bg-muted/60 flex w-full items-start gap-2 rounded-xl border border-violet-500/40 px-3 py-2 transition-all focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500/30'>
+                        <Wand2 className='mt-1 h-4 w-4 flex-shrink-0 text-violet-400' />
 
                         <textarea
                           value={inpaintPrompt}
@@ -959,8 +959,8 @@ export function VersioningMessage({
                               handleInpaint();
                             }
                           }}
-                          placeholder="Describe what to change…"
-                          className="flex-1 bg-transparent text-sm outline-none resize-none placeholder:text-muted-foreground/60 max-h-40 overflow-y-auto"
+                          placeholder='Describe what to change…'
+                          className='placeholder:text-muted-foreground/60 max-h-40 flex-1 resize-none overflow-y-auto bg-transparent text-sm outline-none'
                           rows={1}
                           disabled={isInpainting}
                           // autoFocus
@@ -968,11 +968,11 @@ export function VersioningMessage({
                       </div>
 
                       {/* Buttons */}
-                      <div className="flex flex-col sm:flex-row gap-2 w-full">
+                      <div className='flex w-full flex-col gap-2 sm:flex-row'>
                         <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-9 w-full sm:w-auto px-4 text-xs rounded-xl text-muted-foreground hover:text-destructive hover:border-destructive"
+                          variant='outline'
+                          size='sm'
+                          className='text-muted-foreground hover:text-destructive hover:border-destructive h-9 w-full rounded-xl px-4 text-xs sm:w-auto'
                           onClick={() => {
                             if (maskCanvasRef.current) {
                               const ctx =
@@ -982,7 +982,7 @@ export function VersioningMessage({
                                   0,
                                   0,
                                   maskCanvasRef.current.width,
-                                  maskCanvasRef.current.height,
+                                  maskCanvasRef.current.height
                                 );
                               }
                             }
@@ -997,71 +997,72 @@ export function VersioningMessage({
                         <Button
                           onClick={handleInpaint}
                           disabled={isInpainting || !inpaintPrompt.trim()}
-                          size="sm"
-                          className="h-9 w-full sm:w-auto px-4 gap-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl"
+                          size='sm'
+                          className='h-9 w-full gap-1.5 rounded-xl bg-violet-600 px-4 text-white hover:bg-violet-700 sm:w-auto'
                         >
                           {isInpainting ? (
-                            <Loader className="w-3.5 h-3.5 animate-spin" />
+                            <Loader className='h-3.5 w-3.5 animate-spin' />
                           ) : (
-                            <Send className="w-3.5 h-3.5" />
+                            <Send className='h-3.5 w-3.5' />
                           )}
                           {isInpainting ? "Applying…" : "Apply"}
                         </Button>
                       </div>
                     </div>
 
-                    <p className="text-xs text-muted-foreground px-1">
+                    <p className='text-muted-foreground px-1 text-xs'>
                       Painted area stays active — click <strong>Cancel</strong>{" "}
                       to clear.
                     </p>
                   </div>
                 )}
 
-                <div className="flex-1 min-w-0 w-full">
-                  <p className="text-xs sm:text-sm font-medium text-foreground truncate">
+                <div className='w-full min-w-0 flex-1'>
+                  <p className='text-foreground truncate text-xs font-medium sm:text-sm'>
                     {item.name}
                   </p>
-                  <div className="flex flex-col gap-2 mt-2">
-                    <div className="flex items-center gap-1">
-                      <ImageIcon className="w-3 h-3 text-muted-foreground" />
-                      <p className="text-xs text-muted-foreground">
+                  <div className='mt-2 flex flex-col gap-2'>
+                    <div className='flex items-center gap-1'>
+                      <ImageIcon className='text-muted-foreground h-3 w-3' />
+                      <p className='text-muted-foreground text-xs'>
                         Image • {fileExt}
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className='flex items-center gap-2'>
                       <Button
-                        variant="outline"
-                        size="sm"
+                        variant='outline'
+                        size='sm'
                         onClick={(e) => {
                           e.stopPropagation();
                           handleSetAsActive(item.id);
-                          if (setFocusedGenerationId) setFocusedGenerationId(item.id);
+                          if (setFocusedGenerationId)
+                            setFocusedGenerationId(item.id);
                         }}
-                        className="h-7.5 px-2 text-xs gap-1.5 w-fit border-primary/30 text-primary hover:bg-primary/5 hidden lg:flex"
+                        className='border-primary/30 text-primary hover:bg-primary/5 hidden h-7.5 w-fit gap-1.5 px-2 text-xs lg:flex'
                       >
-                        <LayoutGrid className="w-3 h-3" />
+                        <LayoutGrid className='h-3 w-3' />
                         View
                       </Button>
                       {!isPublished && !item.publishStatus && (
                         <Button
-                          variant="outline"
-                          size="sm"
+                          variant='outline'
+                          size='sm'
                           onClick={(e) => handlePublishToInspiration(e, item)}
                           disabled={publishing === item.id}
-                          className="h-7 px-2 text-xs gap-1.5 w-fit"
+                          className='h-7 w-fit gap-1.5 px-2 text-xs'
                         >
                           {publishing === item.id ? (
-                            <Loader className="w-3 h-3 animate-spin" />
+                            <Loader className='h-3 w-3 animate-spin' />
                           ) : (
-                            <Sparkles className="w-3 h-3" />
+                            <Sparkles className='h-3 w-3' />
                           )}
                           {publishing === item.id ? "Publishing..." : "Publish"}
                         </Button>
                       )}
 
                       {(isPublished || item.publishStatus) && (
-                        <div className="flex items-center gap-1">
+                        <div className='flex items-center gap-1'>
                           <Badge
                             variant={
                               isPublished || item.publishStatus === "published"
@@ -1070,7 +1071,7 @@ export function VersioningMessage({
                                   ? "secondary"
                                   : "destructive"
                             }
-                            className="h-7 px-2 text-xs gap-1.5 w-fit"
+                            className='h-7 w-fit gap-1.5 px-2 text-xs'
                           >
                             {isPublished || item.publishStatus === "published"
                               ? "Published 🎉"
@@ -1084,15 +1085,15 @@ export function VersioningMessage({
                       )}
 
                       <Button
-                        variant="outline"
-                        size="sm"
+                        variant='outline'
+                        size='sm'
                         onClick={(e) => {
                           e.stopPropagation();
                           handleAnimateDesign(item);
                         }}
-                        className="h-7.5 px-2 text-xs gap-1.5 w-fit"
+                        className='h-7.5 w-fit gap-1.5 px-2 text-xs'
                       >
-                        <Play className="w-3 h-3" />
+                        <Play className='h-3 w-3' />
                         Convert to video
                       </Button>
                     </div>
@@ -1100,31 +1101,31 @@ export function VersioningMessage({
                 </div>
               </div>
             ) : mediaType === "video" && mediaUrl ? (
-              <div className="flex flex-col items-start gap-2">
-                <div className="flex-shrink-0 w-full h-full sm:w-full sm:h-full rounded-md overflow-hidden border border-border bg-muted relative">
+              <div className='flex flex-col items-start gap-2'>
+                <div className='border-border bg-muted relative h-full w-full flex-shrink-0 overflow-hidden rounded-md border sm:h-full sm:w-full'>
                   <video
                     src={mediaUrl}
-                    className="w-full h-full object-cover"
+                    className='h-full w-full object-cover'
                     muted
-                    preload="metadata"
+                    preload='metadata'
                   />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                    <Video className="w-4 h-4 text-white" />
+                  <div className='absolute inset-0 flex items-center justify-center bg-black/20'>
+                    <Video className='h-4 w-4 text-white' />
                   </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs sm:text-sm font-medium text-foreground truncate">
+                <div className='min-w-0 flex-1'>
+                  <p className='text-foreground truncate text-xs font-medium sm:text-sm'>
                     {item.name}
                   </p>
-                  <div className="flex flex-col gap-2 mt-2">
-                    <div className="flex items-center gap-1">
-                      <Video className="w-3 h-3 text-muted-foreground" />
-                      <p className="text-xs text-muted-foreground">
+                  <div className='mt-2 flex flex-col gap-2'>
+                    <div className='flex items-center gap-1'>
+                      <Video className='text-muted-foreground h-3 w-3' />
+                      <p className='text-muted-foreground text-xs'>
                         Video • {fileExt}
                       </p>
                     </div>
                     {(isPublished || item.publishStatus) && (
-                      <div className="flex items-center gap-1">
+                      <div className='flex items-center gap-1'>
                         <Badge
                           variant={
                             isPublished || item.publishStatus === "published"
@@ -1133,7 +1134,7 @@ export function VersioningMessage({
                                 ? "secondary"
                                 : "destructive"
                           }
-                          className="text-xs h-5 px-1.5"
+                          className='h-5 px-1.5 text-xs'
                         >
                           {isPublished || item.publishStatus === "published"
                             ? "Published to Inspiration"
@@ -1147,16 +1148,16 @@ export function VersioningMessage({
                     )}
                     {!isPublished && !item.publishStatus && (
                       <Button
-                        variant="outline"
-                        size="sm"
+                        variant='outline'
+                        size='sm'
                         onClick={(e) => handlePublishToInspiration(e, item)}
                         disabled={publishing === item.id}
-                        className="h-7 px-2 text-xs gap-1.5 w-fit"
+                        className='h-7 w-fit gap-1.5 px-2 text-xs'
                       >
                         {publishing === item.id ? (
-                          <Loader className="w-3 h-3 animate-spin" />
+                          <Loader className='h-3 w-3 animate-spin' />
                         ) : (
-                          <Sparkles className="w-3 h-3" />
+                          <Sparkles className='h-3 w-3' />
                         )}
                         {publishing === item.id ? "Publishing..." : "Publish"}
                       </Button>
@@ -1165,17 +1166,17 @@ export function VersioningMessage({
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
-                <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-md border border-border bg-muted flex items-center justify-center">
-                  <File className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground" />
+              <div className='flex items-center gap-2'>
+                <div className='border-border bg-muted flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md border sm:h-12 sm:w-12'>
+                  <File className='text-muted-foreground h-5 w-5 sm:h-6 sm:w-6' />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs sm:text-sm font-medium text-foreground truncate">
+                <div className='min-w-0 flex-1'>
+                  <p className='text-foreground truncate text-xs font-medium sm:text-sm'>
                     {item.name}
                   </p>
-                  <div className="flex items-center gap-1 mt-0.5">
-                    <File className="w-3 h-3 text-muted-foreground" />
-                    <p className="text-xs text-muted-foreground">
+                  <div className='mt-0.5 flex items-center gap-1'>
+                    <File className='text-muted-foreground h-3 w-3' />
+                    <p className='text-muted-foreground text-xs'>
                       {item.type || "File"} •
                     </p>
                   </div>
@@ -1196,48 +1197,48 @@ export function VersioningMessage({
     const item = items[currentSlideIndex] || items[0];
 
     return (
-      <div key={item.id} className="relative group/carousel">
-        <div className="flex flex-col gap-2 sm:gap-3 px-1.5 py-4 rounded-md relative z-10 hover:bg-muted/5 transition-colors">
+      <div key={item.id} className='group/carousel relative'>
+        <div className='hover:bg-muted/5 relative z-10 flex flex-col gap-2 rounded-md px-1.5 py-4 transition-colors sm:gap-3'>
           {renderItemContent(item)}
 
           {/* Carousel Navigation - only show if more than one item */}
           {items.length > 1 && (
-            <div className="flex items-center justify-between mt-2 pt-3 border-t border-border/50">
-              <div className="flex items-center gap-2">
+            <div className='border-border/50 mt-2 flex items-center justify-between border-t pt-3'>
+              <div className='flex items-center gap-2'>
                 <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7 rounded-full bg-muted/30 hover:bg-muted"
+                  variant='ghost'
+                  size='icon'
+                  className='bg-muted/30 hover:bg-muted h-7 w-7 rounded-full'
                   onClick={(e) => {
                     e.stopPropagation();
                     setCurrentSlideIndex((prev) =>
-                      prev > 0 ? prev - 1 : items.length - 1,
+                      prev > 0 ? prev - 1 : items.length - 1
                     );
                   }}
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className='h-4 w-4' />
                 </Button>
-                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+                <span className='text-muted-foreground text-[10px] font-medium tracking-wider uppercase'>
                   {currentSlideIndex + 1} / {items.length}
                 </span>
                 <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7 rounded-full bg-muted/30 hover:bg-muted"
+                  variant='ghost'
+                  size='icon'
+                  className='bg-muted/30 hover:bg-muted h-7 w-7 rounded-full'
                   onClick={(e) => {
                     e.stopPropagation();
                     setCurrentSlideIndex((prev) =>
-                      prev < items.length - 1 ? prev + 1 : 0,
+                      prev < items.length - 1 ? prev + 1 : 0
                     );
                   }}
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className='h-4 w-4' />
                 </Button>
 
                 <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7 rounded-full bg-muted/30 hover:bg-destructive/10 hover:text-destructive transition-colors ml-1"
+                  variant='ghost'
+                  size='icon'
+                  className='bg-muted/30 hover:bg-destructive/10 hover:text-destructive ml-1 h-7 w-7 rounded-full transition-colors'
                   onClick={(e) => {
                     e.stopPropagation();
                     setItemToDelete({
@@ -1246,19 +1247,19 @@ export function VersioningMessage({
                     });
                   }}
                   disabled={isDeletingItem}
-                  title="Delete this version"
+                  title='Delete this version'
                 >
-                  <Trash2 className="h-3.5 w-3.5" />
+                  <Trash2 className='h-3.5 w-3.5' />
                 </Button>
 
-                <div className="mx-1 h-4 w-[1px] bg-border/50" />
+                <div className='bg-border/50 mx-1 h-4 w-[1px]' />
 
                 {/* Set as Active toggle */}
                 {!item.isActive && (
                   <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-7 px-2 text-[10px] rounded-full border-violet-500/30 text-violet-500 hover:bg-violet-500 hover:text-white"
+                    variant='outline'
+                    size='sm'
+                    className='h-7 rounded-full border-violet-500/30 px-2 text-[10px] text-violet-500 hover:bg-violet-500 hover:text-white'
                     onClick={(e) => {
                       e.stopPropagation();
                       handleSetAsActive(item.id);
@@ -1269,9 +1270,9 @@ export function VersioningMessage({
                   </Button>
                 )}
                 {item.isActive && (
-                  <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-violet-500/10 border border-violet-500/20">
-                    <Check className="w-3 h-3 text-violet-500" />
-                    <span className="text-[10px] font-semibold text-violet-600 uppercase">
+                  <div className='flex items-center gap-1.5 rounded-full border border-violet-500/20 bg-violet-500/10 px-2 py-1'>
+                    <Check className='h-3 w-3 text-violet-500' />
+                    <span className='text-[10px] font-semibold text-violet-600 uppercase'>
                       main
                     </span>
                   </div>
@@ -1279,15 +1280,15 @@ export function VersioningMessage({
               </div>
 
               {/* Quick indicators (dots) */}
-              <div className="flex items-center gap-1.5 px-2">
+              <div className='flex items-center gap-1.5 px-2'>
                 {items.map((_, idx) => (
                   <div
                     key={idx}
                     className={cn(
-                      "w-1.5 h-1.5 rounded-full transition-all duration-300",
+                      "h-1.5 w-1.5 rounded-full transition-all duration-300",
                       idx === currentSlideIndex
-                        ? "bg-violet-500 w-3"
-                        : "bg-muted-foreground/30",
+                        ? "w-3 bg-violet-500"
+                        : "bg-muted-foreground/30"
                     )}
                   />
                 ))}
@@ -1300,41 +1301,40 @@ export function VersioningMessage({
   };
 
   return (
-    <div className={cn("ml-6 sm:ml-12 group", className)}>
-      
-      <div className="border border-border rounded-xl overflow-hidden bg-background shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className={cn("group ml-6 sm:ml-12", className)}>
+      <div className='border-border bg-background overflow-hidden rounded-xl border shadow-sm transition-shadow duration-200 hover:shadow-md'>
         {/* Generation Header */}
         <div
-          className="flex items-center justify-between p-2 sm:p-3 cursor-pointer hover:bg-muted/50 transition-colors duration-150"
+          className='hover:bg-muted/50 flex cursor-pointer items-center justify-between p-2 transition-colors duration-150 sm:p-3'
           onClick={handleToggle}
         >
-          <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+          <div className='flex min-w-0 flex-1 items-center gap-2 sm:gap-3'>
             <div
               className={cn(
-                "transition-transform duration-200 flex-shrink-0",
-                !isCollapsed && "rotate-90",
+                "flex-shrink-0 transition-transform duration-200",
+                !isCollapsed && "rotate-90"
               )}
             >
-              <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
+              <ChevronRight className='text-muted-foreground h-3 w-3 sm:h-4 sm:w-4' />
             </div>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2 flex-wrap justify-between">
-                <h3 className="font-medium text-foreground text-xs sm:text-sm truncate">
+            <div className='min-w-0 flex-1'>
+              <div className='flex flex-wrap items-center justify-between gap-2'>
+                <h3 className='text-foreground truncate text-xs font-medium sm:text-sm'>
                   {generation.title}
                 </h3>
-                <div className="flex flex-row items-center gap-2">
+                <div className='flex flex-row items-center gap-2'>
                   {/* Inpaint (wand) icon — only for image generations */}
                   {generation.items.some((it) =>
-                    it.type?.startsWith("image/"),
+                    it.type?.startsWith("image/")
                   ) && (
                     <Button
-                      variant="ghost"
-                      size="sm"
+                      variant='ghost'
+                      size='sm'
                       className={cn(
-                        "h-8 w-8 p-0 mr-0.5 transition-colors",
+                        "mr-0.5 h-8 w-8 p-0 transition-colors",
                         inpaintMode
-                          ? "text-violet-500 bg-violet-500/10"
-                          : "text-muted-foreground hover:text-violet-500",
+                          ? "bg-violet-500/10 text-violet-500"
+                          : "text-muted-foreground hover:text-violet-500"
                       )}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1352,14 +1352,14 @@ export function VersioningMessage({
                           : "Inpaint — edit a region"
                       }
                     >
-                      <Wand2 className="w-4 h-4" />
+                      <Wand2 className='h-4 w-4' />
                     </Button>
                   )}
 
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0 mr-1"
+                    variant='ghost'
+                    size='sm'
+                    className='mr-1 h-8 w-8 p-0'
                     onClick={(e) => {
                       e.stopPropagation();
                       // Prefer an explicit item from the generation items.
@@ -1371,30 +1371,30 @@ export function VersioningMessage({
                         name: repItem.name,
                       });
                     }}
-                    title="Download file"
+                    title='Download file'
                   >
-                    <Download className="w-4 h-4" />
+                    <Download className='h-4 w-4' />
                   </Button>
                   {onDelete && generation.items.length > 1 && (
                     <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                      variant='ghost'
+                      size='sm'
+                      className='text-muted-foreground hover:text-destructive h-8 w-8 p-0'
                       onClick={(e) => {
                         e.stopPropagation();
                         setShowDeleteConfirm(true);
                       }}
-                      title="Delete"
+                      title='Delete'
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className='h-4 w-4' />
                     </Button>
                   )}
                   {generation.isLatest && (
-                    <Badge className="text-xs px-1.5 py-0.5 bg-green-500/10 text-green-600 border-green-500/20 flex-shrink-0">
+                    <Badge className='flex-shrink-0 border-green-500/20 bg-green-500/10 px-1.5 py-0.5 text-xs text-green-600'>
                       Latest
                     </Badge>
                   )}
-                  <p className="text-xs text-muted-foreground line-clamp-1 truncate hidden lg:flex">
+                  <p className='text-muted-foreground line-clamp-1 hidden truncate text-xs lg:flex'>
                     {formatTimestamp(generation.timestamp)}
                   </p>
                 </div>
@@ -1406,11 +1406,11 @@ export function VersioningMessage({
         {/* Generation Items - Collapsible content */}
         <div
           className={cn(
-            "border-t border-border bg-muted/20 overflow-hidden transition-all duration-300 ease-in-out",
-            isCollapsed ? "max-h-0 opacity-0" : "max-h-fit opacity-100",
+            "border-border bg-muted/20 overflow-hidden border-t transition-all duration-300 ease-in-out",
+            isCollapsed ? "max-h-0 opacity-0" : "max-h-fit opacity-100"
           )}
         >
-          <div className="p-2 space-y-1 relative overflow-y-auto">
+          <div className='relative space-y-1 overflow-y-auto p-2'>
             {renderGenerationContent()}
           </div>
         </div>
@@ -1421,13 +1421,13 @@ export function VersioningMessage({
             open={showDeleteConfirm}
             onOpenChange={setShowDeleteConfirm}
             onConfirm={onDelete}
-            message="Are you sure you want to delete this? This will delete both the user prompt and AI response, along with all versions after this."
+            message='Are you sure you want to delete this? This will delete both the user prompt and AI response, along with all versions after this.'
           />
           <DeleteConfirmation
             open={!!itemToDelete}
             onOpenChange={(open) => !open && setItemToDelete(null)}
             onConfirm={handleDeleteItem}
-            message="Are you sure you want to delete this specific version? This action cannot be undone and will remove the image from storage."
+            message='Are you sure you want to delete this specific version? This action cannot be undone and will remove the image from storage.'
           />
         </>
       )}

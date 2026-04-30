@@ -1,6 +1,6 @@
-import React from "react";
-import { Player } from "@remotion/player";
 import { StandardPromo, StandardPromoProps } from "../../remotion/Template";
+import { Player } from "@remotion/player";
+import React from "react";
 
 interface VideoPlayerMessageProps {
   videoConfig: StandardPromoProps & { durationInFrames: number };
@@ -11,7 +11,7 @@ export function VideoPlayerMessage({ videoConfig }: VideoPlayerMessageProps) {
   if (!videoConfig) return <div>Invalid Video Config</div>;
 
   return (
-    <div className="w-full aspect-video rounded-md overflow-hidden border border-border bg-black/5 relative group">
+    <div className='border-border group relative aspect-video w-full overflow-hidden rounded-md border bg-black/5'>
       <Player
         component={StandardPromo}
         inputProps={videoConfig}

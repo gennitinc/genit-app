@@ -1,33 +1,33 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import ReactFlow, {
-  Background,
-  Controls,
-  useNodesState,
-  useEdgesState,
-  Node,
-  Edge,
-  NodeTypes,
-  Panel,
-  ReactFlowProvider,
-  useReactFlow,
-} from "reactflow";
-import "reactflow/dist/style.css";
+import { Button } from "../ui/button";
 import { useProjectDesign } from "@/context/DesignProject";
 import { DesignNode } from "@/nodes/design-node";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
+  LayoutGrid,
   Maximize2,
-  Plus,
   Minus,
   MousePointer2,
   Move,
-  LayoutGrid,
-  Undo2,
+  Plus,
   Redo2,
+  Undo2,
 } from "lucide-react";
-import { Button } from "../ui/button";
-import { LoadingFileLoader } from "@/utils/Loading";
+import ReactFlow, {
+  Background,
+  Controls,
+  Edge,
+  Node,
+  NodeTypes,
+  Panel,
+  ReactFlowProvider,
+  useEdgesState,
+  useNodesState,
+  useReactFlow,
+} from "reactflow";
+import "reactflow/dist/style.css";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 // Define custom node types
 const nodeTypes: NodeTypes = {
@@ -155,7 +155,7 @@ const GraphicsCanvasContent = () => {
       JSON.stringify(newNodes.map((n) => n.id)) !==
       JSON.stringify(nodes.map((n) => n.id));
     const hasSelectionChanges = newNodes.some(
-      (n, i) => n.selected !== nodes[i]?.selected,
+      (n, i) => n.selected !== nodes[i]?.selected
     );
 
     if (hasIdChanges || hasSelectionChanges) {
@@ -187,7 +187,7 @@ const GraphicsCanvasContent = () => {
   }, [isGenerating, isGeneratingImage, nodes.length, fitView]);
 
   return (
-    <div className="h-full relative group">
+    <div className='group relative h-full'>
       <ReactFlow
         proOptions={{ hideAttribution: true }}
         nodes={nodes}
@@ -200,19 +200,19 @@ const GraphicsCanvasContent = () => {
         fitViewOptions={{ padding: 0.2 }}
         maxZoom={1.5}
         minZoom={0.1}
-        className="dark:bg-[#fafafa] bg-[#09090b] shadow-xl border border-zinc-200 dark:border-zinc-800/50 rounded-3xl"
+        className='rounded-3xl border border-zinc-200 bg-[#09090b] shadow-xl dark:border-zinc-800/50 dark:bg-[#fafafa]'
       >
         <Background
           gap={25}
           size={1}
-          className="dark:opacity-[0.15] opacity-[0.4]"
-          color="currentColor"
+          className='opacity-[0.4] dark:opacity-[0.15]'
+          color='currentColor'
         />
 
         {/* Floating Toolkit: Glassmorphic refinement to match Workflow */}
         <Panel
-          position="top-right"
-          className="flex items-center gap-1.5 p-1.5 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-2xl m-6"
+          position='top-right'
+          className='m-6 flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white/90 p-1.5 shadow-2xl backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90'
         >
           {/* <Button
             variant="ghost"
@@ -230,35 +230,35 @@ const GraphicsCanvasContent = () => {
           >
             <Redo2 className="h-4 w-4" />
           </Button> */}
-          <div className="w-px h-4 bg-zinc-200 dark:bg-zinc-800 mx-1" />
+          <div className='mx-1 h-4 w-px bg-zinc-200 dark:bg-zinc-800' />
           <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-            title="Fit View"
+            variant='ghost'
+            size='icon'
+            className='h-8 w-8 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+            title='Fit View'
             onClick={() =>
               reactFlowInstance?.fitView({ duration: 400, padding: 0.2 })
             }
           >
-            <Maximize2 className="h-4 w-4" />
+            <Maximize2 className='h-4 w-4' />
           </Button>
           <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-            title="Zoom In"
+            variant='ghost'
+            size='icon'
+            className='h-8 w-8 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+            title='Zoom In'
             onClick={() => reactFlowInstance?.zoomIn({ duration: 200 })}
           >
-            <Plus className="h-4 w-4" />
+            <Plus className='h-4 w-4' />
           </Button>
           <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-            title="Zoom Out"
+            variant='ghost'
+            size='icon'
+            className='h-8 w-8 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+            title='Zoom Out'
             onClick={() => reactFlowInstance?.zoomOut({ duration: 200 })}
           >
-            <Minus className="h-4 w-4" />
+            <Minus className='h-4 w-4' />
           </Button>
         </Panel>
 
@@ -277,13 +277,13 @@ const GraphicsCanvasContent = () => {
         )} */}
 
         {nodes.length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="text-center space-y-2 opacity-20 select-none text-foreground">
-              <LayoutGrid className="w-12 h-12 mx-auto text-neutral-200 dark:text-neutral-900" />
-              <p className="text-sm font-medium uppercase tracking-[0.2em] text-neutral-200 dark:text-neutral-900">
+          <div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
+            <div className='text-foreground space-y-2 text-center opacity-20 select-none'>
+              <LayoutGrid className='mx-auto h-12 w-12 text-neutral-200 dark:text-neutral-900' />
+              <p className='text-sm font-medium tracking-[0.2em] text-neutral-200 uppercase dark:text-neutral-900'>
                 Design Workspace
               </p>
-              <p className="text-xs text-neutral-200 dark:text-neutral-900">
+              <p className='text-xs text-neutral-200 dark:text-neutral-900'>
                 Generated designs will appear here
               </p>
             </div>
@@ -292,25 +292,20 @@ const GraphicsCanvasContent = () => {
         {/* Loading State Overlay */}
       </ReactFlow>
       {(isGenerating || isGeneratingImage) && (
-        <div
-          className="absolute inset-0 z-50 rounded-3xl
-    bg-white/5 dark:bg-black/10
-    backdrop-blur-2xl
-    border border-white/10"
-        >
+        <div className='absolute inset-0 z-50 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl dark:bg-black/10'>
           {/* subtle light gradient for glass depth */}
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
+          <div className='pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-white/10 to-transparent' />
 
-          <div className="flex h-full w-full items-center justify-center">
-            <div className="flex flex-col items-center gap-4">
+          <div className='flex h-full w-full items-center justify-center'>
+            <div className='flex flex-col items-center gap-4'>
               <LoadingFileLoader />
 
-              <div className="flex flex-col items-center gap-1.5 px-2">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80 dark:text-black">
+              <div className='flex flex-col items-center gap-1.5 px-2'>
+                <p className='text-[11px] font-bold tracking-[0.2em] text-white/80 uppercase dark:text-black'>
                   Agent Thinking
                 </p>
 
-                <p className="text-[9px] text-white/60 dark:text-black italic text-center leading-relaxed">
+                <p className='text-center text-[9px] leading-relaxed text-white/60 italic dark:text-black'>
                   {aiStatus || "Crafting unique design concepts..."}
                 </p>
               </div>

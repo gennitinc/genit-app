@@ -1,32 +1,9 @@
 "use client";
 
-import React, { useState, useRef, useCallback, useEffect } from "react";
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { Button } from "@/components/ui/button";
-import {
-  Sparkles,
-  ImageIcon,
-  HistoryIcon,
-  ChevronLeft,
-  ChevronRight,
-  Trash2,
-  X,
-  Download,
-  Minus,
-  Plus,
-  Trash,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GridPattern } from "@/components/ui/grid-pattern";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import {
   Dialog,
   DialogContent,
@@ -39,8 +16,31 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { GridPattern } from "@/components/ui/grid-pattern";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  HistoryIcon,
+  ImageIcon,
+  Minus,
+  Plus,
+  Sparkles,
+  Trash,
+  Trash2,
+  X,
+} from "lucide-react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 interface GeneratedAngle {
   id: string;
@@ -104,27 +104,27 @@ const GeneratedCarousel = ({
   const img = images[current];
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center gap-0 relative select-none">
+    <div className='relative flex flex-1 flex-col items-center justify-center gap-0 select-none'>
       {/* Main image */}
-      <div className="relative w-full flex-1 flex items-center justify-center">
+      <div className='relative flex w-full flex-1 items-center justify-center'>
         <img
           key={img.id}
           src={img.url}
           alt={`Generated angle ${current + 1}`}
-          className="w-full object-contain max-h-[52vh] rounded-xl"
+          className='max-h-[52vh] w-full rounded-xl object-contain'
         />
 
         {/* Delete button */}
         <button
           onClick={() => handleDelete(img.id)}
           disabled={deletingId === img.id}
-          className="absolute top-3 right-3 size-7 rounded-full bg-black/60 backdrop-blur flex items-center justify-center text-white hover:bg-red-600 transition-colors disabled:opacity-50"
-          title="Delete this angle"
+          className='absolute top-3 right-3 flex size-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur transition-colors hover:bg-red-600 disabled:opacity-50'
+          title='Delete this angle'
         >
           {deletingId === img.id ? (
-            <div className="size-3 border border-white border-t-transparent rounded-full animate-spin" />
+            <div className='size-3 animate-spin rounded-full border border-white border-t-transparent' />
           ) : (
-            <Trash className="size-3.5" />
+            <Trash className='size-3.5' />
           )}
         </button>
 
@@ -132,39 +132,39 @@ const GeneratedCarousel = ({
         <a
           href={img.url}
           download={img.name}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="absolute top-3 right-12 size-7 rounded-full bg-black/60 backdrop-blur flex items-center justify-center text-white hover:bg-blue-600 transition-colors"
-          title="Download"
+          target='_blank'
+          rel='noopener noreferrer'
+          className='absolute top-3 right-12 flex size-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur transition-colors hover:bg-blue-600'
+          title='Download'
         >
-          <Download className="size-3.5" />
+          <Download className='size-3.5' />
         </a>
       </div>
 
       {/* Controls */}
       {images.length > 1 && (
-        <div className="flex items-center gap-4 py-3">
+        <div className='flex items-center gap-4 py-3'>
           <button
             onClick={prev}
-            className="size-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+            className='flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20'
           >
-            <ChevronLeft className="size-4" />
+            <ChevronLeft className='size-4' />
           </button>
-          <span className="text-[10px] font-mono text-white/50">
+          <span className='font-mono text-[10px] text-white/50'>
             {current + 1} / {images.length}
           </span>
           <button
             onClick={next}
-            className="size-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+            className='flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20'
           >
-            <ChevronRight className="size-4" />
+            <ChevronRight className='size-4' />
           </button>
         </div>
       )}
 
       {/* Dot strip */}
       {images.length > 1 && (
-        <div className="flex gap-1.5 pb-2">
+        <div className='flex gap-1.5 pb-2'>
           {images.map((_, i) => (
             <button
               key={i}
@@ -173,7 +173,7 @@ const GeneratedCarousel = ({
                 "rounded-full transition-all",
                 i === current
                   ? "size-2 bg-cyan-400"
-                  : "size-1.5 bg-white/20 hover:bg-white/40",
+                  : "size-1.5 bg-white/20 hover:bg-white/40"
               )}
             />
           ))}
@@ -202,7 +202,7 @@ const ResponsiveCarouselModal = ({
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const content = (
-    <div className="p-4 pt-8 md:p-6 bg-black flex flex-col items-center">
+    <div className='flex flex-col items-center bg-black p-4 pt-8 md:p-6'>
       <GeneratedCarousel
         images={images}
         jobId={jobId}
@@ -215,8 +215,8 @@ const ResponsiveCarouselModal = ({
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-4xl p-0 overflow-hidden bg-black border-white/10">
-          <DialogHeader className="sr-only">
+        <DialogContent className='max-w-4xl overflow-hidden border-white/10 bg-black p-0'>
+          <DialogHeader className='sr-only'>
             <DialogTitle>View Angle</DialogTitle>
           </DialogHeader>
           {content}
@@ -227,8 +227,8 @@ const ResponsiveCarouselModal = ({
 
   return (
     <Drawer open={isOpen} onOpenChange={onOpenChange}>
-      <DrawerContent className="bg-black border-white/10">
-        <DrawerHeader className="sr-only">
+      <DrawerContent className='border-white/10 bg-black'>
+        <DrawerHeader className='sr-only'>
           <DrawerTitle>View Angle</DrawerTitle>
         </DrawerHeader>
         {content}
@@ -246,21 +246,21 @@ const GeneratedGrid = ({
   onImageClick: (index: number) => void;
 }) => {
   return (
-    <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-black/40">
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+    <div className='flex-1 overflow-y-auto bg-black/40 p-4 md:p-6'>
+      <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4'>
         {images.map((img, idx) => (
           <div
             key={img.id}
-            className="group relative aspect-square rounded-xl overflow-hidden bg-muted cursor-pointer ring-1 ring-white/10 hover:ring-cyan-500/50 transition-all shadow-lg"
+            className='group bg-muted relative aspect-square cursor-pointer overflow-hidden rounded-xl shadow-lg ring-1 ring-white/10 transition-all hover:ring-cyan-500/50'
             onClick={() => onImageClick(idx)}
           >
             <img
               src={img.url}
               alt={`Angle ${idx + 1}`}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
             />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-            <div className="absolute bottom-2 left-2 px-1.5 py-0.5 rounded bg-black/60 backdrop-blur text-[8px] font-mono text-white/70 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className='absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/20' />
+            <div className='absolute bottom-2 left-2 rounded bg-black/60 px-1.5 py-0.5 font-mono text-[8px] text-white/70 opacity-0 backdrop-blur transition-opacity group-hover:opacity-100'>
               Angle {idx + 1}
             </div>
           </div>
@@ -304,7 +304,7 @@ const HistoryCard = ({
     try {
       await apiResponse.delete(
         `/apps/angle-reshape/job/${job._id}/angle/${imageId}`,
-        { withCredentials: true },
+        { withCredentials: true }
       );
       onDeleteAngle(job._id, imageId);
     } catch (e) {
@@ -316,23 +316,23 @@ const HistoryCard = ({
 
   return (
     <div
-      className="rounded-xl border border-border bg-card p-3 space-y-3 cursor-pointer hover:border-primary/50 transition-colors"
+      className='border-border bg-card hover:border-primary/50 cursor-pointer space-y-3 rounded-xl border p-3 transition-colors'
       onClick={() => onSelect(job)}
     >
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 min-w-0">
+      <div className='flex items-center justify-between gap-2'>
+        <div className='flex min-w-0 items-center gap-2'>
           <img
             src={job.sourceImageUrl}
-            alt="source"
-            className="size-8 rounded-lg object-cover flex-shrink-0 border border-border"
+            alt='source'
+            className='border-border size-8 flex-shrink-0 rounded-lg border object-cover'
           />
-          <div className="min-w-0">
-            <p className="text-[11px] font-medium text-foreground truncate">
+          <div className='min-w-0'>
+            <p className='text-foreground truncate text-[11px] font-medium'>
               {job.bestAngles
                 ? "Auto — 10 Best Angles"
                 : `R:${job.rotation}° T:${job.tilt}°`}
             </p>
-            <p className="text-[10px] text-muted-foreground">
+            <p className='text-muted-foreground text-[10px]'>
               {new Date(job.createdAt).toLocaleDateString()}
             </p>
           </div>
@@ -343,28 +343,28 @@ const HistoryCard = ({
             handleDeleteJob();
           }}
           disabled={deletingJob}
-          className="flex-shrink-0 size-6 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 flex items-center justify-center transition-colors disabled:opacity-50"
+          className='flex size-6 flex-shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-500 transition-colors hover:bg-red-500/20 disabled:opacity-50'
         >
           {deletingJob ? (
-            <div className="size-3 border border-red-400 border-t-transparent rounded-full animate-spin" />
+            <div className='size-3 animate-spin rounded-full border border-red-400 border-t-transparent' />
           ) : (
-            <Trash2 className="size-3" />
+            <Trash2 className='size-3' />
           )}
         </button>
       </div>
 
       {/* Generated images grid */}
       {job.generatedImages.length > 0 ? (
-        <div className="grid grid-cols-3 gap-1.5">
+        <div className='grid grid-cols-3 gap-1.5'>
           {job.generatedImages.map((img) => (
             <div
               key={img._id}
-              className="relative group/img aspect-square rounded-lg overflow-hidden bg-muted"
+              className='group/img bg-muted relative aspect-square overflow-hidden rounded-lg'
             >
               <img
                 src={img.url}
                 alt={img.name}
-                className="w-full h-full object-cover"
+                className='h-full w-full object-cover'
               />
               <button
                 onClick={(e) => {
@@ -372,19 +372,19 @@ const HistoryCard = ({
                   handleDeleteAngle(img._id);
                 }}
                 disabled={deletingAngle === img._id}
-                className="absolute top-1 right-1 size-5 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity hover:bg-red-600"
+                className='absolute top-1 right-1 flex size-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover/img:opacity-100 hover:bg-red-600'
               >
                 {deletingAngle === img._id ? (
-                  <div className="size-2 border border-white border-t-transparent rounded-full animate-spin" />
+                  <div className='size-2 animate-spin rounded-full border border-white border-t-transparent' />
                 ) : (
-                  <Trash className="size-2.5" />
+                  <Trash className='size-2.5' />
                 )}
               </button>
             </div>
           ))}
         </div>
       ) : (
-        <p className="text-[10px] text-muted-foreground italic text-center py-2">
+        <p className='text-muted-foreground py-2 text-center text-[10px] italic'>
           All images deleted
         </p>
       )}
@@ -407,23 +407,23 @@ const HistoryContent = ({
   onSelect: (job: AngleReshapeJob) => void;
 }) => (
   <>
-    <div className="px-6 py-4 border-b border-border sticky top-0 bg-background z-10 flex items-center justify-between">
-      <h2 className="text-lg font-semibold flex items-center gap-2">
-        <HistoryIcon className="size-4" />
+    <div className='border-border bg-background sticky top-0 z-10 flex items-center justify-between border-b px-6 py-4'>
+      <h2 className='flex items-center gap-2 text-lg font-semibold'>
+        <HistoryIcon className='size-4' />
         Generation History
       </h2>
     </div>
 
-    <div className="flex-1 px-4 py-4 space-y-3 overflow-y-auto">
+    <div className='flex-1 space-y-3 overflow-y-auto px-4 py-4'>
       {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        <div className='flex items-center justify-center py-12'>
+          <div className='border-primary size-8 animate-spin rounded-full border-2 border-t-transparent' />
         </div>
       ) : history.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-12 text-center gap-3">
-          <HistoryIcon className="size-10 text-muted-foreground/30" />
-          <p className="text-sm text-muted-foreground">No history yet.</p>
-          <p className="text-xs text-muted-foreground">
+        <div className='flex flex-col items-center justify-center gap-3 py-12 text-center'>
+          <HistoryIcon className='text-muted-foreground/30 size-10' />
+          <p className='text-muted-foreground text-sm'>No history yet.</p>
+          <p className='text-muted-foreground text-xs'>
             Generate some angles to see them here.
           </p>
         </div>
@@ -535,7 +535,7 @@ const AnglesReshapePage = () => {
         {
           withCredentials: true,
           headers: { "Content-Type": "multipart/form-data" },
-        },
+        }
       );
 
       const data = res.data;
@@ -546,14 +546,14 @@ const AnglesReshapePage = () => {
           id: i.id,
           url: i.url,
           name: i.name,
-        }),
+        })
       );
 
       setGeneratedImages(imgs);
       setCurrentJobId(data.data.jobId);
     } catch (err: any) {
       setGenerateError(
-        err?.response?.data?.message || err.message || "Failed to generate",
+        err?.response?.data?.message || err.message || "Failed to generate"
       );
     } finally {
       setIsGenerating(false);
@@ -595,11 +595,11 @@ const AnglesReshapePage = () => {
           ? {
               ...j,
               generatedImages: j.generatedImages.filter(
-                (img) => img._id !== imageId,
+                (img) => img._id !== imageId
               ),
             }
-          : j,
-      ),
+          : j
+      )
     );
   };
 
@@ -614,7 +614,7 @@ const AnglesReshapePage = () => {
         id: i._id,
         url: i.url,
         name: i.name,
-      })),
+      }))
     );
     setCurrentJobId(job._id);
     setActiveTab("controls");
@@ -622,41 +622,41 @@ const AnglesReshapePage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
+    <div className='flex min-h-screen w-full flex-col bg-white dark:bg-black'>
       <LandingPageBanner />
       <LandingNavbar />
 
-      <main className="flex-grow mt-12 md:mb-20 relative">
-        <div className="bg-grid-black/[0.1] dark:bg-grid-white/[0.2] absolute inset-0" />
-        <div className="text-center animate-fadeInUp mb-10 px-2 md:px-4">
-          <h1 className="font-bold tracking-tight text-2xl lg:text-5xl">
+      <main className='relative mt-12 flex-grow md:mb-20'>
+        <div className='bg-grid-black/[0.1] dark:bg-grid-white/[0.2] absolute inset-0' />
+        <div className='animate-fadeInUp mb-10 px-2 text-center md:px-4'>
+          <h1 className='text-2xl font-bold tracking-tight lg:text-5xl'>
             Cinematic Angles{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
               Position
             </span>
           </h1>
           <p
-            className="my-5 text-muted-foreground text-sm md:text-lg animate-fadeInUp"
+            className='text-muted-foreground animate-fadeInUp my-5 text-sm md:text-lg'
             style={{ animationDelay: "0.2s" }}
           >
             Precision tools built for creators who demand control.
           </p>
         </div>
 
-        <div className="relative w-full border-y border-black/5 dark:border-white/10">
+        <div className='relative w-full border-y border-black/5 dark:border-white/10'>
           <GridPattern
             width={30}
             height={30}
             x={-1}
             y={-1}
             strokeDasharray={"4 2"}
-            className="absolute inset-0 z-0 opacity-90 dark:opacity-50"
+            className='absolute inset-0 z-0 opacity-90 dark:opacity-50'
           />
-          <section className="sm:px-2 lg:px-8 lg:py-10 grid grid-cols-1 md:grid-cols-[1fr_1.4fr] gap-6 lg:gap-16 max-w-6xl mx-auto px-4 gap-y-6 items-start">
+          <section className='mx-auto grid max-w-6xl grid-cols-1 items-start gap-6 gap-y-6 px-4 sm:px-2 md:grid-cols-[1fr_1.4fr] lg:gap-16 lg:px-8 lg:py-10'>
             {/* Left: Controls */}
-            <div className="flex flex-col gap-4 lg:gap-5">
-              <div className="z-1 w-full max-h-fit md:static md:w-auto md:h-full md:max-w-[360px]">
-                <div className="rounded-md bg-white/80 dark:bg-[#141415]/80 backdrop-blur-xl border border-black/5 dark:border-white/5 flex flex-col h-full shadow-2xl overflow-hidden">
+            <div className='flex flex-col gap-4 lg:gap-5'>
+              <div className='z-1 max-h-fit w-full md:static md:h-full md:w-auto md:max-w-[360px]'>
+                <div className='flex h-full flex-col overflow-hidden rounded-md border border-black/5 bg-white/80 shadow-2xl backdrop-blur-xl dark:border-white/5 dark:bg-[#141415]/80'>
                   {/* Visualizer */}
                   <div
                     onPointerDown={onPointerDown}
@@ -669,45 +669,45 @@ const AnglesReshapePage = () => {
                       "border-b border-black/5 dark:border-white/10",
                       "group transition-all duration-200",
                       bestAngles
-                        ? "opacity-50 cursor-not-allowed"
+                        ? "cursor-not-allowed opacity-50"
                         : isDragging
                           ? "cursor-grabbing"
-                          : "cursor-grab",
+                          : "cursor-grab"
                     )}
                   >
-                    <div className="absolute top-4 z-10 text-center space-y-1 pointer-events-none px-4">
-                      <p className="text-[10px] font-bold text-foreground uppercase">
+                    <div className='pointer-events-none absolute top-4 z-10 space-y-1 px-4 text-center'>
+                      <p className='text-foreground text-[10px] font-bold uppercase'>
                         Hold and drag to change
                       </p>
-                      <p className="text-[10px] text-foreground italic">
+                      <p className='text-foreground text-[10px] italic'>
                         camera angle
                       </p>
                     </div>
 
-                    <div className="relative size-40 md:size-48 flex items-center justify-center [perspective:1000px]">
+                    <div className='relative flex size-40 items-center justify-center [perspective:1000px] md:size-48'>
                       {/* Subject at Center */}
-                      <div className="absolute inset-0 flex items-center justify-center [transform-style:preserve-3d] pointer-events-none">
+                      <div className='pointer-events-none absolute inset-0 flex items-center justify-center [transform-style:preserve-3d]'>
                         {previewUrl ? (
                           <div
-                            className="size-24 md:size-28 bg-white/10 rounded-lg overflow-hidden border border-white/20 shadow-2xl"
+                            className='size-24 overflow-hidden rounded-lg border border-white/20 bg-white/10 shadow-2xl md:size-28'
                             style={{
                               transform: `rotateY(${-rotation}deg) rotateX(${-tilt}deg)`,
                             }}
                           >
                             <img
                               src={previewUrl}
-                              alt="Subject"
-                              className="w-full h-full object-contain"
+                              alt='Subject'
+                              className='h-full w-full object-contain'
                             />
                           </div>
                         ) : (
-                          <div className="size-20 md:size-24 rounded-full bg-blue-500/20 blur-2xl" />
+                          <div className='size-20 rounded-full bg-blue-500/20 blur-2xl md:size-24' />
                         )}
                       </div>
 
                       {/* Sphere Cage */}
                       <div
-                        className="absolute inset-0 flex items-center justify-center transition-transform duration-150 ease-out [transform-style:preserve-3d] pointer-events-none"
+                        className='pointer-events-none absolute inset-0 flex items-center justify-center transition-transform duration-150 ease-out [transform-style:preserve-3d]'
                         style={{
                           transform: `rotateY(${rotation}deg) rotateX(${tilt}deg)`,
                         }}
@@ -715,14 +715,14 @@ const AnglesReshapePage = () => {
                         {[0, 30, 60, 90, 120, 150].map((rot) => (
                           <div
                             key={`v-${rot}`}
-                            className="absolute inset-0 rounded-full border border-black/30 dark:border-white/30 opacity-40"
+                            className='absolute inset-0 rounded-full border border-black/30 opacity-40 dark:border-white/30'
                             style={{ transform: `rotateY(${rot}deg)` }}
                           />
                         ))}
                         {[-45, -25, 0, 25, 45].map((rot) => (
                           <div
                             key={`h-${rot}`}
-                            className="absolute inset-0 rounded-full border border-black/30 dark:border-white/30 opacity-60"
+                            className='absolute inset-0 rounded-full border border-black/30 opacity-60 dark:border-white/30'
                             style={{
                               transform: `rotateX(90deg) translateZ(${rot * 1.4}px) scale(${Math.cos((rot * Math.PI) / 180)})`,
                             }}
@@ -732,12 +732,12 @@ const AnglesReshapePage = () => {
 
                       {/* Orbiting Camera — click to upload when empty */}
                       <label
-                        htmlFor="uploadFile1"
+                        htmlFor='uploadFile1'
                         className={cn(
-                          "absolute size-10 md:size-12 bg-white dark:bg-[#1a1a1c] border border-black/10 dark:border-white/10 rounded-xl flex items-center justify-center shadow-lg transition-all duration-150 ease-out overflow-hidden pointer-events-auto",
+                          "pointer-events-auto absolute flex size-10 items-center justify-center overflow-hidden rounded-xl border border-black/10 bg-white shadow-lg transition-all duration-150 ease-out md:size-12 dark:border-white/10 dark:bg-[#1a1a1c]",
                           !previewUrl &&
-                            "cursor-pointer hover:border-blue-400 hover:shadow-blue-500/20 hover:shadow-lg",
-                          previewUrl && "pointer-events-none",
+                            "cursor-pointer hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/20",
+                          previewUrl && "pointer-events-none"
                         )}
                         style={{
                           transform: `perspective(1000px) rotateY(${rotation - 180}deg) rotateX(${tilt}deg) translateZ(95px) rotateX(${-tilt}deg) rotateY(${-(rotation - 180)}deg)`,
@@ -750,13 +750,13 @@ const AnglesReshapePage = () => {
                         {previewUrl ? (
                           <img
                             src={previewUrl}
-                            alt="Viewfinder"
-                            className="w-full h-full object-cover"
+                            alt='Viewfinder'
+                            className='h-full w-full object-cover'
                           />
                         ) : (
-                          <div className="flex flex-col items-center justify-center gap-0.5">
-                            <ImageIcon className="size-3.5 md:size-4 text-blue-500" />
-                            <span className="text-[6px] font-bold text-gray-500 uppercase tracking-wide leading-none">
+                          <div className='flex flex-col items-center justify-center gap-0.5'>
+                            <ImageIcon className='size-3.5 text-blue-500 md:size-4' />
+                            <span className='text-[6px] leading-none font-bold tracking-wide text-gray-500 uppercase'>
                               Upload
                             </span>
                           </div>
@@ -771,45 +771,45 @@ const AnglesReshapePage = () => {
                     onValueChange={(v) =>
                       setActiveTab(v as "upload" | "controls")
                     }
-                    className="w-full mt-1"
+                    className='mt-1 w-full'
                   >
-                    <TabsList className="w-fit ml-2">
-                      <TabsTrigger value="upload">Upload</TabsTrigger>
-                      <TabsTrigger value="controls">Controls</TabsTrigger>
+                    <TabsList className='ml-2 w-fit'>
+                      <TabsTrigger value='upload'>Upload</TabsTrigger>
+                      <TabsTrigger value='controls'>Controls</TabsTrigger>
                     </TabsList>
 
                     {/* Upload Tab */}
-                    <TabsContent value="upload" className="w-full">
-                      <div className="px-2 py-1 flex items-center justify-center">
+                    <TabsContent value='upload' className='w-full'>
+                      <div className='flex items-center justify-center px-2 py-1'>
                         <label
-                          htmlFor="uploadFile1"
-                          className="bg-white dark:bg-white/[0.03] text-slate-500 dark:text-slate-400 font-semibold text-base rounded-xl w-full h-52 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-200 dark:border-white/10 border-dashed hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-500/5 transition-all"
+                          htmlFor='uploadFile1'
+                          className='flex h-52 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-white text-base font-semibold text-slate-500 transition-all hover:border-blue-400 hover:bg-blue-50/50 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-400 dark:hover:border-blue-500 dark:hover:bg-blue-500/5'
                         >
                           <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-10 mb-3 fill-gray-400 dark:fill-slate-500"
-                            viewBox="0 0 32 32"
+                            xmlns='http://www.w3.org/2000/svg'
+                            className='mb-3 w-10 fill-gray-400 dark:fill-slate-500'
+                            viewBox='0 0 32 32'
                           >
-                            <path d="M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z" />
-                            <path d="M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z" />
+                            <path d='M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z' />
+                            <path d='M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z' />
                           </svg>
                           {file ? (
-                            <span className="text-sm text-blue-500 font-medium">
+                            <span className='text-sm font-medium text-blue-500'>
                               {file.name}
                             </span>
                           ) : (
-                            <span className="text-sm text-slate-600 dark:text-slate-300">
+                            <span className='text-sm text-slate-600 dark:text-slate-300'>
                               Upload file
                             </span>
                           )}
                           <input
-                            type="file"
-                            id="uploadFile1"
-                            className="hidden"
-                            accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+                            type='file'
+                            id='uploadFile1'
+                            className='hidden'
+                            accept='image/png,image/jpeg,image/webp,image/gif,image/svg+xml'
                             onChange={handleFileUpload}
                           />
-                          <p className="text-xs font-medium text-slate-400 dark:text-slate-500 mt-2">
+                          <p className='mt-2 text-xs font-medium text-slate-400 dark:text-slate-500'>
                             PNG, JPG, SVG, WEBP, and GIF are Allowed.
                           </p>
                         </label>
@@ -817,15 +817,15 @@ const AnglesReshapePage = () => {
                     </TabsContent>
 
                     {/* Controls Tab */}
-                    <TabsContent value="controls">
-                      <div className="px-2 py-2 space-y-4 bg-black/[0.02] dark:bg-black/20">
-                        <div className="space-y-3">
+                    <TabsContent value='controls'>
+                      <div className='space-y-4 bg-black/[0.02] px-2 py-2 dark:bg-black/20'>
+                        <div className='space-y-3'>
                           {/* Rotation */}
                           {(() => {
                             const pct = (rotation / 360) * 100;
                             return (
-                              <div className="flex items-center gap-1.5">
-                                <span className="text-[10px] text-neutral-400 dark:text-neutral-500 w-[60px] shrink-0 truncate">
+                              <div className='flex items-center gap-1.5'>
+                                <span className='w-[60px] shrink-0 truncate text-[10px] text-neutral-400 dark:text-neutral-500'>
                                   Rotation
                                 </span>
                                 <button
@@ -833,31 +833,31 @@ const AnglesReshapePage = () => {
                                     setRotation(Math.max(0, rotation - 5))
                                   }
                                   disabled={bestAngles}
-                                  className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                 >
-                                  <Minus className="size-2.5" />
+                                  <Minus className='size-2.5' />
                                 </button>
                                 <div
-                                  className="relative flex-1 h-[18px] rounded-md bg-neutral-100 dark:bg-neutral-800 overflow-hidden cursor-pointer"
+                                  className='relative h-[18px] flex-1 cursor-pointer overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-800'
                                   onClick={(e) => {
                                     if (bestAngles) return;
                                     const rect =
                                       e.currentTarget.getBoundingClientRect();
                                     const raw = Math.round(
                                       ((e.clientX - rect.left) / rect.width) *
-                                        360,
+                                        360
                                     );
                                     setRotation(
-                                      Math.max(0, Math.min(360, raw)),
+                                      Math.max(0, Math.min(360, raw))
                                     );
                                   }}
                                 >
                                   <div
-                                    className="absolute left-0 top-0 h-full rounded-l-md bg-neutral-300 dark:bg-neutral-700 transition-[width] duration-100"
+                                    className='absolute top-0 left-0 h-full rounded-l-md bg-neutral-300 transition-[width] duration-100 dark:bg-neutral-700'
                                     style={{ width: `${pct}%` }}
                                   />
-                                  <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-[10px] font-medium tabular-nums text-neutral-700 dark:text-neutral-200">
+                                  <div className='absolute inset-0 flex items-center justify-center'>
+                                    <span className='text-[10px] font-medium text-neutral-700 tabular-nums dark:text-neutral-200'>
                                       {rotation}°
                                     </span>
                                   </div>
@@ -867,9 +867,9 @@ const AnglesReshapePage = () => {
                                     setRotation(Math.min(360, rotation + 5))
                                   }
                                   disabled={bestAngles}
-                                  className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                 >
-                                  <Plus className="size-2.5" />
+                                  <Plus className='size-2.5' />
                                 </button>
                               </div>
                             );
@@ -878,8 +878,8 @@ const AnglesReshapePage = () => {
                           {(() => {
                             const pct = ((tilt + 90) / 180) * 100;
                             return (
-                              <div className="flex items-center gap-1.5">
-                                <span className="text-[10px] text-neutral-400 dark:text-neutral-500 w-[60px] shrink-0 truncate">
+                              <div className='flex items-center gap-1.5'>
+                                <span className='w-[60px] shrink-0 truncate text-[10px] text-neutral-400 dark:text-neutral-500'>
                                   Tilt
                                 </span>
                                 <button
@@ -887,12 +887,12 @@ const AnglesReshapePage = () => {
                                     setTilt(Math.max(-90, tilt - 5))
                                   }
                                   disabled={bestAngles}
-                                  className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                 >
-                                  <Minus className="size-2.5" />
+                                  <Minus className='size-2.5' />
                                 </button>
                                 <div
-                                  className="relative flex-1 h-[18px] rounded-md bg-neutral-100 dark:bg-neutral-800 overflow-hidden cursor-pointer"
+                                  className='relative h-[18px] flex-1 cursor-pointer overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-800'
                                   onClick={(e) => {
                                     if (bestAngles) return;
                                     const rect =
@@ -900,17 +900,17 @@ const AnglesReshapePage = () => {
                                     const raw = Math.round(
                                       ((e.clientX - rect.left) / rect.width) *
                                         180 -
-                                        90,
+                                        90
                                     );
                                     setTilt(Math.max(-90, Math.min(90, raw)));
                                   }}
                                 >
                                   <div
-                                    className="absolute left-0 top-0 h-full rounded-l-md bg-neutral-300 dark:bg-neutral-700 transition-[width] duration-100"
+                                    className='absolute top-0 left-0 h-full rounded-l-md bg-neutral-300 transition-[width] duration-100 dark:bg-neutral-700'
                                     style={{ width: `${pct}%` }}
                                   />
-                                  <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-[10px] font-medium tabular-nums text-neutral-700 dark:text-neutral-200">
+                                  <div className='absolute inset-0 flex items-center justify-center'>
+                                    <span className='text-[10px] font-medium text-neutral-700 tabular-nums dark:text-neutral-200'>
                                       {tilt}°
                                     </span>
                                   </div>
@@ -920,9 +920,9 @@ const AnglesReshapePage = () => {
                                     setTilt(Math.min(90, tilt + 5))
                                   }
                                   disabled={bestAngles}
-                                  className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                 >
-                                  <Plus className="size-2.5" />
+                                  <Plus className='size-2.5' />
                                 </button>
                               </div>
                             );
@@ -931,19 +931,19 @@ const AnglesReshapePage = () => {
                           {(() => {
                             const pct = ((zoom - 1) / 9) * 100;
                             return (
-                              <div className="flex items-center gap-1.5">
-                                <span className="text-[10px] text-neutral-400 dark:text-neutral-500 w-[60px] shrink-0 truncate">
+                              <div className='flex items-center gap-1.5'>
+                                <span className='w-[60px] shrink-0 truncate text-[10px] text-neutral-400 dark:text-neutral-500'>
                                   Zoom
                                 </span>
                                 <button
                                   onClick={() => setZoom(Math.max(1, zoom - 1))}
                                   disabled={bestAngles}
-                                  className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                 >
-                                  <Minus className="size-2.5" />
+                                  <Minus className='size-2.5' />
                                 </button>
                                 <div
-                                  className="relative flex-1 h-[18px] rounded-md bg-neutral-100 dark:bg-neutral-800 overflow-hidden cursor-pointer"
+                                  className='relative h-[18px] flex-1 cursor-pointer overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-800'
                                   onClick={(e) => {
                                     if (bestAngles) return;
                                     const rect =
@@ -951,17 +951,17 @@ const AnglesReshapePage = () => {
                                     const raw = Math.round(
                                       ((e.clientX - rect.left) / rect.width) *
                                         9 +
-                                        1,
+                                        1
                                     );
                                     setZoom(Math.max(1, Math.min(10, raw)));
                                   }}
                                 >
                                   <div
-                                    className="absolute left-0 top-0 h-full rounded-l-md bg-neutral-300 dark:bg-neutral-700 transition-[width] duration-100"
+                                    className='absolute top-0 left-0 h-full rounded-l-md bg-neutral-300 transition-[width] duration-100 dark:bg-neutral-700'
                                     style={{ width: `${pct}%` }}
                                   />
-                                  <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-[10px] font-medium tabular-nums text-neutral-700 dark:text-neutral-200">
+                                  <div className='absolute inset-0 flex items-center justify-center'>
+                                    <span className='text-[10px] font-medium text-neutral-700 tabular-nums dark:text-neutral-200'>
                                       {zoom}x
                                     </span>
                                   </div>
@@ -971,9 +971,9 @@ const AnglesReshapePage = () => {
                                     setZoom(Math.min(10, zoom + 1))
                                   }
                                   disabled={bestAngles}
-                                  className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                 >
-                                  <Plus className="size-2.5" />
+                                  <Plus className='size-2.5' />
                                 </button>
                               </div>
                             );
@@ -981,35 +981,35 @@ const AnglesReshapePage = () => {
                         </div>
 
                         {/* Auto-generate checkbox */}
-                        <label className="flex items-center gap-2 py-2 px-3 rounded-lg bg-black/5 dark:bg-white/[0.03] border border-black/5 dark:border-white/10 cursor-pointer hover:bg-black/10 dark:hover:bg-white/[0.06] transition-colors">
+                        <label className='flex cursor-pointer items-center gap-2 rounded-lg border border-black/5 bg-black/5 px-3 py-2 transition-colors hover:bg-black/10 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]'>
                           <input
-                            type="checkbox"
+                            type='checkbox'
                             checked={bestAngles}
                             onChange={(e) => setBestAngles(e.target.checked)}
-                            className="size-3 border-slate-300 dark:border-slate-700 accent-blue-600"
+                            className='size-3 border-slate-300 accent-blue-600 dark:border-slate-700'
                           />
-                          <span className="text-sm font-normal text-foreground">
+                          <span className='text-foreground text-sm font-normal'>
                             Auto-Generate 10 Best Angles
                           </span>
                         </label>
 
                         {/* Error */}
                         {generateError && (
-                          <p className="text-[10px] text-red-400 text-center">
+                          <p className='text-center text-[10px] text-red-400'>
                             {generateError}
                           </p>
                         )}
 
                         <Button
-                          className="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all flex flex-row items-center justify-center gap-2"
+                          className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-gradient-to-bl focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800'
                           disabled={!file || isGenerating}
                           onClick={handleGenerate}
                         >
-                          <span className="text-sm">
+                          <span className='text-sm'>
                             {isGenerating ? "Generating..." : "Generate"}
                           </span>
                           {!isGenerating && (
-                            <Sparkles className="size-4 text-white" />
+                            <Sparkles className='size-4 text-white' />
                           )}
                         </Button>
                       </div>
@@ -1020,42 +1020,42 @@ const AnglesReshapePage = () => {
             </div>
 
             {/* Right: Result Panel */}
-            <div className="relative rounded-2xl overflow-hidden flex flex-col items-stretch min-h-[40vh] border border-black/5 dark:border-white/5 bg-black dark:bg-black">
+            <div className='relative flex min-h-[40vh] flex-col items-stretch overflow-hidden rounded-2xl border border-black/5 bg-black dark:border-white/5 dark:bg-black'>
               {/* Header */}
-              <div className="h-fit flex items-center justify-between px-8 shrink-0 border-b border-white/5 bg-[#0A0A0A]/50 backdrop-blur">
-                <div className="flex items-center gap-2">
-                  <span className="text-base font-bold text-white">Result</span>
+              <div className='flex h-fit shrink-0 items-center justify-between border-b border-white/5 bg-[#0A0A0A]/50 px-8 backdrop-blur'>
+                <div className='flex items-center gap-2'>
+                  <span className='text-base font-bold text-white'>Result</span>
                   {generatedImages.length > 0 && (
-                    <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 text-[10px] rounded-full font-medium">
+                    <span className='rounded-full bg-cyan-500/20 px-2 py-0.5 text-[10px] font-medium text-cyan-400'>
                       {generatedImages.length} angles
                     </span>
                   )}
                 </div>
                 <button
                   onClick={openHistory}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full bg-black/5 dark:bg-white/[0.05] border border-black/10 dark:border-white/10 text-neutral-600 dark:text-neutral-300 hover:bg-black/10 dark:hover:bg-white/[0.08] hover:text-black dark:hover:text-white transition-colors"
-                  title="View history"
+                  className='inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-3 py-1.5 text-xs font-medium text-neutral-600 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/[0.05] dark:text-neutral-300 dark:hover:bg-white/[0.08] dark:hover:text-white'
+                  title='View history'
                 >
-                  <HistoryIcon className="size-3.5" />
+                  <HistoryIcon className='size-3.5' />
                   History
                 </button>
               </div>
 
               {/* Body */}
               {isGenerating ? (
-                <div className="flex-1 flex flex-col items-center justify-center gap-4 p-8 border-2 border-gray-200 dark:border-white/10 border-dashed">
-                  <div className="relative size-16">
-                    <div className="absolute inset-0 rounded-full border-2 border-cyan-500/30 animate-ping" />
-                    <div className="absolute inset-0 rounded-full border-2 border-t-cyan-500 animate-spin" />
-                    <div className="absolute inset-2 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20" />
+                <div className='flex flex-1 flex-col items-center justify-center gap-4 border-2 border-dashed border-gray-200 p-8 dark:border-white/10'>
+                  <div className='relative size-16'>
+                    <div className='absolute inset-0 animate-ping rounded-full border-2 border-cyan-500/30' />
+                    <div className='absolute inset-0 animate-spin rounded-full border-2 border-t-cyan-500' />
+                    <div className='absolute inset-2 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20' />
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm font-bold text-white">
+                  <div className='text-center'>
+                    <p className='text-sm font-bold text-white'>
                       {bestAngles
                         ? "Generating 10 best angles..."
                         : "Generating..."}
                     </p>
-                    <p className="mt-1 text-xs text-white/40">
+                    <p className='mt-1 text-xs text-white/40'>
                       {bestAngles
                         ? "This may take a minute"
                         : "Processing your image"}
@@ -1090,44 +1090,44 @@ const AnglesReshapePage = () => {
                 </>
               ) : previewUrl ? (
                 /* Live preview (pre-generation) */
-                <div className="flex-1 flex flex-col items-center justify-center p-6 gap-4 border-2 border-gray-200 dark:border-white/10 border-dashed">
-                  <div className="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                <div className='flex flex-1 flex-col items-center justify-center gap-4 border-2 border-dashed border-gray-200 p-6 dark:border-white/10'>
+                  <div className='relative w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 shadow-2xl'>
                     <img
                       src={previewUrl}
-                      alt="Live preview"
-                      className="w-full object-contain max-h-[55vh] rounded-2xl"
+                      alt='Live preview'
+                      className='max-h-[55vh] w-full rounded-2xl object-contain'
                       style={{
                         transform: `perspective(1200px) rotateY(${(rotation - 180) * 0.06}deg) rotateX(${tilt * 0.06}deg) scale(${0.88 + zoom * 0.02})`,
                         transition: "transform 0.12s ease-out",
                       }}
                     />
                   </div>
-                  <div className="flex flex-col items-center gap-1">
-                    <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest">
+                  <div className='flex flex-col items-center gap-1'>
+                    <p className='text-[10px] font-bold tracking-widest text-white/50 uppercase'>
                       Live Preview
                     </p>
-                    <p className="text-[10px] text-white/30 italic">
+                    <p className='text-[10px] text-white/30 italic'>
                       Drag the globe or use sliders to adjust angle
                     </p>
                   </div>
                 </div>
               ) : (
                 /* Empty / demo state */
-                <div className="group relative isolate max-h-[55vh] w-full border-2 border-gray-200 dark:border-white/10 border-dashed">
+                <div className='group relative isolate max-h-[55vh] w-full border-2 border-dashed border-gray-200 dark:border-white/10'>
                   <img
-                    src="https://i.pinimg.com/736x/1d/e5/29/1de52947cf871b610fb4276053dd137f.jpg"
-                    alt="Demo preview"
-                    className="w-full object-cover max-h-[55vh] rounded-2xl"
+                    src='https://i.pinimg.com/736x/1d/e5/29/1de52947cf871b610fb4276053dd137f.jpg'
+                    alt='Demo preview'
+                    className='max-h-[55vh] w-full rounded-2xl object-cover'
                     style={{
                       transform: `perspective(1200px) rotateY(${(rotation - 180) * 0.06}deg) rotateX(${tilt * 0.06}deg) scale(${0.88 + zoom * 0.02})`,
                       transition: "transform 0.12s ease-out",
                     }}
                   />
-                  <div className="flex flex-col items-center gap-1 absolute bottom-4 inset-x-0">
-                    <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest">
+                  <div className='absolute inset-x-0 bottom-4 flex flex-col items-center gap-1'>
+                    <p className='text-[10px] font-bold tracking-widest text-white/50 uppercase'>
                       You have the canvas, No Camera needed
                     </p>
-                    <p className="text-[10px] text-white/30 italic">
+                    <p className='text-[10px] text-white/30 italic'>
                       Upload an image and generate
                     </p>
                   </div>
@@ -1143,7 +1143,7 @@ const AnglesReshapePage = () => {
       {/* History Responsive Container */}
       {isDesktop ? (
         <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
-          <SheetContent className="w-full sm:max-w-md overflow-y-auto flex flex-col gap-0 p-0">
+          <SheetContent className='flex w-full flex-col gap-0 overflow-y-auto p-0 sm:max-w-md'>
             <HistoryContent
               loading={historyLoading}
               history={history}
@@ -1155,7 +1155,7 @@ const AnglesReshapePage = () => {
         </Sheet>
       ) : (
         <Drawer open={historyOpen} onOpenChange={setHistoryOpen}>
-          <DrawerContent className="h-[80vh]">
+          <DrawerContent className='h-[80vh]'>
             <HistoryContent
               loading={historyLoading}
               history={history}

@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { FloatingDock } from "@/components/ui/floating-dock";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import React from "react";
-import { FloatingDock } from "@/components/ui/floating-dock";
+import { apiResponse } from "@/utils/apiResponse";
 import {
   IconBrandGithub,
   IconBrandX,
@@ -18,30 +17,31 @@ import {
   IconTerminal2,
 } from "@tabler/icons-react";
 import {
-  Mic,
-  Network,
-  ImageIcon,
-  Play,
-  Type,
-  Globe,
+  CheckCircle,
+  Crown,
+  Database,
   FileText,
-  Music,
-  Upload,
   FolderPlus,
+  Globe,
+  ImageIcon,
+  Info,
+  Loader2,
   MessageCircle,
+  Mic,
   Mic2,
-  X,
+  Music,
+  Network,
+  Play,
   Plus,
   Search,
-  CheckCircle,
-  Info,
-  Database,
-  Crown,
-  Loader2,
   Trash2,
+  Type,
+  Upload,
+  X,
 } from "lucide-react";
-import { apiResponse } from "@/utils/apiResponse";
 import { toast } from "sonner";
+import { useCallback, useEffect, useRef, useState } from "react";
+import React from "react";
 
 interface FloatingSidebarProps {
   onAddIntegration: (type: string, data?: any) => void;
@@ -89,7 +89,7 @@ export function FloatingSidebar({
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
-    null,
+    null
   );
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
 
@@ -173,7 +173,7 @@ export function FloatingSidebar({
         if (category === "image" || category === "all") {
           const res = await apiResponse.get(
             `/project/myprojects?type=ai-image-gen&page=${page}&limit=${limit}`,
-            { withCredentials: true },
+            { withCredentials: true }
           );
           if (res.data?.success) {
             const fetchedItems = res.data.projects
@@ -196,7 +196,7 @@ export function FloatingSidebar({
         if (category === "video" || category === "all") {
           const res = await apiResponse.get(
             `/project/myprojects?type=ai-video-gen&page=${page}&limit=${limit}`,
-            { withCredentials: true },
+            { withCredentials: true }
           );
           if (res.data?.success) {
             const fetchedItems = res.data.projects
@@ -220,7 +220,7 @@ export function FloatingSidebar({
         if (category === "audio" || category === "all") {
           const res = await apiResponse.get(
             `/inspire/generate/audio/history?page=${page}&limit=${limit}`,
-            { withCredentials: true },
+            { withCredentials: true }
           );
           if (res.data?.success) {
             const fetchedItems = res.data.data.map((p: any) => ({
@@ -247,7 +247,7 @@ export function FloatingSidebar({
           const typeFilter = category === "all" ? undefined : category;
           const res = await apiResponse.get(
             `/inspire/generate/text/history?${typeFilter ? `type=${typeFilter}&` : ""}page=${page}&limit=${limit}`,
-            { withCredentials: true },
+            { withCredentials: true }
           );
           if (res.data?.success) {
             const fetchedItems = res.data.data.map((p: any) => ({
@@ -274,7 +274,7 @@ export function FloatingSidebar({
         if (category === "all") {
           items.sort(
             (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         }
 
@@ -299,7 +299,7 @@ export function FloatingSidebar({
         }));
       }
     },
-    [],
+    []
   ); // Removed historyPagination dependency completely
 
   // sentinel component for infinite scroll
@@ -317,7 +317,7 @@ export function FloatingSidebar({
             fetchHistory(category, true);
           }
         },
-        { rootMargin: "50px" },
+        { rootMargin: "50px" }
       ); // Reduced margin to prevent premature triggers
 
       observer.observe(sentinelRef.current);
@@ -329,12 +329,12 @@ export function FloatingSidebar({
     return (
       <div
         ref={sentinelRef}
-        className="w-full py-4 flex flex-col items-center justify-center min-h-fit"
+        className='flex min-h-fit w-full flex-col items-center justify-center py-4'
       >
         {pagination.isLoading && (
-          <div className="flex flex-col items-center space-y-2 py-2">
-            <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-            <span className="text-[10px] text-muted-foreground animate-pulse">
+          <div className='flex flex-col items-center space-y-2 py-2'>
+            <div className='border-primary h-4 w-4 animate-spin rounded-full border-2 border-t-transparent' />
+            <span className='text-muted-foreground animate-pulse text-[10px]'>
               Loading amazing content...
             </span>
           </div>
@@ -404,13 +404,18 @@ export function FloatingSidebar({
     console.log("🎯 [Sidebar] handleIntegrationAdd called");
     console.log(
       "🎯 [Sidebar] selectedIntegrationType:",
-      selectedIntegrationType,
+      selectedIntegrationType
     );
     console.log("🎯 [Sidebar] selectedItem:", selectedItem);
     console.log("🎯 [Sidebar] inputData:", inputData);
 
     // For text content, require content or a selected item
-    if (selectedIntegrationType === "text" && !inputData.content.trim() && !selectedItem) return;
+    if (
+      selectedIntegrationType === "text" &&
+      !inputData.content.trim() &&
+      !selectedItem
+    )
+      return;
 
     // For other types, require either:
     // 1. A URL (when on url tab)
@@ -512,7 +517,7 @@ export function FloatingSidebar({
             type: "video",
             size: "YouTube Video",
           },
-          "video",
+          "video"
         );
       } else if (selectedSocialPlatform === "instagram") {
         nodeType = "instagram";
@@ -582,7 +587,7 @@ export function FloatingSidebar({
           type: "video",
           size: "YouTube Video",
         },
-        "video",
+        "video"
       );
     } else if (selectedIntegrationType === "text") {
       processedData = {
@@ -609,7 +614,7 @@ export function FloatingSidebar({
           type: "audio",
           size: "Audio File",
         },
-        "audio",
+        "audio"
       );
     } else if (selectedIntegrationType === "image") {
       processedData = {
@@ -628,7 +633,7 @@ export function FloatingSidebar({
           type: "image",
           size: "Image File",
         },
-        "image",
+        "image"
       );
     } else if (selectedIntegrationType === "video") {
       processedData = {
@@ -647,7 +652,7 @@ export function FloatingSidebar({
           type: "video",
           size: "Video File",
         },
-        "video",
+        "video"
       );
     } else if (selectedIntegrationType === "file") {
       const documentUrl = selectedItem?.url || inputData.url;
@@ -672,15 +677,15 @@ export function FloatingSidebar({
           type: "document",
           size: "Document File",
         },
-        "document",
+        "document"
       );
     }
 
     if (selectedIntegrationType && nodeType) {
       console.log("🎯 [Sidebar] Final nodeType:", nodeType);
-      
+
       let finalData = { ...processedData };
-      
+
       if (selectedItem) {
         // If an item is selected, merge its critical fields into fineData
         finalData = {
@@ -688,7 +693,10 @@ export function FloatingSidebar({
           title: selectedItem.name || selectedItem.title || finalData.title,
           url: selectedItem.url || finalData.url,
           content: selectedItem.content || finalData.content,
-          instruction: selectedItem.prompt || selectedItem.instruction || finalData.instruction,
+          instruction:
+            selectedItem.prompt ||
+            selectedItem.instruction ||
+            finalData.instruction,
           duration: selectedItem.duration || finalData.duration,
           size: selectedItem.size || finalData.size,
           alreadyInBrain: true,
@@ -697,7 +705,7 @@ export function FloatingSidebar({
       } else {
         console.log("🎯 [Sidebar] Using processedData:", finalData);
       }
-      
+
       onAddIntegration(nodeType, finalData);
     }
     resetModal();
@@ -738,7 +746,7 @@ export function FloatingSidebar({
 
   const extractVideoId = (url: string) => {
     const match = url.match(
-      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/
     );
     return match ? match[1] : null;
   };
@@ -802,7 +810,7 @@ export function FloatingSidebar({
     setUserFiles((prev) => ({
       ...prev,
       [itemType]: prev[itemType as keyof typeof prev].filter(
-        (file: any) => file.id !== itemId,
+        (file: any) => file.id !== itemId
       ),
     }));
 
@@ -968,7 +976,7 @@ export function FloatingSidebar({
 
   const handleFileInputChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
-    type: string,
+    type: string
   ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -1007,7 +1015,7 @@ export function FloatingSidebar({
     const IconComponent = config.icon;
 
     return (
-      <div className="space-y-4">
+      <div className='space-y-4'>
         {config.tabs.map((tab) => (
           <div key={tab} className={activeTab === tab ? "block" : "hidden"}>
             {config.content[tab as keyof typeof config.content] &&
@@ -1028,20 +1036,20 @@ export function FloatingSidebar({
         return {
           icon: (
             <svg
-              className="w-6 h-6"
-              viewBox="0 0 256 180"
-              width="256"
-              height="180"
-              xmlns="http://www.w3.org/2000/svg"
-              preserveAspectRatio="xMidYMid"
+              className='h-6 w-6'
+              viewBox='0 0 256 180'
+              width='256'
+              height='180'
+              xmlns='http://www.w3.org/2000/svg'
+              preserveAspectRatio='xMidYMid'
             >
               <path
-                d="M250.346 28.075A32.18 32.18 0 0 0 227.69 5.418C207.824 0 127.87 0 127.87 0S47.912.164 28.046 5.582A32.18 32.18 0 0 0 5.39 28.24c-6.009 35.298-8.34 89.084.165 122.97a32.18 32.18 0 0 0 22.656 22.657c19.866 5.418 99.822 5.418 99.822 5.418s79.955 0 99.82-5.418a32.18 32.18 0 0 0 22.657-22.657c6.338-35.348 8.291-89.1-.164-123.134Z"
-                fill="red"
+                d='M250.346 28.075A32.18 32.18 0 0 0 227.69 5.418C207.824 0 127.87 0 127.87 0S47.912.164 28.046 5.582A32.18 32.18 0 0 0 5.39 28.24c-6.009 35.298-8.34 89.084.165 122.97a32.18 32.18 0 0 0 22.656 22.657c19.866 5.418 99.822 5.418 99.822 5.418s79.955 0 99.82-5.418a32.18 32.18 0 0 0 22.657-22.657c6.338-35.348 8.291-89.1-.164-123.134Z'
+                fill='red'
               />
               <path
-                fill="#FFF"
-                d="m102.421 128.06 66.328-38.418-66.328-38.418z"
+                fill='#FFF'
+                d='m102.421 128.06 66.328-38.418-66.328-38.418z'
               />
             </svg>
           ),
@@ -1051,25 +1059,25 @@ export function FloatingSidebar({
       case "instagram":
         return {
           icon: (
-            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <svg className='h-6 w-6' viewBox='0 0 24 24' fill='currentColor'>
               <defs>
                 <linearGradient
-                  id="instagram-gradient"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
+                  id='instagram-gradient'
+                  x1='0%'
+                  y1='0%'
+                  x2='100%'
+                  y2='100%'
                 >
-                  <stop offset="0%" stopColor="#f09433" />
-                  <stop offset="25%" stopColor="#e6683c" />
-                  <stop offset="50%" stopColor="#dc2743" />
-                  <stop offset="75%" stopColor="#cc2366" />
-                  <stop offset="100%" stopColor="#bc1888" />
+                  <stop offset='0%' stopColor='#f09433' />
+                  <stop offset='25%' stopColor='#e6683c' />
+                  <stop offset='50%' stopColor='#dc2743' />
+                  <stop offset='75%' stopColor='#cc2366' />
+                  <stop offset='100%' stopColor='#bc1888' />
                 </linearGradient>
               </defs>
               <path
-                fill="url(#instagram-gradient)"
-                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.073-1.689-.073-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                fill='url(#instagram-gradient)'
+                d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.073-1.689-.073-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z'
               />
             </svg>
           ),
@@ -1079,8 +1087,8 @@ export function FloatingSidebar({
       case "twitter":
         return {
           icon: (
-            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            <svg className='h-6 w-6' viewBox='0 0 24 24' fill='currentColor'>
+              <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
             </svg>
           ),
           color: "text-blue-500",
@@ -1090,16 +1098,16 @@ export function FloatingSidebar({
         return {
           icon: (
             <svg
-              className="w-6 h-6"
-              width="256"
-              height="256"
-              xmlns="http://www.w3.org/2000/svg"
-              preserveAspectRatio="xMidYMid"
-              viewBox="0 0 256 256"
+              className='h-6 w-6'
+              width='256'
+              height='256'
+              xmlns='http://www.w3.org/2000/svg'
+              preserveAspectRatio='xMidYMid'
+              viewBox='0 0 256 256'
             >
               <path
-                d="M218.123 218.127h-37.931v-59.403c0-14.165-.253-32.4-19.728-32.4-19.756 0-22.779 15.434-22.779 31.369v60.43h-37.93V95.967h36.413v16.694h.51a39.907 39.907 0 0 1 35.928-19.733c38.445 0 45.533 25.288 45.533 58.186l-.016 67.013ZM56.955 79.27c-12.157.002-22.014-9.852-22.016-22.009-.002-12.157 9.851-22.014 22.008-22.016 12.157-.003 22.014 9.851 22.016 22.008A22.013 22.013 0 0 1 56.955 79.27m18.966 138.858H37.95V95.967h37.97v122.16ZM237.033.018H18.89C8.58-.098.125 8.161-.001 18.471v219.053c.122 10.315 8.576 18.582 18.89 18.474h218.144c10.336.128 18.823-8.139 18.966-18.474V18.454c-.147-10.33-8.635-18.588-18.966-18.453"
-                fill="#0A66C2"
+                d='M218.123 218.127h-37.931v-59.403c0-14.165-.253-32.4-19.728-32.4-19.756 0-22.779 15.434-22.779 31.369v60.43h-37.93V95.967h36.413v16.694h.51a39.907 39.907 0 0 1 35.928-19.733c38.445 0 45.533 25.288 45.533 58.186l-.016 67.013ZM56.955 79.27c-12.157.002-22.014-9.852-22.016-22.009-.002-12.157 9.851-22.014 22.008-22.016 12.157-.003 22.014 9.851 22.016 22.008A22.013 22.013 0 0 1 56.955 79.27m18.966 138.858H37.95V95.967h37.97v122.16ZM237.033.018H18.89C8.58-.098.125 8.161-.001 18.471v219.053c.122 10.315 8.576 18.582 18.89 18.474h218.144c10.336.128 18.823-8.139 18.966-18.474V18.454c-.147-10.33-8.635-18.588-18.966-18.453'
+                fill='#0A66C2'
               />
             </svg>
           ),
@@ -1110,29 +1118,29 @@ export function FloatingSidebar({
         return {
           icon: (
             <svg
-              className="w-6 h-6"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 36 36"
-              fill="url(#facebook__a)"
-              height="40"
-              width="40"
+              className='h-6 w-6'
+              xmlns='http://www.w3.org/2000/svg'
+              viewBox='0 0 36 36'
+              fill='url(#facebook__a)'
+              height='40'
+              width='40'
             >
               <defs>
                 <linearGradient
-                  x1="50%"
-                  x2="50%"
-                  y1="97.078%"
-                  y2="0%"
-                  id="facebook__a"
+                  x1='50%'
+                  x2='50%'
+                  y1='97.078%'
+                  y2='0%'
+                  id='facebook__a'
                 >
-                  <stop offset="0%" stopColor="#0062E0" />
-                  <stop offset="100%" stopColor="#19AFFF" />
+                  <stop offset='0%' stopColor='#0062E0' />
+                  <stop offset='100%' stopColor='#19AFFF' />
                 </linearGradient>
               </defs>
-              <path d="M15 35.8C6.5 34.3 0 26.9 0 18 0 8.1 8.1 0 18 0s18 8.1 18 18c0 8.9-6.5 16.3-15 17.8l-1-.8h-4l-1 .8z" />
+              <path d='M15 35.8C6.5 34.3 0 26.9 0 18 0 8.1 8.1 0 18 0s18 8.1 18 18c0 8.9-6.5 16.3-15 17.8l-1-.8h-4l-1 .8z' />
               <path
-                fill="#FFF"
-                d="m25 23 .8-5H21v-3.5c0-1.4.5-2.5 2.7-2.5H26V7.4c-1.3-.2-2.7-.4-4-.4-4.1 0-7 2.5-7 7v4h-4.5v5H15v12.7c1 .2 2 .3 3 .3s2-.1 3-.3V23h4z"
+                fill='#FFF'
+                d='m25 23 .8-5H21v-3.5c0-1.4.5-2.5 2.7-2.5H26V7.4c-1.3-.2-2.7-.4-4-.4-4.1 0-7 2.5-7 7v4h-4.5v5H15v12.7c1 .2 2 .3 3 .3s2-.1 3-.3V23h4z'
               />
             </svg>
           ),
@@ -1143,23 +1151,23 @@ export function FloatingSidebar({
       case "tiktok":
         return {
           icon: (
-            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <svg className='h-6 w-6' viewBox='0 0 24 24' fill='currentColor'>
               <defs>
                 <linearGradient
-                  id="tiktok-gradient"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
+                  id='tiktok-gradient'
+                  x1='0%'
+                  y1='0%'
+                  x2='100%'
+                  y2='100%'
                 >
-                  <stop offset="0%" stopColor="#25F4EE" />
-                  <stop offset="50%" stopColor="#FE2C55" />
-                  <stop offset="100%" stopColor="#000000" />
+                  <stop offset='0%' stopColor='#25F4EE' />
+                  <stop offset='50%' stopColor='#FE2C55' />
+                  <stop offset='100%' stopColor='#000000' />
                 </linearGradient>
               </defs>
               <path
-                fill="url(#tiktok-gradient)"
-                d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-.88-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"
+                fill='url(#tiktok-gradient)'
+                d='M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-.88-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z'
               />
             </svg>
           ),
@@ -1176,25 +1184,25 @@ export function FloatingSidebar({
       id: "instagram",
       name: "Instagram",
       icon: (
-        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+        <svg className='h-6 w-6' viewBox='0 0 24 24' fill='currentColor'>
           <defs>
             <linearGradient
-              id="instagram-gradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
+              id='instagram-gradient'
+              x1='0%'
+              y1='0%'
+              x2='100%'
+              y2='100%'
             >
-              <stop offset="0%" stopColor="#f09433" />
-              <stop offset="25%" stopColor="#e6683c" />
-              <stop offset="50%" stopColor="#dc2743" />
-              <stop offset="75%" stopColor="#cc2366" />
-              <stop offset="100%" stopColor="#bc1888" />
+              <stop offset='0%' stopColor='#f09433' />
+              <stop offset='25%' stopColor='#e6683c' />
+              <stop offset='50%' stopColor='#dc2743' />
+              <stop offset='75%' stopColor='#cc2366' />
+              <stop offset='100%' stopColor='#bc1888' />
             </linearGradient>
           </defs>
           <path
-            fill="url(#instagram-gradient)"
-            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.073-1.689-.073-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+            fill='url(#instagram-gradient)'
+            d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.073-1.689-.073-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z'
           />
         </svg>
       ),
@@ -1205,8 +1213,8 @@ export function FloatingSidebar({
       id: "twitter",
       name: "Twitter/X",
       icon: (
-        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        <svg className='h-6 w-6' viewBox='0 0 24 24' fill='currentColor'>
+          <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
         </svg>
       ),
       color: "text-blue-600",
@@ -1218,16 +1226,16 @@ export function FloatingSidebar({
       name: "LinkedIn",
       icon: (
         <svg
-          className="w-6 h-6"
-          width="256"
-          height="256"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="xMidYMid"
-          viewBox="0 0 256 256"
+          className='h-6 w-6'
+          width='256'
+          height='256'
+          xmlns='http://www.w3.org/2000/svg'
+          preserveAspectRatio='xMidYMid'
+          viewBox='0 0 256 256'
         >
           <path
-            d="M218.123 218.127h-37.931v-59.403c0-14.165-.253-32.4-19.728-32.4-19.756 0-22.779 15.434-22.779 31.369v60.43h-37.93V95.967h36.413v16.694h.51a39.907 39.907 0 0 1 35.928-19.733c38.445 0 45.533 25.288 45.533 58.186l-.016 67.013ZM56.955 79.27c-12.157.002-22.014-9.852-22.016-22.009-.002-12.157 9.851-22.014 22.008-22.016 12.157-.003 22.014 9.851 22.016 22.008A22.013 22.013 0 0 1 56.955 79.27m18.966 138.858H37.95V95.967h37.97v122.16ZM237.033.018H18.89C8.58-.098.125 8.161-.001 18.471v219.053c.122 10.315 8.576 18.582 18.89 18.474h218.144c10.336.128 18.823-8.139 18.966-18.474V18.454c-.147-10.33-8.635-18.588-18.966-18.453"
-            fill="#0A66C2"
+            d='M218.123 218.127h-37.931v-59.403c0-14.165-.253-32.4-19.728-32.4-19.756 0-22.779 15.434-22.779 31.369v60.43h-37.93V95.967h36.413v16.694h.51a39.907 39.907 0 0 1 35.928-19.733c38.445 0 45.533 25.288 45.533 58.186l-.016 67.013ZM56.955 79.27c-12.157.002-22.014-9.852-22.016-22.009-.002-12.157 9.851-22.014 22.008-22.016 12.157-.003 22.014 9.851 22.016 22.008A22.013 22.013 0 0 1 56.955 79.27m18.966 138.858H37.95V95.967h37.97v122.16ZM237.033.018H18.89C8.58-.098.125 8.161-.001 18.471v219.053c.122 10.315 8.576 18.582 18.89 18.474h218.144c10.336.128 18.823-8.139 18.966-18.474V18.454c-.147-10.33-8.635-18.588-18.966-18.453'
+            fill='#0A66C2'
           />
         </svg>
       ),
@@ -1239,29 +1247,29 @@ export function FloatingSidebar({
       name: "Facebook",
       icon: (
         <svg
-          className="w-6 h-6"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 36 36"
-          fill="url(#facebook__a)"
-          height="40"
-          width="40"
+          className='h-6 w-6'
+          xmlns='http://www.w3.org/2000/svg'
+          viewBox='0 0 36 36'
+          fill='url(#facebook__a)'
+          height='40'
+          width='40'
         >
           <defs>
             <linearGradient
-              x1="50%"
-              x2="50%"
-              y1="97.078%"
-              y2="0%"
-              id="facebook__a"
+              x1='50%'
+              x2='50%'
+              y1='97.078%'
+              y2='0%'
+              id='facebook__a'
             >
-              <stop offset="0%" stopColor="#0062E0" />
-              <stop offset="100%" stopColor="#19AFFF" />
+              <stop offset='0%' stopColor='#0062E0' />
+              <stop offset='100%' stopColor='#19AFFF' />
             </linearGradient>
           </defs>
-          <path d="M15 35.8C6.5 34.3 0 26.9 0 18 0 8.1 8.1 0 18 0s18 8.1 18 18c0 8.9-6.5 16.3-15 17.8l-1-.8h-4l-1 .8z" />
+          <path d='M15 35.8C6.5 34.3 0 26.9 0 18 0 8.1 8.1 0 18 0s18 8.1 18 18c0 8.9-6.5 16.3-15 17.8l-1-.8h-4l-1 .8z' />
           <path
-            fill="#FFF"
-            d="m25 23 .8-5H21v-3.5c0-1.4.5-2.5 2.7-2.5H26V7.4c-1.3-.2-2.7-.4-4-.4-4.1 0-7 2.5-7 7v4h-4.5v5H15v12.7c1 .2 2 .3 3 .3s2-.1 3-.3V23h4z"
+            fill='#FFF'
+            d='m25 23 .8-5H21v-3.5c0-1.4.5-2.5 2.7-2.5H26V7.4c-1.3-.2-2.7-.4-4-.4-4.1 0-7 2.5-7 7v4h-4.5v5H15v12.7c1 .2 2 .3 3 .3s2-.1 3-.3V23h4z'
           />
         </svg>
       ),
@@ -1273,18 +1281,18 @@ export function FloatingSidebar({
       name: "YouTube",
       icon: (
         <svg
-          className="w-6 h-6"
-          viewBox="0 0 256 180"
-          width="256"
-          height="180"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="xMidYMid"
+          className='h-6 w-6'
+          viewBox='0 0 256 180'
+          width='256'
+          height='180'
+          xmlns='http://www.w3.org/2000/svg'
+          preserveAspectRatio='xMidYMid'
         >
           <path
-            d="M250.346 28.075A32.18 32.18 0 0 0 227.69 5.418C207.824 0 127.87 0 127.87 0S47.912.164 28.046 5.582A32.18 32.18 0 0 0 5.39 28.24c-6.009 35.298-8.34 89.084.165 122.97a32.18 32.18 0 0 0 22.656 22.657c19.866 5.418 99.822 5.418 99.822 5.418s79.955 0 99.82-5.418a32.18 32.18 0 0 0 22.657-22.657c6.338-35.348 8.291-89.1-.164-123.134Z"
-            fill="red"
+            d='M250.346 28.075A32.18 32.18 0 0 0 227.69 5.418C207.824 0 127.87 0 127.87 0S47.912.164 28.046 5.582A32.18 32.18 0 0 0 5.39 28.24c-6.009 35.298-8.34 89.084.165 122.97a32.18 32.18 0 0 0 22.656 22.657c19.866 5.418 99.822 5.418 99.822 5.418s79.955 0 99.82-5.418a32.18 32.18 0 0 0 22.657-22.657c6.338-35.348 8.291-89.1-.164-123.134Z'
+            fill='red'
           />
-          <path fill="#FFF" d="m102.421 128.06 66.328-38.418-66.328-38.418z" />
+          <path fill='#FFF' d='m102.421 128.06 66.328-38.418-66.328-38.418z' />
         </svg>
       ),
       color: "text-red-600",
@@ -1294,23 +1302,23 @@ export function FloatingSidebar({
       id: "tiktok",
       name: "TikTok",
       icon: (
-        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+        <svg className='h-6 w-6' viewBox='0 0 24 24' fill='currentColor'>
           <defs>
             <linearGradient
-              id="tiktok-gradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
+              id='tiktok-gradient'
+              x1='0%'
+              y1='0%'
+              x2='100%'
+              y2='100%'
             >
-              <stop offset="0%" stopColor="#25F4EE" />
-              <stop offset="50%" stopColor="#FE2C55" />
-              <stop offset="100%" stopColor="#000000" />
+              <stop offset='0%' stopColor='#25F4EE' />
+              <stop offset='50%' stopColor='#FE2C55' />
+              <stop offset='100%' stopColor='#000000' />
             </linearGradient>
           </defs>
           <path
-            fill="url(#tiktok-gradient)"
-            d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-.88-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"
+            fill='url(#tiktok-gradient)'
+            d='M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-.88-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z'
           />
         </svg>
       ),
@@ -1353,40 +1361,40 @@ export function FloatingSidebar({
       tabs: ["all", "record", "add"],
       content: {
         all: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <div className='relative'>
+              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
-                placeholder="Search audio files..."
+                placeholder='Search audio files...'
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-10 h-9"
+                className='h-9 pr-10 pl-10'
               />
               {searchQuery && (
                 <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                  variant='ghost'
+                  size='sm'
+                  className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                   onClick={() => setSearchQuery("")}
-                  title="Clear Search"
+                  title='Clear Search'
                 >
-                  <X className="w-3 h-3" />
+                  <X className='h-3 w-3' />
                 </Button>
               )}
             </div>
 
-            <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
-              <div className="flex flex-col gap-y-2">
+            <div className='scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent h-60 overflow-y-auto pr-2 pb-20'>
+              <div className='flex flex-col gap-y-2'>
                 {userFiles.audio.length === 0 &&
                 historyItems.audio.length === 0 &&
                 !historyPagination.audio.isLoading ? (
-                  <div className="text-center py-8">
-                    <Music className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">
+                  <div className='py-8 text-center'>
+                    <Music className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <p className='text-muted-foreground text-sm'>
                       No audio files yet
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className='text-muted-foreground text-xs'>
                       Generate audio or upload files
                     </p>
                   </div>
@@ -1397,12 +1405,12 @@ export function FloatingSidebar({
                       .filter((file: any) =>
                         file.name
                           .toLowerCase()
-                          .includes(searchQuery.toLowerCase()),
+                          .includes(searchQuery.toLowerCase())
                       )
                       .map((file: any) => (
                         <Card
                           key={file.id}
-                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                          className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === file.id
                               ? "bg-primary/10 border-primary/50"
                               : "hover:bg-muted/50"
@@ -1412,23 +1420,23 @@ export function FloatingSidebar({
                             // We don't necessarily want to toggle off selectedItem if we click it again
                           }}
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-muted">
-                              <Music className="w-5 h-5 text-muted-foreground" />
+                          <div className='flex items-center gap-3'>
+                            <div className='bg-muted flex h-10 w-10 items-center justify-center rounded-md'>
+                              <Music className='text-muted-foreground h-5 w-5' />
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-foreground truncate">
+                            <div className='min-w-0 flex-1'>
+                              <p className='text-foreground truncate text-sm font-medium'>
                                 {file.name}
                               </p>
-                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <div className='text-muted-foreground flex items-center gap-2 text-xs'>
                                 <span>{file.duration || "Audio"}</span>
                                 <span>•</span>
                                 <span>{file.size || "Upload"}</span>
                               </div>
                             </div>
                             {selectedItem?.id === file.id && (
-                              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                                <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
@@ -1440,57 +1448,58 @@ export function FloatingSidebar({
                       .filter((item: any) =>
                         (item.name || item.prompt || "")
                           .toLowerCase()
-                          .includes(searchQuery.toLowerCase()),
+                          .includes(searchQuery.toLowerCase())
                       )
                       .map((item: any) => (
                         <Card
                           key={item.id}
-                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                          className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === item.id
                               ? "bg-primary/10 border-primary/50"
                               : "hover:bg-muted/50"
                           }`}
                           onClick={() => setSelectedItem(item)}
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-green-500/10">
-                              <Music className="w-5 h-5 text-green-500" />
+                          <div className='flex items-center gap-3'>
+                            <div className='flex h-10 w-10 items-center justify-center rounded-md bg-green-500/10'>
+                              <Music className='h-5 w-5 text-green-500' />
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-foreground truncate">
+                            <div className='min-w-0 flex-1'>
+                              <p className='text-foreground truncate text-sm font-medium'>
                                 {item.prompt || "Generated Audio"}
                               </p>
-                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <div className='text-muted-foreground flex items-center gap-2 text-xs'>
                                 <Badge
-                                  variant="outline"
-                                  className="px-1 py-0 text-[10px] h-4 bg-primary/5 text-primary"
+                                  variant='outline'
+                                  className='bg-primary/5 text-primary h-4 px-1 py-0 text-[10px]'
                                 >
                                   Generated
                                 </Badge>
                                 <span>•</span>
                                 <span>
                                   {new Date(
-                                    item.createdAt,
+                                    item.createdAt
                                   ).toLocaleDateString()}
                                 </span>
                               </div>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                                <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
                         </Card>
                       ))}
 
-                    <HistorySentinel category="audio" />
+                    <HistorySentinel category='audio' />
 
                     {!historyPagination.audio.hasMore &&
-                      (userFiles.audio.length > 0 || historyItems.audio.length > 0) &&
+                      (userFiles.audio.length > 0 ||
+                        historyItems.audio.length > 0) &&
                       !historyPagination.audio.isLoading && (
-                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                        <div className='border-border/5 mt-4 mb-20 border-t py-10 text-center'>
+                          <p className='text-muted-foreground text-[10px] font-medium tracking-wider uppercase opacity-50'>
                             No more files found
                           </p>
                         </div>
@@ -1502,26 +1511,26 @@ export function FloatingSidebar({
           </div>
         ),
         record: () => (
-          <div className="space-y-4">
-            <div className="text-center py-4">
-              <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mic2 className="w-8 h-8 text-red-500" />
+          <div className='space-y-4'>
+            <div className='py-4 text-center'>
+              <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10'>
+                <Mic2 className='h-8 w-8 text-red-500' />
               </div>
-              <h3 className="text-sm font-semibold text-foreground mb-2">
+              <h3 className='text-foreground mb-2 text-sm font-semibold'>
                 Record Audio
               </h3>
-              <p className="text-xs text-muted-foreground mb-4">
+              <p className='text-muted-foreground mb-4 text-xs'>
                 Capture voice notes, interviews, or audio content
               </p>
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-medium text-foreground">
+              <div className='mb-2 flex items-center justify-between'>
+                <label className='text-foreground text-xs font-medium'>
                   Label
                 </label>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -1544,7 +1553,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="Document your file so you can remember them"
+                  placeholder='Document your file so you can remember them'
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -1552,19 +1561,19 @@ export function FloatingSidebar({
                       title: e.target.value,
                     }))
                   }
-                  className="min-h-[80px] resize-none"
+                  className='min-h-[80px] resize-none'
                 />
               )}
             </div>
 
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Status
               </label>
-              <div className="flex items-center space-x-3">
-                <span className="text-xs text-muted-foreground">Public</span>
+              <div className='flex items-center space-x-3'>
+                <span className='text-muted-foreground text-xs'>Public</span>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -1583,25 +1592,25 @@ export function FloatingSidebar({
                     }`}
                   />
                 </button>
-                <span className="text-xs text-muted-foreground">Private</span>
+                <span className='text-muted-foreground text-xs'>Private</span>
               </div>
             </div>
 
-            <div className="text-center">
+            <div className='text-center'>
               {!isRecording ? (
                 <Button
-                  className="bg-red-500 hover:bg-red-600 text-white w-full"
+                  className='w-full bg-red-500 text-white hover:bg-red-600'
                   onClick={startRecording}
                 >
-                  <Mic2 className="w-8 h-8 mr-2" />
+                  <Mic2 className='mr-2 h-8 w-8' />
                   Start Recording
                 </Button>
               ) : (
                 <Button
-                  className="bg-gray-500 hover:bg-gray-600 text-white w-full"
+                  className='w-full bg-gray-500 text-white hover:bg-gray-600'
                   onClick={stopRecording}
                 >
-                  <div className="w-8 h-8 mr-2 bg-red-500 rounded-full animate-pulse" />
+                  <div className='mr-2 h-8 w-8 animate-pulse rounded-full bg-red-500' />
                   Stop Recording
                 </Button>
               )}
@@ -1609,29 +1618,29 @@ export function FloatingSidebar({
           </div>
         ),
         add: () => (
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <Tabs
               value={addSubTab}
               onValueChange={setAddSubTab}
-              className="w-full"
+              className='w-full'
             >
-              <TabsList className="grid w-full grid-cols-2 h-8">
-                <TabsTrigger value="url" className="text-xs capitalize h-6">
+              <TabsList className='grid h-8 w-full grid-cols-2'>
+                <TabsTrigger value='url' className='h-6 text-xs capitalize'>
                   URL
                 </TabsTrigger>
-                <TabsTrigger value="upload" className="text-xs capitalize h-6">
+                <TabsTrigger value='upload' className='h-6 text-xs capitalize'>
                   Upload
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="url" className="space-y-3">
+              <TabsContent value='url' className='space-y-3'>
                 <div>
-                  <div className="flex items-center justify-between mb-2 mt-4">
-                    <label className="text-xs font-medium text-foreground">
+                  <div className='mt-4 mb-2 flex items-center justify-between'>
+                    <label className='text-foreground text-xs font-medium'>
                       Label
                     </label>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() =>
                         setInputData((prev) => ({
                           ...prev,
@@ -1654,7 +1663,7 @@ export function FloatingSidebar({
                   </div>
                   {inputData.hasInstruction && (
                     <Textarea
-                      placeholder="Document your file so you can remember them"
+                      placeholder='Document your file so you can remember them'
                       value={inputData.title}
                       onChange={(e) =>
                         setInputData((prev) => ({
@@ -1662,20 +1671,20 @@ export function FloatingSidebar({
                           title: e.target.value,
                         }))
                       }
-                      className="min-h-[80px] resize-none"
+                      className='min-h-[80px] resize-none'
                     />
                   )}
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-foreground mb-2 block">
+                  <label className='text-foreground mb-2 block text-xs font-medium'>
                     Status
                   </label>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-xs text-muted-foreground">
+                  <div className='flex items-center space-x-3'>
+                    <span className='text-muted-foreground text-xs'>
                       Public
                     </span>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() =>
                         setInputData((prev) => ({
                           ...prev,
@@ -1697,18 +1706,18 @@ export function FloatingSidebar({
                         }`}
                       />
                     </button>
-                    <span className="text-xs text-muted-foreground">
+                    <span className='text-muted-foreground text-xs'>
                       Private
                     </span>
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-foreground mb-2 block">
+                  <label className='text-foreground mb-2 block text-xs font-medium'>
                     Audio URL
                   </label>
-                  <div className="relative">
+                  <div className='relative'>
                     <Input
-                      placeholder="https://example.com/audio.mp3"
+                      placeholder='https://example.com/audio.mp3'
                       value={inputData.url}
                       onChange={(e) =>
                         setInputData((prev) => ({
@@ -1716,33 +1725,33 @@ export function FloatingSidebar({
                           url: e.target.value,
                         }))
                       }
-                      className="h-9 pr-10"
+                      className='h-9 pr-10'
                     />
                     {inputData.url && (
                       <Button
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                        variant='ghost'
+                        size='sm'
+                        className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                         onClick={() =>
                           setInputData((prev) => ({ ...prev, url: "" }))
                         }
-                        title="Clear URL"
+                        title='Clear URL'
                       >
-                        <X className="w-3 h-3" />
+                        <X className='h-3 w-3' />
                       </Button>
                     )}
                   </div>
                 </div>
               </TabsContent>
 
-              <TabsContent value="upload" className="space-y-3">
+              <TabsContent value='upload' className='space-y-3'>
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-medium text-foreground">
+                  <div className='mb-2 flex items-center justify-between'>
+                    <label className='text-foreground text-xs font-medium'>
                       Label
                     </label>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() =>
                         setInputData((prev) => ({
                           ...prev,
@@ -1765,7 +1774,7 @@ export function FloatingSidebar({
                   </div>
                   {inputData.hasInstruction && (
                     <Textarea
-                      placeholder="Document your file so you can remember them"
+                      placeholder='Document your file so you can remember them'
                       value={inputData.title}
                       onChange={(e) =>
                         setInputData((prev) => ({
@@ -1773,21 +1782,21 @@ export function FloatingSidebar({
                           title: e.target.value,
                         }))
                       }
-                      className="min-h-[80px] resize-none"
+                      className='min-h-[80px] resize-none'
                     />
                   )}
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-foreground mb-2 block">
+                  <label className='text-foreground mb-2 block text-xs font-medium'>
                     Status
                   </label>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-xs text-muted-foreground">
+                  <div className='flex items-center space-x-3'>
+                    <span className='text-muted-foreground text-xs'>
                       Public
                     </span>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() =>
                         setInputData((prev) => ({
                           ...prev,
@@ -1809,42 +1818,44 @@ export function FloatingSidebar({
                         }`}
                       />
                     </button>
-                    <span className="text-xs text-muted-foreground">
+                    <span className='text-muted-foreground text-xs'>
                       Private
                     </span>
                   </div>
                 </div>
 
                 <div
-                  className={`border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors ${
-                    isUploading ? "bg-primary/5 border-primary/30 pointer-events-none" : ""
+                  className={`border-border hover:border-primary/50 rounded-md border-2 border-dashed p-6 text-center transition-colors ${
+                    isUploading
+                      ? "bg-primary/5 border-primary/30 pointer-events-none"
+                      : ""
                   }`}
                   onDrop={(e) => handleDrop(e, "audio")}
                   onDragOver={handleDragOver}
                 >
                   <input
-                    type="file"
-                    accept=".mp3,.wav,.m4a,.aac,.ogg,audio/*"
+                    type='file'
+                    accept='.mp3,.wav,.m4a,.aac,.ogg,audio/*'
                     onChange={(e) => handleFileInputChange(e, "audio")}
-                    className="hidden"
-                    id="audio-upload"
+                    className='hidden'
+                    id='audio-upload'
                     disabled={isUploading}
                   />
-                  <label htmlFor="audio-upload" className="cursor-pointer">
+                  <label htmlFor='audio-upload' className='cursor-pointer'>
                     {isUploading ? (
-                      <div className="flex flex-col items-center">
-                        <Loader2 className="w-8 h-8 text-primary animate-spin mb-2" />
-                        <p className="text-sm text-primary font-medium">
+                      <div className='flex flex-col items-center'>
+                        <Loader2 className='text-primary mb-2 h-8 w-8 animate-spin' />
+                        <p className='text-primary text-sm font-medium'>
                           Uploading audio...
                         </p>
                       </div>
                     ) : (
                       <>
-                        <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                        <p className="text-sm text-muted-foreground mb-2">
+                        <Upload className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                        <p className='text-muted-foreground mb-2 text-sm'>
                           Drop audio files here or click to browse
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className='text-muted-foreground text-xs'>
                           MP3, WAV, M4A up to 50MB
                         </p>
                       </>
@@ -1865,61 +1876,61 @@ export function FloatingSidebar({
       tabs: ["all", "url", "upload"],
       content: {
         all: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <div className='relative'>
+              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
-                placeholder="Search image files..."
+                placeholder='Search image files...'
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-10 h-9"
+                className='h-9 pr-10 pl-10'
               />
               {searchQuery && (
                 <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                  variant='ghost'
+                  size='sm'
+                  className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                   onClick={() => setSearchQuery("")}
-                  title="Clear Search"
+                  title='Clear Search'
                 >
-                  <X className="w-3 h-3" />
+                  <X className='h-3 w-3' />
                 </Button>
               )}
             </div>
 
-            <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
-              <div className="space-y-4">
+            <div className='scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent h-60 overflow-y-auto pr-2 pb-20'>
+              <div className='space-y-4'>
                 {userFiles.image.length === 0 &&
                 historyItems.image.length === 0 &&
                 !historyPagination.image.isLoading ? (
-                  <div className="text-center py-8">
-                    <ImageIcon className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">
+                  <div className='py-8 text-center'>
+                    <ImageIcon className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <p className='text-muted-foreground text-sm'>
                       No images yet
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className='text-muted-foreground text-xs'>
                       Generate images or upload files
                     </p>
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className='grid grid-cols-2 gap-3'>
                       {/* User Uploaded Images */}
                       {userFiles.image
                         .filter((file: any) =>
                           file.name
                             .toLowerCase()
-                            .includes(searchQuery.toLowerCase()),
+                            .includes(searchQuery.toLowerCase())
                         )
                         .map((file: any) => (
                           <div
                             key={file.id}
-                            className={`relative aspect-square rounded-md overflow-hidden cursor-pointer border-2 transition-all ${
+                            className={`relative aspect-square cursor-pointer overflow-hidden rounded-md border-2 transition-all ${
                               selectedItem?.id === file.id &&
                               selectedItem?.type === "image"
                                 ? "border-primary shadow-md"
-                                : "border-transparent hover:border-primary/30"
+                                : "hover:border-primary/30 border-transparent"
                             }`}
                             onClick={() =>
                               setSelectedItem({ ...file, type: "image" })
@@ -1928,16 +1939,16 @@ export function FloatingSidebar({
                             <img
                               src={file.url}
                               alt={file.name}
-                              className="w-full h-full object-cover"
+                              className='h-full w-full object-cover'
                             />
                             {selectedItem?.id === file.id &&
                               selectedItem?.type === "image" && (
-                                <div className="absolute top-1 right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                                  <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                                <div className='bg-primary absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                                  <CheckCircle className='text-primary-foreground h-3 w-3' />
                                 </div>
                               )}
-                            <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/40 backdrop-blur-[2px]">
-                              <p className="text-[10px] text-white truncate px-1">
+                            <div className='absolute right-0 bottom-0 left-0 bg-black/40 p-1 backdrop-blur-[2px]'>
+                              <p className='truncate px-1 text-[10px] text-white'>
                                 {file.name}
                               </p>
                             </div>
@@ -1949,35 +1960,35 @@ export function FloatingSidebar({
                         .filter((item: any) =>
                           (item.prompt || "")
                             .toLowerCase()
-                            .includes(searchQuery.toLowerCase()),
+                            .includes(searchQuery.toLowerCase())
                         )
                         .map((item: any) => (
                           <div
                             key={item.id}
-                            className={`relative aspect-square rounded-md overflow-hidden cursor-pointer border-2 transition-all ${
+                            className={`relative aspect-square cursor-pointer overflow-hidden rounded-md border-2 transition-all ${
                               selectedItem?.id === item.id
                                 ? "border-primary shadow-md"
-                                : "border-transparent hover:border-primary/30"
+                                : "hover:border-primary/30 border-transparent"
                             }`}
                             onClick={() => setSelectedItem(item)}
                           >
                             <img
                               src={item.thumbnail || item.url}
                               alt={item.prompt}
-                              className="w-full h-full object-cover"
+                              className='h-full w-full object-cover'
                             />
-                            <div className="absolute top-1 left-1">
-                              <Badge className="bg-primary/80 hover:bg-primary text-[8px] px-1 py-0 h-3 leading-none border-none">
+                            <div className='absolute top-1 left-1'>
+                              <Badge className='bg-primary/80 hover:bg-primary h-3 border-none px-1 py-0 text-[8px] leading-none'>
                                 AI
                               </Badge>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className="absolute top-1 right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              <div className='bg-primary absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                                <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
-                            <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/40 backdrop-blur-[2px]">
-                              <p className="text-[10px] text-white truncate px-1">
+                            <div className='absolute right-0 bottom-0 left-0 bg-black/40 p-1 backdrop-blur-[2px]'>
+                              <p className='truncate px-1 text-[10px] text-white'>
                                 {item.prompt || "Generated"}
                               </p>
                             </div>
@@ -1985,13 +1996,14 @@ export function FloatingSidebar({
                         ))}
                     </div>
 
-                    <HistorySentinel category="image" />
+                    <HistorySentinel category='image' />
 
                     {!historyPagination.image.hasMore &&
-                      (userFiles.image.length > 0 || historyItems.image.length > 0) &&
+                      (userFiles.image.length > 0 ||
+                        historyItems.image.length > 0) &&
                       !historyPagination.image.isLoading && (
-                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                        <div className='border-border/5 mt-4 mb-20 border-t py-10 text-center'>
+                          <p className='text-muted-foreground text-[10px] font-medium tracking-wider uppercase opacity-50'>
                             No more files found
                           </p>
                         </div>
@@ -2003,14 +2015,14 @@ export function FloatingSidebar({
           </div>
         ),
         url: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-medium text-foreground">
+              <div className='mb-2 flex items-center justify-between'>
+                <label className='text-foreground text-xs font-medium'>
                   Label
                 </label>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -2033,7 +2045,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="Document your file so you can remember them"
+                  placeholder='Document your file so you can remember them'
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -2041,18 +2053,18 @@ export function FloatingSidebar({
                       title: e.target.value,
                     }))
                   }
-                  className="min-h-[80px] resize-none"
+                  className='min-h-[80px] resize-none'
                 />
               )}
             </div>
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Status
               </label>
-              <div className="flex items-center space-x-3">
-                <span className="text-xs text-muted-foreground">Public</span>
+              <div className='flex items-center space-x-3'>
+                <span className='text-muted-foreground text-xs'>Public</span>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -2071,33 +2083,33 @@ export function FloatingSidebar({
                     }`}
                   />
                 </button>
-                <span className="text-xs text-muted-foreground">Private</span>
+                <span className='text-muted-foreground text-xs'>Private</span>
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Image URL
               </label>
-              <div className="relative">
+              <div className='relative'>
                 <Input
-                  placeholder="https://example.com/image.jpg"
+                  placeholder='https://example.com/image.jpg'
                   value={inputData.url}
                   onChange={(e) =>
                     setInputData((prev) => ({ ...prev, url: e.target.value }))
                   }
-                  className="h-9 pr-10"
+                  className='h-9 pr-10'
                 />
                 {inputData.url && (
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                    variant='ghost'
+                    size='sm'
+                    className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                     onClick={() =>
                       setInputData((prev) => ({ ...prev, url: "" }))
                     }
-                    title="Clear URL"
+                    title='Clear URL'
                   >
-                    <X className="w-3 h-3" />
+                    <X className='h-3 w-3' />
                   </Button>
                 )}
               </div>
@@ -2105,14 +2117,14 @@ export function FloatingSidebar({
           </div>
         ),
         upload: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-medium text-foreground">
+              <div className='mb-2 flex items-center justify-between'>
+                <label className='text-foreground text-xs font-medium'>
                   Label
                 </label>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -2135,7 +2147,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="Document your file so you can remember them"
+                  placeholder='Document your file so you can remember them'
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -2143,19 +2155,19 @@ export function FloatingSidebar({
                       title: e.target.value,
                     }))
                   }
-                  className="min-h-[80px] resize-none"
+                  className='min-h-[80px] resize-none'
                 />
               )}
             </div>
 
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Status
               </label>
-              <div className="flex items-center space-x-3">
-                <span className="text-xs text-muted-foreground">Public</span>
+              <div className='flex items-center space-x-3'>
+                <span className='text-muted-foreground text-xs'>Public</span>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -2174,40 +2186,42 @@ export function FloatingSidebar({
                     }`}
                   />
                 </button>
-                <span className="text-xs text-muted-foreground">Private</span>
+                <span className='text-muted-foreground text-xs'>Private</span>
               </div>
             </div>
 
             <div
-              className={`border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors ${
-                isUploading ? "bg-primary/5 border-primary/30 pointer-events-none" : ""
+              className={`border-border hover:border-primary/50 rounded-md border-2 border-dashed p-6 text-center transition-colors ${
+                isUploading
+                  ? "bg-primary/5 border-primary/30 pointer-events-none"
+                  : ""
               }`}
               onDrop={(e) => handleDrop(e, "image")}
               onDragOver={handleDragOver}
             >
               <input
-                type="file"
-                accept=".jpg,.jpeg,.png,.gif,.webp,.svg,image/*"
+                type='file'
+                accept='.jpg,.jpeg,.png,.gif,.webp,.svg,image/*'
                 onChange={(e) => handleFileInputChange(e, "image")}
-                className="hidden"
-                id="image-upload"
+                className='hidden'
+                id='image-upload'
                 disabled={isUploading}
               />
-              <label htmlFor="image-upload" className="cursor-pointer">
+              <label htmlFor='image-upload' className='cursor-pointer'>
                 {isUploading ? (
-                  <div className="flex flex-col items-center">
-                    <Loader2 className="w-8 h-8 text-primary animate-spin mb-2" />
-                    <p className="text-sm text-primary font-medium">
+                  <div className='flex flex-col items-center'>
+                    <Loader2 className='text-primary mb-2 h-8 w-8 animate-spin' />
+                    <p className='text-primary text-sm font-medium'>
                       Uploading image...
                     </p>
                   </div>
                 ) : (
                   <>
-                    <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground mb-2">
+                    <Upload className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <p className='text-muted-foreground mb-2 text-sm'>
                       Drop image files here or click to browse
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className='text-muted-foreground text-xs'>
                       JPG, PNG, GIF up to 10MB
                     </p>
                   </>
@@ -2226,61 +2240,61 @@ export function FloatingSidebar({
       tabs: ["all", "url", "upload"],
       content: {
         all: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <div className='relative'>
+              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
-                placeholder="Search videos..."
+                placeholder='Search videos...'
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-10 h-9"
+                className='h-9 pr-10 pl-10'
               />
               {searchQuery && (
                 <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                  variant='ghost'
+                  size='sm'
+                  className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                   onClick={() => setSearchQuery("")}
-                  title="Clear Search"
+                  title='Clear Search'
                 >
-                  <X className="w-3 h-3" />
+                  <X className='h-3 w-3' />
                 </Button>
               )}
             </div>
 
-            <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
-              <div className="space-y-4">
+            <div className='scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent h-60 overflow-y-auto pr-2 pb-20'>
+              <div className='space-y-4'>
                 {userFiles.video.length === 0 &&
                 historyItems.video.length === 0 &&
                 !historyPagination.video.isLoading ? (
-                  <div className="text-center py-8">
-                    <Play className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">
+                  <div className='py-8 text-center'>
+                    <Play className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <p className='text-muted-foreground text-sm'>
                       No videos yet
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className='text-muted-foreground text-xs'>
                       Generate videos or upload files
                     </p>
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className='grid grid-cols-2 gap-3'>
                       {/* User Uploaded Videos */}
                       {userFiles.video
                         .filter((file: any) =>
                           file.name
                             .toLowerCase()
-                            .includes(searchQuery.toLowerCase()),
+                            .includes(searchQuery.toLowerCase())
                         )
                         .map((file: any) => (
                           <div
                             key={file.id}
-                            className={`relative aspect-video rounded-md overflow-hidden cursor-pointer border-2 transition-all ${
+                            className={`relative aspect-video cursor-pointer overflow-hidden rounded-md border-2 transition-all ${
                               selectedItem?.id === file.id &&
                               selectedItem?.type === "video"
                                 ? "border-primary shadow-md"
-                                : "border-transparent hover:border-primary/30"
+                                : "hover:border-primary/30 border-transparent"
                             }`}
                             onClick={() =>
                               setSelectedItem({ ...file, type: "video" })
@@ -2288,7 +2302,7 @@ export function FloatingSidebar({
                           >
                             <video
                               src={file.url}
-                              className="w-full h-full object-cover"
+                              className='h-full w-full object-cover'
                               muted
                               playsInline
                               onLoadedData={(e) => {
@@ -2306,17 +2320,17 @@ export function FloatingSidebar({
                                   });
                               }}
                             />
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                              <Play className="w-4 h-4 text-white fill-white" />
+                            <div className='absolute inset-0 flex items-center justify-center bg-black/20'>
+                              <Play className='h-4 w-4 fill-white text-white' />
                             </div>
                             {selectedItem?.id === file.id &&
                               selectedItem?.type === "video" && (
-                                <div className="absolute top-1 right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                                  <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                                <div className='bg-primary absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                                  <CheckCircle className='text-primary-foreground h-3 w-3' />
                                 </div>
                               )}
-                            <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/40 backdrop-blur-[2px]">
-                              <p className="text-[10px] text-white truncate px-1">
+                            <div className='absolute right-0 bottom-0 left-0 bg-black/40 p-1 backdrop-blur-[2px]'>
+                              <p className='truncate px-1 text-[10px] text-white'>
                                 {file.name}
                               </p>
                             </div>
@@ -2328,21 +2342,21 @@ export function FloatingSidebar({
                         .filter((item: any) =>
                           (item.prompt || "")
                             .toLowerCase()
-                            .includes(searchQuery.toLowerCase()),
+                            .includes(searchQuery.toLowerCase())
                         )
                         .map((item: any) => (
                           <div
                             key={item.id}
-                            className={`relative aspect-video rounded-md overflow-hidden cursor-pointer border-2 transition-all ${
+                            className={`relative aspect-video cursor-pointer overflow-hidden rounded-md border-2 transition-all ${
                               selectedItem?.id === item.id
                                 ? "border-primary shadow-md"
-                                : "border-transparent hover:border-primary/30"
+                                : "hover:border-primary/30 border-transparent"
                             }`}
                             onClick={() => setSelectedItem(item)}
                           >
                             <video
                               src={item.url}
-                              className="w-full h-full object-cover"
+                              className='h-full w-full object-cover'
                               muted
                               playsInline
                               poster={item.thumbnail}
@@ -2360,21 +2374,21 @@ export function FloatingSidebar({
                                   });
                               }}
                             />
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                              <Play className="w-4 h-4 text-white fill-white" />
+                            <div className='absolute inset-0 flex items-center justify-center bg-black/20'>
+                              <Play className='h-4 w-4 fill-white text-white' />
                             </div>
-                            <div className="absolute top-1 left-1">
-                              <Badge className="bg-primary/80 hover:bg-primary text-[8px] px-1 py-0 h-3 leading-none border-none">
+                            <div className='absolute top-1 left-1'>
+                              <Badge className='bg-primary/80 hover:bg-primary h-3 border-none px-1 py-0 text-[8px] leading-none'>
                                 AI
                               </Badge>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className="absolute top-1 right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              <div className='bg-primary absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                                <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
-                            <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/40 backdrop-blur-[2px]">
-                              <p className="text-[10px] text-white truncate px-1">
+                            <div className='absolute right-0 bottom-0 left-0 bg-black/40 p-1 backdrop-blur-[2px]'>
+                              <p className='truncate px-1 text-[10px] text-white'>
                                 {item.prompt || "Generated"}
                               </p>
                             </div>
@@ -2382,13 +2396,14 @@ export function FloatingSidebar({
                         ))}
                     </div>
 
-                    <HistorySentinel category="video" />
+                    <HistorySentinel category='video' />
 
                     {!historyPagination.video.hasMore &&
-                      (userFiles.video.length > 0 || historyItems.video.length > 0) &&
+                      (userFiles.video.length > 0 ||
+                        historyItems.video.length > 0) &&
                       !historyPagination.video.isLoading && (
-                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                        <div className='border-border/5 mt-4 mb-20 border-t py-10 text-center'>
+                          <p className='text-muted-foreground text-[10px] font-medium tracking-wider uppercase opacity-50'>
                             No more files found
                           </p>
                         </div>
@@ -2400,14 +2415,14 @@ export function FloatingSidebar({
           </div>
         ),
         url: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-medium text-foreground">
+              <div className='mb-2 flex items-center justify-between'>
+                <label className='text-foreground text-xs font-medium'>
                   Label
                 </label>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -2430,7 +2445,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="Document your file so you can remember them"
+                  placeholder='Document your file so you can remember them'
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -2438,18 +2453,18 @@ export function FloatingSidebar({
                       title: e.target.value,
                     }))
                   }
-                  className="min-h-[80px] resize-none"
+                  className='min-h-[80px] resize-none'
                 />
               )}
             </div>
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Status
               </label>
-              <div className="flex items-center space-x-3">
-                <span className="text-xs text-muted-foreground">Public</span>
+              <div className='flex items-center space-x-3'>
+                <span className='text-muted-foreground text-xs'>Public</span>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -2468,33 +2483,33 @@ export function FloatingSidebar({
                     }`}
                   />
                 </button>
-                <span className="text-xs text-muted-foreground">Private</span>
+                <span className='text-muted-foreground text-xs'>Private</span>
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Video URL
               </label>
-              <div className="relative">
+              <div className='relative'>
                 <Input
-                  placeholder="https://example.com/video.mp4"
+                  placeholder='https://example.com/video.mp4'
                   value={inputData.url}
                   onChange={(e) =>
                     setInputData((prev) => ({ ...prev, url: e.target.value }))
                   }
-                  className="h-9 pr-10"
+                  className='h-9 pr-10'
                 />
                 {inputData.url && (
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                    variant='ghost'
+                    size='sm'
+                    className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                     onClick={() =>
                       setInputData((prev) => ({ ...prev, url: "" }))
                     }
-                    title="Clear URL"
+                    title='Clear URL'
                   >
-                    <X className="w-3 h-3" />
+                    <X className='h-3 w-3' />
                   </Button>
                 )}
               </div>
@@ -2502,14 +2517,14 @@ export function FloatingSidebar({
           </div>
         ),
         upload: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-medium text-foreground">
+              <div className='mb-2 flex items-center justify-between'>
+                <label className='text-foreground text-xs font-medium'>
                   Label
                 </label>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -2532,7 +2547,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="Document your file so you can remember them"
+                  placeholder='Document your file so you can remember them'
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -2540,19 +2555,19 @@ export function FloatingSidebar({
                       title: e.target.value,
                     }))
                   }
-                  className="min-h-[80px] resize-none"
+                  className='min-h-[80px] resize-none'
                 />
               )}
             </div>
 
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Status
               </label>
-              <div className="flex items-center space-x-3">
-                <span className="text-xs text-muted-foreground">Public</span>
+              <div className='flex items-center space-x-3'>
+                <span className='text-muted-foreground text-xs'>Public</span>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -2571,40 +2586,42 @@ export function FloatingSidebar({
                     }`}
                   />
                 </button>
-                <span className="text-xs text-muted-foreground">Private</span>
+                <span className='text-muted-foreground text-xs'>Private</span>
               </div>
             </div>
 
             <div
-              className={`border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors ${
-                isUploading ? "bg-primary/5 border-primary/30 pointer-events-none" : ""
+              className={`border-border hover:border-primary/50 rounded-md border-2 border-dashed p-6 text-center transition-colors ${
+                isUploading
+                  ? "bg-primary/5 border-primary/30 pointer-events-none"
+                  : ""
               }`}
               onDrop={(e) => handleDrop(e, "video")}
               onDragOver={handleDragOver}
             >
               <input
-                type="file"
-                accept=".mp4,.mov,.avi,.mkv,.webm,.m4v,video/*"
+                type='file'
+                accept='.mp4,.mov,.avi,.mkv,.webm,.m4v,video/*'
                 onChange={(e) => handleFileInputChange(e, "video")}
-                className="hidden"
-                id="video-upload"
+                className='hidden'
+                id='video-upload'
                 disabled={isUploading}
               />
-              <label htmlFor="video-upload" className="cursor-pointer">
+              <label htmlFor='video-upload' className='cursor-pointer'>
                 {isUploading ? (
-                  <div className="flex flex-col items-center">
-                    <Loader2 className="w-8 h-8 text-primary animate-spin mb-2" />
-                    <p className="text-sm text-primary font-medium">
+                  <div className='flex flex-col items-center'>
+                    <Loader2 className='text-primary mb-2 h-8 w-8 animate-spin' />
+                    <p className='text-primary text-sm font-medium'>
                       Uploading video...
                     </p>
                   </div>
                 ) : (
                   <>
-                    <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground mb-2">
+                    <Upload className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <p className='text-muted-foreground mb-2 text-sm'>
                       Drop video files here or click to browse
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className='text-muted-foreground text-xs'>
                       MP4, MOV, AVI up to 100MB
                     </p>
                   </>
@@ -2623,36 +2640,36 @@ export function FloatingSidebar({
       tabs: ["all", "create"],
       content: {
         all: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <div className='relative'>
+              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
-                placeholder="Search text/docs..."
+                placeholder='Search text/docs...'
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-10 h-9"
+                className='h-9 pr-10 pl-10'
               />
               {searchQuery && (
                 <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                  variant='ghost'
+                  size='sm'
+                  className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                   onClick={() => setSearchQuery("")}
-                  title="Clear Search"
+                  title='Clear Search'
                 >
-                  <X className="w-3 h-3" />
+                  <X className='h-3 w-3' />
                 </Button>
               )}
             </div>
 
-            <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
-              <div className="flex flex-col gap-y-2">
+            <div className='scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent h-60 overflow-y-auto pr-2 pb-20'>
+              <div className='flex flex-col gap-y-2'>
                 {historyItems.text.length === 0 &&
                 !historyPagination.text.isLoading ? (
-                  <div className="text-center py-8">
-                    <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">
+                  <div className='py-8 text-center'>
+                    <FileText className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <p className='text-muted-foreground text-sm'>
                       No text history yet
                     </p>
                   </div>
@@ -2662,33 +2679,33 @@ export function FloatingSidebar({
                       .filter((item: any) =>
                         (item.name || item.prompt || item.content || "")
                           .toLowerCase()
-                          .includes(searchQuery.toLowerCase()),
+                          .includes(searchQuery.toLowerCase())
                       )
                       .map((item: any) => (
                         <Card
                           key={item.id}
-                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                          className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === item.id
                               ? "bg-primary/10 border-primary/50"
                               : "hover:bg-muted/50"
                           }`}
                           onClick={() => setSelectedItem(item)}
                         >
-                          <div className="flex items-start gap-3">
+                          <div className='flex items-start gap-3'>
                             {/* <div className="w-10 h-10 rounded-md flex items-center justify-center bg-orange-500/10 mt-1">
                               <FileText className="w-5 h-5 text-orange-500" />
                             </div> */}
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-foreground line-clamp-1">
+                            <div className='min-w-0 flex-1'>
+                              <p className='text-foreground line-clamp-1 text-sm font-medium'>
                                 {item.prompt || "Generated Text"}
                               </p>
-                              <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
+                              <p className='text-muted-foreground mt-0.5 line-clamp-2 text-xs'>
                                 {item.content}
                               </p>
-                              <div className="flex items-center gap-2 text-[10px] text-muted-foreground mt-1">
+                              <div className='text-muted-foreground mt-1 flex items-center gap-2 text-[10px]'>
                                 <Badge
-                                  variant="outline"
-                                  className="px-1 py-0 h-3.5 bg-primary/5 text-primary"
+                                  variant='outline'
+                                  className='bg-primary/5 text-primary h-3.5 px-1 py-0'
                                 >
                                   {item.type === "social"
                                     ? "Social"
@@ -2699,27 +2716,27 @@ export function FloatingSidebar({
                                 <span>•</span>
                                 <span>
                                   {new Date(
-                                    item.createdAt,
+                                    item.createdAt
                                   ).toLocaleDateString()}
                                 </span>
                               </div>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center mt-1">
-                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              <div className='bg-primary mt-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                                <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
                         </Card>
                       ))}
 
-                    <HistorySentinel category="text" />
+                    <HistorySentinel category='text' />
 
                     {!historyPagination.text.hasMore &&
                       historyItems.text.length > 0 &&
                       !historyPagination.text.isLoading && (
-                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                        <div className='border-border/5 mt-4 mb-20 border-t py-10 text-center'>
+                          <p className='text-muted-foreground text-[10px] font-medium tracking-wider uppercase opacity-50'>
                             No more files found
                           </p>
                         </div>
@@ -2731,14 +2748,14 @@ export function FloatingSidebar({
           </div>
         ),
         create: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-medium text-foreground">
+              <div className='mb-2 flex items-center justify-between'>
+                <label className='text-foreground text-xs font-medium'>
                   Label
                 </label>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -2761,7 +2778,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="Document your file so you can remember them"
+                  placeholder='Document your file so you can remember them'
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -2769,18 +2786,18 @@ export function FloatingSidebar({
                       title: e.target.value,
                     }))
                   }
-                  className="min-h-[80px] resize-none"
+                  className='min-h-[80px] resize-none'
                 />
               )}
             </div>
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Status
               </label>
-              <div className="flex items-center space-x-3">
-                <span className="text-xs text-muted-foreground">Public</span>
+              <div className='flex items-center space-x-3'>
+                <span className='text-muted-foreground text-xs'>Public</span>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -2799,20 +2816,20 @@ export function FloatingSidebar({
                     }`}
                   />
                 </button>
-                <span className="text-xs text-muted-foreground">Private</span>
+                <span className='text-muted-foreground text-xs'>Private</span>
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Content
               </label>
               <Textarea
-                placeholder="Write your content here..."
+                placeholder='Write your content here...'
                 value={inputData.content}
                 onChange={(e) =>
                   setInputData((prev) => ({ ...prev, content: e.target.value }))
                 }
-                className="min-h-[200px] resize-none"
+                className='min-h-[200px] resize-none'
               />
             </div>
           </div>
@@ -2827,87 +2844,86 @@ export function FloatingSidebar({
       tabs: ["all", "socials", "added"],
       content: {
         all: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <div className='relative'>
+              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
-                placeholder="Search socials..."
+                placeholder='Search socials...'
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-10 h-9"
+                className='h-9 pr-10 pl-10'
               />
               {searchQuery && (
                 <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                  variant='ghost'
+                  size='sm'
+                  className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                   onClick={() => setSearchQuery("")}
-                  title="Clear Search"
+                  title='Clear Search'
                 >
-                  <X className="w-3 h-3" />
+                  <X className='h-3 w-3' />
                 </Button>
               )}
             </div>
 
-            <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
-              <div className="flex flex-col gap-y-2">
+            <div className='scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent h-60 overflow-y-auto pr-2 pb-20'>
+              <div className='flex flex-col gap-y-2'>
                 {historyItems.social.length === 0 &&
                 !historyPagination.social.isLoading ? (
-                  <div className="text-center py-8">
-                    <Globe className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">
+                  <div className='py-8 text-center'>
+                    <Globe className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <p className='text-muted-foreground text-sm'>
                       No social history yet
                     </p>
                   </div>
                 ) : (
                   <>
                     {historyItems.social
-                      .filter(
-                        (item: any) =>
-                          (item.prompt || item.content || "")
-                            .toLowerCase()
-                            .includes(searchQuery.toLowerCase()),
+                      .filter((item: any) =>
+                        (item.prompt || item.content || "")
+                          .toLowerCase()
+                          .includes(searchQuery.toLowerCase())
                       )
                       .map((item: any) => (
                         <Card
                           key={item.id}
-                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                          className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === item.id
                               ? "bg-primary/10 border-primary/50"
                               : "hover:bg-muted/50"
                           }`}
                           onClick={() => setSelectedItem(item)}
                         >
-                          <div className="flex items-start gap-3">
-                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-pink-500/10 mt-1">
-                              <Globe className="w-5 h-5 text-pink-500" />
+                          <div className='flex items-start gap-3'>
+                            <div className='mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-pink-500/10'>
+                              <Globe className='h-5 w-5 text-pink-500' />
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-foreground line-clamp-1">
+                            <div className='min-w-0 flex-1'>
+                              <p className='text-foreground line-clamp-1 text-sm font-medium'>
                                 {item.prompt || "Social Content"}
                               </p>
-                              <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
+                              <p className='text-muted-foreground mt-0.5 line-clamp-2 text-xs'>
                                 {item.content}
                               </p>
-                              <div className="flex items-center gap-2 text-[10px] text-muted-foreground mt-1">
+                              <div className='text-muted-foreground mt-1 flex items-center gap-2 text-[10px]'>
                                 <Badge
-                                  variant="outline"
-                                  className="px-1 py-0 h-3.5 bg-primary/5 text-primary"
+                                  variant='outline'
+                                  className='bg-primary/5 text-primary h-3.5 px-1 py-0'
                                 >
                                   Social
                                 </Badge>
                                 <span>•</span>
                                 <span>
                                   {new Date(
-                                    item.createdAt,
+                                    item.createdAt
                                   ).toLocaleDateString()}
                                 </span>
                               </div>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center mt-1">
-                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              <div className='bg-primary mt-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                                <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
@@ -2918,8 +2934,8 @@ export function FloatingSidebar({
                       historyItems.text.filter((item) => item.type === "social")
                         .length > 0 &&
                       !historyPagination.text.isLoading && (
-                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                        <div className='border-border/5 mt-4 mb-20 border-t py-10 text-center'>
+                          <p className='text-muted-foreground text-[10px] font-medium tracking-wider uppercase opacity-50'>
                             No more files found
                           </p>
                         </div>
@@ -2931,41 +2947,41 @@ export function FloatingSidebar({
           </div>
         ),
         socials: () => (
-          <div className="flex flex-col h-full">
+          <div className='flex h-full flex-col'>
             {!selectedSocialPlatform ? (
               <>
-                <div className="flex-shrink-0 space-y-3">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <div className='flex-shrink-0 space-y-3'>
+                  <div className='relative'>
+                    <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
                     <Input
-                      placeholder="Search images, videos, audio, social content..."
+                      placeholder='Search images, videos, audio, social content...'
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 pr-10 h-9"
+                      className='h-9 pr-10 pl-10'
                     />
                     {searchQuery && (
                       <Button
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                        variant='ghost'
+                        size='sm'
+                        className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                         onClick={() => setSearchQuery("")}
-                        title="Clear Search"
+                        title='Clear Search'
                       >
-                        <X className="w-3 h-3" />
+                        <X className='h-3 w-3' />
                       </Button>
                     )}
                   </div>
                 </div>
-                <div className="flex-1 overflow-y-auto pr-2 mt-3 max-h-60 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
-                  <div className="space-y-2">
+                <div className='scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent mt-3 max-h-60 flex-1 overflow-y-auto pr-2'>
+                  <div className='space-y-2'>
                     {/* Social Media Platforms */}
                     {!searchQuery && (
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-2">
+                      <div className='space-y-3'>
+                        <div className='grid grid-cols-2 gap-2'>
                           {socialPlatforms.map((platform) => (
                             <Card
                               key={platform.id}
-                              className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                              className={`border-border/50 cursor-pointer p-3 transition-colors ${
                                 selectedSocialPlatform === platform.id
                                   ? "bg-primary/10 border-primary/50"
                                   : "hover:bg-muted/50"
@@ -2974,13 +2990,13 @@ export function FloatingSidebar({
                                 setSelectedSocialPlatform(platform.id)
                               }
                             >
-                              <div className="flex items-center gap-2">
+                              <div className='flex items-center gap-2'>
                                 <div
-                                  className={`w-8 h-8 ${platform.bg} rounded-md flex items-center justify-center`}
+                                  className={`h-8 w-8 ${platform.bg} flex items-center justify-center rounded-md`}
                                 >
                                   {platform.icon}
                                 </div>
-                                <span className="text-sm font-medium text-foreground">
+                                <span className='text-foreground text-sm font-medium'>
                                   {platform.name}
                                 </span>
                               </div>
@@ -2992,18 +3008,18 @@ export function FloatingSidebar({
 
                     {/* Search Results - Show files from all categories */}
                     {searchQuery && (
-                      <div className="space-y-2">
+                      <div className='space-y-2'>
                         {/* Search Results - Images */}
                         {userFiles.image
                           .filter((file: any) =>
                             file.name
                               .toLowerCase()
-                              .includes(searchQuery.toLowerCase()),
+                              .includes(searchQuery.toLowerCase())
                           )
                           .map((file: any) => (
                             <Card
                               key={`search-image-${file.id}`}
-                              className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                              className={`border-border/50 cursor-pointer p-3 transition-colors ${
                                 selectedItem?.id === file.id &&
                                 selectedItem?.type === "image"
                                   ? "bg-primary/10 border-primary/50"
@@ -3017,33 +3033,33 @@ export function FloatingSidebar({
                                 setActiveTab("all");
                               }}
                             >
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-md flex items-center justify-center overflow-hidden bg-muted relative">
+                              <div className='flex items-center gap-3'>
+                                <div className='bg-muted relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-md'>
                                   {file.url ? (
                                     <img
                                       src={file.url}
                                       alt={file.name}
-                                      className="w-full h-full object-cover"
+                                      className='h-full w-full object-cover'
                                       onError={(e) => {
                                         const target =
                                           e.target as HTMLImageElement;
                                         target.style.display = "none";
                                         target.nextElementSibling?.classList.remove(
-                                          "hidden",
+                                          "hidden"
                                         );
                                       }}
                                     />
                                   ) : null}
-                                  <ImageIcon className="w-5 h-5 text-muted-foreground absolute inset-0 m-auto" />
+                                  <ImageIcon className='text-muted-foreground absolute inset-0 m-auto h-5 w-5' />
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-foreground truncate">
+                                <div className='min-w-0 flex-1'>
+                                  <p className='text-foreground truncate text-sm font-medium'>
                                     {file.name}
                                   </p>
-                                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                  <div className='text-muted-foreground flex items-center gap-2 text-xs'>
                                     <Badge
-                                      variant="secondary"
-                                      className="text-xs px-1 py-0 h-4"
+                                      variant='secondary'
+                                      className='h-4 px-1 py-0 text-xs'
                                     >
                                       Image
                                     </Badge>
@@ -3053,24 +3069,24 @@ export function FloatingSidebar({
                                     <span>{file.date}</span>
                                   </div>
                                 </div>
-                                <div className="flex items-center gap-1">
+                                <div className='flex items-center gap-1'>
                                   {selectedItem?.id === file.id &&
                                     selectedItem?.type === "image" && (
-                                      <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                                        <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                                      <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                                        <CheckCircle className='text-primary-foreground h-3 w-3' />
                                       </div>
                                     )}
                                   <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
+                                    variant='ghost'
+                                    size='sm'
+                                    className='hover:bg-destructive/10 hover:text-destructive h-6 w-6 p-0'
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       handleDeleteItem(file.id, "image");
                                     }}
-                                    title="Delete file"
+                                    title='Delete file'
                                   >
-                                    <Trash2 className="w-3 h-3" />
+                                    <Trash2 className='h-3 w-3' />
                                   </Button>
                                 </div>
                               </div>
@@ -3082,12 +3098,12 @@ export function FloatingSidebar({
                           .filter((file: any) =>
                             file.name
                               .toLowerCase()
-                              .includes(searchQuery.toLowerCase()),
+                              .includes(searchQuery.toLowerCase())
                           )
                           .map((file: any) => (
                             <Card
                               key={`search-video-${file.id}`}
-                              className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                              className={`border-border/50 cursor-pointer p-3 transition-colors ${
                                 selectedItem?.id === file.id &&
                                 selectedItem?.type === "video"
                                   ? "bg-primary/10 border-primary/50"
@@ -3101,12 +3117,12 @@ export function FloatingSidebar({
                                 setActiveTab("all");
                               }}
                             >
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-md flex items-center justify-center overflow-hidden bg-muted relative">
+                              <div className='flex items-center gap-3'>
+                                <div className='bg-muted relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-md'>
                                   {file.url ? (
                                     <video
                                       src={file.url}
-                                      className="w-full h-full object-cover"
+                                      className='h-full w-full object-cover'
                                       onLoadedData={(e) => {
                                         const video =
                                           e.target as HTMLVideoElement;
@@ -3117,25 +3133,25 @@ export function FloatingSidebar({
                                           e.target as HTMLVideoElement;
                                         target.style.display = "none";
                                         target.nextElementSibling?.classList.remove(
-                                          "hidden",
+                                          "hidden"
                                         );
                                       }}
                                     />
                                   ) : null}
-                                  <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="w-6 h-6 bg-black/50 rounded-full flex items-center justify-center">
-                                      <Play className="w-3 h-3 text-white" />
+                                  <div className='absolute inset-0 flex items-center justify-center'>
+                                    <div className='flex h-6 w-6 items-center justify-center rounded-full bg-black/50'>
+                                      <Play className='h-3 w-3 text-white' />
                                     </div>
                                   </div>
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-foreground truncate">
+                                <div className='min-w-0 flex-1'>
+                                  <p className='text-foreground truncate text-sm font-medium'>
                                     {file.name}
                                   </p>
-                                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                  <div className='text-muted-foreground flex items-center gap-2 text-xs'>
                                     <Badge
-                                      variant="secondary"
-                                      className="text-xs px-1 py-0 h-4"
+                                      variant='secondary'
+                                      className='h-4 px-1 py-0 text-xs'
                                     >
                                       Video
                                     </Badge>
@@ -3147,24 +3163,24 @@ export function FloatingSidebar({
                                     <span>{file.date}</span>
                                   </div>
                                 </div>
-                                <div className="flex items-center gap-1">
+                                <div className='flex items-center gap-1'>
                                   {selectedItem?.id === file.id &&
                                     selectedItem?.type === "video" && (
-                                      <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                                        <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                                      <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                                        <CheckCircle className='text-primary-foreground h-3 w-3' />
                                       </div>
                                     )}
                                   <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
+                                    variant='ghost'
+                                    size='sm'
+                                    className='hover:bg-destructive/10 hover:text-destructive h-6 w-6 p-0'
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       handleDeleteItem(file.id, "video");
                                     }}
-                                    title="Delete file"
+                                    title='Delete file'
                                   >
-                                    <Trash2 className="w-3 h-3" />
+                                    <Trash2 className='h-3 w-3' />
                                   </Button>
                                 </div>
                               </div>
@@ -3176,12 +3192,12 @@ export function FloatingSidebar({
                           .filter((file: any) =>
                             file.name
                               .toLowerCase()
-                              .includes(searchQuery.toLowerCase()),
+                              .includes(searchQuery.toLowerCase())
                           )
                           .map((file: any) => (
                             <Card
                               key={`search-audio-${file.id}`}
-                              className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                              className={`border-border/50 cursor-pointer p-3 transition-colors ${
                                 selectedItem?.id === file.id &&
                                 selectedItem?.type === "audio"
                                   ? "bg-primary/10 border-primary/50"
@@ -3195,18 +3211,18 @@ export function FloatingSidebar({
                                 setActiveTab("all");
                               }}
                             >
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-md flex items-center justify-center bg-green-500/10">
-                                  <Music className="w-5 h-5 text-green-500" />
+                              <div className='flex items-center gap-3'>
+                                <div className='flex h-10 w-10 items-center justify-center rounded-md bg-green-500/10'>
+                                  <Music className='h-5 w-5 text-green-500' />
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-foreground truncate">
+                                <div className='min-w-0 flex-1'>
+                                  <p className='text-foreground truncate text-sm font-medium'>
                                     {file.name}
                                   </p>
-                                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                  <div className='text-muted-foreground flex items-center gap-2 text-xs'>
                                     <Badge
-                                      variant="secondary"
-                                      className="text-xs px-1 py-0 h-4"
+                                      variant='secondary'
+                                      className='h-4 px-1 py-0 text-xs'
                                     >
                                       Audio
                                     </Badge>
@@ -3218,24 +3234,24 @@ export function FloatingSidebar({
                                     <span>{file.date}</span>
                                   </div>
                                 </div>
-                                <div className="flex items-center gap-1">
+                                <div className='flex items-center gap-1'>
                                   {selectedItem?.id === file.id &&
                                     selectedItem?.type === "audio" && (
-                                      <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                                        <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                                      <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                                        <CheckCircle className='text-primary-foreground h-3 w-3' />
                                       </div>
                                     )}
                                   <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
+                                    variant='ghost'
+                                    size='sm'
+                                    className='hover:bg-destructive/10 hover:text-destructive h-6 w-6 p-0'
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       handleDeleteItem(file.id, "audio");
                                     }}
-                                    title="Delete file"
+                                    title='Delete file'
                                   >
-                                    <Trash2 className="w-3 h-3" />
+                                    <Trash2 className='h-3 w-3' />
                                   </Button>
                                 </div>
                               </div>
@@ -3246,24 +3262,24 @@ export function FloatingSidebar({
                         {!userFiles.image.some((file: any) =>
                           file.name
                             .toLowerCase()
-                            .includes(searchQuery.toLowerCase()),
+                            .includes(searchQuery.toLowerCase())
                         ) &&
                           !userFiles.video.some((file: any) =>
                             file.name
                               .toLowerCase()
-                              .includes(searchQuery.toLowerCase()),
+                              .includes(searchQuery.toLowerCase())
                           ) &&
                           !userFiles.audio.some((file: any) =>
                             file.name
                               .toLowerCase()
-                              .includes(searchQuery.toLowerCase()),
+                              .includes(searchQuery.toLowerCase())
                           ) && (
-                            <div className="text-center py-8">
-                              <Search className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                              <p className="text-sm text-muted-foreground">
+                            <div className='py-8 text-center'>
+                              <Search className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                              <p className='text-muted-foreground text-sm'>
                                 No content found
                               </p>
-                              <p className="text-xs text-muted-foreground">
+                              <p className='text-muted-foreground text-xs'>
                                 Upload files or add content to search through
                                 them
                               </p>
@@ -3276,40 +3292,40 @@ export function FloatingSidebar({
               </>
             ) : (
               // Selected platform view
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 mb-4">
+              <div className='space-y-4'>
+                <div className='mb-4 flex items-center gap-3'>
                   <Button
-                    variant="ghost"
-                    size="sm"
+                    variant='ghost'
+                    size='sm'
                     onClick={() => setSelectedSocialPlatform(null)}
-                    className="h-8 w-8 p-0 hover:bg-muted"
+                    className='hover:bg-muted h-8 w-8 p-0'
                   >
-                    <X className="w-8 h-8" />
+                    <X className='h-8 w-8' />
                   </Button>
                   <div
-                    className={`w-8 h-8 ${getPlatformConfig(selectedSocialPlatform)?.bg} rounded flex items-center justify-center`}
+                    className={`h-8 w-8 ${getPlatformConfig(selectedSocialPlatform)?.bg} flex items-center justify-center rounded`}
                   >
                     {getPlatformConfig(selectedSocialPlatform)?.icon}
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-foreground">
+                    <h3 className='text-foreground text-sm font-semibold'>
                       Add{" "}
                       {selectedSocialPlatform?.charAt(0).toUpperCase() +
                         selectedSocialPlatform?.slice(1)}{" "}
                       Content
                     </h3>
-                    <p className="text-xs text-muted-foreground">
+                    <p className='text-muted-foreground text-xs'>
                       Enter your content url
                     </p>
                   </div>
                 </div>
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-medium text-foreground">
+                  <div className='mb-2 flex items-center justify-between'>
+                    <label className='text-foreground text-xs font-medium'>
                       Label
                     </label>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() =>
                         setInputData((prev) => ({
                           ...prev,
@@ -3332,7 +3348,7 @@ export function FloatingSidebar({
                   </div>
                   {inputData.hasInstruction && (
                     <Textarea
-                      placeholder="Document your file so you can remember them"
+                      placeholder='Document your file so you can remember them'
                       value={inputData.title}
                       onChange={(e) =>
                         setInputData((prev) => ({
@@ -3340,20 +3356,20 @@ export function FloatingSidebar({
                           title: e.target.value,
                         }))
                       }
-                      className="min-h-[80px] resize-none"
+                      className='min-h-[80px] resize-none'
                     />
                   )}
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-foreground mb-2 block">
+                  <label className='text-foreground mb-2 block text-xs font-medium'>
                     Status
                   </label>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-xs text-muted-foreground">
+                  <div className='flex items-center space-x-3'>
+                    <span className='text-muted-foreground text-xs'>
                       Public
                     </span>
                     <button
-                      type="button"
+                      type='button'
                       onClick={() =>
                         setInputData((prev) => ({
                           ...prev,
@@ -3375,18 +3391,18 @@ export function FloatingSidebar({
                         }`}
                       />
                     </button>
-                    <span className="text-xs text-muted-foreground">
+                    <span className='text-muted-foreground text-xs'>
                       Private
                     </span>
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-foreground mb-2 block">
+                  <label className='text-foreground mb-2 block text-xs font-medium'>
                     {selectedSocialPlatform?.charAt(0).toUpperCase() +
                       selectedSocialPlatform?.slice(1)}{" "}
                     URL
                   </label>
-                  <div className="relative">
+                  <div className='relative'>
                     <Input
                       placeholder={
                         selectedSocialPlatform === "whatsapp"
@@ -3400,26 +3416,26 @@ export function FloatingSidebar({
                           url: e.target.value,
                         }))
                       }
-                      className="h-9 pr-10"
+                      className='h-9 pr-10'
                     />
                     {inputData.url && (
                       <Button
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                        variant='ghost'
+                        size='sm'
+                        className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                         onClick={() =>
                           setInputData((prev) => ({ ...prev, url: "" }))
                         }
-                        title="Clear URL"
+                        title='Clear URL'
                       >
-                        <X className="w-3 h-3" />
+                        <X className='h-3 w-3' />
                       </Button>
                     )}
                   </div>
                 </div>
-                <div className="text-xs text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <Info className="w-3 h-3" />
+                <div className='text-muted-foreground text-xs'>
+                  <div className='flex items-center gap-2'>
+                    <Info className='h-3 w-3' />
                     <span>
                       Content will be fetched and added to your workflow
                     </span>
@@ -3430,13 +3446,13 @@ export function FloatingSidebar({
           </div>
         ),
         added: () => (
-          <div className="space-y-3">
-            <div className="text-center py-8">
-              <MessageCircle className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">
+          <div className='space-y-3'>
+            <div className='py-8 text-center'>
+              <MessageCircle className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+              <p className='text-muted-foreground text-sm'>
                 No social content added yet
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className='text-muted-foreground text-xs'>
                 Add content from social platforms to see it here
               </p>
             </div>
@@ -3452,40 +3468,40 @@ export function FloatingSidebar({
       tabs: ["all", "upload", "url"],
       content: {
         all: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <div className='relative'>
+              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
-                placeholder="Search document files..."
+                placeholder='Search document files...'
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-10 h-9"
+                className='h-9 pr-10 pl-10'
               />
               {searchQuery && (
                 <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                  variant='ghost'
+                  size='sm'
+                  className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                   onClick={() => setSearchQuery("")}
-                  title="Clear Search"
+                  title='Clear Search'
                 >
-                  <X className="w-3 h-3" />
+                  <X className='h-3 w-3' />
                 </Button>
               )}
             </div>
 
-            <div className="h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-20">
-              <div className="flex flex-col gap-y-2">
+            <div className='scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent h-60 overflow-y-auto pr-2 pb-20'>
+              <div className='flex flex-col gap-y-2'>
                 {userFiles.document.length === 0 &&
                 historyItems.docs.length === 0 &&
                 !historyPagination.docs.isLoading ? (
-                  <div className="text-center py-8">
-                    <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">
+                  <div className='py-8 text-center'>
+                    <FileText className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <p className='text-muted-foreground text-sm'>
                       No documents yet
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className='text-muted-foreground text-xs'>
                       Generate docs or upload files
                     </p>
                   </div>
@@ -3496,12 +3512,12 @@ export function FloatingSidebar({
                       .filter((file: any) =>
                         file.name
                           .toLowerCase()
-                          .includes(searchQuery.toLowerCase()),
+                          .includes(searchQuery.toLowerCase())
                       )
                       .map((file: any) => (
                         <Card
                           key={file.id}
-                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                          className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === file.id &&
                             selectedItem?.type === "document"
                               ? "bg-primary/10 border-primary/50"
@@ -3511,23 +3527,23 @@ export function FloatingSidebar({
                             setSelectedItem({ ...file, type: "document" })
                           }
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-muted">
-                              <FileText className="w-5 h-5 text-muted-foreground" />
+                          <div className='flex items-center gap-3'>
+                            <div className='bg-muted flex h-10 w-10 items-center justify-center rounded-md'>
+                              <FileText className='text-muted-foreground h-5 w-5' />
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-foreground truncate">
+                            <div className='min-w-0 flex-1'>
+                              <p className='text-foreground truncate text-sm font-medium'>
                                 {file.name}
                               </p>
-                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <div className='text-muted-foreground flex items-center gap-2 text-xs'>
                                 <span>{file.size || "File"}</span>
                                 <span>•</span>
                                 <span>{file.date || "Upload"}</span>
                               </div>
                             </div>
                             {selectedItem?.id === file.id && (
-                              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                                <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
@@ -3539,57 +3555,58 @@ export function FloatingSidebar({
                       .filter((item: any) =>
                         (item.prompt || item.content || "")
                           .toLowerCase()
-                          .includes(searchQuery.toLowerCase()),
+                          .includes(searchQuery.toLowerCase())
                       )
                       .map((item: any) => (
                         <Card
                           key={item.id}
-                          className={`p-3 transition-colors cursor-pointer border-border/50 ${
+                          className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === item.id
                               ? "bg-primary/10 border-primary/50"
                               : "hover:bg-muted/50"
                           }`}
                           onClick={() => setSelectedItem(item)}
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-md flex items-center justify-center bg-indigo-500/10">
-                              <FileText className="w-5 h-5 text-indigo-500" />
+                          <div className='flex items-center gap-3'>
+                            <div className='flex h-10 w-10 items-center justify-center rounded-md bg-indigo-500/10'>
+                              <FileText className='h-5 w-5 text-indigo-500' />
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-foreground truncate">
+                            <div className='min-w-0 flex-1'>
+                              <p className='text-foreground truncate text-sm font-medium'>
                                 {item.prompt || "Generated Doc"}
                               </p>
-                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <div className='text-muted-foreground flex items-center gap-2 text-xs'>
                                 <Badge
-                                  variant="outline"
-                                  className="px-1 py-0 text-[10px] h-4 bg-primary/5 text-primary"
+                                  variant='outline'
+                                  className='bg-primary/5 text-primary h-4 px-1 py-0 text-[10px]'
                                 >
                                   Generated
                                 </Badge>
                                 <span>•</span>
                                 <span>
                                   {new Date(
-                                    item.createdAt,
+                                    item.createdAt
                                   ).toLocaleDateString()}
                                 </span>
                               </div>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                                <CheckCircle className="w-3 h-3 text-primary-foreground" />
+                              <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                                <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
                         </Card>
                       ))}
 
-                    <HistorySentinel category="docs" />
+                    <HistorySentinel category='docs' />
 
                     {!historyPagination.docs.hasMore &&
-                      (userFiles.document.length > 0 || historyItems.docs.length > 0) &&
+                      (userFiles.document.length > 0 ||
+                        historyItems.docs.length > 0) &&
                       !historyPagination.docs.isLoading && (
-                        <div className="text-center py-10 border-t border-border/5 mt-4 mb-20">
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium opacity-50">
+                        <div className='border-border/5 mt-4 mb-20 border-t py-10 text-center'>
+                          <p className='text-muted-foreground text-[10px] font-medium tracking-wider uppercase opacity-50'>
                             No more files found
                           </p>
                         </div>
@@ -3601,14 +3618,14 @@ export function FloatingSidebar({
           </div>
         ),
         upload: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-medium text-foreground">
+              <div className='mb-2 flex items-center justify-between'>
+                <label className='text-foreground text-xs font-medium'>
                   Instruction
                 </label>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -3631,7 +3648,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="document your file so you can remember them"
+                  placeholder='document your file so you can remember them'
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -3639,19 +3656,19 @@ export function FloatingSidebar({
                       title: e.target.value,
                     }))
                   }
-                  className="min-h-[80px] resize-none"
+                  className='min-h-[80px] resize-none'
                 />
               )}
             </div>
 
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Status
               </label>
-              <div className="flex items-center space-x-3">
-                <span className="text-xs text-muted-foreground">Public</span>
+              <div className='flex items-center space-x-3'>
+                <span className='text-muted-foreground text-xs'>Public</span>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -3670,28 +3687,28 @@ export function FloatingSidebar({
                     }`}
                   />
                 </button>
-                <span className="text-xs text-muted-foreground">Private</span>
+                <span className='text-muted-foreground text-xs'>Private</span>
               </div>
             </div>
 
             <div
-              className="border-2 border-dashed border-border rounded-md p-6 text-center hover:border-primary/50 transition-colors"
+              className='border-border hover:border-primary/50 rounded-md border-2 border-dashed p-6 text-center transition-colors'
               onDrop={(e) => handleDrop(e, "document")}
               onDragOver={handleDragOver}
             >
               <input
-                type="file"
-                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+                type='file'
+                accept='.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt'
                 onChange={(e) => handleFileInputChange(e, "document")}
-                className="hidden"
-                id="document-upload"
+                className='hidden'
+                id='document-upload'
               />
-              <label htmlFor="document-upload" className="cursor-pointer">
-                <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground mb-2">
+              <label htmlFor='document-upload' className='cursor-pointer'>
+                <Upload className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                <p className='text-muted-foreground mb-2 text-sm'>
                   Drop files here or click to browse
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className='text-muted-foreground text-xs'>
                   PDF, DOC, XLS, PPT up to 50MB
                 </p>
               </label>
@@ -3699,14 +3716,14 @@ export function FloatingSidebar({
           </div>
         ),
         url: () => (
-          <div className="space-y-3">
+          <div className='space-y-3'>
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-medium text-foreground">
+              <div className='mb-2 flex items-center justify-between'>
+                <label className='text-foreground text-xs font-medium'>
                   Label
                 </label>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -3729,7 +3746,7 @@ export function FloatingSidebar({
               </div>
               {inputData.hasInstruction && (
                 <Textarea
-                  placeholder="document your file so you can remember them"
+                  placeholder='document your file so you can remember them'
                   value={inputData.title}
                   onChange={(e) =>
                     setInputData((prev) => ({
@@ -3737,18 +3754,18 @@ export function FloatingSidebar({
                       title: e.target.value,
                     }))
                   }
-                  className="min-h-[80px] resize-none"
+                  className='min-h-[80px] resize-none'
                 />
               )}
             </div>
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Status
               </label>
-              <div className="flex items-center space-x-3">
-                <span className="text-xs text-muted-foreground">Public</span>
+              <div className='flex items-center space-x-3'>
+                <span className='text-muted-foreground text-xs'>Public</span>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() =>
                     setInputData((prev) => ({
                       ...prev,
@@ -3767,33 +3784,33 @@ export function FloatingSidebar({
                     }`}
                   />
                 </button>
-                <span className="text-xs text-muted-foreground">Private</span>
+                <span className='text-muted-foreground text-xs'>Private</span>
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 File URL
               </label>
-              <div className="relative">
+              <div className='relative'>
                 <Input
-                  placeholder="https://example.com/document.pdf"
+                  placeholder='https://example.com/document.pdf'
                   value={inputData.url}
                   onChange={(e) =>
                     setInputData((prev) => ({ ...prev, url: e.target.value }))
                   }
-                  className="h-9 pr-10"
+                  className='h-9 pr-10'
                 />
                 {inputData.url && (
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 rounded-full hover:bg-muted"
+                    variant='ghost'
+                    size='sm'
+                    className='hover:bg-muted absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 rounded-full p-0'
                     onClick={() =>
                       setInputData((prev) => ({ ...prev, url: "" }))
                     }
-                    title="Clear URL"
+                    title='Clear URL'
                   >
-                    <X className="w-3 h-3" />
+                    <X className='h-3 w-3' />
                   </Button>
                 )}
               </div>
@@ -3805,77 +3822,77 @@ export function FloatingSidebar({
   };
 
   return (
-    <div className="fixed left-4 top-1/2 -translate-y-1/2 z-50 flex items-center">
+    <div className='fixed top-1/2 left-4 z-50 flex -translate-y-1/2 items-center'>
       {/* Main Sidebar */}
-      <div className="bg-muted/50 backdrop-blur-sm border border-border rounded-md shadow-lg p-2 flex flex-col items-center space-y-2">
+      <div className='bg-muted/50 border-border flex flex-col items-center space-y-2 rounded-md border p-2 shadow-lg backdrop-blur-sm'>
         {/* Media Section */}
 
-        <div className="flex flex-col items-center space-y-1">
+        <div className='flex flex-col items-center space-y-1'>
           <Button
-            variant="ghost"
-            size="sm"
-            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
+            variant='ghost'
+            size='sm'
+            className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "mic"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
-            title="Audio & Voice"
+            title='Audio & Voice'
             onClick={() => handleIconClick("mic")}
           >
-            <Mic className="w-8 h-8" />
+            <Mic className='h-8 w-8' />
           </Button>
-          <span className="text-[10px] text-muted-foreground">Audio</span>
+          <span className='text-muted-foreground text-[10px]'>Audio</span>
         </div>
 
-        <div className="flex flex-col items-center space-y-1">
+        <div className='flex flex-col items-center space-y-1'>
           <Button
-            variant="ghost"
-            size="sm"
-            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
+            variant='ghost'
+            size='sm'
+            className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "image"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
-            title="Images"
+            title='Images'
             onClick={() => handleIconClick("image")}
           >
-            <ImageIcon className="w-8 h-8" />
+            <ImageIcon className='h-8 w-8' />
           </Button>
-          <span className="text-[10px] text-muted-foreground">Images</span>
+          <span className='text-muted-foreground text-[10px]'>Images</span>
         </div>
 
-        <div className="flex flex-col items-center space-y-1">
+        <div className='flex flex-col items-center space-y-1'>
           <Button
-            variant="ghost"
-            size="sm"
-            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
+            variant='ghost'
+            size='sm'
+            className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "video"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
-            title="Video"
+            title='Video'
             onClick={() => handleIconClick("video")}
           >
-            <Play className="w-8 h-8" />
+            <Play className='h-8 w-8' />
           </Button>
-          <span className="text-[10px] text-muted-foreground">Video</span>
+          <span className='text-muted-foreground text-[10px]'>Video</span>
         </div>
 
-        <div className="flex flex-col items-center space-y-1">
+        <div className='flex flex-col items-center space-y-1'>
           <Button
-            variant="ghost"
-            size="sm"
-            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
+            variant='ghost'
+            size='sm'
+            className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "text"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
-            title="Text"
+            title='Text'
             onClick={() => handleIconClick("text")}
           >
-            <Type className="w-8 h-8" />
+            <Type className='h-8 w-8' />
           </Button>
-          <span className="text-[10px] text-muted-foreground">Text</span>
+          <span className='text-muted-foreground text-[10px]'>Text</span>
         </div>
 
         {/* <div className="flex flex-col items-center space-y-1">
@@ -3902,64 +3919,64 @@ export function FloatingSidebar({
           <span className="text-[10px] text-muted-foreground">Database</span>
         </div> */}
 
-        <div className="flex flex-col items-center space-y-1">
+        <div className='flex flex-col items-center space-y-1'>
           <Button
-            variant="ghost"
-            size="sm"
-            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
+            variant='ghost'
+            size='sm'
+            className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "globe"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
-            title="Social Media"
+            title='Social Media'
             onClick={() => handleIconClick("globe")}
           >
-            <Globe className="w-8 h-8" />
+            <Globe className='h-8 w-8' />
           </Button>
-          <span className="text-[10px] text-muted-foreground">Social</span>
+          <span className='text-muted-foreground text-[10px]'>Social</span>
         </div>
 
-        <div className="flex flex-col items-center space-y-1">
+        <div className='flex flex-col items-center space-y-1'>
           <Button
-            variant="ghost"
-            size="sm"
-            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 bg-accent hover:bg-primary/20`}
-            title="Add Prompt"
+            variant='ghost'
+            size='sm'
+            className={`bg-accent hover:bg-primary/20 h-8 w-8 rounded-md p-0 transition-all duration-200`}
+            title='Add Prompt'
             onClick={() => onAddIntegration("prompt", {})}
           >
-            <MessageCircle className="w-8 h-8" />
+            <MessageCircle className='h-8 w-8' />
           </Button>
-          <span className="text-[10px] text-muted-foreground">Prompt</span>
+          <span className='text-muted-foreground text-[10px]'>Prompt</span>
         </div>
 
-        <div className="flex flex-col items-center space-y-1">
+        <div className='flex flex-col items-center space-y-1'>
           <Button
-            variant="ghost"
-            size="sm"
-            className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
+            variant='ghost'
+            size='sm'
+            className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "file"
                 ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
-            title="Documents"
+            title='Documents'
             onClick={() => handleIconClick("file")}
           >
-            <FileText className="w-8 h-8" />
+            <FileText className='h-8 w-8' />
           </Button>
-          <span className="text-[10px] text-muted-foreground">Docs</span>
+          <span className='text-muted-foreground text-[10px]'>Docs</span>
         </div>
       </div>
 
       {/* Sleek Modal */}
       {showModal && (
-        <div className="ml-3 w-80 bg-muted/20 backdrop-blur-sm border border-border rounded-xl shadow-2xl flex flex-col max-h-[600px]">
-          <div className="p-4 pb-0 flex-shrink-0">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
+        <div className='bg-muted/20 border-border ml-3 flex max-h-[600px] w-80 flex-col rounded-xl border shadow-2xl backdrop-blur-sm'>
+          <div className='flex-shrink-0 p-4 pb-0'>
+            <div className='mb-4 flex items-center justify-between'>
+              <div className='flex items-center gap-3'>
                 {selectedIntegrationType && (
                   <>
                     <div
-                      className={`w-8 h-8 rounded-md flex items-center justify-center ${
+                      className={`flex h-8 w-8 items-center justify-center rounded-md ${
                         selectedIntegrationType === "mic"
                           ? "bg-muted/30"
                           : selectedIntegrationType === "image"
@@ -3976,26 +3993,26 @@ export function FloatingSidebar({
                       }`}
                     >
                       {selectedIntegrationType === "mic" && (
-                        <Mic className="w-5 h-5 text-green-500" />
+                        <Mic className='h-5 w-5 text-green-500' />
                       )}
                       {selectedIntegrationType === "image" && (
-                        <ImageIcon className="w-5 h-5 text-purple-500" />
+                        <ImageIcon className='h-5 w-5 text-purple-500' />
                       )}
                       {selectedIntegrationType === "video" && (
-                        <Play className="w-5 h-5 text-blue-500" />
+                        <Play className='h-5 w-5 text-blue-500' />
                       )}
                       {selectedIntegrationType === "text" && (
-                        <Type className="w-5 h-5 text-orange-500" />
+                        <Type className='h-5 w-5 text-orange-500' />
                       )}
                       {selectedIntegrationType === "globe" && (
-                        <Globe className="w-5 h-5 text-pink-500" />
+                        <Globe className='h-5 w-5 text-pink-500' />
                       )}
                       {selectedIntegrationType === "file" && (
-                        <FileText className="w-5 h-5 text-indigo-500" />
+                        <FileText className='h-5 w-5 text-indigo-500' />
                       )}
                     </div>
                     <div>
-                      <h3 className="text-sm font-semibold text-foreground">
+                      <h3 className='text-foreground text-sm font-semibold'>
                         {selectedIntegrationType === "mic" && "Audio & Voice"}
                         {selectedIntegrationType === "image" &&
                           "Images & Graphics"}
@@ -4006,7 +4023,7 @@ export function FloatingSidebar({
                         {selectedIntegrationType === "file" &&
                           "Documents & Files"}
                       </h3>
-                      <p className="text-xs text-muted-foreground line-clamp-1 truncate w-40">
+                      <p className='text-muted-foreground line-clamp-1 w-40 truncate text-xs'>
                         {selectedIntegrationType === "mic" &&
                           (selectedItem
                             ? `Selected: ${selectedItem.name}`
@@ -4031,32 +4048,32 @@ export function FloatingSidebar({
                 )}
               </div>
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={resetModal}
-                className="h-6 w-6 p-0 hover:bg-muted"
+                className='hover:bg-muted h-6 w-6 p-0'
               >
-                <X className="w-3 h-3" />
+                <X className='h-3 w-3' />
               </Button>
             </div>
           </div>
-          <div className="flex-1 overflow-hidden px-4">
+          <div className='flex-1 overflow-hidden px-4'>
             {/* Tabs - Fixed at top, outside scroll section */}
             {selectedIntegrationType && (
-              <div className="mb-4">
+              <div className='mb-4'>
                 <Tabs
                   value={activeTab}
                   onValueChange={handleTabChange}
-                  className="w-full"
+                  className='w-full'
                 >
-                  <TabsList className="grid w-full grid-cols-3 h-8">
+                  <TabsList className='grid h-8 w-full grid-cols-3'>
                     {modalConfigs[
                       selectedIntegrationType as keyof typeof modalConfigs
                     ]?.tabs.map((tab) => (
                       <TabsTrigger
                         key={tab}
                         value={tab}
-                        className="text-xs capitalize h-6"
+                        className='h-6 text-xs capitalize'
                       >
                         {tab}
                       </TabsTrigger>
@@ -4066,8 +4083,8 @@ export function FloatingSidebar({
               </div>
             )}
 
-            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
-              <div className="space-y-4">{renderModalContent()}</div>
+            <div className='scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent flex-1 overflow-y-auto'>
+              <div className='space-y-4'>{renderModalContent()}</div>
             </div>
           </div>
           {!(
@@ -4075,13 +4092,13 @@ export function FloatingSidebar({
               selectedIntegrationType as keyof typeof modalConfigs
             ] as any
           )?.hideFooter && (
-            <div className="p-4 pt-0 flex-shrink-0">
-              <div className="flex space-x-2 pt-3 border-t border-border">
+            <div className='flex-shrink-0 p-4 pt-0'>
+              <div className='border-border flex space-x-2 border-t pt-3'>
                 <Button
                   onClick={resetModal}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 h-8 text-xs bg-transparent"
+                  variant='outline'
+                  size='sm'
+                  className='h-8 flex-1 bg-transparent text-xs'
                 >
                   Cancel
                 </Button>
@@ -4095,17 +4112,17 @@ export function FloatingSidebar({
                         !selectedItem &&
                         activeTab !== "all")
                   }
-                  size="sm"
-                  className="flex-1 h-8 text-xs bg-primary hover:bg-primary/90 text-primary-foreground"
+                  size='sm'
+                  className='bg-primary hover:bg-primary/90 text-primary-foreground h-8 flex-1 text-xs'
                 >
                   {isUploading ? (
                     <>
-                      <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                      <Loader2 className='mr-1 h-3 w-3 animate-spin' />
                       Uploading...
                     </>
                   ) : (
                     <>
-                      <Plus className="w-3 h-3 mr-1" />
+                      <Plus className='mr-1 h-3 w-3' />
                       Add to Canvas
                     </>
                   )}

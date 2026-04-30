@@ -1,8 +1,8 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthenticatedContextProvider } from "@/context/AuthenticatedContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode } from "react";
 
 interface ProvidersProps {
@@ -16,11 +16,11 @@ export function Providers({ children }: ProvidersProps) {
     <QueryClientProvider client={queryClient}>
       <AuthenticatedContextProvider>
         <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
+          attribute='class'
+          defaultTheme='dark'
           enableSystem={false}
           disableTransitionOnChange
-          storageKey="gennit-theme"
+          storageKey='gennit-theme'
         >
           {children}
         </ThemeProvider>

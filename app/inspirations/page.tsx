@@ -1,5 +1,4 @@
 // "use client";
-import type { Metadata } from "next";
 import Banner from "@/components/common/banner";
 import TemplateGridAll from "@/components/common/templateGridAll";
 import LandingPageBanner from "@/components/landing/landing-banner";
@@ -8,6 +7,7 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { IdeaSection } from "@/components/layout/idea-section";
 // import Communityproject from "../layout/community-project";
 import { motion } from "framer-motion";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Inspirations – Gennit AI | Browse Design Templates & Ideas",
@@ -49,62 +49,62 @@ const images = [
 
 export default function TemplatePage() {
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
+    <div className='flex min-h-screen w-full flex-col bg-white dark:bg-black'>
       <LandingPageBanner />
       <LandingNavbar />
-      <div className=" hidden">
-        <div className="flex p-3 items-center bg-primary-surface text-primary banner-launch-week-02-2026-03-10 py-4 relative pr-8 rounded-none z-10">
-          <div className="flex space-y-2 flex-col items-center md:flex-row md:justify-center md:space-y-0 md:space-x-1 w-full">
-            <div className="flex space-x-2 items-center">
-              <p className="text-sm text-center  font-medium hidden md:block">
+      <div className='hidden'>
+        <div className='bg-primary-surface text-primary banner-launch-week-02-2026-03-10 relative z-10 flex items-center rounded-none p-3 py-4 pr-8'>
+          <div className='flex w-full flex-col items-center space-y-2 md:flex-row md:justify-center md:space-y-0 md:space-x-1'>
+            <div className='flex items-center space-x-2'>
+              <p className='hidden text-center text-sm font-medium md:block'>
                 We release updates swiftly. Be sure to check out the changelogs
                 page!
               </p>
-              <p className="text-sm text-center font-medium md:hidden">
+              <p className='text-center text-sm font-medium md:hidden'>
                 We release updates swiftly.
               </p>
             </div>
             <a
-              href="https://railway.com/launch-week-02"
-              target="_blank"
-              rel="noreferrer"
-              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 underline hover:text-pink-600"
+              href='https://railway.com/launch-week-02'
+              target='_blank'
+              rel='noreferrer'
+              className='underline hover:text-pink-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700'
             >
-              <p className="text-sm hidden md:block">View Details</p>
-              <p className="text-sm md:hidden">View changelogs</p>
+              <p className='hidden text-sm md:block'>View Details</p>
+              <p className='text-sm md:hidden'>View changelogs</p>
             </a>
           </div>
-          <div className="absolute right-6 top-0 bottom-0 flex items-center">
+          <div className='absolute top-0 right-6 bottom-0 flex items-center'>
             <div
-              className="icon-container icon-md text-2xl !w-4 !h-4 text-foreground cursor-pointer"
-              aria-hidden="true"
+              className='icon-container icon-md text-foreground !h-4 !w-4 cursor-pointer text-2xl'
+              aria-hidden='true'
             >
               <svg
                 width={24}
                 height={24}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
                 strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-x"
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                className='feather feather-x'
               >
-                <path d="M18 6 6 18M6 6l12 12" />
+                <path d='M18 6 6 18M6 6l12 12' />
               </svg>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="md:px-12 lg:px-20 xl:px-24">
-        <main className="flex-grow relative bg-background">
-          <div className="absolute inset-0 -z-10 size-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_80%_at_50%_50%,#000_40%,transparent_100%)]"></div>
-          <div className="w-full mx-auto px-4 sm:px-6 py-8 mt-20">
-            <div className="space-y-4 flex flex-col ml-2 md:mx-4 lg:mx-8">
-              <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl max-w-xl">
+      <div className='md:px-12 lg:px-20 xl:px-24'>
+        <main className='bg-background relative flex-grow'>
+          <div className='absolute inset-0 -z-10 size-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_60%_80%_at_50%_50%,#000_40%,transparent_100%)] bg-[size:48px_48px]'></div>
+          <div className='mx-auto mt-20 w-full px-4 py-8 sm:px-6'>
+            <div className='ml-2 flex flex-col space-y-4 md:mx-4 lg:mx-8'>
+              <h1 className='max-w-xl text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl'>
                 Browse variety of inspirations,{" "}
-                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
                   fliers and ideas
                 </span>
               </h1>

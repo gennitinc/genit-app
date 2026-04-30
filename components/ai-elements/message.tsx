@@ -1,11 +1,7 @@
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import type { UIMessage } from "ai";
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 import type { ComponentProps, HTMLAttributes } from "react";
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {
@@ -73,8 +69,8 @@ export const MessageAvatar = ({
   className,
   ...props
 }: MessageAvatarProps) => (
-  <Avatar className={cn("size-8 ring-1 ring-border", className)} {...props}>
-    <AvatarImage alt="" className="mt-0 mb-0" src={src} />
+  <Avatar className={cn("ring-border size-8 ring-1", className)} {...props}>
+    <AvatarImage alt='' className='mt-0 mb-0' src={src} />
     <AvatarFallback>{name?.slice(0, 2) || "ME"}</AvatarFallback>
   </Avatar>
 );

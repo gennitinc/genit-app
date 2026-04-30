@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { VideoTemplatesTab, ImageTemplatesTab } from "@/components/inspire";
-import { Video, Image as ImageIcon } from "lucide-react";
+import { ImageTemplatesTab, VideoTemplatesTab } from "@/components/inspire";
 import LandingPageBanner from "@/components/landing/landing-banner";
-import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
+import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Image as ImageIcon, Video } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function TemplatesPage() {
   const router = useRouter();
@@ -32,51 +32,51 @@ export default function TemplatesPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
+    <div className='flex min-h-screen w-full flex-col bg-white dark:bg-black'>
       <LandingPageBanner />
       <LandingNavbar />
 
-      <div className="md:px-12 lg:px-20 xl:px-24">
-        <main className="flex-grow relative bg-background">
-          <div className="absolute inset-0 -z-10 size-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_80%_at_50%_50%,#000_40%,transparent_100%)]"></div>
-          <div className="w-full mx-auto px-4 sm:px-6 py-8 mt-20">
-            <div className="space-y-4 flex flex-col ml-2 md:mx-4 lg:mx-8">
-              <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl max-w-xl">
+      <div className='md:px-12 lg:px-20 xl:px-24'>
+        <main className='bg-background relative flex-grow'>
+          <div className='absolute inset-0 -z-10 size-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_60%_80%_at_50%_50%,#000_40%,transparent_100%)] bg-[size:48px_48px]'></div>
+          <div className='mx-auto mt-20 w-full px-4 py-8 sm:px-6'>
+            <div className='ml-2 flex flex-col space-y-4 md:mx-4 lg:mx-8'>
+              <h1 className='max-w-xl text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl'>
                 Browse templates,{" "}
-                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
                   start creating
                 </span>
               </h1>
-              <p className="text-normal text-sm text-muted-foreground leading-relaxed max-w-2xl">
+              <p className='text-normal text-muted-foreground max-w-2xl text-sm leading-relaxed'>
                 Choose from professionally crafted templates.
               </p>
             </div>
           </div>
         </main>
 
-        <div className="pb-8">
+        <div className='pb-8'>
           <Tabs
             value={activeTab}
             onValueChange={(v) => setActiveTab(v as "video" | "image")}
-            className="w-full"
+            className='w-full'
           >
-            <TabsList className="grid w-fit max-w-md grid-cols-2 mb-6 mt-2 ml-4">
-              <TabsTrigger value="video" className="flex items-center gap-2">
+            <TabsList className='mt-2 mb-6 ml-4 grid w-fit max-w-md grid-cols-2'>
+              <TabsTrigger value='video' className='flex items-center gap-2'>
                 Videos
               </TabsTrigger>
-              <TabsTrigger value="image" className="flex items-center gap-2">
+              <TabsTrigger value='image' className='flex items-center gap-2'>
                 Images
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="video" className="mt-0">
+            <TabsContent value='video' className='mt-0'>
               <VideoTemplatesTab
                 onPromptSelect={handlePromptSelect}
                 onTabChange={handleTabChange}
               />
             </TabsContent>
 
-            <TabsContent value="image" className="mt-0">
+            <TabsContent value='image' className='mt-0'>
               <ImageTemplatesTab
                 onPromptSelect={handlePromptSelect}
                 onTabChange={handleTabChange}

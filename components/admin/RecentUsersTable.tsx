@@ -1,8 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { apiResponse } from "@/utils/apiResponse";
-import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -12,7 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { apiResponse } from "@/utils/apiResponse";
+import { format } from "date-fns";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export const RecentUsersTable = () => {
   const [users, setUsers] = useState<any[]>([]);
@@ -38,34 +38,51 @@ export const RecentUsersTable = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mt-8 p-6 rounded-2xl bg-card border border-border/50"
+      className='bg-card border-border/50 mt-8 rounded-2xl border p-6'
     >
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold">Recent Signups</h3>
-        <Badge variant="outline" className="font-normal">Latest 10 users</Badge>
+      <div className='mb-6 flex items-center justify-between'>
+        <h3 className='text-lg font-semibold'>Recent Signups</h3>
+        <Badge variant='outline' className='font-normal'>
+          Latest 10 users
+        </Badge>
       </div>
 
-      <div className="rounded-md border border-border/40 overflow-hidden">
+      <div className='border-border/40 overflow-hidden rounded-md border'>
         <Table>
-          <TableHeader className="bg-muted/50">
+          <TableHeader className='bg-muted/50'>
             <TableRow>
-              <TableHead className="text-xs font-bold uppercase tracking-wider">User</TableHead>
-              <TableHead className="text-xs font-bold uppercase tracking-wider">Email</TableHead>
-              <TableHead className="text-xs font-bold uppercase tracking-wider">Plan</TableHead>
-              <TableHead className="text-xs font-bold uppercase tracking-wider">Joined</TableHead>
+              <TableHead className='text-xs font-bold tracking-wider uppercase'>
+                User
+              </TableHead>
+              <TableHead className='text-xs font-bold tracking-wider uppercase'>
+                Email
+              </TableHead>
+              <TableHead className='text-xs font-bold tracking-wider uppercase'>
+                Plan
+              </TableHead>
+              <TableHead className='text-xs font-bold tracking-wider uppercase'>
+                Joined
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {users.map((user) => (
-              <TableRow key={user.id} className="hover:bg-muted/30 transition-colors">
-                <TableCell className="font-medium text-sm">{user.username}</TableCell>
-                <TableCell className="text-sm text-muted-foreground">{user.email}</TableCell>
+              <TableRow
+                key={user.id}
+                className='hover:bg-muted/30 transition-colors'
+              >
+                <TableCell className='text-sm font-medium'>
+                  {user.username}
+                </TableCell>
+                <TableCell className='text-muted-foreground text-sm'>
+                  {user.email}
+                </TableCell>
                 <TableCell>
-                  <Badge variant="secondary" className="text-[10px] px-2 py-0">
+                  <Badge variant='secondary' className='px-2 py-0 text-[10px]'>
                     {user.userPlan}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-sm text-muted-foreground">
+                <TableCell className='text-muted-foreground text-sm'>
                   {format(new Date(user.createdAt), "MMM d, h:mm a")}
                 </TableCell>
               </TableRow>

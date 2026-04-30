@@ -1,34 +1,14 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import React, { useEffect, useMemo, useState } from "react";
+import { AIThinkingContent } from "../chat/messages";
+import { BorderBeam } from "../ui/border-beam";
+import ShinyText from "../ui/shiny-text";
+import AnimatedTooltipPreview from "./homeAgentsTooltip";
+import { HomeInfoGrid } from "./homeInfoGrid";
+import CategoryAndSearch from "@/components/common/category-and-search";
+import { PricingDialog } from "@/components/common/pricing-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  MessageSquare,
-  Users,
-  Sparkles,
-  TrendingUp,
-  Zap,
-  Plus,
-  Image as ImageIcon,
-  ArrowRight,
-  Eye,
-  Pencil,
-  AlertCircle,
-  X,
-  XIcon,
-  Mic,
-  PaperclipIcon,
-  Loader,
-  User,
-  WandSparklesIcon,
-  Loader2,
-} from "lucide-react";
-import Link from "next/link";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import {
   Dialog,
   DialogContent,
@@ -38,25 +18,45 @@ import {
 import {
   Drawer,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerFooter,
 } from "@/components/ui/drawer";
-import { useRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { motion, AnimatePresence } from "framer-motion";
-import { PricingDialog } from "@/components/common/pricing-dialog";
-import ShinyText from "../ui/shiny-text";
-import { HomeInfoGrid } from "./homeInfoGrid";
-import AnimatedTooltipPreview from "./homeAgentsTooltip";
-import { apiResponse } from "@/utils/apiResponse";
-import CategoryAndSearch from "@/components/common/category-and-search";
-import { useProjectDesign } from "@/context/DesignProject";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AIThinkingContent } from "../chat/messages";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { useProjectDesign } from "@/context/DesignProject";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { useSpeechToText } from "@/hooks/use-speech-to-text";
+import { cn } from "@/lib/utils";
+import { apiResponse } from "@/utils/apiResponse";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  AlertCircle,
+  ArrowRight,
+  Eye,
+  Image as ImageIcon,
+  Loader,
+  Loader2,
+  MessageSquare,
+  Mic,
+  PaperclipIcon,
+  Pencil,
+  Plus,
+  Sparkles,
+  TrendingUp,
+  User,
+  Users,
+  WandSparklesIcon,
+  X,
+  XIcon,
+  Zap,
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { BorderBeam } from "../ui/border-beam";
+import React, { useEffect, useMemo, useState } from "react";
+import { useCallback, useRef } from "react";
 
 type TemplateItem = {
   id: string;
@@ -130,7 +130,7 @@ export default function TemplateGridAll() {
         `/designinspirations/scrape/pins/search?q=${encodeURIComponent(randomDesignType)}&limit=12&category=${randomDesignType}`,
         {
           withCredentials: true,
-        },
+        }
       );
 
       const data = await res.data();
@@ -191,14 +191,14 @@ export default function TemplateGridAll() {
                 : undefined,
               author: template.author,
               isUserGenerated: template.isUserGenerated,
-            }),
+            })
           );
 
           if (append) {
             setTemplates((prev) => {
               const existingIds = new Set(prev.map((t) => t.id));
               const uniqueNewItems = mapped.filter(
-                (item) => !existingIds.has(item.id),
+                (item) => !existingIds.has(item.id)
               );
               return uniqueNewItems.length
                 ? [...prev, ...uniqueNewItems]
@@ -227,7 +227,7 @@ export default function TemplateGridAll() {
         }
       }
     },
-    [apiResponse],
+    [apiResponse]
   );
 
   // Initial and when search changes
@@ -259,7 +259,7 @@ export default function TemplateGridAll() {
           setPage((p) => p + 1);
         }
       },
-      { rootMargin: "200px" },
+      { rootMargin: "200px" }
     );
     observer.observe(el);
     return () => observer.unobserve(el);
@@ -371,7 +371,7 @@ export default function TemplateGridAll() {
           Math.min(textareaRef.current.scrollHeight, 200) + "px";
       }
     },
-    [setInputValue],
+    [setInputValue]
   );
 
   // Handle file processing with validation
@@ -399,7 +399,7 @@ export default function TemplateGridAll() {
         setInputError(null);
       }
     },
-    [attachedFiles.length, processFiles],
+    [attachedFiles.length, processFiles]
   );
 
   // Handle file input change
@@ -409,7 +409,7 @@ export default function TemplateGridAll() {
       handleFileProcess(files);
       e.target.value = "";
     },
-    [handleFileProcess],
+    [handleFileProcess]
   );
 
   // Handle drag and drop
@@ -425,7 +425,7 @@ export default function TemplateGridAll() {
       const files = Array.from(e.dataTransfer.files);
       handleFileProcess(files);
     },
-    [handleFileProcess],
+    [handleFileProcess]
   );
 
   // Handle form submission
@@ -475,7 +475,7 @@ export default function TemplateGridAll() {
         const result = await createProject(
           inputValue,
           attachedFiles,
-          selectedFiles,
+          selectedFiles
         );
 
         clearInput();
@@ -487,7 +487,7 @@ export default function TemplateGridAll() {
       } catch (error: any) {
         console.error("Failed to create project:", error);
         setInputError(
-          error.message || "Failed to create project. Please try again.",
+          error.message || "Failed to create project. Please try again."
         );
       } finally {
         setIsSubmitting(false);
@@ -503,7 +503,7 @@ export default function TemplateGridAll() {
       createProject,
       user,
       router,
-    ],
+    ]
   );
 
   // Handle file removal
@@ -512,7 +512,7 @@ export default function TemplateGridAll() {
       removeAttachedFile(index);
       setInputError(null);
     },
-    [removeAttachedFile],
+    [removeAttachedFile]
   );
 
   // Handle key press
@@ -522,7 +522,7 @@ export default function TemplateGridAll() {
         handleSubmit(e as any);
       }
     },
-    [handleSubmit],
+    [handleSubmit]
   );
 
   useEffect(() => {
@@ -578,7 +578,7 @@ export default function TemplateGridAll() {
 
   return (
     <motion.div
-      className="mt-2 mb-20"
+      className='mt-2 mb-20'
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.8 }}
@@ -586,55 +586,55 @@ export default function TemplateGridAll() {
       {/* <div className="mt-4 mb-4 flex flex-row items-center">
         <CategoryAndSearch />
       </div> */}
-      <div className="columns-2 md:columns-4 gap-4 [column-fill:_balance]">
+      <div className='columns-2 gap-4 [column-fill:_balance] md:columns-4'>
         {isLoading && templates.length === 0 && (
           <>
             {[220, 280, 200, 260, 240, 300, 210, 250, 230, 270, 190, 310].map(
               (h, idx) => (
                 <div
                   key={`skeleton-${idx}`}
-                  className="mb-4 inline-block w-full align-top border border-border/50 rounded-lg overflow-hidden bg-muted/5 group"
+                  className='border-border/50 bg-muted/5 group mb-4 inline-block w-full overflow-hidden rounded-lg border align-top'
                   style={{ breakInside: "avoid" }}
                 >
-                  <div className="relative">
+                  <div className='relative'>
                     {/* Image Placeholder */}
                     <Skeleton
-                      className="w-full bg-muted/50 transition-colors"
+                      className='bg-muted/50 w-full transition-colors'
                       style={{ height: h }}
                     />
-                    
+
                     {/* Creator Info Skeleton (Bottom) */}
-                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/20 to-transparent flex items-center gap-2">
-                       <Skeleton className="w-5 h-5 rounded-full bg-muted-foreground/20" />
-                       <Skeleton className="h-2 w-16 bg-muted-foreground/20 rounded" />
+                    <div className='absolute right-0 bottom-0 left-0 flex items-center gap-2 bg-gradient-to-t from-black/20 to-transparent p-2'>
+                      <Skeleton className='bg-muted-foreground/20 h-5 w-5 rounded-full' />
+                      <Skeleton className='bg-muted-foreground/20 h-2 w-16 rounded' />
                     </div>
 
                     {/* Action Button Skeleton (Center) */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-40">
-                       <Skeleton className="h-9 w-9 rounded-full bg-muted-foreground/20" />
+                    <div className='absolute inset-0 flex items-center justify-center opacity-40'>
+                      <Skeleton className='bg-muted-foreground/20 h-9 w-9 rounded-full' />
                     </div>
                   </div>
                 </div>
-              ),
+              )
             )}
           </>
         )}
         {templates.map((t) => (
           <div
             key={t.id}
-            className="group relative mb-4 inline-block w-full align-top border border-border rounded-lg"
+            className='group border-border relative mb-4 inline-block w-full rounded-lg border align-top'
             style={{ breakInside: "avoid" }}
           >
-            <div className="relative">
+            <div className='relative'>
               <img
-                className="h-auto max-w-full rounded-lg object-cover"
+                className='h-auto max-w-full rounded-lg object-cover'
                 src={t.src}
                 alt={t.alt || "Template"}
               />
               {t.category && (
                 <Badge
-                  variant="secondary"
-                  className="absolute top-2 left-2 text-xs pointer-events-none z-2 hidden"
+                  variant='secondary'
+                  className='pointer-events-none absolute top-2 left-2 z-2 hidden text-xs'
                 >
                   {t.category
                     .split("_")
@@ -642,95 +642,95 @@ export default function TemplateGridAll() {
                     .join(" ")}
                 </Badge>
               )}
-              <div className="pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:opacity-100 group-hover:bg-black/30" />
+              <div className='pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:bg-black/30 group-hover:opacity-100' />
               {/* Creator Info at Bottom */}
               {t.isUserGenerated && (t.userId || t.author) && (
-                <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 via-black/60 to-transparent rounded-b-lg opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity pointer-events-auto z-10 hidden lg:block">
+                <div className='pointer-events-auto absolute right-0 bottom-0 left-0 z-10 hidden rounded-b-lg bg-gradient-to-t from-black/80 via-black/60 to-transparent p-2 opacity-100 transition-opacity lg:block lg:opacity-0 lg:group-hover:opacity-100'>
                   <Link
                     href={`/creator/${t.userId?.username || t.author || ""}`}
                     onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-2 hover:opacity-80 transition-opacity w-fit"
+                    className='flex w-fit items-center gap-2 transition-opacity hover:opacity-80'
                   >
                     {t.userId?.profilePic ? (
                       <img
                         src={t.userId.profilePic}
                         alt={t.userId.username || t.author || "Creator"}
-                        className="w-5 h-5 rounded-full object-cover"
+                        className='h-5 w-5 rounded-full object-cover'
                       />
                     ) : (
-                      <div className="w-5 h-5 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-                        <User className="w-3 h-3 text-neutral-600 dark:text-neutral-400" />
+                      <div className='flex h-5 w-5 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+                        <User className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
                       </div>
                     )}
-                    <span className="text-xs text-white/80 font-medium">
+                    <span className='text-xs font-medium text-white/80'>
                       {t.userId?.username || t.author || "Creator"}
                     </span>
                     {t.userId?.isVerified && (
                       <svg
-                        viewBox="0 0 22 22"
-                        aria-label="Verified account"
-                        role="img"
-                        className="w-3.5 h-3.5 flex-shrink-0"
-                        data-testid="icon-verified"
-                        fill="#3b82f6"
+                        viewBox='0 0 22 22'
+                        aria-label='Verified account'
+                        role='img'
+                        className='h-3.5 w-3.5 flex-shrink-0'
+                        data-testid='icon-verified'
+                        fill='#3b82f6'
                       >
                         <g>
-                          <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                          <path d='M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z' />
                         </g>
                       </svg>
                     )}
                   </Link>
                 </div>
               )}
-              <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-100 lg:opacity-0 transition-opacity group-hover:opacity-100">
+              <div className='absolute inset-0 flex items-center justify-center gap-2 opacity-100 transition-opacity group-hover:opacity-100 lg:opacity-0'>
                 <Button
-                  size="icon"
+                  size='icon'
                   onClick={() => onEdit(t)}
-                  className="pointer-events-auto rounded-full h-9 w-9 p-0 bg-white/90 dark:bg-black/20 backdrop-blur-sm opacity-50"
-                  aria-label="Edit template"
+                  className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-50 backdrop-blur-sm dark:bg-black/20'
+                  aria-label='Edit template'
                 >
-                  <Pencil className="h-4 w-4 text-black dark:text-white" />
+                  <Pencil className='h-4 w-4 text-black dark:text-white' />
                 </Button>
               </div>
             </div>
           </div>
         ))}
         {/* Sentinel for infinite scroll */}
-        <div ref={loadMoreRef} className="col-span-full h-10"></div>
+        <div ref={loadMoreRef} className='col-span-full h-10'></div>
       </div>
       {isFetchingMore && (
-        <div className="mt-4 flex justify-center">
-          <Loader className="h-5 w-5 animate-spin" />
+        <div className='mt-4 flex justify-center'>
+          <Loader className='h-5 w-5 animate-spin' />
         </div>
       )}
 
       {selected && !isMobile && (
         <Dialog open={editOpen} onOpenChange={setEditOpen}>
-          <DialogContent className="max-w-3xl h-[85vh] p-0 flex flex-col overflow-hidden">
-            <DialogHeader className="px-4 py-3 border-b flex-shrink-0">
+          <DialogContent className='flex h-[85vh] max-w-3xl flex-col overflow-hidden p-0'>
+            <DialogHeader className='flex-shrink-0 border-b px-4 py-3'>
               <DialogTitle>Recreate</DialogTitle>
             </DialogHeader>
 
             {/* Image container with relative positioning */}
-            <div className="relative flex-shrink-0 overflow-hidden h-auto max-h-[63%]">
+            <div className='relative h-auto max-h-[63%] flex-shrink-0 overflow-hidden'>
               <img
                 src={selected.src}
                 alt={selected.alt || "Template"}
-                className="w-full h-full object-contain rounded-md"
+                className='h-full w-full rounded-md object-contain'
               />
 
               {/* File Attachments - Positioned absolutely over the image */}
               {attachedFiles.length > 0 && (
-                <div className="absolute bottom-0 left-0 right-0 ml-2 bg-gradient-to-t from-black/60 to-transparent z-20">
-                  <div className="flex flex-wrap gap-2 custom-scrollbar-horizontal">
+                <div className='absolute right-0 bottom-0 left-0 z-20 ml-2 bg-gradient-to-t from-black/60 to-transparent'>
+                  <div className='custom-scrollbar-horizontal flex flex-wrap gap-2'>
                     {attachedFiles.map((file: any, index: number) => {
                       const fileKey = file.fileKey || `${file.name}-${index}`;
                       return (
                         <div
                           key={fileKey}
-                          className="relative group bg-white/90 dark:bg-black/80 backdrop-blur-sm border border-border rounded-lg p-2 flex items-center gap-2 hover:bg-white dark:hover:bg-black/90 transition-colors max-w-[200px]"
+                          className='group border-border relative flex max-w-[200px] items-center gap-2 rounded-lg border bg-white/90 p-2 backdrop-blur-sm transition-colors hover:bg-white dark:bg-black/80 dark:hover:bg-black/90'
                         >
-                          <div className="w-8 h-8 bg-background border border-border rounded flex items-center justify-center flex-shrink-0 relative">
+                          <div className='bg-background border-border relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border'>
                             {file.type && file.type.startsWith("image/") ? (
                               <img
                                 src={
@@ -738,29 +738,29 @@ export default function TemplateGridAll() {
                                   "/placeholder.svg"
                                 }
                                 alt={file.name}
-                                className="w-full h-full object-cover rounded"
+                                className='h-full w-full rounded object-cover'
                                 onLoad={(e) =>
                                   URL.revokeObjectURL(
-                                    (e.target as HTMLImageElement).src,
+                                    (e.target as HTMLImageElement).src
                                   )
                                 }
                               />
                             ) : file.type && file.type.startsWith("video/") ? (
-                              <div className="w-full h-full grid place-items-center text-[10px] text-muted-foreground">
+                              <div className='text-muted-foreground grid h-full w-full place-items-center text-[10px]'>
                                 🎬
                               </div>
                             ) : (
                               <svg
-                                className="w-4 h-4 text-muted-foreground"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                                className='text-muted-foreground h-4 w-4'
+                                fill='none'
+                                stroke='currentColor'
+                                viewBox='0 0 24 24'
                               >
                                 <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
+                                  strokeLinecap='round'
+                                  strokeLinejoin='round'
                                   strokeWidth={2}
-                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                  d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
                                 />
                               </svg>
                             )}
@@ -777,29 +777,29 @@ export default function TemplateGridAll() {
                           </div> */}
                           <button
                             onClick={() => handleFileRemove(index)}
-                            className="absolute -top-1 -right-1 w-5 h-5 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold"
+                            className='bg-muted-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-500'
                             disabled={isGenerating}
                             aria-label={`Remove ${file.name}`}
                           >
                             &times;
                           </button>
                           {file.type && file.type.startsWith("image/") && (
-                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                              <div className="bg-background border border-border rounded-lg shadow-lg p-2">
+                            <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
+                              <div className='bg-background border-border rounded-lg border p-2 shadow-lg'>
                                 <img
                                   src={
                                     URL.createObjectURL(file) ||
                                     "/placeholder.svg"
                                   }
                                   alt={file.name}
-                                  className="max-w-[200px] max-h-[150px] object-contain rounded"
+                                  className='max-h-[150px] max-w-[200px] rounded object-contain'
                                   onLoad={(e) =>
                                     URL.revokeObjectURL(
-                                      (e.target as HTMLImageElement).src,
+                                      (e.target as HTMLImageElement).src
                                     )
                                   }
                                 />
-                                <div className="mt-1 text-xs text-muted-foreground text-center">
+                                <div className='text-muted-foreground mt-1 text-center text-xs'>
                                   {file.name} • {formatFileSize(file.size)}
                                 </div>
                               </div>
@@ -814,18 +814,18 @@ export default function TemplateGridAll() {
             </div>
 
             <motion.div
-              className="flex flex-col relative w-full flex-1 min-h-0 overflow-hidden pb-0"
+              className='relative flex min-h-0 w-full flex-1 flex-col overflow-hidden pb-0'
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               <div
                 ref={chatContainerRef}
-                className="relative flex rounded-2xl p-[1.5px] overflow-hidden before:absolute before:content-[''] before:top-[-10px] before:left-[-10px] before:bg-radial-gradient md:before:w-[40vh] before:h-[30px] before:blur-[1px] w-full shadow-lg h-full flex-1 min-h-0"
+                className="before:bg-radial-gradient relative flex h-full min-h-0 w-full flex-1 overflow-hidden rounded-2xl p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh]"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
-                <div className="flex flex-col bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-[15px] w-full overflow-hidden z-10 shadow-inner h-full flex-1 min-h-0">
+                <div className='z-10 flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden rounded-[15px] bg-white/90 shadow-inner backdrop-blur-sm dark:bg-black/80'>
                   {/* <div className="flex items-center mx-4 justify-between text-sm flex-shrink-0">
                     {!isGenerating && (
                       <div className="flex items-center gap-3 justify-between w-full">
@@ -872,7 +872,7 @@ export default function TemplateGridAll() {
                     )}
                   </div> */}
 
-                  <div className="relative flex-1 min-h-0 flex flex-col justify-end px-4 pb-4">
+                  <div className='relative flex min-h-0 flex-1 flex-col justify-end px-4 pb-4'>
                     <form
                       onSubmit={
                         user
@@ -882,14 +882,14 @@ export default function TemplateGridAll() {
                               router.push("/signin");
                             }
                       }
-                      className="group flex flex-col gap-2 p-3 w-full rounded-2xl border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
+                      className='group flex w-full flex-col gap-2 rounded-2xl border border-white bg-white/80 p-3 text-base shadow-xl ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
                     >
-                      <div className="min-w-0 w-full">
-                        <div className="relative flex flex-1 items-center">
+                      <div className='w-full min-w-0'>
+                        <div className='relative flex flex-1 items-center'>
                           <textarea
                             ref={textareaRef}
-                            id="chat_bot"
-                            name="chat_bot"
+                            id='chat_bot'
+                            name='chat_bot'
                             value={isGenerating ? "" : inputValue}
                             onChange={handleInputChange}
                             onKeyDown={handleKeyPress}
@@ -901,11 +901,11 @@ export default function TemplateGridAll() {
                                   : "Tell your AI Designer what to create...✦"
                             }
                             disabled={isGenerating || isSubmitting}
-                            className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
+                            className='placeholder:text-muted-foreground/60 scrollbar-none flex max-h-[300px] w-full flex-1 resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                             style={{
                               minHeight: "60px",
                             }}
-                            aria-label="Enter your prompt"
+                            aria-label='Enter your prompt'
                             aria-describedby={
                               inputError ? "input-error" : undefined
                             }
@@ -913,35 +913,35 @@ export default function TemplateGridAll() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1.5">
+                      <div className='flex items-center gap-1.5'>
                         <button
-                          type="button"
-                          className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-secondary text-primary h-8 w-8 shadow-sm flex-shrink-0"
+                          type='button'
+                          className='bg-secondary text-primary relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-sm brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
                           onClick={() => fileInputRef.current?.click()}
                           disabled={isGenerating || isSubmitting}
-                          aria-label="Attach files"
+                          aria-label='Attach files'
                         >
-                          <Plus className="shrink-0 size-5" />
+                          <Plus className='size-5 shrink-0' />
                         </button>
                         <Input
                           ref={fileInputRef}
-                          type="file"
+                          type='file'
                           multiple
                           onChange={handleFileInputChange}
                           disabled={isGenerating || isSubmitting}
-                          className="hidden"
-                          id="file-upload"
-                          accept="image/*,video/*"
+                          className='hidden'
+                          id='file-upload'
+                          accept='image/*,video/*'
                         />
 
-                        <div className="ml-auto flex items-center gap-1.5">
+                        <div className='ml-auto flex items-center gap-1.5'>
                           <button
-                            type="button"
+                            type='button'
                             className={cn(
-                              "relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 h-8 w-8",
+                              "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out",
                               isListening
-                                ? "text-red-500 bg-red-500/10 animate-pulse"
-                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5",
+                                ? "animate-pulse bg-red-500/10 text-red-500"
+                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
                             )}
                             onClick={handleMicClick}
                             disabled={!isSupported || isGenerating}
@@ -951,29 +951,29 @@ export default function TemplateGridAll() {
                                 : "Start voice input"
                             }
                           >
-                            <Mic className="shrink-0 size-4" />
+                            <Mic className='size-4 shrink-0' />
                           </button>
                           <button
-                            type="submit"
-                            className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shadow-md flex-shrink-0 overflow-hidden"
+                            type='submit'
+                            className='bg-primary text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
                             disabled={isSubmitDisabled}
                           >
                             <BorderBeam
                               duration={6}
                               size={40}
-                              className="from-transparent via-red-500 to-transparent"
+                              className='from-transparent via-red-500 to-transparent'
                             />
                             <BorderBeam
                               duration={6}
                               delay={3}
                               size={40}
                               borderWidth={2}
-                              className="from-transparent via-blue-500 to-transparent"
+                              className='from-transparent via-blue-500 to-transparent'
                             />
                             {isGenerating || isSubmitting ? (
-                              <Loader2 className="w-4 h-4 animate-spin" />
+                              <Loader2 className='h-4 w-4 animate-spin' />
                             ) : (
-                              <WandSparklesIcon className="w-4 h-4" />
+                              <WandSparklesIcon className='h-4 w-4' />
                             )}
                           </button>
                         </div>
@@ -989,31 +989,31 @@ export default function TemplateGridAll() {
       {/* Mobile Drawer Version - Same structure */}
       {selected && isMobile && (
         <Drawer open={editOpen} onOpenChange={setEditOpen}>
-          <DrawerContent className="h-[85vh] flex flex-col overflow-hidden">
-            <DrawerHeader className="flex-shrink-0">
+          <DrawerContent className='flex h-[85vh] flex-col overflow-hidden'>
+            <DrawerHeader className='flex-shrink-0'>
               <DrawerTitle>Recreate</DrawerTitle>
             </DrawerHeader>
 
             {/* Image container with relative positioning */}
-            <div className="relative flex-shrink-0 overflow-hidden h-auto max-h-[63%]">
+            <div className='relative h-auto max-h-[63%] flex-shrink-0 overflow-hidden'>
               <img
                 src={selected.src}
                 alt={selected.alt || "Template"}
-                className="w-full h-full object-contain rounded-md"
+                className='h-full w-full rounded-md object-contain'
               />
 
               {/* File Attachments - Positioned absolutely over the image */}
               {attachedFiles.length > 0 && (
-                <div className="absolute bottom-0 left-0 right-0 ml-2 bg-gradient-to-t from-black/60 to-transparent z-20">
-                  <div className="flex flex-wrap gap-2 custom-scrollbar-horizontal">
+                <div className='absolute right-0 bottom-0 left-0 z-20 ml-2 bg-gradient-to-t from-black/60 to-transparent'>
+                  <div className='custom-scrollbar-horizontal flex flex-wrap gap-2'>
                     {attachedFiles.map((file: any, index: number) => {
                       const fileKey = file.fileKey || `${file.name}-${index}`;
                       return (
                         <div
                           key={fileKey}
-                          className="relative group bg-white/90 dark:bg-black/80 backdrop-blur-sm border border-border rounded-lg p-2 flex items-center gap-2 hover:bg-white dark:hover:bg-black/90 transition-colors max-w-[200px]"
+                          className='group border-border relative flex max-w-[200px] items-center gap-2 rounded-lg border bg-white/90 p-2 backdrop-blur-sm transition-colors hover:bg-white dark:bg-black/80 dark:hover:bg-black/90'
                         >
-                          <div className="w-8 h-8 bg-background border border-border rounded flex items-center justify-center flex-shrink-0 relative">
+                          <div className='bg-background border-border relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border'>
                             {file.type && file.type.startsWith("image/") ? (
                               <img
                                 src={
@@ -1021,29 +1021,29 @@ export default function TemplateGridAll() {
                                   "/placeholder.svg"
                                 }
                                 alt={file.name}
-                                className="w-full h-full object-cover rounded"
+                                className='h-full w-full rounded object-cover'
                                 onLoad={(e) =>
                                   URL.revokeObjectURL(
-                                    (e.target as HTMLImageElement).src,
+                                    (e.target as HTMLImageElement).src
                                   )
                                 }
                               />
                             ) : file.type && file.type.startsWith("video/") ? (
-                              <div className="w-full h-full grid place-items-center text-[10px] text-muted-foreground">
+                              <div className='text-muted-foreground grid h-full w-full place-items-center text-[10px]'>
                                 🎬
                               </div>
                             ) : (
                               <svg
-                                className="w-4 h-4 text-muted-foreground"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                                className='text-muted-foreground h-4 w-4'
+                                fill='none'
+                                stroke='currentColor'
+                                viewBox='0 0 24 24'
                               >
                                 <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
+                                  strokeLinecap='round'
+                                  strokeLinejoin='round'
                                   strokeWidth={2}
-                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                  d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
                                 />
                               </svg>
                             )}
@@ -1060,29 +1060,29 @@ export default function TemplateGridAll() {
                           </div> */}
                           <button
                             onClick={() => handleFileRemove(index)}
-                            className="absolute -top-1 -right-1 w-5 h-5 bg-muted-foreground hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold"
+                            className='bg-muted-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-500'
                             disabled={isGenerating}
                             aria-label={`Remove ${file.name}`}
                           >
                             &times;
                           </button>
                           {file.type && file.type.startsWith("image/") && (
-                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                              <div className="bg-background border border-border rounded-lg shadow-lg p-2">
+                            <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
+                              <div className='bg-background border-border rounded-lg border p-2 shadow-lg'>
                                 <img
                                   src={
                                     URL.createObjectURL(file) ||
                                     "/placeholder.svg"
                                   }
                                   alt={file.name}
-                                  className="max-w-[200px] max-h-[150px] object-contain rounded"
+                                  className='max-h-[150px] max-w-[200px] rounded object-contain'
                                   onLoad={(e) =>
                                     URL.revokeObjectURL(
-                                      (e.target as HTMLImageElement).src,
+                                      (e.target as HTMLImageElement).src
                                     )
                                   }
                                 />
-                                <div className="mt-1 text-xs text-muted-foreground text-center">
+                                <div className='text-muted-foreground mt-1 text-center text-xs'>
                                   {file.name} • {formatFileSize(file.size)}
                                 </div>
                               </div>
@@ -1097,18 +1097,18 @@ export default function TemplateGridAll() {
             </div>
 
             <motion.div
-              className="flex flex-col relative w-full flex-1 min-h-0 overflow-hidden pb-0"
+              className='relative flex min-h-0 w-full flex-1 flex-col overflow-hidden pb-0'
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               <div
                 ref={chatContainerRef}
-                className="relative flex rounded-2xl p-[1.5px] overflow-hidden before:absolute before:content-[''] before:top-[-10px] before:left-[-10px] before:bg-radial-gradient md:before:w-[40vh] before:h-[30px] before:blur-[1px] w-full shadow-lg h-full flex-1 min-h-0"
+                className="before:bg-radial-gradient relative flex h-full min-h-0 w-full flex-1 overflow-hidden rounded-2xl p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh]"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
-                <div className="flex flex-col bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-[15px] w-full overflow-hidden z-10 shadow-inner h-full flex-1 min-h-0">
+                <div className='z-10 flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden rounded-[15px] bg-white/90 shadow-inner backdrop-blur-sm dark:bg-black/80'>
                   {/* <div className="flex items-center mx-4 justify-between text-sm flex-shrink-0">
                     {!isGenerating && (
                       <div className="flex items-center gap-3 justify-between w-full">
@@ -1155,7 +1155,7 @@ export default function TemplateGridAll() {
                     )}
                   </div> */}
 
-                  <div className="relative flex-1 min-h-0 flex flex-col justify-end px-4 pb-4">
+                  <div className='relative flex min-h-0 flex-1 flex-col justify-end px-4 pb-4'>
                     <form
                       onSubmit={
                         user
@@ -1165,14 +1165,14 @@ export default function TemplateGridAll() {
                               router.push("/signin");
                             }
                       }
-                      className="group flex flex-col gap-2 p-3 w-full rounded-2xl border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
+                      className='group flex w-full flex-col gap-2 rounded-2xl border border-white bg-white/80 p-3 text-base shadow-xl ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
                     >
-                      <div className="min-w-0 w-full">
-                        <div className="relative flex flex-1 items-center">
+                      <div className='w-full min-w-0'>
+                        <div className='relative flex flex-1 items-center'>
                           <textarea
                             ref={textareaRef}
-                            id="chat_bot_mobile"
-                            name="chat_bot_mobile"
+                            id='chat_bot_mobile'
+                            name='chat_bot_mobile'
                             value={isGenerating ? "" : inputValue}
                             onChange={handleInputChange}
                             onKeyDown={handleKeyPress}
@@ -1184,44 +1184,44 @@ export default function TemplateGridAll() {
                                   : "Tell your AI Designer what to create...✦"
                             }
                             disabled={isGenerating || isSubmitting}
-                            className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
+                            className='placeholder:text-muted-foreground/60 scrollbar-none flex max-h-[300px] w-full flex-1 resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                             style={{
                               minHeight: "60px",
                             }}
-                            aria-label="Enter your prompt"
+                            aria-label='Enter your prompt'
                           />
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1.5">
+                      <div className='flex items-center gap-1.5'>
                         <button
-                          type="button"
-                          className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-secondary text-primary h-8 w-8 shadow-sm flex-shrink-0"
+                          type='button'
+                          className='bg-secondary text-primary relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-sm brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
                           onClick={() => fileInputRef.current?.click()}
                           disabled={isGenerating || isSubmitting}
-                          aria-label="Attach files"
+                          aria-label='Attach files'
                         >
-                          <Plus className="shrink-0 size-5" />
+                          <Plus className='size-5 shrink-0' />
                         </button>
                         <Input
                           ref={fileInputRef}
-                          type="file"
+                          type='file'
                           multiple
                           onChange={handleFileInputChange}
                           disabled={isGenerating || isSubmitting}
-                          className="hidden"
-                          id="file-upload-mobile"
-                          accept="image/*,video/*"
+                          className='hidden'
+                          id='file-upload-mobile'
+                          accept='image/*,video/*'
                         />
 
-                        <div className="ml-auto flex items-center gap-1.5">
+                        <div className='ml-auto flex items-center gap-1.5'>
                           <button
-                            type="button"
+                            type='button'
                             className={cn(
-                              "relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 h-8 w-8",
+                              "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out",
                               isListening
-                                ? "text-red-500 bg-red-500/10 animate-pulse"
-                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5",
+                                ? "animate-pulse bg-red-500/10 text-red-500"
+                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
                             )}
                             onClick={handleMicClick}
                             disabled={!isSupported || isGenerating}
@@ -1231,29 +1231,29 @@ export default function TemplateGridAll() {
                                 : "Start voice input"
                             }
                           >
-                            <Mic className="shrink-0 size-4" />
+                            <Mic className='size-4 shrink-0' />
                           </button>
                           <button
-                            type="submit"
-                            className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shadow-md flex-shrink-0 overflow-hidden"
+                            type='submit'
+                            className='bg-primary text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
                             disabled={isSubmitDisabled}
                           >
                             <BorderBeam
                               duration={6}
                               size={40}
-                              className="from-transparent via-red-500 to-transparent"
+                              className='from-transparent via-red-500 to-transparent'
                             />
                             <BorderBeam
                               duration={6}
                               delay={3}
                               size={40}
                               borderWidth={2}
-                              className="from-transparent via-blue-500 to-transparent"
+                              className='from-transparent via-blue-500 to-transparent'
                             />
                             {isGenerating || isSubmitting ? (
-                              <Loader2 className="w-4 h-4 animate-spin" />
+                              <Loader2 className='h-4 w-4 animate-spin' />
                             ) : (
-                              <WandSparklesIcon className="w-4 h-4" />
+                              <WandSparklesIcon className='h-4 w-4' />
                             )}
                           </button>
                         </div>

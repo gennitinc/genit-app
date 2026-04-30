@@ -1,5 +1,5 @@
-import { Metadata } from "next";
 import { apiResponse } from "@/utils/apiResponse";
+import { Metadata } from "next";
 
 interface CreatorProfile {
   _id: string;
@@ -19,7 +19,7 @@ interface CreatorProfile {
 }
 
 async function getCreatorProfile(
-  username: string,
+  username: string
 ): Promise<CreatorProfile | null> {
   try {
     const baseURL =
@@ -56,7 +56,7 @@ async function getCreatorProfile(
       // Log the error for debugging
       if (process.env.NODE_ENV === "development") {
         console.error(
-          `Failed to fetch creator profile: ${response.status} ${response.statusText}`,
+          `Failed to fetch creator profile: ${response.status} ${response.statusText}`
         );
       }
       return null;

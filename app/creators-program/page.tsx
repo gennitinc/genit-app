@@ -1,11 +1,11 @@
 "use client";
 
-import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
+import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { JoinReferralCard } from "@/components/referral/join-referral-card";
 import { Toaster } from "@/components/ui/sonner";
-import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { useRouter } from "next/navigation";
 
 export default function ReferralLandingPage() {
   const router = useRouter();
@@ -17,11 +17,11 @@ export default function ReferralLandingPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
+    <div className='flex min-h-screen w-full flex-col bg-white dark:bg-black'>
       <Toaster />
       <LandingNavbar />
-      <main className="flex-grow relative">
-        <div className="w-full">
+      <main className='relative flex-grow'>
+        <div className='w-full'>
           <JoinReferralCard onJoinSuccess={handleJoinSuccess} />
         </div>
       </main>
@@ -29,4 +29,3 @@ export default function ReferralLandingPage() {
     </div>
   );
 }
-

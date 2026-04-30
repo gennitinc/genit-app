@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { Handle, NodeResizer, Position, type NodeProps } from "reactflow";
-import { X, Loader2, Monitor } from "lucide-react";
 import { WorkflowPremiumInput } from "@/components/ui/workflow-premium-input";
 import { cn } from "@/lib/utils";
+import { Model } from "@/types/inspire";
 import { apiResponse } from "@/utils/apiResponse";
 import { modelApi } from "@/utils/inspire-api";
-import { Model } from "@/types/inspire";
+import { Loader2, Monitor, X } from "lucide-react";
+import { Handle, type NodeProps, NodeResizer, Position } from "reactflow";
+import { useCallback, useEffect, useState } from "react";
 
 const CONTENT_TYPES = [
   // { id: "all", label: "All" },
@@ -45,7 +45,7 @@ export function PromptNode({
   const [value, setValue] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [contentType, setContentType] = useState<string>(
-    data.contentType || "text",
+    data.contentType || "text"
   );
   const [selectedModel, setSelectedModel] = useState(data.model || "");
   const [availableModels, setAvailableModels] = useState<Model[]>([]);
@@ -92,7 +92,7 @@ export function PromptNode({
         });
       }
     },
-    [data.projectId, data.nodeId],
+    [data.projectId, data.nodeId]
   );
 
   useEffect(() => {
@@ -101,13 +101,18 @@ export function PromptNode({
       .then((res) => {
         if (res.success && res.data) {
           setAvailableModels(res.data);
-          
+
           // Improved default selection logic
-          const relevantModels = res.data.filter((m: any) => m.type === contentType);
-          const isCurrentModelValid = relevantModels.some((m: any) => m.modelId === selectedModel);
-          
+          const relevantModels = res.data.filter(
+            (m: any) => m.type === contentType
+          );
+          const isCurrentModelValid = relevantModels.some(
+            (m: any) => m.modelId === selectedModel
+          );
+
           if (!selectedModel || selectedModel === "" || !isCurrentModelValid) {
-            const def = relevantModels.find((m: any) => m.isDefault) || relevantModels[0];
+            const def =
+              relevantModels.find((m: any) => m.isDefault) || relevantModels[0];
             if (def) setSelectedModel(def.modelId);
           }
         }
@@ -119,7 +124,9 @@ export function PromptNode({
 
   const handleContentTypeChange = (type: string) => {
     setContentType(type);
-    const def = availableModels.find((m: any) => m.type === type && m.isDefault);
+    const def = availableModels.find(
+      (m: any) => m.type === type && m.isDefault
+    );
     if (def) setSelectedModel(def.modelId);
     else setSelectedModel("");
   };
@@ -144,7 +151,7 @@ export function PromptNode({
             ? { aspectRatio }
             : {}),
         },
-        { withCredentials: true },
+        { withCredentials: true }
       );
 
       if (res.data.success && data.onAIAction && data.nodeId) {
@@ -175,21 +182,21 @@ export function PromptNode({
   }, [value, isGenerating, contentType, selectedModel, aspectRatio, data]);
 
   return (
-    <div className="relative group min-w-[500px] max-w-[600px]">
+    <div className='group relative max-w-[600px] min-w-[500px]'>
       <NodeResizer
-        color="#3b82f6"
+        color='#3b82f6'
         isVisible={selected}
         minWidth={280}
         minHeight={100}
-        handleClassName="w-3 h-3 bg-primary border-2 border-white rounded shadow-lg"
+        handleClassName='w-3 h-3 bg-primary border-2 border-white rounded shadow-lg'
       />
 
       {/* Input Context Handle (Target) */}
       <Handle
-        type="target"
+        type='target'
         position={Position.Left}
         isConnectable={isConnectable}
-        className="w-3 h-3 bg-blue-500 border-2 border-background"
+        className='border-background h-3 w-3 border-2 bg-blue-500'
       />
 
       {/* Remove button */}
@@ -199,25 +206,25 @@ export function PromptNode({
             e.stopPropagation();
             data.onRemoveNode?.(data.nodeId!);
           }}
-          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors shadow-lg z-30 opacity-0 group-hover:opacity-100"
-          title="Remove node"
+          className='absolute -top-2 -right-2 z-30 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white opacity-0 shadow-lg transition-colors group-hover:opacity-100 hover:bg-red-600'
+          title='Remove node'
         >
-          <X className="w-3 h-3" />
+          <X className='h-3 w-3' />
         </button>
       )}
 
-      <div className="bg-background/90 backdrop-blur-md border border-border rounded-3xl shadow-2xl overflow-hidden relative">
+      <div className='bg-background/90 border-border relative overflow-hidden rounded-3xl border shadow-2xl backdrop-blur-md'>
         {/* Content-type tabs */}
-        <div className="flex items-center px-3 border border-gray-200 dark:border-neutral-800 rounded-md w-fit m-2">
+        <div className='m-2 flex w-fit items-center rounded-md border border-gray-200 px-3 dark:border-neutral-800'>
           {CONTENT_TYPES.map((t) => (
             <button
               key={t.id}
               onClick={() => handleContentTypeChange(t.id)}
               className={cn(
-                "flex-1 px-2 py-1 my-1 w-full rounded-md text-[10px] font-semibold transition-all",
+                "my-1 w-full flex-1 rounded-md px-2 py-1 text-[10px] font-semibold transition-all",
                 contentType === t.id
                   ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
               {t.label}
@@ -227,11 +234,11 @@ export function PromptNode({
 
         {/* Video orientation picker — shown as leftContent next to model selector */}
         {/* Input */}
-        <div className="">
+        <div className=''>
           {isGenerating && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-sm rounded-b-3xl">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Loader2 className="w-4 h-4 animate-spin text-primary" />
+            <div className='bg-background/60 absolute inset-0 z-10 flex items-center justify-center rounded-b-3xl backdrop-blur-sm'>
+              <div className='text-muted-foreground flex items-center gap-2 text-xs'>
+                <Loader2 className='text-primary h-4 w-4 animate-spin' />
                 Generating…
               </div>
             </div>
@@ -257,18 +264,18 @@ export function PromptNode({
             onAspectRatioChange={setAspectRatio}
             availableModels={filteredModels}
             onSelectHistoryItem={handleSelectHistoryItem}
-            className="border-none shadow-none bg-transparent"
-            minHeight="120px"
+            className='border-none bg-transparent shadow-none'
+            minHeight='120px'
           />
         </div>
       </div>
 
       {/* Output Results Handle (Source) */}
       <Handle
-        type="source"
+        type='source'
         position={Position.Right}
         isConnectable={isConnectable}
-        className="w-3 h-3 bg-green-500 border-2 border-background"
+        className='border-background h-3 w-3 border-2 bg-green-500'
       />
     </div>
   );

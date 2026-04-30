@@ -1,23 +1,23 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import {
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-  AreaChart,
   Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from "recharts";
-import { cn } from "@/lib/utils";
 
 interface ChartData {
   labels: string[];
@@ -68,10 +68,10 @@ export function ChartBlock({
     switch (chartType) {
       case "bar":
         return (
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width='100%' height='100%'>
             <BarChart data={rechartsData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <CartesianGrid strokeDasharray='3 3' />
+              <XAxis dataKey='name' />
               <YAxis />
               <Tooltip />
               <Legend />
@@ -86,22 +86,28 @@ export function ChartBlock({
       case "pie":
       case "doughnut":
         return (
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width='100%' height='100%'>
             <PieChart>
               <Pie
                 data={rechartsData}
-                cx="50%"
-                cy="50%"
+                cx='50%'
+                cy='50%'
                 labelLine={false}
-                label={({ name, percent }: { name?: string; percent?: number }) =>
+                label={({
+                  name,
+                  percent,
+                }: {
+                  name?: string;
+                  percent?: number;
+                }) =>
                   name && percent !== undefined
                     ? `${name} ${(percent * 100).toFixed(0)}%`
                     : ""
                 }
                 outerRadius={chartType === "doughnut" ? 80 : 100}
                 innerRadius={chartType === "doughnut" ? 40 : 0}
-                fill="#8884d8"
-                dataKey="value"
+                fill='#8884d8'
+                dataKey='value'
               >
                 {rechartsData.map((entry, index) => (
                   <Cell
@@ -118,15 +124,15 @@ export function ChartBlock({
 
       case "line":
         return (
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width='100%' height='100%'>
             <LineChart data={rechartsData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <CartesianGrid strokeDasharray='3 3' />
+              <XAxis dataKey='name' />
               <YAxis />
               <Tooltip />
               <Legend />
               <Line
-                type="monotone"
+                type='monotone'
                 dataKey={chartData.datasets[0]?.label || "value"}
                 stroke={CHART_COLORS[0]}
                 strokeWidth={2}
@@ -137,15 +143,15 @@ export function ChartBlock({
 
       case "area":
         return (
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width='100%' height='100%'>
             <AreaChart data={rechartsData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <CartesianGrid strokeDasharray='3 3' />
+              <XAxis dataKey='name' />
               <YAxis />
               <Tooltip />
               <Legend />
               <Area
-                type="monotone"
+                type='monotone'
                 dataKey={chartData.datasets[0]?.label || "value"}
                 stroke={CHART_COLORS[0]}
                 fill={CHART_COLORS[0]}
@@ -157,7 +163,7 @@ export function ChartBlock({
 
       default:
         return (
-          <div className="flex items-center justify-center h-full text-muted-foreground">
+          <div className='text-muted-foreground flex h-full items-center justify-center'>
             Unknown chart type
           </div>
         );
@@ -165,14 +171,13 @@ export function ChartBlock({
   };
 
   return (
-    <div className={cn("w-full h-full min-h-[300px] p-4", className)}>
+    <div className={cn("h-full min-h-[300px] w-full p-4", className)}>
       {config?.title && (
-        <h3 className="text-lg font-semibold mb-4 text-center">
+        <h3 className='mb-4 text-center text-lg font-semibold'>
           {config.title}
         </h3>
       )}
-      <div className="w-full h-[250px]">{renderChart()}</div>
+      <div className='h-[250px] w-full'>{renderChart()}</div>
     </div>
   );
 }
-

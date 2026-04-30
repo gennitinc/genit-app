@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
 import { FileUpload } from "@/components/ui/file-upload";
+import React, { useState } from "react";
 
 export default function FileUploadDemo() {
   const [files, setFiles] = useState<File[]>([]);
@@ -10,7 +10,7 @@ export default function FileUploadDemo() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
+    <div className='mx-auto min-h-96 w-full max-w-4xl rounded-lg border border-dashed border-neutral-200 bg-white dark:border-neutral-800 dark:bg-black'>
       <FileUpload onChange={handleFileUpload} />
     </div>
   );

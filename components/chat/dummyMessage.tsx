@@ -51,8 +51,7 @@ export const demoMessages: DemoMessage[] = [
     parts: [
       {
         type: "text",
-        text:
-          "Explain the difference between streaming and non-streaming AI responses.",
+        text: "Explain the difference between streaming and non-streaming AI responses.",
       },
     ],
     attachedFiles: [
@@ -106,8 +105,7 @@ export const demoMessages: DemoMessage[] = [
     parts: [
       {
         type: "text",
-        text:
-          "Write me a friendly email to reschedule a meeting with a client.",
+        text: "Write me a friendly email to reschedule a meeting with a client.",
       },
     ],
     attachedFiles: [],
@@ -215,8 +213,7 @@ Thanks for your understanding,
     parts: [
       {
         type: "text",
-        text:
-          "Summarize these team notes:\n- Marketing will finalize designs by Friday\n- Dev team is testing new features\n- Launch date is September 15",
+        text: "Summarize these team notes:\n- Marketing will finalize designs by Friday\n- Dev team is testing new features\n- Launch date is September 15",
       },
     ],
     attachedFiles: [],
@@ -231,8 +228,7 @@ Thanks for your understanding,
     parts: [
       {
         type: "text",
-        text:
-          "Marketing will finalize designs by **Friday**, development is testing new features, and the product launches on **September 15**.",
+        text: "Marketing will finalize designs by **Friday**, development is testing new features, and the product launches on **September 15**.",
       },
     ],
     generationGroups: [
@@ -309,8 +305,7 @@ Thanks for your understanding,
     parts: [
       {
         type: "text",
-        text:
-          "Create a short video showing how to make a perfect cup of coffee",
+        text: "Create a short video showing how to make a perfect cup of coffee",
       },
     ],
     attachedFiles: [

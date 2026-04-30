@@ -1,12 +1,4 @@
 "use client";
-import React, { useEffect, useState, ReactNode } from "react";
-
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import Loading from "@/utils/Loading";
-
-import cookie from "js-cookie";
-import { apiResponse } from "@/utils/apiResponse";
 import { NetworkStatus } from "@/components/network/NetworkStatus";
 import {
   identifyAndTrackAuth,
@@ -14,6 +6,12 @@ import {
   resetMixpanelUser,
   trackEvent,
 } from "@/lib/mixpanelClient";
+import Loading from "@/utils/Loading";
+import { apiResponse } from "@/utils/apiResponse";
+import axios from "axios";
+import cookie from "js-cookie";
+import { useRouter } from "next/navigation";
+import React, { ReactNode, useEffect, useState } from "react";
 
 const uToken = cookie.get("gennituToken");
 
@@ -109,7 +107,7 @@ interface AuthenticatedContextInt {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   fetchCurrentUser: () => Promise<void>;
   updateUserPreferences: (
-    preferences: Partial<User["preferences"]>,
+    preferences: Partial<User["preferences"]>
   ) => Promise<void>;
   setIsKlipAiVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isKlipAiVisible: boolean;
@@ -126,7 +124,7 @@ interface AuthenticatedContextInt {
 }
 
 const AuthenticatedContext = React.createContext<AuthenticatedContextInt>(
-  {} as AuthenticatedContextInt,
+  {} as AuthenticatedContextInt
 );
 
 export function AuthenticatedContextProvider({
@@ -145,7 +143,6 @@ export function AuthenticatedContextProvider({
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [dataFetched, setDataFetched] = useState(false);
- const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   const fetchCurrentUser = async () => {
     setLoading(true);
     setIsNetworkError(false);
@@ -189,7 +186,7 @@ export function AuthenticatedContextProvider({
   };
 
   const updateUserPreferences = async (
-    preferences: Partial<User["preferences"]>,
+    preferences: Partial<User["preferences"]>
   ) => {
     if (!user) return;
 
@@ -208,7 +205,7 @@ export function AuthenticatedContextProvider({
             } as User["preferences"],
           };
         });
-        trackEvent(MIXPANEL_TOKEN, "user_preferences_updated", {
+        trackEvent("user_preferences_updated", {
           changed_fields: Object.keys(preferences ?? {}),
         });
       }
@@ -226,8 +223,7 @@ export function AuthenticatedContextProvider({
   useEffect(() => {
     if (!user?._id) return;
     identifyAndTrackAuth(
-      MIXPANEL_TOKEN,
-        {
+      {
         id: user._id,
         email: user.email,
         username: user.username,
@@ -238,7 +234,7 @@ export function AuthenticatedContextProvider({
         role: user.role,
       },
       "login_completed",
-      { source: "session_restore" },
+      { source: "session_restore" }
     );
   }, [user?._id]);
 
@@ -268,7 +264,7 @@ export function AuthenticatedContextProvider({
       }}
     >
       {loading ? (
-        <div className="flex justify-center items-center min-h-[100dvh] overflow-hidden w-full bg-white dark:bg-black">
+        <div className='flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-white dark:bg-black'>
           <Loading />
         </div>
       ) : shouldShowNetworkStatus ? (
@@ -286,7 +282,7 @@ export function AuthenticatedContextProvider({
 export function useUserContext() {
   if (AuthenticatedContext === undefined) {
     throw new Error(
-      "Authenticated context cannot be used outside of the provider",
+      "Authenticated context cannot be used outside of the provider"
     );
   }
   return React.useContext(AuthenticatedContext);

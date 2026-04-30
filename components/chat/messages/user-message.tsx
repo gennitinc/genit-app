@@ -1,12 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import { HoverActions } from "@/components/ui/hover-actions";
+import { ImagePreviewDialog, MessageEditor } from "@/components/chat/messages";
+import { MessageContainer, MessageContent } from "@/components/chat/messages";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
-import { MessageEditor, ImagePreviewDialog } from "@/components/chat/messages";
-import { ImageIcon, FileText, File, Download, Eye } from "lucide-react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,8 +11,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { HoverActions } from "@/components/ui/hover-actions";
+import { Download, Eye, File, FileText, ImageIcon } from "lucide-react";
+import Image from "next/image";
+import ReactMarkdown from "react-markdown";
+import { useEffect, useState } from "react";
 
-import { MessageContainer, MessageContent } from "@/components/chat/messages";
 interface UserMessageProps {
   message: any;
   userAvatar?: string;
@@ -139,8 +139,8 @@ export function UserMessage({
       <MessageContainer
         avatar={
           <AvatarDisplay
-            variant="user"
-            className="rounded-lg"
+            variant='user'
+            className='rounded-lg'
             src={userAvatar}
             alt={userName}
             fallback={userName.charAt(0).toUpperCase()}
@@ -154,7 +154,7 @@ export function UserMessage({
           }
           onSave={handleSave}
           onCancel={handleCancel}
-          placeholder="Edit your message..."
+          placeholder='Edit your message...'
         />
       </MessageContainer>
     );
@@ -165,8 +165,8 @@ export function UserMessage({
       <MessageContainer
         avatar={
           <AvatarDisplay
-            variant="user"
-            className="rounded-lg"
+            variant='user'
+            className='rounded-lg'
             src={userAvatar}
             alt={userName}
             fallback={userName.charAt(0).toUpperCase()}
@@ -175,11 +175,11 @@ export function UserMessage({
         className={className}
       >
         <div
-          className="relative"
+          className='relative'
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <MessageContent variant="user">
+          <MessageContent variant='user'>
             <ReactMarkdown>
               {message.parts?.find((part: any) => part.type === "text")?.text ||
                 ""}
@@ -188,7 +188,7 @@ export function UserMessage({
 
           {/* Attached Files from message level */}
           {message.attachedFiles?.length > 0 && (
-            <div className="mt-3 space-y-2">
+            <div className='mt-3 space-y-2'>
               {message.attachedFiles.map((file: any, index: number) => (
                 <AttachedFilePreview key={file.id || index} file={file} />
               ))}
@@ -197,27 +197,27 @@ export function UserMessage({
 
           {/* Legacy File/Image Attachment Preview (for backward compatibility) */}
           {(imageAttachment || fileAttachment) && (
-            <div className="mt-3">
+            <div className='mt-3'>
               <div
-                className="flex items-center gap-3 p-2 bg-background border border-border rounded-lg hover:bg-muted-foreground/5 transition-colors cursor-pointer group max-w-sm"
+                className='bg-background border-border hover:bg-muted-foreground/5 group flex max-w-sm cursor-pointer items-center gap-3 rounded-lg border p-2 transition-colors'
                 onClick={() => setIsDialogOpen(true)}
               >
                 {/* Small thumbnail or file icon */}
-                <div className="flex-shrink-0">
+                <div className='flex-shrink-0'>
                   {imageAttachment ? (
-                    <div className="w-12 h-12 rounded-md overflow-hidden bg-muted-foreground/5 border">
+                    <div className='bg-muted-foreground/5 h-12 w-12 overflow-hidden rounded-md border'>
                       <img
                         src={imageAttachment || "/placeholder.svg"}
-                        alt="Attachment thumbnail"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                        alt='Attachment thumbnail'
+                        className='h-full w-full object-cover transition-transform duration-200 group-hover:scale-105'
                       />
                     </div>
                   ) : (
-                    <div className="w-12 h-12 rounded-md bg-muted-foreground/5 border flex items-center justify-center">
+                    <div className='bg-muted-foreground/5 flex h-12 w-12 items-center justify-center rounded-md border'>
                       {(() => {
                         const { icon: Icon } = getFileIcon(fileType);
                         return (
-                          <Icon className="w-6 h-6 text-muted-foreground" />
+                          <Icon className='text-muted-foreground h-6 w-6' />
                         );
                       })()}
                     </div>
@@ -225,19 +225,19 @@ export function UserMessage({
                 </div>
 
                 {/* File info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium text-muted-foreground truncate w-30 lg:w-full text-ellipsis">
+                <div className='min-w-0 flex-1'>
+                  <div className='flex items-center gap-2'>
+                    <p className='text-muted-foreground w-30 truncate text-sm font-medium text-ellipsis lg:w-full'>
                       {truncateFileName(fileName)}
                     </p>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">
+                  <p className='text-muted-foreground mt-0.5 text-xs'>
                     {fileSize} • Click to view
                   </p>
                 </div>
 
                 {/* View indicator */}
-                <div className="flex-shrink-0">
+                <div className='flex-shrink-0'>
                   {(() => {
                     const {
                       icon: Icon,
@@ -247,9 +247,9 @@ export function UserMessage({
                     } = getFileIcon(fileType);
                     return (
                       <div
-                        className={`w-6 h-6 rounded-full ${bgColor} flex items-center justify-center ${hoverColor} transition-colors`}
+                        className={`h-6 w-6 rounded-full ${bgColor} flex items-center justify-center ${hoverColor} transition-colors`}
                       >
-                        <Icon className={`w-3 h-3 ${iconColor}`} />
+                        <Icon className={`h-3 w-3 ${iconColor}`} />
                       </div>
                     );
                   })()}
@@ -322,71 +322,71 @@ function AttachedFilePreview({ file }: { file: any }) {
 
   return (
     <>
-      <div className="flex items-center gap-3 p-3 bg-background border border-border rounded-lg hover:bg-muted-foreground/5 transition-colors group max-w-md">
+      <div className='bg-background border-border hover:bg-muted-foreground/5 group flex max-w-md items-center gap-3 rounded-lg border p-3 transition-colors'>
         {/* File thumbnail or icon */}
-        <div className="flex-shrink-0">
+        <div className='flex-shrink-0'>
           {isImage ? (
-            <div className="w-12 h-12 rounded-md overflow-hidden bg-muted-foreground/5 border">
+            <div className='bg-muted-foreground/5 h-12 w-12 overflow-hidden rounded-md border'>
               <Image
                 src={file.filePath || "/placeholder.svg"}
                 alt={file.name}
                 width={48}
                 height={48}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                className='h-full w-full object-cover transition-transform duration-200 group-hover:scale-105'
               />
             </div>
           ) : (
-            <div className="w-12 h-12 rounded-md bg-muted-foreground/5 border flex items-center justify-center">
+            <div className='bg-muted-foreground/5 flex h-12 w-12 items-center justify-center rounded-md border'>
               {isVideo ? (
-                <FileText className="w-6 h-6 text-muted-foreground" />
+                <FileText className='text-muted-foreground h-6 w-6' />
               ) : (
-                <File className="w-6 h-6 text-muted-foreground" />
+                <File className='text-muted-foreground h-6 w-6' />
               )}
             </div>
           )}
         </div>
 
         {/* File info */}
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-foreground truncate w-30 lg:w-full text-ellipsis">
+        <div className='min-w-0 flex-1'>
+          <p className='text-foreground w-30 truncate text-sm font-medium text-ellipsis lg:w-full'>
             {file.name}
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className='text-muted-foreground text-xs'>
             {fileSize} • {file.type}
           </p>
         </div>
 
         {/* Action buttons */}
-        <div className="flex items-center gap-1">
+        <div className='flex items-center gap-1'>
           {(isImage || isVideo) && (
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0"
-                  title="View file"
+                  variant='ghost'
+                  size='sm'
+                  className='h-8 w-8 p-0'
+                  title='View file'
                 >
-                  <Eye className="w-4 h-4" />
+                  <Eye className='h-4 w-4' />
                 </Button>
               </DialogTrigger>
-              <DialogContent className="w-fit max-w-[50vw] h-auto p-0">
-                <div className="">
-                  <div className="relative w-auto h-auto">
+              <DialogContent className='h-auto w-fit max-w-[50vw] p-0'>
+                <div className=''>
+                  <div className='relative h-auto w-auto'>
                     {isImage ? (
                       <Image
                         src={file.filePath}
                         alt={file.name}
                         width={0}
                         height={0}
-                        className="h-auto w-auto object-contain rounded-md"
+                        className='h-auto w-auto rounded-md object-contain'
                         unoptimized
                       />
                     ) : (
                       <video
                         src={file.filePath}
                         controls
-                        className="max-h-[90vh] max-w-[90vw] object-contain rounded-md"
+                        className='max-h-[90vh] max-w-[90vw] rounded-md object-contain'
                       />
                     )}
                   </div>

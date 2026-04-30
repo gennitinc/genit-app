@@ -1,6 +1,6 @@
 "use client";
-import withAuth from "@/helper/hoc/withAuth";
 import { LoginComp } from "@/components/auth/Login";
+import withAuth from "@/helper/hoc/withAuth";
 
 const SigninClient = () => {
   return <LoginComp />;

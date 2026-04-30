@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { StatsCards } from "./StatsCards";
 import { AnalyticsCharts } from "./AnalyticsCharts";
 import { RecentUsersTable } from "./RecentUsersTable";
-import { apiResponse } from "@/utils/apiResponse";
-import { Loader2, RefreshCcw, AlertCircle } from "lucide-react";
+import { StatsCards } from "./StatsCards";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { apiResponse } from "@/utils/apiResponse";
+import { AnimatePresence, motion } from "framer-motion";
+import { AlertCircle, Loader2, RefreshCcw } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,10 @@ export const AdminDashboard = () => {
       });
     } catch (err: any) {
       console.error("Dashboard fetch error:", err);
-      setError(err.response?.data?.message || "Failed to load dashboard data. Ensure you have admin privileges.");
+      setError(
+        err.response?.data?.message ||
+          "Failed to load dashboard data. Ensure you have admin privileges."
+      );
     } finally {
       setLoading(false);
     }
@@ -44,23 +47,29 @@ export const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-[600px] gap-4">
-        <Loader2 className="w-10 h-10 text-primary animate-spin" />
-        <p className="text-sm text-muted-foreground animate-pulse">Loading analytics dashboard...</p>
+      <div className='flex h-[600px] flex-col items-center justify-center gap-4'>
+        <Loader2 className='text-primary h-10 w-10 animate-spin' />
+        <p className='text-muted-foreground animate-pulse text-sm'>
+          Loading analytics dashboard...
+        </p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center h-[600px] p-6 text-center max-w-md mx-auto">
-        <div className="p-4 rounded-full bg-destructive/10 text-destructive mb-6">
-          <AlertCircle className="w-12 h-12" />
+      <div className='mx-auto flex h-[600px] max-w-md flex-col items-center justify-center p-6 text-center'>
+        <div className='bg-destructive/10 text-destructive mb-6 rounded-full p-4'>
+          <AlertCircle className='h-12 w-12' />
         </div>
-        <h2 className="text-xl font-bold mb-2">Access Denied</h2>
-        <p className="text-muted-foreground mb-8">{error}</p>
-        <Button onClick={fetchDashboardData} variant="outline" className="gap-2">
-          <RefreshCcw className="w-4 h-4" />
+        <h2 className='mb-2 text-xl font-bold'>Access Denied</h2>
+        <p className='text-muted-foreground mb-8'>{error}</p>
+        <Button
+          onClick={fetchDashboardData}
+          variant='outline'
+          className='gap-2'
+        >
+          <RefreshCcw className='h-4 w-4' />
           Retry
         </Button>
       </div>
@@ -68,54 +77,60 @@ export const AdminDashboard = () => {
   }
 
   return (
-    <div className="py-4 max-w-7xl mx-auto pb-20">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+    <div className='mx-auto max-w-7xl py-4 pb-20'>
+      <div className='mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-center'>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight mb-2">Admin Overview</h1>
-          <p className="text-muted-foreground">Monitor your platform's growth and user activity.</p>
+          <h1 className='mb-2 text-3xl font-bold tracking-tight'>
+            Admin Overview
+          </h1>
+          <p className='text-muted-foreground'>
+            Monitor your platform's growth and user activity.
+          </p>
         </div>
-        <Button 
-          variant="outline" 
-          onClick={fetchDashboardData} 
+        <Button
+          variant='outline'
+          onClick={fetchDashboardData}
           disabled={loading}
-          className="gap-2 bg-background/50 backdrop-blur-sm self-start"
+          className='bg-background/50 gap-2 self-start backdrop-blur-sm'
         >
-          <RefreshCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCcw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
           Refresh Stats
         </Button>
       </div>
 
       <StatsCards stats={data.overview} />
-      
-      <AnalyticsCharts 
-        growthData={data.series.userGrowth} 
+
+      <AnalyticsCharts
+        growthData={data.series.userGrowth}
         revenueData={data.series.revenue}
         usageData={data.topActivities}
       />
 
       <RecentUsersTable />
 
-      <div className="mt-12 p-8 rounded-3xl bg-gradient-to-br from-primary/10 via-background to-background border border-primary/20 relative overflow-hidden group">
-        <div className="relative z-10">
-          <h2 className="text-2xl font-bold mb-4">Deep Insights</h2>
-          <p className="text-muted-foreground max-w-2xl mb-6">
-            Your platform is growing. We've detected a significant increase in 
-            <strong> {data.overview.content.total.toLocaleString()} </strong> 
-            pieces of AI content created. Most users are currently interacting with 
-            <strong> {data.topActivities[0]?.name || 'new features'}</strong>.
+      <div className='from-primary/10 via-background to-background border-primary/20 group relative mt-12 overflow-hidden rounded-3xl border bg-gradient-to-br p-8'>
+        <div className='relative z-10'>
+          <h2 className='mb-4 text-2xl font-bold'>Deep Insights</h2>
+          <p className='text-muted-foreground mb-6 max-w-2xl'>
+            Your platform is growing. We've detected a significant increase in
+            <strong> {data.overview.content.total.toLocaleString()} </strong>
+            pieces of AI content created. Most users are currently interacting
+            with
+            <strong> {data.topActivities[0]?.name || "new features"}</strong>.
           </p>
-          <div className="flex gap-4">
-            <div className="px-4 py-2 rounded-xl bg-background/80 backdrop-blur-md border border-border/50 text-sm font-medium">
-              Daily Avg: {Math.round(data.overview.content.total / 30)} generations
+          <div className='flex gap-4'>
+            <div className='bg-background/80 border-border/50 rounded-xl border px-4 py-2 text-sm font-medium backdrop-blur-md'>
+              Daily Avg: {Math.round(data.overview.content.total / 30)}{" "}
+              generations
             </div>
-            <div className="px-4 py-2 rounded-xl bg-background/80 backdrop-blur-md border border-border/50 text-sm font-medium">
+            <div className='bg-background/80 border-border/50 rounded-xl border px-4 py-2 text-sm font-medium backdrop-blur-md'>
               System Status: Optimal
             </div>
           </div>
         </div>
-        
+
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px] -mr-32 -mt-32 group-hover:bg-primary/30 transition-colors duration-500" />
+        <div className='bg-primary/20 group-hover:bg-primary/30 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-[100px] transition-colors duration-500' />
       </div>
     </div>
   );

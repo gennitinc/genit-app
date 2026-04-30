@@ -22,6 +22,19 @@
  * />
  * ```
  */
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  Maximize,
+  Minimize,
+  Pause,
+  Play,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
+import Image from "next/image";
 import React, {
   ReactNode,
   createContext,
@@ -32,20 +45,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  Maximize,
-  Minimize,
-  Pause,
-  Play,
-  Volume2,
-  VolumeX,
-} from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
 
 // Types
 interface VideoPlayerState {
@@ -605,7 +604,7 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
       <motion.div
         ref={containerRef}
         className={cn(
-          "relative overflow-hidden group cursor-pointer",
+          "group relative cursor-pointer overflow-hidden",
           className
         )}
         style={{
@@ -656,7 +655,7 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
         {/* Controls */}
         {enableControls && (
           <HoverVideoPlayerControls>
-            <div className="flex items-center space-x-2">
+            <div className='flex items-center space-x-2'>
               <HoverVideoPlayerPlayPauseButton />
               <HoverVideoPlayerVolumeControl />
               <HoverVideoPlayerPiPButton />
@@ -757,13 +756,13 @@ const HoverVideoPlayerVideo: React.FC<{
   }, [isVimeoVideo, src, muted, loop, isHovering]);
 
   if (isVimeoVideo) {
-    return <div ref={containerRef} className="absolute inset-0" />;
+    return <div ref={containerRef} className='absolute inset-0' />;
   }
 
   return (
     <video
       ref={videoRef}
-      className={cn("absolute inset-0 w-full h-full object-cover")}
+      className={cn("absolute inset-0 h-full w-full object-cover")}
       style={{
         top: `-${cropTop}%`,
         bottom: `-${cropBottom}%`,
@@ -773,9 +772,9 @@ const HoverVideoPlayerVideo: React.FC<{
       loop={loop}
       preload={preload}
       playsInline
-      crossOrigin="anonymous"
-      aria-label="Video player"
-      role="application"
+      crossOrigin='anonymous'
+      aria-label='Video player'
+      role='application'
     />
   );
 };
@@ -792,7 +791,7 @@ const HoverVideoPlayerThumbnail: React.FC<{ src: string }> = ({ src }) => {
 
   return (
     <div
-      className={cn("absolute inset-0 w-full h-full")}
+      className={cn("absolute inset-0 h-full w-full")}
       style={{
         top: `-${cropTop}%`,
         bottom: `-${cropBottom}%`,
@@ -801,10 +800,10 @@ const HoverVideoPlayerThumbnail: React.FC<{ src: string }> = ({ src }) => {
     >
       <Image
         src={src}
-        alt="Video thumbnail"
+        alt='Video thumbnail'
         fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        className="object-cover"
+        sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+        className='object-cover'
         priority
       />
     </div>
@@ -823,7 +822,7 @@ const HoverVideoPlayerControls: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <motion.div
-      className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent"
+      className='absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black to-transparent p-4'
       initial={{ opacity: 0, y: 20 }}
       animate={{
         opacity: shouldShowControls ? 1 : 0,
@@ -848,7 +847,7 @@ const HoverVideoPlayerHoverOverlay: React.FC<{ children: React.ReactNode }> = ({
     <AnimatePresence>
       {isHovering && !isLoading && (
         <motion.div
-          className="absolute inset-0 z-30 flex items-center justify-center"
+          className='absolute inset-0 z-30 flex items-center justify-center'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -873,7 +872,7 @@ const HoverVideoPlayerPausedOverlay: React.FC<{
     <AnimatePresence>
       {!isPlaying && !isLoading && !isHovering && (
         <motion.div
-          className="absolute inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50"
+          className='bg-opacity-50 absolute inset-0 z-10 flex items-center justify-center bg-black'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -895,10 +894,10 @@ const HoverVideoPlayerLoadingOverlay: React.FC<{
   const { isLoading } = useHoverVideoPlayer();
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode='wait'>
       {isLoading && (
         <motion.div
-          className="absolute inset-0 z-20 flex items-center justify-center bg-black bg-opacity-50"
+          className='bg-opacity-50 absolute inset-0 z-20 flex items-center justify-center bg-black'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -919,13 +918,13 @@ const HoverVideoPlayerPlayPauseButton: React.FC = () => {
 
   return (
     <Button
-      size="icon"
-      variant="ghost"
+      size='icon'
+      variant='ghost'
       onClick={togglePlay}
-      className="text-white hover:text-primary-foreground"
+      className='hover:text-primary-foreground text-white'
       aria-label={isPlaying ? "Pause video" : "Play video"}
     >
-      {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
+      {isPlaying ? <Pause className='h-6 w-6' /> : <Play className='h-6 w-6' />}
     </Button>
   );
 };
@@ -937,28 +936,28 @@ const HoverVideoPlayerVolumeControl: React.FC = () => {
   const { muted, toggleMute, volume, setVolume } = useHoverVideoPlayer();
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className='flex items-center space-x-2'>
       <Button
-        size="icon"
-        variant="ghost"
+        size='icon'
+        variant='ghost'
         onClick={toggleMute}
-        className="text-white hover:text-primary-foreground"
+        className='hover:text-primary-foreground text-white'
         aria-label={muted ? "Unmute" : "Mute"}
       >
         {muted ? (
-          <VolumeX className="h-6 w-6" />
+          <VolumeX className='h-6 w-6' />
         ) : (
-          <Volume2 className="h-6 w-6" />
+          <Volume2 className='h-6 w-6' />
         )}
       </Button>
       <Slider
-        className="w-24"
+        className='w-24'
         value={[muted ? 0 : volume * 100]}
         min={0}
         max={100}
         step={1}
         onValueChange={(value) => setVolume(value[0] / 100)}
-        aria-label="Volume"
+        aria-label='Volume'
       />
     </div>
   );
@@ -972,7 +971,7 @@ const HoverVideoPlayerProgressBar: React.FC = () => {
 
   return (
     <Slider
-      className="mt-2"
+      className='mt-2'
       value={[progress]}
       min={0}
       max={100}
@@ -984,7 +983,7 @@ const HoverVideoPlayerProgressBar: React.FC = () => {
           setProgress(value[0]);
         }
       }}
-      aria-label="Video progress"
+      aria-label='Video progress'
     />
   );
 };
@@ -997,18 +996,18 @@ const HoverVideoPlayerPiPButton: React.FC = () => {
 
   return (
     <Button
-      size="icon"
-      variant="ghost"
+      size='icon'
+      variant='ghost'
       onClick={togglePiP}
-      className="text-white hover:text-primary-foreground"
+      className='hover:text-primary-foreground text-white'
       aria-label={
         isPiP ? "Exit picture in picture" : "Enter picture in picture"
       }
     >
       {isPiP ? (
-        <Minimize className="h-6 w-6" />
+        <Minimize className='h-6 w-6' />
       ) : (
-        <Maximize className="h-6 w-6" />
+        <Maximize className='h-6 w-6' />
       )}
     </Button>
   );
@@ -1031,7 +1030,7 @@ const HoverVideoPaddingWrapper: React.FC<{
         "relative aspect-[var(--width)/var(--height)] [--radius:theme(borderRadius.xl)]"
       )}
     >
-      <div className="absolute -inset-[var(--padding)] rounded-[calc(var(--radius)+var(--padding))] shadow-sm ring-1 ring-black/5 [--padding:theme(spacing.2)]" />
+      <div className='absolute -inset-[var(--padding)] rounded-[calc(var(--radius)+var(--padding))] shadow-sm ring-1 ring-black/5 [--padding:theme(spacing.2)]' />
       {children}
     </div>
   );

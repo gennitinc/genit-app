@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   ChevronLeft,
   ChevronRight,
-  Play,
   Pause,
+  Play,
   Volume2,
   VolumeX,
 } from "lucide-react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 interface TestimonialContent {
   title: string;
@@ -126,23 +126,23 @@ export const AuthMediaCarousel: React.FC<AuthMediaCarouselProps> = ({
         key={i}
         width={20}
         height={20}
-        viewBox="0 0 20 20"
-        fill="none"
+        viewBox='0 0 20 20'
+        fill='none'
         className={`size-5 ${i < rating ? "text-orange-400" : "text-gray-400"}`}
       >
         <path
-          d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-          className="fill-bg-tertiary"
+          d='M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z'
+          className='fill-bg-tertiary'
         />
         <g clipPath={`url(#clip-star-${i})`}>
           <path
-            d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z"
-            fill="currentColor"
+            d='M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z'
+            fill='currentColor'
           />
         </g>
         <defs>
           <clipPath id={`clip-star-${i}`}>
-            <rect width={i < rating ? "100%" : "0%"} height={20} fill="white" />
+            <rect width={i < rating ? "100%" : "0%"} height={20} fill='white' />
           </clipPath>
         </defs>
       </svg>
@@ -150,13 +150,13 @@ export const AuthMediaCarousel: React.FC<AuthMediaCarouselProps> = ({
   };
 
   return (
-    <div className="relative hidden items-end justify-center overflow-hidden lg:flex h-screen w-full">
+    <div className='relative hidden h-screen w-full items-end justify-center overflow-hidden lg:flex'>
       {/* Media Content */}
-      <div className="absolute inset-0">
+      <div className='absolute inset-0'>
         {currentMedia.type === "image" ? (
           <img
             src={currentMedia.src}
-            className="absolute inset-0 size-full object-cover transition-opacity duration-500"
+            className='absolute inset-0 size-full object-cover transition-opacity duration-500'
             alt={currentMedia.alt || "Carousel image"}
           />
         ) : (
@@ -164,7 +164,7 @@ export const AuthMediaCarousel: React.FC<AuthMediaCarouselProps> = ({
             ref={videoRef}
             src={currentMedia.src}
             poster={currentMedia.poster}
-            className="absolute inset-0 size-full object-cover"
+            className='absolute inset-0 size-full object-cover'
             muted={isMuted}
             playsInline
             onEnded={handleVideoEnded}
@@ -177,62 +177,62 @@ export const AuthMediaCarousel: React.FC<AuthMediaCarouselProps> = ({
       <svg
         width={960}
         height={960}
-        viewBox="0 0 960 960"
-        fill="none"
-        className="pointer-events-none absolute top-0 opacity-40"
+        viewBox='0 0 960 960'
+        fill='none'
+        className='pointer-events-none absolute top-0 opacity-40'
       >
         <mask
-          id="mask0_carousel"
+          id='mask0_carousel'
           style={{ maskType: "alpha" }}
-          maskUnits="userSpaceOnUse"
+          maskUnits='userSpaceOnUse'
           x={0}
           y={0}
           width={960}
           height={960}
         >
-          <rect width={960} height={960} fill="url(#paint0_radial_carousel)" />
+          <rect width={960} height={960} fill='url(#paint0_radial_carousel)' />
         </mask>
-        <g mask="url(#mask0_carousel)">
-          <rect x="0.5" y="0.5" width={959} height={959} stroke="#D0D5DD" />
+        <g mask='url(#mask0_carousel)'>
+          <rect x='0.5' y='0.5' width={959} height={959} stroke='#D0D5DD' />
         </g>
         <defs>
           <radialGradient
-            id="paint0_radial_carousel"
+            id='paint0_radial_carousel'
             cx={0}
             cy={0}
             r={1}
-            gradientUnits="userSpaceOnUse"
-            gradientTransform="translate(480 -0.000114441) rotate(90) scale(960 501.059)"
+            gradientUnits='userSpaceOnUse'
+            gradientTransform='translate(480 -0.000114441) rotate(90) scale(960 501.059)'
           >
             <stop />
-            <stop offset="0.953125" stopOpacity={0} />
+            <stop offset='0.953125' stopOpacity={0} />
           </radialGradient>
         </defs>
       </svg>
 
       {/* Video Controls */}
       {currentMedia.type === "video" && currentMedia.showControls === true && (
-        <div className="absolute top-4 right-4 z-20 flex gap-2">
+        <div className='absolute top-4 right-4 z-20 flex gap-2'>
           <button
             onClick={toggleVideoPlayback}
-            className="p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+            className='rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70'
             aria-label={isVideoPlaying ? "Pause video" : "Play video"}
           >
             {isVideoPlaying ? (
-              <Pause className="w-5 h-5" />
+              <Pause className='h-5 w-5' />
             ) : (
-              <Play className="w-5 h-5" />
+              <Play className='h-5 w-5' />
             )}
           </button>
           <button
             onClick={toggleMute}
-            className="p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+            className='rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70'
             aria-label={isMuted ? "Unmute" : "Mute"}
           >
             {isMuted ? (
-              <VolumeX className="w-5 h-5" />
+              <VolumeX className='h-5 w-5' />
             ) : (
-              <Volume2 className="w-5 h-5" />
+              <Volume2 className='h-5 w-5' />
             )}
           </button>
         </div>
@@ -259,65 +259,65 @@ export const AuthMediaCarousel: React.FC<AuthMediaCarouselProps> = ({
       )} */}
 
       {/* Testimonial Content */}
-      <div className="z-10 flex flex-col items-start justify-start gap-8 bg-gradient-to-t from-black/60 to-black/0 px-16 py-24 w-full">
+      <div className='z-10 flex w-full flex-col items-start justify-start gap-8 bg-gradient-to-t from-black/60 to-black/0 px-16 py-24'>
         {/* Logo/Icon */}
-        <svg width={80} height={80} viewBox="0 0 80 80" fill="none">
+        <svg width={80} height={80} viewBox='0 0 80 80' fill='none'>
           <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M0 40C25.4247 40 40 25.4247 40 0C40 25.4247 54.5753 40 80 40C54.5753 40 40 54.5753 40 80C40 54.5753 25.4247 40 0 40Z"
-            className="fill-white"
+            fillRule='evenodd'
+            clipRule='evenodd'
+            d='M0 40C25.4247 40 40 25.4247 40 0C40 25.4247 54.5753 40 80 40C54.5753 40 40 54.5753 40 80C40 54.5753 25.4247 40 0 40Z'
+            className='fill-white'
           />
           <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M0 12C7.62742 12 12 7.62742 12 0C12 7.62742 16.3726 12 24 12C16.3726 12 12 16.3726 12 24C12 16.3726 7.62742 12 0 12Z"
-            className="fill-orange-300"
+            fillRule='evenodd'
+            clipRule='evenodd'
+            d='M0 12C7.62742 12 12 7.62742 12 0C12 7.62742 16.3726 12 24 12C16.3726 12 12 16.3726 12 24C12 16.3726 7.62742 12 0 12Z'
+            className='fill-orange-300'
           />
           <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M64 24C69.0849 24 72 21.0849 72 16C72 21.0849 74.9151 24 80 24C74.9151 24 72 26.9151 72 32C72 26.9151 69.0849 24 64 24Z"
-            className="fill-orange-300"
+            fillRule='evenodd'
+            clipRule='evenodd'
+            d='M64 24C69.0849 24 72 21.0849 72 16C72 21.0849 74.9151 24 80 24C74.9151 24 72 26.9151 72 32C72 26.9151 69.0849 24 64 24Z'
+            className='fill-orange-300'
           />
         </svg>
 
         {/* Title and Description */}
-        <div className="flex flex-col gap-5 transition-opacity duration-300">
-          <h2 className="text-4xl font-semibold -tracking-[1.2px] text-white">
+        <div className='flex flex-col gap-5 transition-opacity duration-300'>
+          <h2 className='text-4xl font-semibold -tracking-[1.2px] text-white'>
             {currentMedia.testimonial.title}
           </h2>
-          <p className="text-base text-white">
+          <p className='text-base text-white'>
             {currentMedia.testimonial.description}
           </p>
         </div>
 
         {/* Avatars and Rating */}
-        <div className="flex items-center gap-4">
+        <div className='flex items-center gap-4'>
           {currentMedia.testimonial.avatars &&
             currentMedia.testimonial.avatars.length > 0 && (
-              <div className="flex -space-x-3">
+              <div className='flex -space-x-3'>
                 {currentMedia.testimonial.avatars.map((avatar, index) => (
                   <img
                     key={index}
-                    className="size-10 rounded-full object-cover ring-2 ring-white/20"
+                    className='size-10 rounded-full object-cover ring-2 ring-white/20'
                     src={avatar}
                     alt={`User ${index + 1}`}
                   />
                 ))}
               </div>
             )}
-          <div className="flex flex-col gap-1">
-            <div className="flex flex-row items-center gap-2">
-              <div className="flex gap-1">
+          <div className='flex flex-col gap-1'>
+            <div className='flex flex-row items-center gap-2'>
+              <div className='flex gap-1'>
                 {renderStars(currentMedia.testimonial.rating)}
               </div>
-              <p className="text-md font-semibold text-white">
+              <p className='text-md font-semibold text-white'>
                 {currentMedia.testimonial.rating?.toFixed(1) || "5.0"}
               </p>
             </div>
             {currentMedia.testimonial.reviewCount && (
-              <span className="text-md font-medium text-white">
+              <span className='text-md font-medium text-white'>
                 {currentMedia.testimonial.reviewCount}
               </span>
             )}
@@ -326,14 +326,14 @@ export const AuthMediaCarousel: React.FC<AuthMediaCarouselProps> = ({
 
         {/* Pagination Dots */}
         {media.length > 1 && (
-          <div className="flex gap-2 mt-4">
+          <div className='mt-4 flex gap-2'>
             {media.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                className={`h-2 w-2 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? "bg-white w-6"
+                    ? "w-6 bg-white"
                     : "bg-white/50 hover:bg-white/70"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
@@ -559,4 +559,3 @@ export const signupCarouselData: { media: MediaItem[] } = {
     },
   ],
 };
-

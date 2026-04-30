@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Mic, RefreshCw, Play, Volume2 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { Mic, Play, RefreshCw, Sparkles, Volume2 } from "lucide-react";
+import { useState } from "react";
 
 interface ScriptEditorProps {
   script: string;
@@ -41,7 +41,10 @@ export function ScriptEditor({
   };
 
   const handleVoiceInput = () => {
-    if (!("webkitSpeechRecognition" in window) && !("SpeechRecognition" in window)) {
+    if (
+      !("webkitSpeechRecognition" in window) &&
+      !("SpeechRecognition" in window)
+    ) {
       alert("Speech recognition is not supported in your browser.");
       return;
     }
@@ -82,18 +85,18 @@ export function ScriptEditor({
   const characterCount = script.length;
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {/* AI Script Generation Prompt */}
       {!script && (
-        <div className="relative">
-          <div className="flex items-center gap-2 px-3 py-2 bg-primary/5 border border-primary/20 rounded-lg">
-            <Sparkles className="w-4 h-4 text-primary" />
+        <div className='relative'>
+          <div className='bg-primary/5 border-primary/20 flex items-center gap-2 rounded-lg border px-3 py-2'>
+            <Sparkles className='text-primary h-4 w-4' />
             <input
-              type="text"
+              type='text'
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Write a script about Business promotion for product."
-              className="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground"
+              placeholder='Write a script about Business promotion for product.'
+              className='placeholder:text-muted-foreground flex-1 border-none bg-transparent text-sm outline-none'
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -103,7 +106,7 @@ export function ScriptEditor({
             />
             <button
               onClick={() => setPrompt("")}
-              className="text-muted-foreground hover:text-foreground"
+              className='text-muted-foreground hover:text-foreground'
             >
               ×
             </button>
@@ -112,17 +115,17 @@ export function ScriptEditor({
             <Button
               onClick={handleGenerate}
               disabled={isGenerating}
-              size="sm"
-              className="mt-2 w-full"
+              size='sm'
+              className='mt-2 w-full'
             >
               {isGenerating ? (
                 <>
-                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                  <RefreshCw className='mr-2 h-4 w-4 animate-spin' />
                   Generating...
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-4 h-4 mr-2" />
+                  <Sparkles className='mr-2 h-4 w-4' />
                   Generate Script
                 </>
               )}
@@ -132,52 +135,57 @@ export function ScriptEditor({
       )}
 
       {/* Script Textarea */}
-      <div className="relative">
+      <div className='relative'>
         <Textarea
           value={script}
           onChange={(e) => onScriptChange(e.target.value)}
-          placeholder="Enter your script here or use AI to generate one..."
-          className="min-h-[200px] resize-none"
+          placeholder='Enter your script here or use AI to generate one...'
+          className='min-h-[200px] resize-none'
           maxLength={MAX_CHARACTERS}
         />
-        <div className="absolute bottom-2 right-2 text-xs text-muted-foreground">
+        <div className='text-muted-foreground absolute right-2 bottom-2 text-xs'>
           {characterCount}/{MAX_CHARACTERS}
         </div>
       </div>
 
       {/* Script Controls */}
-      <div className="flex items-center justify-between pt-2 border-t">
-        <div className="flex items-center gap-2">
+      <div className='flex items-center justify-between border-t pt-2'>
+        <div className='flex items-center gap-2'>
           <Button
-            type="button"
-            variant="ghost"
-            size="sm"
+            type='button'
+            variant='ghost'
+            size='sm'
             onClick={handleVoiceInput}
             disabled={isListening}
           >
-            <Mic className={cn("w-4 h-4", isListening && "text-primary animate-pulse")} />
+            <Mic
+              className={cn(
+                "h-4 w-4",
+                isListening && "text-primary animate-pulse"
+              )}
+            />
           </Button>
           <Button
-            type="button"
-            variant="ghost"
-            size="sm"
+            type='button'
+            variant='ghost'
+            size='sm'
             onClick={() => onScriptChange("")}
             disabled={!script}
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className='h-4 w-4' />
           </Button>
         </div>
 
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+        <div className='text-muted-foreground flex items-center gap-4 text-sm'>
           <span>{duration}s</span>
           <Button
-            type="button"
-            variant="ghost"
-            size="sm"
+            type='button'
+            variant='ghost'
+            size='sm'
             onClick={handleListen}
             disabled={!script}
           >
-            <Volume2 className="w-4 h-4 mr-2" />
+            <Volume2 className='mr-2 h-4 w-4' />
             Listen
           </Button>
         </div>
@@ -185,4 +193,3 @@ export function ScriptEditor({
     </div>
   );
 }
-

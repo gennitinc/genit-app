@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
-import { Plus, RefreshCw, Lock, Unlock, X, Search, Check } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useProjectDesign } from "@/context/DesignProject";
 import { ColorShadeScale } from "./color-shade-scale";
+import { useProjectDesign } from "@/context/DesignProject";
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { Check, Lock, Plus, RefreshCw, Search, Unlock, X } from "lucide-react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -33,16 +33,27 @@ function generateShades(hex: string): { [key: number]: string } {
   const b = parseInt(clean.slice(4, 6), 16);
 
   const toHex = (r: number, g: number, b: number) =>
-    "#" + [r, g, b].map((v) => Math.min(255, Math.max(0, Math.round(v))).toString(16).padStart(2, "0")).join("");
+    "#" +
+    [r, g, b]
+      .map((v) =>
+        Math.min(255, Math.max(0, Math.round(v)))
+          .toString(16)
+          .padStart(2, "0")
+      )
+      .join("");
 
   const mix = (a: number, t: number[], fac: number) =>
-    toHex(a * (1 - fac) + t[0] * fac, g * (1 - fac) + t[1] * fac, b * (1 - fac) + t[2] * fac);
+    toHex(
+      a * (1 - fac) + t[0] * fac,
+      g * (1 - fac) + t[1] * fac,
+      b * (1 - fac) + t[2] * fac
+    );
 
   const W = [255, 255, 255];
   const Bk = [0, 0, 0];
 
   return {
-    50:  mix(r, W, 0.95),
+    50: mix(r, W, 0.95),
     100: mix(r, W, 0.88),
     200: mix(r, W, 0.75),
     300: mix(r, W, 0.58),
@@ -51,13 +62,18 @@ function generateShades(hex: string): { [key: number]: string } {
     600: toHex(r, g, b),
     700: mix(r, Bk, 0.15),
     800: mix(r, Bk, 0.32),
-    900: mix(r, Bk, 0.50),
+    900: mix(r, Bk, 0.5),
     950: mix(r, Bk, 0.65),
   };
 }
 
 function randomHex() {
-  return "#" + Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, "0");
+  return (
+    "#" +
+    Math.floor(Math.random() * 0xffffff)
+      .toString(16)
+      .padStart(6, "0")
+  );
 }
 
 // Curated fallback fonts (no API key needed)
@@ -72,12 +88,24 @@ const FALLBACK_FONTS: GoogleFont[] = [
   { family: "Lora", category: "serif", variants: ["400", "700"] },
   { family: "Josefin Sans", category: "sans-serif", variants: ["400", "700"] },
   { family: "Raleway", category: "sans-serif", variants: ["400", "700"] },
-  { family: "Source Code Pro", category: "monospace", variants: ["400", "700"] },
+  {
+    family: "Source Code Pro",
+    category: "monospace",
+    variants: ["400", "700"],
+  },
   { family: "Fira Code", category: "monospace", variants: ["400", "700"] },
-  { family: "Bricolage Grotesque", category: "sans-serif", variants: ["400", "700"] },
+  {
+    family: "Bricolage Grotesque",
+    category: "sans-serif",
+    variants: ["400", "700"],
+  },
   { family: "Sora", category: "sans-serif", variants: ["400", "700"] },
   { family: "Outfit", category: "sans-serif", variants: ["400", "700"] },
-  { family: "Plus Jakarta Sans", category: "sans-serif", variants: ["400", "700"] },
+  {
+    family: "Plus Jakarta Sans",
+    category: "sans-serif",
+    variants: ["400", "700"],
+  },
   { family: "Geist", category: "sans-serif", variants: ["400", "700"] },
   { family: "Cormorant Garamond", category: "serif", variants: ["400", "700"] },
   { family: "IBM Plex Mono", category: "monospace", variants: ["400", "700"] },
@@ -87,14 +115,14 @@ const FALLBACK_FONTS: GoogleFont[] = [
 const STATUS_COLORS = [
   { id: "success", label: "Success", hex: "#22c55e" },
   { id: "warning", label: "Warning", hex: "#f59e0b" },
-  { id: "danger",  label: "Danger",  hex: "#ef4444" },
+  { id: "danger", label: "Danger", hex: "#ef4444" },
 ];
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: "brand",   label: "Brand"   },
+  { id: "brand", label: "Brand" },
   { id: "neutral", label: "Neutral" },
-  { id: "status",  label: "Status"  },
-  { id: "fonts",   label: "Fonts"   },
+  { id: "status", label: "Status" },
+  { id: "fonts", label: "Fonts" },
 ];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -115,33 +143,57 @@ function HexInput({
   showRemove?: boolean;
 }) {
   const [draft, setDraft] = useState(value);
-  useEffect(() => { setDraft(value); }, [value]);
+  useEffect(() => {
+    setDraft(value);
+  }, [value]);
 
   return (
-    <div className="flex items-center gap-2 h-10 bg-white/5 border border-white/10 rounded-xl px-3 focus-within:border-white/25 transition-colors group/hex">
-      <div className="w-5 h-5 rounded-full shrink-0 border border-white/10" style={{ backgroundColor: value }} />
+    <div className='group/hex flex h-10 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 transition-colors focus-within:border-white/25'>
+      <div
+        className='h-5 w-5 shrink-0 rounded-full border border-white/10'
+        style={{ backgroundColor: value }}
+      />
       <input
-        type="text"
+        type='text'
         value={draft}
         maxLength={7}
-        placeholder="#000000"
-        className="flex-1 bg-transparent border-none outline-none text-sm font-mono text-foreground min-w-0"
+        placeholder='#000000'
+        className='text-foreground min-w-0 flex-1 border-none bg-transparent font-mono text-sm outline-none'
         onChange={(e) => {
           setDraft(e.target.value);
-          if (/^#[0-9a-fA-F]{6}$/.test(e.target.value)) onChange(e.target.value);
+          if (/^#[0-9a-fA-F]{6}$/.test(e.target.value))
+            onChange(e.target.value);
         }}
         onBlur={() => setDraft(value)}
       />
-      <label className="cursor-pointer text-muted-foreground hover:text-foreground transition-opacity shrink-0">
-        <input type="color" value={value} className="sr-only" onChange={(e) => onChange(e.target.value)} />
-        <div className="w-3.5 h-3.5 rounded border border-white/20" style={{ backgroundColor: value }} />
+      <label className='text-muted-foreground hover:text-foreground shrink-0 cursor-pointer transition-opacity'>
+        <input
+          type='color'
+          value={value}
+          className='sr-only'
+          onChange={(e) => onChange(e.target.value)}
+        />
+        <div
+          className='h-3.5 w-3.5 rounded border border-white/20'
+          style={{ backgroundColor: value }}
+        />
       </label>
-      <button onClick={onLockToggle} className="text-muted-foreground hover:text-foreground transition-colors">
-        {locked ? <Lock className="w-3 h-3" /> : <Unlock className="w-3 h-3 opacity-30 group-hover/hex:opacity-80" />}
+      <button
+        onClick={onLockToggle}
+        className='text-muted-foreground hover:text-foreground transition-colors'
+      >
+        {locked ? (
+          <Lock className='h-3 w-3' />
+        ) : (
+          <Unlock className='h-3 w-3 opacity-30 group-hover/hex:opacity-80' />
+        )}
       </button>
       {showRemove && onRemove && (
-        <button onClick={onRemove} className="text-muted-foreground hover:text-red-400 transition-colors">
-          <X className="w-3 h-3" />
+        <button
+          onClick={onRemove}
+          className='text-muted-foreground transition-colors hover:text-red-400'
+        >
+          <X className='h-3 w-3' />
         </button>
       )}
     </div>
@@ -150,18 +202,24 @@ function HexInput({
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export function ColorManagement({ 
+export function ColorManagement({
   className,
   isLocked,
   finalizedPalette,
   finalizedFont,
-}: { 
+}: {
   className?: string;
   isLocked?: boolean;
   finalizedPalette?: any[];
   finalizedFont?: string | null;
 }) {
-  const { generationMode, setGenerationMode, setSelectedColorScales, primaryFont, setPrimaryFont } = useProjectDesign();
+  const {
+    generationMode,
+    setGenerationMode,
+    setSelectedColorScales,
+    primaryFont,
+    setPrimaryFont,
+  } = useProjectDesign();
 
   const [activeTab, setActiveTab] = useState<Tab>("brand");
 
@@ -172,18 +230,25 @@ export function ColorManagement({
         id: s.id || (idx === 0 ? "primary" : `secondary-${idx}`),
         label: idx === 0 ? "Primary" : "Secondary",
         base: s.base,
-        shades: s.shades || generateShades(s.base)
+        shades: s.shades || generateShades(s.base),
       }));
     }
     return [
-      { id: "primary", label: "Primary", base: "#6366f1", shades: generateShades("#6366f1") },
+      {
+        id: "primary",
+        label: "Primary",
+        base: "#6366f1",
+        shades: generateShades("#6366f1"),
+      },
     ];
   });
 
   // Sync to context whenever brandScales change (ONLY if not locked)
   useEffect(() => {
     if (!isLocked) {
-      setSelectedColorScales(brandScales.map(s => ({ base: s.base, shades: s.shades })));
+      setSelectedColorScales(
+        brandScales.map((s) => ({ base: s.base, shades: s.shades }))
+      );
     }
   }, [brandScales, setSelectedColorScales, isLocked]);
   const [brandLocked, setBrandLocked] = useState<Set<string>>(new Set());
@@ -216,14 +281,18 @@ export function ColorManagement({
     }
 
     setFontsLoading(true);
-    fetch(`https://www.googleapis.com/webfonts/v1/webfonts?sort=popularity&key=${apiKey}`)
+    fetch(
+      `https://www.googleapis.com/webfonts/v1/webfonts?sort=popularity&key=${apiKey}`
+    )
       .then((r) => r.json())
       .then((data) => {
-        const items: GoogleFont[] = (data.items || []).slice(0, 40).map((f: any) => ({
-          family: f.family,
-          category: f.category,
-          variants: f.variants,
-        }));
+        const items: GoogleFont[] = (data.items || [])
+          .slice(0, 40)
+          .map((f: any) => ({
+            family: f.family,
+            category: f.category,
+            variants: f.variants,
+          }));
         setFonts(items);
         // Inject link tag for preview
         const link = document.createElement("link");
@@ -248,7 +317,9 @@ export function ColorManagement({
   // ── Brand tab helpers ────────────────────────────────────────────────────
   const updateBrandBase = (id: string, hex: string) => {
     setBrandScales((prev) => {
-      const next = prev.map((s) => s.id === id ? { ...s, base: hex, shades: generateShades(hex) } : s);
+      const next = prev.map((s) =>
+        s.id === id ? { ...s, base: hex, shades: generateShades(hex) } : s
+      );
       return next;
     });
   };
@@ -257,15 +328,25 @@ export function ColorManagement({
     const hex = randomHex();
     setBrandScales((prev) => [
       ...prev,
-      { id: `secondary-${Date.now()}`, label: "Secondary", base: hex, shades: generateShades(hex) },
+      {
+        id: `secondary-${Date.now()}`,
+        label: "Secondary",
+        base: hex,
+        shades: generateShades(hex),
+      },
     ]);
   };
 
-  const removeBrandScale = (id: string) => setBrandScales((prev) => prev.filter((s) => s.id !== id));
+  const removeBrandScale = (id: string) =>
+    setBrandScales((prev) => prev.filter((s) => s.id !== id));
 
   const randomiseAll = () => {
     setBrandScales((prev) => {
-      const next = prev.map((s) => brandLocked.has(s.id) ? s : { ...s, base: randomHex(), shades: generateShades(randomHex()) });
+      const next = prev.map((s) =>
+        brandLocked.has(s.id)
+          ? s
+          : { ...s, base: randomHex(), shades: generateShades(randomHex()) }
+      );
       return next;
     });
   };
@@ -278,7 +359,11 @@ export function ColorManagement({
 
   // ── Status ───────────────────────────────────────────────────────────────
   const updateStatus = (id: string, hex: string) => {
-    setStatusColors((prev) => prev.map((s) => s.id === id ? { ...s, hex, shades: generateShades(hex) } : s));
+    setStatusColors((prev) =>
+      prev.map((s) =>
+        s.id === id ? { ...s, hex, shades: generateShades(hex) } : s
+      )
+    );
   };
 
   const filteredFonts = fonts.filter((f) =>
@@ -296,8 +381,8 @@ export function ColorManagement({
   return (
     <div className={cn("w-full space-y-3", className)}>
       {/* Mode + Tab row */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center p-1 bg-muted/40 rounded-xl border border-border text-xs font-semibold uppercase tracking-wide">
+      <div className='flex items-center justify-between'>
+        <div className='bg-muted/40 border-border flex items-center rounded-xl border p-1 text-xs font-semibold tracking-wide uppercase'>
           {(["auto", "custom"] as const).map((m) => {
             const active = generationMode === m;
 
@@ -307,11 +392,11 @@ export function ColorManagement({
                 onClick={() => !isLocked && setGenerationMode(m)}
                 disabled={isLocked}
                 className={cn(
-                  "relative flex-1 px-4 py-1.5 rounded-lg transition-all duration-200",
+                  "relative flex-1 rounded-lg px-4 py-1.5 transition-all duration-200",
                   "focus:outline-none",
                   active
                     ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5",
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 )}
               >
                 {m}
@@ -320,23 +405,23 @@ export function ColorManagement({
           })}
         </div>
 
-        <div className="flex items-center gap-4 relative">
+        <div className='relative flex items-center gap-4'>
           {TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "text-[11px] font-medium transition-colors pb-0.5 relative",
+                "relative pb-0.5 text-[11px] font-medium transition-colors",
                 activeTab === tab.id
                   ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground/70",
+                  : "text-muted-foreground hover:text-foreground/70"
               )}
             >
               {tab.label}
               {activeTab === tab.id && (
                 <motion.span
-                  layoutId="color-tab-indicator"
-                  className="absolute inset-x-0 -bottom-0.5 h-px bg-primary"
+                  layoutId='color-tab-indicator'
+                  className='bg-primary absolute inset-x-0 -bottom-0.5 h-px'
                 />
               )}
             </button>
@@ -345,14 +430,14 @@ export function ColorManagement({
       </div>
 
       {/* Content */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode='wait'>
         {generationMode === "auto" ? (
           <motion.p
-            key="auto"
+            key='auto'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="text-[11px] text-muted-foreground/50 italic text-center py-2"
+            className='text-muted-foreground/50 py-2 text-center text-[11px] italic'
           >
             AI will select the optimal palette automatically.
           </motion.p>
@@ -363,15 +448,15 @@ export function ColorManagement({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
-            className="space-y-3"
+            className='space-y-3'
           >
             {/* ── Brand ── */}
             {activeTab === "brand" && (
-              <div className="space-y-3">
+              <div className='space-y-3'>
                 {brandScales.map((scale, idx) => (
-                  <div key={scale.id} className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] text-muted-foreground font-medium">
+                  <div key={scale.id} className='space-y-1.5'>
+                    <div className='flex items-center justify-between'>
+                      <span className='text-muted-foreground text-[10px] font-medium'>
                         {scale.label}
                       </span>
                     </div>
@@ -387,7 +472,9 @@ export function ColorManagement({
                           return n;
                         })
                       }
-                      onChange={(hex) => !isLocked && updateBrandBase(scale.id, hex)}
+                      onChange={(hex) =>
+                        !isLocked && updateBrandBase(scale.id, hex)
+                      }
                       showRemove={idx > 0 && !isLocked}
                       onRemove={() => !isLocked && removeBrandScale(scale.id)}
                     />
@@ -404,26 +491,27 @@ export function ColorManagement({
                 {brandScales.length < 3 && !isLocked && (
                   <button
                     onClick={addBrandSecondary}
-                    className="w-full h-8 rounded-xl border border-dashed border-white/10 hover:border-white/20 text-muted-foreground hover:text-foreground text-[10px] flex items-center justify-center gap-2 transition-all"
+                    className='text-muted-foreground hover:text-foreground flex h-8 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 text-[10px] transition-all hover:border-white/20'
                   >
-                    <Plus className="w-3 h-3" /> Add secondary scale
+                    <Plus className='h-3 w-3' /> Add secondary scale
                   </button>
                 )}
                 {!isLocked && (
                   <button
                     onClick={randomiseAll}
-                  className="w-full h-8 rounded-xl border border-white/5 hover:border-white/10 hover:bg-white/5 text-muted-foreground hover:text-foreground text-[10px] flex items-center justify-center gap-2 transition-all group"
-                >
-                  <RefreshCw className="w-3 h-3 group-hover:rotate-180 transition-transform duration-500" />{" "}
-                  Randomise colors
-                </button>)}
+                    className='text-muted-foreground hover:text-foreground group flex h-8 w-full items-center justify-center gap-2 rounded-xl border border-white/5 text-[10px] transition-all hover:border-white/10 hover:bg-white/5'
+                  >
+                    <RefreshCw className='h-3 w-3 transition-transform duration-500 group-hover:rotate-180' />{" "}
+                    Randomise colors
+                  </button>
+                )}
               </div>
             )}
 
             {/* ── Neutral ── */}
             {activeTab === "neutral" && (
-              <div className="space-y-1.5">
-                <span className="text-[10px] text-muted-foreground font-medium">
+              <div className='space-y-1.5'>
+                <span className='text-muted-foreground text-[10px] font-medium'>
                   Base Grey
                 </span>
                 <HexInput
@@ -438,10 +526,10 @@ export function ColorManagement({
 
             {/* ── Status ── */}
             {activeTab === "status" && (
-              <div className="space-y-3">
+              <div className='space-y-3'>
                 {statusColors.map((s) => (
-                  <div key={s.id} className="space-y-1.5">
-                    <span className="text-[10px] text-muted-foreground font-medium">
+                  <div key={s.id} className='space-y-1.5'>
+                    <span className='text-muted-foreground text-[10px] font-medium'>
                       {s.label}
                     </span>
                     <HexInput
@@ -458,24 +546,24 @@ export function ColorManagement({
 
             {/* ── Fonts ── */}
             {activeTab === "fonts" && (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 h-9 bg-white/5 border border-white/10 rounded-xl px-3 focus-within:border-white/25 transition-colors">
-                  <Search className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+              <div className='space-y-2'>
+                <div className='flex h-9 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 transition-colors focus-within:border-white/25'>
+                  <Search className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
                   <input
                     value={fontSearch}
                     onChange={(e) => setFontSearch(e.target.value)}
-                    placeholder="Search fonts…"
+                    placeholder='Search fonts…'
                     disabled={isLocked}
-                    className="flex-1 bg-transparent border-none outline-none text-sm text-foreground placeholder:text-muted-foreground/50"
+                    className='text-foreground placeholder:text-muted-foreground/50 flex-1 border-none bg-transparent text-sm outline-none'
                   />
                 </div>
 
                 {fontsLoading ? (
-                  <div className="flex items-center justify-center py-6 text-muted-foreground/40 text-xs">
+                  <div className='text-muted-foreground/40 flex items-center justify-center py-6 text-xs'>
                     Loading fonts…
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-1.5 max-h-52 overflow-y-auto custom-scrollbar pr-1">
+                  <div className='custom-scrollbar grid max-h-52 grid-cols-2 gap-1.5 overflow-y-auto pr-1'>
                     {filteredFonts.map((font) => {
                       const isSelected = resolvedPrimaryFont === font.family;
                       return (
@@ -483,22 +571,23 @@ export function ColorManagement({
                           key={font.family}
                           disabled={isLocked}
                           onClick={() =>
-                            !isLocked && setPrimaryFont(isSelected ? null : font.family)
+                            !isLocked &&
+                            setPrimaryFont(isSelected ? null : font.family)
                           }
                           className={cn(
-                            "relative p-2.5 rounded-xl border text-left transition-all duration-200 group",
+                            "group relative rounded-xl border p-2.5 text-left transition-all duration-200",
                             isSelected
                               ? "border-primary/50 bg-primary/5"
-                              : "border-white/8 hover:border-white/20 bg-white/[0.02]",
+                              : "border-white/8 bg-white/[0.02] hover:border-white/20"
                           )}
                         >
                           {isSelected && (
-                            <span className="absolute top-2 right-2">
-                              <Check className="w-3 h-3 text-primary" />
+                            <span className='absolute top-2 right-2'>
+                              <Check className='text-primary h-3 w-3' />
                             </span>
                           )}
                           <p
-                            className="text-sm leading-tight truncate text-foreground"
+                            className='text-foreground truncate text-sm leading-tight'
                             style={{
                               fontFamily: `"${font.family}", ${font.category}`,
                             }}
@@ -507,9 +596,9 @@ export function ColorManagement({
                           </p>
                           <span
                             className={cn(
-                              "mt-1 inline-block text-[9px] px-1.5 py-0.5 rounded font-medium uppercase tracking-wider",
+                              "mt-1 inline-block rounded px-1.5 py-0.5 text-[9px] font-medium tracking-wider uppercase",
                               categoryBadgeColor[font.category] ||
-                                "bg-white/5 text-muted-foreground",
+                                "text-muted-foreground bg-white/5"
                             )}
                           >
                             {font.category}
@@ -521,10 +610,10 @@ export function ColorManagement({
                 )}
 
                 {resolvedPrimaryFont && (
-                  <p className="text-[10px] text-primary/70 text-center">
+                  <p className='text-primary/70 text-center text-[10px]'>
                     Selected:{" "}
                     <span
-                      className="font-semibold"
+                      className='font-semibold'
                       style={{ fontFamily: `"${resolvedPrimaryFont}"` }}
                     >
                       {resolvedPrimaryFont}

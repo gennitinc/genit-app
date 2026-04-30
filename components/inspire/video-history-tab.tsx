@@ -1,10 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Loader2, Trash2, VideoIcon, Play } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
-import { apiResponse } from "@/utils/apiResponse";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,7 +9,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { apiResponse } from "@/utils/apiResponse";
+import { Loader2, Play, Trash2, VideoIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface HistoryVideo {
   _id: string;
@@ -34,7 +34,7 @@ interface HistoryVideo {
 interface VideoHistoryTabProps {
   onLoadToEditor: (video: HistoryVideo) => void;
   onTabChange?: (
-    tab: "preview" | "history" | "community" | "templates" | "tutorial",
+    tab: "preview" | "history" | "community" | "templates" | "tutorial"
   ) => void;
 }
 
@@ -57,7 +57,7 @@ export function VideoHistoryTab({
       setLoading(true);
       const response = await apiResponse.get(
         `/project/myprojects?type=ai-video-gen&limit=50`,
-        { withCredentials: true },
+        { withCredentials: true }
       );
 
       if (response.status === 200) {
@@ -91,12 +91,12 @@ export function VideoHistoryTab({
       // Use the direct delete endpoint for generated videos
       const response = await apiResponse.delete(
         `/inspire/generate/video/${videoToDelete._id}`,
-        { withCredentials: true },
+        { withCredentials: true }
       );
 
       if (response.status === 200 && response.data.success) {
         setVideos((prev) =>
-          prev.filter((vid) => vid._id !== videoToDelete._id),
+          prev.filter((vid) => vid._id !== videoToDelete._id)
         );
         toast({
           title: "Deleted",
@@ -127,10 +127,10 @@ export function VideoHistoryTab({
 
   if (loading) {
     return (
-      <section className="p-4">
-        <div className="flex flex-col items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-6 h-6 text-neutral-400 dark:text-neutral-500 animate-spin mb-3" />
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+      <section className='p-4'>
+        <div className='flex min-h-[60vh] flex-col items-center justify-center'>
+          <Loader2 className='mb-3 h-6 w-6 animate-spin text-neutral-400 dark:text-neutral-500' />
+          <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading history videos
           </p>
         </div>
@@ -140,16 +140,16 @@ export function VideoHistoryTab({
 
   if (videos.length === 0) {
     return (
-      <section className="p-4">
-        <div className="relative w-full rounded-xl overflow-hidden min-h-[400px]">
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-            <div className="w-16 h-16 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
-              <VideoIcon className="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
+      <section className='p-4'>
+        <div className='relative min-h-[400px] w-full overflow-hidden rounded-xl'>
+          <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
+            <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
+              <VideoIcon className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
             </div>
-            <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+            <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
               No history yet
             </h3>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            <p className='text-sm text-neutral-500 dark:text-neutral-400'>
               Your generated videos will appear here
             </p>
           </div>
@@ -160,9 +160,9 @@ export function VideoHistoryTab({
 
   return (
     <>
-      <section className="p-4 px-0">
+      <section className='p-4 px-0'>
         {/* Masonry Grid */}
-        <div className="columns-2 lg:columns-4 gap-4">
+        <div className='columns-2 gap-4 lg:columns-4'>
           {videos.map((video, index) => (
             <VideoCard
               key={video._id}
@@ -188,14 +188,14 @@ export function VideoHistoryTab({
           </DialogHeader>
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => setDeleteDialogOpen(false)}
             >
               Cancel
             </Button>
             <Button
               onClick={handleDelete}
-              className="bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-900"
+              className='bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
             >
               Delete
             </Button>
@@ -219,7 +219,7 @@ function VideoCard({
   deletingId: string | null;
   onLoadToEditor: (video: HistoryVideo) => void;
   onTabChange?: (
-    tab: "preview" | "history" | "community" | "templates" | "tutorial",
+    tab: "preview" | "history" | "community" | "templates" | "tutorial"
   ) => void;
   onDelete: (e: React.MouseEvent) => void;
 }) {
@@ -272,7 +272,7 @@ function VideoCard({
       },
       {
         threshold: 0.1, // Trigger when 10% of video is visible
-      },
+      }
     );
 
     observer.observe(videoElement);
@@ -287,12 +287,12 @@ function VideoCard({
 
   return (
     <div
-      className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4"
+      className='group relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800'
       onClick={() => {
         onLoadToEditor(video);
       }}
     >
-      <div className="relative">
+      <div className='relative'>
         {video.videoData.url ? (
           <video
             ref={videoRef}
@@ -300,8 +300,8 @@ function VideoCard({
             poster={video.videoData.thumbnail}
             muted
             playsInline
-            preload="metadata"
-            className="w-full object-cover"
+            preload='metadata'
+            className='w-full object-cover'
             style={{ aspectRatio }}
             onError={(e) => {
               console.error("Video load error:", e);
@@ -309,44 +309,44 @@ function VideoCard({
           />
         ) : (
           <div
-            className="w-full flex items-center justify-center bg-neutral-800 dark:bg-neutral-900"
+            className='flex w-full items-center justify-center bg-neutral-800 dark:bg-neutral-900'
             style={{ aspectRatio }}
           >
-            <VideoIcon className="w-8 h-8 text-neutral-500 dark:text-neutral-600" />
+            <VideoIcon className='h-8 w-8 text-neutral-500 dark:text-neutral-600' />
           </div>
         )}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-          <div className="flex items-center gap-2">
+        <div className='absolute inset-0 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100' />
+        <div className='absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100'>
+          <div className='flex items-center gap-2'>
             <button
-              type="button"
+              type='button'
               onClick={() => {
                 onLoadToEditor(video);
                 onTabChange?.("preview");
               }}
-              className="w-10 h-10 rounded-lg bg-black/70 hover:bg-black/80 flex items-center justify-center text-white transition-colors shadow-lg"
-              title="Play"
+              className='flex h-10 w-10 items-center justify-center rounded-lg bg-black/70 text-white shadow-lg transition-colors hover:bg-black/80'
+              title='Play'
             >
-              <Play className="w-6 h-6 text-white ml-1" />
+              <Play className='ml-1 h-6 w-6 text-white' />
             </button>
             <button
-              type="button"
+              type='button'
               onClick={onDelete}
-              className="w-10 h-10 rounded-lg bg-black/70 hover:bg-black/80 flex items-center justify-center text-white transition-colors shadow-lg"
-              title="Delete"
+              className='flex h-10 w-10 items-center justify-center rounded-lg bg-black/70 text-white shadow-lg transition-colors hover:bg-black/80'
+              title='Delete'
             >
               {deletingId === video._id ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className='h-4 w-4 animate-spin' />
               ) : (
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className='h-4 w-4' />
               )}
             </button>
           </div>
         </div>
       </div>
       {video.videoData.prompt && (
-        <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-          <p className="text-white text-sm font-medium line-clamp-2">
+        <div className='absolute right-0 bottom-0 left-0 p-3 opacity-0 transition-opacity group-hover:opacity-100'>
+          <p className='line-clamp-2 text-sm font-medium text-white'>
             {video.videoData.prompt}
           </p>
         </div>

@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Mic, Loader2, AlertCircle, Zap } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useSpeechToText } from "@/hooks/use-speech-to-text";
-import { cn } from "@/lib/utils";
 import ShinyText from "./shiny-text";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { useSpeechToText } from "@/hooks/use-speech-to-text";
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { AlertCircle, Loader2, Mic, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 interface PremiumInputProps {
   value: string;
@@ -106,19 +106,19 @@ export function PremiumInput({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="text-xs text-red-500 font-medium flex items-center mb-2 mx-4"
+            className='mx-4 mb-2 flex items-center text-xs font-medium text-red-500'
           >
-            <AlertCircle className="size-3.5 mr-2" />
+            <AlertCircle className='mr-2 size-3.5' />
             {error}
           </motion.p>
         )}
       </AnimatePresence>
 
-      <div className="flex items-center justify-between mb-2 px-4 h-fit">
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium">Prompt</label>
+      <div className='mb-2 flex h-fit items-center justify-between px-4'>
+        <div className='flex items-center gap-2'>
+          <label className='text-sm font-medium'>Prompt</label>
         </div>
-        <div className="flex items-center justify-between px-4 h-fit">
+        <div className='flex h-fit items-center justify-between px-4'>
           {/* <div className="flex items-center gap-2">
             {isGenerating && (
               <ShinyText
@@ -130,33 +130,33 @@ export function PremiumInput({
             )}
           </div> */}
           {!isGenerating && (
-            <div className="flex items-center gap-1 justify-between w-full">
-              <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
+            <div className='flex w-full items-center justify-between gap-1'>
+              <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
+                <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                 {user ? (
-                  <span className="text-xs text-muted-foreground">
+                  <span className='text-muted-foreground text-xs'>
                     {(user?.creditsRemaining ?? 0).toLocaleString()} Credits
                     left
                   </span>
                 ) : (
-                  <span className="text-xs text-muted-foreground">
+                  <span className='text-muted-foreground text-xs'>
                     Get a 50 free credit
                   </span>
                 )}
               </div>
 
               {user && (user?.creditsRemaining ?? 0) === 0 && (
-                <div className="text-xs font-medium">
+                <div className='text-xs font-medium'>
                   {String(user?.userPlan) === "Basic" ? (
                     <span
-                      className="cursor-pointer text-blue-500 hover:underline"
+                      className='cursor-pointer text-blue-500 hover:underline'
                       onClick={() => router.push("/pricing")}
                     >
                       Upgrade
                     </span>
                   ) : (
                     <span
-                      className="cursor-pointer text-blue-500 hover:underline"
+                      className='cursor-pointer text-blue-500 hover:underline'
                       onClick={() => router.push("/user/settings?tab=billing")}
                     >
                       Buy Credits
@@ -171,16 +171,16 @@ export function PremiumInput({
 
       <div
         className={cn(
-          "group flex flex-col gap-2 p-3 w-full rounded-[1.5rem] border transition-all duration-150 ease-in-out shadow-xl",
-          "bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl border-white dark:border-white/[0.08]",
+          "group flex w-full flex-col gap-2 rounded-[1.5rem] border p-3 shadow-xl transition-all duration-150 ease-in-out",
+          "border-white bg-white/80 backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-900/50",
           "ring-1 ring-black/[0.08] dark:ring-black/[0.88]",
           "focus-within:ring-black/[0.16] dark:focus-within:ring-black/[0.96]",
           "hover:ring-black/[0.12]",
-          "focus-within:border-white dark:focus-within:border-foreground/[0.16]",
-          disabled && "opacity-60 cursor-not-allowed",
+          "dark:focus-within:border-foreground/[0.16] focus-within:border-white",
+          disabled && "cursor-not-allowed opacity-60"
         )}
       >
-        <div className="min-w-0 w-full">
+        <div className='w-full min-w-0'>
           <textarea
             ref={textareaRef}
             value={isGenerating ? "" : value}
@@ -195,52 +195,52 @@ export function PremiumInput({
             }
             disabled={isGenerating || disabled}
             className={cn(
-              "flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent outline-none scrollbar-none",
-              isGenerating && "placeholder:opacity-0",
+              "placeholder:text-muted-foreground/60 scrollbar-none flex w-full resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base",
+              isGenerating && "placeholder:opacity-0"
             )}
             style={{ minHeight }}
           />
         </div>
 
-        {footerContent && <div className="px-1">{footerContent}</div>}
+        {footerContent && <div className='px-1'>{footerContent}</div>}
 
-        <div className="flex items-center gap-1.5">
+        <div className='flex items-center gap-1.5'>
           {leftContent}
 
-          <div className="ml-auto flex items-center gap-1.5">
+          <div className='ml-auto flex items-center gap-1.5'>
             {rightContent}
 
             <button
-              type="button"
+              type='button'
               className={cn(
-                "relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 h-8 w-8",
+                "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out",
                 isListening
-                  ? "text-red-500 bg-red-500/10 animate-pulse"
-                  : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5",
+                  ? "animate-pulse bg-red-500/10 text-red-500"
+                  : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
               )}
               onClick={handleMicClick}
               disabled={!isSupported || isGenerating || disabled}
               title={isListening ? "Stop listening" : "Start voice input"}
             >
-              <Mic className="shrink-0 size-4" />
+              <Mic className='size-4 shrink-0' />
             </button>
 
             <button
-              type="button"
+              type='button'
               onClick={handleSubmit}
               disabled={isGenerating || !value.trim() || disabled}
-              className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shadow-md flex-shrink-0 disabled:opacity-50"
+              className='bg-primary text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out disabled:opacity-50'
             >
               {isGenerating ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className='h-4 w-4 animate-spin' />
               ) : (
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="shrink-0 size-5"
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='currentColor'
+                  viewBox='0 0 24 24'
+                  className='size-5 shrink-0'
                 >
-                  <path d="M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0" />
+                  <path d='M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0' />
                 </svg>
               )}
             </button>

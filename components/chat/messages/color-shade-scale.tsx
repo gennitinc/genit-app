@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
 import { cn } from "@/lib/utils";
+import React, { useState } from "react";
 
 interface ColorShadeScaleProps {
   shades: { [key: number]: string };
@@ -31,8 +31,13 @@ export function ColorShadeScale({
   };
 
   return (
-    <div className={cn("w-full overflow-hidden rounded-xl border border-white/5", className)}>
-      <div className="flex w-full">
+    <div
+      className={cn(
+        "w-full overflow-hidden rounded-xl border border-white/5",
+        className
+      )}
+    >
+      <div className='flex w-full'>
         {SHADE_KEYS.map((key) => {
           const raw = shades[key] || "cccccc";
           const hex = raw.startsWith("#") ? raw : `#${raw}`;
@@ -44,17 +49,17 @@ export function ColorShadeScale({
               key={key}
               onClick={() => handleClick(key)}
               title={`${key} — ${hex}`}
-              className="relative flex-1 h-10 flex items-end justify-center pb-1.5 transition-all duration-200 hover:z-10 hover:scale-y-110 origin-bottom focus:outline-none"
+              className='relative flex h-10 flex-1 origin-bottom items-end justify-center pb-1.5 transition-all duration-200 hover:z-10 hover:scale-y-110 focus:outline-none'
               style={{ backgroundColor: hex }}
             >
               {isSelected && (
                 <span
-                  className="w-1 h-1 rounded-full mb-0.5 absolute bottom-2 left-1/2 -translate-x-1/2"
+                  className='absolute bottom-2 left-1/2 mb-0.5 h-1 w-1 -translate-x-1/2 rounded-full'
                   style={{ backgroundColor: textColor }}
                 />
               )}
               <span
-                className="text-[8px] font-mono opacity-0 group-hover:opacity-60 absolute bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap"
+                className='absolute bottom-1 left-1/2 -translate-x-1/2 font-mono text-[8px] whitespace-nowrap opacity-0 group-hover:opacity-60'
                 style={{ color: textColor }}
               >
                 {key}

@@ -1,24 +1,25 @@
 "use client";
 
+import "./globals.css";
+import Wrapper from "@/components/layout/wrapper";
+import { PWAInstaller } from "@/components/pwa/pwa-installer";
+import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
+import { ThemeProvider } from "@/components/theme-provider";
+// Added import for React
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthenticatedContextProvider } from "@/context/AuthenticatedContext";
+import { ProjectProvider } from "@/context/DesignProject";
+import MixpanelProvider from "@/provider/MixpanelProver";
+import Loading from "@/utils/Loading";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import type React from "react"; // Added import for React
-import { Toaster } from "@/components/ui/sonner";
-import { AuthenticatedContextProvider } from "@/context/AuthenticatedContext";
-import { ThemeProvider } from "@/components/theme-provider";
-import Wrapper from "@/components/layout/wrapper";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Suspense } from "react";
-import { ProjectProvider } from "@/context/DesignProject";
-import { Analytics } from "@vercel/analytics/next";
-import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
-import { PWAInstaller } from "@/components/pwa/pwa-installer";
 import Script from "next/script";
-import Loading from "@/utils/Loading";
-import MixpanelProvider from "@/provider/MixpanelProver";
+import type React from "react";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -140,7 +141,7 @@ export default function RootLayout({
 }) {
   const queryClient = new QueryClient();
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning>
       <head>
         {/* Blocking script to prevent theme flash - must run before any content renders */}
         <script
@@ -182,125 +183,125 @@ export default function RootLayout({
           }}
         />
         {/* PWA Meta Tags */}
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#000000" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel='manifest' href='/manifest.json' />
+        <meta name='theme-color' content='#000000' />
+        <meta name='apple-mobile-web-app-capable' content='yes' />
         <meta
-          name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent"
+          name='apple-mobile-web-app-status-bar-style'
+          content='black-translucent'
         />
-        <meta name="apple-mobile-web-app-title" content="Gennit AI" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name='apple-mobile-web-app-title' content='Gennit AI' />
+        <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
+        <meta name='mobile-web-app-capable' content='yes' />
 
         {/* Enhanced OpenGraph Meta Tags for WhatsApp, Facebook, LinkedIn, etc. */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.gennit.online" />
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content='https://www.gennit.online' />
         <meta
-          property="og:title"
-          content="Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required."
+          property='og:title'
+          content='Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.'
         />
         <meta
-          property="og:description"
-          content="Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals instantly. Free AI image and video generator."
+          property='og:description'
+          content='Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals instantly. Free AI image and video generator.'
         />
         <meta
-          property="og:image"
-          content="https://www.gennit.online/opengraph-image.png"
+          property='og:image'
+          content='https://www.gennit.online/opengraph-image.png'
         />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property='og:image:width' content='1200' />
+        <meta property='og:image:height' content='630' />
         <meta
-          property="og:image:alt"
-          content="Gennit AI – AI Media Design Platform"
+          property='og:image:alt'
+          content='Gennit AI – AI Media Design Platform'
         />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:site_name" content="Gennit AI" />
-        <meta property="og:locale" content="en_US" />
-        <meta property="og:locale:alternate" content="en_GB" />
+        <meta property='og:image:type' content='image/png' />
+        <meta property='og:site_name' content='Gennit AI' />
+        <meta property='og:locale' content='en_US' />
+        <meta property='og:locale:alternate' content='en_GB' />
 
         {/* WhatsApp specific (uses OpenGraph but prefers square images) */}
         <meta
-          property="og:image:secure_url"
-          content="https://www.gennit.online/opengraph-image.png"
+          property='og:image:secure_url'
+          content='https://www.gennit.online/opengraph-image.png'
         />
 
         {/* Facebook specific */}
-        <meta property="fb:app_id" content="" />
+        <meta property='fb:app_id' content='' />
         <meta
-          property="article:author"
-          content="https://www.facebook.com/gennit"
+          property='article:author'
+          content='https://www.facebook.com/gennit'
         />
         <meta
-          property="article:publisher"
-          content="https://www.facebook.com/gennit"
+          property='article:publisher'
+          content='https://www.facebook.com/gennit'
         />
 
         {/* LinkedIn specific */}
         <meta
-          property="og:image:url"
-          content="https://www.gennit.online/opengraph-image.png"
+          property='og:image:url'
+          content='https://www.gennit.online/opengraph-image.png'
         />
 
         {/* Additional platform support */}
-        <meta name="author" content="Gennit Team" />
-        <meta name="publisher" content="Gennit AI" />
-        <meta name="copyright" content="Gennit AI" />
-        <meta name="language" content="English" />
-        <meta name="revisit-after" content="7 days" />
-        <meta name="distribution" content="global" />
-        <meta name="rating" content="general" />
+        <meta name='author' content='Gennit Team' />
+        <meta name='publisher' content='Gennit AI' />
+        <meta name='copyright' content='Gennit AI' />
+        <meta name='language' content='English' />
+        <meta name='revisit-after' content='7 days' />
+        <meta name='distribution' content='global' />
+        <meta name='rating' content='general' />
 
         {/* Telegram */}
-        <meta name="telegram:channel" content="@GennitAI" />
+        <meta name='telegram:channel' content='@GennitAI' />
 
         {/* Discord */}
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property='og:image:width' content='1200' />
+        <meta property='og:image:height' content='630' />
 
         {/* Slack */}
-        <meta name="slack-app-id" content="" />
+        <meta name='slack-app-id' content='' />
 
         {/* Microsoft Teams / Office 365 */}
-        <meta name="msapplication-TileColor" content="#000000" />
-        <meta name="msapplication-TileImage" content="/icon-192x192.png" />
-        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name='msapplication-TileColor' content='#000000' />
+        <meta name='msapplication-TileImage' content='/icon-192x192.png' />
+        <meta name='msapplication-config' content='/browserconfig.xml' />
 
         {/* Additional image formats for better compatibility */}
         <link
-          rel="image_src"
-          href="https://www.gennit.online/opengraph-image.png"
+          rel='image_src'
+          href='https://www.gennit.online/opengraph-image.png'
         />
 
         {/* Schema.org for rich snippets */}
         <meta
-          itemProp="name"
-          content="Gennit AI – AI Image & Video Generator"
+          itemProp='name'
+          content='Gennit AI – AI Image & Video Generator'
         />
         <meta
-          itemProp="description"
-          content="Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos instantly with advanced AI models."
+          itemProp='description'
+          content='Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos instantly with advanced AI models.'
         />
         <meta
-          itemProp="image"
-          content="https://www.gennit.online/opengraph-image.png"
+          itemProp='image'
+          content='https://www.gennit.online/opengraph-image.png'
         />
-        <meta itemProp="applicationCategory" content="DesignApplication" />
-        <meta itemProp="operatingSystem" content="Web Browser" />
+        <meta itemProp='applicationCategory' content='DesignApplication' />
+        <meta itemProp='operatingSystem' content='Web Browser' />
         <meta
-          itemProp="offers"
-          itemType="https://schema.org/Offer"
+          itemProp='offers'
+          itemType='https://schema.org/Offer'
           itemScope
-          content="Free tier available"
+          content='Free tier available'
         />
         <meta
-          itemProp="featureList"
-          content="AI Image Generation, AI Video Generation, Text to Image, Text to Video"
+          itemProp='featureList'
+          content='AI Image Generation, AI Video Generation, Text to Image, Text to Video'
         />
 
         {/* Comprehensive Structured Data for SEO and AI Search */}
         <script
-          type="application/ld+json"
+          type='application/ld+json'
           dangerouslySetInnerHTML={{
             __html: JSON.stringify([
               {
@@ -514,74 +515,74 @@ export default function RootLayout({
         />
 
         {/* Additional AI Search Optimization */}
-        <meta name="application-name" content="Gennit AI" />
-        <meta name="apple-mobile-web-app-title" content="Gennit AI" />
+        <meta name='application-name' content='Gennit AI' />
+        <meta name='apple-mobile-web-app-title' content='Gennit AI' />
         <meta
-          name="msapplication-tooltip"
-          content="Gennit AI - Image & Video Generator"
+          name='msapplication-tooltip'
+          content='Gennit AI - Image & Video Generator'
         />
-        <meta name="msapplication-starturl" content="/" />
+        <meta name='msapplication-starturl' content='/' />
 
         {/* AI Search Engine Optimization */}
         <meta
-          name="robots"
-          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+          name='robots'
+          content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
         />
         <meta
-          name="googlebot"
-          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+          name='googlebot'
+          content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
         />
         <meta
-          name="bingbot"
-          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+          name='bingbot'
+          content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
         />
 
         {/* Semantic HTML hints for AI */}
         <meta
-          name="keywords"
-          content="AI image generator, AI video generator, generate images with AI, generate videos with AI, text to image, text to video, AI art generator, AI video maker, artificial intelligence image generator, artificial intelligence video generator, free AI image generator, free AI video generator"
+          name='keywords'
+          content='AI image generator, AI video generator, generate images with AI, generate videos with AI, text to image, text to video, AI art generator, AI video maker, artificial intelligence image generator, artificial intelligence video generator, free AI image generator, free AI video generator'
         />
 
         {/* Additional semantic data */}
-        <meta name="subject" content="AI Image and Video Generation Platform" />
+        <meta name='subject' content='AI Image and Video Generation Platform' />
         <meta
-          name="topic"
-          content="Artificial Intelligence, Image Generation, Video Generation, Content Creation"
+          name='topic'
+          content='Artificial Intelligence, Image Generation, Video Generation, Content Creation'
         />
         <meta
-          name="summary"
-          content="Gennit AI supports Image and Video Generation. Create AI-generated images and videos instantly with advanced AI models."
+          name='summary'
+          content='Gennit AI supports Image and Video Generation. Create AI-generated images and videos instantly with advanced AI models.'
         />
         <meta
-          name="classification"
-          content="Software, AI, Design, Content Creation"
+          name='classification'
+          content='Software, AI, Design, Content Creation'
         />
         <meta
-          name="category"
-          content="AI Image Generator, AI Video Generator, Design Software"
+          name='category'
+          content='AI Image Generator, AI Video Generator, Design Software'
         />
-        <meta name="coverage" content="Worldwide" />
-        <meta name="target" content="all" />
-        <meta name="audience" content="all" />
-        <meta name="DC.title" content="Gennit AI - Image & Video Generator" />
-        <meta name="DC.creator" content="Gennit Team" />
-        <meta name="DC.subject" content="AI Image and Video Generation" />
+        <meta name='coverage' content='Worldwide' />
+        <meta name='target' content='all' />
+        <meta name='audience' content='all' />
+        <meta name='DC.title' content='Gennit AI - Image & Video Generator' />
+        <meta name='DC.creator' content='Gennit Team' />
+        <meta name='DC.subject' content='AI Image and Video Generation' />
         <meta
-          name="DC.description"
-          content="Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos."
+          name='DC.description'
+          content='Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos.'
         />
-        <meta name="DC.publisher" content="Gennit AI" />
-        <meta name="DC.contributor" content="Gennit Team" />
-        <meta name="DC.date" content="2024" />
-        <meta name="DC.type" content="Software" />
-        <meta name="DC.format" content="text/html" />
-        <meta name="DC.identifier" content="https://www.gennit.online" />
-        <meta name="DC.language" content="en" />
-        <meta name="DC.rights" content="Copyright Gennit AI" />
-        <meta name="DC.coverage" content="Worldwide" />
-        <meta name="geo.region" content="US" />
-        <meta name="geo.placename" content="United States" />
-        <meta name="ICBM" content="37.7749, -122.4194" />
+        <meta name='DC.publisher' content='Gennit AI' />
+        <meta name='DC.contributor' content='Gennit Team' />
+        <meta name='DC.date' content='2024' />
+        <meta name='DC.type' content='Software' />
+        <meta name='DC.format' content='text/html' />
+        <meta name='DC.identifier' content='https://www.gennit.online' />
+        <meta name='DC.language' content='en' />
+        <meta name='DC.rights' content='Copyright Gennit AI' />
+        <meta name='DC.coverage' content='Worldwide' />
+        <meta name='geo.region' content='US' />
+        <meta name='geo.placename' content='United States' />
+        <meta name='ICBM' content='37.7749, -122.4194' />
       </head>
 
       <body
@@ -592,16 +593,16 @@ export default function RootLayout({
           <QueryClientProvider client={queryClient}>
             <AuthenticatedContextProvider>
               <ThemeProvider
-                attribute="class"
-                defaultTheme="dark"
+                attribute='class'
+                defaultTheme='dark'
                 enableSystem
                 disableTransitionOnChange
-                storageKey="gennit-theme"
+                storageKey='gennit-theme'
               >
                 <ProjectProvider>
                   <Suspense
                     fallback={
-                      <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-black">
+                      <div className='flex h-screen flex-col items-center justify-center bg-white dark:bg-black'>
                         <Loading />
                       </div>
                     }
@@ -623,8 +624,8 @@ export default function RootLayout({
         <PWAInstaller />
         {/* Theme initialization script - runs before interactive to prevent flash */}
         <Script
-          id="theme-init"
-          strategy="beforeInteractive"
+          id='theme-init'
+          strategy='beforeInteractive'
           dangerouslySetInnerHTML={{
             __html: `
               (function() {

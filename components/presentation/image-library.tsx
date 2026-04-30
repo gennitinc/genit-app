@@ -1,26 +1,26 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
-import {
-  Search,
-  X,
-  Image as ImageIcon,
-  Upload,
-  Sparkles,
-  Loader2,
-  Download,
-  ExternalLink,
-  Trash2,
-  ImagePlus,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { apiResponse } from "@/utils/apiResponse";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { apiResponse } from "@/utils/apiResponse";
+import {
+  Download,
+  ExternalLink,
+  Image as ImageIcon,
+  ImagePlus,
+  Loader2,
+  Search,
+  Sparkles,
+  Trash2,
+  Upload,
+  X,
+} from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface ImageItem {
   id: string;
@@ -481,20 +481,20 @@ export function ImageLibrary({
   }, [activeTab, uploadedImages, displayedImages]);
 
   return (
-    <div className="flex flex-col h-full max-h-[600px]">
+    <div className='flex h-full max-h-[600px] flex-col'>
       {/* Header */}
       {showHeader && (
-        <div className="p-2 pb-0 flex-shrink-0">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-500/10 dark:bg-blue-500/10">
-                <ImageIcon className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+        <div className='flex-shrink-0 p-2 pb-0'>
+          <div className='mb-4 flex items-center justify-between'>
+            <div className='flex items-center gap-3'>
+              <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 dark:bg-blue-500/10'>
+                <ImageIcon className='h-5 w-5 text-blue-500 dark:text-blue-400' />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-foreground">
+                <h3 className='text-foreground text-sm font-semibold'>
                   Image Library
                 </h3>
-                <p className="text-xs text-muted-foreground">
+                <p className='text-muted-foreground text-xs'>
                   {activeTab === "upload"
                     ? `${uploadedImages.length} uploaded`
                     : activeTab === "library"
@@ -507,12 +507,12 @@ export function ImageLibrary({
             </div>
             {onClose && (
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={onClose}
-                className="h-6 w-6 p-0 hover:bg-muted text-muted-foreground hover:text-foreground"
+                className='hover:bg-muted text-muted-foreground hover:text-foreground h-6 w-6 p-0'
               >
-                <X className="w-3 h-3" />
+                <X className='h-3 w-3' />
               </Button>
             )}
           </div>
@@ -520,58 +520,58 @@ export function ImageLibrary({
       )}
 
       {/* Tabs */}
-      <div className="px-2 pb-0 flex-shrink-0">
+      <div className='flex-shrink-0 px-2 pb-0'>
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="upload" className="text-xs">
-              <Upload className="w-3 h-3 mr-1" />
+          <TabsList className='grid w-full grid-cols-3'>
+            <TabsTrigger value='upload' className='text-xs'>
+              <Upload className='mr-1 h-3 w-3' />
               Uploads
             </TabsTrigger>
-            <TabsTrigger value="library" className="text-xs">
-              <ImageIcon className="w-3 h-3 mr-1" />
+            <TabsTrigger value='library' className='text-xs'>
+              <ImageIcon className='mr-1 h-3 w-3' />
               Library
             </TabsTrigger>
-            <TabsTrigger value="generate" className="text-xs">
-              <Sparkles className="w-3 h-3 mr-1" />
+            <TabsTrigger value='generate' className='text-xs'>
+              <Sparkles className='mr-1 h-3 w-3' />
               Generate
             </TabsTrigger>
           </TabsList>
 
           {/* Upload Tab */}
-          <TabsContent value="upload" className="mt-4 space-y-4">
+          <TabsContent value='upload' className='mt-4 space-y-4'>
             <div>
               <input
                 ref={fileInputRef}
-                type="file"
-                accept="image/*"
+                type='file'
+                accept='image/*'
                 multiple
-                className="hidden"
+                className='hidden'
                 onChange={(e) => handleFileUpload(e.target.files)}
               />
               <Button
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full"
-                variant="outline"
+                className='w-full'
+                variant='outline'
                 disabled={isUploading}
               >
                 {isUploading ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                     Uploading...
                   </>
                 ) : (
                   <>
-                    <Upload className="w-4 h-4 mr-2" />
+                    <Upload className='mr-2 h-4 w-4' />
                     Upload Images
                   </>
                 )}
               </Button>
             </div>
             {uploadedImages.length === 0 && (
-              <div className="text-center py-8 text-sm text-muted-foreground">
-                <ImagePlus className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <div className='text-muted-foreground py-8 text-center text-sm'>
+                <ImagePlus className='mx-auto mb-2 h-8 w-8 opacity-50' />
                 <p>No uploaded images</p>
-                <p className="text-xs mt-1">
+                <p className='mt-1 text-xs'>
                   Click "Upload Images" to get started
                 </p>
               </div>
@@ -579,57 +579,57 @@ export function ImageLibrary({
           </TabsContent>
 
           {/* Library Tab */}
-          <TabsContent value="library" className="mt-4">
-            <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <TabsContent value='library' className='mt-4'>
+            <div className='relative mb-4'>
+              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
               <Input
-                type="text"
-                placeholder="Search free images (nature, business, tech...)"
+                type='text'
+                placeholder='Search free images (nature, business, tech...)'
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
                   setCurrentPage(1);
                   setDisplayedImages([]);
                 }}
-                className="pl-9 h-9 text-sm"
+                className='h-9 pl-9 text-sm'
               />
               {isSearching && (
-                <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground animate-spin" />
+                <Loader2 className='text-muted-foreground absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 animate-spin' />
               )}
             </div>
             {!searchQuery.trim() && (
-              <div className="text-xs text-muted-foreground mb-2">
+              <div className='text-muted-foreground mb-2 text-xs'>
                 Showing popular images. Search for specific images above.
               </div>
             )}
           </TabsContent>
 
           {/* Generate Tab */}
-          <TabsContent value="generate" className="mt-4 space-y-4">
+          <TabsContent value='generate' className='mt-4 space-y-4'>
             <div>
-              <label className="text-xs font-medium text-foreground mb-2 block">
+              <label className='text-foreground mb-2 block text-xs font-medium'>
                 Describe the image you want to generate
               </label>
               <Textarea
                 value={generatePrompt}
                 onChange={(e) => setGeneratePrompt(e.target.value)}
-                placeholder="e.g., A futuristic cityscape at sunset with flying cars..."
-                className="min-h-[100px] text-sm"
+                placeholder='e.g., A futuristic cityscape at sunset with flying cars...'
+                className='min-h-[100px] text-sm'
               />
             </div>
             <Button
               onClick={handleGenerateImage}
               disabled={!generatePrompt.trim() || isGenerating}
-              className="w-full"
+              className='w-full'
             >
               {isGenerating ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Generating...
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-4 h-4 mr-2" />
+                  <Sparkles className='mr-2 h-4 w-4' />
                   Generate Image
                 </>
               )}
@@ -641,31 +641,31 @@ export function ImageLibrary({
       {/* Images Grid */}
       {(activeTab === "upload" || activeTab === "library") && (
         <div
-          className="flex-1 overflow-hidden px-1 min-h-0"
+          className='min-h-0 flex-1 overflow-hidden px-1'
           style={{ maxHeight: "400px" }}
         >
-          <ScrollArea className="h-full">
+          <ScrollArea className='h-full'>
             <div ref={scrollAreaRef}>
               {isSearching && currentImages.length === 0 ? (
-                <div className="flex items-center justify-center h-32">
-                  <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+                <div className='flex h-32 items-center justify-center'>
+                  <Loader2 className='text-muted-foreground h-6 w-6 animate-spin' />
                 </div>
               ) : currentImages.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-32">
-                  <ImageIcon className="w-8 h-8 mb-2 text-muted-foreground opacity-50" />
-                  <p className="text-sm text-muted-foreground">
+                <div className='flex h-32 flex-col items-center justify-center'>
+                  <ImageIcon className='text-muted-foreground mb-2 h-8 w-8 opacity-50' />
+                  <p className='text-muted-foreground text-sm'>
                     {activeTab === "upload"
                       ? "No images uploaded yet"
                       : "No images found. Try a different search term."}
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-3 pb-4">
+                <div className='grid grid-cols-2 gap-3 pb-4'>
                   {currentImages.map((image) => (
                     <div
                       key={image.id}
                       className={cn(
-                        "relative group aspect-video rounded-lg overflow-hidden border-2 transition-all cursor-pointer",
+                        "group relative aspect-video cursor-pointer overflow-hidden rounded-lg border-2 transition-all",
                         selectedImage?.id === image.id
                           ? "border-blue-500 ring-2 ring-blue-500/20"
                           : "border-border hover:border-blue-500/50"
@@ -675,8 +675,8 @@ export function ImageLibrary({
                       <img
                         src={image.thumbnail || image.url}
                         alt={image.name || "Image"}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
+                        className='h-full w-full object-cover'
+                        loading='lazy'
                         onError={(e) => {
                           e.currentTarget.src =
                             "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23ddd' width='400' height='300'/%3E%3Ctext fill='%23999' font-family='sans-serif' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3EImage%3C/text%3E%3C/svg%3E";
@@ -684,20 +684,20 @@ export function ImageLibrary({
                       />
                       {activeTab === "upload" && (
                         <Button
-                          variant="ghost"
-                          size="sm"
-                          className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-destructive/80 hover:bg-destructive text-white h-6 w-6 p-0"
+                          variant='ghost'
+                          size='sm'
+                          className='bg-destructive/80 hover:bg-destructive absolute top-1 right-1 h-6 w-6 p-0 text-white opacity-0 transition-opacity group-hover:opacity-100'
                           onClick={(e) => {
                             e.stopPropagation();
                             handleDeleteImage(image.id, image.serverId);
                           }}
                         >
-                          <Trash2 className="w-3 h-3" />
+                          <Trash2 className='h-3 w-3' />
                         </Button>
                       )}
                       {image.author && (
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <p className="text-xs text-white truncate">
+                        <div className='absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/60 to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100'>
+                          <p className='truncate text-xs text-white'>
                             Photo by {image.author}
                           </p>
                         </div>
@@ -713,26 +713,26 @@ export function ImageLibrary({
 
       {/* Selected Image Actions */}
       {selectedImage && (
-        <div className="p-4 pt-0 border-t border-border flex-shrink-0">
-          <div className="flex items-center gap-2">
+        <div className='border-border flex-shrink-0 border-t p-4 pt-0'>
+          <div className='flex items-center gap-2'>
             <Button
               onClick={() => {
                 onInsertImage(selectedImage.url, selectedImage);
                 setSelectedImage(null);
               }}
-              className="flex-1"
-              size="sm"
+              className='flex-1'
+              size='sm'
             >
-              <Download className="w-4 h-4 mr-2" />
+              <Download className='mr-2 h-4 w-4' />
               Insert Image
             </Button>
             {selectedImage.authorUrl && (
               <Button
-                variant="outline"
-                size="sm"
+                variant='outline'
+                size='sm'
                 onClick={() => window.open(selectedImage.authorUrl, "_blank")}
               >
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink className='h-4 w-4' />
               </Button>
             )}
           </div>

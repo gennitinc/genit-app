@@ -1,36 +1,36 @@
 "use client";
 
-import type React from "react";
-import { useState, useEffect, useRef, useCallback } from "react";
+import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
+import { HomeInfoGrid } from "../common/homeInfoGrid";
+import HomeGrid from "../common/templateGrid";
+import ShinyText from "../ui/shiny-text";
+import { PricingDialog } from "@/components/common/pricing-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { useProjectDesign } from "@/context/DesignProject";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  X,
-  PaperclipIcon,
-  XIcon,
-  MessageSquare,
-  Image,
-  TrendingUp,
-  Users,
-  Sparkles,
-  Zap,
   AlertCircle,
-  Mic,
+  Image,
   Loader2,
-  WandSparklesIcon,
+  MessageSquare,
+  Mic,
+  PaperclipIcon,
   Settings,
   Settings2,
+  Sparkles,
+  TrendingUp,
+  Users,
+  WandSparklesIcon,
+  X,
+  XIcon,
+  Zap,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { motion, AnimatePresence } from "framer-motion";
-import { PricingDialog } from "@/components/common/pricing-dialog";
-import { useProjectDesign } from "@/context/DesignProject";
-import ShinyText from "../ui/shiny-text";
-import HomeGrid from "../common/templateGrid";
-import { HomeInfoGrid } from "../common/homeInfoGrid";
-import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
+import type React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface TypewriterEffectProps {
   words: string[];
@@ -350,10 +350,10 @@ export function IdeaSection() {
     (!inputValue.trim() && attachedFiles.length === 0);
 
   return (
-    <div className="">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className=''>
+      <div className='mx-auto max-w-4xl space-y-6'>
         {/* Header */}
-        <div className="text-center space-y-2">
+        <div className='space-y-2 text-center'>
           {/* <div className="flex justify-center items-center">
             {images.map((image, idx) => (
               <motion.div
@@ -385,13 +385,13 @@ export function IdeaSection() {
           </div> */}
           <AnimatedTooltipPreview />
           <motion.div
-            className="mt-2 mb-6 md:mb-8 lg:mb-12 flex flex-col items-center justify-center"
+            className='mt-2 mb-6 flex flex-col items-center justify-center md:mb-8 lg:mb-12'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
             <motion.h1
-              className="text-3xl md:text-4xl font-bold tracking-tight text-center lg:text-5xl mt-8"
+              className='mt-8 text-center text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl'
               custom={1}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -404,13 +404,13 @@ export function IdeaSection() {
                   },
                 }),
               }}
-              initial="hidden"
-              animate="visible"
+              initial='hidden'
+              animate='visible'
             >
               AI Graphics Designer
             </motion.h1>
             <motion.p
-              className="mt-4 text-center text-gray-600 dark:text-gray-300 max-w-lg"
+              className='mt-4 max-w-lg text-center text-gray-600 dark:text-gray-300'
               custom={2}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -423,8 +423,8 @@ export function IdeaSection() {
                   },
                 }),
               }}
-              initial="hidden"
-              animate="visible"
+              initial='hidden'
+              animate='visible'
             >
               Create stunning graphics, brand assets, and marketing visuals in
               minutes—no design degree required
@@ -433,43 +433,43 @@ export function IdeaSection() {
         </div>
 
         <motion.div
-          className="flex flex-col relative w-full max-w-2xl mx-auto"
+          className='relative mx-auto flex w-full max-w-2xl flex-col'
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           {/* Mini preview row below credits */}
           {attachedFiles.length > 0 && (
-            <div className="mx-4 -mt-1 mb-1 flex items-center gap-2 overflow-x-auto custom-scrollbar-horizontal">
+            <div className='custom-scrollbar-horizontal mx-4 -mt-1 mb-1 flex items-center gap-2 overflow-x-auto'>
               {attachedFiles.map((file: any, index: number) => (
                 <div
                   key={(file as any).fileKey || `${file.name}-${index}`}
-                  className="relative w-9 h-9 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex items-center justify-center overflow-hidden flex-shrink-0"
+                  className='relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900'
                   title={file.name}
                 >
                   {file.type?.startsWith("image/") ? (
                     <img
                       src={URL.createObjectURL(file)}
                       alt={file.name}
-                      className="w-full h-full object-cover"
+                      className='h-full w-full object-cover'
                       onLoad={(e) =>
                         URL.revokeObjectURL((e.target as HTMLImageElement).src)
                       }
                     />
                   ) : file.type?.startsWith("video/") ? (
-                    <div className="w-full h-full grid place-items-center text-[10px] text-muted-foreground">
+                    <div className='text-muted-foreground grid h-full w-full place-items-center text-[10px]'>
                       🎬
                     </div>
                   ) : null}
                   <button
-                    type="button"
+                    type='button'
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       handleFileRemove(index);
                     }}
                     aria-label={`Remove ${file.name}`}
-                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-black/60 text-white grid place-items-center text-[10px] hover:bg-red-600"
+                    className='absolute -top-1 -right-1 grid h-4 w-4 place-items-center rounded-full bg-black/60 text-[10px] text-white hover:bg-red-600'
                   >
                     ×
                   </button>
@@ -479,13 +479,13 @@ export function IdeaSection() {
           )}
           <div
             ref={chatContainerRef}
-            className="relative flex bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 dark:from-[#7e7e7e] dark:via-[#363636] dark:to-[#363636] rounded-2xl p-[1.5px] overflow-hidden before:absolute before:content-[''] before:top-[-10px] before:left-[-10px] before:bg-radial-gradient md:before:w-[40vh] before:h-[30px] before:blur-[1px] w-full shadow-lg"
+            className="before:bg-radial-gradient relative flex w-full overflow-hidden rounded-2xl bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh] dark:from-[#7e7e7e] dark:via-[#363636] dark:to-[#363636]"
             onDragOver={handleDragOver}
             onDrop={handleDrop}
           >
             {/* Animated beam with smoother transitions */}
             <motion.div
-              className="absolute w-full md:w-40 h-40 rounded-full bg-blue-400/20 dark:bg-blue-500/20 blur-3xl pointer-events-none z-0"
+              className='pointer-events-none absolute z-0 h-40 w-full rounded-full bg-blue-400/20 blur-3xl md:w-40 dark:bg-blue-500/20'
               animate={{
                 left: `${beamPosition.x}%`,
                 top: `${beamPosition.y}%`,
@@ -496,12 +496,12 @@ export function IdeaSection() {
               }}
               style={{ transform: "translate(-50%, -50%)" }}
             />
-            <div className="flex flex-col bg-white/90 dark:bg-black/80 backdrop-blur-sm rounded-[15px] w-full overflow-hidden z-10 shadow-inner">
+            <div className='z-10 flex w-full flex-col overflow-hidden rounded-[15px] bg-white/90 shadow-inner backdrop-blur-sm dark:bg-black/80'>
               {/* Credit info and typing indicator */}
-              <div className="flex items-center mx-4 justify-between text-sm mt-3 mb-2">
+              <div className='mx-4 mt-3 mb-2 flex items-center justify-between text-sm'>
                 {!isGenerating && (
-                  <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
+                  <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
+                    <span className='mr-2 inline-block h-2 w-2 rounded-full bg-emerald-500'></span>
                     50 AI Credits left
                   </div>
                 )}
@@ -521,10 +521,10 @@ export function IdeaSection() {
                     </div>
                   </div>
                 )} */}
-                <div className="flex items-center gap-2">
+                <div className='flex items-center gap-2'>
                   <PricingDialog
                     open={isPricingDialogOpen}
-                    className="text-primary dark:text-teal-400 hover:text-primary/80 dark:hover:text-teal-300 transition-colors cursor-pointer text-sm font-medium"
+                    className='text-primary hover:text-primary/80 cursor-pointer text-sm font-medium transition-colors dark:text-teal-400 dark:hover:text-teal-300'
                   />
                 </div>
               </div>
@@ -554,22 +554,22 @@ export function IdeaSection() {
                   //     </Button>
                   //   </div>
                   // </motion.div>
-                  <p className="text-xs text-red-500 font-medium flex items-center mt-2 mx-4">
+                  <p className='mx-4 mt-2 flex items-center text-xs font-medium text-red-500'>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="14px"
-                      height="14px"
-                      fill="currentColor"
-                      className="mr-2"
-                      viewBox="0 0 512 512"
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='14px'
+                      height='14px'
+                      fill='currentColor'
+                      className='mr-2'
+                      viewBox='0 0 512 512'
                     >
                       <path
-                        d="M256 0C114.833 0 0 114.833 0 256s114.833 256 256 256 256-114.853 256-256S397.167 0 256 0zm0 472.341c-119.275 0-216.341-97.046-216.341-216.341S136.725 39.659 256 39.659c119.295 0 216.341 97.046 216.341 216.341S375.275 472.341 256 472.341z"
-                        data-original="#000000"
+                        d='M256 0C114.833 0 0 114.833 0 256s114.833 256 256 256 256-114.853 256-256S397.167 0 256 0zm0 472.341c-119.275 0-216.341-97.046-216.341-216.341S136.725 39.659 256 39.659c119.295 0 216.341 97.046 216.341 216.341S375.275 472.341 256 472.341z'
+                        data-original='#000000'
                       />
                       <path
-                        d="M373.451 166.965c-8.071-7.337-20.623-6.762-27.999 1.348L224.491 301.509 166.053 242.1c-7.714-7.813-20.246-7.932-28.039-.238-7.813 7.674-7.932 20.226-.238 28.039l73.151 74.361a19.804 19.804 0 0 0 14.138 5.929c.119 0 .258 0 .377.02a19.842 19.842 0 0 0 14.297-6.504l135.059-148.722c7.358-8.131 6.763-20.663-1.347-28.02z"
-                        data-original="#000000"
+                        d='M373.451 166.965c-8.071-7.337-20.623-6.762-27.999 1.348L224.491 301.509 166.053 242.1c-7.714-7.813-20.246-7.932-28.039-.238-7.813 7.674-7.932 20.226-.238 28.039l73.151 74.361a19.804 19.804 0 0 0 14.138 5.929c.119 0 .258 0 .377.02a19.842 19.842 0 0 0 14.297-6.504l135.059-148.722c7.358-8.131 6.763-20.663-1.347-28.02z'
+                        data-original='#000000'
                       />
                     </svg>
                     {inputError || error}
@@ -577,12 +577,12 @@ export function IdeaSection() {
                 )}
               </AnimatePresence>
 
-              <form onSubmit={handleSubmit} className="relative">
-                <div className="relative flex">
+              <form onSubmit={handleSubmit} className='relative'>
+                <div className='relative flex'>
                   <textarea
                     ref={textareaRef}
-                    id="chat_bot"
-                    name="chat_bot"
+                    id='chat_bot'
+                    name='chat_bot'
                     value={isGenerating ? "" : inputValue}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyPress}
@@ -599,52 +599,52 @@ export function IdeaSection() {
                       minHeight: "40px",
                       maxHeight: "300px",
                     }}
-                    className="bg-transparent rounded-2xl border-none w-full h-[60px] text-gray-800 dark:text-white font-sans font-normal p-4 resize-none overflow-y-auto outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] text-base"
-                    aria-label="Enter your prompt"
+                    className='scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] h-[60px] w-full resize-none overflow-y-auto rounded-2xl border-none bg-transparent p-4 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636]'
+                    aria-label='Enter your prompt'
                     aria-describedby={inputError ? "input-error" : undefined}
                   />
                 </div>
 
-                <div className="flex justify-between items-center p-3">
-                  <div className="flex gap-2">
+                <div className='flex items-center justify-between p-3'>
+                  <div className='flex gap-2'>
                     <Button
-                      variant="ghost"
-                      size="sm"
-                      className="p-1.5 hover:bg-background/50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
+                      variant='ghost'
+                      size='sm'
+                      className='hover:bg-background/50 rounded-lg p-1.5 transition-all duration-200 hover:scale-105 active:scale-95'
                       disabled={isGenerating}
                     >
-                      <Mic className="w-3.5 h-3.5 text-muted-foreground" />
+                      <Mic className='text-muted-foreground h-3.5 w-3.5' />
                     </Button>
                     <button
-                      type="button"
-                      className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      type='button'
+                      className='flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-none bg-transparent text-gray-400 transition-all duration-200 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-white/30 dark:hover:bg-white/5'
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isGenerating || isSubmitting}
-                      aria-label="Attach files"
+                      aria-label='Attach files'
                     >
-                      <PaperclipIcon className="h-4 w-4" />
+                      <PaperclipIcon className='h-4 w-4' />
                     </button>
                     <Input
                       ref={fileInputRef}
-                      type="file"
+                      type='file'
                       multiple
                       onChange={handleFileInputChange}
                       disabled={isGenerating || isSubmitting}
-                      className="hidden"
-                      id="file-upload"
-                      accept="image/*,video/*"
-                      aria-label="Select files to upload"
+                      className='hidden'
+                      id='file-upload'
+                      accept='image/*,video/*'
+                      aria-label='Select files to upload'
                     />
 
-                    <div className="flex flex-row gap-1 items-center ml-3">
-                      
-                    <button
-                      type="button"
-                      className="flex items-center justify-center w-8 h-8 text-gray-400 dark:text-white/30 bg-transparent rounded-full hover:bg-gray-100 dark:hover:bg-white/5 border-none cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                      aria-label="Flier"
-                    >fliers
-                      <Settings2 className="h-4 w-4" />
-                    </button>
+                    <div className='ml-3 flex flex-row items-center gap-1'>
+                      <button
+                        type='button'
+                        className='flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-none bg-transparent text-gray-400 transition-all duration-200 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-white/30 dark:hover:bg-white/5'
+                        aria-label='Flier'
+                      >
+                        fliers
+                        <Settings2 className='h-4 w-4' />
+                      </button>
                     </div>
                   </div>
                   {/* <button
@@ -673,14 +673,14 @@ export function IdeaSection() {
                       )}
                     </div>
                   </button> */}
-                  <button className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-                    <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                    <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
+                  <button className='relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 focus:outline-none'>
+                    <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]' />
+                    <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl'>
                       {isGenerating || isSubmitting ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <Loader2 className='h-5 w-5 animate-spin' />
                       ) : (
-                        <div className="flex flex-row items-center gap-2">
-                          <WandSparklesIcon className="w-3 h-3" />
+                        <div className='flex flex-row items-center gap-2'>
+                          <WandSparklesIcon className='h-3 w-3' />
                           Create
                         </div>
                       )}

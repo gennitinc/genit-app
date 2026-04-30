@@ -1,32 +1,22 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
-import { io, Socket } from "socket.io-client";
 import {
-  Loader2,
-  Sparkles,
-  Video,
-  History,
-  Users,
-  ViewIcon,
-  ChevronDown,
-  ChevronUp,
-  User,
-  Volume2,
-  Monitor,
-  Settings,
-  Image as ImageIcon,
-  BookOpen,
-  LayoutDashboard,
-  Search,
-  Trash,
-  Wand2,
-  Plus,
-  Minus,
-} from "lucide-react";
+  ImageCommunityTab,
+  ImageHistoryTab,
+  ImagePreviewTab,
+  ImageTemplatesTab,
+  TutorialTab,
+  VideoCommunityTab,
+  VideoPreviewTab,
+  VideoTemplatesTab,
+} from "@/components/inspire";
+import { ModelSelector } from "@/components/inspire/model-selector";
+import { VideoHistoryTab } from "@/components/inspire/video-history-tab";
+import LandingPageBanner from "@/components/landing/landing-banner";
+import { LandingFooter } from "@/components/landing/landing-footer";
+import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import {
   Drawer,
   DrawerContent,
@@ -34,7 +24,8 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import withAuth from "@/helper/hoc/withAuth";
+import { PremiumInput } from "@/components/ui/premium-input";
+import { Toaster } from "@/components/ui/sonner";
 import { PresenterSelector } from "@/components/video/presenter-selector";
 import {
   ASPECT_RATIOS,
@@ -42,36 +33,45 @@ import {
   ResolutionSelector,
 } from "@/components/video/resolution-selector";
 import { VoiceSelector } from "@/components/video/voice-selector";
-import { AppSidebar } from "@/components/layout/app-sidebar";
-import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
-import { toast } from "sonner";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import withAuth from "@/helper/hoc/withAuth";
 import { cn } from "@/lib/utils";
-import { IconTemplate } from "@tabler/icons-react";
 import {
-  VideoCommunityTab,
-  VideoPreviewTab,
-  VideoTemplatesTab,
-  TutorialTab,
-  ImageCommunityTab,
-  ImagePreviewTab,
-  ImageTemplatesTab,
-  ImageHistoryTab,
-} from "@/components/inspire";
-import { VideoHistoryTab } from "@/components/inspire/video-history-tab";
-import { ModelSelector } from "@/components/inspire/model-selector";
-import {
+  AspectRatio,
   Model,
   Presenter,
-  Voice,
-  AspectRatio,
   Resolution,
+  Voice,
 } from "@/types/inspire";
-import { videoGenApi, imageGenApi } from "@/utils/inspire-api";
-import { Toaster } from "@/components/ui/sonner";
-import { LandingFooter } from "@/components/landing/landing-footer";
-import LandingPageBanner from "@/components/landing/landing-banner";
-import { LandingNavbar } from "@/components/landing/landing-navbar";
-import { PremiumInput } from "@/components/ui/premium-input";
+import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
+import { imageGenApi, videoGenApi } from "@/utils/inspire-api";
+import { IconTemplate } from "@tabler/icons-react";
+import {
+  BookOpen,
+  ChevronDown,
+  ChevronUp,
+  History,
+  Image as ImageIcon,
+  LayoutDashboard,
+  Loader2,
+  Minus,
+  Monitor,
+  Plus,
+  Search,
+  Settings,
+  Sparkles,
+  Trash,
+  User,
+  Users,
+  Video,
+  ViewIcon,
+  Volume2,
+  Wand2,
+} from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Socket, io } from "socket.io-client";
+import { toast } from "sonner";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type { Presenter, Voice, Model } from "@/types/inspire";
 
@@ -137,15 +137,15 @@ function PresetSlider({
   }, [currentSlide]);
 
   return (
-    <div className="relative w-full overflow-hidden rounded-xl group">
+    <div className='group relative w-full overflow-hidden rounded-xl'>
       <div
         ref={sliderRef}
-        className="flex overflow-x-hidden scroll-smooth snap-x snap-mandatory"
+        className='flex snap-x snap-mandatory overflow-x-hidden scroll-smooth'
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {PRESET_SLIDES.map((slide, index) => (
-          <div key={slide.id} className="min-w-full snap-center">
-            <figure className="aspect-[2.3] w-full relative select-none overflow-hidden rounded-xl cursor-pointer">
+          <div key={slide.id} className='min-w-full snap-center'>
+            <figure className='relative aspect-[2.3] w-full cursor-pointer overflow-hidden rounded-xl select-none'>
               <video
                 ref={(el) => {
                   videoRefs.current[index] = el;
@@ -154,17 +154,17 @@ function PresetSlider({
                 muted
                 playsInline
                 disablePictureInPicture
-                preload="metadata"
+                preload='metadata'
                 poster={slide.poster}
                 src={slide.video}
-                className="object-cover w-full h-full rounded-xl"
+                className='h-full w-full rounded-xl object-cover'
               />
-              <div className="absolute inset-0 pointer-events-none bg-black/30" />
-              <figcaption className="z-10 absolute left-0 bottom-0 w-full pl-3 pb-3 pr-1.5 text-white">
-                <p className="truncate w-full uppercase text-[10px] font-semibold">
+              <div className='pointer-events-none absolute inset-0 bg-black/30' />
+              <figcaption className='absolute bottom-0 left-0 z-10 w-full pr-1.5 pb-3 pl-3 text-white'>
+                <p className='w-full truncate text-[10px] font-semibold uppercase'>
                   {slide.title}
                 </p>
-                <p className="text-[10px] text-white/80">{slide.description}</p>
+                <p className='text-[10px] text-white/80'>{slide.description}</p>
               </figcaption>
             </figure>
           </div>
@@ -185,7 +185,7 @@ function VideoGenerationPage() {
   const urlContentTab = searchParams.get("tab") as any;
 
   const [selectedPresenter, setSelectedPresenter] = useState<Presenter | null>(
-    null,
+    null
   );
   const [selectedResolution, setSelectedResolution] =
     useState<Resolution>("1080p");
@@ -197,13 +197,13 @@ function VideoGenerationPage() {
   const [clonedVoiceId, setClonedVoiceId] = useState<string | null>(null);
   const [generationProgress, setGenerationProgress] = useState(0);
   const [selectedVideoModel, setSelectedVideoModel] = useState<Model | null>(
-    null,
+    null
   );
   const [loadingProject, setLoadingProject] = useState(false);
 
   // Generation mode: image or video - initialize from URL parameter
   const [generationMode, setGenerationMode] = useState<"image" | "video">(
-    searchParams.get("mode") === "ai-image-gen" ? "image" : "video",
+    searchParams.get("mode") === "ai-image-gen" ? "image" : "video"
   );
 
   // Listen to URL parameter changes and update generation mode
@@ -218,7 +218,7 @@ function VideoGenerationPage() {
   const [startFrame, setStartFrame] = useState<File | null>(null);
   const [endFrame, setEndFrame] = useState<File | null>(null);
   const [startFramePreview, setStartFramePreview] = useState<string | null>(
-    null,
+    null
   );
   const [endFramePreview, setEndFramePreview] = useState<string | null>(null);
   const [referenceVideo, setReferenceVideo] = useState<File | null>(null);
@@ -244,7 +244,7 @@ function VideoGenerationPage() {
     useState<ImageStyle>("realistic");
   const [imageCount, setImageCount] = useState(1);
   const [selectedImageModel, setSelectedImageModel] = useState<Model | null>(
-    null,
+    null
   );
 
   const [sectionsEnabled, setSectionsEnabled] = useState({
@@ -260,7 +260,7 @@ function VideoGenerationPage() {
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeContentTab, setActiveContentTab] = useState<any>(
-    urlContentTab || "community",
+    urlContentTab || "community"
   );
   const [isResultsDrawerOpen, setIsResultsDrawerOpen] = useState(false);
 
@@ -281,14 +281,14 @@ function VideoGenerationPage() {
       urlParams.set("tab", tab);
       urlParams.set(
         "mode",
-        generationMode === "image" ? "ai-image-gen" : "ai-video-gen",
+        generationMode === "image" ? "ai-image-gen" : "ai-video-gen"
       );
       if (projectId) urlParams.set("projectId", projectId);
       router.replace(`/agents/video-generation?${urlParams.toString()}`, {
         scroll: false,
       });
     },
-    [searchParams, router, projectId, generationMode],
+    [searchParams, router, projectId, generationMode]
   );
 
   // Switch to image model if mode is image
@@ -338,8 +338,8 @@ function VideoGenerationPage() {
                     return new File([blob], `ref-${i}.jpg`, {
                       type: blob.type,
                     });
-                  },
-                ),
+                  }
+                )
               );
               setPromptImages(files);
               setPromptImagePreviews(files.map((f) => URL.createObjectURL(f)));
@@ -389,7 +389,7 @@ function VideoGenerationPage() {
                 return new File([blob], `animate-ref-${i}.jpg`, {
                   type: blob.type,
                 });
-              }),
+              })
             );
             setPromptImages(files);
             setPromptImagePreviews(files.map((f) => URL.createObjectURL(f)));
@@ -398,12 +398,12 @@ function VideoGenerationPage() {
           if (isAnimate) {
             const params = new URLSearchParams(searchParams.toString());
             ["animate", "prompt", "referenceImage", "designType"].forEach((k) =>
-              params.delete(k),
+              params.delete(k)
             );
             window.history.replaceState(
               {},
               "",
-              `${window.location.pathname}?${params.toString()}`,
+              `${window.location.pathname}?${params.toString()}`
             );
           }
           toast("Your design has been loaded for animation.");
@@ -530,7 +530,7 @@ function VideoGenerationPage() {
             style: selectedImageStyle,
             imageCount: imageCount,
           },
-          promptImages.length > 0 ? promptImages : undefined,
+          promptImages.length > 0 ? promptImages : undefined
         );
         if (response.success && response.data.images) {
           const newImages = response.data.images.map((img: any, i: number) => ({
@@ -590,7 +590,7 @@ function VideoGenerationPage() {
           endFrameUrl: endFramePreview || undefined,
           referenceVideoUrl: referenceVideoPreview || undefined,
         },
-        Object.keys(videoFiles).length > 0 ? videoFiles : undefined,
+        Object.keys(videoFiles).length > 0 ? videoFiles : undefined
       );
 
       if (response.success && response.data.videos) {
@@ -608,7 +608,7 @@ function VideoGenerationPage() {
             startFrameUrl: startFramePreview,
             endFrameUrl: endFramePreview,
             referenceImageUrls: promptImagePreviews,
-          }),
+          })
         );
 
         setGeneratedVideos((prev) => [...newVideos, ...prev]);
@@ -638,25 +638,25 @@ function VideoGenerationPage() {
   };
 
   return (
-    <div className="relative w-full bg-white dark:bg-black">
+    <div className='relative w-full bg-white dark:bg-black'>
       <Toaster />
       <LandingPageBanner />
       <LandingNavbar />
       <div
-        id="main-content"
-        className="flex-1 relative px-2 md:px-6 lg:px-20 mt-5 mb-20"
+        id='main-content'
+        className='relative mt-5 mb-20 flex-1 px-2 md:px-6 lg:px-20'
       >
-        <div className="bg-grid-black/[0.05] dark:bg-grid-white/[0.05] absolute inset-0 -z-10" />
+        <div className='bg-grid-black/[0.05] dark:bg-grid-white/[0.05] absolute inset-0 -z-10' />
 
-        <div className="grid grid-cols-1 md:grid-cols-[27rem_1fr] gap-6 relative w-full md:h-[calc(100vh-10rem)] min-h-0">
-          <div className="flex flex-col h-full min-h-0 overflow-hidden">
-            <div className="flex justify-between py-2 z-20 items-baseline">
+        <div className='relative grid min-h-0 w-full grid-cols-1 gap-6 md:h-[calc(100vh-10rem)] md:grid-cols-[27rem_1fr]'>
+          <div className='flex h-full min-h-0 flex-col overflow-hidden'>
+            <div className='z-20 flex items-baseline justify-between py-2'>
               <div
-                role="tablist"
-                className="rounded-xl p-1 flex gap-4 bg-neutral-100 dark:bg-neutral-900"
+                role='tablist'
+                className='flex gap-4 rounded-xl bg-neutral-100 p-1 dark:bg-neutral-900'
               >
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => {
                     setGenerationMode("video");
                     const params = new URLSearchParams(searchParams.toString());
@@ -666,17 +666,17 @@ function VideoGenerationPage() {
                     });
                   }}
                   className={cn(
-                    "flex items-center gap-2 text-sm py-2 px-3 rounded-lg transition-colors",
+                    "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
                     generationMode === "video"
-                      ? "bg-neutral-200 dark:bg-neutral-800 text-foreground"
-                      : "text-muted-foreground hover:text-foreground",
+                      ? "text-foreground bg-neutral-200 dark:bg-neutral-800"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  <Video className="w-4 h-4" />
+                  <Video className='h-4 w-4' />
                   Video
                 </button>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => {
                     setGenerationMode("image");
                     const params = new URLSearchParams(searchParams.toString());
@@ -686,13 +686,13 @@ function VideoGenerationPage() {
                     });
                   }}
                   className={cn(
-                    "flex items-center gap-2 text-sm py-2 px-3 rounded-lg transition-colors",
+                    "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
                     generationMode === "image"
-                      ? "bg-neutral-200 dark:bg-neutral-800 text-foreground"
-                      : "text-muted-foreground hover:text-foreground",
+                      ? "text-foreground bg-neutral-200 dark:bg-neutral-800"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  <ImageIcon className="w-4 h-4" />
+                  <ImageIcon className='h-4 w-4' />
                   Image
                 </button>
               </div>
@@ -702,17 +702,17 @@ function VideoGenerationPage() {
                 onOpenChange={setIsResultsDrawerOpen}
               >
                 <DrawerTrigger asChild>
-                  <button className="w-fit h-fit py-1 px-2 md:hidden bg-neutral-100 dark:bg-neutral-800 rounded-sm text-sm font-semibold flex items-center justify-center gap-2 border border-neutral-200 dark:border-neutral-700">
+                  <button className='flex h-fit w-fit items-center justify-center gap-2 rounded-sm border border-neutral-200 bg-neutral-100 px-2 py-1 text-sm font-semibold md:hidden dark:border-neutral-700 dark:bg-neutral-800'>
                     <LayoutDashboard size={16} />
                     <span>view</span>
                   </button>
                 </DrawerTrigger>
-                <DrawerContent className="h-[85vh] px-4">
-                  <DrawerHeader className="px-0">
+                <DrawerContent className='h-[85vh] px-4'>
+                  <DrawerHeader className='px-0'>
                     <DrawerTitle>Explore & Results</DrawerTitle>
                   </DrawerHeader>
-                  <div className="flex flex-col flex-1 min-h-0 overflow-hidden pb-6">
-                    <div className="flex overflow-x-auto hide-scrollbar gap-2 mb-4 shrink-0">
+                  <div className='flex min-h-0 flex-1 flex-col overflow-hidden pb-6'>
+                    <div className='hide-scrollbar mb-4 flex shrink-0 gap-2 overflow-x-auto'>
                       {[
                         { id: "preview", icon: ViewIcon, label: "Preview" },
                         { id: "history", icon: History, label: "History" },
@@ -728,10 +728,10 @@ function VideoGenerationPage() {
                           key={t.id}
                           onClick={() => updateContentTab(t.id as any)}
                           className={cn(
-                            "flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-full whitespace-nowrap transition-colors border",
+                            "flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium whitespace-nowrap transition-colors",
                             activeContentTab === t.id
                               ? "bg-primary text-primary-foreground border-primary"
-                              : "bg-neutral-50 dark:bg-neutral-900 text-neutral-500 border-neutral-200 dark:border-neutral-800",
+                              : "border-neutral-200 bg-neutral-50 text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900"
                           )}
                         >
                           <t.icon size={14} />
@@ -739,7 +739,7 @@ function VideoGenerationPage() {
                         </button>
                       ))}
                     </div>
-                    <div className="flex-1 overflow-y-auto">
+                    <div className='flex-1 overflow-y-auto'>
                       {activeContentTab === "preview" &&
                         (generationMode === "image" ? (
                           <ImagePreviewTab
@@ -767,11 +767,11 @@ function VideoGenerationPage() {
                           <ImageHistoryTab
                             onLoadToEditor={(image) => {
                               const urlParams = new URLSearchParams(
-                                searchParams.toString(),
+                                searchParams.toString()
                               );
                               urlParams.set("projectId", image._id);
                               router.push(
-                                `/apps/video-generation?${urlParams.toString()}`,
+                                `/apps/video-generation?${urlParams.toString()}`
                               );
                               setIsResultsDrawerOpen(false);
                             }}
@@ -781,11 +781,11 @@ function VideoGenerationPage() {
                           <VideoHistoryTab
                             onLoadToEditor={(video) => {
                               const urlParams = new URLSearchParams(
-                                searchParams.toString(),
+                                searchParams.toString()
                               );
                               urlParams.set("projectId", video._id);
                               router.push(
-                                `/apps/video-generation?${urlParams.toString()}`,
+                                `/apps/video-generation?${urlParams.toString()}`
                               );
                               setIsResultsDrawerOpen(false);
                             }}
@@ -837,8 +837,8 @@ function VideoGenerationPage() {
               </Drawer>
             </div>
 
-            <div className="flex flex-col h-full min-h-0 pt-4 overflow-hidden bg-white dark:bg-black/20 rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-sm relative z-10">
-              <div className="px-4 pb-4 shrink-0 overflow-y-auto hide-scrollbar space-y-3 flex-1">
+            <div className='relative z-10 flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-neutral-100 bg-white pt-4 shadow-sm dark:border-neutral-800 dark:bg-black/20'>
+              <div className='hide-scrollbar flex-1 shrink-0 space-y-3 overflow-y-auto px-4 pb-4'>
                 {generationMode === "video" && (
                   <PresetSlider currentSlide={0} onSlideChange={() => {}} />
                 )}
@@ -858,35 +858,35 @@ function VideoGenerationPage() {
                 />
 
                 {generationMode === "video" && (
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="relative aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-neutral-50 dark:bg-neutral-900">
+                  <div className='grid grid-cols-2 gap-2'>
+                    <div className='relative flex aspect-video cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed bg-neutral-50 dark:bg-neutral-900'>
                       {startFramePreview ? (
                         <>
                           <img
                             src={startFramePreview}
-                            className="w-full h-full object-cover"
+                            className='h-full w-full object-cover'
                           />
                           <button
-                            type="button"
+                            type='button'
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
                               setStartFrame(null);
                               setStartFramePreview(null);
                             }}
-                            className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1"
+                            className='absolute top-1 right-1 rounded-full bg-black/50 p-1 text-white'
                           >
                             <Trash size={12} />
                           </button>
                         </>
                       ) : (
-                        <span className="text-[14px] text-neutral-500">
+                        <span className='text-[14px] text-neutral-500'>
                           Start Frame
                         </span>
                       )}
                       <input
-                        type="file"
-                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        type='file'
+                        className='absolute inset-0 cursor-pointer opacity-0'
                         onChange={(e) => {
                           const f = e.target.files?.[0];
                           if (f) {
@@ -896,34 +896,34 @@ function VideoGenerationPage() {
                         }}
                       />
                     </div>
-                    <div className="relative aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-neutral-50 dark:bg-neutral-900">
+                    <div className='relative flex aspect-video cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed bg-neutral-50 dark:bg-neutral-900'>
                       {endFramePreview ? (
                         <>
                           <img
                             src={endFramePreview}
-                            className="w-full h-full object-cover"
+                            className='h-full w-full object-cover'
                           />
                           <button
-                            type="button"
+                            type='button'
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
                               setEndFrame(null);
                               setEndFramePreview(null);
                             }}
-                            className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1"
+                            className='absolute top-1 right-1 rounded-full bg-black/50 p-1 text-white'
                           >
                             <Trash size={12} />
                           </button>
                         </>
                       ) : (
-                        <span className="text-[14px] text-neutral-500">
+                        <span className='text-[14px] text-neutral-500'>
                           End Frame
                         </span>
                       )}
                       <input
-                        type="file"
-                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        type='file'
+                        className='absolute inset-0 cursor-pointer opacity-0'
                         onChange={(e) => {
                           const f = e.target.files?.[0];
                           if (f) {
@@ -936,7 +936,7 @@ function VideoGenerationPage() {
                   </div>
                 )}
 
-                <div className="space-y-2">
+                <div className='space-y-2'>
                   <PremiumInput
                     value={prompt}
                     onChange={setPrompt}
@@ -947,30 +947,30 @@ function VideoGenerationPage() {
                         ? "Describe your image..."
                         : "Describe the motion..."
                     }
-                    minHeight="50px"
+                    minHeight='50px'
                   />
                 </div>
 
                 {/* Reference Images Section */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium">
+                <div className='space-y-2'>
+                  <div className='flex items-center justify-between'>
+                    <label className='text-sm font-medium'>
                       Reference Images (Optional)
                     </label>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className='flex flex-wrap gap-2'>
                     {promptImagePreviews.map((preview, index) => (
                       <div
                         key={index}
-                        className="relative w-16 h-16 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700"
+                        className='relative h-16 w-16 overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700'
                       >
                         <img
                           src={preview}
                           alt={`Reference ${index + 1}`}
-                          className="w-full h-full object-cover"
+                          className='h-full w-full object-cover'
                         />
                         <button
-                          type="button"
+                          type='button'
                           onClick={() => {
                             const newFiles = [...promptImages];
                             const newPreviews = [...promptImagePreviews];
@@ -979,18 +979,18 @@ function VideoGenerationPage() {
                             setPromptImages(newFiles);
                             setPromptImagePreviews(newPreviews);
                           }}
-                          className="absolute top-0.5 right-0.5 bg-black/50 text-white rounded-full p-0.5"
+                          className='absolute top-0.5 right-0.5 rounded-full bg-black/50 p-0.5 text-white'
                         >
                           <Trash size={10} />
                         </button>
                       </div>
                     ))}
                     {promptImagePreviews.length < 5 && (
-                      <label className="w-16 h-16 border border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg flex items-center justify-center cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
+                      <label className='flex h-16 w-16 cursor-pointer items-center justify-center rounded-lg border border-dashed border-neutral-300 transition-colors hover:bg-neutral-50 dark:border-neutral-600 dark:hover:bg-neutral-900'>
                         <input
-                          type="file"
-                          accept="image/*"
-                          className="sr-only"
+                          type='file'
+                          accept='image/*'
+                          className='sr-only'
                           onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (file) {
@@ -1002,7 +1002,7 @@ function VideoGenerationPage() {
                             }
                           }}
                         />
-                        <ImageIcon className="w-4 h-4 text-neutral-400" />
+                        <ImageIcon className='h-4 w-4 text-neutral-400' />
                       </label>
                     )}
                   </div>
@@ -1011,11 +1011,11 @@ function VideoGenerationPage() {
                 {/* Reference Video Section */}
 
                 {generationMode === "image" && (
-                  <div className="space-y-2 ">
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium">Style</label>
+                  <div className='space-y-2'>
+                    <div className='flex items-center justify-between'>
+                      <label className='text-sm font-medium'>Style</label>
                     </div>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className='grid grid-cols-3 gap-2'>
                       {[
                         {
                           value: "realistic",
@@ -1056,22 +1056,22 @@ function VideoGenerationPage() {
                       ].map((style) => (
                         <button
                           key={style.value}
-                          type="button"
+                          type='button'
                           onClick={() =>
                             setSelectedImageStyle(style.value as ImageStyle)
                           }
                           className={cn(
-                            "relative rounded-xl overflow-hidden transition-all group",
+                            "group relative overflow-hidden rounded-xl transition-all",
                             selectedImageStyle === style.value
-                              ? "ring-2 ring-cyan-500 ring-offset-2 ring-offset-background"
-                              : "hover:ring-2 hover:ring-neutral-300 dark:hover:ring-neutral-600",
+                              ? "ring-offset-background ring-2 ring-cyan-500 ring-offset-2"
+                              : "hover:ring-2 hover:ring-neutral-300 dark:hover:ring-neutral-600"
                           )}
                         >
-                          <div className="aspect-square relative">
+                          <div className='relative aspect-square'>
                             <img
                               src={style.image}
                               alt={style.label}
-                              className="w-full h-full object-cover"
+                              className='h-full w-full object-cover'
                             />
                             {/* Overlay */}
                             <div
@@ -1079,25 +1079,25 @@ function VideoGenerationPage() {
                                 "absolute inset-0 transition-all",
                                 selectedImageStyle === style.value
                                   ? "bg-cyan-500/20"
-                                  : "bg-black/40 group-hover:bg-black/30",
+                                  : "bg-black/40 group-hover:bg-black/30"
                               )}
                             />
                             {/* Checkmark for selected */}
                             {selectedImageStyle === style.value && (
-                              <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-neutral-500 flex items-center justify-center">
+                              <div className='absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-neutral-500'>
                                 <svg
-                                  width="12"
-                                  height="12"
-                                  viewBox="0 0 12 12"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
+                                  width='12'
+                                  height='12'
+                                  viewBox='0 0 12 12'
+                                  fill='none'
+                                  xmlns='http://www.w3.org/2000/svg'
                                 >
                                   <path
-                                    d="M10 3L4.5 8.5L2 6"
-                                    stroke="white"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
+                                    d='M10 3L4.5 8.5L2 6'
+                                    stroke='white'
+                                    strokeWidth='2'
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
                                   />
                                 </svg>
                               </div>
@@ -1106,51 +1106,51 @@ function VideoGenerationPage() {
                           {/* Label */}
                           <div
                             className={cn(
-                              "absolute bottom-0 left-0 right-0 p-2 text-center",
+                              "absolute right-0 bottom-0 left-0 p-2 text-center",
                               selectedImageStyle === style.value
                                 ? "bg-black/60"
-                                : "bg-black/60",
+                                : "bg-black/60"
                             )}
                           >
-                            <span className="text-xs font-medium text-white">
+                            <span className='text-xs font-medium text-white'>
                               {style.label}
                             </span>
                           </div>
                         </button>
                       ))}
                     </div>
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium mt-4">
+                    <div className='flex items-center justify-between'>
+                      <label className='mt-4 text-sm font-medium'>
                         No of Images
                       </label>
                     </div>
-                    <div className="flex items-center gap-1.5 pt-2 border-t">
+                    <div className='flex items-center gap-1.5 border-t pt-2'>
                       <button
                         onClick={() =>
                           setImageCount(Math.max(1, imageCount - 1))
                         }
-                        className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0"
+                        className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                       >
-                        <Minus className="size-2.5" />
+                        <Minus className='size-2.5' />
                       </button>
 
                       <div
-                        className="relative flex-1 h-[18px] rounded-md bg-neutral-100 dark:bg-neutral-800 overflow-hidden cursor-pointer"
+                        className='relative h-[18px] flex-1 cursor-pointer overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-800'
                         onClick={(e) => {
                           const rect = e.currentTarget.getBoundingClientRect();
                           const raw = Math.round(
-                            ((e.clientX - rect.left) / rect.width) * 3 + 1,
+                            ((e.clientX - rect.left) / rect.width) * 3 + 1
                           );
                           setImageCount(Math.max(1, Math.min(4, raw)));
                         }}
                       >
                         <div
-                          className="absolute left-0 top-0 h-full rounded-l-md bg-neutral-300 dark:bg-neutral-700 transition-[width] duration-100"
+                          className='absolute top-0 left-0 h-full rounded-l-md bg-neutral-300 transition-[width] duration-100 dark:bg-neutral-700'
                           style={{ width: `${((imageCount - 1) / 3) * 100}%` }}
                         />
 
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-[10px] font-medium tabular-nums text-neutral-700 dark:text-neutral-200">
+                        <div className='absolute inset-0 flex items-center justify-center'>
+                          <span className='text-[10px] font-medium text-neutral-700 tabular-nums dark:text-neutral-200'>
                             {imageCount}
                           </span>
                         </div>
@@ -1160,19 +1160,19 @@ function VideoGenerationPage() {
                         onClick={() =>
                           setImageCount(Math.min(4, imageCount + 1))
                         }
-                        className="size-5 rounded-md flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-500 dark:text-neutral-400 transition-colors shrink-0"
+                        className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                       >
-                        <Plus className="size-2.5" />
+                        <Plus className='size-2.5' />
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium mt-4">
+                    <div className='flex items-center justify-between'>
+                      <label className='mt-4 text-sm font-medium'>
                         Aspect Ratio
                       </label>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className='grid grid-cols-2 gap-2'>
                       {ASPECT_RATIOS.map((ratio) => (
                         <AspectRatioCard
                           key={ratio.value}
@@ -1188,25 +1188,25 @@ function VideoGenerationPage() {
                 )}
 
                 {generationMode === "video" && (
-                  <div className="pb-4 pt-4 space-y-2">
+                  <div className='space-y-2 pt-4 pb-4'>
                     {selectedVideoModel?.capabilities
                       ?.supportsVideoReference && (
-                      <div className="space-y-2">
+                      <div className='space-y-2'>
                         <button
-                          type="button"
+                          type='button'
                           onClick={() => toggleSection("videoRef")}
-                          className="w-full flex items-center justify-between p-3 bg-neutral-surface-subtle rounded-lg hover:bg-neutral-surface-subtle/80 transition-colors"
+                          className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                         >
-                          <div className="flex items-center gap-2">
-                            <Video className="w-4 h-4 text-text-secondary" />
-                            <span className="text-sm font-medium text-font-primary">
+                          <div className='flex items-center gap-2'>
+                            <Video className='text-text-secondary h-4 w-4' />
+                            <span className='text-font-primary text-sm font-medium'>
                               Reference Video
                             </span>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className='flex items-center gap-2'>
                             <button
-                              type="button"
-                              role="switch"
+                              type='button'
+                              role='switch'
                               aria-checked={sectionsEnabled.videoRef}
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -1216,7 +1216,7 @@ function VideoGenerationPage() {
                                 "relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-200",
                                 sectionsEnabled.videoRef
                                   ? "bg-neutral-900 dark:bg-neutral-100"
-                                  : "bg-neutral-300 dark:bg-neutral-600",
+                                  : "bg-neutral-300 dark:bg-neutral-600"
                               )}
                             >
                               <span
@@ -1224,63 +1224,63 @@ function VideoGenerationPage() {
                                   "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200",
                                   sectionsEnabled.videoRef
                                     ? "translate-x-4"
-                                    : "translate-x-0.5",
+                                    : "translate-x-0.5"
                                 )}
                               />
                             </button>
                             {sectionsEnabled.videoRef ? (
-                              <ChevronUp className="w-4 h-4 text-text-secondary" />
+                              <ChevronUp className='text-text-secondary h-4 w-4' />
                             ) : (
-                              <ChevronDown className="w-4 h-4 text-text-secondary" />
+                              <ChevronDown className='text-text-secondary h-4 w-4' />
                             )}
                           </div>
                         </button>
                         {sectionsEnabled.videoRef && (
-                          <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12">
+                          <div className='bg-neutral-surface-subtle border-neutral-12 rounded-lg border p-3'>
                             {referenceVideoPreview ? (
-                              <div className="relative aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer overflow-hidden bg-neutral-50 dark:bg-neutral-900 group">
+                              <div className='group relative flex aspect-video cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed bg-neutral-50 dark:bg-neutral-900'>
                                 <video
                                   src={referenceVideoPreview}
-                                  className="w-full h-full object-cover"
+                                  className='h-full w-full object-cover'
                                   controls={false}
                                   autoPlay
                                   loop
                                   muted
                                 />
                                 <button
-                                  type="button"
+                                  type='button'
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     setReferenceVideo(null);
                                     setReferenceVideoPreview(null);
                                   }}
-                                  className="absolute top-2 right-2 bg-black/50 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                                  className='absolute top-2 right-2 rounded-full bg-black/50 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100'
                                 >
                                   <Trash size={14} />
                                 </button>
                               </div>
                             ) : (
-                              <label className="relative aspect-video rounded-xl border-2 border-dashed border-neutral-300 dark:border-neutral-700 flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
+                              <label className='relative flex aspect-video cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-neutral-300 transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-900'>
                                 <input
-                                  type="file"
-                                  accept="video/*"
-                                  className="sr-only"
+                                  type='file'
+                                  accept='video/*'
+                                  className='sr-only'
                                   onChange={(e) => {
                                     const file = e.target.files?.[0];
                                     if (file) {
                                       setReferenceVideo(file);
                                       setReferenceVideoPreview(
-                                        URL.createObjectURL(file),
+                                        URL.createObjectURL(file)
                                       );
                                     }
                                   }}
                                 />
-                                <Video className="w-8 h-8 text-neutral-400 mb-2" />
-                                <span className="text-sm text-neutral-500 font-medium">
+                                <Video className='mb-2 h-8 w-8 text-neutral-400' />
+                                <span className='text-sm font-medium text-neutral-500'>
                                   Upload reference video
                                 </span>
-                                <p className="text-xs text-neutral-400 mt-1">
+                                <p className='mt-1 text-xs text-neutral-400'>
                                   Max size: 50MB
                                 </p>
                               </label>
@@ -1291,22 +1291,22 @@ function VideoGenerationPage() {
                     )}
 
                     {selectedVideoModel?.allowCustomAudio && (
-                      <div className="mt-2 space-y-2">
+                      <div className='mt-2 space-y-2'>
                         <button
-                          type="button"
+                          type='button'
                           onClick={() => toggleSection("audio")}
-                          className="w-full flex items-center justify-between p-3 bg-neutral-surface-subtle rounded-lg hover:bg-neutral-surface-subtle/80 transition-colors"
+                          className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                         >
-                          <div className="flex items-center gap-2">
-                            <Volume2 className="w-4 h-4 text-text-secondary" />
-                            <span className="text-sm font-medium text-font-primary">
+                          <div className='flex items-center gap-2'>
+                            <Volume2 className='text-text-secondary h-4 w-4' />
+                            <span className='text-font-primary text-sm font-medium'>
                               Audio & Voice
                             </span>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className='flex items-center gap-2'>
                             <button
-                              type="button"
-                              role="switch"
+                              type='button'
+                              role='switch'
                               aria-checked={sectionsEnabled.audio}
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -1316,7 +1316,7 @@ function VideoGenerationPage() {
                                 "relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-200",
                                 sectionsEnabled.audio
                                   ? "bg-neutral-900 dark:bg-neutral-100"
-                                  : "bg-neutral-300 dark:bg-neutral-600",
+                                  : "bg-neutral-300 dark:bg-neutral-600"
                               )}
                             >
                               <span
@@ -1324,19 +1324,19 @@ function VideoGenerationPage() {
                                   "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200",
                                   sectionsEnabled.audio
                                     ? "translate-x-4"
-                                    : "translate-x-0.5",
+                                    : "translate-x-0.5"
                                 )}
                               />
                             </button>
                             {sectionsEnabled.audio ? (
-                              <ChevronUp className="w-4 h-4 text-text-secondary" />
+                              <ChevronUp className='text-text-secondary h-4 w-4' />
                             ) : (
-                              <ChevronDown className="w-4 h-4 text-text-secondary" />
+                              <ChevronDown className='text-text-secondary h-4 w-4' />
                             )}
                           </div>
                         </button>
                         {sectionsEnabled.audio && (
-                          <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12">
+                          <div className='bg-neutral-surface-subtle border-neutral-12 rounded-lg border p-3'>
                             <VoiceSelector
                               selectedVoice={selectedVoice}
                               clonedVoiceId={clonedVoiceId}
@@ -1351,7 +1351,7 @@ function VideoGenerationPage() {
                       </div>
                     )}
 
-                    <div className="space-y-2">
+                    <div className='space-y-2'>
                       <button
                         onClick={() =>
                           setSectionsEnabled({
@@ -1359,19 +1359,19 @@ function VideoGenerationPage() {
                             avatar: !sectionsEnabled.avatar,
                           })
                         }
-                        className="w-full flex justify-between p-3 bg-neutral-100 dark:bg-neutral-900 rounded-lg text-sm font-medium"
+                        className='flex w-full justify-between rounded-lg bg-neutral-100 p-3 text-sm font-medium dark:bg-neutral-900'
                       >
                         Avatar & Presenter
                         <ChevronDown
                           size={16}
                           className={cn(
                             "transition-transform",
-                            sectionsEnabled.avatar && "rotate-180",
+                            sectionsEnabled.avatar && "rotate-180"
                           )}
                         />
                       </button>
                       {sectionsEnabled.avatar && (
-                        <div className="p-3 border rounded-lg">
+                        <div className='rounded-lg border p-3'>
                           <PresenterSelector
                             selectedPresenter={selectedPresenter}
                             onSelectPresenter={setSelectedPresenter}
@@ -1381,7 +1381,7 @@ function VideoGenerationPage() {
                       )}
                     </div>
 
-                    <div className="space-y-2">
+                    <div className='space-y-2'>
                       <button
                         onClick={() =>
                           setSectionsEnabled({
@@ -1389,19 +1389,19 @@ function VideoGenerationPage() {
                             resolution: !sectionsEnabled.resolution,
                           })
                         }
-                        className="w-full flex justify-between p-3 bg-neutral-100 dark:bg-neutral-900 rounded-lg text-sm font-medium"
+                        className='flex w-full justify-between rounded-lg bg-neutral-100 p-3 text-sm font-medium dark:bg-neutral-900'
                       >
                         Resolution & Format
                         <ChevronDown
                           size={16}
                           className={cn(
                             "transition-transform",
-                            sectionsEnabled.resolution && "rotate-180",
+                            sectionsEnabled.resolution && "rotate-180"
                           )}
                         />
                       </button>
                       {sectionsEnabled.resolution && (
-                        <div className="p-3 border rounded-lg space-y-3">
+                        <div className='space-y-3 rounded-lg border p-3'>
                           <ResolutionSelector
                             selectedResolution={selectedResolution}
                             selectedAspectRatio={selectedAspectRatio}
@@ -1410,8 +1410,8 @@ function VideoGenerationPage() {
                             onDrawerClose={() => {}}
                           />
                           {generationMode === "video" && (
-                            <div className="pt-2 border-t">
-                              <label className="text-sm font-medium mb-2 block text-font-primary">
+                            <div className='border-t pt-2'>
+                              <label className='text-font-primary mb-2 block text-sm font-medium'>
                                 Duration
                               </label>
                               <select
@@ -1419,7 +1419,7 @@ function VideoGenerationPage() {
                                 onChange={(e) =>
                                   setDuration(Number(e.target.value))
                                 }
-                                className="w-full px-3 py-2 bg-background border border-neutral-12 rounded-md text-sm"
+                                className='bg-background border-neutral-12 w-full rounded-md border px-3 py-2 text-sm'
                               >
                                 <option value={4}>4 seconds</option>
                                 <option value={8}>8 seconds</option>
@@ -1433,77 +1433,77 @@ function VideoGenerationPage() {
                       )}
                     </div>
 
-                    <div className="space-y-2">
+                    <div className='space-y-2'>
                       <button
                         onClick={() => toggleSection("advanced")}
-                        className="w-full flex justify-between p-3 bg-neutral-100 dark:bg-neutral-900 rounded-lg text-sm font-medium"
+                        className='flex w-full justify-between rounded-lg bg-neutral-100 p-3 text-sm font-medium dark:bg-neutral-900'
                       >
                         Advanced Settings
                         <ChevronDown
                           size={16}
                           className={cn(
                             "transition-transform",
-                            sectionsEnabled.advanced && "rotate-180",
+                            sectionsEnabled.advanced && "rotate-180"
                           )}
                         />
                       </button>
                       {sectionsEnabled.advanced && (
-                        <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12 space-y-3">
+                        <div className='bg-neutral-surface-subtle border-neutral-12 space-y-3 rounded-lg border p-3'>
                           {/* Fixed Lens Toggle */}
-                          <div className="rounded-xl p-3 bg-neutral-100 dark:bg-neutral-800 transition-all">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
+                          <div className='rounded-xl bg-neutral-100 p-3 transition-all dark:bg-neutral-800'>
+                            <div className='flex items-center justify-between'>
+                              <div className='flex items-center gap-3'>
                                 <div
                                   className={cn(
-                                    "w-10 h-10 rounded-lg flex items-center justify-center",
+                                    "flex h-10 w-10 items-center justify-center rounded-lg",
                                     fixedLens
-                                      ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                                      : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
+                                      ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                                      : "bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400"
                                   )}
                                 >
                                   <svg
                                     width={20}
                                     height={20}
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
+                                    viewBox='0 0 24 24'
+                                    fill='none'
+                                    stroke='currentColor'
+                                    strokeWidth='2'
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
                                   >
-                                    <circle cx="12" cy="12" r="10" />
-                                    <circle cx="12" cy="12" r="3" />
+                                    <circle cx='12' cy='12' r='10' />
+                                    <circle cx='12' cy='12' r='3' />
                                   </svg>
                                 </div>
                                 <div>
-                                  <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                                  <p className='text-sm font-medium text-neutral-900 dark:text-white'>
                                     Fixed Lens
                                   </p>
-                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                  <p className='text-xs text-neutral-500 dark:text-neutral-400'>
                                     Lock camera position
                                   </p>
                                 </div>
                               </div>
                               <button
-                                type="button"
-                                role="switch"
+                                type='button'
+                                role='switch'
                                 aria-checked={fixedLens}
-                                aria-label="Fixed Lens"
+                                aria-label='Fixed Lens'
                                 onClick={() => setFixedLens(!fixedLens)}
                                 className={cn(
-                                  "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
+                                  "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full ring-0 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent dark:focus-visible:ring-neutral-100",
                                   fixedLens
                                     ? "bg-neutral-900 dark:bg-neutral-100"
-                                    : "bg-neutral-300 dark:bg-neutral-600",
+                                    : "bg-neutral-300 dark:bg-neutral-600"
                                 )}
                               >
                                 <span
-                                  aria-hidden="true"
+                                  aria-hidden='true'
                                   className={cn(
                                     "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
                                     fixedLens
                                       ? "translate-x-5"
-                                      : "translate-x-0.5",
+                                      : "translate-x-0.5"
                                   )}
                                 />
                               </button>
@@ -1511,48 +1511,48 @@ function VideoGenerationPage() {
                           </div>
 
                           {/* Audio Toggle */}
-                          <div className="rounded-xl p-3 bg-neutral-100 dark:bg-neutral-800 transition-all">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
+                          <div className='rounded-xl bg-neutral-100 p-3 transition-all dark:bg-neutral-800'>
+                            <div className='flex items-center justify-between'>
+                              <div className='flex items-center gap-3'>
                                 <div
                                   className={cn(
-                                    "w-10 h-10 rounded-lg flex items-center justify-center",
+                                    "flex h-10 w-10 items-center justify-center rounded-lg",
                                     audioEnabled
-                                      ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                                      : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
+                                      ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                                      : "bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400"
                                   )}
                                 >
-                                  <Volume2 className="w-5 h-5" />
+                                  <Volume2 className='h-5 w-5' />
                                 </div>
                                 <div>
-                                  <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                                  <p className='text-sm font-medium text-neutral-900 dark:text-white'>
                                     Include Audio
                                   </p>
-                                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                  <p className='text-xs text-neutral-500 dark:text-neutral-400'>
                                     Add sound to video
                                   </p>
                                 </div>
                               </div>
                               <button
-                                type="button"
-                                role="switch"
+                                type='button'
+                                role='switch'
                                 aria-checked={audioEnabled}
-                                aria-label="Audio"
+                                aria-label='Audio'
                                 onClick={() => setAudioEnabled(!audioEnabled)}
                                 className={cn(
-                                  "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
+                                  "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full ring-0 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent dark:focus-visible:ring-neutral-100",
                                   audioEnabled
                                     ? "bg-neutral-900 dark:bg-neutral-100"
-                                    : "bg-neutral-300 dark:bg-neutral-600",
+                                    : "bg-neutral-300 dark:bg-neutral-600"
                                 )}
                               >
                                 <span
-                                  aria-hidden="true"
+                                  aria-hidden='true'
                                   className={cn(
                                     "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
                                     audioEnabled
                                       ? "translate-x-5"
-                                      : "translate-x-0.5",
+                                      : "translate-x-0.5"
                                   )}
                                 />
                               </button>
@@ -1565,15 +1565,15 @@ function VideoGenerationPage() {
                 )}
               </div>
 
-              <div className="px-4 py-3 border-t bg-white dark:bg-black z-10 space-y-3">
+              <div className='z-10 space-y-3 border-t bg-white px-4 py-3 dark:bg-black'>
                 <button
                   onClick={handleGenerate}
                   disabled={isGenerating}
-                  className="w-full h-11 text-white bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-transform"
+                  className='flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-transform active:scale-95'
                 >
                   {isGenerating ? (
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="animate-spin" size={16} />
+                    <div className='flex items-center gap-2'>
+                      <Loader2 className='animate-spin' size={16} />
                       <span>{generationProgress}%</span>
                     </div>
                   ) : (
@@ -1594,8 +1594,8 @@ function VideoGenerationPage() {
             </div>
           </div>
 
-          <div className="hidden md:flex flex-col flex-1 min-h-0 relative gap-2.5 pb-3 overflow-hidden">
-            <div className="flex justify-end gap-2 p-1 bg-neutral-100 dark:bg-neutral-900 rounded-xl self-end shrink-0">
+          <div className='relative hidden min-h-0 flex-1 flex-col gap-2.5 overflow-hidden pb-3 md:flex'>
+            <div className='flex shrink-0 justify-end gap-2 self-end rounded-xl bg-neutral-100 p-1 dark:bg-neutral-900'>
               {[
                 { id: "preview", icon: ViewIcon, label: "Preview" },
                 { id: "history", icon: History, label: "History" },
@@ -1607,10 +1607,10 @@ function VideoGenerationPage() {
                   key={t.id}
                   onClick={() => updateContentTab(t.id as any)}
                   className={cn(
-                    "flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors",
+                    "flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
                     activeContentTab === t.id
-                      ? "bg-white dark:bg-neutral-800 shadow-sm"
-                      : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300",
+                      ? "bg-white shadow-sm dark:bg-neutral-800"
+                      : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
                   )}
                 >
                   <t.icon size={14} />
@@ -1619,7 +1619,7 @@ function VideoGenerationPage() {
               ))}
             </div>
 
-            <div className="flex-1 overflow-y-auto pr-1">
+            <div className='flex-1 overflow-y-auto pr-1'>
               {activeContentTab === "preview" &&
                 (generationMode === "image" ? (
                   <ImagePreviewTab
@@ -1647,11 +1647,11 @@ function VideoGenerationPage() {
                   <ImageHistoryTab
                     onLoadToEditor={(image) => {
                       const urlParams = new URLSearchParams(
-                        searchParams.toString(),
+                        searchParams.toString()
                       );
                       urlParams.set("projectId", image._id);
                       router.push(
-                        `/apps/video-generation?${urlParams.toString()}`,
+                        `/apps/video-generation?${urlParams.toString()}`
                       );
                     }}
                     onTabChange={updateContentTab}
@@ -1660,11 +1660,11 @@ function VideoGenerationPage() {
                   <VideoHistoryTab
                     onLoadToEditor={(video) => {
                       const urlParams = new URLSearchParams(
-                        searchParams.toString(),
+                        searchParams.toString()
                       );
                       urlParams.set("projectId", video._id);
                       router.push(
-                        `/apps/video-generation?${urlParams.toString()}`,
+                        `/apps/video-generation?${urlParams.toString()}`
                       );
                     }}
                     onTabChange={updateContentTab}

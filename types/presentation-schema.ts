@@ -1,7 +1,17 @@
 // JSON Schema for Presentation State
 export interface PresentationBlock {
   id: string;
-  type: 'text' | 'heading' | 'image' | 'list' | 'quote' | 'code' | 'divider' | 'shape' | 'icon' | 'chart';
+  type:
+    | "text"
+    | "heading"
+    | "image"
+    | "list"
+    | "quote"
+    | "code"
+    | "divider"
+    | "shape"
+    | "icon"
+    | "chart";
   content: string | RichTextContent;
   position: { x: number; y: number; width: number; height: number };
   style?: BlockStyle;
@@ -15,7 +25,7 @@ export interface PresentationBlock {
 }
 
 export interface RichTextContent {
-  type: 'doc';
+  type: "doc";
   content: Array<{
     type: string;
     content?: any[];
@@ -29,7 +39,7 @@ export interface BlockStyle {
   fontWeight?: string;
   color?: string;
   backgroundColor?: string;
-  textAlign?: 'left' | 'center' | 'right' | 'justify';
+  textAlign?: "left" | "center" | "right" | "justify";
   padding?: number;
   borderRadius?: number;
   border?: string;
@@ -44,7 +54,13 @@ export interface Slide {
     image?: string;
     gradient?: string;
   };
-  layout: 'default' | 'title-only' | 'two-column' | 'image-left' | 'image-right' | 'centered';
+  layout:
+    | "default"
+    | "title-only"
+    | "two-column"
+    | "image-left"
+    | "image-right"
+    | "centered";
   order: number;
   theme?: string;
 }
@@ -59,4 +75,3 @@ export interface PresentationProject {
   createdAt?: string;
   updatedAt?: string;
 }
-

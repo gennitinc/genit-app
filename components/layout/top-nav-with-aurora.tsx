@@ -1,4 +1,7 @@
-import { SidebarTrigger } from "../ui/sidebar";
+import { PricingDialog } from "../common/pricing-dialog";
+import { Logo } from "../logo";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,21 +11,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { PricingDialog } from "../common/pricing-dialog";
-import { Sparkles } from "lucide-react";
-import { BadgeCheck, CreditCard, Bell, LogOut, Sun, Moon } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { usePathname, useParams } from "next/navigation";
-import { useState, useEffect, RefObject, useCallback, useRef } from "react";
-import { Logo } from "../logo";
+import { SidebarTrigger } from "../ui/sidebar";
 import { useSidebar } from "../ui/sidebar";
-import { cn } from "@/lib/utils";
 import UserPopOver from "../user/userPopOver";
-import Link from "next/link";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
+import { Sparkles } from "lucide-react";
+import { BadgeCheck, Bell, CreditCard, LogOut, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 interface TopNavWithAuroraProps {
   scrollContainerRef?: RefObject<HTMLDivElement>;
@@ -40,7 +40,7 @@ export default function TopNavWithAurora({
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const scrollTargetRef = useRef<HTMLElement | Window | null>(null);
 
-    // Optimized scroll handler with throttling
+  // Optimized scroll handler with throttling
   const handleScroll = useCallback(() => {
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
@@ -58,7 +58,7 @@ export default function TopNavWithAurora({
   useEffect(() => {
     // Get the current scroll target
     const scrollTarget = scrollContainerRef?.current || window;
-    
+
     // Clean up previous listener if target changed
     if (scrollTargetRef.current && scrollTargetRef.current !== scrollTarget) {
       scrollTargetRef.current.removeEventListener("scroll", handleScroll);
@@ -103,32 +103,32 @@ export default function TopNavWithAurora({
   return (
     <header
       className={cn(
-        "sticky top-0 z-30 transition-all duration-300 bg-transparent",
+        "sticky top-0 z-30 bg-transparent transition-all duration-300",
         pathName == "/chat" ? "backdrop-blur-sm" : "backdrop-blur-md",
-        "h-fit shrink-0 w-full",
+        "h-fit w-full shrink-0"
       )}
     >
-      <div className="flex px-4 py-1.5 items-center justify-between w-full">
-        <div className="flex z-20 items-center flex-1">
+      <div className='flex w-full items-center justify-between px-4 py-1.5'>
+        <div className='z-20 flex flex-1 items-center'>
           {(!isChatIdPage || isMobile) && (
-            <SidebarTrigger className="-ml-2 z-20" />
+            <SidebarTrigger className='z-20 -ml-2' />
           )}
-          <Link href="/" className="lg:hidden flex items-center gap-1">
-            <Logo className="w-9 h-9" />
-            <span className="font-semibold text-lg">Gennit</span>
+          <Link href='/' className='flex items-center gap-1 lg:hidden'>
+            <Logo className='h-9 w-9' />
+            <span className='text-lg font-semibold'>Gennit</span>
           </Link>
         </div>
-        <div className="flex z-20 items-center gap-4">
+        <div className='z-20 flex items-center gap-4'>
           <Button
-            variant="ghost"
-            size="sm"
+            variant='ghost'
+            size='sm'
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="w-8 h-8 p-0 rounded-lg hover:bg-accent"
+            className='hover:bg-accent h-8 w-8 rounded-lg p-0'
           >
             {theme === "dark" ? (
-              <Sun className="w-4 h-4" />
+              <Sun className='h-4 w-4' />
             ) : (
-              <Moon className="w-4 h-4" />
+              <Moon className='h-4 w-4' />
             )}
           </Button>
 

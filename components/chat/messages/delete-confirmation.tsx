@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -17,8 +17,8 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { useState } from "react";
 
 interface DeleteConfirmationProps {
   open: boolean;
@@ -49,21 +49,21 @@ export function DeleteConfirmation({
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className='sm:max-w-[425px]'>
           <DialogHeader>
             <DialogTitle>Delete Message</DialogTitle>
             <DialogDescription>{message}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => onOpenChange(false)}
               disabled={isDeleting}
             >
               Cancel
             </Button>
             <Button
-              variant="destructive"
+              variant='destructive'
               onClick={handleConfirm}
               disabled={isDeleting}
             >
@@ -84,14 +84,14 @@ export function DeleteConfirmation({
         </DrawerHeader>
         <DrawerFooter>
           <Button
-            variant="destructive"
+            variant='destructive'
             onClick={handleConfirm}
             disabled={isDeleting}
           >
             {isDeleting ? "Deleting..." : "Delete"}
           </Button>
           <Button
-            variant="outline"
+            variant='outline'
             onClick={() => onOpenChange(false)}
             disabled={isDeleting}
           >
@@ -102,4 +102,3 @@ export function DeleteConfirmation({
     </Drawer>
   );
 }
-

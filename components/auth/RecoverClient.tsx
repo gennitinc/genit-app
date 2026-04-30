@@ -1,6 +1,6 @@
 "use client";
-import withAuth from "@/helper/hoc/withAuth";
 import { RecoverComp } from "@/components/auth/Recover";
+import withAuth from "@/helper/hoc/withAuth";
 
 const RecoverClient = () => {
   return <RecoverComp />;

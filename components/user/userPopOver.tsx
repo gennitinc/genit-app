@@ -1,35 +1,35 @@
 "use client";
-import {
-  User,
-  Settings,
-  CreditCard,
-  Book,
-  Users,
-  MessageSquare,
-  LogOut,
-  Sun,
-  Moon,
-  Monitor,
-  Menu,
-  X,
-  Edit3,
-  Lock,
-} from "lucide-react";
+import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import AccountActionModal from "@/components/user/account-action-modal";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { useAccountActions } from "@/hooks/use-account-actions";
+import {
+  Book,
+  CreditCard,
+  Edit3,
+  Lock,
+  LogOut,
+  Menu,
+  MessageSquare,
+  Monitor,
+  Moon,
+  Settings,
+  Sun,
+  User,
+  Users,
+  X,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import AccountActionModal from "@/components/user/account-action-modal";
-import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
-import { useAccountActions } from "@/hooks/use-account-actions";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
 
 const UserPopOver = () => {
   const { user } = useUserContext();
@@ -70,119 +70,119 @@ const UserPopOver = () => {
   return (
     <Popover open={isUserPopoverOpen} onOpenChange={setIsUserPopoverOpen}>
       <PopoverTrigger asChild>
-        <Avatar className={isMobile ? "w-6 h-6 px-0" : "w-8 h-8 px-0"}>
+        <Avatar className={isMobile ? "h-6 w-6 px-0" : "h-8 w-8 px-0"}>
           <AvatarImage
             src={user?.userdp}
             alt={user?.username}
-            className="object-cover"
+            className='object-cover'
           />
           <AvatarFallback>{user?.username[0]}</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
       <PopoverContent
-        className="w-64 p-0 bg-background/95 backdrop-blur-sm border border-border shadow-xl rounded-xl"
-        align="end"
+        className='bg-background/95 border-border w-64 rounded-xl border p-0 shadow-xl backdrop-blur-sm'
+        align='end'
       >
-        <div className="p-4">
+        <div className='p-4'>
           {/* User Email */}
           <Link
             href={`/creator/${user?.username}`}
             onClick={() => setIsUserPopoverOpen(false)}
-            className="pb-2 mb-2 flex flex-row items-center gap-2 border-b border-border hover:opacity-80 transition-opacity"
+            className='border-border mb-2 flex flex-row items-center gap-2 border-b pb-2 transition-opacity hover:opacity-80'
           >
-            <Avatar className={isMobile ? "w-6 h-6 px-0" : "w-8 h-8 px-0"}>
+            <Avatar className={isMobile ? "h-6 w-6 px-0" : "h-8 w-8 px-0"}>
               <AvatarImage
                 src={user?.userdp}
                 alt={user?.username}
-                className="object-cover"
+                className='object-cover'
               />
               <AvatarFallback>{user?.username[0]}</AvatarFallback>
             </Avatar>
-            <p className="text-sm font-medium text-foreground">
+            <p className='text-foreground text-sm font-medium'>
               {user?.username || "Loading..."}
             </p>
           </Link>
           {/* Preferences */}
-          <div className="mb-2">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-muted-foreground">
+          <div className='mb-2'>
+            <div className='mb-2 flex items-center justify-between'>
+              <span className='text-muted-foreground text-sm font-medium'>
                 Theme
               </span>
-              <div className="flex gap-1 p-1 bg-muted rounded-lg">
+              <div className='bg-muted flex gap-1 rounded-lg p-1'>
                 <button
-                  className="p-1.5 hover:bg-accent hover:shadow-sm rounded transition-all duration-200"
+                  className='hover:bg-accent rounded p-1.5 transition-all duration-200 hover:shadow-sm'
                   onClick={() => setTheme("light")}
                 >
-                  <Sun className="h-3.5 w-3.5 text-muted-foreground" />
+                  <Sun className='text-muted-foreground h-3.5 w-3.5' />
                 </button>
                 <button
-                  className="p-1.5 hover:bg-accent hover:shadow-sm rounded transition-all duration-200"
+                  className='hover:bg-accent rounded p-1.5 transition-all duration-200 hover:shadow-sm'
                   onClick={() => setTheme("dark")}
                 >
-                  <Moon className="h-3.5 w-3.5 text-muted-foreground" />
+                  <Moon className='text-muted-foreground h-3.5 w-3.5' />
                 </button>
                 <button
-                  className="p-1.5 bg-accent shadow-sm rounded"
+                  className='bg-accent rounded p-1.5 shadow-sm'
                   onClick={() => setTheme("system")}
                 >
-                  <Monitor className="h-3.5 w-3.5 text-primary" />
+                  <Monitor className='text-primary h-3.5 w-3.5' />
                 </button>
               </div>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-muted-foreground">
+            <div className='flex items-center justify-between'>
+              <span className='text-muted-foreground text-sm font-medium'>
                 Language
               </span>
               <select
-                className="text-sm bg-background border border-border rounded-md px-2 py-1 text-foreground"
+                className='bg-background border-border text-foreground rounded-md border px-2 py-1 text-sm'
                 disabled
               >
-                <option value="en" selected>
+                <option value='en' selected>
                   English
                 </option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
+                <option value='es'>Spanish</option>
+                <option value='fr'>French</option>
               </select>
             </div>
           </div>
           {/* Credit Balance */}
-          <div className="mb-1 p-3 bg-muted/50 rounded-lg border border-border/50">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-semibold text-muted-foreground">
+          <div className='bg-muted/50 border-border/50 mb-1 rounded-lg border p-3'>
+            <div className='mb-2 flex items-center justify-between'>
+              <span className='text-muted-foreground text-sm font-semibold'>
                 Credits
               </span>
-              <CreditCard className="h-4 w-4 text-primary" />
+              <CreditCard className='text-primary h-4 w-4' />
             </div>
-            <div className="space-y-1 text-xs">
-              <div className="flex justify-between text-muted-foreground">
+            <div className='space-y-1 text-xs'>
+              <div className='text-muted-foreground flex justify-between'>
                 <span>Available</span>
-                <span className="font-medium text-foreground">
+                <span className='text-foreground font-medium'>
                   {user?.creditsRemaining ?? 0}
                 </span>
               </div>
-              <div className="flex justify-between text-muted-foreground">
+              <div className='text-muted-foreground flex justify-between'>
                 <span>Used</span>
-                <span className="font-medium text-green-600 dark:text-green-400">
+                <span className='font-medium text-green-600 dark:text-green-400'>
                   {user?.creditsUsed ?? 0}
                 </span>
               </div>
             </div>
-            <Link href="/pricing" target="_blank">
-              <button className="text-xs text-primary hover:text-primary/80 font-medium mt-2 hover:underline transition-colors cursor-pointer">
+            <Link href='/pricing' target='_blank'>
+              <button className='text-primary hover:text-primary/80 mt-2 cursor-pointer text-xs font-medium transition-colors hover:underline'>
                 Pricing →
               </button>
             </Link>
-            <div className="mt-2">
+            <div className='mt-2'>
               <button
                 onClick={() => setIsTopUpOpen(true)}
-                className="text-xs text-foreground font-medium underline"
+                className='text-foreground text-xs font-medium underline'
               >
                 Top up credits
               </button>
             </div>
           </div>
           {/* Menu Items */}
-          <div className="space-y-0.5 mb-2">
+          <div className='mb-2 space-y-0.5'>
             {[
               { icon: Settings, label: "Settings", href: "/user/settings" },
               {
@@ -198,23 +198,23 @@ const UserPopOver = () => {
               <Link
                 key={label}
                 href={href}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg transition-all duration-200 group"
+                className='text-muted-foreground hover:bg-accent hover:text-accent-foreground group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200'
                 onClick={() => setIsUserPopoverOpen(false)}
               >
-                <Icon className="h-4 w-4 text-muted-foreground group-hover:text-accent-foreground transition-colors" />
-                <span className="group-hover:translate-x-0.5 transition-transform duration-200 text-sm">
+                <Icon className='text-muted-foreground group-hover:text-accent-foreground h-4 w-4 transition-colors' />
+                <span className='text-sm transition-transform duration-200 group-hover:translate-x-0.5'>
                   {label}
                 </span>
               </Link>
             ))}
           </div>
           {/* Sign Out */}
-          <div className="pt-1 border-t border-border">
+          <div className='border-border border-t pt-1'>
             <button
               onClick={() => setIsSignOutModalOpen(true)}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 hover:text-destructive rounded-lg transition-all duration-200 group"
+              className='text-destructive hover:bg-destructive/10 hover:text-destructive group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200'
             >
-              <LogOut className="h-4 w-4 group-hover:translate-x-0.5 transition-transform duration-200" />
+              <LogOut className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5' />
               <span>Sign Out</span>
             </button>
           </div>
@@ -228,9 +228,9 @@ const UserPopOver = () => {
           await signOut();
         }}
         loading={isSigningOut}
-        title="Ready to sign out?"
+        title='Ready to sign out?'
         description="You'll need to sign back in to continue working on your projects."
-        confirmLabel="Sign out"
+        confirmLabel='Sign out'
       />
       <CreditTopUpModal
         open={isTopUpOpen}

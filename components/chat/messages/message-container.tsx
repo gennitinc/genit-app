@@ -17,11 +17,11 @@ export function MessageContainer({
 }: MessageContainerProps) {
   return (
     <div className={`space-y-2 text-sm font-normal ${className}`}>
-      <div className="flex items-start gap-3">
+      <div className='flex items-start gap-3'>
         {avatar}
-        <div className="flex-1 min-w-0">{children}</div>
+        <div className='min-w-0 flex-1'>{children}</div>
       </div>
-      {actions && <div className="ml-11">{actions}</div>}
+      {actions && <div className='ml-11'>{actions}</div>}
     </div>
   );
 }

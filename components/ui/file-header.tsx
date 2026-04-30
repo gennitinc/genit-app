@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { Copy, Download } from "lucide-react";
-import { useTheme } from "next-themes";
-import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
   TooltipProvider,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import { Copy, Download } from "lucide-react";
+import { useTheme } from "next-themes";
 
 interface FileHeaderProps {
   fileName: string;
@@ -40,23 +40,23 @@ export function FileHeader({ fileName, content }: FileHeaderProps) {
     <div>
       <div
         className={cn(
-          "flex items-center sticky z-10 justify-between px-2 py-1 border-b",
+          "sticky z-10 flex items-center justify-between border-b px-2 py-1",
           theme === "dark"
-            ? "bg-zinc-800 border-zinc-700"
-            : "bg-white border-zinc-200"
+            ? "border-zinc-700 bg-zinc-800"
+            : "border-zinc-200 bg-white"
         )}
       >
-        <h2 className="text-xs font-medium truncate flex-1">{fileName}</h2>
-        <div className="flex items-center space-x-1">
+        <h2 className='flex-1 truncate text-xs font-medium'>{fileName}</h2>
+        <div className='flex items-center space-x-1'>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={handleCopy}
-                className="h-6 w-6 p-0"
+                className='h-6 w-6 p-0'
               >
-                <Copy className="h-3 w-3" />
+                <Copy className='h-3 w-3' />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Copy</TooltipContent>
@@ -64,12 +64,12 @@ export function FileHeader({ fileName, content }: FileHeaderProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={handleDownload}
-                className="h-6 w-6 p-0"
+                className='h-6 w-6 p-0'
               >
-                <Download className="h-3 w-3" />
+                <Download className='h-3 w-3' />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Download</TooltipContent>

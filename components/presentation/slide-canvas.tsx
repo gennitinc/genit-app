@@ -1,22 +1,8 @@
 "use client";
 
-import {
-  DndContext,
-  closestCenter,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-  DragStartEvent,
-} from "@dnd-kit/core";
-import { PresentationBlock, Slide } from "@/types/presentation-schema";
+import { ChartBlock } from "./chart-block";
 import { DraggableBlock } from "./draggable-block";
 import { TiptapEditor } from "./tiptap-editor";
-import { ChartBlock } from "./chart-block";
-import { cn } from "@/lib/utils";
-import { ImageIcon, Settings, Trash2 } from "lucide-react";
-import { Icon } from "@iconify/react";
-import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -24,6 +10,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { PresentationBlock, Slide } from "@/types/presentation-schema";
+import {
+  DndContext,
+  DragEndEvent,
+  DragStartEvent,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { Icon } from "@iconify/react";
+import { ImageIcon, Settings, Trash2 } from "lucide-react";
+import { useRef, useState } from "react";
 
 interface SlideCanvasProps {
   slide: Slide;
@@ -188,7 +188,7 @@ export function SlideCanvas({
     <div
       data-slide-id={slide.id}
       className={cn(
-        "w-full h-full border border-border relative rounded-xl overflow-hidden group",
+        "border-border group relative h-full w-full overflow-hidden rounded-xl border",
         slide.background?.color || themeStyle.bg
       )}
       style={{
@@ -204,24 +204,24 @@ export function SlideCanvas({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              variant="ghost"
-              size="sm"
-              className="absolute top-2 right-2 h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity z-50"
+              variant='ghost'
+              size='sm'
+              className='absolute top-2 right-2 z-50 h-7 w-7 p-0 opacity-0 transition-opacity group-hover:opacity-100'
               onClick={(e) => e.stopPropagation()}
-              title="Slide settings"
+              title='Slide settings'
             >
-              <Settings className="w-4 h-4" />
+              <Settings className='h-4 w-4' />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40">
+          <DropdownMenuContent align='end' className='w-40'>
             <DropdownMenuItem
               onClick={(e) => {
                 e.stopPropagation();
                 onDeleteSlide();
               }}
-              className="text-destructive focus:text-destructive"
+              className='text-destructive focus:text-destructive'
             >
-              <Trash2 className="w-4 h-4 mr-2" />
+              <Trash2 className='mr-2 h-4 w-4' />
               Delete Slide
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -235,7 +235,7 @@ export function SlideCanvas({
       >
         <div
           ref={canvasRef}
-          className="relative w-full h-full p-8 px-0"
+          className='relative h-full w-full p-8 px-0'
           onClick={(e) => {
             // Deselect when clicking on canvas
             if (e.target === e.currentTarget) {
@@ -245,7 +245,7 @@ export function SlideCanvas({
         >
           {/* Empty State */}
           {slide.blocks.length === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
               <p className={cn("text-muted-foreground", themeStyle.text)}>
                 Click "Text" or "Templates" to add content
               </p>

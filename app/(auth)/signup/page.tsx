@@ -1,5 +1,6 @@
 import SignupClient from "@/components/auth/SignupClient";
 import type { Metadata } from "next";
+
 export const metadata: Metadata = {
   title: "Sign Up – Gennit AI",
   description:

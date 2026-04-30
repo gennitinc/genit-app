@@ -1,5 +1,5 @@
-import type { Node, XYPosition } from "reactflow";
 import type { NodeData } from "./types";
+import type { Node, XYPosition } from "reactflow";
 
 let nodeIdCounter = 0;
 

@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import cookie from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import { useToast } from "@/hooks/use-toast";
 import { apiResponse } from "@/utils/apiResponse";
-import { useUserContext } from "@/context/AuthenticatedContext";
+import cookie from "js-cookie";
+import { useRouter } from "next/navigation";
+import { useCallback, useState } from "react";
 
 export const useAccountActions = () => {
   const router = useRouter();

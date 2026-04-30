@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 /**
  * This page has been deprecated and split into:
@@ -27,10 +27,10 @@ export default function CreateRedirectPage() {
   }, [router, searchParams, mode]);
 
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-white dark:bg-black">
-      <div className="flex flex-col items-center gap-4">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-sm font-medium text-muted-foreground">
+    <div className='flex h-screen w-full items-center justify-center bg-white dark:bg-black'>
+      <div className='flex flex-col items-center gap-4'>
+        <Loader2 className='text-primary h-8 w-8 animate-spin' />
+        <p className='text-muted-foreground text-sm font-medium'>
           Redirecting to newer app experience...
         </p>
       </div>

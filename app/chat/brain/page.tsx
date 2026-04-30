@@ -1,13 +1,9 @@
+import React from "react";
 
-import React from 'react'
 // import GennittWorkflow from '@/components/gennitt-workflow'
 
 const page = () => {
-  return (
-    <div>
-      {/* <GennittWorkflow /> */}
-    </div>
-  )
-}
+  return <div>{/* <GennittWorkflow /> */}</div>;
+};
 
-export default page
+export default page;

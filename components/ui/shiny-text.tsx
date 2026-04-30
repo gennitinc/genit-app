@@ -1,5 +1,5 @@
-import React from "react";
 import "./shiny-text.css";
+import React from "react";
 
 interface ShinyTextProps {
   text: string;

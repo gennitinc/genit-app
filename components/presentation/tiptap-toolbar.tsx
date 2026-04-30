@@ -1,19 +1,5 @@
 "use client";
 
-import { Editor } from "@tiptap/react";
-import {
-  Bold,
-  Italic,
-  Underline,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  AlignJustify,
-  Type,
-  Palette,
-  Minus,
-  Plus,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -23,7 +9,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useState, useEffect, useRef } from "react";
+import { Editor } from "@tiptap/react";
+import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
+  Bold,
+  Italic,
+  Minus,
+  Palette,
+  Plus,
+  Type,
+  Underline,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface TiptapToolbarProps {
   editor: Editor | null;
@@ -189,7 +189,7 @@ export function TiptapToolbar({
     <div
       ref={toolbarRef}
       className={cn(
-        "fixed z-[100] bg-background border border-border rounded shadow-sm p-1 flex items-center gap-1",
+        "bg-background border-border fixed z-[100] flex items-center gap-1 rounded border p-1 shadow-sm",
         className
       )}
       style={{
@@ -210,8 +210,8 @@ export function TiptapToolbar({
           }
         }}
       >
-        <SelectTrigger className="h-8 w-[120px] text-xs">
-          <SelectValue placeholder="Font" />
+        <SelectTrigger className='h-8 w-[120px] text-xs'>
+          <SelectValue placeholder='Font' />
         </SelectTrigger>
         <SelectContent>
           {FONT_FAMILIES.map((font) => (
@@ -235,7 +235,7 @@ export function TiptapToolbar({
           editor.chain().focus().setFontSize(`${value}px`).run();
         }}
       >
-        <SelectTrigger className="h-8 w-[70px] text-xs">
+        <SelectTrigger className='h-8 w-[70px] text-xs'>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -247,97 +247,97 @@ export function TiptapToolbar({
         </SelectContent>
       </Select>
 
-      <div className="h-6 w-px bg-border mx-1" />
+      <div className='bg-border mx-1 h-6 w-px' />
 
       {/* Bold */}
       <Button
-        variant="ghost"
-        size="sm"
+        variant='ghost'
+        size='sm'
         className={cn("h-8 w-8 p-0", editor.isActive("bold") && "bg-muted")}
         onClick={() => editor.chain().focus().toggleBold().run()}
       >
-        <Bold className="w-4 h-4" />
+        <Bold className='h-4 w-4' />
       </Button>
 
       {/* Italic */}
       <Button
-        variant="ghost"
-        size="sm"
+        variant='ghost'
+        size='sm'
         className={cn("h-8 w-8 p-0", editor.isActive("italic") && "bg-muted")}
         onClick={() => editor.chain().focus().toggleItalic().run()}
       >
-        <Italic className="w-4 h-4" />
+        <Italic className='h-4 w-4' />
       </Button>
 
       {/* Underline */}
       <Button
-        variant="ghost"
-        size="sm"
+        variant='ghost'
+        size='sm'
         className={cn(
           "h-8 w-8 p-0",
           editor.isActive("underline") && "bg-muted"
         )}
         onClick={() => editor.chain().focus().toggleUnderline().run()}
       >
-        <Underline className="w-4 h-4" />
+        <Underline className='h-4 w-4' />
       </Button>
 
-      <div className="h-6 w-px bg-border mx-1" />
+      <div className='bg-border mx-1 h-6 w-px' />
 
       {/* Text Align */}
       <Button
-        variant="ghost"
-        size="sm"
+        variant='ghost'
+        size='sm'
         className={cn(
           "h-8 w-8 p-0",
           editor.isActive({ textAlign: "left" }) && "bg-muted"
         )}
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
       >
-        <AlignLeft className="w-4 h-4" />
+        <AlignLeft className='h-4 w-4' />
       </Button>
       <Button
-        variant="ghost"
-        size="sm"
+        variant='ghost'
+        size='sm'
         className={cn(
           "h-8 w-8 p-0",
           editor.isActive({ textAlign: "center" }) && "bg-muted"
         )}
         onClick={() => editor.chain().focus().setTextAlign("center").run()}
       >
-        <AlignCenter className="w-4 h-4" />
+        <AlignCenter className='h-4 w-4' />
       </Button>
       <Button
-        variant="ghost"
-        size="sm"
+        variant='ghost'
+        size='sm'
         className={cn(
           "h-8 w-8 p-0",
           editor.isActive({ textAlign: "right" }) && "bg-muted"
         )}
         onClick={() => editor.chain().focus().setTextAlign("right").run()}
       >
-        <AlignRight className="w-4 h-4" />
+        <AlignRight className='h-4 w-4' />
       </Button>
       <Button
-        variant="ghost"
-        size="sm"
+        variant='ghost'
+        size='sm'
         className={cn(
           "h-8 w-8 p-0",
           editor.isActive({ textAlign: "justify" }) && "bg-muted"
         )}
         onClick={() => editor.chain().focus().setTextAlign("justify").run()}
       >
-        <AlignJustify className="w-4 h-4" />
+        <AlignJustify className='h-4 w-4' />
       </Button>
 
-      <div className="h-6 w-px bg-border mx-1" />
+      <div className='bg-border mx-1 h-6 w-px' />
 
       {/* Color Picker */}
-      <div className="relative">
+      <div className='relative'>
         <Button
-          variant="ghost"
-          size="sm"
-          className="h-8 w-8 p-0"
+          variant='ghost'
+          size='sm'
+          className='h-8 w-8 p-0'
           onClick={() => {
             // Toggle color picker or open color selector
             const input = document.createElement("input");
@@ -350,7 +350,7 @@ export function TiptapToolbar({
             input.click();
           }}
         >
-          <Palette className="w-4 h-4" />
+          <Palette className='h-4 w-4' />
         </Button>
       </div>
     </div>

@@ -4,16 +4,16 @@ import React from "react";
 
 export function LandingVoiceClone() {
   return (
-    <div className="mt-20">
-      <div className="text-center mb-12 md:mb-16 space-y-4">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+    <div className='mt-20'>
+      <div className='mb-12 space-y-4 text-center md:mb-16'>
+        <h2 className='text-foreground text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl'>
           Clone your voice with AI
         </h2>
-        <p className="text-base md:text-base text-muted-foreground max-w-2xl mx-auto">
+        <p className='text-muted-foreground mx-auto max-w-2xl text-base md:text-base'>
           Speak like the real you with AI.
         </p>
       </div>
-      <div className="flex justify-center items-center min-h-[300px] relative">
+      <div className='relative flex min-h-[300px] items-center justify-center'>
         <style
           dangerouslySetInnerHTML={{
             __html: `
@@ -115,10 +115,10 @@ export function LandingVoiceClone() {
             `,
           }}
         />
-        <div className="orb-container">
-          <div className="orb">
-            <div className="orb-inner"></div>
-            <div className="orb-inner"></div>
+        <div className='orb-container'>
+          <div className='orb'>
+            <div className='orb-inner'></div>
+            <div className='orb-inner'></div>
           </div>
         </div>
       </div>

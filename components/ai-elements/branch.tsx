@@ -144,18 +144,18 @@ export const BranchPrevious = ({
 
   return (
     <Button
-      aria-label="Previous branch"
+      aria-label='Previous branch'
       className={cn(
-        "size-7 shrink-0 rounded-full text-muted-foreground transition-colors",
+        "text-muted-foreground size-7 shrink-0 rounded-full transition-colors",
         "hover:bg-accent hover:text-foreground",
         "disabled:pointer-events-none disabled:opacity-50",
         className
       )}
       disabled={totalBranches <= 1}
       onClick={goToPrevious}
-      size="icon"
-      type="button"
-      variant="ghost"
+      size='icon'
+      type='button'
+      variant='ghost'
       {...props}
     >
       {children ?? <ChevronLeftIcon size={14} />}
@@ -174,18 +174,18 @@ export const BranchNext = ({
 
   return (
     <Button
-      aria-label="Next branch"
+      aria-label='Next branch'
       className={cn(
-        "size-7 shrink-0 rounded-full text-muted-foreground transition-colors",
+        "text-muted-foreground size-7 shrink-0 rounded-full transition-colors",
         "hover:bg-accent hover:text-foreground",
         "disabled:pointer-events-none disabled:opacity-50",
         className
       )}
       disabled={totalBranches <= 1}
       onClick={goToNext}
-      size="icon"
-      type="button"
-      variant="ghost"
+      size='icon'
+      type='button'
+      variant='ghost'
       {...props}
     >
       {children ?? <ChevronRightIcon size={14} />}
@@ -201,7 +201,7 @@ export const BranchPage = ({ className, ...props }: BranchPageProps) => {
   return (
     <span
       className={cn(
-        "font-medium text-muted-foreground text-xs tabular-nums",
+        "text-muted-foreground text-xs font-medium tabular-nums",
         className
       )}
       {...props}

@@ -1,35 +1,34 @@
 "use client";
 
-import type React from "react";
-
-import { useState, useCallback, useRef } from "react";
-import ReactFlow, {
-  ReactFlowProvider,
-  Background,
-  Controls,
-  MiniMap,
-  addEdge,
-  Panel,
-  useNodesState,
-  useEdgesState,
-  type Connection,
-  type Edge,
-  type NodeTypes,
-  type EdgeTypes,
-  type Node,
-} from "reactflow";
-import "reactflow/dist/style.css";
-import { toast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
-import { Save, Upload, Play } from "lucide-react";
 import NodeLibrary from "./node-library";
+import { CodeNode } from "./nodes/code-node";
+import { ConditionalNode } from "./nodes/conditional-node";
 import { InputNode } from "./nodes/input-node";
 import { OutputNode } from "./nodes/output-node";
 import { ProcessNode } from "./nodes/process-node";
-import { ConditionalNode } from "./nodes/conditional-node";
-import { CodeNode } from "./nodes/code-node";
-import { generateNodeId, createNode } from "@/lib/workflow-utils";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
 import type { WorkflowNode } from "@/lib/types";
+import { createNode, generateNodeId } from "@/lib/workflow-utils";
+import { Play, Save, Upload } from "lucide-react";
+import ReactFlow, {
+  Background,
+  type Connection,
+  Controls,
+  type Edge,
+  type EdgeTypes,
+  MiniMap,
+  type Node,
+  type NodeTypes,
+  Panel,
+  ReactFlowProvider,
+  addEdge,
+  useEdgesState,
+  useNodesState,
+} from "reactflow";
+import "reactflow/dist/style.css";
+import type React from "react";
+import { useCallback, useRef, useState } from "react";
 
 const nodeTypes: NodeTypes = {
   input: InputNode,
@@ -49,7 +48,7 @@ export default function WorkflowBuilder() {
   const onConnect = useCallback(
     (params: Edge | Connection) =>
       setEdges((eds) => addEdge({ ...params, type: "custom" }, eds)),
-    [setEdges],
+    [setEdges]
   );
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
@@ -84,7 +83,7 @@ export default function WorkflowBuilder() {
         setNodes((nds) => nds.concat(newNode));
       }
     },
-    [reactFlowInstance, setNodes],
+    [reactFlowInstance, setNodes]
   );
 
   const onNodeClick = useCallback((_: React.MouseEvent, node: Node) => {
@@ -109,10 +108,10 @@ export default function WorkflowBuilder() {
             };
           }
           return node;
-        }),
+        })
       );
     },
-    [setNodes],
+    [setNodes]
   );
 
   const saveWorkflow = () => {
@@ -196,14 +195,14 @@ export default function WorkflowBuilder() {
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="w-64 border-r border-gray-200 p-4 bg-gray-50">
-        <h2 className="text-lg font-semibold mb-4">Node Library</h2>
+    <div className='flex h-screen'>
+      <div className='w-64 border-r border-gray-200 bg-gray-50 p-4'>
+        <h2 className='mb-4 text-lg font-semibold'>Node Library</h2>
         <NodeLibrary />
       </div>
 
-      <div className="flex-1 flex flex-col">
-        <div className="flex-1" ref={reactFlowWrapper}>
+      <div className='flex flex-1 flex-col'>
+        <div className='flex-1' ref={reactFlowWrapper}>
           <ReactFlowProvider>
             <ReactFlow
               nodes={nodes}
@@ -225,18 +224,18 @@ export default function WorkflowBuilder() {
               <Background />
               <Controls />
               <MiniMap />
-              <Panel position="top-right">
-                <div className="flex gap-2">
-                  <Button onClick={saveWorkflow} size="sm" variant="outline">
-                    <Save className="h-4 w-4 mr-2" />
+              <Panel position='top-right'>
+                <div className='flex gap-2'>
+                  <Button onClick={saveWorkflow} size='sm' variant='outline'>
+                    <Save className='mr-2 h-4 w-4' />
                     Save
                   </Button>
-                  <Button onClick={loadWorkflow} size="sm" variant="outline">
-                    <Upload className="h-4 w-4 mr-2" />
+                  <Button onClick={loadWorkflow} size='sm' variant='outline'>
+                    <Upload className='mr-2 h-4 w-4' />
                     Load
                   </Button>
-                  <Button onClick={executeWorkflow} size="sm" variant="default">
-                    <Play className="h-4 w-4 mr-2" />
+                  <Button onClick={executeWorkflow} size='sm' variant='default'>
+                    <Play className='mr-2 h-4 w-4' />
                     Execute
                   </Button>
                 </div>

@@ -1,10 +1,10 @@
 "use client";
 
-import { memo } from "react";
-import { Handle, Position, NodeResizer, type NodeProps } from "reactflow";
-import { Database, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { NodeData } from "@/lib/types";
+import { Database, Trash2, X } from "lucide-react";
+import { Handle, type NodeProps, NodeResizer, Position } from "reactflow";
+import { memo } from "react";
 
 interface ExtendedNodeData extends NodeData {
   onRemoveNode?: (nodeId: string) => void;
@@ -14,48 +14,48 @@ interface ExtendedNodeData extends NodeData {
 export const InputNode = memo(
   ({ data, isConnectable, selected }: NodeProps<ExtendedNodeData>) => {
     return (
-      <div className="relative rounded-[1.5rem]">
+      <div className='relative rounded-[1.5rem]'>
         <NodeResizer
-          color="#3b82f6"
+          color='#3b82f6'
           isVisible={selected}
           minWidth={150}
           minHeight={80}
-          handleClassName="w-3 h-3 bg-primary border-2 border-white rounded shadow-lg"
+          handleClassName='w-3 h-3 bg-primary border-2 border-white rounded shadow-lg'
         />
 
         {/* Remove Button */}
         {data.onRemoveNode && data.nodeId && (
           <button
             onClick={() => data.onRemoveNode?.(data.nodeId as string)}
-            className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-lg z-10"
-            title="Remove node"
+            className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
+            title='Remove node'
           >
-            <X className="w-3 h-3" />
+            <X className='h-3 w-3' />
           </button>
-        )}  
+        )}
         <div
-          className={`bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-4 w-80 min-w-[150px] min-h-[80px] relative ${
+          className={`bg-card border-border relative min-h-[80px] w-80 min-w-[150px] rounded-lg border p-4 shadow-sm transition-all duration-200 hover:shadow-md ${
             selected
-              ? "ring-2 ring-primary ring-offset-2"
-              : "hover:ring-1 hover:ring-primary/50"
+              ? "ring-primary ring-2 ring-offset-2"
+              : "hover:ring-primary/50 hover:ring-1"
           }`}
         >
-          <div className="flex items-center">
-            <div className="rounded-full w-8 h-8 flex items-center justify-center bg-primary/10 text-primary">
-              <Database className="h-4 w-4" />
+          <div className='flex items-center'>
+            <div className='bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-full'>
+              <Database className='h-4 w-4' />
             </div>
-            <div className="ml-2">
-              <div className="text-sm font-bold text-foreground">
+            <div className='ml-2'>
+              <div className='text-foreground text-sm font-bold'>
                 {data.label || "Input"}
               </div>
-              <div className="text-xs text-muted-foreground">
+              <div className='text-muted-foreground text-xs'>
                 {data.description || "Data input node"}
               </div>
             </div>
           </div>
 
           {data.dataSource && (
-            <div className="mt-2 text-xs bg-muted p-1 rounded text-muted-foreground">
+            <div className='bg-muted text-muted-foreground mt-2 rounded p-1 text-xs'>
               Source: {data.dataSource}
             </div>
           )}
@@ -63,26 +63,26 @@ export const InputNode = memo(
           {/* Delete Button - Only show when selected */}
           {selected && data.onRemoveNode && data.nodeId && (
             <Button
-              variant="ghost"
-              size="sm"
+              variant='ghost'
+              size='sm'
               onClick={() => data.onRemoveNode!(data.nodeId!)}
-              className="absolute -top-2 -right-2 w-6 h-6 p-0 rounded-full bg-destructive hover:bg-destructive/90 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-              title="Delete Node"
+              className='bg-destructive hover:bg-destructive/90 absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 text-white shadow-lg transition-all duration-200 hover:shadow-xl'
+              title='Delete Node'
             >
-              <Trash2 className="w-3 h-3" />
+              <Trash2 className='h-3 w-3' />
             </Button>
           )}
 
           <Handle
-            type="source"
+            type='source'
             position={Position.Bottom}
             isConnectable={isConnectable}
-            className="w-3 h-3 bg-primary"
+            className='bg-primary h-3 w-3'
           />
         </div>
       </div>
     );
-  },
+  }
 );
 
 InputNode.displayName = "InputNode";

@@ -1,6 +1,5 @@
 "use client";
 
-import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { Badge } from "@/components/ui/badge";
 import {
   Collapsible,
@@ -8,6 +7,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
+import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import {
   BrainIcon,
   ChevronDownIcon,
@@ -82,13 +82,13 @@ export const ChainOfThoughtHeader = memo(
       <Collapsible onOpenChange={setIsOpen} open={isOpen}>
         <CollapsibleTrigger
           className={cn(
-            "flex w-full items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground",
+            "text-muted-foreground hover:text-foreground flex w-full items-center gap-2 text-sm transition-colors",
             className
           )}
           {...props}
         >
-          <BrainIcon className="size-4" />
-          <span className="flex-1 text-left">
+          <BrainIcon className='size-4' />
+          <span className='flex-1 text-left'>
             {children ?? "Chain of Thought"}
           </span>
           <ChevronDownIcon
@@ -136,14 +136,14 @@ export const ChainOfThoughtStep = memo(
         )}
         {...props}
       >
-        <div className="relative mt-0.5">
-          <Icon className="size-4" />
-          <div className="-mx-px absolute top-7 bottom-0 left-1/2 w-px bg-border" />
+        <div className='relative mt-0.5'>
+          <Icon className='size-4' />
+          <div className='bg-border absolute top-7 bottom-0 left-1/2 -mx-px w-px' />
         </div>
-        <div className="flex-1 space-y-2">
+        <div className='flex-1 space-y-2'>
           <div>{label}</div>
           {description && (
-            <div className="text-muted-foreground text-xs">{description}</div>
+            <div className='text-muted-foreground text-xs'>{description}</div>
           )}
           {children}
         </div>
@@ -165,8 +165,8 @@ export type ChainOfThoughtSearchResultProps = ComponentProps<typeof Badge>;
 export const ChainOfThoughtSearchResult = memo(
   ({ className, children, ...props }: ChainOfThoughtSearchResultProps) => (
     <Badge
-      className={cn("gap-1 px-2 py-0.5 font-normal text-xs", className)}
-      variant="secondary"
+      className={cn("gap-1 px-2 py-0.5 text-xs font-normal", className)}
+      variant='secondary'
       {...props}
     >
       {children}
@@ -187,7 +187,7 @@ export const ChainOfThoughtContent = memo(
         <CollapsibleContent
           className={cn(
             "mt-2 space-y-3",
-            "data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 text-popover-foreground outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
+            "data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 text-popover-foreground data-[state=closed]:animate-out data-[state=open]:animate-in outline-none",
             className
           )}
           {...props}
@@ -206,10 +206,10 @@ export type ChainOfThoughtImageProps = ComponentProps<"div"> & {
 export const ChainOfThoughtImage = memo(
   ({ className, children, caption, ...props }: ChainOfThoughtImageProps) => (
     <div className={cn("mt-2 space-y-2", className)} {...props}>
-      <div className="relative flex max-h-[22rem] items-center justify-center overflow-hidden rounded-lg bg-muted p-3">
+      <div className='bg-muted relative flex max-h-[22rem] items-center justify-center overflow-hidden rounded-lg p-3'>
         {children}
       </div>
-      {caption && <p className="text-muted-foreground text-xs">{caption}</p>}
+      {caption && <p className='text-muted-foreground text-xs'>{caption}</p>}
     </div>
   )
 );

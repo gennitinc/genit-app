@@ -1,23 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { voiceApi } from "@/utils/inspire-api";
-import { Voice } from "@/types/inspire";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  Trash2,
-  Search,
-  Loader2,
-  Plus,
-  Edit,
-  X,
-  Volume2,
-  Play,
-  Pause,
-} from "lucide-react";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -33,8 +19,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Voice } from "@/types/inspire";
+import { voiceApi } from "@/utils/inspire-api";
+import {
+  Edit,
+  Loader2,
+  Pause,
+  Play,
+  Plus,
+  Search,
+  Trash2,
+  Volume2,
+  X,
+} from "lucide-react";
+import { toast } from "sonner";
+import { useCallback, useEffect, useState } from "react";
 
 // Language and accent options
 const LANGUAGES = [
@@ -173,9 +173,7 @@ export default function AdminVoicesPage() {
       }
     } catch (error: any) {
       console.error("Failed to delete voice:", error);
-      toast.error(
-        error.response?.data?.message || "Failed to delete voice"
-      );
+      toast.error(error.response?.data?.message || "Failed to delete voice");
     } finally {
       setIsDeleting(false);
     }
@@ -296,9 +294,7 @@ export default function AdminVoicesPage() {
       }
     } catch (error: any) {
       console.error("Failed to save voice:", error);
-      toast.error(
-        error.response?.data?.message || "Failed to save voice"
-      );
+      toast.error(error.response?.data?.message || "Failed to save voice");
     } finally {
       setIsSubmitting(false);
     }
@@ -312,134 +308,133 @@ export default function AdminVoicesPage() {
   });
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-6 flex items-center justify-between">
+    <div className='container mx-auto px-4 py-8'>
+      <div className='mb-6 flex items-center justify-between'>
         <div>
-          <h1 className="text-3xl font-bold mb-2">Voice Management</h1>
-          <p className="text-muted-foreground">
+          <h1 className='mb-2 text-3xl font-bold'>Voice Management</h1>
+          <p className='text-muted-foreground'>
             Manage AI voices for video generation
           </p>
         </div>
         <Button onClick={handleCreateClick}>
-          <Plus className="w-4 h-4 mr-2" />
+          <Plus className='mr-2 h-4 w-4' />
           Create Voice
         </Button>
       </div>
 
-      <div className="mb-6 flex gap-4 items-center flex-wrap">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+      <div className='mb-6 flex flex-wrap items-center gap-4'>
+        <div className='relative max-w-md flex-1'>
+          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
-            placeholder="Search voices..."
+            placeholder='Search voices...'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className='pl-10'
           />
         </div>
         <Select
           value={filterCategory}
           onValueChange={(v: "all" | "ai" | "cloned") => setFilterCategory(v)}
         >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by category" />
+          <SelectTrigger className='w-[180px]'>
+            <SelectValue placeholder='Filter by category' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
-            <SelectItem value="ai">AI Voices</SelectItem>
-            <SelectItem value="cloned">Cloned Voices</SelectItem>
+            <SelectItem value='all'>All Categories</SelectItem>
+            <SelectItem value='ai'>AI Voices</SelectItem>
+            <SelectItem value='cloned'>Cloned Voices</SelectItem>
           </SelectContent>
         </Select>
         <Select
           value={filterGender}
           onValueChange={(v: "all" | "male" | "female") => setFilterGender(v)}
         >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by gender" />
+          <SelectTrigger className='w-[180px]'>
+            <SelectValue placeholder='Filter by gender' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Genders</SelectItem>
-            <SelectItem value="male">Male</SelectItem>
-            <SelectItem value="female">Female</SelectItem>
+            <SelectItem value='all'>All Genders</SelectItem>
+            <SelectItem value='male'>Male</SelectItem>
+            <SelectItem value='female'>Female</SelectItem>
           </SelectContent>
         </Select>
-        <div className="text-sm text-muted-foreground">
+        <div className='text-muted-foreground text-sm'>
           {filteredVoices.length} voice{filteredVoices.length !== 1 ? "s" : ""}
         </div>
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+        <div className='flex items-center justify-center py-12'>
+          <Loader2 className='text-muted-foreground h-6 w-6 animate-spin' />
         </div>
       ) : filteredVoices.length === 0 ? (
-        <div className="text-center py-12">
-          <Volume2 className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-          <p className="text-muted-foreground">No voices found</p>
+        <div className='py-12 text-center'>
+          <Volume2 className='text-muted-foreground mx-auto mb-4 h-12 w-12' />
+          <p className='text-muted-foreground'>No voices found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
           {filteredVoices.map((voice) => {
             const voiceId = voice._id || voice.id || "";
             const isPlaying = playingVoiceId === voiceId;
             return (
               <div
                 key={voiceId}
-                className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                className='rounded-lg border p-4 transition-shadow hover:shadow-md'
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg mb-1">{voice.name}</h3>
-                    <p className="text-sm text-muted-foreground">
+                <div className='mb-3 flex items-start justify-between'>
+                  <div className='flex-1'>
+                    <h3 className='mb-1 text-lg font-semibold'>{voice.name}</h3>
+                    <p className='text-muted-foreground text-sm'>
                       {voice.language} • {voice.accent}
                     </p>
                   </div>
-                  <div className="flex gap-2">
+                  <div className='flex gap-2'>
                     <button
                       onClick={() => handlePlayToggle(voice)}
-                      className="p-2 rounded-lg hover:bg-muted transition-colors"
+                      className='hover:bg-muted rounded-lg p-2 transition-colors'
                     >
                       {isPlaying ? (
-                        <Pause className="w-4 h-4" />
+                        <Pause className='h-4 w-4' />
                       ) : (
-                        <Play className="w-4 h-4" />
+                        <Play className='h-4 w-4' />
                       )}
                     </button>
                     <button
                       onClick={() => handleEditClick(voice)}
-                      className="p-2 rounded-lg hover:bg-muted transition-colors"
+                      className='hover:bg-muted rounded-lg p-2 transition-colors'
                     >
-                      <Edit className="w-4 h-4" />
+                      <Edit className='h-4 w-4' />
                     </button>
                     <button
                       onClick={() => handleDeleteClick(voice)}
-                      className="p-2 rounded-lg hover:bg-destructive/10 text-destructive transition-colors"
+                      className='hover:bg-destructive/10 text-destructive rounded-lg p-2 transition-colors'
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className='h-4 w-4' />
                     </button>
                   </div>
                 </div>
-                <div className="flex flex-wrap gap-2 mb-3">
-                  <Badge variant="outline">{voice.gender}</Badge>
-                  <Badge variant="outline">{voice.category}</Badge>
+                <div className='mb-3 flex flex-wrap gap-2'>
+                  <Badge variant='outline'>{voice.gender}</Badge>
+                  <Badge variant='outline'>{voice.category}</Badge>
                   {voice.status && (
                     <Badge
                       variant={
                         voice.status === "active"
                           ? "default"
                           : voice.status === "processing"
-                          ? "secondary"
-                          : "destructive"
+                            ? "secondary"
+                            : "destructive"
                       }
                     >
                       {voice.status}
                     </Badge>
                   )}
-                  {voice.isPublic && (
-                    <Badge variant="secondary">Public</Badge>
-                  )}
+                  {voice.isPublic && <Badge variant='secondary'>Public</Badge>}
                 </div>
-                <div className="text-xs text-muted-foreground">
-                  Used {voice.usageCount} time{voice.usageCount !== 1 ? "s" : ""}
+                <div className='text-muted-foreground text-xs'>
+                  Used {voice.usageCount} time
+                  {voice.usageCount !== 1 ? "s" : ""}
                 </div>
               </div>
             );
@@ -449,7 +444,7 @@ export default function AdminVoicesPage() {
 
       {/* Create Dialog */}
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>Create New Voice</DialogTitle>
             <DialogDescription>
@@ -457,22 +452,22 @@ export default function AdminVoicesPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name *</Label>
+          <div className='space-y-4 py-4'>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='name'>Name *</Label>
                 <Input
-                  id="name"
+                  id='name'
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  placeholder="e.g., Professional Male Voice"
+                  placeholder='e.g., Professional Male Voice'
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="gender">Gender *</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='gender'>Gender *</Label>
                 <Select
                   value={formData.gender}
                   onValueChange={(v: "male" | "female") =>
@@ -483,24 +478,24 @@ export default function AdminVoicesPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value='male'>Male</SelectItem>
+                    <SelectItem value='female'>Female</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="language">Language *</Label>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='language'>Language *</Label>
                 <Select
                   value={formData.language}
                   onValueChange={(value) =>
                     setFormData({ ...formData, language: value })
                   }
                 >
-                  <SelectTrigger id="language">
-                    <SelectValue placeholder="Select language" />
+                  <SelectTrigger id='language'>
+                    <SelectValue placeholder='Select language' />
                   </SelectTrigger>
                   <SelectContent>
                     {LANGUAGES.map((lang) => (
@@ -512,16 +507,16 @@ export default function AdminVoicesPage() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="accent">Accent *</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='accent'>Accent *</Label>
                 <Select
                   value={formData.accent}
                   onValueChange={(value) =>
                     setFormData({ ...formData, accent: value })
                   }
                 >
-                  <SelectTrigger id="accent">
-                    <SelectValue placeholder="Select accent" />
+                  <SelectTrigger id='accent'>
+                    <SelectValue placeholder='Select accent' />
                   </SelectTrigger>
                   <SelectContent>
                     {ACCENTS.map((accent) => (
@@ -534,9 +529,9 @@ export default function AdminVoicesPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='category'>Category</Label>
                 <Select
                   value={formData.category}
                   onValueChange={(v: "ai" | "cloned") =>
@@ -547,94 +542,99 @@ export default function AdminVoicesPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ai">AI Voice</SelectItem>
-                    <SelectItem value="cloned">Cloned Voice</SelectItem>
+                    <SelectItem value='ai'>AI Voice</SelectItem>
+                    <SelectItem value='cloned'>Cloned Voice</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="status">Status</Label>
-                <Select value="active" disabled>
+              <div className='space-y-2'>
+                <Label htmlFor='status'>Status</Label>
+                <Select value='active' disabled>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value='active'>Active</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="provider">Provider (Optional)</Label>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='provider'>Provider (Optional)</Label>
                 <Input
-                  id="provider"
+                  id='provider'
                   value={formData.provider}
                   onChange={(e) =>
                     setFormData({ ...formData, provider: e.target.value })
                   }
-                  placeholder="e.g., ElevenLabs, OpenAI"
+                  placeholder='e.g., ElevenLabs, OpenAI'
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="providerVoiceId">Provider Voice ID (Optional)</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='providerVoiceId'>
+                  Provider Voice ID (Optional)
+                </Label>
                 <Input
-                  id="providerVoiceId"
+                  id='providerVoiceId'
                   value={formData.providerVoiceId}
                   onChange={(e) =>
-                    setFormData({ ...formData, providerVoiceId: e.target.value })
+                    setFormData({
+                      ...formData,
+                      providerVoiceId: e.target.value,
+                    })
                   }
-                  placeholder="External provider voice ID"
+                  placeholder='External provider voice ID'
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="audio">Audio File *</Label>
-              <div className="flex items-center gap-4">
-                <div className="flex-1">
+            <div className='space-y-2'>
+              <Label htmlFor='audio'>Audio File *</Label>
+              <div className='flex items-center gap-4'>
+                <div className='flex-1'>
                   <Input
-                    id="audio"
-                    type="file"
-                    accept="audio/*"
+                    id='audio'
+                    type='file'
+                    accept='audio/*'
                     onChange={handleAudioChange}
-                    className="cursor-pointer"
+                    className='cursor-pointer'
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className='text-muted-foreground mt-1 text-xs'>
                     Upload an audio sample (MP3, WAV, etc.)
                   </p>
                 </div>
                 {audioFile && (
                   <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
+                    type='button'
+                    variant='outline'
+                    size='sm'
                     onClick={() => setAudioFile(null)}
                   >
-                    <X className="w-4 h-4" />
+                    <X className='h-4 w-4' />
                   </Button>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               <Switch
-                id="isPublic"
+                id='isPublic'
                 checked={formData.isPublic}
                 onCheckedChange={(checked) =>
                   setFormData({ ...formData, isPublic: checked })
                 }
               />
-              <Label htmlFor="isPublic">Make Public</Label>
+              <Label htmlFor='isPublic'>Make Public</Label>
             </div>
           </div>
 
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => {
                 setCreateDialogOpen(false);
                 setAudioFile(null);
@@ -645,7 +645,7 @@ export default function AdminVoicesPage() {
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Creating...
                 </>
               ) : (
@@ -658,7 +658,7 @@ export default function AdminVoicesPage() {
 
       {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>Edit Voice</DialogTitle>
             <DialogDescription>
@@ -666,11 +666,11 @@ export default function AdminVoicesPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-name">Name *</Label>
+          <div className='space-y-4 py-4'>
+            <div className='space-y-2'>
+              <Label htmlFor='edit-name'>Name *</Label>
               <Input
-                id="edit-name"
+                id='edit-name'
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
@@ -678,17 +678,17 @@ export default function AdminVoicesPage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="edit-language">Language *</Label>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='edit-language'>Language *</Label>
                 <Select
                   value={formData.language}
                   onValueChange={(value) =>
                     setFormData({ ...formData, language: value })
                   }
                 >
-                  <SelectTrigger id="edit-language">
-                    <SelectValue placeholder="Select language" />
+                  <SelectTrigger id='edit-language'>
+                    <SelectValue placeholder='Select language' />
                   </SelectTrigger>
                   <SelectContent>
                     {LANGUAGES.map((lang) => (
@@ -700,16 +700,16 @@ export default function AdminVoicesPage() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="edit-accent">Accent *</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='edit-accent'>Accent *</Label>
                 <Select
                   value={formData.accent}
                   onValueChange={(value) =>
                     setFormData({ ...formData, accent: value })
                   }
                 >
-                  <SelectTrigger id="edit-accent">
-                    <SelectValue placeholder="Select accent" />
+                  <SelectTrigger id='edit-accent'>
+                    <SelectValue placeholder='Select accent' />
                   </SelectTrigger>
                   <SelectContent>
                     {ACCENTS.map((accent) => (
@@ -722,49 +722,51 @@ export default function AdminVoicesPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="edit-audio">Audio File (Optional - leave empty to keep current)</Label>
-              <div className="flex items-center gap-4">
-                <div className="flex-1">
+            <div className='space-y-2'>
+              <Label htmlFor='edit-audio'>
+                Audio File (Optional - leave empty to keep current)
+              </Label>
+              <div className='flex items-center gap-4'>
+                <div className='flex-1'>
                   <Input
-                    id="edit-audio"
-                    type="file"
-                    accept="audio/*"
+                    id='edit-audio'
+                    type='file'
+                    accept='audio/*'
                     onChange={handleAudioChange}
-                    className="cursor-pointer"
+                    className='cursor-pointer'
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className='text-muted-foreground mt-1 text-xs'>
                     Upload a new audio sample to replace the existing one
                   </p>
                 </div>
                 {audioFile && (
                   <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
+                    type='button'
+                    variant='outline'
+                    size='sm'
                     onClick={() => setAudioFile(null)}
                   >
-                    <X className="w-4 h-4" />
+                    <X className='h-4 w-4' />
                   </Button>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               <Switch
-                id="edit-isPublic"
+                id='edit-isPublic'
                 checked={formData.isPublic}
                 onCheckedChange={(checked) =>
                   setFormData({ ...formData, isPublic: checked })
                 }
               />
-              <Label htmlFor="edit-isPublic">Make Public</Label>
+              <Label htmlFor='edit-isPublic'>Make Public</Label>
             </div>
           </div>
 
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => {
                 setEditDialogOpen(false);
                 setEditingVoice(null);
@@ -776,7 +778,7 @@ export default function AdminVoicesPage() {
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Updating...
                 </>
               ) : (
@@ -799,7 +801,7 @@ export default function AdminVoicesPage() {
           </DialogHeader>
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => {
                 setDeleteDialogOpen(false);
                 setVoiceToDelete(null);
@@ -809,13 +811,13 @@ export default function AdminVoicesPage() {
               Cancel
             </Button>
             <Button
-              variant="destructive"
+              variant='destructive'
               onClick={handleDeleteConfirm}
               disabled={isDeleting}
             >
               {isDeleting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Deleting...
                 </>
               ) : (
@@ -828,4 +830,3 @@ export default function AdminVoicesPage() {
     </div>
   );
 }
-

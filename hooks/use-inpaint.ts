@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { toast } from "sonner";
 import { apiResponse } from "@/utils/apiResponse";
+import { toast } from "sonner";
+import { useState } from "react";
 
 interface InpaintArgs {
   projectId: string;
@@ -29,7 +29,7 @@ export function useInpaint() {
     if (generationGroupId) {
       formData.append("generationGroupId", generationGroupId);
     }
-    
+
     // Create a file from the blob
     const maskFile = new File([maskBlob], "mask.png", { type: "image/png" });
     formData.append("files", maskFile);
@@ -50,7 +50,8 @@ export function useInpaint() {
       return response.data;
     } catch (error: any) {
       console.error("Inpaint error:", error);
-      const errorMessage = error.response?.data?.message || error.message || "Inpaint failed";
+      const errorMessage =
+        error.response?.data?.message || error.message || "Inpaint failed";
       toast.error("Inpaint failed", {
         description: errorMessage,
       });

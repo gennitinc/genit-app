@@ -1,28 +1,28 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useRef,
-  useCallback,
-  useEffect,
-} from "react";
-import { useRouter } from "next/navigation";
-import { useUserContext } from "./AuthenticatedContext";
-import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
-import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
-import { toast } from "@/hooks/use-toast";
-import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
 import { demoMessages } from "../components/chat/dummyMessage";
-import { io } from "socket.io-client";
+import { useUserContext } from "./AuthenticatedContext";
+import { toast } from "@/hooks/use-toast";
 import {
-  IProjectDesignContext,
   IDesignProject,
+  IProjectDesignContext,
   ProjectStatus,
 } from "@/types/ProjectTypes";
+import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
+import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
+import { useRouter } from "next/navigation";
+import { io } from "socket.io-client";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 const ProjectDesignContext = createContext<IProjectDesignContext | undefined>(
-  undefined,
+  undefined
 );
 
 export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -33,7 +33,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const user = useUserContext().user;
   const userId = String(user?._id);
   const [currentProjectRoom, setCurrentProjectRoom] = useState<string | null>(
-    null,
+    null
   );
   const [isGenerating, setIsGenerating] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
@@ -80,38 +80,81 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const socketRef = useRef<any>(null);
   const projectIdRef = useRef<string | null>(null);
   const messagesRef = useRef<any[]>([]);
-  const [focusedGenerationId, setFocusedGenerationId] = useState<string | null>(null);
-  const [selectedColorScales, setSelectedColorScales] = useState<Array<{
-    base: string;
-    shades: { [key: number]: string };
-  }>>([]);
-  const [activeGenerationId, setActiveGenerationId] = useState<string | null>(null);
+  const [focusedGenerationId, setFocusedGenerationId] = useState<string | null>(
+    null
+  );
+  const [selectedColorScales, setSelectedColorScales] = useState<
+    Array<{
+      base: string;
+      shades: { [key: number]: string };
+    }>
+  >([]);
+  const [activeGenerationId, setActiveGenerationId] = useState<string | null>(
+    null
+  );
   const [inputMode, setInputMode] = useState<"text" | "color" | "file">("text");
-  const [generationMode, setGenerationMode] = useState<"auto" | "custom">("custom");
+  const [generationMode, setGenerationMode] = useState<"auto" | "custom">(
+    "custom"
+  );
   const [primaryFont, setPrimaryFont] = useState<string | null>(null);
   const [aiStatus, setAiStatus] = useState<string | null>(null);
-  const [liveNodes, setLiveNodes] = useState<Array<{ id: string; filePath: string; name: string; prompt: string }>>([]);
+  const [liveNodes, setLiveNodes] = useState<
+    Array<{ id: string; filePath: string; name: string; prompt: string }>
+  >([]);
 
-  const addLiveNode = useCallback((node: { id: string; filePath: string; name: string; prompt: string }) => {
-    setLiveNodes(prev => {
-      // Avoid duplicates
-      if (prev.find(n => n.id === node.id)) return prev;
-      return [...prev, node];
-    });
-  }, []);
+  const addLiveNode = useCallback(
+    (node: { id: string; filePath: string; name: string; prompt: string }) => {
+      setLiveNodes((prev) => {
+        // Avoid duplicates
+        if (prev.find((n) => n.id === node.id)) return prev;
+        return [...prev, node];
+      });
+    },
+    []
+  );
 
   const transformMessages = useCallback((messages: any[]) => {
     if (!messages || !Array.isArray(messages)) {
       return [];
     }
 
-    return messages.map((msg, index) => {
-      if (!msg) {
-        console.warn(`[DesignProject] msg at index ${index} is null/undefined`);
-        return null;
-      }
+    return messages
+      .map((msg, index) => {
+        if (!msg) {
+          console.warn(
+            `[DesignProject] msg at index ${index} is null/undefined`
+          );
+          return null;
+        }
 
-      if (msg.parts && Array.isArray(msg.parts)) {
+        if (msg.parts && Array.isArray(msg.parts)) {
+          return {
+            ...msg,
+            id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
+            // Normalize role and type
+            role: (msg.type === "user" ? "user" : "assistant") as
+              | "user"
+              | "assistant",
+            type: msg.type === "user" ? "user" : "ai",
+            parts: msg.parts,
+            ...(msg.type === "user" &&
+              msg.fileAttachments && {
+                attachedFiles: msg.fileAttachments.map((file: any) => ({
+                  id: file.id || `file-${Date.now()}`,
+                  name: file.name || "Untitled",
+                  type: file.type || "unknown",
+                  filePath: file.url || file.filePath || "",
+                  status: "uploaded" as const,
+                })),
+              }),
+          };
+        }
+
+        // Fallback for older message format or missing parts
+        console.log(
+          `[DesignProject] Message at index ${index} missing parts, using fallback transformation`,
+          msg
+        );
         return {
           ...msg,
           id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
@@ -120,7 +163,18 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             | "user"
             | "assistant",
           type: msg.type === "user" ? "user" : "ai",
-          parts: msg.parts,
+          parts:
+            msg.type === "user"
+              ? [
+                  {
+                    type: "text" as const,
+                    text: msg.text || "",
+                  },
+                ]
+              : [
+                  { type: "reasoning" as const, text: msg.analysis || "" },
+                  { type: "text" as const, text: msg.text || "" },
+                ],
           ...(msg.type === "user" &&
             msg.fileAttachments && {
               attachedFiles: msg.fileAttachments.map((file: any) => ({
@@ -132,42 +186,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
               })),
             }),
         };
-      }
-
-      // Fallback for older message format or missing parts
-      console.log(`[DesignProject] Message at index ${index} missing parts, using fallback transformation`, msg);
-      return {
-        ...msg,
-        id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
-        // Normalize role and type
-        role: (msg.type === "user" ? "user" : "assistant") as
-          | "user"
-          | "assistant",
-        type: msg.type === "user" ? "user" : "ai",
-        parts:
-          msg.type === "user"
-            ? [
-                {
-                  type: "text" as const,
-                  text: msg.text || "",
-                },
-              ]
-            : [
-                { type: "reasoning" as const, text: msg.analysis || "" },
-                { type: "text" as const, text: msg.text || "" },
-              ],
-        ...(msg.type === "user" &&
-          msg.fileAttachments && {
-            attachedFiles: msg.fileAttachments.map((file: any) => ({
-              id: file.id || `file-${Date.now()}`,
-              name: file.name || "Untitled",
-              type: file.type || "unknown",
-              filePath: file.url || file.filePath || "",
-              status: "uploaded" as const,
-            })),
-          }),
-      };
-    }).filter(Boolean);
+      })
+      .filter(Boolean);
   }, []);
 
   const dataURLtoFile = (dataUrl: string, filename: string) => {
@@ -186,10 +206,12 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   // Update project ID ref when project changes
   useEffect(() => {
     const newProjectIdStr = project?._id ? String(project._id) : null;
-    
+
     // If project has changed, reset project-specific states to ensure isolation
     if (newProjectIdStr !== projectIdRef.current) {
-      console.log(`🔄 [DesignProject] Project switching detected: ${projectIdRef.current} -> ${newProjectIdStr}. Resetting state...`);
+      console.log(
+        `🔄 [DesignProject] Project switching detected: ${projectIdRef.current} -> ${newProjectIdStr}. Resetting state...`
+      );
       setMessages([]);
       setLiveNodes([]);
       setAiStatus(null);
@@ -198,10 +220,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsGenerating(false);
       setIsGeneratingImage(false);
       setGeneratingForMessageId(null);
-      
+
       // Update the processed draft ref so new project can process its own draft
       hasProcessedDraftRef.current = false;
-      
+
       // Update the refractory ref immediately to signal we've processed this switch
       projectIdRef.current = newProjectIdStr;
     }
@@ -370,9 +392,19 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     const handleWorkflowNodeNew = (data: any) => {
       const incomingProjectId = data?.projectId;
       const currentProjectId = projectIdRef.current;
-      if (incomingProjectId && currentProjectId && incomingProjectId !== currentProjectId) return;
+      if (
+        incomingProjectId &&
+        currentProjectId &&
+        incomingProjectId !== currentProjectId
+      )
+        return;
       if (data?.id && data?.filePath) {
-        addLiveNode({ id: data.id, filePath: data.filePath, name: data.name || "Design", prompt: data.prompt || "" });
+        addLiveNode({
+          id: data.id,
+          filePath: data.filePath,
+          name: data.name || "Design",
+          prompt: data.prompt || "",
+        });
       }
     };
     socket.on("workflow:node:new", handleWorkflowNodeNew);
@@ -380,7 +412,12 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     const handleWorkflowAIStatus = (data: any) => {
       const incomingProjectId = data?.projectId;
       const currentProjectId = projectIdRef.current;
-      if (incomingProjectId && currentProjectId && incomingProjectId !== currentProjectId) return;
+      if (
+        incomingProjectId &&
+        currentProjectId &&
+        incomingProjectId !== currentProjectId
+      )
+        return;
       if (data?.text) {
         setAiStatus(data.text);
       }
@@ -410,7 +447,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       files: File[] | null,
       projectId: string,
       selectedFiles?: string[], // e.g., ["https://example.com/image1.png", "video.mp4"]
-      metadata?: Record<string, any>,
+      metadata?: Record<string, any>
     ) => {
       try {
         setIsGenerating(true);
@@ -557,7 +594,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           ) {
             console.log(
               key,
-              `[File: ${(value as File).name}, size: ${(value as File).size}]`,
+              `[File: ${(value as File).name}, size: ${(value as File).size}]`
             );
           } else {
             console.log(key, value);
@@ -573,21 +610,21 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           {
             withCredentials: true,
             // Remove manual Content-Type header - let axios set it automatically with boundary
-          },
+          }
         );
 
         console.log("✅ Server response:", response.data);
       } catch (error) {
         console.error("❌ Error sending message:", error);
         setError(
-          error instanceof Error ? error.message : "Failed to send message",
+          error instanceof Error ? error.message : "Failed to send message"
         );
       } finally {
         setIsGenerating(false);
         setIsTyping(false);
       }
     },
-    [transformMessages],
+    [transformMessages]
   );
 
   const handleLocalStorageDraft = useCallback(
@@ -656,7 +693,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           restoredFiles.length > 0 ? restoredFiles : null,
           project._id,
           selectedFiles,
-          metadata,
+          metadata
         );
         // Remove draft after successful generation
         localStorage.removeItem("newData");
@@ -668,7 +705,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         clearInput();
       }
     },
-    [setAttachedFiles, generateMessage],
+    [setAttachedFiles, generateMessage]
   );
 
   const clearError = () => setError(null);
@@ -687,7 +724,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     designTypeId?: string,
     orientation?: string | null,
     customSize?: { width: string; height: string } | null,
-    metadata?: Record<string, any>,
+    metadata?: Record<string, any>
   ) => {
     let category;
 
@@ -727,7 +764,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         newProject,
         {
           withCredentials: true,
-        },
+        }
       );
 
       if (response.status === 201) {
@@ -765,8 +802,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                 };
                 reader.onerror = reject;
                 reader.readAsDataURL(file);
-              }),
-          ),
+              })
+          )
         );
 
         // 🧠 Save all data in localStorage
@@ -779,7 +816,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             designType: designTypeId || null,
             projectId,
             metadata: metadata || {},
-          }),
+          })
         );
 
         return {
@@ -804,7 +841,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const fetchProject = useCallback(
     async (
-      projectId: string,
+      projectId: string
     ): Promise<{
       success: boolean;
       error?: "not_found" | "unauthorized" | "server_error";
@@ -830,14 +867,20 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
         if (response.status == 200) {
           const projectData = response.data.project;
-          
+
           // Use string normalization for safer comparisons with Object IDs
-          const currentIdStr = String(projectData?._id || projectData?.id || "");
-          console.log(`[DesignProject] Fetched ID: ${currentIdStr}, Last ID: ${lastFetchedProjectIdRef.current}`);
+          const currentIdStr = String(
+            projectData?._id || projectData?.id || ""
+          );
+          console.log(
+            `[DesignProject] Fetched ID: ${currentIdStr}, Last ID: ${lastFetchedProjectIdRef.current}`
+          );
 
           // If switching to a different project, reset UI message state first
           if (lastFetchedProjectIdRef.current !== currentIdStr) {
-            console.log(`[DesignProject] Project ID mismatch. Resetting messages for new project: ${currentIdStr}`);
+            console.log(
+              `[DesignProject] Project ID mismatch. Resetting messages for new project: ${currentIdStr}`
+            );
             // Update the ref immediately to prevent the isolation useEffect from wiping out these messages
             projectIdRef.current = currentIdStr;
             lastFetchedProjectIdRef.current = currentIdStr;
@@ -848,22 +891,35 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           }
 
           setProject(projectData);
-          console.log(`[DesignProject] Project State Updated:`, projectData?._id);
-          console.log(`[DesignProject] raw messages count:`, projectData?.messages?.length || 0);
+          console.log(
+            `[DesignProject] Project State Updated:`,
+            projectData?._id
+          );
+          console.log(
+            `[DesignProject] raw messages count:`,
+            projectData?.messages?.length || 0
+          );
 
           if (Array.isArray(projectData?.messages)) {
-            console.log(`[DesignProject] Messages array found. Length: ${projectData.messages.length}`);
+            console.log(
+              `[DesignProject] Messages array found. Length: ${projectData.messages.length}`
+            );
             if (projectData.messages.length > 0) {
-              console.log(`[DesignProject] Sample raw message [0]:`, JSON.stringify(projectData.messages[0]).slice(0, 200));
+              console.log(
+                `[DesignProject] Sample raw message [0]:`,
+                JSON.stringify(projectData.messages[0]).slice(0, 200)
+              );
             }
             if (projectData.messages.length >= 1) {
               const serverMessages = transformMessages(
-                projectData.messages || [],
+                projectData.messages || []
               );
-              console.log(`[DesignProject] Transformed ${serverMessages.length} messages`);
+              console.log(
+                `[DesignProject] Transformed ${serverMessages.length} messages`
+              );
               setMessages((prev: any[]) => {
                 const serverIds = new Set(
-                  serverMessages.map((m: any) => String(m.id || m._id)),
+                  serverMessages.map((m: any) => String(m.id || m._id))
                 );
                 const serverUserTexts = new Set<string>();
                 const serverAiKeys = new Set<string>();
@@ -898,7 +954,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                   }
                   return true;
                 });
-                console.log(`[DesignProject] Final setMessages called with ${serverMessages.length} items`);
+                console.log(
+                  `[DesignProject] Final setMessages called with ${serverMessages.length} items`
+                );
                 return [...optimistic, ...serverMessages];
               });
               setIsTyping(false);
@@ -942,14 +1000,14 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsLoadingProject(false);
       }
     },
-    [transformMessages, handleLocalStorageDraft],
+    [transformMessages, handleLocalStorageDraft]
   );
 
   const toggleGeneration = (id: string) => {
     setGenerations((prev) =>
       prev.map((gen) =>
-        gen.id === id ? { ...gen, isCollapsed: !gen.isCollapsed } : gen,
-      ),
+        gen.id === id ? { ...gen, isCollapsed: !gen.isCollapsed } : gen
+      )
     );
   };
 
@@ -961,7 +1019,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     messageId: string,
     updatedContent: string,
     files: File[] | null,
-    projectId: string,
+    projectId: string
   ) => {
     try {
       setIsGenerating(true);
@@ -970,7 +1028,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         {
           text: updatedContent,
           files,
-        },
+        }
       );
     } catch (error) {
       console.error("Error editing message:", error);
@@ -985,8 +1043,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-
-
   const deleteMessage = async (messageId: string) => {
     try {
       if (!project?._id) {
@@ -996,7 +1052,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
       // Find the message index
       const messageIndex = messagesRef.current.findIndex(
-        (msg: any) => msg.id === messageId || msg._id === messageId,
+        (msg: any) => msg.id === messageId || msg._id === messageId
       );
 
       if (messageIndex === -1) {
@@ -1029,7 +1085,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           {
             data: { messageId },
             withCredentials: true,
-          },
+          }
         );
 
         if (response.data?.success) {
@@ -1039,7 +1095,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           });
         } else {
           throw new Error(
-            response.data?.message || "Failed to delete from server",
+            response.data?.message || "Failed to delete from server"
           );
         }
       } catch (apiError: any) {
@@ -1065,7 +1121,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const addReaction = async (
     messageId: string,
-    type: "like" | "dislike" | "comment",
+    type: "like" | "dislike" | "comment"
   ) => {
     try {
       if (!project?._id) {
@@ -1094,14 +1150,14 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             };
           }
           return msg;
-        }),
+        })
       );
 
       // Update on server
       await apiResponse.post(
         `/project/${project._id}/messages/${messageId}/reactions`,
         { type },
-        { withCredentials: true },
+        { withCredentials: true }
       );
     } catch (error) {
       console.error("Error adding reaction:", error);
@@ -1111,7 +1167,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const removeReaction = async (
     messageId: string,
-    type: "like" | "dislike" | "comment",
+    type: "like" | "dislike" | "comment"
   ) => {
     try {
       if (!project?._id) {
@@ -1137,13 +1193,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             };
           }
           return msg;
-        }),
+        })
       );
 
       // Update on server
       await apiResponse.delete(
         `/project/${project._id}/messages/${messageId}/reactions/${type}`,
-        { withCredentials: true },
+        { withCredentials: true }
       );
     } catch (error) {
       console.error("Error removing reaction:", error);
@@ -1161,7 +1217,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const handleKeyDown = (
-    _event?: React.KeyboardEvent<HTMLTextAreaElement>,
+    _event?: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {};
 
   const handlePaste = () => {};

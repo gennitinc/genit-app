@@ -1,37 +1,37 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { ScrollArea } from "./scroll-area";
+import ShinyText from "./shiny-text";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { useSpeechToText } from "@/hooks/use-speech-to-text";
+import { cn } from "@/lib/utils";
+import { Model } from "@/types/inspire";
+import { apiResponse } from "@/utils/apiResponse";
 import {
-  Mic,
-  Loader2,
+  audioGenApi,
+  imageGenApi,
+  modelApi,
+  textGenApi,
+  videoGenApi,
+} from "@/utils/inspire-api";
+import { AnimatePresence, motion } from "framer-motion";
+import {
   AlertCircle,
-  Zap,
   Check,
   ChevronDown,
   History,
   Image as ImageIcon,
-  Video as VideoIcon,
-  Type,
-  Music,
+  Loader2,
+  Mic,
   Monitor,
+  Music,
+  Type,
+  Video as VideoIcon,
+  Zap,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useSpeechToText } from "@/hooks/use-speech-to-text";
-import { cn } from "@/lib/utils";
-import ShinyText from "./shiny-text";
-import { useUserContext } from "@/context/AuthenticatedContext";
 import { useRouter } from "next/navigation";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import {
-  modelApi,
-  imageGenApi,
-  videoGenApi,
-  textGenApi,
-  audioGenApi,
-} from "@/utils/inspire-api";
-import { Model } from "@/types/inspire";
-import { apiResponse } from "@/utils/apiResponse";
-import { ScrollArea } from "./scroll-area";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const MODELS_BY_TYPE = {
   text: [
@@ -181,7 +181,7 @@ export function WorkflowPremiumInput({
       if (contentType === "all" || contentType === "image") {
         const res = await apiResponse.get(
           `/project/myprojects?type=ai-image-gen&limit=20`,
-          { withCredentials: true },
+          { withCredentials: true }
         );
         if (res.data?.projects) {
           const imageItems = res.data.projects
@@ -201,7 +201,7 @@ export function WorkflowPremiumInput({
       if (contentType === "all" || contentType === "video") {
         const res = await apiResponse.get(
           `/project/myprojects?type=ai-video-gen&limit=20`,
-          { withCredentials: true },
+          { withCredentials: true }
         );
         if (res.data?.projects) {
           const videoItems = res.data.projects
@@ -218,7 +218,12 @@ export function WorkflowPremiumInput({
         }
       }
 
-      if (contentType === "all" || contentType === "text" || contentType === "social" || contentType === "docs") {
+      if (
+        contentType === "all" ||
+        contentType === "text" ||
+        contentType === "social" ||
+        contentType === "docs"
+      ) {
         // If "all", passing undefined to getHistory might fetch all text-based items
         const textType = contentType === "all" ? undefined : contentType;
         const res = await textGenApi.getHistory(textType);
@@ -251,7 +256,7 @@ export function WorkflowPremiumInput({
       // Sort by creation date descending
       items.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
       setHistory(items);
     } catch (error) {
@@ -347,58 +352,58 @@ export function WorkflowPremiumInput({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="text-xs text-red-500 font-medium flex items-center mb-2 mx-4"
+            className='mx-4 mb-2 flex items-center text-xs font-medium text-red-500'
           >
-            <AlertCircle className="size-3.5 mr-2" />
+            <AlertCircle className='mr-2 size-3.5' />
             {error}
           </motion.p>
         )}
       </AnimatePresence>
 
-      <div className="flex items-center justify-between my-1 px-4 h-fit">
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium">Prompt</label>
-          <div className="h-4 w-px bg-border mx-1" />
+      <div className='my-1 flex h-fit items-center justify-between px-4'>
+        <div className='flex items-center gap-2'>
+          <label className='text-sm font-medium'>Prompt</label>
+          <div className='bg-border mx-1 h-4 w-px' />
         </div>
-        <div className="flex items-center justify-between px-4 h-fit">
-          <div className="flex items-center gap-2">
+        <div className='flex h-fit items-center justify-between px-4'>
+          <div className='flex items-center gap-2'>
             {isGenerating && (
               <ShinyText
-                text="Thinking..."
+                text='Thinking...'
                 disabled={false}
                 speed={3}
-                className="text-xs font-medium"
+                className='text-xs font-medium'
               />
             )}
           </div>
           {!isGenerating && (
-            <div className="flex items-center gap-1 justify-between w-full">
-              <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
+            <div className='flex w-full items-center justify-between gap-1'>
+              <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
+                <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                 {user ? (
-                  <span className="text-xs text-muted-foreground">
+                  <span className='text-muted-foreground text-xs'>
                     {(user?.creditsRemaining ?? 0).toLocaleString()} Credits
                     left
                   </span>
                 ) : (
-                  <span className="text-xs text-muted-foreground">
+                  <span className='text-muted-foreground text-xs'>
                     Get a 50 free credit
                   </span>
                 )}
               </div>
 
               {user && (user?.creditsRemaining ?? 0) === 0 && (
-                <div className="text-xs font-medium">
+                <div className='text-xs font-medium'>
                   {String(user?.userPlan) === "Basic" ? (
                     <span
-                      className="cursor-pointer text-blue-500 hover:underline"
+                      className='cursor-pointer text-blue-500 hover:underline'
                       onClick={() => router.push("/pricing")}
                     >
                       Upgrade
                     </span>
                   ) : (
                     <span
-                      className="cursor-pointer text-blue-500 hover:underline"
+                      className='cursor-pointer text-blue-500 hover:underline'
                       onClick={() => router.push("/user/settings?tab=billing")}
                     >
                       Buy Credits
@@ -413,16 +418,16 @@ export function WorkflowPremiumInput({
 
       <div
         className={cn(
-          "group flex flex-col gap-2 p-3 w-full rounded-[1.5rem] border transition-all duration-150 ease-in-out shadow-xl",
-          "bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl border-white dark:border-white/[0.08]",
+          "group flex w-full flex-col gap-2 rounded-[1.5rem] border p-3 shadow-xl transition-all duration-150 ease-in-out",
+          "border-white bg-white/80 backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-900/50",
           "ring-1 ring-black/[0.08] dark:ring-black/[0.88]",
           "focus-within:ring-black/[0.16] dark:focus-within:ring-black/[0.96]",
           "hover:ring-black/[0.12]",
-          "focus-within:border-white dark:focus-within:border-foreground/[0.16]",
-          disabled && "opacity-60 cursor-not-allowed",
+          "dark:focus-within:border-foreground/[0.16] focus-within:border-white",
+          disabled && "cursor-not-allowed opacity-60"
         )}
       >
-        <div className="min-w-0 w-full">
+        <div className='w-full min-w-0'>
           <textarea
             ref={textareaRef}
             value={isGenerating ? "" : value}
@@ -437,22 +442,22 @@ export function WorkflowPremiumInput({
             }
             disabled={isGenerating || disabled}
             className={cn(
-              " flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent outline-none scrollbar-none",
-              isGenerating && "placeholder:opacity-0",
+              "placeholder:text-muted-foreground/60 scrollbar-none flex w-full resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base",
+              isGenerating && "placeholder:opacity-0"
             )}
             style={{ minHeight }}
           />
         </div>
 
-        {footerContent && <div className="px-1">{footerContent}</div>}
+        {footerContent && <div className='px-1'>{footerContent}</div>}
 
-        <div className="flex items-center justify-between gap-1.5">
+        <div className='flex items-center justify-between gap-1.5'>
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-muted transition-colors text-xs font-medium text-muted-foreground hover:text-foreground">
-                <span className="opacity-70">
+              <button className='hover:bg-muted text-muted-foreground hover:text-foreground flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium transition-colors'>
+                <span className='opacity-70'>
                   {isLoadingModels ? (
-                    <Loader2 className="h-3 w-3 animate-spin" />
+                    <Loader2 className='h-3 w-3 animate-spin' />
                   ) : (
                     activeModel?.icon || "✦"
                   )}
@@ -460,14 +465,14 @@ export function WorkflowPremiumInput({
                 {isLoadingModels
                   ? "Loading..."
                   : activeModel?.name || "Select Model"}
-                <ChevronDown className="h-3 w-3 opacity-50" />
+                <ChevronDown className='h-3 w-3 opacity-50' />
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-1" align="start">
-              <div className="space-y-1">
+            <PopoverContent className='w-[200px] p-1' align='start'>
+              <div className='space-y-1'>
                 {isLoadingModels ? (
-                  <div className="flex items-center justify-center p-4">
-                    <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                  <div className='flex items-center justify-center p-4'>
+                    <Loader2 className='text-muted-foreground h-4 w-4 animate-spin' />
                   </div>
                 ) : (
                   currentModels.map((model) => (
@@ -475,18 +480,18 @@ export function WorkflowPremiumInput({
                       key={model.id}
                       onClick={() => onModelChange?.(model.id)}
                       className={cn(
-                        "flex items-center justify-between w-full px-2 py-1.5 rounded-sm text-xs transition-colors",
+                        "flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-xs transition-colors",
                         selectedModel === model.id
                           ? "bg-primary/10 text-primary font-medium"
-                          : "hover:bg-muted",
+                          : "hover:bg-muted"
                       )}
                     >
-                      <div className="flex items-center gap-2">
-                        <span className="opacity-70">{model.icon}</span>
+                      <div className='flex items-center gap-2'>
+                        <span className='opacity-70'>{model.icon}</span>
                         {model.name}
                       </div>
                       {selectedModel === model.id && (
-                        <Check className="h-3 w-3" />
+                        <Check className='h-3 w-3' />
                       )}
                     </button>
                   ))
@@ -494,18 +499,18 @@ export function WorkflowPremiumInput({
               </div>
             </PopoverContent>
           </Popover>
-          
+
           {(contentType === "image" || contentType === "video") && (
             <Popover>
               <PopoverTrigger asChild>
-                <button className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-muted transition-colors text-xs font-medium text-muted-foreground hover:text-foreground">
-                  <Monitor className="h-3.5 w-3.5 opacity-70" />
+                <button className='hover:bg-muted text-muted-foreground hover:text-foreground flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium transition-colors'>
+                  <Monitor className='h-3.5 w-3.5 opacity-70' />
                   {aspectRatio === "auto" ? "Auto" : aspectRatio || "16:9"}
-                  <ChevronDown className="h-3 w-3 opacity-50" />
+                  <ChevronDown className='h-3 w-3 opacity-50' />
                 </button>
               </PopoverTrigger>
-              <PopoverContent className="w-[180px] p-1" align="start">
-                <div className="space-y-1">
+              <PopoverContent className='w-[180px] p-1' align='start'>
+                <div className='space-y-1'>
                   {[
                     { value: "auto", label: "Auto Orientation" },
                     { value: "16:9", label: "Landscape 16:9" },
@@ -517,15 +522,15 @@ export function WorkflowPremiumInput({
                       key={ratio.value}
                       onClick={() => onAspectRatioChange?.(ratio.value)}
                       className={cn(
-                        "flex items-center justify-between w-full px-2 py-1.5 rounded-sm text-xs transition-colors",
+                        "flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-xs transition-colors",
                         aspectRatio === ratio.value
                           ? "bg-primary/10 text-primary font-medium"
-                          : "hover:bg-muted",
+                          : "hover:bg-muted"
                       )}
                     >
                       {ratio.label}
                       {aspectRatio === ratio.value && (
-                        <Check className="h-3 w-3" />
+                        <Check className='h-3 w-3' />
                       )}
                     </button>
                   ))}
@@ -538,38 +543,38 @@ export function WorkflowPremiumInput({
 
           <Popover open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-muted transition-colors text-xs font-medium text-muted-foreground hover:text-foreground">
-                <History className="h-3.5 w-3.5 opacity-70" />
+              <button className='hover:bg-muted text-muted-foreground hover:text-foreground flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium transition-colors'>
+                <History className='h-3.5 w-3.5 opacity-70' />
                 History
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-[320px] p-0" align="start">
-              <div className="p-3 border-b bg-muted/30">
-                <h4 className="text-xs font-semibold flex items-center gap-2">
-                  <History className="h-3 w-3" />
+            <PopoverContent className='w-[320px] p-0' align='start'>
+              <div className='bg-muted/30 border-b p-3'>
+                <h4 className='flex items-center gap-2 text-xs font-semibold'>
+                  <History className='h-3 w-3' />
                   {contentType === "all"
                     ? "Combined History"
                     : `${contentType.charAt(0).toUpperCase() + contentType.slice(1)} History`}
                 </h4>
               </div>
-              <ScrollArea className="h-[300px]">
-                <div className="p-2">
+              <ScrollArea className='h-[300px]'>
+                <div className='p-2'>
                   {isLoadingHistory ? (
-                    <div className="flex flex-col items-center justify-center py-8 gap-2">
-                      <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-                      <span className="text-[10px] text-muted-foreground">
+                    <div className='flex flex-col items-center justify-center gap-2 py-8'>
+                      <Loader2 className='text-muted-foreground h-5 w-5 animate-spin' />
+                      <span className='text-muted-foreground text-[10px]'>
                         Loading history...
                       </span>
                     </div>
                   ) : history.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-8 text-center px-4">
-                      <History className="h-8 w-8 text-muted-foreground/20 mb-2" />
-                      <p className="text-[10px] text-muted-foreground">
+                    <div className='flex flex-col items-center justify-center px-4 py-8 text-center'>
+                      <History className='text-muted-foreground/20 mb-2 h-8 w-8' />
+                      <p className='text-muted-foreground text-[10px]'>
                         No generation history found for this category.
                       </p>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className='grid grid-cols-2 gap-2'>
                       {history.map((item) => (
                         <div
                           key={item.id}
@@ -577,14 +582,14 @@ export function WorkflowPremiumInput({
                             onSelectHistoryItem?.(item);
                             setIsHistoryOpen(false);
                           }}
-                          className="group relative aspect-video rounded-md overflow-hidden bg-muted cursor-pointer border hover:border-primary/50 transition-all"
+                          className='group bg-muted hover:border-primary/50 relative aspect-video cursor-pointer overflow-hidden rounded-md border transition-all'
                         >
                           {item.thumbnail || item.url ? (
                             <>
                               {item.type === "video" ? (
                                 <video
                                   src={item.url}
-                                  className="w-full h-full object-cover"
+                                  className='h-full w-full object-cover'
                                   muted
                                   playsInline
                                   autoPlay
@@ -600,28 +605,28 @@ export function WorkflowPremiumInput({
                                 <img
                                   src={item.thumbnail || item.url}
                                   alt={item.prompt}
-                                  className="w-full h-full object-cover"
+                                  className='h-full w-full object-cover'
                                 />
                               )}
-                              <div className="absolute top-1 right-1">
+                              <div className='absolute top-1 right-1'>
                                 {item.type === "image" ? (
-                                  <ImageIcon className="h-3 w-3 text-white drop-shadow-md" />
+                                  <ImageIcon className='h-3 w-3 text-white drop-shadow-md' />
                                 ) : (
-                                  <VideoIcon className="h-3 w-3 text-white drop-shadow-md" />
+                                  <VideoIcon className='h-3 w-3 text-white drop-shadow-md' />
                                 )}
                               </div>
                             </>
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center p-2 bg-muted/50">
+                            <div className='bg-muted/50 flex h-full w-full items-center justify-center p-2'>
                               {item.type === "audio" ? (
-                                <Music className="h-4 w-4 text-muted-foreground" />
+                                <Music className='text-muted-foreground h-4 w-4' />
                               ) : (
-                                <Type className="h-4 w-4 text-muted-foreground" />
+                                <Type className='text-muted-foreground h-4 w-4' />
                               )}
                             </div>
                           )}
-                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2">
-                            <p className="text-[9px] text-white line-clamp-2 leading-tight">
+                          <div className='absolute inset-0 flex flex-col justify-end bg-black/60 p-2 opacity-0 transition-opacity group-hover:opacity-100'>
+                            <p className='line-clamp-2 text-[9px] leading-tight text-white'>
                               {item.prompt}
                             </p>
                           </div>
@@ -634,40 +639,40 @@ export function WorkflowPremiumInput({
             </PopoverContent>
           </Popover>
 
-          <div className="ml-auto flex items-center gap-1.5">
+          <div className='ml-auto flex items-center gap-1.5'>
             {rightContent}
 
             <button
-              type="button"
+              type='button'
               className={cn(
-                "relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 h-8 w-8",
+                "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out",
                 isListening
-                  ? "text-red-500 bg-red-500/10 animate-pulse"
-                  : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5",
+                  ? "animate-pulse bg-red-500/10 text-red-500"
+                  : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
               )}
               onClick={handleMicClick}
               disabled={!isSupported || isGenerating || disabled}
               title={isListening ? "Stop listening" : "Start voice input"}
             >
-              <Mic className="shrink-0 size-4" />
+              <Mic className='size-4 shrink-0' />
             </button>
 
             <button
-              type="button"
+              type='button'
               onClick={handleSubmit}
               disabled={isGenerating || !value.trim() || disabled}
-              className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shadow-md flex-shrink-0 disabled:opacity-50"
+              className='bg-primary text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out disabled:opacity-50'
             >
               {isGenerating ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className='h-4 w-4 animate-spin' />
               ) : (
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="shrink-0 size-5"
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='currentColor'
+                  viewBox='0 0 24 24'
+                  className='size-5 shrink-0'
                 >
-                  <path d="M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0" />
+                  <path d='M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0' />
                 </svg>
               )}
             </button>

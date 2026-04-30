@@ -8,7 +8,7 @@ function Page() {
   return (
     <React.Suspense
       fallback={
-        <div className="flex justify-center items-center min-h-[100dvh] overflow-hidden w-full bg-black">
+        <div className='flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-black'>
           {/* <Loading /> */}
         </div>
       }

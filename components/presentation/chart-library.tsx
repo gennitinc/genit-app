@@ -1,20 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import {
-  X,
-  BarChart3,
-  PieChart,
-  LineChart,
-  TrendingUp,
-  Download,
-  Settings,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -22,6 +11,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import {
+  BarChart3,
+  Download,
+  LineChart,
+  PieChart,
+  Settings,
+  TrendingUp,
+  X,
+} from "lucide-react";
+import { useMemo, useState } from "react";
 
 interface ChartData {
   labels: string[];
@@ -116,32 +116,32 @@ export function ChartLibrary({
   };
 
   return (
-    <div className="flex flex-col h-full max-h-[600px]">
+    <div className='flex h-full max-h-[600px] flex-col'>
       {/* Header */}
       {showHeader && (
-        <div className="p-4 pb-0 flex-shrink-0">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-purple-500/10 dark:bg-purple-500/10">
-                <BarChart3 className="w-5 h-5 text-purple-500 dark:text-purple-400" />
+        <div className='flex-shrink-0 p-4 pb-0'>
+          <div className='mb-4 flex items-center justify-between'>
+            <div className='flex items-center gap-3'>
+              <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 dark:bg-purple-500/10'>
+                <BarChart3 className='h-5 w-5 text-purple-500 dark:text-purple-400' />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-foreground">
+                <h3 className='text-foreground text-sm font-semibold'>
                   Chart Library
                 </h3>
-                <p className="text-xs text-muted-foreground">
+                <p className='text-muted-foreground text-xs'>
                   Create data visualizations
                 </p>
               </div>
             </div>
             {onClose && (
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={onClose}
-                className="h-6 w-6 p-0 hover:bg-muted text-muted-foreground hover:text-foreground"
+                className='hover:bg-muted text-muted-foreground hover:text-foreground h-6 w-6 p-0'
               >
-                <X className="w-3 h-3" />
+                <X className='h-3 w-3' />
               </Button>
             )}
           </div>
@@ -149,13 +149,13 @@ export function ChartLibrary({
       )}
 
       {/* Chart Configuration */}
-      <div className="flex-1 overflow-hidden px-4">
-        <ScrollArea className="h-full">
-          <div className="space-y-4 pb-4">
+      <div className='flex-1 overflow-hidden px-4'>
+        <ScrollArea className='h-full'>
+          <div className='space-y-4 pb-4'>
             {/* Chart Type Selection */}
-            <div className="space-y-2">
-              <Label className="text-xs font-medium">Chart Type</Label>
-              <div className="grid grid-cols-3 gap-2">
+            <div className='space-y-2'>
+              <Label className='text-xs font-medium'>Chart Type</Label>
+              <div className='grid grid-cols-3 gap-2'>
                 {(
                   ["bar", "pie", "line", "doughnut", "area"] as ChartType[]
                 ).map((type) => {
@@ -165,14 +165,14 @@ export function ChartLibrary({
                       key={type}
                       onClick={() => setChartType(type)}
                       className={cn(
-                        "flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all",
+                        "flex flex-col items-center gap-2 rounded-lg border-2 p-3 transition-all",
                         chartType === type
                           ? "border-purple-500 bg-purple-500/10"
                           : "border-border hover:border-purple-500/50"
                       )}
                     >
-                      <Icon className="w-5 h-5" />
-                      <span className="text-xs capitalize">{type}</span>
+                      <Icon className='h-5 w-5' />
+                      <span className='text-xs capitalize'>{type}</span>
                     </button>
                   );
                 })}
@@ -180,78 +180,78 @@ export function ChartLibrary({
             </div>
 
             {/* Chart Title */}
-            <div className="space-y-2">
-              <Label htmlFor="chart-title" className="text-xs font-medium">
+            <div className='space-y-2'>
+              <Label htmlFor='chart-title' className='text-xs font-medium'>
                 Chart Title (Optional)
               </Label>
               <Input
-                id="chart-title"
+                id='chart-title'
                 value={chartTitle}
                 onChange={(e) => setChartTitle(e.target.value)}
-                placeholder="e.g., Sales Overview"
-                className="h-9 text-sm"
+                placeholder='e.g., Sales Overview'
+                className='h-9 text-sm'
               />
             </div>
 
             {/* Labels */}
-            <div className="space-y-2">
-              <Label htmlFor="chart-labels" className="text-xs font-medium">
+            <div className='space-y-2'>
+              <Label htmlFor='chart-labels' className='text-xs font-medium'>
                 Labels (comma-separated)
               </Label>
               <Input
-                id="chart-labels"
+                id='chart-labels'
                 value={labels}
                 onChange={(e) => setLabels(e.target.value)}
-                placeholder="Q1, Q2, Q3, Q4"
-                className="h-9 text-sm"
+                placeholder='Q1, Q2, Q3, Q4'
+                className='h-9 text-sm'
               />
-              <p className="text-[10px] text-muted-foreground">
+              <p className='text-muted-foreground text-[10px]'>
                 {parsedLabels.length} label(s) detected
               </p>
             </div>
 
             {/* Data */}
-            <div className="space-y-2">
-              <Label htmlFor="chart-data" className="text-xs font-medium">
+            <div className='space-y-2'>
+              <Label htmlFor='chart-data' className='text-xs font-medium'>
                 Data Values (comma-separated)
               </Label>
               <Input
-                id="chart-data"
+                id='chart-data'
                 value={data}
                 onChange={(e) => setData(e.target.value)}
-                placeholder="100, 200, 150, 300"
-                className="h-9 text-sm"
+                placeholder='100, 200, 150, 300'
+                className='h-9 text-sm'
               />
-              <p className="text-[10px] text-muted-foreground">
+              <p className='text-muted-foreground text-[10px]'>
                 {parsedData.length} value(s) detected
               </p>
             </div>
 
             {/* Data Label */}
-            <div className="space-y-2">
-              <Label htmlFor="data-label" className="text-xs font-medium">
+            <div className='space-y-2'>
+              <Label htmlFor='data-label' className='text-xs font-medium'>
                 Data Series Label
               </Label>
               <Input
-                id="data-label"
+                id='data-label'
                 value={dataLabel}
                 onChange={(e) => setDataLabel(e.target.value)}
-                placeholder="Sales, Revenue, etc."
-                className="h-9 text-sm"
+                placeholder='Sales, Revenue, etc.'
+                className='h-9 text-sm'
               />
             </div>
 
             {/* Preview Info */}
             {parsedLabels.length > 0 && parsedData.length > 0 && (
-              <div className="p-3 rounded-lg bg-muted/50 border border-border">
-                <div className="flex items-center gap-2 mb-2">
-                  <Settings className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-xs font-medium">Preview</span>
+              <div className='bg-muted/50 border-border rounded-lg border p-3'>
+                <div className='mb-2 flex items-center gap-2'>
+                  <Settings className='text-muted-foreground h-4 w-4' />
+                  <span className='text-xs font-medium'>Preview</span>
                 </div>
-                <div className="text-xs text-muted-foreground space-y-1">
+                <div className='text-muted-foreground space-y-1 text-xs'>
                   <p>
                     Type:{" "}
-                    <span className="font-mono capitalize">{chartType}</span>
+                    <span className='font-mono capitalize'>{chartType}</span>
                   </p>
                   <p>
                     Data Points:{" "}
@@ -266,22 +266,22 @@ export function ChartLibrary({
       </div>
 
       {/* Insert Button */}
-      <div className="p-4 pt-0 border-t border-border flex-shrink-0">
+      <div className='border-border flex-shrink-0 border-t p-4 pt-0'>
         <Button
           onClick={handleInsert}
-          className="w-full"
-          size="sm"
+          className='w-full'
+          size='sm'
           disabled={
             parsedLabels.length === 0 ||
             parsedData.length === 0 ||
             parsedLabels.length !== parsedData.length
           }
         >
-          <Download className="w-4 h-4 mr-2" />
+          <Download className='mr-2 h-4 w-4' />
           Insert Chart
         </Button>
         {parsedLabels.length !== parsedData.length && (
-          <p className="text-xs text-destructive mt-2 text-center">
+          <p className='text-destructive mt-2 text-center text-xs'>
             Number of labels must match number of data values
           </p>
         )}

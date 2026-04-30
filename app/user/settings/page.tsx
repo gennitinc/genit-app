@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
-import withAuth from "@/helper/hoc/withAuth";
 import { Toaster } from "@/components/ui/sonner";
 import SettingsHome from "@/components/user-settings/settingsHome";
+import withAuth from "@/helper/hoc/withAuth";
+import { useEffect, useRef } from "react";
 
 function SettingsPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -39,12 +39,12 @@ function SettingsPage() {
   }, []);
 
   return (
-    <div className="flex relative w-full h-[100dvh] overflow-hidden bg-white dark:bg-black">
+    <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>
       <Toaster />
       <AppSidebar />
       <div
         ref={scrollContainerRef}
-        className="flex-1 flex flex-col overflow-auto will-change-scroll scroll-container"
+        className='scroll-container flex flex-1 flex-col overflow-auto will-change-scroll'
       >
         <TopNavWithAurora
           scrollContainerRef={
@@ -52,8 +52,8 @@ function SettingsPage() {
           }
         />
         <div
-          id="main-content"
-          className="flex-1"
+          id='main-content'
+          className='flex-1'
           style={{
             // Optimize rendering performance
             transform: "translateZ(0)",

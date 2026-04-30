@@ -1,27 +1,5 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { CommunityContent } from "@/types/inspire";
-import {
-  Heart,
-  Eye,
-  Loader2,
-  Play,
-  Pause,
-  RefreshCw,
-  Copy,
-  User,
-  Check,
-  ChevronDown,
-  ChevronUp,
-  Download,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { communityApi, creatorApi } from "@/utils/inspire-api";
-import { toast } from "@/hooks/use-toast";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -35,6 +13,28 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { CommunityContent } from "@/types/inspire";
+import { communityApi, creatorApi } from "@/utils/inspire-api";
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  Copy,
+  Download,
+  Eye,
+  Heart,
+  Loader2,
+  Pause,
+  Play,
+  RefreshCw,
+  User,
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
@@ -209,22 +209,20 @@ function VideoCard({
       onClick={() => onClick(item)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="group relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 cursor-pointer break-inside-avoid mb-4"
+      className='group relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800'
     >
-    
-      
-      <div className="relative">
+      <div className='relative'>
         {item.contentType === "video" && item.videoUrl ? (
           <>
             <video
               ref={videoRef}
               src={item.videoUrl}
               poster={item.thumbnailUrl}
-              className="w-full object-cover"
+              className='w-full object-cover'
               style={{ aspectRatio }}
               muted
               playsInline
-              preload="metadata"
+              preload='metadata'
               loop
             />
           </>
@@ -232,25 +230,25 @@ function VideoCard({
           <img
             src={item.thumbnailUrl}
             alt={item.prompt}
-            className="w-full object-cover"
+            className='w-full object-cover'
             style={{ aspectRatio }}
-            loading="lazy"
+            loading='lazy'
           />
         )}
 
         {/* Gradient overlay on hover */}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className='absolute inset-0 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100' />
 
         {/* Play/Pause and View icons - Play/Pause only on mobile/tablet, View always visible */}
         {item.contentType === "video" && item.videoUrl && (
-          <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+          <div className='pointer-events-none absolute inset-0 z-10 flex items-center justify-center'>
             <div
               className={`flex items-center ${!isDesktop ? "gap-3" : ""} pointer-events-auto`}
             >
               {/* Play/Pause Button - Only visible on mobile/tablet */}
               {!isDesktop && (
                 <button
-                  type="button"
+                  type='button'
                   onClick={(e) => {
                     e.stopPropagation();
                     if (isPaused) {
@@ -262,44 +260,44 @@ function VideoCard({
                       }
                     }
                   }}
-                  className="w-10 h-10 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
+                  className='flex h-10 w-10 items-center justify-center rounded-full bg-black/70 opacity-100 shadow-lg backdrop-blur-sm transition-colors hover:bg-black/80'
                 >
                   {isPaused ? (
-                    <Play className="w-5 h-5 text-white ml-0.5" />
+                    <Play className='ml-0.5 h-5 w-5 text-white' />
                   ) : (
-                    <Pause className="w-5 h-5 text-white" />
+                    <Pause className='h-5 w-5 text-white' />
                   )}
                 </button>
               )}
               {/* View Button - Always visible */}
               <button
-                type="button"
+                type='button'
                 onClick={(e) => {
                   e.stopPropagation();
                   onClick(item);
                 }}
-                className="w-10 h-10 rounded-full bg-black/70 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center shadow-lg transition-colors opacity-100"
+                className='flex h-10 w-10 items-center justify-center rounded-full bg-black/70 opacity-100 shadow-lg backdrop-blur-sm transition-colors hover:bg-black/80'
               >
-                <Eye className="w-5 h-5 text-white" />
+                <Eye className='h-5 w-5 text-white' />
               </button>
             </div>
           </div>
         )}
 
         {/* Likes count and heart icon - Top right, centered together */}
-        <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
+        <div className='absolute top-3 right-3 z-10 flex items-center gap-1.5'>
           {item.likes > 0 && (
-            <span className="text-white text-xs font-medium">{item.likes}</span>
+            <span className='text-xs font-medium text-white'>{item.likes}</span>
           )}
           <button
-            type="button"
+            type='button'
             onClick={(e) => onLike(e, item.id)}
             disabled={likingId === item.id}
-            className="w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className='flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all hover:bg-black/70 disabled:cursor-not-allowed disabled:opacity-50'
             title={isLiked ? "Unlike" : "Like"}
           >
             <Heart
-              className={`w-4 h-4 transition-all ${
+              className={`h-4 w-4 transition-all ${
                 isLiked ? "fill-red-500 text-red-500" : "fill-none text-white"
               }`}
             />
@@ -307,56 +305,56 @@ function VideoCard({
         </div>
 
         {/* Prompt and Recreate button - Bottom overlay on hover */}
-        <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-          <div className="mb-2">
-            <p className="text-white text-sm font-medium line-clamp-2">
+        <div className='absolute right-0 bottom-0 left-0 p-3 opacity-0 transition-opacity group-hover:opacity-100'>
+          <div className='mb-2'>
+            <p className='line-clamp-2 text-sm font-medium text-white'>
               {item.prompt}
             </p>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className='flex flex-col gap-2'>
             <Link
               href={`/creator/${item.author.name}`}
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-2 hover:opacity-80 transition-opacity w-fit"
+              className='flex w-fit items-center gap-2 transition-opacity hover:opacity-80'
             >
               {item.author.avatar ? (
                 <img
                   src={item.author.avatar}
                   alt={item.author.name}
-                  className="w-5 h-5 rounded-full object-cover"
+                  className='h-5 w-5 rounded-full object-cover'
                 />
               ) : (
-                <div className="w-5 h-5 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-                  <User className="w-3 h-3 text-neutral-600 dark:text-neutral-400" />
+                <div className='flex h-5 w-5 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+                  <User className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
                 </div>
               )}
-              <span className="text-xs text-white/80 font-medium">
+              <span className='text-xs font-medium text-white/80'>
                 {item.author.name}
               </span>
               {item.author.isVerified && (
                 <svg
-                  viewBox="0 0 22 22"
-                  aria-label="Verified account"
-                  role="img"
-                  className="w-3.5 h-3.5 flex-shrink-0"
-                  data-testid="icon-verified"
-                  fill="#3b82f6"
+                  viewBox='0 0 22 22'
+                  aria-label='Verified account'
+                  role='img'
+                  className='h-3.5 w-3.5 flex-shrink-0'
+                  data-testid='icon-verified'
+                  fill='#3b82f6'
                 >
                   <g>
-                    <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                    <path d='M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z' />
                   </g>
                 </svg>
               )}
             </Link>
             <button
-              type="button"
+              type='button'
               onClick={(e) => {
                 e.stopPropagation();
                 onRecreate(item);
               }}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-medium transition-colors w-fit"
+              className='flex w-fit items-center gap-1 rounded-lg bg-cyan-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-cyan-600'
             >
-              <RefreshCw className="w-3 h-3" />
+              <RefreshCw className='h-3 w-3' />
               Recreate
             </button>
           </div>
@@ -511,14 +509,14 @@ export function CreatorProfileContent({
     ];
 
     return (
-      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 mb-8 w-full">
+      <div className='mb-8 w-full columns-2 gap-4 md:columns-3 lg:columns-4'>
         {skeletonHeights.map((height, idx) => (
           <div
             key={`skeleton-${idx}`}
-            className="break-inside-avoid mb-4 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800"
+            className='mb-4 break-inside-avoid overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800'
           >
             <Skeleton
-              className="w-full rounded-xl bg-neutral-200 dark:bg-neutral-700"
+              className='w-full rounded-xl bg-neutral-200 dark:bg-neutral-700'
               style={{ height: `${height}px` }}
             />
           </div>
@@ -529,8 +527,8 @@ export function CreatorProfileContent({
 
   if (content.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-neutral-500 dark:text-neutral-400">
+      <div className='py-12 text-center'>
+        <p className='text-neutral-500 dark:text-neutral-400'>
           No {contentType} published yet
         </p>
       </div>
@@ -539,7 +537,7 @@ export function CreatorProfileContent({
 
   return (
     <>
-      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 mb-8 w-full">
+      <div className='mb-8 w-full columns-2 gap-4 md:columns-3 lg:columns-4'>
         {contentState.map((item) => {
           const isLiked = likedIds.has(item.id);
           const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "16/9"];
@@ -568,7 +566,7 @@ export function CreatorProfileContent({
           open={!!selectedContent}
           onOpenChange={() => setSelectedContent(null)}
         >
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden flex flex-col p-0">
+          <DialogContent className='flex max-h-[90vh] max-w-2xl flex-col overflow-hidden p-0'>
             {selectedContent && (
               <ContentDetailContent
                 content={selectedContent}
@@ -592,7 +590,7 @@ export function CreatorProfileContent({
           open={!!selectedContent}
           onOpenChange={() => setSelectedContent(null)}
         >
-          <DrawerContent className="max-h-[90vh] overflow-hidden flex flex-col">
+          <DrawerContent className='flex max-h-[90vh] flex-col overflow-hidden'>
             {selectedContent && (
               <ContentDetailContent
                 content={selectedContent}
@@ -658,34 +656,34 @@ function ContentDetailContent({
   }, [content.videoUrl, content.contentType]);
 
   return (
-    <div className="flex flex-col h-full max-h-[90vh] overflow-hidden">
-      <div className="flex-1 overflow-y-auto min-h-0">
+    <div className='flex h-full max-h-[90vh] flex-col overflow-hidden'>
+      <div className='min-h-0 flex-1 overflow-y-auto'>
         {/* Media Preview */}
-        <div className="relative w-full bg-neutral-100 dark:bg-neutral-800">
+        <div className='relative w-full bg-neutral-100 dark:bg-neutral-800'>
           {content.contentType === "video" && content.videoUrl ? (
             <video
               ref={videoDetailRef}
               src={content.videoUrl}
               controls
               playsInline
-              preload="auto"
+              preload='auto'
               autoPlay
-              className="w-full h-auto object-contain"
+              className='h-auto w-full object-contain'
               poster={content.thumbnailUrl}
             />
           ) : (
             <img
               src={content.mediaUrl}
               alt={content.prompt}
-              className="w-full h-auto object-contain"
+              className='h-auto w-full object-contain'
             />
           )}
         </div>
 
-        <div className="px-6 space-y-4">
+        <div className='space-y-4 px-6'>
           {/* Prompt */}
           <div>
-            <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-1">
+            <h3 className='mb-1 text-sm font-medium text-neutral-500 dark:text-neutral-400'>
               Prompt
             </h3>
             <div>
@@ -700,17 +698,17 @@ function ContentDetailContent({
               {content.prompt.split("\n").length > 2 ||
               (content.prompt.length > 200 && !showFullPrompt) ? (
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => setShowFullPrompt(!showFullPrompt)}
-                  className="text-neutral-500 dark:text-neutral-400 text-xs font-medium mt-1 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors flex items-center gap-1"
+                  className='mt-1 flex items-center gap-1 text-xs font-medium text-neutral-500 transition-colors hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300'
                 >
                   {showFullPrompt ? (
                     <>
-                      View less <ChevronUp className="w-3 h-3" />
+                      View less <ChevronUp className='h-3 w-3' />
                     </>
                   ) : (
                     <>
-                      View more <ChevronDown className="w-3 h-3" />
+                      View more <ChevronDown className='h-3 w-3' />
                     </>
                   )}
                 </button>
@@ -721,57 +719,57 @@ function ContentDetailContent({
           {/* Creator Info */}
           <Link
             href={`/creator/${content.author.name}`}
-            className="flex items-center gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            className='flex items-center gap-3 rounded-lg bg-neutral-50 p-3 transition-colors hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800'
           >
             {content.author.avatar ? (
               <img
                 src={content.author.avatar}
                 alt={content.author.name}
-                className="w-10 h-10 rounded-full object-cover"
+                className='h-10 w-10 rounded-full object-cover'
               />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
-                <User className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+              <div className='flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+                <User className='h-5 w-5 text-neutral-600 dark:text-neutral-400' />
               </div>
             )}
-            <div className="flex-1">
-              <div className="flex items-center gap-1.5">
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">
+            <div className='flex-1'>
+              <div className='flex items-center gap-1.5'>
+                <p className='text-sm font-medium text-neutral-900 dark:text-white'>
                   {content.author.name}
                 </p>
                 {content.author.isVerified && (
                   <svg
-                    viewBox="0 0 22 22"
-                    aria-label="Verified account"
-                    role="img"
-                    className="w-4 h-4 flex-shrink-0"
-                    data-testid="icon-verified"
-                    fill="#3b82f6"
+                    viewBox='0 0 22 22'
+                    aria-label='Verified account'
+                    role='img'
+                    className='h-4 w-4 flex-shrink-0'
+                    data-testid='icon-verified'
+                    fill='#3b82f6'
                   >
                     <g>
-                      <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z" />
+                      <path d='M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z' />
                     </g>
                   </svg>
                 )}
               </div>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400">
+              <p className='text-xs text-neutral-500 dark:text-neutral-400'>
                 Creator
               </p>
             </div>
           </Link>
 
           {/* Stats */}
-          <div className="flex items-center gap-4 m-2">
+          <div className='m-2 flex items-center gap-4'>
             {onLike ? (
               <button
-                type="button"
+                type='button'
                 onClick={(e) => onLike(e, content.id)}
                 disabled={isLiking}
-                className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-red-500 transition-colors disabled:opacity-50"
+                className='flex items-center gap-2 text-sm text-neutral-600 transition-colors hover:text-red-500 disabled:opacity-50 dark:text-neutral-400'
               >
                 <span>{content.likes}</span>
                 <Heart
-                  className={`w-4 h-4 transition-all ${
+                  className={`h-4 w-4 transition-all ${
                     isLiked || content.isLiked
                       ? "fill-red-500 text-red-500"
                       : "fill-none"
@@ -779,13 +777,13 @@ function ContentDetailContent({
                 />
               </button>
             ) : (
-              <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+              <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
                 <span>{content.likes}</span>
-                <Heart className="w-4 h-4" />
+                <Heart className='h-4 w-4' />
               </div>
             )}
-            <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-              <Eye className="w-4 h-4" />
+            <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
+              <Eye className='h-4 w-4' />
               <span>{content.views}</span>
             </div>
           </div>
@@ -793,18 +791,18 @@ function ContentDetailContent({
       </div>
 
       {/* Actions - Fixed at bottom */}
-      <div className="shrink-0 px-6 py-4 border-t bg-neutral-50 dark:bg-neutral-900">
-        <div className="flex gap-2">
+      <div className='shrink-0 border-t bg-neutral-50 px-6 py-4 dark:bg-neutral-900'>
+        <div className='flex gap-2'>
           <button
-            type="button"
+            type='button'
             onClick={onRecreate}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white font-medium transition-colors"
+            className='flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-500 px-4 py-2.5 font-medium text-white transition-colors hover:bg-cyan-600'
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className='h-4 w-4' />
             Recreate
           </button>
           <button
-            type="button"
+            type='button'
             onClick={() => {
               navigator.clipboard.writeText(content.prompt);
               setCopied(true);
@@ -814,16 +812,16 @@ function ContentDetailContent({
               });
               setTimeout(() => setCopied(false), 2000);
             }}
-            className="px-4 py-2.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-colors"
+            className='rounded-lg bg-neutral-100 px-4 py-2.5 text-neutral-900 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'
           >
             {copied ? (
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className='h-4 w-4 text-green-500' />
             ) : (
-              <Copy className="w-4 h-4" />
+              <Copy className='h-4 w-4' />
             )}
           </button>
           <button
-            type="button"
+            type='button'
             onClick={async () => {
               try {
                 const url =
@@ -861,9 +859,9 @@ function ContentDetailContent({
                 });
               }
             }}
-            className="px-4 py-2.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white transition-colors"
+            className='rounded-lg bg-neutral-100 px-4 py-2.5 text-neutral-900 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'
           >
-            <Download className="w-4 h-4" />
+            <Download className='h-4 w-4' />
           </button>
         </div>
       </div>

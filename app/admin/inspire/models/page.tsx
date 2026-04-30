@@ -1,26 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { modelApi } from "@/utils/inspire-api";
-import { Model, ModelType } from "@/types/inspire";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  Trash2,
-  Search,
-  Loader2,
-  Image as ImageIcon,
-  Video,
-  Plus,
-  Edit,
-  X,
-  Music,
-  Type as TypeIcon,
-  Share2,
-  FileText,
-} from "lucide-react";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -36,10 +19,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { Model, ModelType } from "@/types/inspire";
+import { modelApi } from "@/utils/inspire-api";
+import {
+  Edit,
+  FileText,
+  Image as ImageIcon,
+  Loader2,
+  Music,
+  Plus,
+  Search,
+  Share2,
+  Trash2,
+  Type as TypeIcon,
+  Video,
+  X,
+} from "lucide-react";
+import { toast } from "sonner";
+import { useCallback, useEffect, useState } from "react";
 
 export default function AdminModelsPage() {
   const [models, setModels] = useState<Model[]>([]);
@@ -211,7 +211,7 @@ export default function AdminModelsPage() {
         const response = await modelApi.update(
           editingModel._id,
           formData,
-          iconFile || undefined,
+          iconFile || undefined
         );
         if (response.success) {
           toast.success("Model updated successfully");
@@ -252,109 +252,109 @@ export default function AdminModelsPage() {
   });
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-6 flex items-center justify-between">
+    <div className='container mx-auto px-4 py-8'>
+      <div className='mb-6 flex items-center justify-between'>
         <div>
-          <h1 className="text-3xl font-bold mb-2">Model Management</h1>
-          <p className="text-muted-foreground">
+          <h1 className='mb-2 text-3xl font-bold'>Model Management</h1>
+          <p className='text-muted-foreground'>
             Manage AI models for image and video generation
           </p>
         </div>
         <Button onClick={handleCreateClick}>
-          <Plus className="w-4 h-4 mr-2" />
+          <Plus className='mr-2 h-4 w-4' />
           Create Model
         </Button>
       </div>
 
-      <div className="mb-6 flex gap-4 items-center flex-wrap">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+      <div className='mb-6 flex flex-wrap items-center gap-4'>
+        <div className='relative max-w-md flex-1'>
+          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
-            placeholder="Search models..."
+            placeholder='Search models...'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className='pl-10'
           />
         </div>
         <Select value={filterType} onValueChange={(v: any) => setFilterType(v)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by type" />
+          <SelectTrigger className='w-[180px]'>
+            <SelectValue placeholder='Filter by type' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            <SelectItem value="image">Image Models</SelectItem>
-            <SelectItem value="video">Video Models</SelectItem>
-            <SelectItem value="audio">Audio Models</SelectItem>
-            <SelectItem value="text">Text Models</SelectItem>
-            <SelectItem value="social">Social Models</SelectItem>
-            <SelectItem value="docs">Docs Models</SelectItem>
+            <SelectItem value='all'>All Types</SelectItem>
+            <SelectItem value='image'>Image Models</SelectItem>
+            <SelectItem value='video'>Video Models</SelectItem>
+            <SelectItem value='audio'>Audio Models</SelectItem>
+            <SelectItem value='text'>Text Models</SelectItem>
+            <SelectItem value='social'>Social Models</SelectItem>
+            <SelectItem value='docs'>Docs Models</SelectItem>
           </SelectContent>
         </Select>
-        <div className="text-sm text-muted-foreground">
+        <div className='text-muted-foreground text-sm'>
           {filteredModels.length} model{filteredModels.length !== 1 ? "s" : ""}
         </div>
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+        <div className='flex items-center justify-center py-12'>
+          <Loader2 className='text-muted-foreground h-8 w-8 animate-spin' />
         </div>
       ) : filteredModels.length === 0 ? (
-        <div className="text-center py-12 text-muted-foreground">
+        <div className='text-muted-foreground py-12 text-center'>
           No models found
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
           {filteredModels.map((model) => (
             <div
               key={model._id}
-              className="group relative border rounded-lg p-4 bg-card hover:shadow-lg transition-shadow"
+              className='group bg-card relative rounded-lg border p-4 transition-shadow hover:shadow-lg'
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2">
+              <div className='mb-3 flex items-start justify-between'>
+                <div className='flex items-center gap-2'>
                   {model.type === "image" && (
-                    <ImageIcon className="w-5 h-5 text-blue-500" />
+                    <ImageIcon className='h-5 w-5 text-blue-500' />
                   )}
                   {model.type === "video" && (
-                    <Video className="w-5 h-5 text-purple-500" />
+                    <Video className='h-5 w-5 text-purple-500' />
                   )}
                   {model.type === "audio" && (
-                    <Music className="w-5 h-5 text-green-500" />
+                    <Music className='h-5 w-5 text-green-500' />
                   )}
                   {model.type === "text" && (
-                    <TypeIcon className="w-5 h-5 text-orange-500" />
+                    <TypeIcon className='h-5 w-5 text-orange-500' />
                   )}
                   {model.type === "social" && (
-                    <Share2 className="w-5 h-5 text-pink-500" />
+                    <Share2 className='h-5 w-5 text-pink-500' />
                   )}
                   {model.type === "docs" && (
-                    <FileText className="w-5 h-5 text-gray-500" />
+                    <FileText className='h-5 w-5 text-gray-500' />
                   )}
-                  <h3 className="font-semibold">{model.name}</h3>
+                  <h3 className='font-semibold'>{model.name}</h3>
                 </div>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className='flex gap-1 opacity-0 transition-opacity group-hover:opacity-100'>
                   <Button
-                    variant="ghost"
-                    size="icon"
+                    variant='ghost'
+                    size='icon'
                     onClick={() => handleEditClick(model)}
-                    className="h-8 w-8"
+                    className='h-8 w-8'
                   >
-                    <Edit className="w-4 h-4" />
+                    <Edit className='h-4 w-4' />
                   </Button>
                   <Button
-                    variant="ghost"
-                    size="icon"
+                    variant='ghost'
+                    size='icon'
                     onClick={() => handleDeleteClick(model)}
-                    className="h-8 w-8 text-destructive"
+                    className='text-destructive h-8 w-8'
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className='h-4 w-4' />
                   </Button>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">{model.provider}</Badge>
+              <div className='space-y-2'>
+                <div className='flex flex-wrap gap-2'>
+                  <Badge variant='outline'>{model.provider}</Badge>
                   <Badge
                     variant={
                       model.status === "active" ? "default" : "secondary"
@@ -363,28 +363,28 @@ export default function AdminModelsPage() {
                     {model.status}
                   </Badge>
                   {model.isDefault && (
-                    <Badge variant="default" className="bg-green-500">
+                    <Badge variant='default' className='bg-green-500'>
                       Default
                     </Badge>
                   )}
                   {model.isPremium && (
-                    <Badge variant="default" className="bg-yellow-500">
+                    <Badge variant='default' className='bg-yellow-500'>
                       Premium
                     </Badge>
                   )}
                 </div>
 
-                <p className="text-sm text-muted-foreground">
+                <p className='text-muted-foreground text-sm'>
                   ID: {model.modelId}
                 </p>
 
                 {model.description && (
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <p className='text-muted-foreground line-clamp-2 text-sm'>
                     {model.description}
                   </p>
                 )}
 
-                <div className="text-xs text-muted-foreground">
+                <div className='text-muted-foreground text-xs'>
                   Usage: {model.usageCount || 0} times
                 </div>
               </div>
@@ -395,7 +395,7 @@ export default function AdminModelsPage() {
 
       {/* Create Dialog */}
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>Create New Model</DialogTitle>
             <DialogDescription>
@@ -403,22 +403,22 @@ export default function AdminModelsPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name *</Label>
+          <div className='space-y-4 py-4'>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='name'>Name *</Label>
                 <Input
-                  id="name"
+                  id='name'
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  placeholder="e.g., DALL-E 3"
+                  placeholder='e.g., DALL-E 3'
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="type">Type *</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='type'>Type *</Label>
                 <Select
                   value={formData.type}
                   onValueChange={(v: "image" | "video" | "audio" | "text") =>
@@ -429,107 +429,107 @@ export default function AdminModelsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="image">Image</SelectItem>
-                    <SelectItem value="video">Video</SelectItem>
-                    <SelectItem value="audio">Audio</SelectItem>
-                    <SelectItem value="text">Text</SelectItem>
-                    <SelectItem value="social">Social</SelectItem>
-                    <SelectItem value="docs">Documentation</SelectItem>
+                    <SelectItem value='image'>Image</SelectItem>
+                    <SelectItem value='video'>Video</SelectItem>
+                    <SelectItem value='audio'>Audio</SelectItem>
+                    <SelectItem value='text'>Text</SelectItem>
+                    <SelectItem value='social'>Social</SelectItem>
+                    <SelectItem value='docs'>Documentation</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="provider">Provider *</Label>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='provider'>Provider *</Label>
                 <Input
-                  id="provider"
+                  id='provider'
                   value={formData.provider}
                   onChange={(e) =>
                     setFormData({ ...formData, provider: e.target.value })
                   }
-                  placeholder="e.g., openai, stability"
+                  placeholder='e.g., openai, stability'
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="modelId">Model ID *</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='modelId'>Model ID *</Label>
                 <Input
-                  id="modelId"
+                  id='modelId'
                   value={formData.modelId}
                   onChange={(e) =>
                     setFormData({ ...formData, modelId: e.target.value })
                   }
-                  placeholder="e.g., dall-e-3"
+                  placeholder='e.g., dall-e-3'
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+            <div className='space-y-2'>
+              <Label htmlFor='description'>Description</Label>
               <Textarea
-                id="description"
+                id='description'
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                placeholder="Model description..."
+                placeholder='Model description...'
                 rows={3}
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="icon">Model Icon/Logo</Label>
-              <div className="flex items-center gap-4">
+            <div className='space-y-2'>
+              <Label htmlFor='icon'>Model Icon/Logo</Label>
+              <div className='flex items-center gap-4'>
                 {iconPreview && (
-                  <div className="relative w-16 h-16 border rounded-lg overflow-hidden">
+                  <div className='relative h-16 w-16 overflow-hidden rounded-lg border'>
                     {iconPreview.startsWith("data:image") ||
                     iconPreview.startsWith("http") ? (
                       <img
                         src={iconPreview}
-                        alt="Icon preview"
-                        className="w-full h-full object-contain"
+                        alt='Icon preview'
+                        className='h-full w-full object-contain'
                       />
                     ) : (
                       <div
-                        className="w-full h-full"
+                        className='h-full w-full'
                         dangerouslySetInnerHTML={{ __html: iconPreview }}
                       />
                     )}
                   </div>
                 )}
-                <div className="flex-1">
+                <div className='flex-1'>
                   <Input
-                    id="icon"
-                    type="file"
-                    accept="image/*,.svg"
+                    id='icon'
+                    type='file'
+                    accept='image/*,.svg'
                     onChange={handleIconChange}
-                    className="cursor-pointer"
+                    className='cursor-pointer'
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className='text-muted-foreground mt-1 text-xs'>
                     Upload an icon/logo for this model (SVG, PNG, JPG, WebP)
                   </p>
                 </div>
                 {iconPreview && (
                   <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
+                    type='button'
+                    variant='outline'
+                    size='sm'
                     onClick={() => {
                       setIconFile(null);
                       setIconPreview(null);
                     }}
                   >
-                    <X className="w-4 h-4" />
+                    <X className='h-4 w-4' />
                   </Button>
                 )}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="status">Status</Label>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='status'>Status</Label>
                 <Select
                   value={formData.status}
                   onValueChange={(v: "active" | "inactive" | "beta") =>
@@ -540,17 +540,17 @@ export default function AdminModelsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                    <SelectItem value="beta">Beta</SelectItem>
+                    <SelectItem value='active'>Active</SelectItem>
+                    <SelectItem value='inactive'>Inactive</SelectItem>
+                    <SelectItem value='beta'>Beta</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="maxResolution">Max Resolution</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='maxResolution'>Max Resolution</Label>
                 <Input
-                  id="maxResolution"
+                  id='maxResolution'
                   value={formData.capabilities.maxResolution}
                   onChange={(e) =>
                     setFormData({
@@ -561,39 +561,39 @@ export default function AdminModelsPage() {
                       },
                     })
                   }
-                  placeholder="e.g., 1024x1024"
+                  placeholder='e.g., 1024x1024'
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
+            <div className='flex items-center gap-6'>
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="isDefault"
+                  id='isDefault'
                   checked={formData.isDefault}
                   onCheckedChange={(checked) =>
                     setFormData({ ...formData, isDefault: checked })
                   }
                 />
-                <Label htmlFor="isDefault">Set as Default</Label>
+                <Label htmlFor='isDefault'>Set as Default</Label>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="isPremium"
+                  id='isPremium'
                   checked={formData.isPremium}
                   onCheckedChange={(checked) =>
                     setFormData({ ...formData, isPremium: checked })
                   }
                 />
-                <Label htmlFor="isPremium">Premium Model</Label>
+                <Label htmlFor='isPremium'>Premium Model</Label>
               </div>
             </div>
 
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
+            <div className='flex items-center gap-6'>
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="supportsAspectRatio"
+                  id='supportsAspectRatio'
                   checked={formData.capabilities.supportsAspectRatio}
                   onCheckedChange={(checked) =>
                     setFormData({
@@ -605,14 +605,14 @@ export default function AdminModelsPage() {
                     })
                   }
                 />
-                <Label htmlFor="supportsAspectRatio">
+                <Label htmlFor='supportsAspectRatio'>
                   Supports Aspect Ratio
                 </Label>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="supportsStyle"
+                  id='supportsStyle'
                   checked={formData.capabilities.supportsStyle}
                   onCheckedChange={(checked) =>
                     setFormData({
@@ -624,14 +624,14 @@ export default function AdminModelsPage() {
                     })
                   }
                 />
-                <Label htmlFor="supportsStyle">Supports Style</Label>
+                <Label htmlFor='supportsStyle'>Supports Style</Label>
               </div>
             </div>
 
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
+            <div className='flex items-center gap-6'>
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="supportsVideoReference"
+                  id='supportsVideoReference'
                   checked={formData.capabilities.supportsVideoReference}
                   onCheckedChange={(checked) =>
                     setFormData({
@@ -643,14 +643,14 @@ export default function AdminModelsPage() {
                     })
                   }
                 />
-                <Label htmlFor="supportsVideoReference">
+                <Label htmlFor='supportsVideoReference'>
                   Supports Video Ref
                 </Label>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="supportsSubjectReference"
+                  id='supportsSubjectReference'
                   checked={formData.capabilities.supportsSubjectReference}
                   onCheckedChange={(checked) =>
                     setFormData({
@@ -662,23 +662,23 @@ export default function AdminModelsPage() {
                     })
                   }
                 />
-                <Label htmlFor="supportsSubjectReference">
+                <Label htmlFor='supportsSubjectReference'>
                   Supports Subject Ref
                 </Label>
               </div>
             </div>
 
             {formData.type === "video" && (
-              <div className="flex items-center gap-6">
-                <div className="flex items-center gap-2">
+              <div className='flex items-center gap-6'>
+                <div className='flex items-center gap-2'>
                   <Switch
-                    id="allowCustomAudio"
+                    id='allowCustomAudio'
                     checked={formData.allowCustomAudio}
                     onCheckedChange={(checked) =>
                       setFormData({ ...formData, allowCustomAudio: checked })
                     }
                   />
-                  <Label htmlFor="allowCustomAudio">Allow Custom Audio</Label>
+                  <Label htmlFor='allowCustomAudio'>Allow Custom Audio</Label>
                 </div>
               </div>
             )}
@@ -686,7 +686,7 @@ export default function AdminModelsPage() {
 
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => setCreateDialogOpen(false)}
             >
               Cancel
@@ -694,7 +694,7 @@ export default function AdminModelsPage() {
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Creating...
                 </>
               ) : (
@@ -707,7 +707,7 @@ export default function AdminModelsPage() {
 
       {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>Edit Model</DialogTitle>
             <DialogDescription>
@@ -715,12 +715,12 @@ export default function AdminModelsPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="edit-name">Name *</Label>
+          <div className='space-y-4 py-4'>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='edit-name'>Name *</Label>
                 <Input
-                  id="edit-name"
+                  id='edit-name'
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
@@ -728,8 +728,8 @@ export default function AdminModelsPage() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="edit-type">Type *</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='edit-type'>Type *</Label>
                 <Select
                   value={formData.type}
                   onValueChange={(v: ModelType) =>
@@ -740,22 +740,22 @@ export default function AdminModelsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="image">Image</SelectItem>
-                    <SelectItem value="video">Video</SelectItem>
-                    <SelectItem value="audio">Audio</SelectItem>
-                    <SelectItem value="text">Text</SelectItem>
-                    <SelectItem value="social">Social</SelectItem>
-                    <SelectItem value="docs">Documentation</SelectItem>
+                    <SelectItem value='image'>Image</SelectItem>
+                    <SelectItem value='video'>Video</SelectItem>
+                    <SelectItem value='audio'>Audio</SelectItem>
+                    <SelectItem value='text'>Text</SelectItem>
+                    <SelectItem value='social'>Social</SelectItem>
+                    <SelectItem value='docs'>Documentation</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="edit-provider">Provider *</Label>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='edit-provider'>Provider *</Label>
                 <Input
-                  id="edit-provider"
+                  id='edit-provider'
                   value={formData.provider}
                   onChange={(e) =>
                     setFormData({ ...formData, provider: e.target.value })
@@ -763,10 +763,10 @@ export default function AdminModelsPage() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="edit-modelId">Model ID *</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='edit-modelId'>Model ID *</Label>
                 <Input
-                  id="edit-modelId"
+                  id='edit-modelId'
                   value={formData.modelId}
                   onChange={(e) =>
                     setFormData({ ...formData, modelId: e.target.value })
@@ -775,10 +775,10 @@ export default function AdminModelsPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="edit-description">Description</Label>
+            <div className='space-y-2'>
+              <Label htmlFor='edit-description'>Description</Label>
               <Textarea
-                id="edit-description"
+                id='edit-description'
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
@@ -787,57 +787,57 @@ export default function AdminModelsPage() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="edit-icon">Model Icon/Logo</Label>
-              <div className="flex items-center gap-4">
+            <div className='space-y-2'>
+              <Label htmlFor='edit-icon'>Model Icon/Logo</Label>
+              <div className='flex items-center gap-4'>
                 {iconPreview && (
-                  <div className="relative w-16 h-16 border rounded-lg overflow-hidden">
+                  <div className='relative h-16 w-16 overflow-hidden rounded-lg border'>
                     {iconPreview.startsWith("data:image") ||
                     iconPreview.startsWith("http") ? (
                       <img
                         src={iconPreview}
-                        alt="Icon preview"
-                        className="w-full h-full object-contain"
+                        alt='Icon preview'
+                        className='h-full w-full object-contain'
                       />
                     ) : (
                       <div
-                        className="w-full h-full"
+                        className='h-full w-full'
                         dangerouslySetInnerHTML={{ __html: iconPreview }}
                       />
                     )}
                   </div>
                 )}
-                <div className="flex-1">
+                <div className='flex-1'>
                   <Input
-                    id="edit-icon"
-                    type="file"
-                    accept="image/*,.svg"
+                    id='edit-icon'
+                    type='file'
+                    accept='image/*,.svg'
                     onChange={handleIconChange}
-                    className="cursor-pointer"
+                    className='cursor-pointer'
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className='text-muted-foreground mt-1 text-xs'>
                     Upload an icon/logo for this model (SVG, PNG, JPG, WebP)
                   </p>
                 </div>
                 {iconPreview && (
                   <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
+                    type='button'
+                    variant='outline'
+                    size='sm'
                     onClick={() => {
                       setIconFile(null);
                       setIconPreview(editingModel?.icon || null);
                     }}
                   >
-                    <X className="w-4 h-4" />
+                    <X className='h-4 w-4' />
                   </Button>
                 )}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="edit-status">Status</Label>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='edit-status'>Status</Label>
                 <Select
                   value={formData.status}
                   onValueChange={(v: "active" | "inactive" | "beta") =>
@@ -848,17 +848,17 @@ export default function AdminModelsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                    <SelectItem value="beta">Beta</SelectItem>
+                    <SelectItem value='active'>Active</SelectItem>
+                    <SelectItem value='inactive'>Inactive</SelectItem>
+                    <SelectItem value='beta'>Beta</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="edit-maxResolution">Max Resolution</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='edit-maxResolution'>Max Resolution</Label>
                 <Input
-                  id="edit-maxResolution"
+                  id='edit-maxResolution'
                   value={formData.capabilities.maxResolution}
                   onChange={(e) =>
                     setFormData({
@@ -869,39 +869,39 @@ export default function AdminModelsPage() {
                       },
                     })
                   }
-                  placeholder="e.g., 1024x1024"
+                  placeholder='e.g., 1024x1024'
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
+            <div className='flex items-center gap-6'>
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="edit-isDefault"
+                  id='edit-isDefault'
                   checked={formData.isDefault}
                   onCheckedChange={(checked) =>
                     setFormData({ ...formData, isDefault: checked })
                   }
                 />
-                <Label htmlFor="edit-isDefault">Set as Default</Label>
+                <Label htmlFor='edit-isDefault'>Set as Default</Label>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="edit-isPremium"
+                  id='edit-isPremium'
                   checked={formData.isPremium}
                   onCheckedChange={(checked) =>
                     setFormData({ ...formData, isPremium: checked })
                   }
                 />
-                <Label htmlFor="edit-isPremium">Premium Model</Label>
+                <Label htmlFor='edit-isPremium'>Premium Model</Label>
               </div>
             </div>
 
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
+            <div className='flex items-center gap-6'>
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="edit-supportsAspectRatio"
+                  id='edit-supportsAspectRatio'
                   checked={formData.capabilities.supportsAspectRatio}
                   onCheckedChange={(checked) =>
                     setFormData({
@@ -913,14 +913,14 @@ export default function AdminModelsPage() {
                     })
                   }
                 />
-                <Label htmlFor="edit-supportsAspectRatio">
+                <Label htmlFor='edit-supportsAspectRatio'>
                   Supports Aspect Ratio
                 </Label>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="edit-supportsStyle"
+                  id='edit-supportsStyle'
                   checked={formData.capabilities.supportsStyle}
                   onCheckedChange={(checked) =>
                     setFormData({
@@ -932,14 +932,14 @@ export default function AdminModelsPage() {
                     })
                   }
                 />
-                <Label htmlFor="edit-supportsStyle">Supports Style</Label>
+                <Label htmlFor='edit-supportsStyle'>Supports Style</Label>
               </div>
             </div>
 
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
+            <div className='flex items-center gap-6'>
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="edit-supportsVideoReference"
+                  id='edit-supportsVideoReference'
                   checked={formData.capabilities.supportsVideoReference}
                   onCheckedChange={(checked) =>
                     setFormData({
@@ -951,14 +951,14 @@ export default function AdminModelsPage() {
                     })
                   }
                 />
-                <Label htmlFor="edit-supportsVideoReference">
+                <Label htmlFor='edit-supportsVideoReference'>
                   Supports Video Ref
                 </Label>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className='flex items-center gap-2'>
                 <Switch
-                  id="edit-supportsSubjectReference"
+                  id='edit-supportsSubjectReference'
                   checked={formData.capabilities.supportsSubjectReference}
                   onCheckedChange={(checked) =>
                     setFormData({
@@ -970,23 +970,23 @@ export default function AdminModelsPage() {
                     })
                   }
                 />
-                <Label htmlFor="edit-supportsSubjectReference">
+                <Label htmlFor='edit-supportsSubjectReference'>
                   Supports Subject Ref
                 </Label>
               </div>
             </div>
 
             {formData.type === "video" && (
-              <div className="flex items-center gap-6">
-                <div className="flex items-center gap-2">
+              <div className='flex items-center gap-6'>
+                <div className='flex items-center gap-2'>
                   <Switch
-                    id="edit-allowCustomAudio"
+                    id='edit-allowCustomAudio'
                     checked={formData.allowCustomAudio}
                     onCheckedChange={(checked) =>
                       setFormData({ ...formData, allowCustomAudio: checked })
                     }
                   />
-                  <Label htmlFor="edit-allowCustomAudio">
+                  <Label htmlFor='edit-allowCustomAudio'>
                     Allow Custom Audio
                   </Label>
                 </div>
@@ -996,7 +996,7 @@ export default function AdminModelsPage() {
 
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => {
                 setEditDialogOpen(false);
                 setEditingModel(null);
@@ -1007,7 +1007,7 @@ export default function AdminModelsPage() {
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Updating...
                 </>
               ) : (
@@ -1030,7 +1030,7 @@ export default function AdminModelsPage() {
           </DialogHeader>
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => {
                 setDeleteDialogOpen(false);
                 setModelToDelete(null);
@@ -1039,13 +1039,13 @@ export default function AdminModelsPage() {
               Cancel
             </Button>
             <Button
-              variant="destructive"
+              variant='destructive'
               onClick={handleDeleteConfirm}
               disabled={isDeleting}
             >
               {isDeleting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Deleting...
                 </>
               ) : (

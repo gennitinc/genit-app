@@ -1,10 +1,9 @@
 "use client";
 
-import type React from "react";
-
-import { useState } from "react";
-import { Loader, FileText, AlertCircle, Play, Volume2 } from "lucide-react";
 import { useFilePreview } from "@/hooks/message/use-file-preview";
+import { AlertCircle, FileText, Loader, Play, Volume2 } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
 
 interface FilePreviewTooltipProps {
   file: File;
@@ -44,9 +43,9 @@ export function FilePreviewTooltip({
   const renderPreviewContent = () => {
     if (isLoading) {
       return (
-        <div className="flex items-center justify-center p-4">
-          <Loader className="w-6 h-6 animate-spin text-muted-foreground" />
-          <span className="ml-2 text-sm text-muted-foreground">
+        <div className='flex items-center justify-center p-4'>
+          <Loader className='text-muted-foreground h-6 w-6 animate-spin' />
+          <span className='text-muted-foreground ml-2 text-sm'>
             Loading preview...
           </span>
         </div>
@@ -58,14 +57,14 @@ export function FilePreviewTooltip({
     switch (previewData.type) {
       case "image":
         return (
-          <div className="p-2">
+          <div className='p-2'>
             <img
               src={previewData.url || "/placeholder.svg"}
-              alt="File preview"
-              className="max-w-[300px] max-h-[200px] object-contain rounded border"
+              alt='File preview'
+              className='max-h-[200px] max-w-[300px] rounded border object-contain'
               onError={() => console.error("Failed to load image preview")}
             />
-            <div className="mt-2 text-xs text-gray-500 text-center">
+            <div className='mt-2 text-center text-xs text-gray-500'>
               {file.name} • {(file.size / 1024 / 1024).toFixed(2)} MB
             </div>
           </div>
@@ -73,17 +72,17 @@ export function FilePreviewTooltip({
 
       case "text":
         return (
-          <div className="p-3 max-w-[400px]">
-            <div className="flex items-center gap-2 mb-2">
-              <FileText className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-medium text-muted-foreground">
+          <div className='max-w-[400px] p-3'>
+            <div className='mb-2 flex items-center gap-2'>
+              <FileText className='text-muted-foreground h-4 w-4' />
+              <span className='text-muted-foreground text-sm font-medium'>
                 {file.name}
               </span>
             </div>
-            <pre className="text-xs text-muted-foreground whitespace-pre-wrap bg-muted-foreground/10 p-2 rounded border max-h-[150px] overflow-y-auto">
+            <pre className='text-muted-foreground bg-muted-foreground/10 max-h-[150px] overflow-y-auto rounded border p-2 text-xs whitespace-pre-wrap'>
               {previewData.content}
             </pre>
-            <div className="mt-2 text-xs text-muted-foreground">
+            <div className='text-muted-foreground mt-2 text-xs'>
               {(file.size / 1024).toFixed(1)} KB •{" "}
               {previewData.content?.split("\n").length} lines
             </div>
@@ -92,21 +91,21 @@ export function FilePreviewTooltip({
 
       case "pdf":
         return (
-          <div className="p-3 max-w-[300px]">
-            <div className="flex items-center gap-2 mb-2">
-              <FileText className="w-4 h-4 text-red-500" />
-              <span className="text-sm font-medium text-muted-foreground">
+          <div className='max-w-[300px] p-3'>
+            <div className='mb-2 flex items-center gap-2'>
+              <FileText className='h-4 w-4 text-red-500' />
+              <span className='text-muted-foreground text-sm font-medium'>
                 {file.name}
               </span>
             </div>
-            <div className="bg-red-50 border border-red-200 rounded p-4 text-center">
-              <FileText className="w-8 h-8 text-red-500 mx-auto mb-2" />
-              <p className="text-sm text-red-700">PDF Document</p>
-              <p className="text-xs text-red-600 mt-1">
+            <div className='rounded border border-red-200 bg-red-50 p-4 text-center'>
+              <FileText className='mx-auto mb-2 h-8 w-8 text-red-500' />
+              <p className='text-sm text-red-700'>PDF Document</p>
+              <p className='mt-1 text-xs text-red-600'>
                 {(file.size / 1024 / 1024).toFixed(2)} MB
               </p>
             </div>
-            <p className="text-xs text-muted-foreground mt-2 text-center">
+            <p className='text-muted-foreground mt-2 text-center text-xs'>
               Click to view full document
             </p>
           </div>
@@ -114,20 +113,20 @@ export function FilePreviewTooltip({
 
       case "video":
         return (
-          <div className="p-2">
-            <div className="relative">
+          <div className='p-2'>
+            <div className='relative'>
               <video
                 src={previewData.url}
-                className="max-w-[300px] max-h-[200px] rounded border"
+                className='max-h-[200px] max-w-[300px] rounded border'
                 controls={false}
                 muted
-                preload="metadata"
+                preload='metadata'
               />
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded">
-                <Play className="w-8 h-8 text-white" />
+              <div className='bg-opacity-30 absolute inset-0 flex items-center justify-center rounded bg-black'>
+                <Play className='h-8 w-8 text-white' />
               </div>
             </div>
-            <div className="mt-2 text-xs text-muted-foreground text-center">
+            <div className='text-muted-foreground mt-2 text-center text-xs'>
               {file.name} • {(file.size / 1024 / 1024).toFixed(2)} MB
             </div>
           </div>
@@ -135,45 +134,45 @@ export function FilePreviewTooltip({
 
       case "audio":
         return (
-          <div className="p-3 max-w-[300px]">
-            <div className="flex items-center gap-2 mb-2">
-              <Volume2 className="w-4 h-4 text-blue-500" />
-              <span className="text-sm font-medium text-muted-foreground">
+          <div className='max-w-[300px] p-3'>
+            <div className='mb-2 flex items-center gap-2'>
+              <Volume2 className='h-4 w-4 text-blue-500' />
+              <span className='text-muted-foreground text-sm font-medium'>
                 {file.name}
               </span>
             </div>
-            <div className="bg-blue-50 border border-blue-200 rounded p-4 text-center">
-              <Volume2 className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-              <p className="text-sm text-blue-700">Audio File</p>
-              <p className="text-xs text-blue-600 mt-1">
+            <div className='rounded border border-blue-200 bg-blue-50 p-4 text-center'>
+              <Volume2 className='mx-auto mb-2 h-8 w-8 text-blue-500' />
+              <p className='text-sm text-blue-700'>Audio File</p>
+              <p className='mt-1 text-xs text-blue-600'>
                 {(file.size / 1024 / 1024).toFixed(2)} MB
               </p>
             </div>
             <audio
               src={previewData.url}
               controls
-              className="w-full mt-2"
-              preload="metadata"
+              className='mt-2 w-full'
+              preload='metadata'
             />
           </div>
         );
 
       case "unknown":
         return (
-          <div className="p-3 max-w-[300px]">
-            <div className="flex items-center gap-2 mb-2">
-              <AlertCircle className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-medium text-muted-foreground">
+          <div className='max-w-[300px] p-3'>
+            <div className='mb-2 flex items-center gap-2'>
+              <AlertCircle className='text-muted-foreground h-4 w-4' />
+              <span className='text-muted-foreground text-sm font-medium'>
                 {file.name}
               </span>
             </div>
-            <div className="bg-muted-foreground/10 border border-border rounded p-4 text-center">
-              <AlertCircle className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">
+            <div className='bg-muted-foreground/10 border-border rounded border p-4 text-center'>
+              <AlertCircle className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+              <p className='text-muted-foreground text-sm'>
                 {previewData.error ||
                   "Preview not available for this file type"}
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className='text-muted-foreground mt-1 text-xs'>
                 {(file.size / 1024 / 1024).toFixed(2)} MB
               </p>
             </div>
@@ -193,13 +192,13 @@ export function FilePreviewTooltip({
 
       {/* Tooltip */}
       {isVisible && (
-        <div className="absolute z-50 bottom-full left-1/2 transform -translate-x-1/2 mb-2">
-          <div className="bg-background border border-border rounded-lg shadow-lg max-w-[450px] overflow-hidden">
+        <div className='absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform'>
+          <div className='bg-background border-border max-w-[450px] overflow-hidden rounded-lg border shadow-lg'>
             {/* Arrow */}
-            <div className="absolute top-full left-1/2 transform -translate-x-1/2">
-              <div className="border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-border"></div>
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-px">
-                <div className="border-l-7 border-r-7 border-t-7 border-l-transparent border-r-transparent border-t-background"></div>
+            <div className='absolute top-full left-1/2 -translate-x-1/2 transform'>
+              <div className='border-t-border border-t-8 border-r-8 border-l-8 border-r-transparent border-l-transparent'></div>
+              <div className='absolute top-0 left-1/2 -translate-x-1/2 -translate-y-px transform'>
+                <div className='border-t-background border-t-7 border-r-7 border-l-7 border-r-transparent border-l-transparent'></div>
               </div>
             </div>
 

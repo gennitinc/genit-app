@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 import {
-  motion,
-  useTransform,
   AnimatePresence,
+  motion,
   useMotionValue,
   useSpring,
+  useTransform,
 } from "motion/react";
-import { cn } from "@/lib/utils";
+import React, { useState } from "react";
 
 export const AnimatedTooltip = ({
   hideTooltip = false,
@@ -46,12 +46,12 @@ export const AnimatedTooltip = ({
     <>
       {items.map((item, idx) => (
         <div
-          className="group relative -mr-4"
+          className='group relative -mr-4'
           key={item.name}
           onMouseEnter={() => setHoveredIndex(item.id)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence mode='popLayout'>
             {hoveredIndex === item.id && !hideTooltip && (
               <motion.div
                 initial={{ opacity: 0, y: 20, scale: 0.6 }}
@@ -88,7 +88,7 @@ export const AnimatedTooltip = ({
                     !AnimateFromBottom ? "-bottom-px" : "-top-px"
                   )}
                 />
-                <div className="relative z-30 text-base font-bold text-white">
+                <div className='relative z-30 text-base font-bold text-white'>
                   {item.name}
                 </div>
                 {/* {item.designation && (
@@ -103,7 +103,7 @@ export const AnimatedTooltip = ({
             width={100}
             src={item.image}
             alt={item.name}
-            className="relative !m-0 h-10 w-10 sm:w-12 sm:h-12 rounded-full border-2 border-foreground object-cover object-top !p-0 transition bg-background duration-500 group-hover:z-30 group-hover:scale-105"
+            className='border-foreground bg-background relative !m-0 h-10 w-10 rounded-full border-2 object-cover object-top !p-0 transition duration-500 group-hover:z-30 group-hover:scale-105 sm:h-12 sm:w-12'
           />
         </div>
       ))}

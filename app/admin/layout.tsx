@@ -28,10 +28,12 @@ export default function AdminLayout({
 
   if (loading || isMounting) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="animate-pulse flex flex-col items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-primary/20" />
-          <p className="text-sm text-muted-foreground">Verifying admin access...</p>
+      <div className='bg-background flex min-h-screen items-center justify-center'>
+        <div className='flex animate-pulse flex-col items-center gap-4'>
+          <div className='bg-primary/20 h-12 w-12 rounded-full' />
+          <p className='text-muted-foreground text-sm'>
+            Verifying admin access...
+          </p>
         </div>
       </div>
     );
@@ -41,11 +43,11 @@ export default function AdminLayout({
   if (!user || user.role !== "admin") return null;
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground overflow-hidden h-screen overflow-y-scroll">
+    <div className='bg-background text-foreground flex h-screen min-h-screen overflow-hidden overflow-y-scroll'>
       <AdminSidebar />
-      <SidebarInset className="flex flex-col flex-1 overflow-hidden transition-all duration-300">
+      <SidebarInset className='flex flex-1 flex-col overflow-hidden transition-all duration-300'>
         <AdminTopNav />
-        <main className="flex-1 overflow-y-auto py-10 custom-scrollbar px-2 md:px-6 lg:px-10">
+        <main className='custom-scrollbar flex-1 overflow-y-auto px-2 py-10 md:px-6 lg:px-10'>
           {children}
         </main>
       </SidebarInset>

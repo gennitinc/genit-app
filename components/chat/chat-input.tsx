@@ -1,27 +1,27 @@
 "use client";
 
-import type React from "react";
-import {
-  Paperclip,
-  Mic,
-  ChevronDown,
-  Plus,
-  Settings,
-  Loader2,
-  AlertCircle,
-  Zap,
-} from "lucide-react";
+import ShinyText from "../ui/shiny-text";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useRef, useEffect, useCallback, useState } from "react";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
-import { motion, AnimatePresence } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import ShinyText from "../ui/shiny-text";
 import { trackEvent } from "@/lib/mixpanelClient";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  AlertCircle,
+  ChevronDown,
+  Loader2,
+  Mic,
+  Paperclip,
+  Plus,
+  Settings,
+  Zap,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import type React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface ChatInterfaceProps {
   children?: React.ReactNode;
@@ -70,7 +70,6 @@ export function ChatInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useUserContext();
   const router = useRouter();
- const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string;
   const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 10;
   const validateInput = useCallback((value: string, files: File[]) => {
     if (!value.trim() && files.length === 0) {
@@ -92,7 +91,7 @@ export function ChatInput({
     useSpeechToText({
       onTranscript: (transcript) => {
         setInputValue(
-          initialInputValue ? `${initialInputValue} ${transcript}` : transcript,
+          initialInputValue ? `${initialInputValue} ${transcript}` : transcript
         );
       },
     });
@@ -146,7 +145,7 @@ export function ChatInput({
     const creditsRemaining = user?.creditsRemaining ?? 0;
     if (creditsRemaining <= 10) {
       const isBasic = String(user?.userPlan) === "Basic";
-      trackEvent(MIXPANEL_TOKEN, "low_credits_prompt_shown", {
+      trackEvent("low_credits_prompt_shown", {
         credits_remaining: creditsRemaining,
         user_plan: user?.userPlan,
       });
@@ -164,7 +163,7 @@ export function ChatInput({
 
     const validationError = validateInput(
       inputValue,
-      attachedFiles as unknown as File[],
+      attachedFiles as unknown as File[]
     );
     if (validationError) {
       console.error("Validation error:", validationError);
@@ -178,13 +177,13 @@ export function ChatInput({
 
     try {
       // Use projectId for proper server routing
-      trackEvent(MIXPANEL_TOKEN, "generation_requested", {
+      trackEvent("generation_requested", {
         prompt_length: inputValue.trim().length,
         attachment_count: attachedFiles.length,
         project_id: project._id,
       });
       await generateMessage(inputValue, attachedFiles, project._id);
-      trackEvent(MIXPANEL_TOKEN, "generation_request_submitted", {
+      trackEvent("generation_request_submitted", {
         project_id: project._id,
       });
 
@@ -196,7 +195,7 @@ export function ChatInput({
       }, 100);
     } catch (error) {
       console.error("Failed to send message:", error);
-      trackEvent(MIXPANEL_TOKEN, "generation_request_failed", {
+      trackEvent("generation_request_failed", {
         project_id: project?._id,
       });
     }
@@ -204,7 +203,7 @@ export function ChatInput({
 
   // Enhanced key down handler
   const handleEnhancedKeyDown = (
-    event: React.KeyboardEvent<HTMLTextAreaElement>,
+    event: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -224,16 +223,16 @@ export function ChatInput({
   };
 
   return (
-    <div className={`h-full flex flex-col bg-transparent ${className}`}>
+    <div className={`flex h-full flex-col bg-transparent ${className}`}>
       {/* Chat Content Area */}
-      <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
+      <div className='relative flex min-h-0 flex-1 flex-col overflow-hidden'>
         {children}
       </div>
 
       {/* Bottom Input Area - with drag and drop handlers */}
       <div
         ref={inputSectionRef}
-        className="sticky bottom-0 p-2 backdrop-blur-sm z-10 w-full"
+        className='sticky bottom-0 z-10 w-full p-2 backdrop-blur-sm'
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
@@ -241,90 +240,90 @@ export function ChatInput({
       >
         {/* Scroll to Bottom Button */}
         <div
-          className={`absolute left-1/2 transform -translate-x-1/2 -top-12 z-20 transition-opacity duration-300 ${
-            showScrollButton ? "opacity-100" : "opacity-0 pointer-events-none"
+          className={`absolute -top-12 left-1/2 z-20 -translate-x-1/2 transform transition-opacity duration-300 ${
+            showScrollButton ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
         >
           <button
             onClick={() => {
               window.dispatchEvent(new Event("scroll-chat-to-bottom"));
             }}
-            className="bg-background/80 backdrop-blur-sm border border-border rounded-full p-1.5 transition-all duration-200 hover:scale-105 active:scale-95 shadow-md"
+            className='bg-background/80 border-border rounded-full border p-1.5 shadow-md backdrop-blur-sm transition-all duration-200 hover:scale-105 active:scale-95'
             style={{
               animation: showScrollButton
                 ? "gentle-bounce 2s infinite"
                 : "none",
             }}
           >
-            <ChevronDown className="w-5 h-5 text-muted-foreground" />
+            <ChevronDown className='text-muted-foreground h-5 w-5' />
           </button>
         </div>
 
         {/* File Attachments Previews */}
         {attachedFiles.length > 0 && !isGenerating && (
-          <div className="flex flex-wrap gap-2 px-3 mb-1">
+          <div className='mb-1 flex flex-wrap gap-2 px-3'>
             {attachedFiles.map((file, index) => (
               <div
                 key={index}
-                className="relative group bg-muted-foreground/5 border border-border rounded-lg p-1.5 flex items-center gap-2 max-w-[150px]"
+                className='group bg-muted-foreground/5 border-border relative flex max-w-[150px] items-center gap-2 rounded-lg border p-1.5'
               >
-                <div className="w-6 h-6 bg-background rounded flex items-center justify-center overflow-hidden">
+                <div className='bg-background flex h-6 w-6 items-center justify-center overflow-hidden rounded'>
                   {file.type && file.type.startsWith("image/") ? (
                     <img
                       src={URL.createObjectURL(file as any)}
                       alt={file.name}
-                      className="w-full h-full object-cover"
+                      className='h-full w-full object-cover'
                     />
                   ) : (
-                    <Paperclip className="w-3 h-3 text-muted-foreground" />
+                    <Paperclip className='text-muted-foreground h-3 w-3' />
                   )}
                 </div>
-                <span className="text-[10px] truncate max-w-[80px]">
+                <span className='max-w-[80px] truncate text-[10px]'>
                   {file.name}
                 </span>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => removeAttachedFile(index)}
-                  className="text-muted-foreground hover:text-red-500"
+                  className='text-muted-foreground hover:text-red-500'
                 >
-                  <Plus className="w-3 h-3 rotate-45" />
+                  <Plus className='h-3 w-3 rotate-45' />
                 </button>
               </div>
             ))}
           </div>
         )}
 
-        <div className="w-full max-w-4xl mx-auto">
+        <div className='mx-auto w-full max-w-4xl'>
           {/* Thinking / Credits Status */}
-          <div className="flex items-center justify-between mb-2 px-4 h-6">
+          <div className='mb-2 flex h-6 items-center justify-between px-4'>
             {!isGenerating && (
-              <div className="flex items-center gap-1 justify-between w-full">
-                <div className="text-muted-foreground dark:text-zinc-400 flex items-center">
-                  <Zap className="inline-block w-3 h-3 text-emerald-500 mr-2" />
+              <div className='flex w-full items-center justify-between gap-1'>
+                <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
+                  <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                   {user ? (
-                    <span className="text-xs text-muted-foreground">
+                    <span className='text-muted-foreground text-xs'>
                       {(user?.creditsRemaining ?? 0).toLocaleString()} Credits
                       left
                     </span>
                   ) : (
-                    <span className="text-xs text-muted-foreground">
+                    <span className='text-muted-foreground text-xs'>
                       Get a 50 free credit
                     </span>
                   )}
                 </div>
 
                 {user && (user?.creditsRemaining ?? 0) === 0 && (
-                  <div className="text-xs font-medium">
+                  <div className='text-xs font-medium'>
                     {String(user?.userPlan) === "Basic" ? (
                       <span
-                        className="cursor-pointer text-blue-500 hover:underline"
+                        className='cursor-pointer text-blue-500 hover:underline'
                         onClick={() => router.push("/pricing")}
                       >
                         Upgrade
                       </span>
                     ) : (
                       <span
-                        className="cursor-pointer text-blue-500 hover:underline"
+                        className='cursor-pointer text-blue-500 hover:underline'
                         onClick={() =>
                           router.push("/user/settings?tab=billing")
                         }
@@ -345,9 +344,9 @@ export function ChatInput({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="text-xs text-red-500 font-medium flex items-center mb-2 mx-4"
+                className='mx-4 mb-2 flex items-center text-xs font-medium text-red-500'
               >
-                <AlertCircle className="size-3.5 mr-2" />
+                <AlertCircle className='mr-2 size-3.5' />
                 {error}
               </motion.p>
             )}
@@ -358,10 +357,10 @@ export function ChatInput({
               e.preventDefault();
               handlegenerateMessage();
             }}
-            className="group flex flex-col gap-2 p-3 w-full rounded-[1.5rem] border border-white bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl text-base shadow-xl ring-1 ring-black/[0.08] transition-all focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96] duration-150 ease-in-out"
+            className='group flex w-full flex-col gap-2 rounded-[1.5rem] border border-white bg-white/80 p-3 text-base shadow-xl ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
           >
-            <div className="min-w-0 w-full">
-              <div className="relative flex flex-1 items-center">
+            <div className='w-full min-w-0'>
+              <div className='relative flex flex-1 items-center'>
                 <textarea
                   ref={textareaRef}
                   value={isGenerating ? "" : inputValue}
@@ -376,61 +375,61 @@ export function ChatInput({
                         : placeholder
                   }
                   disabled={isGenerating}
-                  className="flex w-full px-3 py-2 transition-colors duration-150 ease-in-out placeholder:text-muted-foreground/60 resize-none border-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 max-h-[300px] bg-transparent flex-1 outline-none scrollbar-none"
+                  className='placeholder:text-muted-foreground/60 scrollbar-none flex max-h-[300px] w-full flex-1 resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                   style={{ minHeight: "60px" }}
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <div className='flex items-center gap-1.5'>
               <button
-                type="button"
-                className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-secondary text-primary h-8 w-8 shadow-sm flex-shrink-0"
+                type='button'
+                className='bg-secondary text-primary relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-sm brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isGenerating}
               >
-                <Plus className="shrink-0 size-5" />
+                <Plus className='size-5 shrink-0' />
               </button>
               <input
                 ref={fileInputRef}
-                type="file"
+                type='file'
                 multiple
-                accept="image/*,video/*"
+                accept='image/*,video/*'
                 onChange={handleFileSelect}
-                className="hidden"
+                className='hidden'
               />
 
-              <div className="ml-auto flex items-center gap-1.5">
+              <div className='ml-auto flex items-center gap-1.5'>
                 <button
-                  type="button"
-                  className={`relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 h-8 w-8 ${
+                  type='button'
+                  className={`relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out ${
                     isListening
-                      ? "text-red-500 bg-red-500/10 animate-pulse"
+                      ? "animate-pulse bg-red-500/10 text-red-500"
                       : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
                   }`}
                   onClick={handleMicClick}
                   disabled={!isSupported || isGenerating}
                 >
-                  <Mic className="shrink-0 size-4" />
+                  <Mic className='size-4 shrink-0' />
                 </button>
                 <button
-                  type="submit"
+                  type='submit'
                   disabled={
                     isGenerating ||
                     (!inputValue.trim() && attachedFiles.length === 0)
                   }
-                  className="relative box-border inline-flex min-w-fit items-center justify-center gap-2 whitespace-nowrap text-sm font-normal brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out px-4 py-2 rounded-full !p-0 bg-primary text-primary-foreground h-8 w-8 shadow-md flex-shrink-0"
+                  className='bg-primary text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
                 >
                   {isGenerating ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className='h-4 w-4 animate-spin' />
                   ) : (
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      className="shrink-0 size-5"
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='currentColor'
+                      viewBox='0 0 24 24'
+                      className='size-5 shrink-0'
                     >
-                      <path d="M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0" />
+                      <path d='M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0' />
                     </svg>
                   )}
                 </button>

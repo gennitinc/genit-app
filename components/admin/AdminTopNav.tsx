@@ -1,14 +1,8 @@
 "use client";
 
-import { SidebarTrigger } from "../ui/sidebar";
 import { Button } from "../ui/button";
-import { Sun, Moon, Bell, Search } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { SidebarTrigger } from "../ui/sidebar";
 import UserPopOver from "../user/userPopOver";
-import { cn } from "@/lib/utils";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,6 +11,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { cn } from "@/lib/utils";
+import { Bell, Moon, Search, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function AdminTopNav() {
   const { theme, setTheme } = useTheme();
@@ -32,30 +32,30 @@ export function AdminTopNav() {
 
   // Generate breadcrumbs from pathname
   const pathSegments = pathname.split("/").filter(Boolean);
-  
+
   return (
-    <header className="sticky top-0 z-30 w-full border-b border-border/50 bg-background/60 backdrop-blur-xl transition-all duration-300">
+    <header className='border-border/50 bg-background/60 sticky top-0 z-30 w-full border-b backdrop-blur-xl transition-all duration-300'>
       {/* Aurora Background Effect */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-        <div className="absolute -top-1/2 -left-1/4 w-full h-full bg-gradient-to-br from-primary/30 via-transparent to-transparent blur-[120px] animate-pulse" />
-        <div className="absolute -bottom-1/2 -right-1/4 w-full h-full bg-gradient-to-tl from-primary/20 via-transparent to-transparent blur-[120px] animate-pulse delay-700" />
+      <div className='pointer-events-none absolute inset-0 overflow-hidden opacity-20'>
+        <div className='from-primary/30 absolute -top-1/2 -left-1/4 h-full w-full animate-pulse bg-gradient-to-br via-transparent to-transparent blur-[120px]' />
+        <div className='from-primary/20 absolute -right-1/4 -bottom-1/2 h-full w-full animate-pulse bg-gradient-to-tl via-transparent to-transparent blur-[120px] delay-700' />
       </div>
 
-      <div className="flex h-16 items-center px-4 md:px-8 justify-between relative z-10">
-        <div className="flex items-center gap-4">
-          <SidebarTrigger className="h-9 w-9" />
-          <div className="h-6 w-px bg-border/50 hidden md:block" />
-          
-          <Breadcrumb className="hidden md:flex">
+      <div className='relative z-10 flex h-16 items-center justify-between px-4 md:px-8'>
+        <div className='flex items-center gap-4'>
+          <SidebarTrigger className='h-9 w-9' />
+          <div className='bg-border/50 hidden h-6 w-px md:block' />
+
+          <Breadcrumb className='hidden md:flex'>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/admin">Admin</BreadcrumbLink>
+                <BreadcrumbLink href='/admin'>Admin</BreadcrumbLink>
               </BreadcrumbItem>
               {pathSegments.length > 1 && (
                 <>
                   <BreadcrumbSeparator />
                   <BreadcrumbItem>
-                    <BreadcrumbPage className="capitalize font-semibold">
+                    <BreadcrumbPage className='font-semibold capitalize'>
                       {pathSegments[pathSegments.length - 1].replace(/-/g, " ")}
                     </BreadcrumbPage>
                   </BreadcrumbItem>
@@ -65,38 +65,42 @@ export function AdminTopNav() {
           </Breadcrumb>
         </div>
 
-        <div className="flex items-center gap-2 md:gap-4">
+        <div className='flex items-center gap-2 md:gap-4'>
           {/* Quick Search */}
-          <div className="relative hidden lg:block group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-            <input 
-              type="text" 
-              placeholder="Quick search..." 
-              className="h-9 w-64 pl-10 pr-4 rounded-full bg-muted/50 border border-transparent focus:border-primary/50 focus:bg-background transition-all outline-none text-sm"
+          <div className='group relative hidden lg:block'>
+            <Search className='text-muted-foreground group-focus-within:text-primary absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transition-colors' />
+            <input
+              type='text'
+              placeholder='Quick search...'
+              className='bg-muted/50 focus:border-primary/50 focus:bg-background h-9 w-64 rounded-full border border-transparent pr-4 pl-10 text-sm transition-all outline-none'
             />
           </div>
 
-          <div className="flex items-center gap-1 md:gap-2">
+          <div className='flex items-center gap-1 md:gap-2'>
             <Button
-              variant="ghost"
-              size="icon"
-              className="h-9 w-9 rounded-full"
+              variant='ghost'
+              size='icon'
+              className='h-9 w-9 rounded-full'
             >
-              <Bell className="h-4 w-4" />
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="h-9 w-9 rounded-full"
-            >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              <Bell className='h-4 w-4' />
             </Button>
 
-            <div className="h-8 w-px bg-border/50 mx-1" />
-            
-            <div className="scale-95 md:scale-100 origin-right">
+            <Button
+              variant='ghost'
+              size='icon'
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className='h-9 w-9 rounded-full'
+            >
+              {theme === "dark" ? (
+                <Sun className='h-4 w-4' />
+              ) : (
+                <Moon className='h-4 w-4' />
+              )}
+            </Button>
+
+            <div className='bg-border/50 mx-1 h-8 w-px' />
+
+            <div className='origin-right scale-95 md:scale-100'>
               <UserPopOver />
             </div>
           </div>

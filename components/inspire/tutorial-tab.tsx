@@ -1,17 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ExternalLink, PlayCircle, Loader2 } from "lucide-react";
-import { tutorialApi } from "@/utils/inspire-api";
-import { Tutorial } from "@/types/inspire";
 import { toast } from "@/hooks/use-toast";
+import { Tutorial } from "@/types/inspire";
+import { tutorialApi } from "@/utils/inspire-api";
+import { ExternalLink, Loader2, PlayCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface TutorialTabProps {
   type?: "image" | "video" | "general";
 }
 
 export function TutorialTab({ type = "general" }: TutorialTabProps) {
-  const [featuredTutorial, setFeaturedTutorial] = useState<Tutorial | null>(null);
+  const [featuredTutorial, setFeaturedTutorial] = useState<Tutorial | null>(
+    null
+  );
   const [tutorials, setTutorials] = useState<Tutorial[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,7 +21,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
     const fetchTutorials = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch featured tutorial
         const featuredResponse = await tutorialApi.getFeatured(type);
         let featuredId: string | null = null;
@@ -57,7 +59,9 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
       return `https://www.youtube.com/embed/${youtubeId}`;
     }
     // Try to extract YouTube ID from URL
-    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/);
+    const match = url.match(
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/
+    );
     if (match) {
       return `https://www.youtube.com/embed/${match[1]}`;
     }
@@ -65,13 +69,13 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
   };
 
   if (loading) {
-  return (
-      <section className="p-4">
-        <div className="flex flex-col items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-6 h-6 text-neutral-400 dark:text-neutral-500 animate-spin mb-3" />
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+    return (
+      <section className='p-4'>
+        <div className='flex min-h-[60vh] flex-col items-center justify-center'>
+          <Loader2 className='mb-3 h-6 w-6 animate-spin text-neutral-400 dark:text-neutral-500' />
+          <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading tutorials
-        </p>
+          </p>
         </div>
       </section>
     );
@@ -79,25 +83,25 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
 
   if (!featuredTutorial && tutorials.length === 0) {
     return (
-      <section className="p-4">
-        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-          <div className="w-16 h-16 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
-            <PlayCircle className="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
+      <section className='p-4'>
+        <div className='flex min-h-[60vh] flex-col items-center justify-center text-center'>
+          <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
+            <PlayCircle className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
           </div>
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+          <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
             No tutorials available
           </h3>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-sm mb-6">
+          <p className='mb-6 max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
             Tutorials are being added regularly. Check back soon!
           </p>
           <a
-            href="https://www.youtube.com/@gennit-tutorials"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-sm font-medium text-white dark:text-neutral-900 transition-colors inline-flex items-center gap-2"
+            href='https://www.youtube.com/@gennit-tutorials'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='inline-flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
           >
             Visit YouTube Channel
-            <ExternalLink className="w-4 h-4" />
+            <ExternalLink className='h-4 w-4' />
           </a>
         </div>
       </section>
@@ -105,48 +109,51 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
   }
 
   return (
-    <section className="p-4 px-0">
-      <div className="mb-4 flex items-center justify-between">
+    <section className='p-4 px-0'>
+      <div className='mb-4 flex items-center justify-between'>
         <div>
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-1">
+          <h2 className='mb-1 text-lg font-semibold text-neutral-900 dark:text-white'>
             Learn How to Use
           </h2>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+          <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Watch tutorials to get started quickly
           </p>
         </div>
         <a
-          href="https://www.youtube.com/@gennit-tutorials"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-sm font-medium text-cyan-500 hover:text-cyan-600 transition-colors"
+          href='https://www.youtube.com/@gennit-tutorials'
+          target='_blank'
+          rel='noopener noreferrer'
+          className='flex items-center gap-1.5 text-sm font-medium text-cyan-500 transition-colors hover:text-cyan-600'
         >
           View All
-          <ExternalLink className="w-4 h-4" />
+          <ExternalLink className='h-4 w-4' />
         </a>
       </div>
 
       {/* Featured Tutorial Video */}
       {featuredTutorial && (
-        <div className="space-y-4 mb-6">
-          <div className="relative rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 aspect-video">
+        <div className='mb-6 space-y-4'>
+          <div className='relative aspect-video overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800'>
             <iframe
-              width="100%"
-              height="100%"
-              src={getYouTubeEmbedUrl(featuredTutorial.videoUrl, featuredTutorial.youtubeId)}
+              width='100%'
+              height='100%'
+              src={getYouTubeEmbedUrl(
+                featuredTutorial.videoUrl,
+                featuredTutorial.youtubeId
+              )}
               title={featuredTutorial.title}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              frameBorder='0'
+              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
               allowFullScreen
-              className="absolute inset-0 w-full h-full"
+              className='absolute inset-0 h-full w-full'
             />
           </div>
 
           <div>
-            <h3 className="text-base font-semibold text-neutral-900 dark:text-white mb-2">
+            <h3 className='mb-2 text-base font-semibold text-neutral-900 dark:text-white'>
               {featuredTutorial.title}
             </h3>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+            <p className='mb-4 text-sm text-neutral-600 dark:text-neutral-400'>
               {featuredTutorial.description}
             </p>
           </div>
@@ -155,11 +162,11 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
 
       {/* Additional Tutorial Links */}
       {tutorials.length > 0 && (
-        <div className="space-y-2">
-          <h4 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
+        <div className='space-y-2'>
+          <h4 className='mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300'>
             More Tutorials
           </h4>
-          
+
           {tutorials.map((tutorial, index) => {
             const gradients = [
               "from-cyan-400 to-blue-500",
@@ -173,22 +180,24 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
               <a
                 key={tutorial._id}
                 href={tutorial.videoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors group"
+                target='_blank'
+                rel='noopener noreferrer'
+                className='group flex items-center gap-3 rounded-lg bg-neutral-50 p-3 transition-colors hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800'
               >
-                <div className={`flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center`}>
-                  <PlayCircle className="w-6 h-6 text-white" />
+                <div
+                  className={`h-12 w-12 flex-shrink-0 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center`}
+                >
+                  <PlayCircle className='h-6 w-6 text-white' />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white group-hover:text-cyan-500 transition-colors">
+                <div className='min-w-0 flex-1'>
+                  <p className='text-sm font-medium text-neutral-900 transition-colors group-hover:text-cyan-500 dark:text-white'>
                     {tutorial.title}
                   </p>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                  <p className='text-xs text-neutral-500 dark:text-neutral-400'>
                     {tutorial.duration}
                   </p>
                 </div>
-                <ExternalLink className="w-4 h-4 text-neutral-400 group-hover:text-cyan-500 transition-colors" />
+                <ExternalLink className='h-4 w-4 text-neutral-400 transition-colors group-hover:text-cyan-500' />
               </a>
             );
           })}
@@ -197,14 +206,14 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
 
       {/* View All Button */}
       <a
-        href="https://www.youtube.com/@gennit-tutorials"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-4 flex items-center justify-center gap-2 w-full py-3 px-4 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-medium transition-all"
+        href='https://www.youtube.com/@gennit-tutorials'
+        target='_blank'
+        rel='noopener noreferrer'
+        className='mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-3 font-medium text-white transition-all hover:from-cyan-600 hover:to-blue-600'
       >
-        <PlayCircle className="w-5 h-5" />
+        <PlayCircle className='h-5 w-5' />
         View All Tutorials on YouTube
-        <ExternalLink className="w-4 h-4" />
+        <ExternalLink className='h-4 w-4' />
       </a>
     </section>
   );

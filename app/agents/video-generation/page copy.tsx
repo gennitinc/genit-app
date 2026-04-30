@@ -1,55 +1,55 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useUserContext } from "@/context/AuthenticatedContext";
-import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
-import { io, Socket } from "socket.io-client";
 import {
-  Loader2,
-  Sparkles,
-  Video,
-  History,
-  BookOpen,
-  ViewIcon,
-  Users,
-  Image as ImageIcon,
-  Wand2,
-} from "lucide-react";
-import withAuth from "@/helper/hoc/withAuth";
+  ImageCommunityTab,
+  ImagePreviewTab,
+  ImageTemplatesTab,
+  TutorialTab,
+  VideoCommunityTab,
+  VideoPreviewTab,
+  VideoTemplatesTab,
+} from "@/components/inspire";
+import { ImageHistoryTab } from "@/components/inspire/image-history-tab";
+import { ModelSelector } from "@/components/inspire/model-selector";
+import { VideoHistoryTab } from "@/components/inspire/video-history-tab";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { Toaster } from "@/components/ui/sonner";
 import { PresenterSelector } from "@/components/video/presenter-selector";
 import { ResolutionSelector } from "@/components/video/resolution-selector";
 import { VoiceSelector } from "@/components/video/voice-selector";
-import { AppSidebar } from "@/components/layout/app-sidebar";
-import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
-import { toast } from "sonner";
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import withAuth from "@/helper/hoc/withAuth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { Model, Presenter, Voice } from "@/types/inspire";
+import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
+import { imageGenApi, videoGenApi } from "@/utils/inspire-api";
+import { IconTemplate } from "@tabler/icons-react";
+import {
+  BookOpen,
+  History,
+  Image as ImageIcon,
+  Loader2,
+  Sparkles,
+  Users,
+  Video,
+  ViewIcon,
+  Wand2,
+} from "lucide-react";
 import {
   ChevronDown,
   ChevronUp,
-  User,
-  Volume2,
   Monitor,
   Settings,
+  User,
+  Volume2,
 } from "lucide-react";
-import { IconTemplate } from "@tabler/icons-react";
-import {
-  ImageCommunityTab,
-  VideoCommunityTab,
-  ImagePreviewTab,
-  VideoPreviewTab,
-  ImageTemplatesTab,
-  VideoTemplatesTab,
-  TutorialTab,
-} from "@/components/inspire";
-import { ImageHistoryTab } from "@/components/inspire/image-history-tab";
-import { VideoHistoryTab } from "@/components/inspire/video-history-tab";
-import { ModelSelector } from "@/components/inspire/model-selector";
-import { Model, Presenter, Voice } from "@/types/inspire";
-import { imageGenApi, videoGenApi } from "@/utils/inspire-api";
-import { Toaster } from "@/components/ui/sonner";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Socket, io } from "socket.io-client";
+import { toast } from "sonner";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type Resolution = "1080p" | "720p" | "480p" | "4K";
 export type AspectRatio = "16:9" | "9:16" | "1:1" | "4:3";
@@ -149,17 +149,17 @@ function PresetSlider({
   }, [currentSlide]);
 
   return (
-    <div className="relative w-full overflow-hidden rounded-xl group">
+    <div className='group relative w-full overflow-hidden rounded-xl'>
       {/* Slider Container */}
       <div
         ref={sliderRef}
-        className="flex overflow-x-hidden scroll-smooth snap-x snap-mandatory"
+        className='flex snap-x snap-mandatory overflow-x-hidden scroll-smooth'
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {PRESET_SLIDES.map((slide, index) => (
-          <div key={slide.id} className="min-w-full snap-center">
+          <div key={slide.id} className='min-w-full snap-center'>
             <figure
-              className="aspect-[2.3] w-full relative select-none overflow-hidden rounded-xl cursor-pointer"
+              className='relative aspect-[2.3] w-full cursor-pointer overflow-hidden rounded-xl select-none'
               onClick={() => onSlideChange(index)}
             >
               <video
@@ -170,19 +170,19 @@ function PresetSlider({
                 muted
                 playsInline
                 disablePictureInPicture
-                preload="metadata"
+                preload='metadata'
                 poster={slide.poster}
                 src={slide.video}
-                className="object-cover w-full h-full rounded-xl"
+                className='h-full w-full rounded-xl object-cover'
               >
                 Your browser does not support the video.
               </video>
-              <div className="absolute inset-0 pointer-events-none bg-black/30" />
-              <figcaption className="z-10 absolute left-0 bottom-0 w-full pl-3 pb-3 pr-1.5">
-                <p className="truncate w-full uppercase text-xs font-semibold text-white">
+              <div className='pointer-events-none absolute inset-0 bg-black/30' />
+              <figcaption className='absolute bottom-0 left-0 z-10 w-full pr-1.5 pb-3 pl-3'>
+                <p className='w-full truncate text-xs font-semibold text-white uppercase'>
                   {slide.title}
                 </p>
-                <p className="text-xs text-white/80">{slide.description}</p>
+                <p className='text-xs text-white/80'>{slide.description}</p>
               </figcaption>
             </figure>
           </div>
@@ -190,17 +190,17 @@ function PresetSlider({
       </div>
 
       {/* Dot Indicators */}
-      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+      <div className='absolute bottom-1 left-1/2 z-20 flex -translate-x-1/2 gap-1.5'>
         {PRESET_SLIDES.map((_, index) => (
           <button
             key={index}
-            type="button"
+            type='button'
             onClick={() => onSlideChange(index)}
             className={cn(
-              "w-1.5 h-1.5 rounded-full transition-all duration-300",
+              "h-1.5 w-1.5 rounded-full transition-all duration-300",
               currentSlide === index
-                ? "bg-white w-4"
-                : "bg-white/50 hover:bg-white/70",
+                ? "w-4 bg-white"
+                : "bg-white/50 hover:bg-white/70"
             )}
             aria-label={`Go to slide ${index + 1}`}
           />
@@ -209,24 +209,24 @@ function PresetSlider({
 
       {/* Navigation Arrows */}
       <button
-        type="button"
+        type='button'
         onClick={() =>
           onSlideChange(
-            (currentSlide - 1 + PRESET_SLIDES.length) % PRESET_SLIDES.length,
+            (currentSlide - 1 + PRESET_SLIDES.length) % PRESET_SLIDES.length
           )
         }
-        className="absolute left-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity z-20"
-        aria-label="Previous slide"
+        className='absolute top-1/2 left-2 z-20 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-black/60'
+        aria-label='Previous slide'
       >
-        <ChevronUp className="w-4 h-4 -rotate-90" />
+        <ChevronUp className='h-4 w-4 -rotate-90' />
       </button>
       <button
-        type="button"
+        type='button'
         onClick={() => onSlideChange((currentSlide + 1) % PRESET_SLIDES.length)}
-        className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity z-20"
-        aria-label="Next slide"
+        className='absolute top-1/2 right-2 z-20 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-black/60'
+        aria-label='Next slide'
       >
-        <ChevronDown className="w-4 h-4 -rotate-90" />
+        <ChevronDown className='h-4 w-4 -rotate-90' />
       </button>
     </div>
   );
@@ -250,12 +250,11 @@ function VideoCreatePage() {
     | null;
 
   const [selectedPresenter, setSelectedPresenter] = useState<Presenter | null>(
-    null,
+    null
   );
   const [selectedResolution, setSelectedResolution] =
     useState<Resolution>("1080p");
-  const [selectedAspectRatio, setSelectedAspectRatio] =
-    useState<any>("1:1");
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState<any>("1:1");
   const [selectedVoice, setSelectedVoice] = useState<Voice | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isCloningVoice, setIsCloningVoice] = useState(false);
@@ -310,17 +309,17 @@ function VideoCreatePage() {
     useState<ImageStyle>("realistic");
   const [imageCount, setImageCount] = useState(1);
   const [selectedImageModel, setSelectedImageModel] = useState<Model | null>(
-    null,
+    null
   );
   const [selectedVideoModel, setSelectedVideoModel] = useState<Model | null>(
-    null,
+    null
   );
 
   const pathname = usePathname();
 
   // Generation mode: image or video - initialize from URL parameter
   const [generationMode, setGenerationMode] = useState<"image" | "video">(
-    urlMode === "ai-image-gen" ? "image" : "video",
+    urlMode === "ai-image-gen" ? "image" : "video"
   );
 
   // Listen to URL parameter changes and update generation mode (for browser back/forward navigation)
@@ -405,12 +404,12 @@ function VideoCreatePage() {
                       return new File([blob], `reference-${index}.jpg`, {
                         type: blob.type,
                       });
-                    },
-                  ),
+                    }
+                  )
                 );
                 setPromptImages(imageFiles);
                 setPromptImagePreviews(
-                  imageFiles.map((file) => URL.createObjectURL(file)),
+                  imageFiles.map((file) => URL.createObjectURL(file))
                 );
               } catch (error) {
                 console.error("Failed to load reference images:", error);
@@ -457,12 +456,12 @@ function VideoCreatePage() {
                       return new File([blob], `reference-${index}.jpg`, {
                         type: blob.type,
                       });
-                    },
-                  ),
+                    }
+                  )
                 );
                 setPromptImages(imageFiles);
                 setPromptImagePreviews(
-                  imageFiles.map((file) => URL.createObjectURL(file)),
+                  imageFiles.map((file) => URL.createObjectURL(file))
                 );
               } catch (error) {
                 console.error("Failed to load reference images:", error);
@@ -478,7 +477,7 @@ function VideoCreatePage() {
           localStorage.removeItem("recreateData");
 
           toast(
-            "All generation parameters have been loaded. Click Generate to create your version.",
+            "All generation parameters have been loaded. Click Generate to create your version."
           );
         }
       } catch (error) {
@@ -558,18 +557,18 @@ function VideoCreatePage() {
                   const response = await fetch(imageUrl);
                   if (!response.ok) {
                     throw new Error(
-                      `Failed to fetch image: ${response.status}`,
+                      `Failed to fetch image: ${response.status}`
                     );
                   }
                   const blob = await response.blob();
                   return new File([blob], `reference-${index}.jpg`, {
                     type: blob.type || "image/jpeg",
                   });
-                }),
+                })
               );
               setPromptImages(imageFiles);
               setPromptImagePreviews(
-                imageFiles.map((file) => URL.createObjectURL(file)),
+                imageFiles.map((file) => URL.createObjectURL(file))
               );
             } catch (error) {
               console.error("Failed to load reference images:", error);
@@ -592,7 +591,7 @@ function VideoCreatePage() {
           }
 
           toast(
-            "Your design has been loaded. You can modify the prompt and click Generate to animate it.",
+            "Your design has been loaded. You can modify the prompt and click Generate to animate it."
           );
         }
       } catch (error) {
@@ -730,10 +729,10 @@ function VideoCreatePage() {
   >(
     urlContentTab &&
       ["preview", "history", "community", "templates", "tutorial"].includes(
-        urlContentTab,
+        urlContentTab
       )
       ? urlContentTab
-      : "community",
+      : "community"
   );
 
   // Sync activeContentTab with URL parameter changes (for browser back/forward)
@@ -749,7 +748,7 @@ function VideoCreatePage() {
     if (
       currentTab &&
       ["preview", "history", "community", "templates", "tutorial"].includes(
-        currentTab,
+        currentTab
       ) &&
       activeContentTab !== currentTab
     ) {
@@ -775,7 +774,7 @@ function VideoCreatePage() {
       isMobile &&
       currentTab &&
       ["preview", "history", "community", "templates", "tutorial"].includes(
-        currentTab,
+        currentTab
       )
     ) {
       setSidebarDrawerOpen(true);
@@ -806,7 +805,7 @@ function VideoCreatePage() {
         setSidebarDrawerOpen(true);
       }
     },
-    [searchParams, router, isMobile],
+    [searchParams, router, isMobile]
   );
 
   // Set up socket connection for video generation progress
@@ -841,7 +840,7 @@ function VideoCreatePage() {
               updateContentTab("preview");
             }
           }
-        },
+        }
       );
 
       socket.on("disconnect", () => {
@@ -862,7 +861,7 @@ function VideoCreatePage() {
   const [startFrame, setStartFrame] = useState<File | null>(null);
   const [endFrame, setEndFrame] = useState<File | null>(null);
   const [startFramePreview, setStartFramePreview] = useState<string | null>(
-    null,
+    null
   );
   const [endFramePreview, setEndFramePreview] = useState<string | null>(null);
   const [prompt, setPrompt] = useState("");
@@ -896,7 +895,7 @@ function VideoCreatePage() {
   const handleFileUpload = (
     file: File | null,
     setFile: (file: File | null) => void,
-    setPreview: (preview: string | null) => void,
+    setPreview: (preview: string | null) => void
   ) => {
     if (file) {
       setFile(file);
@@ -912,34 +911,34 @@ function VideoCreatePage() {
   };
 
   return (
-    <div className="flex relative w-full h-[100dvh] overflow-hidden bg-white dark:bg-black">
+    <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>
       <Toaster />
       <AppSidebar />
       <div
         ref={scrollContainerRef}
-        className="flex-1 flex flex-col overflow-auto will-change-scroll scroll-container"
+        className='scroll-container flex flex-1 flex-col overflow-auto will-change-scroll'
       >
         <TopNavWithAurora
           scrollContainerRef={
             scrollContainerRef as React.RefObject<HTMLDivElement>
           }
         />
-        <div id="main-content" className="flex-1 px-2 lg:px-8">
-          <div className="grid grid-cols-[1fr] md:grid-cols-[27rem_1fr] gap-2 md:h-[calc(100vh-4rem)] relative w-full">
-            <div className="flex flex-col max-h-full min-h-0">
+        <div id='main-content' className='flex-1 px-2 lg:px-8'>
+          <div className='relative grid w-full grid-cols-[1fr] gap-2 md:h-[calc(100vh-4rem)] md:grid-cols-[27rem_1fr]'>
+            <div className='flex max-h-full min-h-0 flex-col'>
               {/* Mode Selector: Video & Image Tabs */}
-              <div className="flex items-start justify-between lg:px-4 py-2 mb-1 z-20">
+              <div className='z-20 mb-1 flex items-start justify-between py-2 lg:px-4'>
                 <div
-                  role="tablist"
-                  aria-orientation="horizontal"
-                  className="rounded-xl p-1 flex gap-4 bg-neutral-100 dark:bg-neutral-900"
+                  role='tablist'
+                  aria-orientation='horizontal'
+                  className='flex gap-4 rounded-xl bg-neutral-100 p-1 dark:bg-neutral-900'
                   tabIndex={0}
-                  data-orientation="horizontal"
+                  data-orientation='horizontal'
                   style={{ outline: "none" }}
                 >
                   <button
-                    type="button"
-                    role="tab"
+                    type='button'
+                    role='tab'
                     aria-selected={generationMode === "video"}
                     data-state={
                       generationMode === "video" ? "active" : "inactive"
@@ -947,7 +946,7 @@ function VideoCreatePage() {
                     onClick={() => {
                       setGenerationMode("video");
                       const urlParams = new URLSearchParams(
-                        searchParams.toString(),
+                        searchParams.toString()
                       );
                       urlParams.set("mode", "ai-video-gen");
                       if (projectId) {
@@ -959,24 +958,24 @@ function VideoCreatePage() {
                       }
                       router.replace(
                         `/inspire/create?${urlParams.toString()}`,
-                        { scroll: false },
+                        { scroll: false }
                       );
                     }}
                     className={cn(
-                      "relative min-w-fit cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2 px-3",
+                      "relative flex min-w-fit cursor-pointer items-center justify-center gap-2 px-3 py-2 text-sm transition-colors",
                       generationMode === "video"
-                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                        ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 dark:bg-neutral-800"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                     )}
                     tabIndex={generationMode === "video" ? -1 : 0}
-                    data-orientation="horizontal"
+                    data-orientation='horizontal'
                   >
-                    <Video className="w-4 h-4" />
+                    <Video className='h-4 w-4' />
                     Video
                   </button>
                   <button
-                    type="button"
-                    role="tab"
+                    type='button'
+                    role='tab'
                     aria-selected={generationMode === "image"}
                     data-state={
                       generationMode === "image" ? "active" : "inactive"
@@ -984,7 +983,7 @@ function VideoCreatePage() {
                     onClick={() => {
                       setGenerationMode("image");
                       const urlParams = new URLSearchParams(
-                        searchParams.toString(),
+                        searchParams.toString()
                       );
                       urlParams.set("mode", "ai-image-gen");
                       if (projectId) {
@@ -996,51 +995,51 @@ function VideoCreatePage() {
                       }
                       router.replace(
                         `/inspire/create?${urlParams.toString()}`,
-                        { scroll: false },
+                        { scroll: false }
                       );
                     }}
                     className={cn(
-                      "relative min-w-fit cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2 px-3",
+                      "relative flex min-w-fit cursor-pointer items-center justify-center gap-2 px-3 py-2 text-sm transition-colors",
                       generationMode === "image"
-                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                        ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 dark:bg-neutral-800"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                     )}
                     tabIndex={generationMode === "image" ? -1 : 0}
-                    data-orientation="horizontal"
+                    data-orientation='horizontal'
                   >
-                    <ImageIcon className="w-4 h-4" />
+                    <ImageIcon className='h-4 w-4' />
                     Image
                   </button>
                 </div>
                 {/* Sidebar toggle button for mobile/tablet */}
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => setSidebarDrawerOpen(true)}
-                  className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors"
-                  aria-label="Open sidebar"
+                  className='flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-100 transition-colors hover:bg-neutral-200 lg:hidden dark:bg-neutral-900 dark:hover:bg-neutral-800'
+                  aria-label='Open sidebar'
                 >
                   {/* <Menu className="w-5 h-5 text-neutral-700 dark:text-neutral-300" /> */}
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns='http://www.w3.org/2000/svg'
                     width={24}
                     height={24}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
                     strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="w-5 h-5 text-neutral-700 dark:text-neutral-300"
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='h-5 w-5 text-neutral-700 dark:text-neutral-300'
                   >
-                    <path d="M10 5H3" />
-                    <path d="M12 19H3" />
-                    <path d="M14 3v4" />
-                    <path d="M16 17v4" />
-                    <path d="M21 12h-9" />
-                    <path d="M21 19h-5" />
-                    <path d="M21 5h-7" />
-                    <path d="M8 10v4" />
-                    <path d="M8 12H3" />
+                    <path d='M10 5H3' />
+                    <path d='M12 19H3' />
+                    <path d='M14 3v4' />
+                    <path d='M16 17v4' />
+                    <path d='M21 12h-9' />
+                    <path d='M21 19h-5' />
+                    <path d='M21 5h-7' />
+                    <path d='M8 10v4' />
+                    <path d='M8 12H3' />
                   </svg>
                 </button>
               </div>
@@ -1048,11 +1047,11 @@ function VideoCreatePage() {
               <div
                 className={cn(
                   "absolute w-full lg:w-[27rem]",
-                  generationMode === "video" ? "top-[50px]" : "top-[50px]",
+                  generationMode === "video" ? "top-[50px]" : "top-[50px]"
                 )}
               >
                 <form
-                  className="generate-form generate-form--asset flex flex-col shrink-0 max-h-[calc(100vh-7rem)] relative z-10 border-t-0 rounded-b-2xl px-2"
+                  className='generate-form generate-form--asset relative z-10 flex max-h-[calc(100vh-7rem)] shrink-0 flex-col rounded-b-2xl border-t-0 px-2'
                   onSubmit={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -1061,17 +1060,17 @@ function VideoCreatePage() {
                 >
                   {/* Image Generation Form */}
                   {generationMode === "image" && (
-                    <div className="md:px-4 pb-4 shrink-0 md:overflow-y-auto pt-4 hide-scrollbar space-y-4 md:max-h-[calc(100vh-15rem)]">
+                    <div className='hide-scrollbar shrink-0 space-y-4 pt-4 pb-4 md:max-h-[calc(100vh-15rem)] md:overflow-y-auto md:px-4'>
                       {/* Model Selection */}
                       <ModelSelector
-                        type="image"
+                        type='image'
                         selectedModel={selectedImageModel}
                         onSelectModel={setSelectedImageModel}
                       />
 
                       {/* Prompt Input */}
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                      <div className='space-y-2'>
+                        <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                           Prompt
                         </label>
                         <textarea
@@ -1084,31 +1083,31 @@ function VideoCreatePage() {
                               e.preventDefault();
                             }
                           }}
-                          placeholder="Describe the image you want to generate..."
-                          className="w-full min-h-[100px] p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 border-2 border-dashed border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 resize-none focus:outline-none focus:ring-2 focus:ring-transparent focus:border-transparent"
+                          placeholder='Describe the image you want to generate...'
+                          className='min-h-[100px] w-full resize-none rounded-xl border-2 border-dashed border-neutral-300 bg-neutral-100 p-3 text-sm text-neutral-900 placeholder:text-neutral-500 focus:border-transparent focus:ring-2 focus:ring-transparent focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'
                         />
 
                         {/* Reference Images (Optional) */}
-                        <div className="space-y-2">
-                          <label className="text-xs text-neutral-500 dark:text-neutral-400">
+                        <div className='space-y-2'>
+                          <label className='text-xs text-neutral-500 dark:text-neutral-400'>
                             Reference Images{" "}
-                            <span className="text-neutral-400">
+                            <span className='text-neutral-400'>
                               (optional - for style/context)
                             </span>
                           </label>
-                          <div className="flex flex-wrap gap-2">
+                          <div className='flex flex-wrap gap-2'>
                             {promptImagePreviews.map((preview, index) => (
                               <div
                                 key={index}
-                                className="relative w-20 h-20 rounded-lg overflow-hidden border-2 border-neutral-300 dark:border-neutral-600"
+                                className='relative h-20 w-20 overflow-hidden rounded-lg border-2 border-neutral-300 dark:border-neutral-600'
                               >
                                 <img
                                   src={preview}
                                   alt={`Reference ${index + 1}`}
-                                  className="w-full h-full object-cover"
+                                  className='h-full w-full object-cover'
                                 />
                                 <button
-                                  type="button"
+                                  type='button'
                                   onClick={() => {
                                     const newImages = [...promptImages];
                                     const newPreviews = [
@@ -1119,30 +1118,30 @@ function VideoCreatePage() {
                                     setPromptImages(newImages);
                                     setPromptImagePreviews(newPreviews);
                                   }}
-                                  className="absolute top-1 right-1 bg-black/50 hover:bg-black/70 text-white rounded-full p-1 z-10"
+                                  className='absolute top-1 right-1 z-10 rounded-full bg-black/50 p-1 text-white hover:bg-black/70'
                                 >
                                   <svg
                                     width={12}
                                     height={12}
-                                    viewBox="0 0 16 16"
-                                    fill="none"
+                                    viewBox='0 0 16 16'
+                                    fill='none'
                                   >
                                     <path
-                                      d="M12 4L4 12M4 4l8 8"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
+                                      d='M12 4L4 12M4 4l8 8'
+                                      stroke='currentColor'
+                                      strokeWidth='2'
+                                      strokeLinecap='round'
                                     />
                                   </svg>
                                 </button>
                               </div>
                             ))}
                             {promptImagePreviews.length < 5 && (
-                              <label className="w-20 h-20 border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg flex items-center justify-center cursor-pointer hover:border-cyan-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+                              <label className='flex h-20 w-20 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-neutral-300 transition-colors hover:border-cyan-500 hover:bg-neutral-100 dark:border-neutral-600 dark:hover:bg-neutral-800'>
                                 <input
-                                  type="file"
-                                  accept="image/jpeg,image/jpg,image/png,image/webp"
-                                  className="sr-only"
+                                  type='file'
+                                  accept='image/jpeg,image/jpg,image/png,image/webp'
+                                  className='sr-only'
                                   onChange={(e) => {
                                     const file = e.target.files?.[0];
                                     if (file) {
@@ -1161,12 +1160,12 @@ function VideoCreatePage() {
                                     }
                                   }}
                                 />
-                                <ImageIcon className="w-5 h-5 text-neutral-400" />
+                                <ImageIcon className='h-5 w-5 text-neutral-400' />
                               </label>
                             )}
                           </div>
                           {promptImagePreviews.length > 0 && (
-                            <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                            <p className='text-xs text-neutral-500 dark:text-neutral-400'>
                               These images provide style/context reference for
                               image generation.
                             </p>
@@ -1175,11 +1174,11 @@ function VideoCreatePage() {
                       </div>
 
                       {/* Style Selection */}
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                      <div className='space-y-2'>
+                        <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                           Style
                         </label>
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className='grid grid-cols-3 gap-2'>
                           {[
                             {
                               value: "realistic",
@@ -1220,22 +1219,22 @@ function VideoCreatePage() {
                           ].map((style) => (
                             <button
                               key={style.value}
-                              type="button"
+                              type='button'
                               onClick={() =>
                                 setSelectedImageStyle(style.value as ImageStyle)
                               }
                               className={cn(
-                                "relative rounded-xl overflow-hidden transition-all group",
+                                "group relative overflow-hidden rounded-xl transition-all",
                                 selectedImageStyle === style.value
-                                  ? "ring-2 ring-cyan-500 ring-offset-2 ring-offset-background"
-                                  : "hover:ring-2 hover:ring-neutral-300 dark:hover:ring-neutral-600",
+                                  ? "ring-offset-background ring-2 ring-cyan-500 ring-offset-2"
+                                  : "hover:ring-2 hover:ring-neutral-300 dark:hover:ring-neutral-600"
                               )}
                             >
-                              <div className="aspect-square relative">
+                              <div className='relative aspect-square'>
                                 <img
                                   src={style.image}
                                   alt={style.label}
-                                  className="w-full h-full object-cover"
+                                  className='h-full w-full object-cover'
                                 />
                                 {/* Overlay */}
                                 <div
@@ -1243,25 +1242,25 @@ function VideoCreatePage() {
                                     "absolute inset-0 transition-all",
                                     selectedImageStyle === style.value
                                       ? "bg-cyan-500/20"
-                                      : "bg-black/40 group-hover:bg-black/30",
+                                      : "bg-black/40 group-hover:bg-black/30"
                                   )}
                                 />
                                 {/* Checkmark for selected */}
                                 {selectedImageStyle === style.value && (
-                                  <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-neutral-500 flex items-center justify-center">
+                                  <div className='absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-neutral-500'>
                                     <svg
-                                      width="12"
-                                      height="12"
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
+                                      width='12'
+                                      height='12'
+                                      viewBox='0 0 12 12'
+                                      fill='none'
+                                      xmlns='http://www.w3.org/2000/svg'
                                     >
                                       <path
-                                        d="M10 3L4.5 8.5L2 6"
-                                        stroke="white"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
+                                        d='M10 3L4.5 8.5L2 6'
+                                        stroke='white'
+                                        strokeWidth='2'
+                                        strokeLinecap='round'
+                                        strokeLinejoin='round'
                                       />
                                     </svg>
                                   </div>
@@ -1270,13 +1269,13 @@ function VideoCreatePage() {
                               {/* Label */}
                               <div
                                 className={cn(
-                                  "absolute bottom-0 left-0 right-0 p-2 text-center",
+                                  "absolute right-0 bottom-0 left-0 p-2 text-center",
                                   selectedImageStyle === style.value
                                     ? "bg-black/60"
-                                    : "bg-black/60",
+                                    : "bg-black/60"
                                 )}
                               >
-                                <span className="text-xs font-medium text-white">
+                                <span className='text-xs font-medium text-white'>
                                   {style.label}
                                 </span>
                               </div>
@@ -1286,11 +1285,11 @@ function VideoCreatePage() {
                       </div>
 
                       {/* Aspect Ratio */}
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                      <div className='space-y-2'>
+                        <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                           Aspect Ratio
                         </label>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className='grid grid-cols-2 gap-2'>
                           {[
                             {
                               value: "16:9" as const,
@@ -1315,26 +1314,26 @@ function VideoCreatePage() {
                           ].map((ratio) => (
                             <button
                               key={ratio.value}
-                              type="button"
+                              type='button'
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 setSelectedAspectRatio(ratio.value);
                               }}
                               className={cn(
-                                "p-3 rounded-lg text-xs font-medium transition-all text-left",
+                                "rounded-lg p-3 text-left text-xs font-medium transition-all",
                                 selectedAspectRatio === ratio.value
                                   ? "bg-cyan-500 text-white"
-                                  : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700",
+                                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                               )}
                             >
-                              <div className="font-semibold">{ratio.label}</div>
+                              <div className='font-semibold'>{ratio.label}</div>
                               <div
                                 className={cn(
-                                  "text-[10px] mt-0.5",
+                                  "mt-0.5 text-[10px]",
                                   selectedAspectRatio === ratio.value
                                     ? "text-white/80"
-                                    : "text-neutral-500 dark:text-neutral-400",
+                                    : "text-neutral-500 dark:text-neutral-400"
                                 )}
                               >
                                 {ratio.desc}
@@ -1345,21 +1344,21 @@ function VideoCreatePage() {
                       </div>
 
                       {/* Number of Images */}
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                      <div className='space-y-2'>
+                        <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                           Number of Images
                         </label>
-                        <div className="grid grid-cols-4 gap-2">
+                        <div className='grid grid-cols-4 gap-2'>
                           {[1, 2, 3, 4].map((count) => (
                             <button
                               key={count}
-                              type="button"
+                              type='button'
                               onClick={() => setImageCount(count)}
                               className={cn(
-                                "p-2 rounded-lg text-xs font-medium transition-all",
+                                "rounded-lg p-2 text-xs font-medium transition-all",
                                 imageCount === count
                                   ? "bg-cyan-500 text-white"
-                                  : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700",
+                                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                               )}
                             >
                               {count}
@@ -1372,7 +1371,7 @@ function VideoCreatePage() {
 
                   {/* Video Generation Form */}
                   {generationMode === "video" && (
-                    <div className="md:px-4 pb-4 shrink-0 md:overflow-y-auto pt-4 hide-scrollbar space-y-2 md:max-h-[calc(100vh-15rem)]">
+                    <div className='hide-scrollbar shrink-0 space-y-2 pt-4 pb-4 md:max-h-[calc(100vh-15rem)] md:overflow-y-auto md:px-4'>
                       <fieldset>
                         <PresetSlider
                           currentSlide={currentPresetSlide}
@@ -1381,48 +1380,48 @@ function VideoCreatePage() {
                       </fieldset>
 
                       {/* Model Selection */}
-                      <div className="mb-2">
+                      <div className='mb-2'>
                         <ModelSelector
-                          type="video"
+                          type='video'
                           selectedModel={selectedVideoModel}
                           onSelectModel={setSelectedVideoModel}
                         />
                       </div>
 
-                      <div className="md:overflow-y-auto relative">
+                      <div className='relative md:overflow-y-auto'>
                         <div
-                          id="form-video-dropzones"
-                          className="grid grid-cols-2 gap-2 mb-4"
+                          id='form-video-dropzones'
+                          className='mb-4 grid grid-cols-2 gap-2'
                         >
-                          <label className="border-2 border-dashed border-neutral-300 dark:border-neutral-600 size-full rounded-xl grid grid-cols-1 grid-rows-1 justify-center items-center p-3 md:py-6 md:px-9 transition cursor-pointer hover:border-cyan-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 relative overflow-hidden">
+                          <label className='relative grid size-full cursor-pointer grid-cols-1 grid-rows-1 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-neutral-300 p-3 transition hover:border-cyan-500 hover:bg-neutral-100 md:px-9 md:py-6 dark:border-neutral-600 dark:hover:bg-neutral-800'>
                             {startFramePreview ? (
                               <>
                                 <img
                                   src={startFramePreview}
-                                  alt="Start frame preview"
-                                  className="absolute inset-0 w-full h-full object-cover"
+                                  alt='Start frame preview'
+                                  className='absolute inset-0 h-full w-full object-cover'
                                 />
                                 <button
-                                  type="button"
+                                  type='button'
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     setStartFrame(null);
                                     setStartFramePreview(null);
                                   }}
-                                  className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1 z-10"
+                                  className='absolute top-2 right-2 z-10 rounded-full bg-black/50 p-1 text-white hover:bg-black/70'
                                 >
                                   <svg
                                     width={16}
                                     height={16}
-                                    viewBox="0 0 16 16"
-                                    fill="none"
+                                    viewBox='0 0 16 16'
+                                    fill='none'
                                   >
                                     <path
-                                      d="M12 4L4 12M4 4l8 8"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
+                                      d='M12 4L4 12M4 4l8 8'
+                                      stroke='currentColor'
+                                      strokeWidth='2'
+                                      strokeLinecap='round'
                                     />
                                   </svg>
                                 </button>
@@ -1430,59 +1429,59 @@ function VideoCreatePage() {
                             ) : (
                               <>
                                 <input
-                                  className="sr-only"
-                                  accept="image/jpeg,image/jpg,image/png"
-                                  type="file"
+                                  className='sr-only'
+                                  accept='image/jpeg,image/jpg,image/png'
+                                  type='file'
                                   onChange={(e) => {
                                     const file = e.target.files?.[0] || null;
                                     handleFileUpload(
                                       file,
                                       setStartFrame,
-                                      setStartFramePreview,
+                                      setStartFramePreview
                                     );
                                   }}
                                 />
                                 <div
-                                  id="radix-_r_3_"
-                                  aria-haspopup="menu"
-                                  aria-expanded="false"
-                                  data-state="closed"
-                                  className="@container text-center w-full text-nowrap text-sm *:flex *:flex-col *:justify-center *:items-center"
+                                  id='radix-_r_3_'
+                                  aria-haspopup='menu'
+                                  aria-expanded='false'
+                                  data-state='closed'
+                                  className='@container w-full text-center text-sm text-nowrap *:flex *:flex-col *:items-center *:justify-center'
                                 >
-                                  <div className="grid justify-center">
+                                  <div className='grid justify-center'>
                                     <div
-                                      aria-hidden="true"
-                                      className="grid justify-center items-center rounded-full backdrop-blur-xs mix-blend-luminosity bg-white-4 aspect-square border-white-50 svg:text-font-secondary size-8 @[15rem]:size-12 svg:size-4! @[15rem]:svg:size-6!"
+                                      aria-hidden='true'
+                                      className='bg-white-4 border-white-50 svg:text-font-secondary svg:size-4! @[15rem]:svg:size-6! grid aspect-square size-8 items-center justify-center rounded-full mix-blend-luminosity backdrop-blur-xs @[15rem]:size-12'
                                       style={{
                                         boxShadow:
                                           "rgba(0, 0, 0, 0) 0px 128.852px 36.007px 0px, rgba(0, 0, 0, 0.01) 0px 82.429px 33.031px 0px, rgba(0, 0, 0, 0.05) 0px 46.422px 27.972px 0px, rgba(0, 0, 0, 0.09) 0px 20.533px 20.533px 0px, rgba(0, 0, 0, 0.1) 0px 5.059px 11.308px 0px, rgba(185, 185, 185, 0.35) 0px -0.298px 5.356px 0px inset",
                                       }}
                                     >
-                                      <div className="flex items-center justify-center p-1.5 size-9 rounded-lg bg-surface-primary shadow-[0_-1.872px_0_0_rgba(20,1,8,0.30)_inset,0_3.744px_3.744px_0_rgba(0,0,0,0.25)]">
+                                      <div className='bg-surface-primary flex size-9 items-center justify-center rounded-lg p-1.5 shadow-[0_-1.872px_0_0_rgba(20,1,8,0.30)_inset,0_3.744px_3.744px_0_rgba(0,0,0,0.25)]'>
                                         <svg
-                                          className="size-5! text-neutral-700 dark:text-neutral-300"
-                                          aria-hidden="true"
-                                          width="24px"
-                                          height="24px"
-                                          viewBox="0 0 24 24"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
+                                          className='size-5! text-neutral-700 dark:text-neutral-300'
+                                          aria-hidden='true'
+                                          width='24px'
+                                          height='24px'
+                                          viewBox='0 0 24 24'
+                                          fill='none'
+                                          xmlns='http://www.w3.org/2000/svg'
                                         >
                                           <path
-                                            d="M3.75 16L7.64677 12.3325C7.84356 12.1472 8.15191 12.1519 8.343 12.343L12 16L13.6464 14.3536C13.8417 14.1583 14.1583 14.1583 14.3536 14.3536L19.5 19.5M4.75 20.25H19.25C19.8023 20.25 20.25 19.8023 20.25 19.25V4.75C20.25 4.19772 19.8023 3.75 19.25 3.75H4.75C4.19772 3.75 3.75 4.19772 3.75 4.75V19.25C3.75 19.8023 4.19772 20.25 4.75 20.25ZM15.75 9C15.75 9.82843 15.0784 10.5 14.25 10.5C13.4216 10.5 12.75 9.82843 12.75 9C12.75 8.17157 13.4216 7.5 14.25 7.5C15.0784 7.5 15.75 8.17157 15.75 9Z"
-                                            stroke="currentColor"
-                                            strokeWidth="1.5"
-                                            strokeLinecap="round"
+                                            d='M3.75 16L7.64677 12.3325C7.84356 12.1472 8.15191 12.1519 8.343 12.343L12 16L13.6464 14.3536C13.8417 14.1583 14.1583 14.1583 14.3536 14.3536L19.5 19.5M4.75 20.25H19.25C19.8023 20.25 20.25 19.8023 20.25 19.25V4.75C20.25 4.19772 19.8023 3.75 19.25 3.75H4.75C4.19772 3.75 3.75 4.19772 3.75 4.75V19.25C3.75 19.8023 4.19772 20.25 4.75 20.25ZM15.75 9C15.75 9.82843 15.0784 10.5 14.25 10.5C13.4216 10.5 12.75 9.82843 12.75 9C12.75 8.17157 13.4216 7.5 14.25 7.5C15.0784 7.5 15.75 8.17157 15.75 9Z'
+                                            stroke='currentColor'
+                                            strokeWidth='1.5'
+                                            strokeLinecap='round'
                                           />
                                         </svg>
                                       </div>
                                     </div>
                                   </div>
-                                  <div className="mt-2 @[15rem]:mt-4 text-sm font-medium text-font-secondary">
-                                    <p className="md:text-font-primary text-sm">
+                                  <div className='text-font-secondary mt-2 text-sm font-medium @[15rem]:mt-4'>
+                                    <p className='md:text-font-primary text-sm'>
                                       Start frame
                                     </p>
-                                    <p className="text-font-secondary text-xs">
+                                    <p className='text-font-secondary text-xs'>
                                       (Optional)
                                     </p>
                                   </div>
@@ -1490,35 +1489,35 @@ function VideoCreatePage() {
                               </>
                             )}
                           </label>
-                          <label className="border-2 border-dashed border-neutral-300 dark:border-neutral-600 size-full rounded-xl grid grid-cols-1 grid-rows-1 justify-center items-center p-3 md:py-6 md:px-9 transition cursor-pointer hover:border-cyan-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 relative overflow-hidden">
+                          <label className='relative grid size-full cursor-pointer grid-cols-1 grid-rows-1 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-neutral-300 p-3 transition hover:border-cyan-500 hover:bg-neutral-100 md:px-9 md:py-6 dark:border-neutral-600 dark:hover:bg-neutral-800'>
                             {endFramePreview ? (
                               <>
                                 <img
                                   src={endFramePreview}
-                                  alt="End frame preview"
-                                  className="absolute inset-0 w-full h-full object-cover"
+                                  alt='End frame preview'
+                                  className='absolute inset-0 h-full w-full object-cover'
                                 />
                                 <button
-                                  type="button"
+                                  type='button'
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     setEndFrame(null);
                                     setEndFramePreview(null);
                                   }}
-                                  className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1 z-10"
+                                  className='absolute top-2 right-2 z-10 rounded-full bg-black/50 p-1 text-white hover:bg-black/70'
                                 >
                                   <svg
                                     width={16}
                                     height={16}
-                                    viewBox="0 0 16 16"
-                                    fill="none"
+                                    viewBox='0 0 16 16'
+                                    fill='none'
                                   >
                                     <path
-                                      d="M12 4L4 12M4 4l8 8"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
+                                      d='M12 4L4 12M4 4l8 8'
+                                      stroke='currentColor'
+                                      strokeWidth='2'
+                                      strokeLinecap='round'
                                     />
                                   </svg>
                                 </button>
@@ -1526,59 +1525,59 @@ function VideoCreatePage() {
                             ) : (
                               <>
                                 <input
-                                  className="sr-only"
-                                  accept="image/jpeg,image/jpg,image/png"
-                                  type="file"
+                                  className='sr-only'
+                                  accept='image/jpeg,image/jpg,image/png'
+                                  type='file'
                                   onChange={(e) => {
                                     const file = e.target.files?.[0] || null;
                                     handleFileUpload(
                                       file,
                                       setEndFrame,
-                                      setEndFramePreview,
+                                      setEndFramePreview
                                     );
                                   }}
                                 />
                                 <div
-                                  id="radix-_r_8_"
-                                  aria-haspopup="menu"
-                                  aria-expanded="false"
-                                  data-state="closed"
-                                  className="@container text-center w-full text-nowrap text-sm *:flex *:flex-col *:justify-center *:items-center"
+                                  id='radix-_r_8_'
+                                  aria-haspopup='menu'
+                                  aria-expanded='false'
+                                  data-state='closed'
+                                  className='@container w-full text-center text-sm text-nowrap *:flex *:flex-col *:items-center *:justify-center'
                                 >
-                                  <div className="grid justify-center">
+                                  <div className='grid justify-center'>
                                     <div
-                                      aria-hidden="true"
-                                      className="grid justify-center items-center rounded-full backdrop-blur-xs mix-blend-luminosity bg-white-4 aspect-square border-white-50 svg:text-font-secondary size-8 @[15rem]:size-12 svg:size-4! @[15rem]:svg:size-6!"
+                                      aria-hidden='true'
+                                      className='bg-white-4 border-white-50 svg:text-font-secondary svg:size-4! @[15rem]:svg:size-6! grid aspect-square size-8 items-center justify-center rounded-full mix-blend-luminosity backdrop-blur-xs @[15rem]:size-12'
                                       style={{
                                         boxShadow:
                                           "rgba(0, 0, 0, 0) 0px 128.852px 36.007px 0px, rgba(0, 0, 0, 0.01) 0px 82.429px 33.031px 0px, rgba(0, 0, 0, 0.05) 0px 46.422px 27.972px 0px, rgba(0, 0, 0, 0.09) 0px 20.533px 20.533px 0px, rgba(0, 0, 0, 0.1) 0px 5.059px 11.308px 0px, rgba(185, 185, 185, 0.35) 0px -0.298px 5.356px 0px inset",
                                       }}
                                     >
-                                      <div className="flex items-center justify-center p-1.5 size-9 rounded-lg bg-surface-primary shadow-[0_-1.872px_0_0_rgba(20,1,8,0.30)_inset,0_3.744px_3.744px_0_rgba(0,0,0,0.25)]">
+                                      <div className='bg-surface-primary flex size-9 items-center justify-center rounded-lg p-1.5 shadow-[0_-1.872px_0_0_rgba(20,1,8,0.30)_inset,0_3.744px_3.744px_0_rgba(0,0,0,0.25)]'>
                                         <svg
-                                          className="size-5! text-neutral-700 dark:text-neutral-300"
-                                          aria-hidden="true"
-                                          width="24px"
-                                          height="24px"
-                                          viewBox="0 0 24 24"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
+                                          className='size-5! text-neutral-700 dark:text-neutral-300'
+                                          aria-hidden='true'
+                                          width='24px'
+                                          height='24px'
+                                          viewBox='0 0 24 24'
+                                          fill='none'
+                                          xmlns='http://www.w3.org/2000/svg'
                                         >
                                           <path
-                                            d="M3.75 16L7.64677 12.3325C7.84356 12.1472 8.15191 12.1519 8.343 12.343L12 16L13.6464 14.3536C13.8417 14.1583 14.1583 14.1583 14.3536 14.3536L19.5 19.5M4.75 20.25H19.25C19.8023 20.25 20.25 19.8023 20.25 19.25V4.75C20.25 4.19772 19.8023 3.75 19.25 3.75H4.75C4.19772 3.75 3.75 4.19772 3.75 4.75V19.25C3.75 19.8023 4.19772 20.25 4.75 20.25ZM15.75 9C15.75 9.82843 15.0784 10.5 14.25 10.5C13.4216 10.5 12.75 9.82843 12.75 9C12.75 8.17157 13.4216 7.5 14.25 7.5C15.0784 7.5 15.75 8.17157 15.75 9Z"
-                                            stroke="currentColor"
-                                            strokeWidth="1.5"
-                                            strokeLinecap="round"
+                                            d='M3.75 16L7.64677 12.3325C7.84356 12.1472 8.15191 12.1519 8.343 12.343L12 16L13.6464 14.3536C13.8417 14.1583 14.1583 14.1583 14.3536 14.3536L19.5 19.5M4.75 20.25H19.25C19.8023 20.25 20.25 19.8023 20.25 19.25V4.75C20.25 4.19772 19.8023 3.75 19.25 3.75H4.75C4.19772 3.75 3.75 4.19772 3.75 4.75V19.25C3.75 19.8023 4.19772 20.25 4.75 20.25ZM15.75 9C15.75 9.82843 15.0784 10.5 14.25 10.5C13.4216 10.5 12.75 9.82843 12.75 9C12.75 8.17157 13.4216 7.5 14.25 7.5C15.0784 7.5 15.75 8.17157 15.75 9Z'
+                                            stroke='currentColor'
+                                            strokeWidth='1.5'
+                                            strokeLinecap='round'
                                           />
                                         </svg>
                                       </div>
                                     </div>
                                   </div>
-                                  <div className="mt-2 @[15rem]:mt-4 text-sm font-medium text-font-secondary">
-                                    <p className="md:text-font-primary text-sm">
+                                  <div className='text-font-secondary mt-2 text-sm font-medium @[15rem]:mt-4'>
+                                    <p className='md:text-font-primary text-sm'>
                                       End frame
                                     </p>
-                                    <p className="text-font-secondary block text-xs">
+                                    <p className='text-font-secondary block text-xs'>
                                       (Optional)
                                     </p>
                                   </div>
@@ -1589,8 +1588,8 @@ function VideoCreatePage() {
                         </div>
 
                         {/* Prompt Input */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                        <div className='space-y-2'>
+                          <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                             Prompt
                           </label>
                           <textarea
@@ -1603,31 +1602,31 @@ function VideoCreatePage() {
                                 e.preventDefault();
                               }
                             }}
-                            placeholder="Describe the scene you imagine, with details..."
-                            className="w-full min-h-[100px] p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 border-2 border-dashed border-neutral-300 dark:border-neutral-600 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 resize-none focus:outline-none focus:ring-2 focus:ring-transparent focus:border-transparent"
+                            placeholder='Describe the scene you imagine, with details...'
+                            className='min-h-[100px] w-full resize-none rounded-xl border-2 border-dashed border-neutral-300 bg-neutral-100 p-3 text-sm text-neutral-900 placeholder:text-neutral-500 focus:border-transparent focus:ring-2 focus:ring-transparent focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'
                           />
 
                           {/* Reference Images (Optional) */}
-                          <div className="space-y-2">
-                            <label className="text-xs text-neutral-500 dark:text-neutral-400">
+                          <div className='space-y-2'>
+                            <label className='text-xs text-neutral-500 dark:text-neutral-400'>
                               Reference Images{" "}
-                              <span className="text-neutral-400">
+                              <span className='text-neutral-400'>
                                 (optional - for style/context)
                               </span>
                             </label>
-                            <div className="flex flex-wrap gap-2">
+                            <div className='flex flex-wrap gap-2'>
                               {promptImagePreviews.map((preview, index) => (
                                 <div
                                   key={index}
-                                  className="relative w-20 h-20 rounded-lg overflow-hidden border-2 border-neutral-300 dark:border-neutral-600"
+                                  className='relative h-20 w-20 overflow-hidden rounded-lg border-2 border-neutral-300 dark:border-neutral-600'
                                 >
                                   <img
                                     src={preview}
                                     alt={`Reference ${index + 1}`}
-                                    className="w-full h-full object-cover"
+                                    className='h-full w-full object-cover'
                                   />
                                   <button
-                                    type="button"
+                                    type='button'
                                     onClick={() => {
                                       const newImages = [...promptImages];
                                       const newPreviews = [
@@ -1638,30 +1637,30 @@ function VideoCreatePage() {
                                       setPromptImages(newImages);
                                       setPromptImagePreviews(newPreviews);
                                     }}
-                                    className="absolute top-1 right-1 bg-black/50 hover:bg-black/70 text-white rounded-full p-1 z-10"
+                                    className='absolute top-1 right-1 z-10 rounded-full bg-black/50 p-1 text-white hover:bg-black/70'
                                   >
                                     <svg
                                       width={12}
                                       height={12}
-                                      viewBox="0 0 16 16"
-                                      fill="none"
+                                      viewBox='0 0 16 16'
+                                      fill='none'
                                     >
                                       <path
-                                        d="M12 4L4 12M4 4l8 8"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
+                                        d='M12 4L4 12M4 4l8 8'
+                                        stroke='currentColor'
+                                        strokeWidth='2'
+                                        strokeLinecap='round'
                                       />
                                     </svg>
                                   </button>
                                 </div>
                               ))}
                               {promptImagePreviews.length < 5 && (
-                                <label className="w-20 h-20 border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg flex items-center justify-center cursor-pointer hover:border-cyan-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+                                <label className='flex h-20 w-20 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-neutral-300 transition-colors hover:border-cyan-500 hover:bg-neutral-100 dark:border-neutral-600 dark:hover:bg-neutral-800'>
                                   <input
-                                    type="file"
-                                    accept="image/jpeg,image/jpg,image/png,image/webp"
-                                    className="sr-only"
+                                    type='file'
+                                    accept='image/jpeg,image/jpg,image/png,image/webp'
+                                    className='sr-only'
                                     onChange={(e) => {
                                       const file = e.target.files?.[0];
                                       if (file) {
@@ -1680,12 +1679,12 @@ function VideoCreatePage() {
                                       }
                                     }}
                                   />
-                                  <ImageIcon className="w-5 h-5 text-neutral-400" />
+                                  <ImageIcon className='h-5 w-5 text-neutral-400' />
                                 </label>
                               )}
                             </div>
                             {promptImagePreviews.length > 0 && (
-                              <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                              <p className='text-xs text-neutral-500 dark:text-neutral-400'>
                                 These images provide style/context reference.
                                 They differ from start/end frames which are used
                                 for video generation.
@@ -1695,22 +1694,22 @@ function VideoCreatePage() {
                         </div>
 
                         {/* Collapsible Section: Avatar/Presenter */}
-                        <div className="mt-3 space-y-2">
+                        <div className='mt-3 space-y-2'>
                           <button
-                            type="button"
+                            type='button'
                             onClick={() => toggleSection("avatar")}
-                            className="w-full flex items-center justify-between p-3 bg-neutral-surface-subtle rounded-lg hover:bg-neutral-surface-subtle/80 transition-colors"
+                            className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                           >
-                            <div className="flex items-center gap-2">
-                              <User className="w-4 h-4 text-text-secondary" />
-                              <span className="text-sm font-medium text-font-primary">
+                            <div className='flex items-center gap-2'>
+                              <User className='text-text-secondary h-4 w-4' />
+                              <span className='text-font-primary text-sm font-medium'>
                                 Avatar/Presenter
                               </span>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className='flex items-center gap-2'>
                               <button
-                                type="button"
-                                role="switch"
+                                type='button'
+                                role='switch'
                                 aria-checked={sectionsEnabled.avatar}
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -1720,7 +1719,7 @@ function VideoCreatePage() {
                                   "relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-200",
                                   sectionsEnabled.avatar
                                     ? "bg-neutral-900 dark:bg-neutral-100"
-                                    : "bg-neutral-300 dark:bg-neutral-600",
+                                    : "bg-neutral-300 dark:bg-neutral-600"
                                 )}
                               >
                                 <span
@@ -1728,19 +1727,19 @@ function VideoCreatePage() {
                                     "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200",
                                     sectionsEnabled.avatar
                                       ? "translate-x-4"
-                                      : "translate-x-0.5",
+                                      : "translate-x-0.5"
                                   )}
                                 />
                               </button>
                               {sectionsEnabled.avatar ? (
-                                <ChevronUp className="w-4 h-4 text-text-secondary" />
+                                <ChevronUp className='text-text-secondary h-4 w-4' />
                               ) : (
-                                <ChevronDown className="w-4 h-4 text-text-secondary" />
+                                <ChevronDown className='text-text-secondary h-4 w-4' />
                               )}
                             </div>
                           </button>
                           {sectionsEnabled.avatar && (
-                            <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12">
+                            <div className='bg-neutral-surface-subtle border-neutral-12 rounded-lg border p-3'>
                               <PresenterSelector
                                 selectedPresenter={selectedPresenter}
                                 onSelectPresenter={setSelectedPresenter}
@@ -1754,22 +1753,22 @@ function VideoCreatePage() {
 
                         {/* Collapsible Section: Audio/Voice */}
                         {selectedVideoModel?.allowCustomAudio && (
-                          <div className="mt-2 space-y-2">
+                          <div className='mt-2 space-y-2'>
                             <button
-                              type="button"
+                              type='button'
                               onClick={() => toggleSection("audio")}
-                              className="w-full flex items-center justify-between p-3 bg-neutral-surface-subtle rounded-lg hover:bg-neutral-surface-subtle/80 transition-colors"
+                              className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                             >
-                              <div className="flex items-center gap-2">
-                                <Volume2 className="w-4 h-4 text-text-secondary" />
-                                <span className="text-sm font-medium text-font-primary">
+                              <div className='flex items-center gap-2'>
+                                <Volume2 className='text-text-secondary h-4 w-4' />
+                                <span className='text-font-primary text-sm font-medium'>
                                   Audio & Voice
                                 </span>
                               </div>
-                              <div className="flex items-center gap-2">
+                              <div className='flex items-center gap-2'>
                                 <button
-                                  type="button"
-                                  role="switch"
+                                  type='button'
+                                  role='switch'
                                   aria-checked={sectionsEnabled.audio}
                                   onClick={(e) => {
                                     e.stopPropagation();
@@ -1779,7 +1778,7 @@ function VideoCreatePage() {
                                     "relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-200",
                                     sectionsEnabled.audio
                                       ? "bg-neutral-900 dark:bg-neutral-100"
-                                      : "bg-neutral-300 dark:bg-neutral-600",
+                                      : "bg-neutral-300 dark:bg-neutral-600"
                                   )}
                                 >
                                   <span
@@ -1787,19 +1786,19 @@ function VideoCreatePage() {
                                       "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200",
                                       sectionsEnabled.audio
                                         ? "translate-x-4"
-                                        : "translate-x-0.5",
+                                        : "translate-x-0.5"
                                     )}
                                   />
                                 </button>
                                 {sectionsEnabled.audio ? (
-                                  <ChevronUp className="w-4 h-4 text-text-secondary" />
+                                  <ChevronUp className='text-text-secondary h-4 w-4' />
                                 ) : (
-                                  <ChevronDown className="w-4 h-4 text-text-secondary" />
+                                  <ChevronDown className='text-text-secondary h-4 w-4' />
                                 )}
                               </div>
                             </button>
                             {sectionsEnabled.audio && (
-                              <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12">
+                              <div className='bg-neutral-surface-subtle border-neutral-12 rounded-lg border p-3'>
                                 <VoiceSelector
                                   selectedVoice={selectedVoice}
                                   clonedVoiceId={clonedVoiceId}
@@ -1817,22 +1816,22 @@ function VideoCreatePage() {
                         )}
 
                         {/* Collapsible Section: Resolution & Settings */}
-                        <div className="mt-2 space-y-2">
+                        <div className='mt-2 space-y-2'>
                           <button
-                            type="button"
+                            type='button'
                             onClick={() => toggleSection("resolution")}
-                            className="w-full flex items-center justify-between p-3 bg-neutral-surface-subtle rounded-lg hover:bg-neutral-surface-subtle/80 transition-colors"
+                            className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                           >
-                            <div className="flex items-center gap-2">
-                              <Monitor className="w-4 h-4 text-text-secondary" />
-                              <span className="text-sm font-medium text-font-primary">
+                            <div className='flex items-center gap-2'>
+                              <Monitor className='text-text-secondary h-4 w-4' />
+                              <span className='text-font-primary text-sm font-medium'>
                                 Resolution & Format
                               </span>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className='flex items-center gap-2'>
                               <button
-                                type="button"
-                                role="switch"
+                                type='button'
+                                role='switch'
                                 aria-checked={sectionsEnabled.resolution}
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -1842,7 +1841,7 @@ function VideoCreatePage() {
                                   "relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-200",
                                   sectionsEnabled.resolution
                                     ? "bg-neutral-900 dark:bg-neutral-100"
-                                    : "bg-neutral-300 dark:bg-neutral-600",
+                                    : "bg-neutral-300 dark:bg-neutral-600"
                                 )}
                               >
                                 <span
@@ -1850,19 +1849,19 @@ function VideoCreatePage() {
                                     "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200",
                                     sectionsEnabled.resolution
                                       ? "translate-x-4"
-                                      : "translate-x-0.5",
+                                      : "translate-x-0.5"
                                   )}
                                 />
                               </button>
                               {sectionsEnabled.resolution ? (
-                                <ChevronUp className="w-4 h-4 text-text-secondary" />
+                                <ChevronUp className='text-text-secondary h-4 w-4' />
                               ) : (
-                                <ChevronDown className="w-4 h-4 text-text-secondary" />
+                                <ChevronDown className='text-text-secondary h-4 w-4' />
                               )}
                             </div>
                           </button>
                           {sectionsEnabled.resolution && (
-                            <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12 space-y-3">
+                            <div className='bg-neutral-surface-subtle border-neutral-12 space-y-3 rounded-lg border p-3'>
                               <ResolutionSelector
                                 selectedResolution={selectedResolution}
                                 selectedAspectRatio={selectedAspectRatio}
@@ -1872,8 +1871,8 @@ function VideoCreatePage() {
                                   setSidebarDrawerOpen(false)
                                 }
                               />
-                              <div className="pt-2 border-t">
-                                <label className="text-sm font-medium mb-2 block text-font-primary">
+                              <div className='border-t pt-2'>
+                                <label className='text-font-primary mb-2 block text-sm font-medium'>
                                   Duration
                                 </label>
                                 <select
@@ -1881,7 +1880,7 @@ function VideoCreatePage() {
                                   onChange={(e) =>
                                     setDuration(Number(e.target.value))
                                   }
-                                  className="w-full px-3 py-2 bg-background border border-neutral-12 rounded-md text-sm"
+                                  className='bg-background border-neutral-12 w-full rounded-md border px-3 py-2 text-sm'
                                 >
                                   <option value={4}>4 seconds</option>
                                   <option value={8}>8 seconds</option>
@@ -1895,83 +1894,83 @@ function VideoCreatePage() {
                         </div>
 
                         {/* Advanced Settings */}
-                        <div className="mt-2 space-y-2">
+                        <div className='mt-2 space-y-2'>
                           <button
-                            type="button"
+                            type='button'
                             onClick={() => toggleSection("advanced")}
-                            className="w-full flex items-center justify-between p-3 bg-neutral-surface-subtle rounded-lg hover:bg-neutral-surface-subtle/80 transition-colors"
+                            className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                           >
-                            <div className="flex items-center gap-2">
-                              <Settings className="w-4 h-4 text-text-secondary" />
-                              <span className="text-sm font-medium text-font-primary">
+                            <div className='flex items-center gap-2'>
+                              <Settings className='text-text-secondary h-4 w-4' />
+                              <span className='text-font-primary text-sm font-medium'>
                                 Advanced Settings
                               </span>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className='flex items-center gap-2'>
                               {sectionsEnabled.advanced ? (
-                                <ChevronUp className="w-4 h-4 text-text-secondary" />
+                                <ChevronUp className='text-text-secondary h-4 w-4' />
                               ) : (
-                                <ChevronDown className="w-4 h-4 text-text-secondary" />
+                                <ChevronDown className='text-text-secondary h-4 w-4' />
                               )}
                             </div>
                           </button>
                           {sectionsEnabled.advanced && (
-                            <div className="p-3 bg-neutral-surface-subtle rounded-lg border border-neutral-12 space-y-3">
+                            <div className='bg-neutral-surface-subtle border-neutral-12 space-y-3 rounded-lg border p-3'>
                               {/* Fixed Lens Toggle */}
-                              <div className="rounded-xl p-3 bg-neutral-100 dark:bg-neutral-800 transition-all">
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center gap-3">
+                              <div className='rounded-xl bg-neutral-100 p-3 transition-all dark:bg-neutral-800'>
+                                <div className='flex items-center justify-between'>
+                                  <div className='flex items-center gap-3'>
                                     <div
                                       className={cn(
-                                        "w-10 h-10 rounded-lg flex items-center justify-center",
+                                        "flex h-10 w-10 items-center justify-center rounded-lg",
                                         fixedLens
-                                          ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                                          : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
+                                          ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                                          : "bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400"
                                       )}
                                     >
                                       <svg
                                         width={20}
                                         height={20}
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
+                                        viewBox='0 0 24 24'
+                                        fill='none'
+                                        stroke='currentColor'
+                                        strokeWidth='2'
+                                        strokeLinecap='round'
+                                        strokeLinejoin='round'
                                       >
-                                        <circle cx="12" cy="12" r="10" />
-                                        <circle cx="12" cy="12" r="3" />
+                                        <circle cx='12' cy='12' r='10' />
+                                        <circle cx='12' cy='12' r='3' />
                                       </svg>
                                     </div>
                                     <div>
-                                      <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                                      <p className='text-sm font-medium text-neutral-900 dark:text-white'>
                                         Fixed Lens
                                       </p>
-                                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                      <p className='text-xs text-neutral-500 dark:text-neutral-400'>
                                         Lock camera position
                                       </p>
                                     </div>
                                   </div>
                                   <button
-                                    type="button"
-                                    role="switch"
+                                    type='button'
+                                    role='switch'
                                     aria-checked={fixedLens}
-                                    aria-label="Fixed Lens"
+                                    aria-label='Fixed Lens'
                                     onClick={() => setFixedLens(!fixedLens)}
                                     className={cn(
-                                      "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
+                                      "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full ring-0 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent dark:focus-visible:ring-neutral-100",
                                       fixedLens
                                         ? "bg-neutral-900 dark:bg-neutral-100"
-                                        : "bg-neutral-300 dark:bg-neutral-600",
+                                        : "bg-neutral-300 dark:bg-neutral-600"
                                     )}
                                   >
                                     <span
-                                      aria-hidden="true"
+                                      aria-hidden='true'
                                       className={cn(
                                         "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
                                         fixedLens
                                           ? "translate-x-5"
-                                          : "translate-x-0.5",
+                                          : "translate-x-0.5"
                                       )}
                                     />
                                   </button>
@@ -1979,50 +1978,50 @@ function VideoCreatePage() {
                               </div>
 
                               {/* Audio Toggle */}
-                              <div className="rounded-xl p-3 bg-neutral-100 dark:bg-neutral-800 transition-all">
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center gap-3">
+                              <div className='rounded-xl bg-neutral-100 p-3 transition-all dark:bg-neutral-800'>
+                                <div className='flex items-center justify-between'>
+                                  <div className='flex items-center gap-3'>
                                     <div
                                       className={cn(
-                                        "w-10 h-10 rounded-lg flex items-center justify-center",
+                                        "flex h-10 w-10 items-center justify-center rounded-lg",
                                         audioEnabled
-                                          ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                                          : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400",
+                                          ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900"
+                                          : "bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400"
                                       )}
                                     >
-                                      <Volume2 className="w-5 h-5" />
+                                      <Volume2 className='h-5 w-5' />
                                     </div>
                                     <div>
-                                      <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                                      <p className='text-sm font-medium text-neutral-900 dark:text-white'>
                                         Include Audio
                                       </p>
-                                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                                      <p className='text-xs text-neutral-500 dark:text-neutral-400'>
                                         Add sound to video
                                       </p>
                                     </div>
                                   </div>
                                   <button
-                                    type="button"
-                                    role="switch"
+                                    type='button'
+                                    role='switch'
                                     aria-checked={audioEnabled}
-                                    aria-label="Audio"
+                                    aria-label='Audio'
                                     onClick={() =>
                                       setAudioEnabled(!audioEnabled)
                                     }
                                     className={cn(
-                                      "relative inline-flex shrink-0 cursor-pointer items-center transition-all duration-200 ring-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100 focus-visible:ring-offset-transparent rounded-full h-6 w-11",
+                                      "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full ring-0 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent dark:focus-visible:ring-neutral-100",
                                       audioEnabled
                                         ? "bg-neutral-900 dark:bg-neutral-100"
-                                        : "bg-neutral-300 dark:bg-neutral-600",
+                                        : "bg-neutral-300 dark:bg-neutral-600"
                                     )}
                                   >
                                     <span
-                                      aria-hidden="true"
+                                      aria-hidden='true'
                                       className={cn(
                                         "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform duration-200 ease-in-out",
                                         audioEnabled
                                           ? "translate-x-5"
-                                          : "translate-x-0.5",
+                                          : "translate-x-0.5"
                                       )}
                                     />
                                   </button>
@@ -2036,9 +2035,9 @@ function VideoCreatePage() {
                   )}
 
                   {/* Generate Button */}
-                  <div className="px-4 relative bottom-0 shrink-0 w-full pt-3 pb-3 rounded-b-2xl">
+                  <div className='relative bottom-0 w-full shrink-0 rounded-b-2xl px-4 pt-3 pb-3'>
                     <button
-                      type="button"
+                      type='button'
                       onClick={async () => {
                         if (!prompt.trim()) {
                           toast("Please enter a prompt");
@@ -2079,7 +2078,7 @@ function VideoCreatePage() {
                                 style: selectedImageStyle,
                                 imageCount: imageCount,
                               },
-                              files.length > 0 ? files : undefined,
+                              files.length > 0 ? files : undefined
                             );
 
                             if (response.success && response.data.images) {
@@ -2099,7 +2098,7 @@ function VideoCreatePage() {
                                     promptImages.length > 0
                                       ? promptImagePreviews
                                       : (img as any).referenceImageUrls || [],
-                                }),
+                                })
                               );
 
                               setGeneratedImages((prev) => [
@@ -2115,11 +2114,11 @@ function VideoCreatePage() {
                               }
 
                               toast(
-                                `Successfully generated ${newImages.length} image(s)`,
+                                `Successfully generated ${newImages.length} image(s)`
                               );
                             } else {
                               throw new Error(
-                                response.message || "Failed to generate image",
+                                response.message || "Failed to generate image"
                               );
                             }
                           } else {
@@ -2181,7 +2180,7 @@ function VideoCreatePage() {
                               },
                               Object.keys(videoFiles).length > 0
                                 ? videoFiles
-                                : undefined,
+                                : undefined
                             );
 
                             if (response.success && response.data.videos) {
@@ -2206,7 +2205,7 @@ function VideoCreatePage() {
                                     promptImages.length > 0
                                       ? promptImagePreviews
                                       : (vid as any).referenceImageUrls || [],
-                                }),
+                                })
                               );
 
                               setGeneratedVideos((prev) => [
@@ -2224,7 +2223,7 @@ function VideoCreatePage() {
                               }
 
                               toast(
-                                `Successfully generated ${newVideos.length} video(s)`,
+                                `Successfully generated ${newVideos.length} video(s)`
                               );
                             } else {
                               toast(response.message);
@@ -2252,7 +2251,7 @@ function VideoCreatePage() {
                                   router.push(
                                     isBasic
                                       ? "/pricing"
-                                      : "/user/settings?tab=billing",
+                                      : "/user/settings?tab=billing"
                                   );
                                 },
                               },
@@ -2265,26 +2264,26 @@ function VideoCreatePage() {
                       }}
                       disabled={isGenerating}
                       tabIndex={0}
-                      className="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all flex flex-row items-center justify-center gap-2"
-                      data-rac=""
-                      id="react-aria3512376871-_r_1f_"
+                      className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-gradient-to-bl focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800'
+                      data-rac=''
+                      id='react-aria3512376871-_r_1f_'
                       style={{ touchAction: "pan-x pan-y pinch-zoom" }}
                     >
                       {isGenerating ? (
                         <>
-                          <Loader2 className="h-5 w-5 animate-spin" />
+                          <Loader2 className='h-5 w-5 animate-spin' />
                           Generating...
                         </>
                       ) : (
                         <>
                           {generationMode === "image" ? (
                             <>
-                              <Wand2 className="w-4 h-4" />
+                              <Wand2 className='h-4 w-4' />
                               Generate Image
                             </>
                           ) : (
                             <>
-                              <Sparkles className="w-4 h-4" />
+                              <Sparkles className='h-4 w-4' />
                               Generate Video
                             </>
                           )}
@@ -2296,124 +2295,124 @@ function VideoCreatePage() {
               </div>
             </div>
             {/* Right Section - Desktop: always visible, Mobile/Tablet: in drawer */}
-            <div className="hidden md:flex md:flex-1 min-h-0 relative flex-col gap-2.5 pb-3 overflow-hidden">
+            <div className='relative hidden min-h-0 flex-col gap-2.5 overflow-hidden pb-3 md:flex md:flex-1'>
               <div
-                dir="ltr"
-                data-orientation="horizontal"
-                className="z-10 flex w-full items-end justify-end"
+                dir='ltr'
+                data-orientation='horizontal'
+                className='z-10 flex w-full items-end justify-end'
               >
                 <div
-                  role="tablist"
-                  aria-orientation="horizontal"
-                  className="rounded-xl p-1 flex gap-4 bg-page-primary border-separator-card bg-neutral-100 dark:bg-neutral-900"
+                  role='tablist'
+                  aria-orientation='horizontal'
+                  className='bg-page-primary border-separator-card flex gap-4 rounded-xl bg-neutral-100 p-1 dark:bg-neutral-900'
                   tabIndex={0}
-                  data-orientation="horizontal"
+                  data-orientation='horizontal'
                   style={{ outline: "none" }}
                 >
                   <button
-                    type="button"
-                    role="tab"
+                    type='button'
+                    role='tab'
                     aria-selected={activeContentTab === "preview"}
                     data-state={
                       activeContentTab === "preview" ? "active" : "inactive"
                     }
                     onClick={() => updateContentTab("preview")}
                     className={cn(
-                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                      "button button-sm relative flex min-w-[100px] cursor-pointer items-center justify-center gap-2 py-2 text-sm transition-colors active:brightness-60",
                       activeContentTab === "preview"
-                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                        ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 px-2 dark:bg-neutral-800"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                     )}
                     tabIndex={activeContentTab === "preview" ? -1 : 0}
-                    data-orientation="horizontal"
+                    data-orientation='horizontal'
                   >
-                    <ViewIcon className="size-4" />
+                    <ViewIcon className='size-4' />
                     Preview
                   </button>
                   <button
-                    type="button"
-                    role="tab"
+                    type='button'
+                    role='tab'
                     aria-selected={activeContentTab === "history"}
                     data-state={
                       activeContentTab === "history" ? "active" : "inactive"
                     }
                     onClick={() => updateContentTab("history")}
                     className={cn(
-                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                      "button button-sm relative flex min-w-[100px] cursor-pointer items-center justify-center gap-2 py-2 text-sm transition-colors active:brightness-60",
                       activeContentTab === "history"
-                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                        ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 px-2 dark:bg-neutral-800"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                     )}
                     tabIndex={activeContentTab === "history" ? -1 : 0}
-                    data-orientation="horizontal"
+                    data-orientation='horizontal'
                   >
-                    <History className="size-4" />
+                    <History className='size-4' />
                     History
                   </button>
                   <button
-                    type="button"
-                    role="tab"
+                    type='button'
+                    role='tab'
                     aria-selected={activeContentTab === "community"}
                     data-state={
                       activeContentTab === "community" ? "active" : "inactive"
                     }
                     onClick={() => updateContentTab("community")}
                     className={cn(
-                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                      "button button-sm relative flex min-w-[100px] cursor-pointer items-center justify-center gap-2 py-2 text-sm transition-colors active:brightness-60",
                       activeContentTab === "community"
-                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                        ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 px-2 dark:bg-neutral-800"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                     )}
                     tabIndex={activeContentTab === "community" ? -1 : 0}
-                    data-orientation="horizontal"
+                    data-orientation='horizontal'
                   >
-                    <Users className="size-4" />
+                    <Users className='size-4' />
                     Community
                   </button>
                   <button
-                    type="button"
-                    role="tab"
+                    type='button'
+                    role='tab'
                     aria-selected={activeContentTab === "templates"}
                     data-state={
                       activeContentTab === "templates" ? "active" : "inactive"
                     }
                     onClick={() => updateContentTab("templates")}
                     className={cn(
-                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                      "button button-sm relative flex min-w-[100px] cursor-pointer items-center justify-center gap-2 py-2 text-sm transition-colors active:brightness-60",
                       activeContentTab === "templates"
-                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                        ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 px-2 dark:bg-neutral-800"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                     )}
                     tabIndex={activeContentTab === "templates" ? -1 : 0}
-                    data-orientation="horizontal"
+                    data-orientation='horizontal'
                   >
-                    <IconTemplate className="size-4" />
+                    <IconTemplate className='size-4' />
                     Templates
                   </button>
                   <button
-                    type="button"
-                    role="tab"
+                    type='button'
+                    role='tab'
                     aria-selected={activeContentTab === "tutorial"}
                     data-state={
                       activeContentTab === "tutorial" ? "active" : "inactive"
                     }
                     onClick={() => updateContentTab("tutorial")}
                     className={cn(
-                      "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                      "button button-sm relative flex min-w-[100px] cursor-pointer items-center justify-center gap-2 py-2 text-sm transition-colors active:brightness-60",
                       activeContentTab === "tutorial"
-                        ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                        : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                        ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 px-2 dark:bg-neutral-800"
+                        : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                     )}
                     tabIndex={activeContentTab === "tutorial" ? -1 : 0}
-                    data-orientation="horizontal"
+                    data-orientation='horizontal'
                   >
-                    <BookOpen className="size-4" />
+                    <BookOpen className='size-4' />
                     Learn how
                   </button>
                 </div>
               </div>
 
-              <div className="flex-1 md:overflow-auto">
+              <div className='flex-1 md:overflow-auto'>
                 {/* Preview Tab */}
                 {activeContentTab === "preview" && (
                   <>
@@ -2474,17 +2473,17 @@ function VideoCreatePage() {
                           setPrompt(image.imageData.prompt || "");
                           if (image.imageData.aspectRatio) {
                             setSelectedAspectRatio(
-                              image.imageData.aspectRatio as AspectRatio,
+                              image.imageData.aspectRatio as AspectRatio
                             );
                           }
                           if (image.imageData.resolution) {
                             setSelectedResolution(
-                              image.imageData.resolution as Resolution,
+                              image.imageData.resolution as Resolution
                             );
                           }
                           if (image.imageData.style) {
                             setSelectedImageStyle(
-                              image.imageData.style as ImageStyle,
+                              image.imageData.style as ImageStyle
                             );
                           }
                           updateContentTab("preview");
@@ -2518,12 +2517,12 @@ function VideoCreatePage() {
                           setPrompt(video.videoData.prompt || "");
                           if (video.videoData.aspectRatio) {
                             setSelectedAspectRatio(
-                              video.videoData.aspectRatio as AspectRatio,
+                              video.videoData.aspectRatio as AspectRatio
                             );
                           }
                           if (video.videoData.resolution) {
                             setSelectedResolution(
-                              video.videoData.resolution as Resolution,
+                              video.videoData.resolution as Resolution
                             );
                           }
                           updateContentTab("preview");
@@ -2563,7 +2562,7 @@ function VideoCreatePage() {
                                   };
                                   reader.readAsDataURL(file);
                                 });
-                              }),
+                              })
                             );
                             setPromptImagePreviews(previews);
                           },
@@ -2622,7 +2621,7 @@ function VideoCreatePage() {
                                   };
                                   reader.readAsDataURL(file);
                                 });
-                              }),
+                              })
                             );
                             setPromptImagePreviews(previews);
                           },
@@ -2682,72 +2681,72 @@ function VideoCreatePage() {
       {/* Right Section Drawer for Mobile/Tablet */}
       {isMobile && (
         <Drawer open={sidebarDrawerOpen} onOpenChange={setSidebarDrawerOpen}>
-          <DrawerContent className="h-[85vh] max-h-[85vh]">
-            <div className="flex flex-1 min-h-0 relative flex-col gap-2.5 pb-3">
+          <DrawerContent className='h-[85vh] max-h-[85vh]'>
+            <div className='relative flex min-h-0 flex-1 flex-col gap-2.5 pb-3'>
               <div
-                dir="ltr"
-                data-orientation="horizontal"
-                className="z-10 w-full pt-4"
+                dir='ltr'
+                data-orientation='horizontal'
+                className='z-10 w-full pt-4'
               >
                 <div
-                  className="overflow-x-auto scrollbar-hide"
+                  className='scrollbar-hide overflow-x-auto'
                   style={{
                     WebkitOverflowScrolling: "touch",
                     overflowY: "hidden",
                   }}
                 >
-                  <div className="flex items-center min-w-max px-4">
+                  <div className='flex min-w-max items-center px-4'>
                     <div
-                      role="tablist"
-                      aria-orientation="horizontal"
-                      className="rounded-xl p-1 flex gap-4 bg-page-primary border-separator-card bg-neutral-100 dark:bg-neutral-900 shrink-0"
+                      role='tablist'
+                      aria-orientation='horizontal'
+                      className='bg-page-primary border-separator-card flex shrink-0 gap-4 rounded-xl bg-neutral-100 p-1 dark:bg-neutral-900'
                       tabIndex={0}
-                      data-orientation="horizontal"
+                      data-orientation='horizontal'
                       style={{ outline: "none" }}
                     >
                       <button
-                        type="button"
-                        role="tab"
+                        type='button'
+                        role='tab'
                         aria-selected={activeContentTab === "preview"}
                         data-state={
                           activeContentTab === "preview" ? "active" : "inactive"
                         }
                         onClick={() => updateContentTab("preview")}
                         className={cn(
-                          "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                          "button button-sm relative flex min-w-[100px] cursor-pointer items-center justify-center gap-2 py-2 text-sm transition-colors active:brightness-60",
                           activeContentTab === "preview"
-                            ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                            : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                            ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 px-2 dark:bg-neutral-800"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                         )}
                         tabIndex={activeContentTab === "preview" ? -1 : 0}
-                        data-orientation="horizontal"
+                        data-orientation='horizontal'
                       >
-                        <ViewIcon className="size-4" />
+                        <ViewIcon className='size-4' />
                         Preview
                       </button>
                       <button
-                        type="button"
-                        role="tab"
+                        type='button'
+                        role='tab'
                         aria-selected={activeContentTab === "history"}
                         data-state={
                           activeContentTab === "history" ? "active" : "inactive"
                         }
                         onClick={() => updateContentTab("history")}
                         className={cn(
-                          "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                          "button button-sm relative flex min-w-[100px] cursor-pointer items-center justify-center gap-2 py-2 text-sm transition-colors active:brightness-60",
                           activeContentTab === "history"
-                            ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                            : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                            ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 px-2 dark:bg-neutral-800"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                         )}
                         tabIndex={activeContentTab === "history" ? -1 : 0}
-                        data-orientation="horizontal"
+                        data-orientation='horizontal'
                       >
-                        <History className="size-4" />
+                        <History className='size-4' />
                         History
                       </button>
                       <button
-                        type="button"
-                        role="tab"
+                        type='button'
+                        role='tab'
                         aria-selected={activeContentTab === "community"}
                         data-state={
                           activeContentTab === "community"
@@ -2756,20 +2755,20 @@ function VideoCreatePage() {
                         }
                         onClick={() => updateContentTab("community")}
                         className={cn(
-                          "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                          "button button-sm relative flex min-w-[100px] cursor-pointer items-center justify-center gap-2 py-2 text-sm transition-colors active:brightness-60",
                           activeContentTab === "community"
-                            ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                            : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                            ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 px-2 dark:bg-neutral-800"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                         )}
                         tabIndex={activeContentTab === "community" ? -1 : 0}
-                        data-orientation="horizontal"
+                        data-orientation='horizontal'
                       >
-                        <Users className="size-4" />
+                        <Users className='size-4' />
                         Community
                       </button>
                       <button
-                        type="button"
-                        role="tab"
+                        type='button'
+                        role='tab'
                         aria-selected={activeContentTab === "templates"}
                         data-state={
                           activeContentTab === "templates"
@@ -2778,20 +2777,20 @@ function VideoCreatePage() {
                         }
                         onClick={() => updateContentTab("templates")}
                         className={cn(
-                          "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                          "button button-sm relative flex min-w-[100px] cursor-pointer items-center justify-center gap-2 py-2 text-sm transition-colors active:brightness-60",
                           activeContentTab === "templates"
-                            ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                            : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                            ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 px-2 dark:bg-neutral-800"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                         )}
                         tabIndex={activeContentTab === "templates" ? -1 : 0}
-                        data-orientation="horizontal"
+                        data-orientation='horizontal'
                       >
-                        <IconTemplate className="size-4" />
+                        <IconTemplate className='size-4' />
                         Templates
                       </button>
                       <button
-                        type="button"
-                        role="tab"
+                        type='button'
+                        role='tab'
                         aria-selected={activeContentTab === "tutorial"}
                         data-state={
                           activeContentTab === "tutorial"
@@ -2800,15 +2799,15 @@ function VideoCreatePage() {
                         }
                         onClick={() => updateContentTab("tutorial")}
                         className={cn(
-                          "relative button button-sm active:brightness-60 min-w-[100px] cursor-pointer transition-colors flex items-center justify-center gap-2 text-sm py-2",
+                          "button button-sm relative flex min-w-[100px] cursor-pointer items-center justify-center gap-2 py-2 text-sm transition-colors active:brightness-60",
                           activeContentTab === "tutorial"
-                            ? "text-font-primary border border-separator-card flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-lg px-2"
-                            : "text-font-secondary hover:text-font-primary flex items-center justify-center",
+                            ? "text-font-primary border-separator-card flex items-center justify-center rounded-lg border bg-neutral-200 px-2 dark:bg-neutral-800"
+                            : "text-font-secondary hover:text-font-primary flex items-center justify-center"
                         )}
                         tabIndex={activeContentTab === "tutorial" ? -1 : 0}
-                        data-orientation="horizontal"
+                        data-orientation='horizontal'
                       >
-                        <BookOpen className="size-4" />
+                        <BookOpen className='size-4' />
                         Learn how
                       </button>
                     </div>
@@ -2816,7 +2815,7 @@ function VideoCreatePage() {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-auto px-1">
+              <div className='flex-1 overflow-auto px-1'>
                 {/* Community Tab */}
                 {activeContentTab === "community" && (
                   <>
@@ -2845,7 +2844,7 @@ function VideoCreatePage() {
                                   };
                                   reader.readAsDataURL(file);
                                 });
-                              }),
+                              })
                             );
                             setPromptImagePreviews(previews);
                           },
@@ -2903,7 +2902,7 @@ function VideoCreatePage() {
                                   };
                                   reader.readAsDataURL(file);
                                 });
-                              }),
+                              })
                             );
                             setPromptImagePreviews(previews);
                           },
@@ -2943,17 +2942,17 @@ function VideoCreatePage() {
                           setPrompt(image.imageData.prompt || "");
                           if (image.imageData.aspectRatio) {
                             setSelectedAspectRatio(
-                              image.imageData.aspectRatio as AspectRatio,
+                              image.imageData.aspectRatio as AspectRatio
                             );
                           }
                           if (image.imageData.resolution) {
                             setSelectedResolution(
-                              image.imageData.resolution as Resolution,
+                              image.imageData.resolution as Resolution
                             );
                           }
                           if (image.imageData.style) {
                             setSelectedImageStyle(
-                              image.imageData.style as ImageStyle,
+                              image.imageData.style as ImageStyle
                             );
                           }
                           updateContentTab("preview");
@@ -2987,12 +2986,12 @@ function VideoCreatePage() {
                           setPrompt(video.videoData.prompt || "");
                           if (video.videoData.aspectRatio) {
                             setSelectedAspectRatio(
-                              video.videoData.aspectRatio as AspectRatio,
+                              video.videoData.aspectRatio as AspectRatio
                             );
                           }
                           if (video.videoData.resolution) {
                             setSelectedResolution(
-                              video.videoData.resolution as Resolution,
+                              video.videoData.resolution as Resolution
                             );
                           }
                           updateContentTab("preview");

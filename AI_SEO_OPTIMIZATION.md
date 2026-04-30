@@ -7,6 +7,7 @@ Gennit AI has been optimized for maximum visibility in both traditional search e
 ## Key Updates
 
 ### 1. Enhanced Metadata
+
 - **Title**: Updated to emphasize "AI Image & Video Generator"
 - **Description**: Explicitly states "Gennit AI supports Image and Video Generation"
 - **Keywords**: Expanded with 25+ relevant keywords including:
@@ -21,12 +22,14 @@ Gennit AI has been optimized for maximum visibility in both traditional search e
 ### 2. Comprehensive Structured Data (JSON-LD)
 
 #### Organization Schema
+
 - Company information
 - Contact details
 - Social media links
 - Founding date
 
 #### WebApplication Schema
+
 - Application category
 - Feature list (AI Image Generation, AI Video Generation, etc.)
 - Operating system requirements
@@ -34,12 +37,14 @@ Gennit AI has been optimized for maximum visibility in both traditional search e
 - Aggregate ratings
 
 #### SoftwareApplication Schema
+
 - Application details
 - Screenshots
 - Version information
 - Release notes mentioning Image & Video Generation
 
 #### FAQPage Schema
+
 - 6 comprehensive FAQs covering:
   - Does Gennit support Image Generation?
   - Does Gennit support Video Generation?
@@ -49,16 +54,19 @@ Gennit AI has been optimized for maximum visibility in both traditional search e
   - General platform information
 
 #### HowTo Schema
+
 - Step-by-step guide for generating images and videos
 - 6 detailed steps from signup to download
 
 #### BreadcrumbList Schema
+
 - Navigation structure
 - Links to Image and Video generation pages
 
 ### 3. AI Search Engine Bot Optimization
 
 Updated `robots.ts` to explicitly allow:
+
 - **GPTBot** (OpenAI ChatGPT)
 - **ChatGPT-User** (ChatGPT browsing)
 - **CCBot** (Common Crawl - used by AI models)
@@ -71,27 +79,32 @@ Updated `robots.ts` to explicitly allow:
 ### 4. Enhanced Sitemap
 
 Added high-priority entries for:
+
 - `/inspire/create?mode=ai-image-gen` (Priority: 0.9)
 - `/inspire/create?mode=ai-video-gen` (Priority: 0.9)
 
 ### 5. Comprehensive Meta Tags
 
 #### Dublin Core Metadata
+
 - DC.title, DC.creator, DC.subject, DC.description
 - DC.publisher, DC.contributor, DC.date
 - DC.type, DC.format, DC.identifier
 - DC.language, DC.rights, DC.coverage
 
 #### Geographic Metadata
+
 - geo.region, geo.placename
 - ICBM coordinates
 
 #### Application Metadata
+
 - application-name
 - msapplication-tooltip
 - msapplication-starturl
 
 #### Semantic Hints
+
 - subject, topic, summary
 - classification, category
 - coverage, target, audience
@@ -99,23 +112,28 @@ Added high-priority entries for:
 ### 6. Platform-Specific Optimizations
 
 #### WhatsApp
+
 - `og:image:secure_url` for HTTPS images
 - Square image support (1200x1200)
 
 #### Facebook
+
 - `fb:app_id` (add your App ID)
 - Article author and publisher
 
 #### LinkedIn
+
 - `og:image:url` for previews
 
 #### Twitter
+
 - Summary large image card
 - Updated title and description
 
 ### 7. Schema.org Microdata
 
 Added `itemProp` attributes:
+
 - name, description, image
 - applicationCategory, operatingSystem
 - offers, featureList
@@ -123,22 +141,26 @@ Added `itemProp` attributes:
 ## How AI Search Engines Use This Data
 
 ### ChatGPT / GPT-4
+
 - Reads structured data (JSON-LD)
 - Uses FAQPage for answering questions
 - Uses HowTo for step-by-step instructions
 - References SoftwareApplication for capabilities
 
 ### Perplexity AI
+
 - Crawls with PerplexityBot
 - Uses structured data for answers
 - References metadata for context
 
 ### Claude (Anthropic)
+
 - Uses CCBot and anthropic-ai bots
 - Reads comprehensive metadata
 - Uses structured data for understanding
 
 ### Google AI Overview
+
 - Uses GoogleBot with enhanced crawling
 - Reads all structured data
 - Uses FAQPage for featured snippets
@@ -156,17 +178,20 @@ Added `itemProp` attributes:
 ## Testing Your SEO
 
 ### Traditional Search Engines
+
 1. Google Search Console: Submit sitemap
 2. Bing Webmaster Tools: Submit sitemap
 3. Test with: `site:gennit.online`
 
 ### AI Search Engines
+
 1. **ChatGPT**: Ask "What is Gennit AI?" or "How do I generate images with AI?"
 2. **Perplexity**: Search "AI image generator" or "AI video generator"
 3. **Claude**: Ask about Gennit AI capabilities
 4. **Google AI Overview**: Search "generate images with AI"
 
 ### Validation Tools
+
 - [Google Rich Results Test](https://search.google.com/test/rich-results)
 - [Schema.org Validator](https://validator.schema.org/)
 - [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
@@ -175,12 +200,14 @@ Added `itemProp` attributes:
 ## Monitoring
 
 ### Key Metrics to Track
+
 1. **Search Rankings**: Track for "AI image generator", "AI video generator"
 2. **AI Mentions**: Monitor when AI assistants recommend Gennit
 3. **Traffic Sources**: Track referrals from AI search engines
 4. **Rich Snippets**: Monitor FAQ and HowTo appearances in search
 
 ### Tools
+
 - Google Search Console
 - Google Analytics
 - Bing Webmaster Tools
@@ -198,6 +225,7 @@ Added `itemProp` attributes:
 ## Key Phrases for AI Discovery
 
 When AI search engines crawl your site, they'll understand:
+
 - "Gennit AI supports Image and Video Generation"
 - "AI image generator"
 - "AI video generator"
@@ -209,6 +237,7 @@ When AI search engines crawl your site, they'll understand:
 - "Free AI video generator"
 
 These phrases appear in:
+
 - Page titles
 - Meta descriptions
 - Structured data
@@ -226,4 +255,3 @@ Your site is now optimized for:
 ✅ Voice search and AI assistants
 
 The comprehensive structured data and metadata ensure that AI systems can understand and recommend Gennit AI when users ask about image or video generation.
-

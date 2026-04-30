@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
-import { Search, X, Palette, Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react";
+import { Download, Loader2, Palette, Search, X } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 // Popular icons to show initially (format: "icon-set:icon-name")
 const POPULAR_ICONS = [
@@ -373,20 +373,20 @@ export function IconLibrary({
   };
 
   return (
-    <div className="flex flex-col h-full max-h-[600px]">
+    <div className='flex h-full max-h-[600px] flex-col'>
       {/* Header */}
       {showHeader && (
-        <div className="p-4 pb-0 flex-shrink-0">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-orange-500/10 dark:bg-orange-500/10">
-                <Palette className="w-5 h-5 text-orange-500 dark:text-orange-400" />
+        <div className='flex-shrink-0 p-4 pb-0'>
+          <div className='mb-4 flex items-center justify-between'>
+            <div className='flex items-center gap-3'>
+              <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500/10 dark:bg-orange-500/10'>
+                <Palette className='h-5 w-5 text-orange-500 dark:text-orange-400' />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-foreground">
+                <h3 className='text-foreground text-sm font-semibold'>
                   Icon Library
                 </h3>
-                <p className="text-xs text-muted-foreground">
+                <p className='text-muted-foreground text-xs'>
                   {isSearching
                     ? "Searching..."
                     : `${displayedIcons.length}${hasMore ? "+" : ""} icons shown`}
@@ -395,12 +395,12 @@ export function IconLibrary({
             </div>
             {onClose && (
               <Button
-                variant="ghost"
-                size="sm"
+                variant='ghost'
+                size='sm'
                 onClick={onClose}
-                className="h-6 w-6 p-0 hover:bg-muted text-muted-foreground hover:text-foreground"
+                className='hover:bg-muted text-muted-foreground hover:text-foreground h-6 w-6 p-0'
               >
-                <X className="w-3 h-3" />
+                <X className='h-3 w-3' />
               </Button>
             )}
           </div>
@@ -408,63 +408,63 @@ export function IconLibrary({
       )}
 
       {/* Search and Customization Section */}
-      <div className="p-4 pb-0 flex-shrink-0">
+      <div className='flex-shrink-0 p-4 pb-0'>
         {/* Search */}
-        <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <div className='relative mb-4'>
+          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
           <Input
-            type="text"
-            placeholder="Search 200,000+ icons..."
+            type='text'
+            placeholder='Search 200,000+ icons...'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 h-9 text-sm"
+            className='h-9 pl-9 text-sm'
           />
           {isSearching && (
-            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground animate-spin" />
+            <Loader2 className='text-muted-foreground absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 animate-spin' />
           )}
         </div>
 
         {/* Icon Customization (when selected) */}
         {selectedIcon && (
-          <div className="mb-4 p-3 rounded-lg bg-muted/50 border border-border space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-foreground">
+          <div className='bg-muted/50 border-border mb-4 space-y-3 rounded-lg border p-3'>
+            <div className='flex items-center justify-between'>
+              <span className='text-foreground text-xs font-medium'>
                 Selected:
               </span>
-              <span className="text-xs text-muted-foreground font-mono truncate max-w-[200px]">
+              <span className='text-muted-foreground max-w-[200px] truncate font-mono text-xs'>
                 {selectedIcon}
               </span>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className='grid grid-cols-2 gap-2'>
               <div>
-                <label className="text-[10px] text-muted-foreground mb-1 block">
+                <label className='text-muted-foreground mb-1 block text-[10px]'>
                   Color
                 </label>
-                <div className="flex gap-1">
+                <div className='flex gap-1'>
                   <input
-                    type="color"
+                    type='color'
                     value={iconColor}
                     onChange={(e) => setIconColor(e.target.value)}
-                    className="w-8 h-8 rounded border border-border cursor-pointer"
+                    className='border-border h-8 w-8 cursor-pointer rounded border'
                   />
                   <Input
-                    type="text"
+                    type='text'
                     value={iconColor}
                     onChange={(e) => setIconColor(e.target.value)}
-                    className="h-8 text-xs flex-1"
-                    placeholder="#000000"
+                    className='h-8 flex-1 text-xs'
+                    placeholder='#000000'
                   />
                 </div>
               </div>
               <div>
-                <label className="text-[10px] text-muted-foreground mb-1 block">
+                <label className='text-muted-foreground mb-1 block text-[10px]'>
                   Size
                 </label>
                 <Input
-                  type="number"
+                  type='number'
                   value={iconSize}
                   onChange={(e) => setIconSize(Number(e.target.value))}
-                  className="h-8 text-xs"
+                  className='h-8 text-xs'
                   min={12}
                   max={128}
                 />
@@ -472,10 +472,10 @@ export function IconLibrary({
             </div>
             <Button
               onClick={handleInsert}
-              size="sm"
-              className="w-full h-8 text-xs"
+              size='sm'
+              className='h-8 w-full text-xs'
             >
-              <Download className="w-3 h-3 mr-1" />
+              <Download className='mr-1 h-3 w-3' />
               Insert Icon
             </Button>
           </div>
@@ -484,34 +484,34 @@ export function IconLibrary({
 
       {/* Icons Grid */}
       <div
-        className="flex-1 overflow-hidden px-4 min-h-0"
+        className='min-h-0 flex-1 overflow-hidden px-4'
         style={{ maxHeight: "400px" }}
       >
-        <ScrollArea className="h-full">
+        <ScrollArea className='h-full'>
           <div ref={scrollAreaRef}>
             {isSearching && displayedIcons.length === 0 ? (
-              <div className="flex items-center justify-center h-32">
-                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              <div className='flex h-32 items-center justify-center'>
+                <Loader2 className='text-muted-foreground h-6 w-6 animate-spin' />
               </div>
             ) : displayedIcons.length === 0 ? (
-              <div className="flex items-center justify-center h-32">
-                <p className="text-sm text-muted-foreground">
+              <div className='flex h-32 items-center justify-center'>
+                <p className='text-muted-foreground text-sm'>
                   No icons found. Try a different search term.
                 </p>
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-5 gap-2 pb-4">
+                <div className='grid grid-cols-5 gap-2 pb-4'>
                   {displayedIcons.map(({ icon, name }) => (
                     <button
                       key={icon}
                       data-icon={icon}
                       onClick={() => handleIconClick(icon)}
                       className={cn(
-                        "aspect-square rounded-lg border-2 transition-all duration-200 flex items-center justify-center group",
+                        "group flex aspect-square items-center justify-center rounded-lg border-2 transition-all duration-200",
                         selectedIcon === icon
                           ? "border-orange-500 bg-orange-500/10"
-                          : "border-border hover:border-orange-500/50 bg-muted/30 hover:bg-muted/50"
+                          : "border-border bg-muted/30 hover:bg-muted/50 hover:border-orange-500/50"
                       )}
                       title={name}
                     >
@@ -525,7 +525,7 @@ export function IconLibrary({
                               }
                             : undefined
                         }
-                        className="flex items-center justify-center"
+                        className='flex items-center justify-center'
                       >
                         <Icon
                           icon={icon}
@@ -535,7 +535,7 @@ export function IconLibrary({
                               ? "text-orange-500"
                               : "text-muted-foreground group-hover:text-foreground",
                             !selectedIcon || selectedIcon !== icon
-                              ? "w-5 h-5"
+                              ? "h-5 w-5"
                               : ""
                           )}
                           style={
@@ -553,8 +553,8 @@ export function IconLibrary({
                   ))}
                 </div>
                 {isLoadingMore && (
-                  <div className="flex items-center justify-center py-4">
-                    <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+                  <div className='flex items-center justify-center py-4'>
+                    <Loader2 className='text-muted-foreground h-5 w-5 animate-spin' />
                   </div>
                 )}
               </>

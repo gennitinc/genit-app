@@ -1,12 +1,7 @@
 "use client";
 
-import { memo, useState } from "react";
-import { Handle, Position, type NodeProps } from "reactflow";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -14,8 +9,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Edit3,
+  ExternalLink,
+  Instagram,
+  ListCheck,
+  Loader2,
+  Lock,
+  MessageSquare,
+  Search,
+  Sparkles,
+  Unlock,
+  X,
+} from "lucide-react";
 import { InstagramEmbed } from "react-social-media-embed";
-import { Instagram, ExternalLink, Edit3, X, Lock, Unlock, Sparkles, Loader2, MessageSquare, ListCheck, Search } from "lucide-react";
+import { Handle, type NodeProps, Position } from "reactflow";
+import { memo, useState } from "react";
 
 interface InstagramNodeData {
   instruction?: string;
@@ -70,11 +82,11 @@ export const InstagramNode = memo(
 
     return (
       <>
-        <div className="relative w-fit rounded-[1.5rem]">
+        <div className='relative w-fit rounded-[1.5rem]'>
           <Handle
-            type="target"
+            type='target'
             position={Position.Left}
-            className="w-3 h-3 bg-red-500 border-2 border-white transition-all shadow-sm"
+            className='h-3 w-3 border-2 border-white bg-red-500 shadow-sm transition-all'
             isConnectable={isConnectable}
           />
 
@@ -82,51 +94,51 @@ export const InstagramNode = memo(
           {data.onRemoveNode && data.nodeId && (
             <button
               onClick={() => data.onRemoveNode!(data.nodeId!)}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-lg z-10"
-              title="Remove node"
+              className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
+              title='Remove node'
             >
-              <X className="w-3 h-3" />
+              <X className='h-3 w-3' />
             </button>
           )}
 
-          <Card className="bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-300 group">
-            <CardContent className="p-4 w-fit">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center space-x-2">
+          <Card className='bg-card border-border group rounded-lg border shadow-sm transition-all duration-300 hover:shadow-md'>
+            <CardContent className='w-fit p-4'>
+              <div className='mb-3 flex items-center justify-between'>
+                <div className='flex items-center space-x-2'>
                   <svg
-                    className="w-6 h-6"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
+                    className='h-6 w-6'
+                    viewBox='0 0 24 24'
+                    fill='currentColor'
                   >
                     <defs>
                       <linearGradient
-                        id="instagram-gradient"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
+                        id='instagram-gradient'
+                        x1='0%'
+                        y1='0%'
+                        x2='100%'
+                        y2='100%'
                       >
-                        <stop offset="0%" stopColor="#f09433" />
-                        <stop offset="25%" stopColor="#e6683c" />
-                        <stop offset="50%" stopColor="#dc2743" />
-                        <stop offset="75%" stopColor="#cc2366" />
-                        <stop offset="100%" stopColor="#bc1888" />
+                        <stop offset='0%' stopColor='#f09433' />
+                        <stop offset='25%' stopColor='#e6683c' />
+                        <stop offset='50%' stopColor='#dc2743' />
+                        <stop offset='75%' stopColor='#cc2366' />
+                        <stop offset='100%' stopColor='#bc1888' />
                       </linearGradient>
                     </defs>
                     <path
-                      fill="url(#instagram-gradient)"
-                      d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.073-1.689-.073-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                      fill='url(#instagram-gradient)'
+                      d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.073-1.689-.073-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z'
                     />
                   </svg>
-                  <span className="text-sm font-semibold text-foreground">
+                  <span className='text-foreground text-sm font-semibold'>
                     Instagram
                   </span>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className='flex items-center space-x-2'>
                   {!analyzed && onAnalyze && (
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant='outline'
+                      size='sm'
                       onClick={async () => {
                         setIsAnalyzing(true);
                         try {
@@ -136,37 +148,37 @@ export const InstagramNode = memo(
                         }
                       }}
                       disabled={isAnalyzing}
-                      className="h-8 px-2 text-xs gap-1.5 border-primary/20 hover:border-primary/50 bg-primary/5 hover:bg-primary/10 text-primary transition-all duration-300"
+                      className='border-primary/20 hover:border-primary/50 bg-primary/5 hover:bg-primary/10 text-primary h-8 gap-1.5 px-2 text-xs transition-all duration-300'
                     >
                       {isAnalyzing ? (
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <Loader2 className='h-3.5 w-3.5 animate-spin' />
                       ) : (
-                        <Sparkles className="w-3.5 h-3.5" />
+                        <Sparkles className='h-3.5 w-3.5' />
                       )}
                       Analyze
                     </Button>
                   )}
                   {analyzed && (
-                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 text-[10px] font-medium">
-                      <ListCheck className="w-3 h-3" />
+                    <div className='flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 px-2 py-1 text-[10px] font-medium text-green-600 dark:text-green-400'>
+                      <ListCheck className='h-3 w-3' />
                       Analyzed
                     </div>
                   )}
                   <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="ghost" size="sm" className="p-1 h-auto">
-                        <Edit3 className="w-4 h-4 text-muted-foreground" />
+                      <Button variant='ghost' size='sm' className='h-auto p-1'>
+                        <Edit3 className='text-muted-foreground h-4 w-4' />
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-md">
+                    <DialogContent className='sm:max-w-md'>
                       <DialogHeader>
                         <DialogTitle>Edit Instagram Post</DialogTitle>
                       </DialogHeader>
-                      <div className="space-y-4">
+                      <div className='space-y-4'>
                         <div>
-                          <Label htmlFor="url">Instagram URL</Label>
+                          <Label htmlFor='url'>Instagram URL</Label>
                           <Input
-                            id="url"
+                            id='url'
                             value={editData.url}
                             onChange={(e) =>
                               setEditData((prev) => ({
@@ -174,13 +186,13 @@ export const InstagramNode = memo(
                                 url: e.target.value,
                               }))
                             }
-                            placeholder="https://www.instagram.com/..."
+                            placeholder='https://www.instagram.com/...'
                           />
                         </div>
                         <div>
-                          <Label htmlFor="instruction">Instruction</Label>
+                          <Label htmlFor='instruction'>Instruction</Label>
                           <Textarea
-                            id="instruction"
+                            id='instruction'
                             value={editData.instruction}
                             onChange={(e) =>
                               setEditData((prev) => ({
@@ -188,18 +200,18 @@ export const InstagramNode = memo(
                                 instruction: e.target.value,
                               }))
                             }
-                            placeholder="Document your file so you can remember them"
-                            className="min-h-[80px] resize-none"
+                            placeholder='Document your file so you can remember them'
+                            className='min-h-[80px] resize-none'
                           />
                         </div>
                         <div>
-                          <Label htmlFor="status">Status</Label>
-                          <div className="flex items-center space-x-3">
-                            <span className="text-xs text-muted-foreground">
+                          <Label htmlFor='status'>Status</Label>
+                          <div className='flex items-center space-x-3'>
+                            <span className='text-muted-foreground text-xs'>
                               Public
                             </span>
                             <button
-                              type="button"
+                              type='button'
                               onClick={() =>
                                 setEditData((prev) => ({
                                   ...prev,
@@ -209,7 +221,7 @@ export const InstagramNode = memo(
                                       : "public",
                                 }))
                               }
-                              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none  ${
+                              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
                                 editData.status === "private"
                                   ? "bg-primary"
                                   : "bg-muted"
@@ -223,14 +235,14 @@ export const InstagramNode = memo(
                                 }`}
                               />
                             </button>
-                            <span className="text-xs text-muted-foreground">
+                            <span className='text-muted-foreground text-xs'>
                               Private
                             </span>
                           </div>
                         </div>
-                        <div className="flex justify-end space-x-2">
+                        <div className='flex justify-end space-x-2'>
                           <Button
-                            variant="outline"
+                            variant='outline'
                             onClick={() => setIsEditOpen(false)}
                           >
                             Cancel
@@ -243,67 +255,70 @@ export const InstagramNode = memo(
                   {editData.url && (
                     <button
                       onClick={handlePostClick}
-                      className="p-1 hover:bg-muted rounded-md transition-colors"
+                      className='hover:bg-muted rounded-md p-1 transition-colors'
                     >
-                      <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                      <ExternalLink className='text-muted-foreground h-4 w-4' />
                     </button>
                   )}
                 </div>
               </div>
 
               {editData.url && (
-                <div className="mt-3">
-                  <InstagramEmbed url={editData.url} width="100%" />
+                <div className='mt-3'>
+                  <InstagramEmbed url={editData.url} width='100%' />
                 </div>
               )}
 
-              <div className="mt-3">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-medium text-foreground line-clamp-2 leading-relaxed">
+              <div className='mt-3'>
+                <div className='mb-2 flex items-center justify-between'>
+                  <p className='text-foreground line-clamp-2 text-sm leading-relaxed font-medium'>
                     {editData.instruction || "Instagram Post"}
                   </p>
-                  <div className="flex items-center space-x-1 ml-2">
+                  <div className='ml-2 flex items-center space-x-1'>
                     {editData.status === "private" ? (
-                      <Lock className="w-3 h-3 text-red-500" />
+                      <Lock className='h-3 w-3 text-red-500' />
                     ) : (
-                      <Unlock className="w-3 h-3 text-green-500" />
+                      <Unlock className='h-3 w-3 text-green-500' />
                     )}
-                    <span className="text-xs text-muted-foreground">
+                    <span className='text-muted-foreground text-xs'>
                       {editData.status}
                     </span>
                   </div>
                 </div>
 
                 {analyzed && analysis && (
-                  <div className="mt-4 space-y-3 pt-3 border-t border-border/50">
+                  <div className='border-border/50 mt-4 space-y-3 border-t pt-3'>
                     {analysis.summary && (
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
-                          <MessageSquare className="w-3 h-3" />
+                      <div className='space-y-1'>
+                        <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
+                          <MessageSquare className='h-3 w-3' />
                           AI Summary
                         </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed italic bg-muted/30 p-2 rounded-lg border border-border/30">
+                        <p className='text-muted-foreground bg-muted/30 border-border/30 rounded-lg border p-2 text-xs leading-relaxed italic'>
                           "{analysis.summary}"
                         </p>
                       </div>
                     )}
-                    
+
                     {(analysis.description || analysis.transcription) && (
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
-                          <Search className="w-3 h-3" />
+                      <div className='space-y-1'>
+                        <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
+                          <Search className='h-3 w-3' />
                           Context
                         </div>
-                        <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                        <p className='text-muted-foreground line-clamp-3 text-xs leading-relaxed'>
                           {analysis.description || analysis.transcription}
                         </p>
                       </div>
                     )}
 
                     {analysis.tags && analysis.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-1">
+                      <div className='mt-1 flex flex-wrap gap-1'>
                         {analysis.tags.slice(0, 5).map((tag, i) => (
-                          <span key={i} className="px-1.5 py-0.5 rounded bg-muted text-[9px] text-muted-foreground border border-border/50">
+                          <span
+                            key={i}
+                            className='bg-muted text-muted-foreground border-border/50 rounded border px-1.5 py-0.5 text-[9px]'
+                          >
                             #{tag}
                           </span>
                         ))}
@@ -316,15 +331,15 @@ export const InstagramNode = memo(
           </Card>
 
           <Handle
-            type="source"
+            type='source'
             position={Position.Right}
-            className="w-3 h-3 bg-green-500 border-2 border-white transition-all shadow-sm"
+            className='h-3 w-3 border-2 border-white bg-green-500 shadow-sm transition-all'
             isConnectable={isConnectable}
           />
         </div>
       </>
     );
-  },
+  }
 );
 
 InstagramNode.displayName = "InstagramNode";

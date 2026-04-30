@@ -3,6 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import appLogo from "@/resources/images/gennit-logo-genneric.svg";
 import Image from "next/image";
+
 interface AvatarDisplayProps {
   src?: string;
   alt: string;
@@ -23,15 +24,15 @@ export function AvatarDisplay({
       <Image
         src={appLogo}
         alt={alt}
-        className={`w-8 h-8 flex-shrink-0 mt-1 ${className} dark:invert`}
+        className={`mt-1 h-8 w-8 flex-shrink-0 ${className} dark:invert`}
       />
     );
   }
 
   return (
-    <Avatar className={`w-8 h-8 flex-shrink-0 mt-1 ${className}`}>
+    <Avatar className={`mt-1 h-8 w-8 flex-shrink-0 ${className}`}>
       {src && <AvatarImage src={src || "/placeholder.svg"} alt={alt} />}
-      <AvatarFallback className="bg-muted-foreground/30 text-muted-foreground text-sm font-medium rounded-lg">
+      <AvatarFallback className='bg-muted-foreground/30 text-muted-foreground rounded-lg text-sm font-medium'>
         {fallback}
       </AvatarFallback>
     </Avatar>

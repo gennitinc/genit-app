@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import Loading from "@/utils/Loading";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 function withAuth(
   Component: React.ComponentType<any>,
@@ -51,7 +51,9 @@ function withAuth(
           // User exists - check verification and onboarding
           if (!user.emailVerified) {
             // Not verified - redirect to verification
-            router.push(`/account/verify?email=${encodeURIComponent(user.email)}`);
+            router.push(
+              `/account/verify?email=${encodeURIComponent(user.email)}`
+            );
             return;
           }
 
@@ -70,11 +72,19 @@ function withAuth(
       };
 
       handleAuthAndOnboarding();
-    }, [loading, user, router, setLoading, isAuthPage, skipOnboardingCheck, pathname]);
+    }, [
+      loading,
+      user,
+      router,
+      setLoading,
+      isAuthPage,
+      skipOnboardingCheck,
+      pathname,
+    ]);
 
     if (loading || isCheckingAuth) {
       return (
-        <div className="flex justify-center items-center min-h-[100dvh] overflow-hidden w-full bg-black">
+        <div className='flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-black'>
           <Loading />
         </div>
       );
@@ -92,7 +102,9 @@ function withAuth(
         !loading &&
         user &&
         user.emailVerified &&
-        (skipOnboardingCheck || user.onboarding?.onboardingCompleted || pathname === "/onboarding")
+        (skipOnboardingCheck ||
+          user.onboarding?.onboardingCompleted ||
+          pathname === "/onboarding")
       ) {
         setLoading(false);
         return <Component {...props} />;

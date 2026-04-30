@@ -2,53 +2,53 @@
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
-import React, { useState } from "react";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Filter } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { Filter } from "lucide-react";
+import { usePathname } from "next/navigation";
+import React, { useState } from "react";
 
 const TryNowButton = () => (
   <button
-    type="button"
-    className="relative inline-flex items-center justify-center px-8 py-2.5 overflow-hidden tracking-tighter text-white bg-gray-800 rounded-md group w-full"
+    type='button'
+    className='group relative inline-flex w-full items-center justify-center overflow-hidden rounded-md bg-gray-800 px-8 py-2.5 tracking-tighter text-white'
   >
-    <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full group-hover:w-56 group-hover:h-56"></span>
-    <span className="absolute bottom-0 left-0 h-full -ml-2">
+    <span className='absolute h-0 w-0 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500 ease-out group-hover:h-56 group-hover:w-56'></span>
+    <span className='absolute bottom-0 left-0 -ml-2 h-full'>
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-auto h-full opacity-100 object-stretch"
-        viewBox="0 0 487 487"
+        xmlns='http://www.w3.org/2000/svg'
+        className='object-stretch h-full w-auto opacity-100'
+        viewBox='0 0 487 487'
       >
         <path
-          fillOpacity=".1"
-          fillRule="nonzero"
-          fill="#FFF"
-          d="M0 .3c67 2.1 134.1 4.3 186.3 37 52.2 32.7 89.6 95.8 112.8 150.6 23.2 54.8 32.3 101.4 61.2 149.9 28.9 48.4 77.7 98.8 126.4 149.2H0V.3z"
+          fillOpacity='.1'
+          fillRule='nonzero'
+          fill='#FFF'
+          d='M0 .3c67 2.1 134.1 4.3 186.3 37 52.2 32.7 89.6 95.8 112.8 150.6 23.2 54.8 32.3 101.4 61.2 149.9 28.9 48.4 77.7 98.8 126.4 149.2H0V.3z'
         ></path>
       </svg>
     </span>
-    <span className="absolute top-0 right-0 w-12 h-full -mr-3">
+    <span className='absolute top-0 right-0 -mr-3 h-full w-12'>
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="object-cover w-full h-full"
-        viewBox="0 0 487 487"
+        xmlns='http://www.w3.org/2000/svg'
+        className='h-full w-full object-cover'
+        viewBox='0 0 487 487'
       >
         <path
-          fillOpacity=".1"
-          fillRule="nonzero"
-          fill="#FFF"
-          d="M487 486.7c-66.1-3.6-132.3-7.3-186.3-37s-95.9-85.3-126.2-137.2c-30.4-51.8-49.3-99.9-76.5-151.4C70.9 109.6 35.6 54.8.3 0H487v486.7z"
+          fillOpacity='.1'
+          fillRule='nonzero'
+          fill='#FFF'
+          d='M487 486.7c-66.1-3.6-132.3-7.3-186.3-37s-95.9-85.3-126.2-137.2c-30.4-51.8-49.3-99.9-76.5-151.4C70.9 109.6 35.6 54.8.3 0H487v486.7z'
         ></path>
       </svg>
     </span>
-    <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-200"></span>
-    <span className="relative text-base font-semibold">Try now</span>
+    <span className='absolute inset-0 -mt-1 h-full w-full rounded-lg bg-gradient-to-b from-transparent via-transparent to-gray-200 opacity-30'></span>
+    <span className='relative text-base font-semibold'>Try now</span>
   </button>
 );
 
@@ -78,22 +78,22 @@ const AppCard = ({
   imageSrc,
   badge,
 }: AppCardProps) => (
-  <div className="max-w-[248px] lg:max-w-none shrink-0 md:min-w-0">
-    <div className="h-full">
+  <div className='max-w-[248px] shrink-0 md:min-w-0 lg:max-w-none'>
+    <div className='h-full'>
       <a
-        className="react-aria-Link"
+        className='react-aria-Link'
         href={href}
         style={{ touchAction: "pan-x pan-y pinch-zoom" }}
       >
-        <div className="flex flex-col group overflow-hidden w-full h-full cursor-pointer rounded-2xl border border-transparent transition-all duration-200 !bg-page-primary border-separator-card flex-1 shadow-[inset_2px_2px_2px_rgba(255,255,255,0.02)] hover:border-separator-card hover:!bg-surface-primary !min-w-0 h-full">
+        <div className='group !bg-page-primary border-separator-card hover:border-separator-card hover:!bg-surface-primary flex h-full w-full !min-w-0 flex-1 cursor-pointer flex-col overflow-hidden rounded-2xl border border-transparent shadow-[inset_2px_2px_2px_rgba(255,255,255,0.02)] transition-all duration-200'>
           <div
-            className="relative overflow-hidden rounded-t-xl rounded-xl"
+            className='relative overflow-hidden rounded-xl rounded-t-xl'
             style={{ aspectRatio: "1.03333 / 1" }}
           >
             {badge && (
-              <div className="flex flex-wrap gap-2 absolute bottom-2 left-2 z-10">
+              <div className='absolute bottom-2 left-2 z-10 flex flex-wrap gap-2'>
                 <span
-                  className="inline-flex items-center justify-center px-1.5 text-sm leading-[18px] font-bold uppercase text-white relative overflow-hidden skew-x-[-10deg] rounded"
+                  className='relative inline-flex skew-x-[-10deg] items-center justify-center overflow-hidden rounded px-1.5 text-sm leading-[18px] font-bold text-white uppercase'
                   style={{
                     fontFamily: '"Space Grotesk"',
                     backgroundColor: badge.bgColor,
@@ -105,7 +105,7 @@ const AppCard = ({
               </div>
             )}
             <figure
-              className="group relative h-full rounded-2xl"
+              className='group relative h-full rounded-2xl'
               style={{ aspectRatio: "1.03333 / 1" }}
             >
               {videoSrc ? (
@@ -113,12 +113,12 @@ const AppCard = ({
                   loop
                   playsInline
                   disablePictureInPicture
-                  preload="none"
+                  preload='none'
                   poster={posterSrc}
                   src={videoSrc}
                   autoPlay
                   muted
-                  className="object-cover size-full absolute inset-0 w-full h-full"
+                  className='absolute inset-0 size-full h-full w-full object-cover'
                   aria-label={description}
                 >
                   Your browser does not support the video.
@@ -126,20 +126,20 @@ const AppCard = ({
               ) : (
                 <img
                   alt={description}
-                  loading="lazy"
-                  decoding="async"
-                  className="object-cover absolute inset-0 w-full h-full"
+                  loading='lazy'
+                  decoding='async'
+                  className='absolute inset-0 h-full w-full object-cover'
                   src={imageSrc}
                 />
               )}
             </figure>
           </div>
-          <div className="flex flex-col gap-6 py-3 sm:py-4 min-w-0 justify-between flex-1 p-4">
-            <div className="flex flex-col gap-1">
-              <h3 className="text-base sm:text-md-semi font-semibold text-font-primary leading-6 tracking-[-0.16px]">
+          <div className='flex min-w-0 flex-1 flex-col justify-between gap-6 p-4 py-3 sm:py-4'>
+            <div className='flex flex-col gap-1'>
+              <h3 className='sm:text-md-semi text-font-primary text-base leading-6 font-semibold tracking-[-0.16px]'>
                 {title}
               </h3>
-              <p className="text-sm text-text-secondary line-clamp-2 overflow-hidden text-ellipsis">
+              <p className='text-text-secondary line-clamp-2 overflow-hidden text-sm text-ellipsis'>
                 {description}
               </p>
             </div>
@@ -794,27 +794,27 @@ const Apps = () => {
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-black flex flex-col">
+    <div className='flex min-h-screen w-full flex-col bg-white dark:bg-black'>
       <LandingPageBanner />
       <LandingNavbar />
 
-      <main id="main" className="h-full min-w-0 area-[main]">
-        <div className="h-full container mx-auto grid gap-8 max-w-[1280px] grid-rows-[auto_1fr_auto] overflow-x-hidden pt-12 md:pt-14 px-4 sm:px-6 lg:px-8">
-          <main className="flex-grow relative bg-background">
-            <div className="absolute inset-0 -z-10 size-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_80%_at_50%_50%,#000_40%,transparent_100%)]"></div>
-            <div className="w-full mx-auto px-4 sm:px-6 py-8 lg:mt-10">
-              <div className="space-y-4 flex flex-col ml-2 md:mx-4 lg:mx-8 items-center justify-center">
-                <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl max-w-xl text-center">
+      <main id='main' className='area-[main] h-full min-w-0'>
+        <div className='container mx-auto grid h-full max-w-[1280px] grid-rows-[auto_1fr_auto] gap-8 overflow-x-hidden px-4 pt-12 sm:px-6 md:pt-14 lg:px-8'>
+          <main className='bg-background relative flex-grow'>
+            <div className='absolute inset-0 -z-10 size-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_60%_80%_at_50%_50%,#000_40%,transparent_100%)] bg-[size:48px_48px]'></div>
+            <div className='mx-auto w-full px-4 py-8 sm:px-6 lg:mt-10'>
+              <div className='ml-2 flex flex-col items-center justify-center space-y-4 md:mx-4 lg:mx-8'>
+                <h1 className='max-w-xl text-center text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl'>
                   Explore Apps{" "}
                 </h1>
-                <p className="text-normal text-sm text-muted-foreground leading-relaxed max-w-2xl text-center">
+                <p className='text-normal text-muted-foreground max-w-2xl text-center text-sm leading-relaxed'>
                   Discover amazing AI-generated videos and images created by our
                   community.
                 </p>
 
-                <div className="flex items-center justify-center w-full lg:w-[450px]">
+                <div className='flex w-full items-center justify-center lg:w-[450px]'>
                   <div
-                    className="relative flex items-center gap-2 w-full px-3 py-3 h-11 rounded-xl border border-transparent bg-[rgba(255,255,255,0.04)] focus-within:border-white-24 focus-within:bg-white-12 transition-colors max-w-full"
+                    className='focus-within:border-white-24 focus-within:bg-white-12 relative flex h-11 w-full max-w-full items-center gap-2 rounded-xl border border-transparent bg-[rgba(255,255,255,0.04)] px-3 py-3 transition-colors'
                     style={{
                       boxShadow: "rgba(0, 0, 0, 0.12) 0px 4px 12px 0px",
                     }}
@@ -822,45 +822,45 @@ const Apps = () => {
                     <svg
                       width={20}
                       height={20}
-                      viewBox="0 0 20 20"
-                      className="size-5 text-text-secondary shrink-0"
+                      viewBox='0 0 20 20'
+                      className='text-text-secondary size-5 shrink-0'
                     >
                       <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M9.16634 3.83203C6.22082 3.83203 3.83301 6.21985 3.83301 9.16536C3.83301 12.1109 6.22082 14.4987 9.16634 14.4987C12.1119 14.4987 14.4997 12.1109 14.4997 9.16536C14.4997 6.21985 12.1119 3.83203 9.16634 3.83203ZM2.83301 9.16536C2.83301 5.66756 5.66854 2.83203 9.16634 2.83203C12.6641 2.83203 15.4997 5.66756 15.4997 9.16536C15.4997 10.7343 14.9292 12.17 13.9843 13.2763L18.2699 17.5618C18.4652 17.7571 18.4652 18.0737 18.2699 18.2689C18.0746 18.4642 17.758 18.4642 17.5628 18.2689L13.2772 13.9834C12.1709 14.9282 10.7353 15.4987 9.16634 15.4987C5.66854 15.4987 2.83301 12.6632 2.83301 9.16536Z"
-                        fill="currentColor"
+                        fillRule='evenodd'
+                        clipRule='evenodd'
+                        d='M9.16634 3.83203C6.22082 3.83203 3.83301 6.21985 3.83301 9.16536C3.83301 12.1109 6.22082 14.4987 9.16634 14.4987C12.1119 14.4987 14.4997 12.1109 14.4997 9.16536C14.4997 6.21985 12.1119 3.83203 9.16634 3.83203ZM2.83301 9.16536C2.83301 5.66756 5.66854 2.83203 9.16634 2.83203C12.6641 2.83203 15.4997 5.66756 15.4997 9.16536C15.4997 10.7343 14.9292 12.17 13.9843 13.2763L18.2699 17.5618C18.4652 17.7571 18.4652 18.0737 18.2699 18.2689C18.0746 18.4642 17.758 18.4642 17.5628 18.2689L13.2772 13.9834C12.1709 14.9282 10.7353 15.4987 9.16634 15.4987C5.66854 15.4987 2.83301 12.6632 2.83301 9.16536Z'
+                        fill='currentColor'
                       />
                     </svg>
                     <input
-                      placeholder="Search"
-                      className="flex-1 bg-transparent text-sm text-font-primary placeholder:text-text-secondary outline-none min-w-0"
-                      type="text"
-                      defaultValue=""
+                      placeholder='Search'
+                      className='text-font-primary placeholder:text-text-secondary min-w-0 flex-1 bg-transparent text-sm outline-none'
+                      type='text'
+                      defaultValue=''
                     />
 
-                    <div className="shrink-0 flex items-center border-l border-white-8 pl-3 ml-1">
+                    <div className='border-white-8 ml-1 flex shrink-0 items-center border-l pl-3'>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <div className="flex items-center gap-1.5 cursor-pointer text-text-secondary hover:text-text-primary transition-colors text-sm font-medium">
-                            <Filter className="size-4" />
-                            <span className="whitespace-nowrap">
+                          <div className='text-text-secondary hover:text-text-primary flex cursor-pointer items-center gap-1.5 text-sm font-medium transition-colors'>
+                            <Filter className='size-4' />
+                            <span className='whitespace-nowrap'>
                               {activeType}
                             </span>
                           </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
-                          align="end"
-                          className="w-48 bg-[#1A1D1F] border-white-8 text-text-primary mt-2"
+                          align='end'
+                          className='border-white-8 text-text-primary mt-2 w-48 bg-[#1A1D1F]'
                         >
                           {mediaTypes.map((mType) => (
                             <DropdownMenuItem
                               key={mType}
                               onClick={() => setActiveType(mType)}
                               className={cn(
-                                "cursor-pointer focus:bg-white-8 focus:text-text-primary",
+                                "focus:bg-white-8 focus:text-text-primary cursor-pointer",
                                 activeType === mType &&
-                                  "bg-white-8 text-text-primary",
+                                  "bg-white-8 text-text-primary"
                               )}
                             >
                               {mType}
@@ -874,25 +874,25 @@ const Apps = () => {
               </div>
             </div>
           </main>
-          <div className="min-w-0 w-full overflow-x-hidden space-y-12 md:space-y-14">
-            <div className="flex flex-col items-center justify-center overflow-x-scroll hide-scrollbar bg-white-8 p-1 rounded-xl border border-white-4">
-              <div className="w-full relative">
+          <div className='w-full min-w-0 space-y-12 overflow-x-hidden md:space-y-14'>
+            <div className='hide-scrollbar bg-white-8 border-white-4 flex flex-col items-center justify-center overflow-x-scroll rounded-xl border p-1'>
+              <div className='relative w-full'>
                 <div
-                  className="absolute top-0 left-0 h-full w-12 z-10 pointer-events-none transition-opacity rounded-l-lg opacity-0"
+                  className='pointer-events-none absolute top-0 left-0 z-10 h-full w-12 rounded-l-lg opacity-0 transition-opacity'
                   style={{
                     background:
                       "linear-gradient(90deg, rgb(15, 17, 19) 0%, transparent 100%)",
                   }}
                 />
                 <div
-                  className="absolute top-0 right-0 h-full w-12 z-10 pointer-events-none transition-opacity rounded-r-lg opacity-100"
+                  className='pointer-events-none absolute top-0 right-0 z-10 h-full w-12 rounded-r-lg opacity-100 transition-opacity'
                   style={{
                     background:
                       "linear-gradient(270deg, rgb(15, 17, 19) 0%, transparent 100%)",
                   }}
                 />
-                <div className="overflow-x-auto overflow-y-hidden hide-scrollbar">
-                  <nav className="flex items-center gap-1">
+                <div className='hide-scrollbar overflow-x-auto overflow-y-hidden'>
+                  <nav className='flex items-center gap-1'>
                     {categories.map((category) => {
                       const isActive = activeCategory === category.name;
                       return (
@@ -900,9 +900,9 @@ const Apps = () => {
                           key={category.name}
                           onClick={() => setActiveCategory(category.name)}
                           className={cn(
-                            "text-text-secondary text-body-s font-medium px-4 py-2 whitespace-nowrap flex items-center justify-center rounded-[0.625rem] h-9 transition-all duration-200 border border-transparent !text-sm hover:text-text-primary hover:bg-white-12",
+                            "text-text-secondary text-body-s hover:text-text-primary hover:bg-white-12 flex h-9 items-center justify-center rounded-[0.625rem] border border-transparent px-4 py-2 !text-sm font-medium whitespace-nowrap transition-all duration-200",
                             isActive &&
-                              "text-text-primary bg-gradient-to-r from-cyan-500 to-blue-500 shadow-sm",
+                              "text-text-primary bg-gradient-to-r from-cyan-500 to-blue-500 shadow-sm"
                           )}
                         >
                           <span>{category.name}</span>
@@ -914,20 +914,20 @@ const Apps = () => {
               </div>
             </div>
 
-            <div className="relative">
+            <div className='relative'>
               <div style={{ opacity: 1, transform: "none" }}>
-                <div className="space-y-8">
+                <div className='space-y-8'>
                   {appSections
                     .filter(
                       (section) =>
                         activeCategory === "All" ||
-                        section.title === activeCategory,
+                        section.title === activeCategory
                     )
                     .map((section) => {
                       const filteredApps = section.apps.filter(
                         (app) =>
                           activeType === "All Types" ||
-                          app.type === activeType.toLowerCase(),
+                          app.type === activeType.toLowerCase()
                       );
 
                       if (filteredApps.length === 0) return null;
@@ -935,42 +935,42 @@ const Apps = () => {
                       return (
                         <section
                           key={section.title}
-                          className="space-y-4 last:border-b-0"
+                          className='space-y-4 last:border-b-0'
                         >
-                          <div className="flex items-end justify-between gap-4">
-                            <div className="flex-1 space-y-1">
-                              <h2 className="text-h-sm-bold uppercase font-grotesk text-font-primary">
+                          <div className='flex items-end justify-between gap-4'>
+                            <div className='flex-1 space-y-1'>
+                              <h2 className='text-h-sm-bold font-grotesk text-font-primary uppercase'>
                                 {section.title}
                               </h2>
-                              <p className="text-sm text-text-secondary">
+                              <p className='text-text-secondary text-sm'>
                                 {section.description}
                               </p>
                             </div>
                             <button
-                              className="flex items-center gap-1 text-sm-semi transition-colors shrink-0 text-white p-[10px]"
+                              className='text-sm-semi flex shrink-0 items-center gap-1 p-[10px] text-white transition-colors'
                               onClick={() => setActiveCategory(section.title)}
                             >
                               <span>See all</span>
                               <svg
-                                className="size-2 sm:size-[18px]"
-                                aria-hidden="true"
-                                width="24px"
-                                height="24px"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
+                                className='size-2 sm:size-[18px]'
+                                aria-hidden='true'
+                                width='24px'
+                                height='24px'
+                                viewBox='0 0 24 24'
+                                fill='none'
+                                xmlns='http://www.w3.org/2000/svg'
                               >
                                 <path
-                                  d="M10 16L13.6464 12.3536C13.8417 12.1583 13.8417 11.8417 13.6464 11.6464L10 8"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
+                                  d='M10 16L13.6464 12.3536C13.8417 12.1583 13.8417 11.8417 13.6464 11.6464L10 8'
+                                  stroke='currentColor'
+                                  strokeWidth='1.5'
+                                  strokeLinecap='round'
+                                  strokeLinejoin='round'
                                 />
                               </svg>
                             </button>
                           </div>
-                          <div className="flex gap-4 overflow-x-auto hide-scrollbar lg:grid md:grid-cols-3 lg:grid-cols-5">
+                          <div className='hide-scrollbar flex gap-4 overflow-x-auto md:grid-cols-3 lg:grid lg:grid-cols-5'>
                             {filteredApps.map((app) => (
                               <AppCard
                                 key={app.id}
@@ -987,7 +987,7 @@ const Apps = () => {
           </div>
         </div>
         <style
-          type="text/css"
+          type='text/css'
           dangerouslySetInnerHTML={{
             __html:
               "\n          body {\n            background: radial-gradient(23.93% 26.98% at 100% 0%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(34.93% 41.39% at 92.71% 106.14%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(31.57% 33.97% at -2.15% 107.04%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(39.39% 24% at -13.58% 35.4%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 99.97%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), #D9D9D9!important;\n            box-shadow: transparent !important;\n            backdrop-filter: transparent !important;\n            overflow-x: hidden;\n          }\n          \n    body {\n      background: radial-gradient(23.93% 26.98% at 100% 0%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(34.93% 41.39% at 92.71% 106.14%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(31.57% 33.97% at -2.15% 107.04%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 100%), radial-gradient(39.39% 24% at -13.58% 35.4%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 73.08%, rgba(255, 255, 255, 0.00) 99.97%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), linear-gradient(0deg, #0F1113 0%, #0F1113 100%), #D9D9D9!important;\n      box-shadow: transparent !important;\n      backdrop-filter: transparent !important;\n    }\n      #header {\n      background: none !important;\n      box-shadow: none !important;\n      backdrop-filter: none !important;\n    }\n    html.apps-header-scrolled #header {\n      background: #0F1113 !important;\n      box-shadow: inset 0 1rem 1rem rgba(0,0,0,1) !important;\n      backdrop-filter: blur(4px) !important;\n    }\n  \n        ",

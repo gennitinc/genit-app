@@ -1,13 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { apiResponse } from "@/utils/apiResponse";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, Search, Loader2, Image as ImageIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +11,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { apiResponse } from "@/utils/apiResponse";
+import { Image as ImageIcon, Loader2, Search, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Template {
   _id: string;
@@ -39,11 +39,11 @@ export default function AdminTemplatesPage() {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [templateToDelete, setTemplateToDelete] = useState<Template | null>(
-    null,
+    null
   );
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedTemplates, setSelectedTemplates] = useState<Set<string>>(
-    new Set(),
+    new Set()
   );
   const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false);
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
@@ -67,7 +67,7 @@ export default function AdminTemplatesPage() {
           `/designinspirations?${params.toString()}`,
           {
             withCredentials: true,
-          },
+          }
         );
 
         const data = res.data;
@@ -95,7 +95,7 @@ export default function AdminTemplatesPage() {
         setIsFetchingMore(false);
       }
     },
-    [searchTerm],
+    [searchTerm]
   );
 
   useEffect(() => {
@@ -128,7 +128,7 @@ export default function AdminTemplatesPage() {
           setPage((p) => p + 1);
         }
       },
-      { rootMargin: "200px" },
+      { rootMargin: "200px" }
     );
     observer.observe(el);
     return () => observer.unobserve(el);
@@ -148,7 +148,7 @@ export default function AdminTemplatesPage() {
         `/designinspirations/${templateToDelete._id}`,
         {
           withCredentials: true,
-        },
+        }
       );
 
       if (res.data.success) {
@@ -157,7 +157,7 @@ export default function AdminTemplatesPage() {
         setTemplateToDelete(null);
         // Remove from UI without reloading
         setTemplates((prev) =>
-          prev.filter((t) => t._id !== templateToDelete._id),
+          prev.filter((t) => t._id !== templateToDelete._id)
         );
         // Remove from selection if it was selected
         setSelectedTemplates((prev) => {
@@ -193,7 +193,7 @@ export default function AdminTemplatesPage() {
         setBulkDeleteDialogOpen(false);
         // Remove deleted items from UI without reloading
         setTemplates((prev) =>
-          prev.filter((t) => !selectedTemplates.has(t._id)),
+          prev.filter((t) => !selectedTemplates.has(t._id))
         );
         setSelectedTemplates(new Set());
       } else {
@@ -202,7 +202,7 @@ export default function AdminTemplatesPage() {
     } catch (error: any) {
       console.error("Failed to delete templates:", error);
       toast.error(
-        error.response?.data?.message || "Failed to delete templates",
+        error.response?.data?.message || "Failed to delete templates"
       );
     } finally {
       setIsBulkDeleting(false);
@@ -240,7 +240,7 @@ export default function AdminTemplatesPage() {
   useEffect(() => {
     if (selectAllCheckboxRef.current) {
       const input = selectAllCheckboxRef.current.querySelector(
-        'input[type="checkbox"]',
+        'input[type="checkbox"]'
       ) as HTMLInputElement;
       if (input) {
         input.indeterminate = isSomeSelected;
@@ -257,90 +257,90 @@ export default function AdminTemplatesPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">
+    <div className='container mx-auto px-4 py-8'>
+      <div className='mb-6'>
+        <h1 className='mb-2 text-3xl font-bold'>
           Design Inspirations Management
         </h1>
-        <p className="text-muted-foreground">
+        <p className='text-muted-foreground'>
           Manage all design Inspiration in the platform
         </p>
       </div>
 
-      <div className="mb-6 flex gap-4 items-center flex-wrap">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+      <div className='mb-6 flex flex-wrap items-center gap-4'>
+        <div className='relative max-w-md flex-1'>
+          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
-            placeholder="Search templates..."
+            placeholder='Search templates...'
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
               setPage(1);
             }}
-            className="pl-10"
+            className='pl-10'
           />
         </div>
-        <div className="text-sm text-muted-foreground">
+        <div className='text-muted-foreground text-sm'>
           {templates.length} template{templates.length !== 1 ? "s" : ""}
         </div>
         {selectedTemplates.size > 0 && (
           <Button
-            variant="destructive"
+            variant='destructive'
             onClick={() => setBulkDeleteDialogOpen(true)}
           >
-            <Trash2 className="w-4 h-4 mr-2" />
+            <Trash2 className='mr-2 h-4 w-4' />
             Delete {selectedTemplates.size} selected
           </Button>
         )}
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+        <div className='flex items-center justify-center py-12'>
+          <Loader2 className='text-muted-foreground h-8 w-8 animate-spin' />
         </div>
       ) : templates.length === 0 ? (
-        <div className="text-center py-12 text-muted-foreground">
+        <div className='text-muted-foreground py-12 text-center'>
           No templates found
         </div>
       ) : (
         <>
-          <div className="mb-4 flex items-center gap-2">
+          <div className='mb-4 flex items-center gap-2'>
             <Checkbox
               ref={selectAllCheckboxRef}
               checked={isAllSelected}
               onCheckedChange={handleSelectAll}
             />
-            <span className="text-sm text-muted-foreground">
+            <span className='text-muted-foreground text-sm'>
               {selectedTemplates.size > 0
                 ? `${selectedTemplates.size} selected`
                 : "Select all"}
             </span>
           </div>
-          <div className="columns-2 md:columns-4 gap-4 [column-fill:balance] space-y-4">
+          <div className='columns-2 gap-4 space-y-4 [column-fill:balance] md:columns-4'>
             {templates.map((template) => (
               <div
                 key={template._id}
-                className={`group relative mb-4 inline-block w-full align-top break-inside-avoid border rounded-lg overflow-hidden bg-card hover:shadow-lg transition-shadow ${
+                className={`group bg-card relative mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-lg border align-top transition-shadow hover:shadow-lg ${
                   selectedTemplates.has(template._id)
-                    ? "border-primary ring-2 ring-primary"
+                    ? "border-primary ring-primary ring-2"
                     : "border-border"
                 }`}
               >
-                <div className="absolute top-2 left-2 z-10">
+                <div className='absolute top-2 left-2 z-10'>
                   <Checkbox
                     checked={selectedTemplates.has(template._id)}
                     onCheckedChange={(checked) =>
                       handleSelectTemplate(template._id, checked as boolean)
                     }
                     onClick={(e) => e.stopPropagation()}
-                    className="bg-background/80 backdrop-blur-sm"
+                    className='bg-background/80 backdrop-blur-sm'
                   />
                 </div>
-                <div className="relative bg-muted">
+                <div className='bg-muted relative'>
                   <img
                     src={template.mediaUrl}
                     alt={template.alt}
-                    className="w-full h-auto object-cover"
+                    className='h-auto w-full object-cover'
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.style.display = "none";
@@ -348,41 +348,41 @@ export default function AdminTemplatesPage() {
                         "flex",
                         "items-center",
                         "justify-center",
-                        "h-40", // Add fixed height for broken images
+                        "h-40" // Add fixed height for broken images
                       );
                     }}
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <div className='absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-colors group-hover:bg-black/30 group-hover:opacity-100'>
                     <Button
-                      variant="destructive"
-                      size="icon"
+                      variant='destructive'
+                      size='icon'
                       onClick={() => handleDeleteClick(template)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                      className='opacity-0 transition-opacity group-hover:opacity-100'
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className='h-4 w-4' />
                     </Button>
                   </div>
                 </div>
-                <div className="p-3 space-y-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <p className="text-sm font-medium line-clamp-2 flex-1">
+                <div className='space-y-2 p-3'>
+                  <div className='flex items-start justify-between gap-2'>
+                    <p className='line-clamp-2 flex-1 text-sm font-medium'>
                       {template.alt || "Untitled Template"}
                     </p>
                   </div>
-                  <div className="flex flex-wrap gap-1">
+                  <div className='flex flex-wrap gap-1'>
                     {template.category && (
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant='secondary' className='text-xs'>
                         {formatCategory(template.category)}
                       </Badge>
                     )}
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant='outline' className='text-xs'>
                       {template.sourceSite}
                     </Badge>
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant='outline' className='text-xs'>
                       {template.mediaType}
                     </Badge>
                   </div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className='text-muted-foreground text-xs'>
                     {new Date(template.scrapedAt).toLocaleDateString()}
                   </div>
                 </div>
@@ -393,13 +393,13 @@ export default function AdminTemplatesPage() {
           {/* Sentinel for infinite scroll */}
           <div
             ref={loadMoreRef}
-            className="h-20 flex items-center justify-center"
+            className='flex h-20 items-center justify-center'
           >
             {isFetchingMore && (
-              <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              <Loader2 className='text-muted-foreground h-6 w-6 animate-spin' />
             )}
             {!hasNextPage && templates.length > 0 && (
-              <p className="text-sm text-muted-foreground">
+              <p className='text-muted-foreground text-sm'>
                 No more templates to load
               </p>
             )}
@@ -418,7 +418,7 @@ export default function AdminTemplatesPage() {
           </DialogHeader>
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => {
                 setDeleteDialogOpen(false);
                 setTemplateToDelete(null);
@@ -428,13 +428,13 @@ export default function AdminTemplatesPage() {
               Cancel
             </Button>
             <Button
-              variant="destructive"
+              variant='destructive'
               onClick={handleDeleteConfirm}
               disabled={isDeleting}
             >
               {isDeleting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Deleting...
                 </>
               ) : (
@@ -460,20 +460,20 @@ export default function AdminTemplatesPage() {
           </DialogHeader>
           <DialogFooter>
             <Button
-              variant="outline"
+              variant='outline'
               onClick={() => setBulkDeleteDialogOpen(false)}
               disabled={isBulkDeleting}
             >
               Cancel
             </Button>
             <Button
-              variant="destructive"
+              variant='destructive'
               onClick={handleBulkDeleteConfirm}
               disabled={isBulkDeleting}
             >
               {isBulkDeleting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Deleting...
                 </>
               ) : (

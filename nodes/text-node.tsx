@@ -1,13 +1,7 @@
 "use client";
 
-import { memo, useState, useEffect } from "react";
-import { Handle, Position, type NodeProps } from "reactflow";
-import { FileText, Edit3, Save, X, Lock, Unlock, Copy, CheckCheck, Sparkles, Loader2, MessageSquare, ListCheck, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +9,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  CheckCheck,
+  Copy,
+  Edit3,
+  FileText,
+  ListCheck,
+  Loader2,
+  Lock,
+  MessageSquare,
+  Save,
+  Search,
+  Sparkles,
+  Unlock,
+  X,
+} from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { Handle, type NodeProps, Position } from "reactflow";
+import { memo, useEffect, useState } from "react";
 
 interface TextNodeData {
   label?: string;
@@ -81,89 +95,89 @@ export const TextNode = memo(
     }, [label, content, status]);
 
     return (
-      <div className="relative bg-card border border-border rounded-[1.5rem] shadow-sm p-2 w-[450px] min-w-[300px] min-h-[200px]">
+      <div className='bg-card border-border relative min-h-[200px] w-[450px] min-w-[300px] rounded-[1.5rem] border p-2 shadow-sm'>
         <Handle
-          type="target"
+          type='target'
           position={Position.Left}
-          className="w-3 h-3 bg-blue-500 border-2 border-white"
+          className='h-3 w-3 border-2 border-white bg-blue-500'
         />
         <Handle
-          type="source"
+          type='source'
           position={Position.Right}
-          className="w-3 h-3 bg-green-500 border-2 border-white"
+          className='h-3 w-3 border-2 border-white bg-green-500'
         />
 
         {/* Remove Button */}
         {data.onRemoveNode && data.nodeId && (
           <button
             onClick={() => data.onRemoveNode!(data.nodeId!)}
-            className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-lg"
-            title="Remove node"
+            className='absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
+            title='Remove node'
           >
-            <X className="w-3 h-3" />
+            <X className='h-3 w-3' />
           </button>
         )}
 
-        <div className="flex items-start space-x-3 h-full">
-          <div className="flex-1 min-w-0 flex flex-col h-full">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center space-x-2 flex-1 min-w-0">
-                <h3 className="font-semibold text-xs truncate">
+        <div className='flex h-full items-start space-x-3'>
+          <div className='flex h-full min-w-0 flex-1 flex-col'>
+            <div className='mb-2 flex items-center justify-between'>
+              <div className='flex min-w-0 flex-1 items-center space-x-2'>
+                <h3 className='truncate text-xs font-semibold'>
                   {editData.hasLabel && editData.label.trim()
                     ? editData.label
                     : "Text Content"}
                 </h3>
-                  <span className="text-xs text-muted-foreground">
-                    {editData.status}
-                  </span>
-                </div>
+                <span className='text-muted-foreground text-xs'>
+                  {editData.status}
+                </span>
               </div>
-              <div className="flex items-center space-x-1 ml-auto">
-                {!analyzed && onAnalyze && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={async () => {
-                      setIsAnalyzing(true);
-                      try {
-                        await onAnalyze();
-                      } finally {
-                        setIsAnalyzing(false);
-                      }
-                    }}
-                    disabled={isAnalyzing}
-                    className="h-7 px-2 text-[10px] gap-1 borber-primary/20 bg-primary/5 text-primary"
-                  >
-                    {isAnalyzing ? (
-                      <Loader2 className="w-3 h-3 animate-spin" />
-                    ) : (
-                      <Sparkles className="w-3 h-3" />
-                    )}
-                    Analyze
-                  </Button>
-                )}
-                {analyzed && (
-                  <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-600 text-[9px] font-medium">
-                    <ListCheck className="w-2.5 h-2.5" />
-                    Analyzed
-                  </div>
-                )}
-                <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+            </div>
+            <div className='ml-auto flex items-center space-x-1'>
+              {!analyzed && onAnalyze && (
+                <Button
+                  variant='outline'
+                  size='sm'
+                  onClick={async () => {
+                    setIsAnalyzing(true);
+                    try {
+                      await onAnalyze();
+                    } finally {
+                      setIsAnalyzing(false);
+                    }
+                  }}
+                  disabled={isAnalyzing}
+                  className='borber-primary/20 bg-primary/5 text-primary h-7 gap-1 px-2 text-[10px]'
+                >
+                  {isAnalyzing ? (
+                    <Loader2 className='h-3 w-3 animate-spin' />
+                  ) : (
+                    <Sparkles className='h-3 w-3' />
+                  )}
+                  Analyze
+                </Button>
+              )}
+              {analyzed && (
+                <div className='flex items-center gap-1 rounded-full border border-green-500/20 bg-green-500/10 px-1.5 py-0.5 text-[9px] font-medium text-green-600'>
+                  <ListCheck className='h-2.5 w-2.5' />
+                  Analyzed
+                </div>
+              )}
+              <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                 <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm" className="p-1 h-auto">
-                    <Edit3 className="w-3 h-3 text-muted-foreground" />
+                  <Button variant='ghost' size='sm' className='h-auto p-1'>
+                    <Edit3 className='text-muted-foreground h-3 w-3' />
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-2xl max-h-[85vh] flex flex-col p-0 overflow-hidden">
-                  <DialogHeader className="p-6 pb-2">
+                <DialogContent className='flex max-h-[85vh] flex-col overflow-hidden p-0 sm:max-w-2xl'>
+                  <DialogHeader className='p-6 pb-2'>
                     <DialogTitle>Edit Text Content</DialogTitle>
                   </DialogHeader>
-                  <div className="flex-1 overflow-y-auto p-6 pt-2 space-y-6">
+                  <div className='flex-1 space-y-6 overflow-y-auto p-6 pt-2'>
                     <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <Label htmlFor="label">Label</Label>
+                      <div className='mb-2 flex items-center justify-between'>
+                        <Label htmlFor='label'>Label</Label>
                         <button
-                          type="button"
+                          type='button'
                           onClick={() =>
                             setEditData((prev) => ({
                               ...prev,
@@ -171,7 +185,7 @@ export const TextNode = memo(
                               label: !prev.hasLabel ? prev.label : "",
                             }))
                           }
-                          className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none  ${
+                          className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
                             editData.hasLabel ? "bg-primary" : "bg-muted"
                           }`}
                         >
@@ -186,7 +200,7 @@ export const TextNode = memo(
                       </div>
                       {editData.hasLabel && (
                         <Textarea
-                          id="label"
+                          id='label'
                           value={editData.label}
                           onChange={(e) =>
                             setEditData((prev) => ({
@@ -194,19 +208,19 @@ export const TextNode = memo(
                               label: e.target.value,
                             }))
                           }
-                          placeholder="Document your file so you can remember them"
-                          className="min-h-[80px] resize-none"
+                          placeholder='Document your file so you can remember them'
+                          className='min-h-[80px] resize-none'
                         />
                       )}
                     </div>
                     <div>
-                      <Label htmlFor="status">Status</Label>
-                      <div className="flex items-center space-x-3 mt-1">
-                        <span className="text-xs text-muted-foreground">
+                      <Label htmlFor='status'>Status</Label>
+                      <div className='mt-1 flex items-center space-x-3'>
+                        <span className='text-muted-foreground text-xs'>
                           Public
                         </span>
                         <button
-                          type="button"
+                          type='button'
                           onClick={() =>
                             setEditData((prev) => ({
                               ...prev,
@@ -214,7 +228,7 @@ export const TextNode = memo(
                                 prev.status === "public" ? "private" : "public",
                             }))
                           }
-                          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none  ${
+                          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
                             editData.status === "private"
                               ? "bg-primary"
                               : "bg-muted"
@@ -228,15 +242,15 @@ export const TextNode = memo(
                             }`}
                           />
                         </button>
-                        <span className="text-xs text-muted-foreground">
+                        <span className='text-muted-foreground text-xs'>
                           Private
                         </span>
                       </div>
                     </div>
                     <div>
-                      <Label htmlFor="content">Content</Label>
+                      <Label htmlFor='content'>Content</Label>
                       <Textarea
-                        id="content"
+                        id='content'
                         value={editData.content}
                         onChange={(e) =>
                           setEditData((prev) => ({
@@ -244,14 +258,14 @@ export const TextNode = memo(
                             content: e.target.value,
                           }))
                         }
-                        placeholder="Enter your text content..."
-                        className="min-h-[400px] mt-1"
+                        placeholder='Enter your text content...'
+                        className='mt-1 min-h-[400px]'
                       />
                     </div>
                   </div>
-                  <div className="p-6 pt-2 border-t flex justify-end space-x-2">
+                  <div className='flex justify-end space-x-2 border-t p-6 pt-2'>
                     <Button
-                      variant="outline"
+                      variant='outline'
                       onClick={() => setIsEditOpen(false)}
                     >
                       Cancel
@@ -262,42 +276,83 @@ export const TextNode = memo(
               </Dialog>
             </div>
 
-            <div className="text-xs text-muted-foreground bg-muted p-4 rounded-[1.5rem] border border-border flex-1 overflow-y-auto max-h-[400px] nodrag nowheel cursor-text select-text relative group">
+            <div className='text-muted-foreground bg-muted border-border nodrag nowheel group relative max-h-[400px] flex-1 cursor-text overflow-y-auto rounded-[1.5rem] border p-4 text-xs select-text'>
               {editData.content ? (
                 <>
                   <ReactMarkdown
                     components={{
-                      h1: ({node, ...props}) => <h1 className="text-lg font-bold mb-2 border-b pb-1" {...props} />,
-                      h2: ({node, ...props}) => <h2 className="text-base font-bold mb-1 mt-3" {...props} />,
-                      h3: ({node, ...props}) => <h3 className="text-[11px] font-bold mb-1 mt-2" {...props} />,
-                      p: ({node, ...props}) => <p className="mb-2 last:mb-0 leading-relaxed" {...props} />,
-                      ul: ({node, ...props}) => <ul className="list-disc ml-4 mb-2 space-y-1" {...props} />,
-                      ol: ({node, ...props}) => <ol className="list-decimal ml-4 mb-2 space-y-1" {...props} />,
-                      li: ({node, ...props}) => <li className="mb-0.5" {...props} />,
-                      code: ({node, ...props}: any) => (
-                        <code className="bg-background/50 px-1 rounded text-[10px] font-mono" {...props} />
+                      h1: ({ node, ...props }) => (
+                        <h1
+                          className='mb-2 border-b pb-1 text-lg font-bold'
+                          {...props}
+                        />
                       ),
-                      pre: ({node, ...props}: any) => (
-                        <pre className="bg-background/50 p-2 rounded-lg my-2 overflow-x-auto font-mono text-[10px]" {...props} />
+                      h2: ({ node, ...props }) => (
+                        <h2
+                          className='mt-3 mb-1 text-base font-bold'
+                          {...props}
+                        />
                       ),
-                      blockquote: ({node, ...props}) => (
-                        <blockquote className="border-l-2 border-primary/30 pl-3 italic my-2" {...props} />
+                      h3: ({ node, ...props }) => (
+                        <h3
+                          className='mt-2 mb-1 text-[11px] font-bold'
+                          {...props}
+                        />
+                      ),
+                      p: ({ node, ...props }) => (
+                        <p
+                          className='mb-2 leading-relaxed last:mb-0'
+                          {...props}
+                        />
+                      ),
+                      ul: ({ node, ...props }) => (
+                        <ul
+                          className='mb-2 ml-4 list-disc space-y-1'
+                          {...props}
+                        />
+                      ),
+                      ol: ({ node, ...props }) => (
+                        <ol
+                          className='mb-2 ml-4 list-decimal space-y-1'
+                          {...props}
+                        />
+                      ),
+                      li: ({ node, ...props }) => (
+                        <li className='mb-0.5' {...props} />
+                      ),
+                      code: ({ node, ...props }: any) => (
+                        <code
+                          className='bg-background/50 rounded px-1 font-mono text-[10px]'
+                          {...props}
+                        />
+                      ),
+                      pre: ({ node, ...props }: any) => (
+                        <pre
+                          className='bg-background/50 my-2 overflow-x-auto rounded-lg p-2 font-mono text-[10px]'
+                          {...props}
+                        />
+                      ),
+                      blockquote: ({ node, ...props }) => (
+                        <blockquote
+                          className='border-primary/30 my-2 border-l-2 pl-3 italic'
+                          {...props}
+                        />
                       ),
                     }}
                   >
                     {editData.content}
                   </ReactMarkdown>
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute bottom-2 right-2 h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity bg-background/50 backdrop-blur-sm border border-border rounded-lg"
+                    variant='ghost'
+                    size='sm'
+                    className='bg-background/50 border-border absolute right-2 bottom-2 h-7 w-7 rounded-lg border p-0 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100'
                     onClick={handleCopy}
-                    title="Copy to clipboard"
+                    title='Copy to clipboard'
                   >
                     {isCopied ? (
-                      <CheckCheck className="w-3.5 h-3.5 text-green-500" />
+                      <CheckCheck className='h-3.5 w-3.5 text-green-500' />
                     ) : (
-                      <Copy className="w-3.5 h-3.5" />
+                      <Copy className='h-3.5 w-3.5' />
                     )}
                   </Button>
                 </>
@@ -307,23 +362,26 @@ export const TextNode = memo(
             </div>
 
             {analyzed && analysis && (
-              <div className="mt-4 space-y-3 pt-3 border-t border-border/50">
+              <div className='border-border/50 mt-4 space-y-3 border-t pt-3'>
                 {analysis.summary && (
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
-                      <MessageSquare className="w-3 h-3" />
+                  <div className='space-y-1'>
+                    <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
+                      <MessageSquare className='h-3 w-3' />
                       AI Summary
                     </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed italic bg-muted/30 p-2 rounded-lg border border-border/30">
+                    <p className='text-muted-foreground bg-muted/30 border-border/30 rounded-lg border p-2 text-xs leading-relaxed italic'>
                       "{analysis.summary}"
                     </p>
                   </div>
                 )}
 
                 {analysis.tags && analysis.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-1">
+                  <div className='mt-1 flex flex-wrap gap-1'>
                     {analysis.tags.slice(0, 5).map((tag, i) => (
-                      <span key={i} className="px-1.5 py-0.5 rounded bg-muted text-[9px] text-muted-foreground border border-border/50">
+                      <span
+                        key={i}
+                        className='bg-muted text-muted-foreground border-border/50 rounded border px-1.5 py-0.5 text-[9px]'
+                      >
                         #{tag}
                       </span>
                     ))}
@@ -335,7 +393,7 @@ export const TextNode = memo(
         </div>
       </div>
     );
-  },
+  }
 );
 
 TextNode.displayName = "TextNode";

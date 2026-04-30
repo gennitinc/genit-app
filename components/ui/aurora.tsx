@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 import { useTheme } from "next-themes";
+import { Color, Mesh, Program, Renderer, Triangle } from "ogl";
+import { useEffect, useRef, useState } from "react";
 
 const VERT = `#version 300 es
 in vec2 position;
@@ -233,7 +233,7 @@ export default function Aurora(props: AuroraProps) {
   return (
     <div
       ref={ctnDom}
-      className={`w-full absolute top-0 h-72 ${
+      className={`absolute top-0 h-72 w-full ${
         theme === "light" ? "opacity-25" : "opacity-70"
       }`}
     />

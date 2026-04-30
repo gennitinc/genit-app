@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Handle, Position, type NodeProps } from "reactflow";
-import { Send, Maximize2, Minimize2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { apiResponse } from "@/utils/apiResponse";
+import { Maximize2, Minimize2, Send, X } from "lucide-react";
+import { Handle, type NodeProps, Position } from "reactflow";
+import { useCallback, useState } from "react";
 
 interface AIChatNodeData {
   title?: string;
@@ -56,7 +56,7 @@ export function AIChatNode({
           nodeId: data.nodeId,
           prompt: message,
         },
-        { withCredentials: true },
+        { withCredentials: true }
       );
 
       if (res.data.success) {
@@ -89,74 +89,74 @@ export function AIChatNode({
         handleSendMessage();
       }
     },
-    [handleSendMessage],
+    [handleSendMessage]
   );
 
   return (
     <div
-      className={`bg-background border-2 rounded-[1.5rem] shadow-lg transition-all duration-200 ${
-        isMaximized ? "fixed inset-4 z-50" : "w-full h-full"
-      } ${selected ? "ring-2 ring-primary ring-offset-2" : ""}`}
+      className={`bg-background rounded-[1.5rem] border-2 shadow-lg transition-all duration-200 ${
+        isMaximized ? "fixed inset-4 z-50" : "h-full w-full"
+      } ${selected ? "ring-primary ring-2 ring-offset-2" : ""}`}
       style={{ minWidth: "300px", minHeight: "250px" }}
     >
       <Handle
-        type="target"
+        type='target'
         position={Position.Left}
         isConnectable={isConnectable}
-        className="w-3 h-3 bg-blue-500 border-2 border-background"
+        className='border-background h-3 w-3 border-2 bg-blue-500'
       />
       <Handle
-        type="source"
+        type='source'
         position={Position.Right}
         isConnectable={isConnectable}
-        className="w-3 h-3 bg-green-500 border-2 border-background"
+        className='border-background h-3 w-3 border-2 bg-green-500'
       />
 
       {/* Remove Button */}
       {data.onRemoveNode && data.nodeId && (
         <button
           onClick={() => data.onRemoveNode!(data.nodeId!)}
-          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-lg z-10"
-          title="Remove node"
+          className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
+          title='Remove node'
         >
-          <X className="w-3 h-3" />
+          <X className='h-3 w-3' />
         </button>
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between p-3 border-b border-border bg-muted/50 rounded-t-lg">
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+      <div className='border-border bg-muted/50 flex items-center justify-between rounded-t-lg border-b p-3'>
+        <div className='flex items-center space-x-2'>
+          <div className='h-3 w-3 rounded-full bg-green-500'></div>
+          <h3 className='text-foreground text-sm font-semibold'>{title}</h3>
         </div>
-        <div className="flex items-center space-x-1">
+        <div className='flex items-center space-x-1'>
           <Button
-            variant="ghost"
-            size="sm"
+            variant='ghost'
+            size='sm'
             onClick={() => setIsMaximized(!isMaximized)}
-            className="h-6 w-6 p-0 hover:bg-muted"
+            className='hover:bg-muted h-6 w-6 p-0'
             title={isMaximized ? "Minimize" : "Maximize"}
           >
             {isMaximized ? (
-              <Minimize2 className="w-3 h-3" />
+              <Minimize2 className='h-3 w-3' />
             ) : (
-              <Maximize2 className="w-3 h-3" />
+              <Maximize2 className='h-3 w-3' />
             )}
           </Button>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 p-3 overflow-hidden">
-        <ScrollArea className="h-48 w-full">
-          <div className="space-y-3">
+      <div className='flex-1 overflow-hidden p-3'>
+        <ScrollArea className='h-48 w-full'>
+          <div className='space-y-3'>
             {messages.length === 0 && !isTyping ? (
-              <div className="text-center text-muted-foreground text-sm py-8">
-                <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center mx-auto mb-2">
-                  <Send className="w-4 h-4" />
+              <div className='text-muted-foreground py-8 text-center text-sm'>
+                <div className='bg-muted mx-auto mb-2 flex h-8 w-8 items-center justify-center rounded-full'>
+                  <Send className='h-4 w-4' />
                 </div>
                 <p>Start a conversation with AI</p>
-                <p className="text-xs">Type your message below</p>
+                <p className='text-xs'>Type your message below</p>
               </div>
             ) : (
               <>
@@ -171,7 +171,7 @@ export function AIChatNode({
                       className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm ${
                         msg.role === "user"
                           ? "bg-primary text-primary-foreground rounded-tr-none"
-                          : "bg-muted text-foreground rounded-tl-none border border-border/50"
+                          : "bg-muted text-foreground border-border/50 rounded-tl-none border"
                       }`}
                     >
                       {msg.content}
@@ -179,19 +179,19 @@ export function AIChatNode({
                   </div>
                 ))}
                 {isTyping && (
-                  <div className="flex justify-start">
-                    <div className="bg-muted text-foreground rounded-2xl rounded-tl-none px-4 py-2 text-sm border border-border/50 shadow-sm">
-                      <div className="flex space-x-1 items-center h-4">
+                  <div className='flex justify-start'>
+                    <div className='bg-muted text-foreground border-border/50 rounded-2xl rounded-tl-none border px-4 py-2 text-sm shadow-sm'>
+                      <div className='flex h-4 items-center space-x-1'>
                         <div
-                          className="w-1.5 h-1.5 bg-foreground/50 rounded-full animate-bounce"
+                          className='bg-foreground/50 h-1.5 w-1.5 animate-bounce rounded-full'
                           style={{ animationDelay: "0ms" }}
                         ></div>
                         <div
-                          className="w-1.5 h-1.5 bg-foreground/50 rounded-full animate-bounce"
+                          className='bg-foreground/50 h-1.5 w-1.5 animate-bounce rounded-full'
                           style={{ animationDelay: "150ms" }}
                         ></div>
                         <div
-                          className="w-1.5 h-1.5 bg-foreground/50 rounded-full animate-bounce"
+                          className='bg-foreground/50 h-1.5 w-1.5 animate-bounce rounded-full'
                           style={{ animationDelay: "300ms" }}
                         ></div>
                       </div>
@@ -205,22 +205,22 @@ export function AIChatNode({
       </div>
 
       {/* Input */}
-      <div className="p-3 border-t border-border">
-        <div className="flex space-x-2">
+      <div className='border-border border-t p-3'>
+        <div className='flex space-x-2'>
           <Input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Type your message..."
-            className="flex-1 text-sm"
+            placeholder='Type your message...'
+            className='flex-1 text-sm'
           />
           <Button
             onClick={handleSendMessage}
-            size="sm"
-            className="px-3"
+            size='sm'
+            className='px-3'
             disabled={!message.trim()}
           >
-            <Send className="w-4 h-4" />
+            <Send className='h-4 w-4' />
           </Button>
         </div>
       </div>

@@ -1,28 +1,14 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import { ModelSelector } from "@/components/inspire/model-selector";
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
+import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { Button } from "@/components/ui/button";
-import {
-  Sparkles,
-  HistoryIcon,
-  Trash2,
-  X,
-  Upload,
-  User,
-  Loader2,
-  Wand2,
-  Check,
-  Plus,
-  SaveIcon,
-  Download,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GridPattern } from "@/components/ui/grid-pattern";
-import { apiResponse } from "@/utils/apiResponse";
+import { PremiumInput } from "@/components/ui/premium-input";
 import {
   Select,
   SelectContent,
@@ -30,15 +16,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner";
-import withAuth from "@/helper/hoc/withAuth";
-import { ModelSelector } from "@/components/inspire/model-selector";
-import { Model } from "@/types/inspire";
-import { imageGenApi, presenterApi } from "@/utils/inspire-api";
 import { Toaster } from "@/components/ui/sonner";
-import { PremiumInput } from "@/components/ui/premium-input";
-import { AppSidebar } from "@/components/layout/app-sidebar";
-import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import withAuth from "@/helper/hoc/withAuth";
+import { cn } from "@/lib/utils";
+import { Model } from "@/types/inspire";
+import { apiResponse } from "@/utils/apiResponse";
+import { imageGenApi, presenterApi } from "@/utils/inspire-api";
+import {
+  Check,
+  Download,
+  HistoryIcon,
+  Loader2,
+  Plus,
+  SaveIcon,
+  Sparkles,
+  Trash2,
+  Upload,
+  User,
+  Wand2,
+  X,
+} from "lucide-react";
+import { toast } from "sonner";
+import React, { useCallback, useEffect, useState } from "react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -60,7 +60,7 @@ const PresenterPage = () => {
   const [loadingPresenters, setLoadingPresenters] = useState(false);
   const [activeTab, setActiveTab] = useState<"upload" | "ai">("upload");
   const [rightActiveTab, setRightActiveTab] = useState<"list" | "preview">(
-    "list",
+    "list"
   );
 
   // Create Form State
@@ -204,64 +204,64 @@ const PresenterPage = () => {
   };
 
   return (
-    <div className="flex relative w-full h-[100dvh] overflow-hidden bg-white dark:bg-black">
+    <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>
       <Toaster />
       <AppSidebar />
-      <div className="flex-1 flex flex-col overflow-auto will-change-scroll scroll-container">
+      <div className='scroll-container flex flex-1 flex-col overflow-auto will-change-scroll'>
         <TopNavWithAurora />
-        <div id="main-content" className="flex-1">
-          <main className="flex-grow pt-12">
-            <div className="text-center animate-fadeInUp mb-10 px-2 md:px-4">
-              <h1 className="font-semibold tracking-tight text-2xl lg:text-4xl">
+        <div id='main-content' className='flex-1'>
+          <main className='flex-grow pt-12'>
+            <div className='animate-fadeInUp mb-10 px-2 text-center md:px-4'>
+              <h1 className='text-2xl font-semibold tracking-tight lg:text-4xl'>
                 Character
-                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent ml-1">
+                <span className='from-primary to-accent ml-1 bg-gradient-to-r bg-clip-text text-transparent'>
                   Creation
                 </span>
               </h1>
               <p
-                className="my-2 text-muted-foreground text-sm md:text-lg animate-fadeInUp"
+                className='text-muted-foreground animate-fadeInUp my-2 text-sm md:text-lg'
                 style={{ animationDelay: "0.2s" }}
               >
                 Create and manage your AI Characters
               </p>
             </div>
 
-            <div className="relative w-full border-y border-black/5 dark:border-white/10">
+            <div className='relative w-full border-y border-black/5 dark:border-white/10'>
               <GridPattern
                 width={30}
                 height={30}
-                className="absolute inset-0 z-0 opacity-50"
+                className='absolute inset-0 z-0 opacity-50'
               />
 
-              <section className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-[1fr_1.4fr] gap-8 lg:gap-16 items-start relative z-10">
+              <section className='relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-start gap-8 px-4 py-10 md:grid-cols-[1fr_1.4fr] lg:gap-16'>
                 {/* Left: Controls */}
-                <div className="bg-white/80 dark:bg-[#141415]/80 backdrop-blur-xl border border-black/5 dark:border-white/5 rounded-2xl shadow-sm overflow-hidden p-6 space-y-6">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase text-muted-foreground">
+                <div className='space-y-6 overflow-hidden rounded-2xl border border-black/5 bg-white/80 p-6 shadow-sm backdrop-blur-xl dark:border-white/5 dark:bg-[#141415]/80'>
+                  <div className='space-y-4'>
+                    <div className='space-y-2'>
+                      <label className='text-muted-foreground text-xs font-bold uppercase'>
                         Presenter Name
                       </label>
                       <input
-                        type="text"
+                        type='text'
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="e.g. Sarah J."
-                        className="w-full bg-black/5 dark:bg-white/5 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                        placeholder='e.g. Sarah J.'
+                        className='focus:ring-primary/20 w-full rounded-lg border-none bg-black/5 px-4 py-2 text-sm transition-all outline-none focus:ring-2 dark:bg-white/5'
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase text-muted-foreground">
+                    <div className='space-y-2'>
+                      <label className='text-muted-foreground text-xs font-bold uppercase'>
                         Gender
                       </label>
                       <Select value={gender} onValueChange={setGender}>
-                        <SelectTrigger className="w-full bg-black/5 dark:bg-white/5 border-none h-9 rounded-lg px-4">
-                          <SelectValue placeholder="Select Gender" />
+                        <SelectTrigger className='h-9 w-full rounded-lg border-none bg-black/5 px-4 dark:bg-white/5'>
+                          <SelectValue placeholder='Select Gender' />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="unisex">Unisex</SelectItem>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value='unisex'>Unisex</SelectItem>
+                          <SelectItem value='male'>Male</SelectItem>
+                          <SelectItem value='female'>Female</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -270,73 +270,73 @@ const PresenterPage = () => {
                   <Tabs
                     value={activeTab}
                     onValueChange={(v: any) => setActiveTab(v)}
-                    className="w-full"
+                    className='w-full'
                   >
-                    <TabsList className="grid w-full grid-cols-2 mb-4">
+                    <TabsList className='mb-4 grid w-full grid-cols-2'>
                       <TabsTrigger
-                        value="upload"
-                        className="flex items-center gap-2"
+                        value='upload'
+                        className='flex items-center gap-2'
                       >
                         <Upload size={14} /> Upload
                       </TabsTrigger>
                       <TabsTrigger
-                        value="ai"
-                        className="flex items-center gap-2"
+                        value='ai'
+                        className='flex items-center gap-2'
                       >
                         <Sparkles size={14} /> AI Generate
                       </TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value="upload" className="space-y-4">
-                      <label className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-black/10 dark:border-white/10 rounded-2xl cursor-pointer hover:border-primary/50 transition-colors bg-black/5 dark:bg-white/5">
+                    <TabsContent value='upload' className='space-y-4'>
+                      <label className='hover:border-primary/50 flex h-48 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-black/10 bg-black/5 transition-colors dark:border-white/10 dark:bg-white/5'>
                         {previewUrl ? (
                           <img
                             src={previewUrl}
-                            className="h-full w-full object-cover rounded-2xl"
-                            alt=""
+                            className='h-full w-full rounded-2xl object-cover'
+                            alt=''
                           />
                         ) : (
-                          <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                          <div className='text-muted-foreground flex flex-col items-center gap-2'>
                             <Upload size={24} />
-                            <span className="text-xs font-medium">
+                            <span className='text-xs font-medium'>
                               Click to upload image
                             </span>
                           </div>
                         )}
                         <input
-                          type="file"
+                          type='file'
                           onChange={handleFileChange}
-                          className="hidden"
-                          accept="image/*"
+                          className='hidden'
+                          accept='image/*'
                         />
                       </label>
                     </TabsContent>
 
-                    <TabsContent value="ai" className="space-y-4">
+                    <TabsContent value='ai' className='space-y-4'>
                       <ModelSelector
-                        type="image"
+                        type='image'
                         selectedModel={selectedModel}
                         onSelectModel={setSelectedModel}
                       />
-                      <div className="space-y-2">
+                      <div className='space-y-2'>
                         <PremiumInput
                           value={prompt}
                           onChange={setPrompt}
                           onSubmit={handleAIGenerate}
                           isGenerating={isGenerating}
                           placeholder="Describe the person's look, ethnicity, clothing..."
-                          minHeight="50px"
+                          minHeight='50px'
                         />
                       </div>
                       <Button
                         onClick={handleAIGenerate}
                         disabled={isGenerating}
-                        className="w-full h-fit bg-gradient-to-r from-blue-500 to-cyan-500"
+                        className='h-fit w-full bg-gradient-to-r from-blue-500 to-cyan-500'
                       >
                         {isGenerating ? (
-                          <Loader2 className="animate-spin" />
+                          <Loader2 className='animate-spin' />
                         ) : (
-                          <Sparkles className="mr-2" size={16} />
+                          <Sparkles className='mr-2' size={16} />
                         )}
                         {isGenerating ? "Generating..." : "Generate Candidate"}
                       </Button>
@@ -347,12 +347,12 @@ const PresenterPage = () => {
                     <Button
                       onClick={handleCreatePresenter}
                       disabled={isCreating}
-                      className="w-full h-fit text-md"
+                      className='text-md h-fit w-full'
                     >
                       {isCreating ? (
-                        <Loader2 className="animate-spin" />
+                        <Loader2 className='animate-spin' />
                       ) : (
-                        <SaveIcon className="mr-2" />
+                        <SaveIcon className='mr-2' />
                       )}
                       Save as Presenter
                     </Button>
@@ -360,16 +360,16 @@ const PresenterPage = () => {
                 </div>
 
                 {/* Right: List / Preview */}
-                <div className="flex flex-col h-full min-h-[500px]">
-                  <div className="flex justify-start mb-6">
-                    <div className="flex p-1 bg-black/5 dark:bg-white/5 rounded-xl">
+                <div className='flex h-full min-h-[500px] flex-col'>
+                  <div className='mb-6 flex justify-start'>
+                    <div className='flex rounded-xl bg-black/5 p-1 dark:bg-white/5'>
                       <button
                         onClick={() => setRightActiveTab("list")}
                         className={cn(
-                          "px-4 py-2 text-xs font-bold rounded-lg transition-all",
+                          "rounded-lg px-4 py-2 text-xs font-bold transition-all",
                           rightActiveTab === "list"
-                            ? "bg-white dark:bg-neutral-800 shadow"
-                            : "text-muted-foreground",
+                            ? "bg-white shadow dark:bg-neutral-800"
+                            : "text-muted-foreground"
                         )}
                       >
                         My Presenters
@@ -378,10 +378,10 @@ const PresenterPage = () => {
                         onClick={() => setRightActiveTab("preview")}
                         disabled={!generatedImgUrl && !previewUrl}
                         className={cn(
-                          "px-4 py-2 text-xs font-bold rounded-lg transition-all",
+                          "rounded-lg px-4 py-2 text-xs font-bold transition-all",
                           rightActiveTab === "preview"
-                            ? "bg-white dark:bg-neutral-800 shadow"
-                            : "text-muted-foreground",
+                            ? "bg-white shadow dark:bg-neutral-800"
+                            : "text-muted-foreground"
                         )}
                       >
                         Preview
@@ -390,88 +390,88 @@ const PresenterPage = () => {
                   </div>
 
                   {rightActiveTab === "list" ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div className='grid grid-cols-2 gap-4 sm:grid-cols-3'>
                       {loadingPresenters ? (
                         [1, 2, 3].map((i) => (
                           <div
                             key={i}
-                            className="aspect-square rounded-2xl bg-black/5 dark:bg-white/5 animate-pulse"
+                            className='aspect-square animate-pulse rounded-2xl bg-black/5 dark:bg-white/5'
                           />
                         ))
                       ) : presenters.length > 0 ? (
                         presenters.map((p) => (
-                          <div className="relative group">
+                          <div className='group relative'>
                             <button
                               // onClick={onSelect}
                               className={cn(
-                                "relative overflow-hidden rounded-lg transition-all w-full",
+                                "relative w-full overflow-hidden rounded-lg transition-all"
                                 // isSelected
                                 //   ? "ring-2 ring-neutral-900 dark:ring-neutral-100"
                                 //   : "ring-1 ring-neutral-200 dark:ring-neutral-800",
                               )}
                             >
-                              <div className="aspect-[3/4] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+                              <div className='aspect-[3/4] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800'>
                                 <img
                                   src={p.imageUrl}
                                   alt={p.name}
-                                  className="h-full w-full object-cover object-top"
+                                  className='h-full w-full object-cover object-top'
                                 />
                               </div>
-                              <div className="absolute bottom-0 left-0 right-0 p-1.5 bg-neutral-900/80 dark:bg-neutral-100/80 backdrop-blur-sm">
-                                <p className="text-sm font-medium text-white dark:text-neutral-900 text-center truncate">
+                              <div className='absolute right-0 bottom-0 left-0 bg-neutral-900/80 p-1.5 backdrop-blur-sm dark:bg-neutral-100/80'>
+                                <p className='truncate text-center text-sm font-medium text-white dark:text-neutral-900'>
                                   {p.name}
                                 </p>
                               </div>
                             </button>
 
-                            <div className="absolute top-1.5 right-1.5 flex gap-2">
+                            <div className='absolute top-1.5 right-1.5 flex gap-2'>
                               <button
                                 // onClick={() => handleDeletePresenter(p._id)}
-                                className=" w-6 h-6 rounded flex items-center justify-center transition-colors text-neutral-600 dark:text-neutral-400 hover:text-green-600 dark:hover:text-green-400 bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm opacity-0 group-hover:opacity-100"
-                                title="Download avatar"
+                                className='flex h-6 w-6 items-center justify-center rounded bg-white/90 text-neutral-600 opacity-0 backdrop-blur-sm transition-colors group-hover:opacity-100 hover:text-green-600 dark:bg-neutral-800/90 dark:text-neutral-400 dark:hover:text-green-400'
+                                title='Download avatar'
                               >
-                                <Download className="w-3 h-3" />
+                                <Download className='h-3 w-3' />
                               </button>
                               <button
                                 onClick={() => handleDeletePresenter(p._id)}
-                                className=" w-6 h-6 rounded flex items-center justify-center transition-colors text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm opacity-0 group-hover:opacity-100"
-                                title="Delete avatar"
+                                className='flex h-6 w-6 items-center justify-center rounded bg-white/90 text-neutral-600 opacity-0 backdrop-blur-sm transition-colors group-hover:opacity-100 hover:text-red-600 dark:bg-neutral-800/90 dark:text-neutral-400 dark:hover:text-red-400'
+                                title='Delete avatar'
                               >
-                                <Trash2 className="w-3 h-3" />
+                                <Trash2 className='h-3 w-3' />
                               </button>
                             </div>
                           </div>
                         ))
                       ) : (
-                        <div className="col-span-full flex flex-col items-center justify-center py-20 text-muted-foreground border-2 border-dashed rounded-3xl">
-                          <User size={48} className="mb-4 opacity-20" />
-                          <p className="text-sm font-medium">
+                        <div className='text-muted-foreground col-span-full flex flex-col items-center justify-center rounded-3xl border-2 border-dashed py-20'>
+                          <User size={48} className='mb-4 opacity-20' />
+                          <p className='text-sm font-medium'>
                             No presenters yet
                           </p>
-                          <p className="text-xs">
+                          <p className='text-xs'>
                             Create your first one on the left
                           </p>
                         </div>
                       )}
                     </div>
                   ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center">
-                      <div className="relative max-w-sm w-full aspect-square rounded-3xl overflow-hidden shadow-2xl border border-black/5 dark:border-white/10">
+                    <div className='flex flex-1 flex-col items-center justify-center'>
+                      <div className='relative aspect-square w-full max-w-sm overflow-hidden rounded-3xl border border-black/5 shadow-2xl dark:border-white/10'>
                         <img
                           src={generatedImgUrl || previewUrl || ""}
-                          className="w-full h-full object-cover"
-                          alt="Preview"
+                          className='h-full w-full object-cover'
+                          alt='Preview'
                         />
                         {isGenerating && (
-                          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+                          <div className='absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm'>
                             <Loader2
-                              className="animate-spin text-white"
+                              className='animate-spin text-white'
                               size={48}
                             />
                           </div>
                         )}
                       </div>
-                      <p className="mt-4 text-xs text-muted-foreground italic">
+                      <p className='text-muted-foreground mt-4 text-xs italic'>
                         Current Candidate Preview
                       </p>
                     </div>

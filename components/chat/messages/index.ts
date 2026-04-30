@@ -6,6 +6,6 @@ export * from "./file-upload";
 export * from "./file-preview-tooltip";
 export * from "./message-editor";
 export * from "./image-preview-dialog";
-export * from "./user-message"
+export * from "./user-message";
 export * from "./versioning-message";
 export * from "./ai-thinking-content";
