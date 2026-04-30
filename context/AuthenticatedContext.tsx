@@ -8,6 +8,12 @@ import Loading from "@/utils/Loading";
 import cookie from "js-cookie";
 import { apiResponse } from "@/utils/apiResponse";
 import { NetworkStatus } from "@/components/network/NetworkStatus";
+import {
+  identifyAndTrackAuth,
+  identifyUser,
+  resetMixpanelUser,
+  trackEvent,
+} from "@/lib/mixpanelClient";
 
 const uToken = cookie.get("gennituToken");
 
@@ -202,6 +208,9 @@ export function AuthenticatedContextProvider({
             } as User["preferences"],
           };
         });
+        trackEvent("user_preferences_updated", {
+          changed_fields: Object.keys(preferences ?? {}),
+        });
       }
     } catch (error) {
       console.error("Failed to update user preferences:", error);
@@ -213,6 +222,24 @@ export function AuthenticatedContextProvider({
     if (uToken) fetchCurrentUser();
     else setLoading(false); // No need to fetch if there's no token
   }, [isReload]);
+
+  useEffect(() => {
+    if (!user?._id) return;
+    identifyAndTrackAuth(
+      {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+        plan: user.userPlan,
+        createdAt: user.createdAt,
+        emailVerified: user.emailVerified,
+        onboardingCompleted: user.onboarding?.onboardingCompleted,
+        role: user.role,
+      },
+      "login_completed",
+      { source: "session_restore" },
+    );
+  }, [user?._id]);
 
   // Show network status only for actual network errors when user exists
   const shouldShowNetworkStatus =

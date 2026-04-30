@@ -94,6 +94,7 @@
     "jspdf": "^3.0.4",
     "konva": "^10.0.12",
     "lucide-react": "^0.544.0",
+    "mixpanel-browser": "^2.78.0",
     "motion": "^12.35.1",
     "nanoid": "^5.1.5",
     "next": "^16.0.7",

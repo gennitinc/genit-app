@@ -21,6 +21,7 @@ import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import ShinyText from "../ui/shiny-text";
+import { trackEvent } from "@/lib/mixpanelClient";
 
 interface ChatInterfaceProps {
   children?: React.ReactNode;
@@ -145,6 +146,10 @@ export function ChatInput({
     const creditsRemaining = user?.creditsRemaining ?? 0;
     if (creditsRemaining <= 10) {
       const isBasic = String(user?.userPlan) === "Basic";
+      trackEvent("low_credits_prompt_shown", {
+        credits_remaining: creditsRemaining,
+        user_plan: user?.userPlan,
+      });
       toast.error(`Low Credits`, {
         description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? "s" : ""} remaining.`,
         action: {
@@ -173,7 +178,15 @@ export function ChatInput({
 
     try {
       // Use projectId for proper server routing
+      trackEvent("generation_requested", {
+        prompt_length: inputValue.trim().length,
+        attachment_count: attachedFiles.length,
+        project_id: project._id,
+      });
       await generateMessage(inputValue, attachedFiles, project._id);
+      trackEvent("generation_request_submitted", {
+        project_id: project._id,
+      });
 
       clearInput();
 
@@ -183,6 +196,9 @@ export function ChatInput({
       }, 100);
     } catch (error) {
       console.error("Failed to send message:", error);
+      trackEvent("generation_request_failed", {
+        project_id: project?._id,
+      });
     }
   };
 

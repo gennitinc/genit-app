@@ -20,6 +20,7 @@ import { Logo } from "@/components/logo";
 import { RegexType, AuthTypes } from "@/types/Authtypes";
 import withAuth from "@/helper/hoc/withAuth";
 import { AuthMediaCarousel, loginCarouselData } from "./AuthMediaCarousel";
+import { identifyAndTrackAuth, trackEvent } from "@/lib/mixpanelClient";
 
 // import { LoginSocialGoogle, LoginSocialGithub } from "reactjs-social-login";
 
@@ -91,6 +92,7 @@ export const LoginComp = () => {
   ) => {
     event.preventDefault();
     setLoading(true);
+    trackEvent("login_attempted", { auth_method: "password" });
 
     try {
       const response = await apiResponse.post("/auth/sign-in", formData, {
@@ -115,6 +117,20 @@ export const LoginComp = () => {
         // Check verification and onboarding status, redirect accordingly
         const userData = await apiResponse.get("/user/active-user");
         const currentUser = userData.data.user;
+        identifyAndTrackAuth(
+          {
+            id: currentUser._id,
+            email: currentUser.email,
+            username: currentUser.username,
+            plan: currentUser.userPlan,
+            createdAt: currentUser.createdAt,
+            emailVerified: currentUser.emailVerified,
+            onboardingCompleted: currentUser.onboarding?.onboardingCompleted,
+            role: currentUser.role,
+          },
+          "login_completed",
+          { auth_method: "password" },
+        );
 
         if (!currentUser.emailVerified) {
           // Not verified - redirect to verification
@@ -132,6 +148,10 @@ export const LoginComp = () => {
     } catch (error: any) {
       setLoading(false);
       console.log(error?.message);
+      trackEvent("login_failed", {
+        auth_method: "password",
+        reason: error?.response?.data?.message || error?.message,
+      });
 
       toast.error(error?.response?.data.message);
     } finally {
@@ -141,6 +161,7 @@ export const LoginComp = () => {
 
   const handleGoogleSignIn = async (provider: string, data: any) => {
     setLoading2(true);
+    trackEvent("login_attempted", { auth_method: "google" });
 
     const Formdata = {
       email: data.email,
@@ -182,6 +203,20 @@ export const LoginComp = () => {
           // Check verification and onboarding status, redirect accordingly
           const userData = await apiResponse.get("/user/active-user");
           const currentUser = userData.data.user;
+          identifyAndTrackAuth(
+            {
+              id: currentUser._id,
+              email: currentUser.email,
+              username: currentUser.username,
+              plan: currentUser.userPlan,
+              createdAt: currentUser.createdAt,
+              emailVerified: currentUser.emailVerified,
+              onboardingCompleted: currentUser.onboarding?.onboardingCompleted,
+              role: currentUser.role,
+            },
+            "login_completed",
+            { auth_method: "google" },
+          );
 
           if (!currentUser.emailVerified) {
             // Not verified - redirect to verification
@@ -199,6 +234,10 @@ export const LoginComp = () => {
       } catch (error: any) {
         setLoading2(false);
         console.log(error?.message);
+        trackEvent("login_failed", {
+          auth_method: "google",
+          reason: error?.response?.data?.message || error?.message,
+        });
 
         toast.error(error?.response?.data.message);
       } finally {

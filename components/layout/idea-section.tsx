@@ -77,6 +77,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
+import { trackAppOpened, trackFeatureUsed, trackEvent } from "@/lib/mixpanelClient";
 
 interface TypewriterEffectProps {
   words: string[];
@@ -280,6 +281,11 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
 
       <Link
         href={item.href || "#"}
+        onClick={() => {
+          trackAppOpened(item.id, item.label, "idea_section_quick_apps", {
+            href: item.href,
+          });
+        }}
         className="flex flex-col items-center relative z-20"
       >
         <div
@@ -453,6 +459,12 @@ export function IdeaSection() {
 
   // Effect to resize textarea on inputValue change
   useEffect(() => {
+    trackEvent("idea_section_viewed", {
+      available_apps: APP_SECTIONS.reduce((acc, section) => acc + section.apps.length, 0),
+    });
+  }, []);
+
+  useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height =
@@ -616,6 +628,7 @@ export function IdeaSection() {
 
       // Check if user is authenticated
       if (!user) {
+        trackFeatureUsed("idea_submit_requires_auth", { source: "idea_section" });
         router.push("/signin");
         return;
       }
@@ -624,6 +637,10 @@ export function IdeaSection() {
       const creditsRemaining = user?.creditsRemaining ?? 0;
       if (creditsRemaining <= 10) {
         const isBasic = String(user?.userPlan) === "Basic";
+        trackFeatureUsed("idea_low_credits_blocked_submit", {
+          credits_remaining: creditsRemaining,
+          user_plan: user?.userPlan,
+        });
         toast.error(`Low Credits`, {
           description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? "s" : ""} remaining.`,
           action: {
@@ -638,6 +655,9 @@ export function IdeaSection() {
 
       const validationError = validateInput(inputValue, attachedFiles);
       if (validationError) {
+        trackFeatureUsed("idea_submit_validation_failed", {
+          reason: validationError,
+        });
         setInputError(validationError);
         return;
       }
@@ -647,6 +667,9 @@ export function IdeaSection() {
         (item) => item.id === selectedDesignTypeId,
       );
       if (selectedItem && (selectedItem as any).comingSoon) {
+        trackFeatureUsed("idea_coming_soon_feature_clicked", {
+          design_type: selectedDesignTypeId,
+        });
         toast(`${selectedItem.label} is coming soon.`);
         return;
       }
@@ -655,6 +678,9 @@ export function IdeaSection() {
 
       // Handle presentation projects differently
       if (selectedDesignTypeId === "presentation") {
+        trackFeatureUsed("idea_presentation_outline_requested", {
+          prompt_length: inputValue.trim().length,
+        });
         setIsSubmitting(true);
         setInputError(null);
         await generatePresentationOutline(inputValue);
@@ -682,6 +708,13 @@ export function IdeaSection() {
         );
 
         console.log("Project creation result:", res);
+        trackEvent("idea_project_created", {
+          design_type: selectedDesignTypeId,
+          orientation: selectedOrientation,
+          has_custom_size: Boolean(customSize.width && customSize.height),
+          prompt_length: inputValue.trim().length,
+          attached_files_count: attachedFiles.length,
+        });
 
         clearInput();
         setSelectedDesignTypeId("flier");
@@ -695,6 +728,10 @@ export function IdeaSection() {
         }
       } catch (error: any) {
         console.error("Failed to create project:", error);
+        trackEvent("idea_project_creation_failed", {
+          design_type: selectedDesignTypeId,
+          reason: error?.message || "unknown",
+        });
         setInputError(
           error.message || "Failed to create project. Please try again.",
         );
@@ -1254,6 +1291,9 @@ export function IdeaSection() {
                           onClick={() => {
                             setIsSettingsOpen(!isSettingsOpen);
                             setShowOrientationSelection(true);
+                            trackFeatureUsed("idea_advanced_settings_opened", {
+                              source: "input_toolbar",
+                            });
                           }}
                         >
                           <Settings className="shrink-0 size-4" />
@@ -1270,6 +1310,9 @@ export function IdeaSection() {
                           onClick={() => {
                             setIsBrandSettingsOpen(!isBrandSettingsOpen);
                             setIsSettingsOpen(false);
+                            trackFeatureUsed("idea_brand_settings_toggled", {
+                              is_opening: !isBrandSettingsOpen,
+                            });
                           }}
                         >
                           <Palette className="shrink-0 size-4" />
@@ -1386,7 +1429,11 @@ export function IdeaSection() {
                                 type="button"
                                 onClick={() => {
                                   if (isComingSoon) return;
+                                  trackFeatureUsed("idea_design_type_selected", {
+                                    design_type: item.id,
+                                  });
                                   if (item.id == "video") {
+                                    trackAppOpened("video-generation", "AI Video", "idea_settings");
                                     router.push(
                                       "/inspire/create?mode=ai-video-gen",
                                     );
@@ -1483,6 +1530,10 @@ export function IdeaSection() {
                                     type="button"
                                     onClick={() => {
                                       setSelectedOrientation(option.id);
+                                    trackFeatureUsed("idea_orientation_selected", {
+                                      orientation: option.id,
+                                      design_type: selectedDesignTypeId,
+                                    });
                                       setIsSettingsOpen(false);
                                       setShowOrientationSelection(false);
                                     }}
@@ -1683,6 +1734,14 @@ export function IdeaSection() {
                       (app) => (
                         <Link key={app.id} href={app.href} className="shrink-0">
                           <div
+                            onClick={() =>
+                              trackAppOpened(app.id, app.title, "idea_feature_agents", {
+                                href: app.href,
+                                app_type: app.type,
+                              })
+                            }
+                          >
+                          <div
                             className="focus-visible:ring-f-primary/30 group flex flex-col items-center rounded-xl bg-transparent p-0 text-center focus-visible:outline-none focus-visible:ring-2 justify-center gap-2"
                             style={{ width: 128 }}
                           >
@@ -1727,6 +1786,7 @@ export function IdeaSection() {
                                 {app.title}
                               </span>
                             </span>
+                          </div>
                           </div>
                         </Link>
                       ),

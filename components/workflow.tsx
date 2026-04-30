@@ -71,6 +71,7 @@ import { TextNode } from "@/nodes/text-node";
 import { FloatingSidebar } from "@/floating-sidebar";
 import { PromptNode } from "@/nodes/prompt-node";
 import { LoadingFileLoader } from "@/utils/Loading";
+import { trackFeatureUsed, trackEvent } from "@/lib/mixpanelClient";
 
 // Import edge types
 const nodeTypes: NodeTypes = {
@@ -216,6 +217,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   const addNode = useCallback(
     (node: Node) => {
       console.log("🎯 [GennittWorkflow] Adding node:", node);
+      trackFeatureUsed("workflow_node_added", {
+        node_type: node.type,
+      });
       setNodes((prevNodes) => {
         const newNodes = [...prevNodes, node];
         // Use a functional update to ensure we have the absolute latest state for history
@@ -242,6 +246,10 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     (connection: Connection) => {
       if (!connection.source || !connection.target) return;
       console.log("🔗 [GennittWorkflow] Connection attempt:", connection);
+      trackFeatureUsed("workflow_node_connection_attempted", {
+        source: connection.source,
+        target: connection.target,
+      });
 
       const edgeId = `edge-${connection.source}-${connection.target}-${connection.sourceHandle || "default"}-${connection.targetHandle || "default"}`;
 
@@ -799,6 +807,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   // Undo function
   const undo = useCallback(() => {
     if (historyIndex > 0 && history.length > 0) {
+      trackFeatureUsed("workflow_undo_used");
       const previousState = history[historyIndex - 1];
       if (previousState && previousState.nodes && previousState.edges) {
         setIsUndoRedoAction(true);
@@ -818,6 +827,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   // Redo function
   const redo = useCallback(() => {
     if (historyIndex < history.length - 1 && history.length > 0) {
+      trackFeatureUsed("workflow_redo_used");
       const nextState = history[historyIndex + 1];
       if (nextState && nextState.nodes && nextState.edges) {
         setIsUndoRedoAction(true);
@@ -1070,6 +1080,9 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   const handleCreateWorkflow = async () => {
     if (!projectName.trim()) return;
     setIsCreating(true);
+    trackEvent("workflow_create_attempted", {
+      has_name: Boolean(projectName.trim()),
+    });
     try {
       const res = await apiResponse.post(
         "/apps/workflow",
@@ -1078,11 +1091,16 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       );
       if (res.data.success) {
         const newProject = res.data.data;
+        trackEvent("workflow_create_succeeded", {
+          workflow_id: newProject._id,
+          workflow_slug: newProject.slug,
+        });
         setProjectId(newProject._id);
         router.push(`/agents/workflow/${newProject.slug}`);
       }
     } catch (error) {
       console.error("Failed to create workflow:", error);
+      trackEvent("workflow_create_failed");
     } finally {
       setIsCreating(false);
     }

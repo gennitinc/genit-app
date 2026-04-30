@@ -29,6 +29,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { trackAppOpened, trackFeatureUsed } from "@/lib/mixpanelClient";
 
 
 
@@ -171,7 +172,15 @@ export function NavMain() {
                       ? "text-zinc-300 dark:text-zinc-300 hover:bg-zinc-800 hover:text-white dark:hover:bg-zinc-800 dark:hover:text-white"
                       : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-neutral-700 dark:hover:text-neutral-300",
                 )}
-                onClick={handleLinkClick}
+                onClick={() => {
+                  handleLinkClick();
+                  trackAppOpened(
+                    item.href.replace(/\//g, "-") || "home",
+                    item.title,
+                    "sidebar_nav",
+                    { href: item.href },
+                  );
+                }}
               >
                 <Link href={item.href} className="flex items-center w-full">
                   <item.icon
@@ -231,7 +240,13 @@ export function NavMain() {
                       ? "text-zinc-300 dark:text-zinc-300 hover:bg-zinc-800 hover:text-white dark:hover:bg-zinc-800 dark:hover:text-white"
                       : "text-gray-700 dark:text-gray-700 hover:bg-gray-100 hover:text-black dark:hover:bg-neutral-700 dark:hover:text-neutral-300",
                 )}
-                onClick={handleLinkClick}
+                onClick={() => {
+                  handleLinkClick();
+                  trackFeatureUsed("secondary_nav_clicked", {
+                    nav_item: item.title,
+                    href: item.href,
+                  });
+                }}
               >
                 <Link
                   href={item.href}

@@ -17,6 +17,7 @@ import { Toaster } from "sonner";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
+import { trackAppOpened, trackFeatureUsed, trackEvent } from "@/lib/mixpanelClient";
 
 const TryNowButton = ({ onClick }: { onClick?: () => void }) => (
   <button
@@ -67,6 +68,7 @@ const TryNowButton = ({ onClick }: { onClick?: () => void }) => (
 // Handled by apps-config.ts
 
 const AppCard = ({
+  id,
   href,
   title,
   description,
@@ -85,6 +87,10 @@ const AppCard = ({
       e.stopPropagation();
     }
 
+    trackAppOpened(id, title, "agents_directory", {
+      app_type: type,
+      href,
+    });
     router.push(href);
   };
 
@@ -185,6 +191,13 @@ const Apps = () => {
   const [activeType, setActiveType] = useState("All Types");
   const pathname = usePathname();
 
+  React.useEffect(() => {
+    trackEvent("agents_directory_viewed", {
+      total_sections: APP_SECTIONS.length,
+      total_apps: APP_SECTIONS.reduce((acc, section) => acc + section.apps.length, 0),
+    });
+  }, []);
+
   return (
 
     <div className="flex relative w-full h-[100dvh] overflow-hidden bg-white dark:bg-black">
@@ -218,7 +231,12 @@ const Apps = () => {
                         return (
                           <button
                             key={category.name}
-                            onClick={() => setActiveCategory(category.name)}
+                            onClick={() => {
+                              setActiveCategory(category.name);
+                              trackFeatureUsed("agents_category_filter_changed", {
+                                category: category.name,
+                              });
+                            }}
                             className={cn(
                               "text-muted-foreground text-sm font-medium px-4 py-2 rounded-md transition-all duration-200 hover:text-foreground hover:bg-muted",
                               isActive &&
@@ -268,7 +286,12 @@ const Apps = () => {
                           {mediaTypes.map((mType) => (
                             <DropdownMenuItem
                               key={mType}
-                              onClick={() => setActiveType(mType)}
+                              onClick={() => {
+                                setActiveType(mType);
+                                trackFeatureUsed("agents_type_filter_changed", {
+                                  media_type: mType,
+                                });
+                              }}
                               className={cn(
                                 "cursor-pointer",
                                 activeType === mType &&
@@ -315,9 +338,12 @@ const Apps = () => {
                                 </div>
                                 <button
                                   className="flex items-center gap-1 text-sm-semi transition-colors shrink-0 text-white p-[10px]"
-                                  onClick={() =>
-                                    setActiveCategory(section.title)
-                                  }
+                                  onClick={() => {
+                                    setActiveCategory(section.title);
+                                    trackFeatureUsed("agents_section_see_all_clicked", {
+                                      section_title: section.title,
+                                    });
+                                  }}
                                 >
                                   <span>See all</span>
                                   <svg

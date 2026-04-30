@@ -18,6 +18,7 @@ import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register"
 import { PWAInstaller } from "@/components/pwa/pwa-installer";
 import Script from "next/script";
 import Loading from "@/utils/Loading";
+import MixpanelProvider from "@/provider/MixpanelProver";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -582,6 +583,7 @@ export default function RootLayout({
         <meta name="geo.placename" content="United States" />
         <meta name="ICBM" content="37.7749, -122.4194" />
       </head>
+
       <body
         suppressHydrationWarning
         className={`${inter.className} custom-scrollbar`}
@@ -604,7 +606,9 @@ export default function RootLayout({
                       </div>
                     }
                   >
-                    <Wrapper>{children}</Wrapper>
+                    <Wrapper>
+                      <MixpanelProvider>{children}</MixpanelProvider>
+                    </Wrapper>
                   </Suspense>
                 </ProjectProvider>
               </ThemeProvider>

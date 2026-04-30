@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, Crown, Loader2 } from "lucide-react";
 import { LandingFooter } from "@/components/landing/landing-footer";
@@ -8,6 +8,10 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { apiResponse } from "@/utils/apiResponse";
 import { cn } from "@/lib/utils";
 import { Spotlight } from "@/components/ui/spotlight-new";
+import {
+  trackEvent,
+  trackExperimentExposure,
+} from "@/lib/mixpanelClient";
 
 const plansDev = [
   {
@@ -243,9 +247,30 @@ export default function PricingComponent() {
   const [isYearly, setIsYearly] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
+  useEffect(() => {
+    trackEvent("pricing_page_viewed", {
+      plans_count: plans.length,
+    });
+    trackExperimentExposure("pricing_billing_cycle_toggle", "default_monthly");
+  }, []);
+
   const handleCheckout = async (plan: any) => {
+    const billing = isYearly ? "yearly" : "monthly";
+    trackEvent("pricing_plan_selected", {
+      plan_id: plan.id,
+      plan_name: plan.name,
+      billing_cycle: billing,
+      plan_price: isYearly ? plan.yearlyPrice : plan.monthlyPrice,
+    });
+
     if (plan.monthlyPrice === 0) {
       // Handle free plan - redirect to signup or dashboard
+      trackEvent("checkout_intent", {
+        plan_id: plan.id,
+        plan_name: plan.name,
+        billing_cycle: billing,
+        action: "redirect_signup",
+      });
       window.location.href = "/signup";
       return;
     }
@@ -253,8 +278,13 @@ export default function PricingComponent() {
     setLoadingPlan(plan.name);
 
     try {
-      const billing = isYearly ? "yearly" : "monthly";
       const productId = plan.productIds[billing];
+      trackEvent("checkout_started", {
+        plan_id: plan.id,
+        plan_name: plan.name,
+        billing_cycle: billing,
+        product_id: productId,
+      });
 
       const response = await apiResponse.post(
         "/payment/sub/create",
@@ -268,12 +298,29 @@ export default function PricingComponent() {
 
       if (response.data && response.data.checkoutUrl) {
         // Redirect to Polar checkout
+        trackEvent("checkout_redirected", {
+          plan_id: plan.id,
+          plan_name: plan.name,
+          billing_cycle: billing,
+        });
         window.location.href = response.data.checkoutUrl;
       } else {
         console.error("Checkout failed - no checkout URL received");
+        trackEvent("checkout_failed", {
+          plan_id: plan.id,
+          plan_name: plan.name,
+          billing_cycle: billing,
+          reason: "missing_checkout_url",
+        });
       }
     } catch (error) {
       console.error("Error initiating checkout:", error);
+      trackEvent("checkout_failed", {
+        plan_id: plan.id,
+        plan_name: plan.name,
+        billing_cycle: billing,
+        reason: "api_error",
+      });
     } finally {
       setLoadingPlan(null);
     }
@@ -352,7 +399,17 @@ export default function PricingComponent() {
                 id="pricing-switch"
                 className="peer sr-only"
                 checked={isYearly}
-                onChange={(e) => setIsYearly(e.target.checked)}
+                onChange={(e) => {
+                  const nextValue = e.target.checked;
+                  setIsYearly(nextValue);
+                  trackEvent("pricing_billing_toggled", {
+                    billing_cycle: nextValue ? "yearly" : "monthly",
+                  });
+                  trackExperimentExposure(
+                    "pricing_billing_cycle_toggle",
+                    nextValue ? "yearly" : "monthly",
+                  );
+                }}
               />
               <span className="absolute inset-0 bg-gray-200 rounded-full transition-colors duration-200 ease-in-out peer-checked:bg-blue-600 dark:bg-neutral-700 dark:peer-checked:bg-blue-500 peer-disabled:opacity-50 peer-disabled:pointer-events-none" />
               <span className="absolute top-1/2 start-0.5 -translate-y-1/2 size-5 bg-white rounded-full shadow-xs transition-transform duration-200 ease-in-out peer-checked:translate-x-full dark:bg-neutral-400 dark:peer-checked:bg-white" />
@@ -577,7 +634,12 @@ export default function PricingComponent() {
                   <button
                     onClick={() =>
                       plan.id === "enterprise"
-                        ? (window.location.href = "mailto:sales@gennit.com")
+                        ? (() => {
+                            trackEvent("enterprise_contact_intent", {
+                              source: "pricing_page",
+                            });
+                            window.location.href = "mailto:sales@gennit.com";
+                          })()
                         : handleCheckout(plan)
                     }
                     disabled={loadingPlan === plan.name}

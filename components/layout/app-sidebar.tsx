@@ -36,6 +36,7 @@ import { useUrlState } from "@/hooks/use-url-state";
 import Link from "next/link";
 import { usePathname, useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { trackEvent } from "@/lib/mixpanelClient";
 
 export function AppSidebar({
   className,
@@ -180,8 +181,16 @@ export function AppSidebar({
                   type="button"
                   onClick={() => {
                     if (user?.userPlan === "Basic") {
+                      trackEvent("upgrade_cta_clicked", {
+                        source: "sidebar_card",
+                        destination: "/pricing",
+                      });
                       router.push("/pricing");
                     } else {
+                      trackEvent("buy_credits_cta_clicked", {
+                        source: "sidebar_card",
+                        destination: "/user/settings?tab=billing",
+                      });
                       router.push("/user/settings?tab=billing");
                     }
                   }}
@@ -201,8 +210,16 @@ export function AppSidebar({
               className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center shadow-lg hover:bg-cyan-500/90 transition-colors cursor-pointer"
               onClick={() => {
                 if (user?.userPlan === "Basic") {
+                  trackEvent("upgrade_cta_clicked", {
+                    source: "sidebar_collapsed",
+                    destination: "/pricing",
+                  });
                   router.push("/pricing");
                 } else {
+                  trackEvent("buy_credits_cta_clicked", {
+                    source: "sidebar_collapsed",
+                    destination: "/user/settings?tab=billing",
+                  });
                   router.push("/user/settings?tab=billing");
                 }
               }}

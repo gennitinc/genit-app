@@ -49,6 +49,7 @@ import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { GridPattern } from "@/components/ui/grid-pattern";
+import { trackFeatureUsed, trackEvent } from "@/lib/mixpanelClient";
 import {
   ASPECT_RATIOS,
   AspectRatioCard,
@@ -118,6 +119,7 @@ function ImageGenerationPage() {
   const updateContentTab = useCallback(
     (tab: "preview" | "history" | "community" | "templates" | "tutorial") => {
       setActiveContentTab(tab);
+      trackFeatureUsed("image_gen_tab_switched", { tab });
       const urlParams = new URLSearchParams(searchParams.toString());
       urlParams.set("tab", tab);
       if (projectId) urlParams.set("projectId", projectId);
@@ -228,6 +230,14 @@ function ImageGenerationPage() {
 
     setIsGenerating(true);
     updateContentTab("preview");
+    trackEvent("image_generation_started", {
+      model_id: selectedImageModel?._id,
+      style: selectedImageStyle,
+      image_count: imageCount,
+      aspect_ratio: selectedAspectRatio,
+      resolution: selectedResolution,
+      has_reference_images: promptImages.length > 0,
+    });
 
     try {
       const files: File[] = [...promptImages];
@@ -264,11 +274,19 @@ function ImageGenerationPage() {
         setGeneratedImages((prev) => [...newImages, ...prev]);
         setSelectedImageIndex(0);
         toast(`Successfully generated ${newImages.length} image(s)`);
+        trackEvent("image_generation_succeeded", {
+          generated_count: newImages.length,
+          model_id: selectedImageModel?._id,
+        });
       } else {
         throw new Error(response.message || "Failed to generate image");
       }
     } catch (error: any) {
       console.error("Generation error:", error);
+      trackEvent("image_generation_failed", {
+        reason: error?.message || "unknown",
+        model_id: selectedImageModel?._id,
+      });
       const creditsRemaining = user?.creditsRemaining ?? 0;
       if (creditsRemaining <= 10) {
         const isBasic = String(user?.userPlan) === "Basic";
@@ -414,7 +432,13 @@ function ImageGenerationPage() {
                   <ModelSelector
                     type="image"
                     selectedModel={selectedImageModel}
-                    onSelectModel={setSelectedImageModel}
+                    onSelectModel={(model) => {
+                      setSelectedImageModel(model);
+                      trackFeatureUsed("image_model_selected", {
+                        model_id: model?._id,
+                        model_name: model?.name,
+                      });
+                    }}
                   />
 
                   <div className="space-y-2">

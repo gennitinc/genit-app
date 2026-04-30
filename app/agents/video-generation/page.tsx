@@ -72,6 +72,7 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { PremiumInput } from "@/components/ui/premium-input";
+import { trackFeatureUsed, trackEvent } from "@/lib/mixpanelClient";
 
 export type { Presenter, Voice, Model } from "@/types/inspire";
 
@@ -277,6 +278,10 @@ function VideoGenerationPage() {
   const updateContentTab = useCallback(
     (tab: any) => {
       setActiveContentTab(tab);
+      trackFeatureUsed("video_gen_tab_switched", {
+        tab,
+        generation_mode: generationMode,
+      });
       const urlParams = new URLSearchParams(searchParams.toString());
       urlParams.set("tab", tab);
       urlParams.set(
@@ -575,6 +580,12 @@ function VideoGenerationPage() {
       }
       setIsGenerating(true);
       updateContentTab("preview");
+      trackEvent("inspire_image_generation_started", {
+        model_id: selectedImageModel?._id,
+        style: selectedImageStyle,
+        image_count: imageCount,
+        aspect_ratio: selectedAspectRatio,
+      });
       try {
         const response = await imageGenApi.generate(
           {
@@ -603,11 +614,19 @@ function VideoGenerationPage() {
           setGeneratedImages((prev) => [...newImages, ...prev]);
           setSelectedImageIndex(0);
           toast(`Generated ${newImages.length} image(s)`);
+          trackEvent("inspire_image_generation_succeeded", {
+            generated_count: newImages.length,
+            model_id: selectedImageModel?._id,
+          });
         } else {
           toast(response.message || "Failed to generate image");
         }
       } catch (error: any) {
         console.error(error);
+        trackEvent("inspire_image_generation_failed", {
+          reason: error?.message || "unknown",
+          model_id: selectedImageModel?._id,
+        });
       } finally {
         setIsGenerating(false);
       }
@@ -622,6 +641,15 @@ function VideoGenerationPage() {
     setIsGenerating(true);
     setGenerationProgress(0);
     updateContentTab("preview");
+    trackEvent("video_generation_started", {
+      model_id: selectedVideoModel?._id,
+      duration,
+      aspect_ratio: selectedAspectRatio,
+      has_start_frame: Boolean(startFrame || startFramePreview),
+      has_end_frame: Boolean(endFrame || endFramePreview),
+      has_reference_video: Boolean(referenceVideo || referenceVideoPreview),
+      reference_images_count: promptImages.length,
+    });
 
     try {
       const videoFiles: any = {};
@@ -670,11 +698,19 @@ function VideoGenerationPage() {
         setSelectedVideoIndex(0);
         setGenerationProgress(100);
         toast(`Successfully generated ${newVideos.length} video(s)`);
+        trackEvent("video_generation_succeeded", {
+          generated_count: newVideos.length,
+          model_id: selectedVideoModel?._id,
+        });
       } else {
         toast(response.message);
       }
     } catch (error: any) {
       console.error(error);
+      trackEvent("video_generation_failed", {
+        reason: error?.message || "unknown",
+        model_id: selectedVideoModel?._id,
+      });
       const creditsRemaining = user?.creditsRemaining ?? 0;
       if (creditsRemaining <= 10) {
         const isBasic = String(user?.userPlan) === "Basic";
@@ -730,6 +766,10 @@ function VideoGenerationPage() {
                       type="button"
                       onClick={() => {
                         setGenerationMode("video");
+                        trackFeatureUsed("generation_mode_switched", {
+                          mode: "video",
+                          source: "video_page_toggle",
+                        });
                         const params = new URLSearchParams(
                           searchParams.toString(),
                         );
@@ -752,6 +792,10 @@ function VideoGenerationPage() {
                       type="button"
                       onClick={() => {
                         setGenerationMode("image");
+                        trackFeatureUsed("generation_mode_switched", {
+                          mode: "image",
+                          source: "video_page_toggle",
+                        });
                         const params = new URLSearchParams(
                           searchParams.toString(),
                         );
@@ -921,11 +965,21 @@ function VideoGenerationPage() {
                           ? selectedImageModel
                           : selectedVideoModel
                       }
-                      onSelectModel={
-                        generationMode === "image"
-                          ? setSelectedImageModel
-                          : setSelectedVideoModel
-                      }
+                      onSelectModel={(model) => {
+                        if (generationMode === "image") {
+                          setSelectedImageModel(model);
+                          trackFeatureUsed("inspire_image_model_selected", {
+                            model_id: model?._id,
+                            model_name: model?.name,
+                          });
+                          return;
+                        }
+                        setSelectedVideoModel(model);
+                        trackFeatureUsed("video_model_selected", {
+                          model_id: model?._id,
+                          model_name: model?.name,
+                        });
+                      }}
                     />
 
                     {generationMode === "video" && (

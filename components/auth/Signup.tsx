@@ -20,6 +20,7 @@ import { Logo } from "@/components/logo";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
 import withAuth from "@/helper/hoc/withAuth";
 import { AuthMediaCarousel, signupCarouselData } from "./AuthMediaCarousel";
+import { identifyAndTrackAuth, trackEvent } from "@/lib/mixpanelClient";
 
 const LoginSocialGoogle = dynamic(
   () => import("reactjs-social-login").then((mod) => mod.LoginSocialGoogle),
@@ -152,6 +153,7 @@ export const SignupComp = () => {
     setBackgroundColor(getRandomColor());
 
     setLoading(true);
+    trackEvent("signup_attempted", { auth_method: "password" });
     try {
       // Add referral code if present in URL
       const referralCode = getReferralCode();
@@ -184,6 +186,20 @@ export const SignupComp = () => {
         // Check verification and onboarding status, redirect accordingly
         const userData = await apiResponse.get("/user/active-user");
         const currentUser = userData.data.user;
+        identifyAndTrackAuth(
+          {
+            id: currentUser._id,
+            email: currentUser.email,
+            username: currentUser.username,
+            plan: currentUser.userPlan,
+            createdAt: currentUser.createdAt,
+            emailVerified: currentUser.emailVerified,
+            onboardingCompleted: currentUser.onboarding?.onboardingCompleted,
+            role: currentUser.role,
+          },
+          "signup_completed",
+          { auth_method: "password" },
+        );
 
         if (!currentUser.emailVerified) {
           // Not verified - redirect to verification
@@ -201,6 +217,10 @@ export const SignupComp = () => {
     } catch (error: any) {
       setLoading(false);
       console.log(error);
+      trackEvent("signup_failed", {
+        auth_method: "password",
+        reason: error?.response?.data?.message || error?.message,
+      });
 
       toast.error(error?.response?.data.message);
     } finally {
@@ -210,6 +230,7 @@ export const SignupComp = () => {
 
   const handleGoogleSignUp = async (provider: string, data: any) => {
     console.log("data", data);
+    trackEvent("signup_attempted", { auth_method: "google" });
 
     const referralCode = getReferralCode();
     const Formdata = {
@@ -246,6 +267,20 @@ export const SignupComp = () => {
           // Check verification and onboarding status, redirect accordingly
           const userData = await apiResponse.get("/user/active-user");
           const currentUser = userData.data.user;
+          identifyAndTrackAuth(
+            {
+              id: currentUser._id,
+              email: currentUser.email,
+              username: currentUser.username,
+              plan: currentUser.userPlan,
+              createdAt: currentUser.createdAt,
+              emailVerified: currentUser.emailVerified,
+              onboardingCompleted: currentUser.onboarding?.onboardingCompleted,
+              role: currentUser.role,
+            },
+            "signup_completed",
+            { auth_method: "google" },
+          );
 
           if (!currentUser.emailVerified) {
             // Not verified - redirect to verification
@@ -263,6 +298,10 @@ export const SignupComp = () => {
       } catch (error: any) {
         setLoading2(false);
         console.log(error);
+        trackEvent("signup_failed", {
+          auth_method: "google",
+          reason: error?.response?.data?.message || error?.message,
+        });
 
         toast.error(error?.response?.data.message);
       } finally {
