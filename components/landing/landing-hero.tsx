@@ -489,7 +489,7 @@ const LandingHero = () => {
   return (
     <section className='relative w-screen overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
       <div className='relative flex w-full flex-col items-center justify-center'>
-        <svg
+        {/* <svg
           width={960}
           height={960}
           viewBox='0 0 960 960'
@@ -1344,7 +1344,7 @@ const LandingHero = () => {
               <rect width={960} height={960} fill='white' />
             </clipPath>
           </defs>
-        </svg>
+        </svg> */}
 
         <IdeaSection />
       </div>
