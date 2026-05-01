@@ -1023,6 +1023,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             setIsTyping(false);
           }
 
+          if (projectData.imageModel) {
+            setImageModel(projectData.imageModel);
+          }
+
           if (projectData.metadata?.finalizedSelections) {
             const selections = projectData.metadata.finalizedSelections;
             isHydratingRef.current = true;

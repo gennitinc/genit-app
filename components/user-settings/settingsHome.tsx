@@ -275,7 +275,7 @@ const SettingsHome = () => {
                         placeholder='Confirm new password'
                       />
                     </div>
-                    <div className='flex gap-2'>
+                    <div className='flex flex-col space-y-2 lg:flex-row gap-2'>
                       <Button>
                         <Save className='mr-2 h-4 w-4' />
                         Update Password

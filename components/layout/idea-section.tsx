@@ -720,7 +720,6 @@ export function IdeaSection() {
             finalizedSelections: {
               selectedColorScales,
               primaryFont,
-              model: selectedModel,
             },
           }
         );
