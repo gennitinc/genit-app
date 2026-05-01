@@ -1347,7 +1347,7 @@ export function IdeaSection() {
                         </div>
 
                         <button
-                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground hover:bg-primary/5 relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5'
+                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground hover:bg-primary/5 relative box-border hidden lg:inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5'
                           type='button'
                           aria-label='Settings'
                           onClick={() => {
