@@ -2,7 +2,7 @@
 import { SparklesCore } from "@/components/ui/sparkles";
 import { cn } from "@/lib/utils";
 import { IconDotsVertical } from "@tabler/icons-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 interface CompareProps {

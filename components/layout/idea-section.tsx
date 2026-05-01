@@ -1,8 +1,8 @@
 "use client";
 
 import { AIThinkingContent } from "../chat/messages";
-import { BrandIndicator } from "../common/brand-indicator";
 import { ColorManagement } from "../chat/messages/color-management";
+import { BrandIndicator } from "../common/brand-indicator";
 import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
 import { HomeInfoGrid } from "../common/homeInfoGrid";
 import HomeGrid from "../common/templateGrid";
@@ -45,6 +45,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
   Camera,
+  CheckCircle2,
   FileText,
   Grid2X2Plus,
   Image,
@@ -76,7 +77,6 @@ import {
   XIcon,
   Youtube,
   Zap,
-  CheckCircle2,
 } from "lucide-react";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -708,8 +708,14 @@ export function IdeaSection() {
           attachedFiles as any,
           undefined,
           selectedDesignTypeId || undefined,
-          isAuto || selectedOrientation === "auto" ? undefined : (selectedOrientation || undefined),
-          isAuto || selectedOrientation === "auto" ? undefined : (customSize.width && customSize.height ? customSize : undefined),
+          isAuto || selectedOrientation === "auto"
+            ? undefined
+            : selectedOrientation || undefined,
+          isAuto || selectedOrientation === "auto"
+            ? undefined
+            : customSize.width && customSize.height
+              ? customSize
+              : undefined,
           {
             finalizedSelections: {
               selectedColorScales,
@@ -1172,28 +1178,28 @@ export function IdeaSection() {
                   <div className='mx-4 mt-3 mb-2 flex items-center justify-between text-sm'>
                     {!isGenerating && (
                       <div className='flex w-full items-center justify-between gap-1'>
-                         <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
-                           <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
-                           {user ? (
-                             <span className='text-muted-foreground text-xs'>
-                               {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
-                               Credits left
-                             </span>
-                           ) : (
-                             <span className='text-muted-foreground text-xs'>
-                               Get a 50 free credit
-                             </span>
-                           )}
-                         </div>
+                        <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
+                          <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
+                          {user ? (
+                            <span className='text-muted-foreground text-xs'>
+                              {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
+                              Credits left
+                            </span>
+                          ) : (
+                            <span className='text-muted-foreground text-xs'>
+                              Get a 50 free credit
+                            </span>
+                          )}
+                        </div>
 
-                         <div className="flex items-center gap-3">
-                           <BrandIndicator
-                             onClick={() => {
-                               setIsBrandSettingsOpen(!isBrandSettingsOpen);
-                               setIsSettingsOpen(false);
-                             }}
-                           />
-                         </div>
+                        <div className='flex items-center gap-3'>
+                          <BrandIndicator
+                            onClick={() => {
+                              setIsBrandSettingsOpen(!isBrandSettingsOpen);
+                              setIsSettingsOpen(false);
+                            }}
+                          />
+                        </div>
 
                         {user && (user?.creditsRemaining ?? 0) === 0 && (
                           <div className='text-xs font-medium'>
@@ -1316,20 +1322,14 @@ export function IdeaSection() {
 
                       <div className='ml-auto flex items-center gap-1.5'>
                         {brandSaveStatus !== "idle" && (
-                          <div className='flex items-center gap-1.5 px-1.5 text-[10px] font-medium animate-in fade-in slide-in-from-right-1 duration-300'>
+                          <div className='animate-in fade-in slide-in-from-right-1 flex items-center gap-1.5 px-1.5 text-[10px] font-medium duration-300'>
                             {brandSaveStatus === "saving" ? (
                               <>
-                                <Loader2 className='size-3 animate-spin text-primary' />
-                                <span className='text-muted-foreground/60'>
-                                  Saving...
-                                </span>
+                                <Loader2 className='text-primary size-3 animate-spin' />
                               </>
                             ) : (
                               <>
                                 <CheckCircle2 className='size-3 text-green-500' />
-                                <span className='text-green-500 font-semibold'>
-                                  Saved
-                                </span>
                               </>
                             )}
                           </div>

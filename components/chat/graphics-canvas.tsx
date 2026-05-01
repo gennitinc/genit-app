@@ -276,7 +276,7 @@ const GraphicsCanvasContent = () => {
           </div>
         )} */}
 
-        {nodes.length === 0 && (
+        {nodes.length === 0 &&  (
           <div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
             <div className='text-foreground space-y-2 text-center opacity-20 select-none'>
               <LayoutGrid className='mx-auto h-12 w-12 text-neutral-200 dark:text-neutral-900' />

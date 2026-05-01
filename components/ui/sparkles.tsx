@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import type { Container, SingleOrMultiple } from "@tsparticles/engine";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
-import { motion, useAnimation } from "motion/react";
+import { motion, useAnimation } from "framer-motion";
 import React, { useId, useMemo } from "react";
 import { useEffect, useState } from "react";
 

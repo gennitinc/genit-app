@@ -113,10 +113,27 @@ export function AIMessage({
         <div className='space-y-4'>
           {message?.parts?.map((part: any, i: number) => {
             switch (part.type) {
-              case "text":
-                return (
-                  <Response key={`${message.id}-${i}`}>{part.text}</Response>
+              case "text": {
+                // Strip image/media content from text if generations exist (shown in Version card instead)
+                let textContent = part.text || "";
+                const hasGenerations = message?.generationGroups?.some(
+                  (g: any) => g.items?.length > 0
                 );
+                if (hasGenerations && textContent) {
+                  // Remove markdown images: ![alt](url)
+                  textContent = textContent.replace(/!\[.*?\]\(.*?\)/g, "");
+                  // Remove markdown links to generated files: [text](https://...)
+                  textContent = textContent.replace(/\[.*?\]\(https?:\/\/.*?\)/g, "");
+                  // Remove raw URLs on their own lines
+                  textContent = textContent.replace(/^https?:\/\/\S+$/gm, "");
+                  // Clean up excessive whitespace
+                  textContent = textContent.replace(/\n{3,}/g, "\n\n").trim();
+                }
+                if (!textContent) return null;
+                return (
+                  <Response key={`${message.id}-${i}`}>{textContent}</Response>
+                );
+              }
               case "reasoning":
                 return (
                   <Reasoning

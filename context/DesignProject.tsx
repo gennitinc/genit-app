@@ -315,6 +315,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setStreamingContent("");
         setStreamingAnalysis("");
         setIsTyping(false);
+        setIsGenerating(false);
+        setIsGeneratingImage(false); // Force clear image loading too
+        
         // Only clear status if we aren't generating an image in the background
         if (!isGeneratingImageRef.current) {
           setAiStatus(null);
@@ -377,6 +380,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         }
         // Final text is in data.text, but we'll wait for newMessage event for full project state
         // Keep typing true until newMessage arrives
+        setIsGenerating(false);
+        setIsGeneratingImage(false);
+        setIsTyping(false);
       } catch (e) {
         console.error("Error handling textCompleted event", e);
       }

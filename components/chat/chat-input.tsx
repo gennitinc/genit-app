@@ -1,17 +1,20 @@
 "use client";
 
+import { BrandIndicator } from "../common/brand-indicator";
+import { ModelSelector } from "../inspire/model-selector";
 import ShinyText from "../ui/shiny-text";
+import { ColorManagement } from "./messages/color-management";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
-import { ModelSelector } from "../inspire/model-selector";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { trackEvent } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
+  CheckCircle2,
   ChevronDown,
   Loader2,
   Mic,
@@ -20,13 +23,10 @@ import {
   Plus,
   Settings,
   X,
-  CheckCircle2,
   Zap,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { BrandIndicator } from "../common/brand-indicator";
-import { ColorManagement } from "./messages/color-management";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -126,10 +126,11 @@ export function ChatInput({
   const autoResize = useCallback(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height =
-        textareaRef.current.scrollHeight + "px";
+      // If input is empty, force the minimum height to prevent browser miscalculation on mount/refresh
+      const newHeight = !inputValue ? 60 : textareaRef.current.scrollHeight;
+      textareaRef.current.style.height = `${newHeight}px`;
     }
-  }, []);
+  }, [inputValue]);
 
   // Effect to resize textarea on inputValue change
   useEffect(() => {
@@ -240,7 +241,7 @@ export function ChatInput({
   };
 
   return (
-    <div className={`flex h-full flex-col bg-transparent ${className}`}>
+    <div className={cn("flex flex-col bg-transparent", className)}>
       {/* Chat Content Area */}
       <div className='relative flex min-h-0 flex-1 flex-col overflow-hidden'>
         {children}
@@ -249,7 +250,7 @@ export function ChatInput({
       {/* Bottom Input Area - with drag and drop handlers */}
       <div
         ref={inputSectionRef}
-        className='sticky bottom-0 z-10 w-full p-2 backdrop-blur-sm'
+        className='sticky bottom-0 z-10 w-full flex-none p-2 backdrop-blur-sm'
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
@@ -329,7 +330,7 @@ export function ChatInput({
                   )}
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className='flex items-center gap-3'>
                   <BrandIndicator
                     onClick={() => {
                       setIsBrandSettingsOpen(!isBrandSettingsOpen);
@@ -386,7 +387,7 @@ export function ChatInput({
             className='group flex w-full flex-col gap-2 rounded-[1.5rem] border border-white bg-white/80 p-3 text-base shadow-xl ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
           >
             <div className='w-full min-w-0'>
-              <div className='relative flex flex-1 items-center'>
+              <div className='relative flex items-center'>
                 <textarea
                   ref={textareaRef}
                   value={isGenerating ? "" : inputValue}
@@ -401,8 +402,8 @@ export function ChatInput({
                         : placeholder
                   }
                   disabled={isGenerating}
-                  className='placeholder:text-muted-foreground/60 scrollbar-none flex max-h-[300px] w-full flex-1 resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
-                  style={{ minHeight: "60px" }}
+                  className='placeholder:text-muted-foreground/60 scrollbar-none max-h-[300px] w-full resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
+                  style={{ height: "60px", minHeight: "60px" }}
                 />
               </div>
             </div>
@@ -442,16 +443,14 @@ export function ChatInput({
 
               <div className='ml-auto flex items-center gap-1.5'>
                 {brandSaveStatus !== "idle" && (
-                  <div className='flex items-center gap-1.5 px-1.5 text-[10px] font-medium animate-in fade-in slide-in-from-right-1 duration-300'>
+                  <div className='animate-in fade-in slide-in-from-right-1 flex items-center gap-1.5 px-1.5 text-[10px] font-medium duration-300'>
                     {brandSaveStatus === "saving" ? (
                       <>
-                        <Loader2 className='size-3 animate-spin text-primary' />
-                        <span className='text-muted-foreground'>Saving...</span>
+                        <Loader2 className='text-primary size-3 animate-spin' />
                       </>
                     ) : (
                       <>
                         <CheckCircle2 className='size-3 text-green-500' />
-                        <span className='text-green-500 font-semibold'>Saved</span>
                       </>
                     )}
                   </div>
@@ -520,7 +519,7 @@ export function ChatInput({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className='border-border absolute bottom-full right-0 left-0 z-50 mx-auto mb-2 max-h-[500px] w-full max-w-md overflow-hidden rounded-xl border bg-white shadow-md md:mx-0 dark:bg-black'
+                className='border-border absolute right-0 bottom-full left-0 z-50 mx-auto mb-2 max-h-[500px] w-full max-w-md overflow-hidden rounded-xl border bg-white shadow-md md:mx-0 dark:bg-black'
               >
                 <div className='flex flex-col p-4'>
                   {/* Header */}
@@ -542,7 +541,7 @@ export function ChatInput({
                   </div>
 
                   {/* Brand Settings Content */}
-                  <div className='max-h-[400px] overflow-y-auto pr-1 custom-scrollbar'>
+                  <div className='custom-scrollbar max-h-[400px] overflow-y-auto pr-1'>
                     <ColorManagement className='p-1' />
                   </div>
                 </div>

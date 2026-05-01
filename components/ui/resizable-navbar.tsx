@@ -6,7 +6,7 @@ import {
   motion,
   useMotionValueEvent,
   useScroll,
-} from "motion/react";
+} from "framer-motion";
 import React, { useRef, useState } from "react";
 
 interface NavbarProps {
