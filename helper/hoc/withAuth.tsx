@@ -93,7 +93,6 @@ function withAuth(
     if (isAuthPage) {
       // For auth pages: render if no user or user not verified
       if (!loading && (!user || !user.emailVerified)) {
-        setLoading(false);
         return <Component {...props} />;
       }
     } else {
@@ -106,7 +105,6 @@ function withAuth(
           user.onboarding?.onboardingCompleted ||
           pathname === "/onboarding")
       ) {
-        setLoading(false);
         return <Component {...props} />;
       }
     }

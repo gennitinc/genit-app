@@ -426,17 +426,7 @@ function ImageGenerationPage() {
             <div className='relative grid min-h-0 w-full flex-1 grid-cols-1 gap-6 md:grid-cols-[27rem_1fr]'>
               <div className='flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-neutral-100 bg-white pt-4 shadow-sm dark:border-neutral-800 dark:bg-black/20'>
                 <div className='hide-scrollbar flex-1 shrink-0 space-y-4 overflow-y-auto px-4 pb-4'>
-                  <ModelSelector
-                    type='image'
-                    selectedModel={selectedImageModel}
-                    onSelectModel={(model) => {
-                      setSelectedImageModel(model);
-                      trackFeatureUsed("image_model_selected", {
-                        model_id: model?._id,
-                        model_name: model?.name,
-                      });
-                    }}
-                  />
+                  
 
                   <div className='space-y-2'>
                     <PremiumInput
@@ -446,6 +436,19 @@ function ImageGenerationPage() {
                       isGenerating={isGenerating}
                       placeholder='Describe your image...'
                       minHeight='50px'
+                      modelSelector={
+                        <ModelSelector
+                          type='image'
+                          selectedModel={selectedImageModel}
+                          onSelectModel={(model) => {
+                            setSelectedImageModel(model);
+                            trackFeatureUsed("image_model_selected", {
+                              model_id: model?._id,
+                              model_name: model?.name,
+                            });
+                          }}
+                        />
+                      }
                     />
                   </div>
 

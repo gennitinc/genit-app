@@ -21,6 +21,50 @@ import Script from "next/script";
 import type React from "react";
 import { Suspense } from "react";
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const inter = Inter({ subsets: ["latin"] });
 
 const metadata: Metadata = {
@@ -144,7 +188,7 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <head>
         {/* Blocking script to prevent theme flash - must run before any content renders */}
-        <script
+        <Script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -300,7 +344,7 @@ export default function RootLayout({
         />
 
         {/* Comprehensive Structured Data for SEO and AI Search */}
-        <script
+        <Script
           type='application/ld+json'
           dangerouslySetInnerHTML={{
             __html: JSON.stringify([

@@ -20,6 +20,7 @@ interface PremiumInputProps {
   leftContent?: React.ReactNode;
   rightContent?: React.ReactNode;
   footerContent?: React.ReactNode;
+  modelSelector?: React.ReactNode;
   error?: string;
   minHeight?: string;
   maxHeight?: string;
@@ -36,6 +37,7 @@ export function PremiumInput({
   leftContent,
   rightContent,
   footerContent,
+  modelSelector,
   error,
   minHeight = "30px",
   maxHeight = "300px",
@@ -205,7 +207,9 @@ export function PremiumInput({
         {footerContent && <div className='px-1'>{footerContent}</div>}
 
         <div className='flex items-center gap-1.5'>
+          {modelSelector}
           {leftContent}
+          
 
           <div className='ml-auto flex items-center gap-1.5'>
             {rightContent}

@@ -992,29 +992,7 @@ function VideoGenerationPage() {
                       <PresetSlider currentSlide={0} onSlideChange={() => {}} />
                     )}
 
-                    <ModelSelector
-                      type={generationMode}
-                      selectedModel={
-                        generationMode === "image"
-                          ? selectedImageModel
-                          : selectedVideoModel
-                      }
-                      onSelectModel={(model) => {
-                        if (generationMode === "image") {
-                          setSelectedImageModel(model);
-                          trackFeatureUsed("inspire_image_model_selected", {
-                            model_id: model?._id,
-                            model_name: model?.name,
-                          });
-                          return;
-                        }
-                        setSelectedVideoModel(model);
-                        trackFeatureUsed("video_model_selected", {
-                          model_id: model?._id,
-                          model_name: model?.name,
-                        });
-                      }}
-                    />
+                    {/* ModelSelector removed from here */}
 
                     {generationMode === "video" && (
                       <div className='grid grid-cols-2 gap-2'>
@@ -1107,6 +1085,31 @@ function VideoGenerationPage() {
                             : "Describe the motion..."
                         }
                         minHeight='50px'
+                        modelSelector={
+                          <ModelSelector
+                            type={generationMode}
+                            selectedModel={
+                              generationMode === "image"
+                                ? selectedImageModel
+                                : selectedVideoModel
+                            }
+                            onSelectModel={(model) => {
+                              if (generationMode === "image") {
+                                setSelectedImageModel(model);
+                                trackFeatureUsed("inspire_image_model_selected", {
+                                  model_id: model?._id,
+                                  model_name: model?.name,
+                                });
+                                return;
+                              }
+                              setSelectedVideoModel(model);
+                              trackFeatureUsed("video_model_selected", {
+                                model_id: model?._id,
+                                model_name: model?.name,
+                              });
+                            }}
+                          />
+                        }
                       />
                     </div>
 

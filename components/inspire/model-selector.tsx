@@ -187,11 +187,11 @@ export function ModelSelector({
                     type={selectedModel.type}
                   />
                   {/* <span className='truncate'>{selectedModel.name}</span> */}
-                  {selectedModel.isDefault && (
+                  {/* {selectedModel.isDefault && (
                     <span className='rounded bg-neutral-200 px-1.5 py-0.5 text-xs text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400'>
                       Default
                     </span>
-                  )}
+                  )} */}
                 </div>
                 {/* {selectedModel.isPremium && (
                   <Crown className='h-4 w-4 flex-shrink-0 text-yellow-500' />
@@ -221,11 +221,11 @@ export function ModelSelector({
                           <span className='truncate text-sm font-medium'>
                             {model.name}
                           </span>
-                          {model.isDefault && (
+                          {/* {model.isDefault && (
                             <span className='rounded bg-neutral-200 px-1.5 py-0.5 text-xs text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400'>
                               Default
                             </span>
-                          )}
+                          )} */}
                         </div>
                         {model.description && (
                           <p className='w-30 truncate text-xs text-neutral-500 dark:text-neutral-400'>
