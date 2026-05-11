@@ -301,7 +301,7 @@ export default function AdminModelsPage() {
         </div>
       ) : filteredModels.length === 0 ? (
         <div className='text-muted-foreground py-12 text-center'>
-          No models found
+          {/* No models found */}
         </div>
       ) : (
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>

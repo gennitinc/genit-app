@@ -12,72 +12,20 @@ import ShinyText from "../ui/shiny-text";
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { PointerHighlight } from "@/components/ui/pointer-highlight";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
-import {
-  trackAppOpened,
-  trackEvent,
-  trackFeatureUsed,
-} from "@/lib/mixpanelClient";
+import { trackAppOpened, trackEvent, trackFeatureUsed } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  Camera,
-  CheckCircle2,
-  FileText,
-  Grid2X2Plus,
-  Image,
-  Image as ImageIcon,
-  Layout,
-  Loader2,
-  MessageSquare,
-  Mic,
-  Music,
-  Paintbrush,
-  Palette,
-  PaperclipIcon,
-  Play,
-  Presentation,
-  Settings,
-  Settings2,
-  Sparkles,
-  Table,
-  TrendingUp,
-  Type,
-  User,
-  Users,
-  Video,
-  Volume2,
-  Wand2,
-  WandSparklesIcon,
-  Workflow,
-  X,
-  XIcon,
-  Youtube,
-  Zap,
-} from "lucide-react";
+import { AlertCircle, Camera, CheckCircle2, FileText, Grid2X2Plus, Image, Image as ImageIcon, Layout, Loader2, MessageSquare, Mic, Music, Paintbrush, Palette, PaperclipIcon, Play, Presentation, Settings, Settings2, Sparkles, Table, TrendingUp, Type, User, Users, Video, Volume2, Wand2, WandSparklesIcon, Workflow, X, XIcon, Youtube, Zap } from "lucide-react";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -85,6 +33,146 @@ import { toast } from "sonner";
 import { div } from "three/src/nodes/math/OperatorNode.js";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 interface TypewriterEffectProps {
   words: string[];
@@ -1021,18 +1109,19 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Idea to
+              Ai
               <PointerHighlight
                 rectangleClassName='bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700 leading-loose'
                 pointerClassName='text-blue-500 h-3 w-3'
                 containerClassName='inline-block mx-1'
               >
-                <span className='relative z-10'> Design </span>
+                <span className='relative z-10 mx-1'> Design </span>
               </PointerHighlight>{" "}
-              in 10.s
+              & Marketing
             </motion.h1>
+
             <motion.p
-              className='text-foreground/65 mb-6 max-w-[25ch] text-center text-lg leading-tight md:max-w-full md:text-xl'
+              className='text-foreground/80 mt-2 mb-6 max-w-[25ch] text-center text-lg leading-tight md:max-w-full md:text-lg'
               custom={2}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -1048,7 +1137,8 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Design graphics, videos, and assets with AI.
+              Agents that creates, designs, post, run ads, and handles <br />{" "}
+              your brand marketing across every channel.
             </motion.p>
           </motion.div>
         </div>
@@ -1255,6 +1345,18 @@ export function IdeaSection() {
                     }
                     className='group relative flex w-full flex-col gap-2 rounded-lg border border-white bg-white/80 p-3 text-base shadow-md ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
                   >
+                    <BorderBeam
+                      duration={6}
+                      size={40}
+                      className='from-transparent via-red-500 to-transparent'
+                    />
+                    <BorderBeam
+                      duration={6}
+                      delay={3}
+                      size={40}
+                      borderWidth={2}
+                      className='from-transparent via-blue-500 to-transparent'
+                    />
                     <div className='w-full min-w-0'>
                       <div className='relative flex flex-1 items-center'>
                         <textarea
@@ -1346,7 +1448,7 @@ export function IdeaSection() {
                         </div>
 
                         <button
-                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground hover:bg-primary/5 relative box-border hidden lg:inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5'
+                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground hover:bg-primary/5 relative box-border hidden h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 lg:inline-flex dark:hover:bg-white/5'
                           type='button'
                           aria-label='Settings'
                           onClick={() => {
@@ -1400,18 +1502,6 @@ export function IdeaSection() {
                           type='submit'
                           disabled={isSubmitDisabled}
                         >
-                          <BorderBeam
-                            duration={6}
-                            size={40}
-                            className='from-transparent via-red-500 to-transparent'
-                          />
-                          <BorderBeam
-                            duration={6}
-                            delay={3}
-                            size={40}
-                            borderWidth={2}
-                            className='from-transparent via-blue-500 to-transparent'
-                          />
                           {isGenerating || isSubmitting ? (
                             <Loader2 className='h-4 w-4 animate-spin' />
                           ) : (

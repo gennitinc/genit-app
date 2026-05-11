@@ -165,7 +165,7 @@ export function ModelSelector({
           Model
         </label> */}
         <span className='py-2 text-center text-sm text-neutral-500 dark:text-neutral-400'>
-          No models available
+         
         </span>
       </div>
     );
