@@ -144,6 +144,7 @@ export function ConnectDialog({
     }
     setPhase("connecting");
     setErrorMessage(null);
+    
     try {
       const url = await requestConnectUrl(platform);
       const width = 600;
