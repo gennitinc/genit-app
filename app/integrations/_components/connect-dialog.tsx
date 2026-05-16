@@ -12,7 +12,7 @@ import { type CSSProperties, type ComponentType, useCallback, useEffect, useRef,
 
 
 
-
+//ks
 
 
 
@@ -144,7 +144,7 @@ export function ConnectDialog({
     }
     setPhase("connecting");
     setErrorMessage(null);
-    
+
     try {
       const url = await requestConnectUrl(platform);
       const width = 600;
