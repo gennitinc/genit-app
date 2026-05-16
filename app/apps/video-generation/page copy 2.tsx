@@ -284,7 +284,7 @@ function VideoGenerationPage() {
         generationMode === "image" ? "ai-image-gen" : "ai-video-gen"
       );
       if (projectId) urlParams.set("projectId", projectId);
-      router.replace(`/agents/video-generation?${urlParams.toString()}`, {
+      router.replace(`/apps/video-generation?${urlParams.toString()}`, {
         scroll: false,
       });
     },

@@ -120,7 +120,7 @@ function ImageGenerationPage() {
       const urlParams = new URLSearchParams(searchParams.toString());
       urlParams.set("tab", tab);
       if (projectId) urlParams.set("projectId", projectId);
-      router.replace(`/agents/image-generation?${urlParams.toString()}`, {
+      router.replace(`/apps/image-generation?${urlParams.toString()}`, {
         scroll: false,
       });
     },
@@ -426,8 +426,6 @@ function ImageGenerationPage() {
             <div className='relative grid min-h-0 w-full flex-1 grid-cols-1 gap-6 md:grid-cols-[27rem_1fr]'>
               <div className='flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-neutral-100 bg-white pt-4 shadow-sm dark:border-neutral-800 dark:bg-black/20'>
                 <div className='hide-scrollbar flex-1 shrink-0 space-y-4 overflow-y-auto px-4 pb-4'>
-                  
-
                   <div className='space-y-2'>
                     <PremiumInput
                       value={prompt}

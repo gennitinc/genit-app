@@ -27,12 +27,12 @@ export const APP_SECTIONS: AppSection[] = [
   {
     title: "General Agents",
     description: "Premium visual styles and sophisticated effects",
-    href: "/agents/enhance-style",
+    href: "/apps/enhance-style",
     apps: [
       {
         id: "design-chat",
         href: "/chat",
-        title: "Design Chat",
+        title: "Agentic Chat",
         description: "Transform perspective and camera angles with precision",
         type: "image",
         imageSrc:
@@ -40,7 +40,7 @@ export const APP_SECTIONS: AppSection[] = [
       },
       {
         id: "workflow",
-        href: "/agents/workflow",
+        href: "/apps/workflow",
         title: "AI Workflow",
         description: "Automate your creative process with AI nodes",
         type: "image",
@@ -54,7 +54,7 @@ export const APP_SECTIONS: AppSection[] = [
       },
       {
         id: "angles-reshape",
-        href: "/agents/angles-reshape",
+        href: "/apps/angles-reshape",
         title: "Angle Reshape",
         description: "Transform perspective and camera angles with precision",
         type: "image",
@@ -63,7 +63,7 @@ export const APP_SECTIONS: AppSection[] = [
       },
       {
         id: "video-generation",
-        href: "/agents/video-generation",
+        href: "/apps/video-generation",
         title: "Video Generation",
         description: "Kinetic AI storytelling and animation",
         type: "video",
@@ -72,7 +72,7 @@ export const APP_SECTIONS: AppSection[] = [
       },
       {
         id: "skin-enhancer",
-        href: "/agents/skin-enhancer",
+        href: "/apps/skin-enhancer",
         title: "Skin Enhancer",
         description: "Achieve professional, true-to-life skin textures",
         type: "image",
@@ -81,7 +81,7 @@ export const APP_SECTIONS: AppSection[] = [
       },
       {
         id: "image-generation",
-        href: "/agents/image-generation",
+        href: "/apps/image-generation",
         title: "Image Generation",
         description: "Professional AI image creation suite",
         type: "image",
@@ -90,7 +90,7 @@ export const APP_SECTIONS: AppSection[] = [
       },
       {
         id: "character",
-        href: "/agents/character",
+        href: "/apps/character",
         title: "Character Manager",
         description: "Manage and generate your own custom digital characters",
         type: "image",
@@ -99,7 +99,7 @@ export const APP_SECTIONS: AppSection[] = [
       },
       {
         id: "image-inpaint",
-        href: "/agents/image-inpaint",
+        href: "/apps/image-inpaint",
         title: "In-Painting",
         description: "Seamlessly remove objects and fill backgrounds with AI",
         type: "image",
@@ -113,7 +113,7 @@ export const APP_SECTIONS: AppSection[] = [
       },
       {
         id: "logo-animation",
-        href: "/agents/logo-animation",
+        href: "/apps/logo-animation",
         title: "Logo Animator",
         description: "Bring your logo to life with stunning animations",
         type: "image",
@@ -127,7 +127,7 @@ export const APP_SECTIONS: AppSection[] = [
       },
       {
         id: "face-swap",
-        href: "/agents/face-swap",
+        href: "/apps/face-swap",
         title: "Face Swap",
         description: "Swap faces in images and videos with high precision",
         type: "image",
@@ -141,7 +141,7 @@ export const APP_SECTIONS: AppSection[] = [
       },
       {
         id: "relight",
-        href: "/agents/relight",
+        href: "/apps/relight",
         title: "Glow Control",
         description: "Precision adjustment for lighting, color, and intensity",
         type: "image",
@@ -155,7 +155,7 @@ export const APP_SECTIONS: AppSection[] = [
       },
       // {
       //   id: "text-to-speech",
-      //   href: "/agents/text-to-speech",
+      //   href: "/apps/text-to-speech",
       //   title: "Text to Speech",
       //   description: "Transform text into lifelike AI speech with expressive voices",
       //   type: "audio",

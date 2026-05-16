@@ -1128,7 +1128,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           workflow_slug: newProject.slug,
         });
         setProjectId(newProject._id);
-        router.push(`/agents/workflow/${newProject.slug}`);
+        router.push(`/apps/workflow/${newProject.slug}`);
       }
     } catch (error) {
       console.error("Failed to create workflow:", error);
@@ -1425,7 +1425,7 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
                     <div
                       key={project._id}
                       onClick={() =>
-                        router.push(`/agents/workflow/${project.slug}`)
+                        router.push(`/apps/workflow/${project.slug}`)
                       }
                       className='group border-border bg-muted/30 hover:bg-muted/50 hover:border-primary/30 flex cursor-pointer items-center justify-between rounded-xl border p-3 transition-all'
                     >

@@ -1,34 +1,15 @@
 "use client";
-import {
-  SidebarGroup,
-  SidebarMenu,
-  SidebarMenuBadge,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import { SidebarGroup, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { trackAppOpened, trackFeatureUsed } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
-import {
-  CreditCard,
-  GalleryHorizontal,
-  Gift,
-  Grid2X2Plus,
-  HelpCircle,
-  History,
-  Image as ImageIcon,
-  Palette,
-  Settings,
-  UserPlus,
-  Users,
-  Video,
-  WandSparklesIcon,
-  Workflow,
-} from "lucide-react";
+import { CreditCard, GalleryHorizontal, Gift, GitBranchPlus, Grid2X2Plus, HelpCircle, History, Image as ImageIcon, Palette, Settings, SquarePen, UserPlus, Users, Video, WandSparklesIcon, Workflow } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+
+
 
 export function NavMain() {
   const { state, setOpenMobile, isMobile } = useSidebar();
@@ -39,37 +20,26 @@ export function NavMain() {
   const user = useUserContext().user;
   const navItems = [
     {
-      title: "Design Chat",
-      icon: WandSparklesIcon,
+      title: "Agentic Chat",
+      icon: SquarePen,
       href: "/chat",
     },
     {
-      title: "Agents",
+      title: "Integrations",
+      icon: GitBranchPlus,
+      href: "/integrations",
+    },
+    {
+      title: "Apps",
       icon: Grid2X2Plus,
-      href: "/agents",
+      href: "/apps",
     },
     {
       title: "Workflow",
       icon: Workflow,
-      href: "/agents/workflow",
+      href: "/apps/workflow",
       badge: "New",
     },
-    // {
-    //   title: "Image Generation",
-    //   icon: ImageIcon,
-    //   href: "/agents/image-generation",
-    // },
-    // {
-    //   title: "Video Generation",
-    //   icon: Video,
-    //   href: "/agents/video-generation",
-    // },
-    // {
-    //   title: "Presenter",
-    //   icon: UserPlus,
-    //   href: "/agents/presenter",
-    // },
-
     {
       title: "Community",
       icon: Users,

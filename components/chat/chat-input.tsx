@@ -3,7 +3,7 @@
 import { BrandIndicator } from "../common/brand-indicator";
 import { ModelSelector } from "../inspire/model-selector";
 import ShinyText from "../ui/shiny-text";
-import { ColorManagement } from "./messages/color-management";
+import { BrandIdentityPanel } from "./messages/brand-identity-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthenticatedContext";
@@ -542,7 +542,7 @@ export function ChatInput({
 
                   {/* Brand Settings Content */}
                   <div className='custom-scrollbar max-h-[400px] overflow-y-auto pr-1'>
-                    <ColorManagement className='p-1' />
+                    <BrandIdentityPanel />
                   </div>
                 </div>
               </motion.div>

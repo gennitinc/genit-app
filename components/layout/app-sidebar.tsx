@@ -1,10 +1,8 @@
 "use client";
 
 import { NavMain } from "./nav-main";
-import { NavUser } from "./nav-user";
+import { OrgSwitcher } from "./org-switcher";
 import { Logo } from "@/components/logo";
-import { Button } from "@/components/ui/button";
-// import { TeamSwitcher } from "./team-switcher" // Removed import
 import {
   Sidebar,
   SidebarContent,
@@ -13,26 +11,11 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
-// Updated import
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { useUrlState } from "@/hooks/use-url-state";
 import { trackEvent } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
-import {
-  Bolt,
-  BookOpen,
-  Crown,
-  HelpCircle,
-  History,
-  Layout,
-  Plus,
-  Settings,
-  Sparkles,
-  TrendingUp,
-  Users,
-} from "lucide-react";
-import { useTheme } from "next-themes";
+import { Bolt, Crown, Sparkles, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import type * as React from "react";
@@ -43,9 +26,7 @@ export function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const { state, isMobile, setOpen } = useSidebar();
-  const { theme } = useTheme();
   const user = useUserContext().user;
-  const { setUrlState } = useUrlState();
   const isTablet = useMediaQuery("(max-width: 1024px)");
   const isLargeDesktop = useMediaQuery("(min-width: 1280px)");
   const pathname = usePathname();
@@ -75,7 +56,7 @@ export function AppSidebar({
     <Sidebar
       collapsible='icon'
       className={cn(
-        "border-border h-full bg-white transition-colors duration-300 dark:bg-black [&_[data-sidebar=sidebar]]:bg-white dark:[&_[data-sidebar=sidebar]]:bg-black",
+        "h-full bg-white transition-colors duration-300 dark:bg-black [&_[data-sidebar=sidebar]]:bg-white dark:[&_[data-sidebar=sidebar]]:bg-black",
         className
       )}
       {...props}
@@ -88,7 +69,6 @@ export function AppSidebar({
             state === "collapsed" && !isMobile && "justify-start"
           )}
         >
-          {/* <Logo className="w-8 h-8 flex-shrink-0" /> */}
           <Logo className='h-12 w-12 flex-shrink-0' />
           <span
             className={cn(
@@ -233,8 +213,8 @@ export function AppSidebar({
         )
       )}
 
-      <SidebarFooter className='border-border border-t pt-4'>
-        <NavUser user={user} />
+      <SidebarFooter className='border-border border-t pt-2'>
+        <OrgSwitcher />
       </SidebarFooter>
       <SidebarRail className='border-border' />
     </Sidebar>

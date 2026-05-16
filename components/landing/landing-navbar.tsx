@@ -64,8 +64,8 @@ export function LandingNavbar() {
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
 
   const navigation = [
-    { name: "Design Chat", href: "/chat" },
-    { name: "Agents", href: "/agents" },
+    { name: "Integrations", href: "/integrations" },
+    { name: "Apps", href: "/apps" },
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Community", href: "/community" },
     { name: "History", href: user ? "/chat/history" : "/signin" },
@@ -124,16 +124,16 @@ export function LandingNavbar() {
                       {user && (
                         <Link
                           className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                          href='/chat'
+                          href='/integrations'
                         >
-                          Design Chat
+                          Integrations
                         </Link>
                       )}
                       <Link
                         className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='/agents'
+                        href='/apps'
                       >
-                        Agents
+                        Apps
                       </Link>
                       {/* <Link
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
@@ -309,12 +309,12 @@ export function LandingNavbar() {
                           className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                           href='/chat'
                         >
-                          Design Chat
+                          Agentic Chat
                         </Link>
                       )}
                       <Link
                         className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='/agents'
+                        href='/apps'
                       >
                         Agents
                       </Link>

@@ -210,7 +210,7 @@ export function Navbar({ title }: NavbarProps) {
               className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
               href='/chat'
             >
-              Design Chat
+              Agentic Chat
             </Link>
             <Link
               target='__blank'

@@ -1,7 +1,7 @@
 "use client";
 
 import { AIThinkingContent } from "../chat/messages";
-import { ColorManagement } from "../chat/messages/color-management";
+import { BrandIdentityPanel } from "../chat/messages/brand-identity-panel";
 import { BrandIndicator } from "../common/brand-indicator";
 import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
 import { HomeInfoGrid } from "../common/homeInfoGrid";
@@ -12,20 +12,72 @@ import ShinyText from "../ui/shiny-text";
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { PointerHighlight } from "@/components/ui/pointer-highlight";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
-import { trackAppOpened, trackEvent, trackFeatureUsed } from "@/lib/mixpanelClient";
+import {
+  trackAppOpened,
+  trackEvent,
+  trackFeatureUsed,
+} from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, Camera, CheckCircle2, FileText, Grid2X2Plus, Image, Image as ImageIcon, Layout, Loader2, MessageSquare, Mic, Music, Paintbrush, Palette, PaperclipIcon, Play, Presentation, Settings, Settings2, Sparkles, Table, TrendingUp, Type, User, Users, Video, Volume2, Wand2, WandSparklesIcon, Workflow, X, XIcon, Youtube, Zap } from "lucide-react";
+import {
+  AlertCircle,
+  Camera,
+  CheckCircle2,
+  FileText,
+  Grid2X2Plus,
+  Image,
+  Image as ImageIcon,
+  Layout,
+  Loader2,
+  MessageSquare,
+  Mic,
+  Music,
+  Paintbrush,
+  Palette,
+  PaperclipIcon,
+  Play,
+  Presentation,
+  Settings,
+  Settings2,
+  Sparkles,
+  Table,
+  TrendingUp,
+  Type,
+  User,
+  Users,
+  Video,
+  Volume2,
+  Wand2,
+  WandSparklesIcon,
+  Workflow,
+  X,
+  XIcon,
+  Youtube,
+  Zap,
+} from "lucide-react";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -33,146 +85,6 @@ import { toast } from "sonner";
 import { div } from "three/src/nodes/math/OperatorNode.js";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 interface TypewriterEffectProps {
   words: string[];
@@ -247,7 +159,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "all-agents",
     label: "All Agents",
-    href: "/agents",
+    href: "/apps",
     icon: Grid2X2Plus,
     bg: "rgba(30, 30, 30, 30)",
     lightBg: "rgba(255, 255, 255, 0.7)",
@@ -257,7 +169,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   },
   {
     id: "design-chat",
-    label: "Design Chat",
+    label: "Agentic Chat",
     href: "/chat",
     icon: WandSparklesIcon,
     bg: "rgba(255, 183, 77, 0.45)",
@@ -269,7 +181,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "workflow",
     label: "AI Workflow",
-    href: "/agents/workflow",
+    href: "/apps/workflow",
     icon: Workflow,
     bg: "rgba(34, 197, 94, 0.45)",
     lightBg: "rgba(34, 197, 94, 0.35)",
@@ -280,7 +192,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "video",
     label: "AI Video",
-    href: "/agents/video-generation",
+    href: "/apps/video-generation",
     icon: Video,
     bg: "rgba(255, 99, 132, 0.45)",
     lightBg: "rgba(255, 99, 132, 0.35)",
@@ -291,7 +203,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "image",
     label: "AI Image",
-    href: "/agents/image-generation",
+    href: "/apps/image-generation",
     icon: Image,
     bg: "rgba(99, 102, 241, 0.5)",
     lightBg: "rgba(99, 102, 241, 0.4)",
@@ -302,7 +214,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "character",
     label: "AI Character",
-    href: "/agents/character",
+    href: "/apps/character",
     icon: User,
     bg: "rgba(168, 85, 247, 0.5)",
     lightBg: "rgba(168, 85, 247, 0.4)",
@@ -313,7 +225,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "skin-enhancer",
     label: "AI Enhancer",
-    href: "/agents/skin-enhancer",
+    href: "/apps/skin-enhancer",
     icon: Paintbrush,
     bg: "rgba(59, 130, 246, 0.5)",
     lightBg: "rgba(59, 130, 246, 0.4)",
@@ -324,7 +236,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "angles-reshape",
     label: "Angle Reshape",
-    href: "/agents/angles-reshape",
+    href: "/apps/angles-reshape",
     icon: Camera,
     bg: "rgba(255, 204, 0, 0.5)",
     lightBg: "rgba(255, 204, 0, 0.4)",
@@ -335,7 +247,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   {
     id: "logo-animation",
     label: "AI Animation",
-    href: "/agents/logo-animation2",
+    href: "/apps/logo-animation2",
     icon: Play,
     bg: "rgba(0, 122, 255, 0.5)",
     lightBg: "rgba(0, 122, 255, 0.4)",
@@ -1115,13 +1027,13 @@ export function IdeaSection() {
                 pointerClassName='text-blue-500 h-3 w-3'
                 containerClassName='inline-block mx-1'
               >
-                <span className='relative z-10 mx-1'> Design </span>
+                <span className='relative z-10 mx-2'> Design </span>
               </PointerHighlight>{" "}
               & Marketing
             </motion.h1>
 
             <motion.p
-              className='text-foreground/80 mt-2 mb-6 max-w-[25ch] text-center text-lg leading-tight md:max-w-full md:text-lg'
+              className='text-foreground/80 mt-2 mb-6 max-w-full text-center text-base'
               custom={2}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -1855,7 +1767,7 @@ export function IdeaSection() {
                     </div>
 
                     <div className='custom-scrollbar max-h-[400px] overflow-y-auto'>
-                      <ColorManagement />
+                      <BrandIdentityPanel />
                     </div>
                   </div>
                 </motion.div>
@@ -1881,10 +1793,10 @@ export function IdeaSection() {
         <div className='mx-auto mt-8 w-full max-w-4xl min-w-0 px-4'>
           <div className='mb-2 flex items-center justify-between'>
             <h2 className='text-sm font-bold text-black lg:ml-4 lg:text-lg dark:text-white'>
-              Feature Agents
+              Feature Apps
             </h2>
             <Link
-              href='/agents'
+              href='/apps'
               className='text-primary font-mono text-[11px] font-bold transition-all hover:underline'
             >
               View all →

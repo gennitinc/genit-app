@@ -24,6 +24,55 @@ export enum Plan {
   ENTERPRISE = "Enterprise",
 }
 
+export interface Organization {
+  _id: string;
+  businessName: string;
+  businessLogo?: string;
+  businessBio?: string;
+  businessWebsite?: string;
+  businessCategory?: string;
+  businessPlan?: string;
+  industry?: string;
+  country?: string;
+  language?: string;
+  brandColors?: string[];
+  primaryColor?: string;
+  secondaryColor?: string;
+  fontHeadline?: string;
+  fontBody?: string;
+  aboutUs?: string;
+  mission?: string;
+  vision?: string;
+  slogan?: string;
+  values?: string[];
+  voiceTone?: string[];
+  socialMediaUrls?: { platform: string; url: string }[];
+  owner: string;
+  members?: { user: string; role: string; joinedAt?: string }[];
+  derivedFromOnboarding?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  // Legacy fields kept for back-compat with existing settings UI
+  businessDescription?: string;
+  businessAddress?: string;
+  businessPhone?: string;
+  businessEmail?: string;
+  designer?: boolean;
+  emailCampaignProfile?: { approvedName: string; approvedEmail: string }[];
+}
+
+export interface Team {
+  _id: string;
+  organization: string;
+  name: string;
+  description?: string;
+  color?: string;
+  members?: { user: string; role: string; joinedAt?: string }[];
+  createdBy: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface User {
   _id: string;
   username: string;
@@ -38,27 +87,9 @@ export interface User {
   emailtemplatetourguide: boolean;
   formtourguide: boolean;
   __v: number;
-  business: {
-    _id: string;
-    businessName: string;
-    businessLogo: string;
-    businessDescription: string;
-    businessAddress: string;
-    businessPhone: string;
-    businessEmail: string;
-    businessBio: string;
-    businessWebsite: string;
-    businessCategory: string;
-    businessPlan: string;
-    designer: boolean;
-
-    emailCampaignProfile: [
-      {
-        approvedName: string;
-        approvedEmail: string;
-      },
-    ];
-  };
+  business: Organization;
+  allOrganizations?: Organization[];
+  currentOrganization?: Organization | null;
   userPlan: Plan;
   role: "user" | "admin";
   creditsRemaining?: number;
@@ -78,6 +109,7 @@ export interface User {
   onboarding?: {
     _id: string;
     onboardingCompleted: boolean;
+    onboardingSkipped?: boolean;
     onboardingStep: string;
     businessName?: string;
     businessBio?: string;
@@ -85,11 +117,24 @@ export interface User {
     country?: string;
     language?: string;
     companyWebsite?: string;
+    brandLogo?: string;
+    ogImage?: string;
+    aboutUs?: string;
+    mission?: string;
+    vision?: string;
+    slogan?: string;
+    values?: string[];
+    voiceTone?: string[];
+    brandColors?: string[];
+    fontHeadline?: string;
+    fontBody?: string;
     primaryGoal?: string;
     channels?: string[]; // Legacy format
     socialMediaUrls?: { platform: string; url: string }[];
     primaryColor?: string;
     secondaryColor?: string;
+    role?: string;
+    hearAboutUs?: string;
   };
 }
 
@@ -106,6 +151,46 @@ interface AuthenticatedContextInt {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   fetchCurrentUser: () => Promise<void>;
+  switchOrganization: (orgId: string) => Promise<void>;
+  createOrganization: (payload: {
+    businessName: string;
+    businessBio?: string;
+    businessLogo?: string;
+    businessWebsite?: string;
+    industry?: string;
+    country?: string;
+    language?: string;
+    brandColors?: string[];
+    primaryColor?: string;
+    secondaryColor?: string;
+    fontHeadline?: string;
+    fontBody?: string;
+    aboutUs?: string;
+    mission?: string;
+    vision?: string;
+    slogan?: string;
+    values?: string[];
+    voiceTone?: string[];
+    socialMediaUrls?: { platform: string; url: string }[];
+  }) => Promise<Organization | null>;
+  updateOrganization: (
+    orgId: string,
+    updates: Partial<Organization> & Record<string, any>
+  ) => Promise<Organization | null>;
+  createTeam: (
+    orgId: string,
+    payload: { name: string; description?: string; color?: string }
+  ) => Promise<Team | null>;
+  inviteToTeam: (
+    orgId: string,
+    teamId: string,
+    payload: { email: string; role?: "Lead" | "Member" | "Viewer" }
+  ) => Promise<{ _id: string; email: string; role: string } | null>;
+  leaveTeam: (
+    orgId: string,
+    teamId: string
+  ) => Promise<{ leftOrganization: boolean } | null>;
+  fetchTeamsForOrg: (orgId: string) => Promise<Team[]>;
   updateUserPreferences: (
     preferences: Partial<User["preferences"]>
   ) => Promise<void>;
@@ -185,6 +270,211 @@ export function AuthenticatedContextProvider({
     }
   };
 
+  const switchOrganization = async (orgId: string) => {
+    try {
+      const response = await apiResponse.patch(`/orgs/switch/${orgId}`);
+      if (response.status === 200) {
+        const next = response.data.currentOrganization as Organization;
+        setuser((prev) =>
+          prev ? { ...prev, currentOrganization: next } : prev
+        );
+        trackEvent("organization_switched", { organization_id: orgId });
+      }
+    } catch (error) {
+      console.error("Failed to switch organization:", error);
+      throw error;
+    }
+  };
+
+  const createOrganization = async (payload: {
+    businessName: string;
+    businessBio?: string;
+    businessLogo?: string;
+    businessWebsite?: string;
+    industry?: string;
+    country?: string;
+    language?: string;
+    brandColors?: string[];
+    primaryColor?: string;
+    secondaryColor?: string;
+    fontHeadline?: string;
+    fontBody?: string;
+    aboutUs?: string;
+    mission?: string;
+    vision?: string;
+    slogan?: string;
+    values?: string[];
+    voiceTone?: string[];
+    socialMediaUrls?: { platform: string; url: string }[];
+  }) => {
+    try {
+      const response = await apiResponse.post(`/orgs`, payload);
+      if (response.status === 201 || response.status === 200) {
+        const org = response.data.organization as Organization;
+        setuser((prev) =>
+          prev
+            ? {
+                ...prev,
+                allOrganizations: [...(prev.allOrganizations || []), org],
+                currentOrganization: org,
+              }
+            : prev
+        );
+        trackEvent("organization_created", { organization_id: org._id });
+        return org;
+      }
+      return null;
+    } catch (error: any) {
+      if (error?.response?.status === 402) {
+        const err = new Error(
+          error?.response?.data?.message ||
+            "Upgrade to a paid plan to create more organizations."
+        ) as Error & { code?: string };
+        err.code = "UPGRADE_REQUIRED";
+        throw err;
+      }
+      console.error("Failed to create organization:", error);
+      throw error;
+    }
+  };
+
+  const updateOrganization = async (
+    orgId: string,
+    updates: Partial<Organization> & Record<string, any>
+  ) => {
+    try {
+      const response = await apiResponse.patch(`/orgs/${orgId}`, updates);
+      if (response.status === 200) {
+        const org = response.data.organization as Organization;
+        setuser((prev) => {
+          if (!prev) return prev;
+          const nextAll = (prev.allOrganizations || []).map((o) =>
+            o._id === org._id ? org : o
+          );
+          const isCurrent =
+            prev.currentOrganization &&
+            typeof prev.currentOrganization === "object" &&
+            prev.currentOrganization._id === org._id;
+          return {
+            ...prev,
+            allOrganizations: nextAll,
+            currentOrganization: isCurrent ? org : prev.currentOrganization,
+            business:
+              typeof prev.business === "object" &&
+              (prev.business as Organization)?._id === org._id
+                ? org
+                : prev.business,
+          };
+        });
+        trackEvent("organization_updated", { organization_id: orgId });
+        return org;
+      }
+      return null;
+    } catch (error) {
+      console.error("Failed to update organization:", error);
+      throw error;
+    }
+  };
+
+  const createTeam = async (
+    orgId: string,
+    payload: { name: string; description?: string; color?: string }
+  ) => {
+    try {
+      const response = await apiResponse.post(`/orgs/${orgId}/teams`, payload);
+      if (response.status === 201 || response.status === 200) {
+        trackEvent("team_created", {
+          organization_id: orgId,
+          team_id: response.data.team?._id,
+        });
+        return response.data.team as Team;
+      }
+      return null;
+    } catch (error) {
+      console.error("Failed to create team:", error);
+      throw error;
+    }
+  };
+
+  const inviteToTeam = async (
+    orgId: string,
+    teamId: string,
+    payload: { email: string; role?: "Lead" | "Member" | "Viewer" }
+  ) => {
+    try {
+      const response = await apiResponse.post(
+        `/orgs/${orgId}/teams/${teamId}/invitations`,
+        payload
+      );
+      if (response.status === 201 || response.status === 200) {
+        trackEvent("team_invitation_sent", {
+          organization_id: orgId,
+          team_id: teamId,
+          role: payload.role || "Member",
+        });
+        return response.data.invitation;
+      }
+      return null;
+    } catch (error) {
+      console.error("Failed to invite to team:", error);
+      throw error;
+    }
+  };
+
+  const leaveTeam = async (orgId: string, teamId: string) => {
+    try {
+      const response = await apiResponse.post(
+        `/orgs/${orgId}/teams/${teamId}/leave`
+      );
+      if (response.status === 200) {
+        const leftOrganization = !!response.data?.leftOrganization;
+        if (leftOrganization) {
+          // Strip the org from local user state so the switcher updates instantly.
+          setuser((prev) => {
+            if (!prev) return prev;
+            const nextAll = (prev.allOrganizations || []).filter(
+              (o) => o._id !== orgId
+            );
+            const currentIsThisOrg =
+              prev.currentOrganization &&
+              typeof prev.currentOrganization === "object" &&
+              prev.currentOrganization._id === orgId;
+            return {
+              ...prev,
+              allOrganizations: nextAll,
+              currentOrganization: currentIsThisOrg
+                ? nextAll[0] || null
+                : prev.currentOrganization,
+            };
+          });
+        }
+        trackEvent("team_left", {
+          organization_id: orgId,
+          team_id: teamId,
+          left_organization: leftOrganization,
+        });
+        return { leftOrganization };
+      }
+      return null;
+    } catch (error) {
+      console.error("Failed to leave team:", error);
+      throw error;
+    }
+  };
+
+  const fetchTeamsForOrg = async (orgId: string): Promise<Team[]> => {
+    try {
+      const response = await apiResponse.get(`/orgs/${orgId}/teams`);
+      if (response.status === 200) {
+        return (response.data.teams as Team[]) || [];
+      }
+      return [];
+    } catch (error) {
+      console.error("Failed to fetch teams:", error);
+      return [];
+    }
+  };
+
   const updateUserPreferences = async (
     preferences: Partial<User["preferences"]>
   ) => {
@@ -248,6 +538,13 @@ export function AuthenticatedContextProvider({
         user,
         setuser,
         fetchCurrentUser,
+        switchOrganization,
+        createOrganization,
+        updateOrganization,
+        createTeam,
+        inviteToTeam,
+        leaveTeam,
+        fetchTeamsForOrg,
         updateUserPreferences,
         isKlipAiVisible,
         setIsKlipAiVisible,

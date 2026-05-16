@@ -288,7 +288,7 @@ function VideoGenerationPage() {
         generationMode === "image" ? "ai-image-gen" : "ai-video-gen"
       );
       if (projectId) urlParams.set("projectId", projectId);
-      router.replace(`/agents/video-generation?${urlParams.toString()}`, {
+      router.replace(`/apps/video-generation?${urlParams.toString()}`, {
         scroll: false,
       });
     },
@@ -1096,10 +1096,13 @@ function VideoGenerationPage() {
                             onSelectModel={(model) => {
                               if (generationMode === "image") {
                                 setSelectedImageModel(model);
-                                trackFeatureUsed("inspire_image_model_selected", {
-                                  model_id: model?._id,
-                                  model_name: model?.name,
-                                });
+                                trackFeatureUsed(
+                                  "inspire_image_model_selected",
+                                  {
+                                    model_id: model?._id,
+                                    model_name: model?.name,
+                                  }
+                                );
                                 return;
                               }
                               setSelectedVideoModel(model);

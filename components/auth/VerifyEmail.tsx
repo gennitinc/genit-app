@@ -19,7 +19,7 @@ import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const VerifyEmailComp = () => {
   const router = useRouter();
@@ -29,6 +29,9 @@ const VerifyEmailComp = () => {
   const [otpValue, setOtpValue] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
+  // Tracks the last code we auto-submitted, so a wrong code doesn't retrigger
+  // unless the user edits something.
+  const lastAutoSubmittedRef = useRef<string>("");
 
   useEffect(() => {
     // If no email parameter, redirect to signup
@@ -37,8 +40,8 @@ const VerifyEmailComp = () => {
     }
   }, [email, router]);
 
-  const handleVerifyEmail = async () => {
-    if (otpValue.length !== 6) {
+  const handleVerifyEmail = async (code: string = otpValue) => {
+    if (code.length !== 6) {
       toast.error("Please enter a valid 6-digit verification code");
       return;
     }
@@ -46,7 +49,7 @@ const VerifyEmailComp = () => {
     setIsVerifying(true);
     try {
       const response = await apiResponse.post(`auth/verify-email`, {
-        verificationCode: otpValue,
+        verificationCode: code,
       });
 
       if (response.status === 200) {
@@ -65,6 +68,18 @@ const VerifyEmailComp = () => {
       toast.error(errorMessage);
     } finally {
       setIsVerifying(false);
+    }
+  };
+
+  const handleOtpChange = (value: string) => {
+    setOtpValue(value);
+    if (
+      value.length === 6 &&
+      !isVerifying &&
+      lastAutoSubmittedRef.current !== value
+    ) {
+      lastAutoSubmittedRef.current = value;
+      void handleVerifyEmail(value);
     }
   };
 
@@ -121,7 +136,7 @@ const VerifyEmailComp = () => {
               <InputOTP
                 maxLength={6}
                 value={otpValue}
-                onChange={(value) => setOtpValue(value)}
+                onChange={handleOtpChange}
                 disabled={isVerifying}
               >
                 <InputOTPGroup>
@@ -140,7 +155,7 @@ const VerifyEmailComp = () => {
 
             <div className='space-y-3'>
               <Button
-                onClick={handleVerifyEmail}
+                onClick={() => handleVerifyEmail()}
                 disabled={otpValue.length !== 6 || isVerifying}
                 className='w-full'
               >

@@ -1,40 +1,50 @@
 import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import BrandSettings from "@/components/user-settings/brand-settings";
 import AccountActionModal from "@/components/user/account-action-modal";
-import { Plan, User, useUserContext } from "@/context/AuthenticatedContext";
+import { Organization, Plan, User, useUserContext } from "@/context/AuthenticatedContext";
 import { useAccountActions } from "@/hooks/use-account-actions";
 import { useToast } from "@/hooks/use-toast";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  Check,
-  ChevronRight,
-  CreditCard,
-  Edit3,
-  Loader2,
-  Palette,
-  Save,
-  Shield,
-  User as UserIcon,
-} from "lucide-react";
+import { Check, ChevronRight, CreditCard, Edit3, Loader2, Palette, Save, Shield, User as UserIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const SettingsHome = () => {
   const [activeTab, setActiveTab] = useState("account");
   const [isEditing, setIsEditing] = useState(false);
   const { user, updateUserPreferences, fetchCurrentUser } = useUserContext();
+  const currentOrg: Organization | null =
+    user?.currentOrganization && typeof user.currentOrganization === "object"
+      ? user.currentOrganization
+      : user?.business && typeof user.business === "object"
+        ? (user.business as Organization)
+        : null;
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
@@ -57,12 +67,13 @@ const SettingsHome = () => {
     if (activeTab === "billing") fetchBilling();
   }, [activeTab]);
 
-  // Check for billing tab in URL params
+  // Sync active tab with ?tab= URL param.
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get("tab");
-    if (tab === "billing") {
-      setActiveTab("billing");
+    const valid = ["account", "brand", "billing", "security", "preferences"];
+    if (tab && valid.includes(tab)) {
+      setActiveTab(tab);
     }
   }, []);
 
@@ -104,6 +115,7 @@ const SettingsHome = () => {
 
   const settingsTabs = [
     { id: "account", label: "Account", icon: UserIcon },
+    { id: "brand", label: "Brand", icon: Palette },
     { id: "billing", label: "Billing", icon: CreditCard },
     { id: "security", label: "Security", icon: Shield },
     { id: "preferences", label: "Preferences", icon: Palette },
@@ -287,6 +299,9 @@ const SettingsHome = () => {
               </div>
             )}
 
+            {/* Brand Settings */}
+            {activeTab === "brand" && <BrandSettings />}
+
             {/* Billing Settings */}
             {activeTab === "billing" && (
               <div className='space-y-6'>
@@ -312,7 +327,7 @@ const SettingsHome = () => {
                             <p className='text-muted-foreground text-sm'>
                               {user?.userPlan === Plan.BASIC
                                 ? "Free"
-                                : user?.business?.businessPlan || "No plan"}
+                                : currentOrg?.businessPlan || "No plan"}
                             </p>
                           </div>
                           <Badge variant='secondary'>Active</Badge>
