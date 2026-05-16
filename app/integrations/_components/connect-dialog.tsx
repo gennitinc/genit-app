@@ -11,16 +11,6 @@ import { toast } from "sonner";
 import { type CSSProperties, type ComponentType, useCallback, useEffect, useRef, useState } from "react";
 
 
-
-//ks
-
-
-
-
-
-
-
-
 type PopupMessage =
   | {
       type: "gennit:integration:connected";
