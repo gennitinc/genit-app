@@ -1,9 +1,11 @@
 "use client";
 
-import { BrandIndicator } from "../common/brand-indicator";
 import { ModelSelector } from "../inspire/model-selector";
 import ShinyText from "../ui/shiny-text";
-import { BrandIdentityPanel } from "./messages/brand-identity-panel";
+import {
+  BrandIdentityPanel,
+  useBrandIdentityEnabled,
+} from "./messages/brand-identity-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthenticatedContext";
@@ -82,6 +84,16 @@ export function ChatInput({
   const { user } = useUserContext();
   const router = useRouter();
   const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 10;
+  const [brandIdentityEnabled] = useBrandIdentityEnabled();
+  const activeOrg =
+    user?.currentOrganization && typeof user.currentOrganization === "object"
+      ? user.currentOrganization
+      : user?.business && typeof user.business === "object"
+        ? user.business
+        : null;
+  const orgBrandColors = (activeOrg?.brandColors ?? []).filter(Boolean).slice(0, 3);
+  const hasOrgBrand = orgBrandColors.length > 0;
+  const showAppliedSwatches = hasOrgBrand && brandIdentityEnabled;
   const validateInput = useCallback((value: string, files: File[]) => {
     if (!value.trim() && files.length === 0) {
       return "Please enter a prompt or attach files";
@@ -330,15 +342,6 @@ export function ChatInput({
                   )}
                 </div>
 
-                <div className='flex items-center gap-3'>
-                  <BrandIndicator
-                    onClick={() => {
-                      setIsBrandSettingsOpen(!isBrandSettingsOpen);
-                      setIsSettingsOpen(false);
-                    }}
-                  />
-                </div>
-
                 {user && (user?.creditsRemaining ?? 0) === 0 && (
                   <div className='text-xs font-medium'>
                     {String(user?.userPlan) === "Basic" ? (
@@ -458,12 +461,21 @@ export function ChatInput({
                 <button
                   type='button'
                   className={cn(
-                    "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-                    isBrandSettingsOpen
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
+                    "relative box-border inline-flex h-fit min-w-fit items-center justify-center gap-1.5 rounded-full bg-transparent px-2 py-1 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+                    showAppliedSwatches
+                      ? "ring-primary/40 ring-1"
+                      : isBrandSettingsOpen
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5",
+                    !showAppliedSwatches && "w-8 !p-0"
                   )}
-                  aria-label='Brand settings'
+                  aria-label={
+                    showAppliedSwatches
+                      ? "Brand applied"
+                      : hasOrgBrand
+                        ? "Apply brand"
+                        : "Add brand"
+                  }
                   onClick={() => {
                     setIsBrandSettingsOpen(!isBrandSettingsOpen);
                     setIsSettingsOpen(false);
@@ -473,7 +485,19 @@ export function ChatInput({
                     });
                   }}
                 >
-                  <Palette className='size-4 shrink-0' />
+                  {showAppliedSwatches ? (
+                    <div className='flex -space-x-1.5'>
+                      {orgBrandColors.map((color, i) => (
+                        <span
+                          key={`${color}-${i}`}
+                          className='border-background h-4 w-4 rounded-full border-2 shadow-sm'
+                          style={{ backgroundColor: color }}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <Palette className='size-4 shrink-0' />
+                  )}
                 </button>
                 <button
                   type='button'

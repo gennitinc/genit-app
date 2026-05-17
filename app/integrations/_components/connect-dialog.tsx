@@ -1,15 +1,50 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { integrationsQueryKey } from "@/hooks/use-integrations";
-import { IntegrationPlatform, isPlatformSupported, requestConnectUrl } from "@/lib/integrations-api";
+import {
+  integrationsQueryKey,
+  useIntegrations,
+} from "@/hooks/use-integrations";
+import {
+  ConnectUrlResponse,
+  IntegrationPlatform,
+  connectBrevoWithApiKey,
+  connectTelegramWithToken,
+  isCredentialPlatform,
+  isMetaSurface,
+  isPlatformSupported,
+  requestConnectUrl,
+} from "@/lib/integrations-api";
+import { GradientFrame } from "@/utils/gradient-frame";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, CheckCircle2, Loader2, Lock, ShieldCheck, X } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  KeyRound,
+  Loader2,
+  Lock,
+  ShieldCheck,
+  Sparkles,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
-import { type CSSProperties, type ComponentType, useCallback, useEffect, useRef, useState } from "react";
-
+import {
+  type CSSProperties,
+  type ComponentType,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 type PopupMessage =
   | {
@@ -40,12 +75,96 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
   facebook: [
     "See the Pages you manage",
     "Publish posts, photos and videos to those Pages",
-    "Read engagement on posts you publish",
+    "Read engagement and comments on posts",
+    "Reply to Page direct messages",
   ],
   instagram: [
     "Identify your Instagram Business or Creator account",
     "Publish photos, videos, reels and carousels",
     "Read insights for the content we publish",
+    "Manage comments and direct messages",
+  ],
+  meta_ads: [
+    "List your ad accounts in Business Manager",
+    "Create and manage campaigns, ad sets and ads",
+    "Read ad performance, spend and conversions",
+  ],
+  threads: [
+    "Identify your Threads profile",
+    "Publish text, image, video and carousel posts",
+    "Read and reply to comments on your threads",
+    "Read insights on your threads and profile",
+  ],
+  whatsapp: [
+    "List the WhatsApp Business phone numbers you manage",
+    "Send template, text and media messages on your behalf",
+    "Read message templates and approval status",
+    "Read messaging analytics for your numbers",
+  ],
+  gmail: [
+    "Identify your Google account (email + profile picture)",
+    "Send email on your behalf via Gmail",
+    "Read your inbox to surface replies and threads",
+    "Modify labels on messages we send and receive",
+  ],
+  telegram: [
+    "Send messages, photos, documents and videos from your bot",
+    "Read recent updates to surface known chats",
+    "Reply automatically to users who message your bot",
+  ],
+  x: [
+    "Identify your X account (handle, name, profile picture)",
+    "Post tweets, threads and replies on your behalf",
+    "Read your recent tweets, mentions and replies",
+    "Pull per-tweet impressions and engagement metrics",
+  ],
+  linkedin: [
+    "Identify your LinkedIn profile (name, email, picture)",
+    "Post to your personal feed and any company pages you admin",
+    "Read comments on the posts we publish",
+    "Pull share analytics for company-page posts",
+  ],
+  tiktok: [
+    "Identify your TikTok account (handle, display name, avatar)",
+    "Publish videos directly to your TikTok account",
+    "List your recent videos with view, like, comment and share counts",
+    "Read comments on videos posted to your account",
+  ],
+  youtube: [
+    "Identify your YouTube channel (title, avatar, subscriber count)",
+    "Upload videos and manage their privacy status",
+    "List your videos and read viewer comments",
+    "Reply to comments and pull view/watch-time analytics",
+  ],
+  brevo: [
+    "Identify the Brevo account (email + plan info)",
+    "Send transactional emails on your behalf",
+    "Read and create contacts in your Brevo lists",
+    "List your marketing campaigns and pull delivery / open / click stats",
+  ],
+  pinterest: [
+    "Identify your Pinterest account (handle, avatar, business name)",
+    "List your boards and create pins from image URLs",
+    "List, update and delete pins on your account",
+    "Pull per-pin and account-level impressions, clicks, saves and outbound clicks",
+  ],
+  snapchat: [
+    "Identify the connected Snap Business user",
+    "List the organizations and ad accounts you can manage",
+    "List ad campaigns and read account + campaign performance stats",
+    "Read spend, impressions, swipes and view metrics in your reporting timezone",
+  ],
+  google_ads: [
+    "List the Google Ads customers your Google account can access (managers + child accounts)",
+    "Read campaign metadata via GAQL — status, channel type, budget pacing",
+    "Pull per-day metrics: impressions, clicks, cost, conversions, conversion value",
+    "Filter analytics down to a single campaign id",
+  ],
+  tiktok_ads: [
+    "Identify the TikTok Business advertiser accounts you authorized at connect time",
+    "List campaigns under each advertiser",
+    "Pull /report/integrated/get/ data at campaign, ad-group, or ad level",
+    "Filter reports by campaign id and choose your own metrics + dimensions",
   ],
 };
 
@@ -54,7 +173,96 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
     "Instagram account must be Business or Creator",
     "Instagram must be linked to a Facebook Page",
   ],
+  meta_ads: [
+    "You must be admin on at least one ad account in Business Manager",
+    "Two-factor auth must be enabled on your Meta account",
+  ],
+  threads: [
+    "You'll sign in directly with your Threads account",
+    "Threads uses a separate login from Facebook and Instagram",
+  ],
+  whatsapp: [
+    "Your phone number must be added to a WhatsApp Business Account",
+    "The WABA must live in a Meta Business Manager you own or admin",
+  ],
+  gmail: [
+    "Gennit is a verified Google app — if you see a warning screen, click Advanced → Continue",
+    "Workspace admins may need to allow third-party Gmail apps for the domain",
+  ],
+  telegram: [
+    "Create a bot in @BotFather and copy the API token (format: <id>:<secret>)",
+    "Users must /start your bot before it can DM them — group/channel admins must add it",
+  ],
+  x: [
+    "Your X developer app must have OAuth 2.0 enabled with the User authentication settings",
+    "Posting requires a Free, Basic, or Pro X API plan — read-only plans cannot publish",
+  ],
+  linkedin: [
+    "Posting as a company page requires being an admin of that page in LinkedIn",
+    "We'll create one connection per page you can post as, plus one for your personal profile",
+  ],
+  tiktok: [
+    "Direct publish needs the Content Posting API approved on your TikTok developer app",
+    "The video URL you publish must be on a domain you've verified in the TikTok developer portal",
+  ],
+  youtube: [
+    "Your Google account must already have a YouTube channel — create one at youtube.com/create_channel first",
+    "Daily upload quota is a fixed cost per video in YouTube API units — uploading more than 6 a day on the default quota will fail",
+  ],
+  brevo: [
+    "Generate a v3 API key in Brevo → SMTP & API → API Keys (not the older v2 key)",
+    "Sending requires at least one verified sender address on your Brevo account",
+  ],
+  pinterest: [
+    "Your Pinterest app must be approved for the boards / pins scopes — apps in trial mode are limited to the app owner's account",
+    "Pin images must be publicly accessible https URLs at least 75×75 px",
+  ],
+  snapchat: [
+    "Your Snap dev app must be approved for the snapchat-marketing-api scope",
+    "You need at least one ad account in a Snap Business Manager you admin — we provision one connection per ad account",
+  ],
+  google_ads: [
+    "Set GOOGLE_ADS_DEVELOPER_TOKEN — apply at ads.google.com/aw/apicenter (test tokens work on test accounts only)",
+    "Connecting Google account must have access to at least one Google Ads customer; managers + children each become a separate connection",
+  ],
+  tiktok_ads: [
+    "Register a TikTok Business Marketing API app (separate from the regular TikTok developer app) and set TIKTOK_ADS_APP_ID / TIKTOK_ADS_SECRET",
+    "During the TikTok consent screen you choose which advertisers to authorize — we provision one connection per choice",
+  ],
 };
+
+// Per-platform copy for the credential-entry flow (no OAuth). Used to build
+// the input field and the help text under it. Keyed by platform name.
+interface CredentialInputConfig {
+  label: string;
+  placeholder: string;
+  autoComplete?: string;
+  helpUrl?: string;
+  helpUrlLabel?: string;
+  helpSuffix?: string;
+}
+
+const CREDENTIAL_INPUT: Partial<
+  Record<IntegrationPlatform, CredentialInputConfig>
+> = {
+  telegram: {
+    label: "Bot API token",
+    placeholder: "123456789:ABCdefGHIjklMNOpqrSTUvwxYZ",
+    autoComplete: "off",
+    helpUrl: "https://t.me/BotFather",
+    helpUrlLabel: "@BotFather",
+    helpSuffix: ". We'll encrypt it before storing.",
+  },
+  brevo: {
+    label: "Brevo API key",
+    placeholder: "xkeysib-...",
+    autoComplete: "off",
+    helpUrl: "https://app.brevo.com/settings/keys/api",
+    helpUrlLabel: "your Brevo account",
+    helpSuffix: ". Keys are AES-encrypted at rest.",
+  },
+};
+
 
 export function ConnectDialog({
   open,
@@ -68,13 +276,24 @@ export function ConnectDialog({
   const [phase, setPhase] = useState<Phase>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
+  const [credentialValue, setCredentialValue] = useState("");
   const popupRef = useRef<Window | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const qc = useQueryClient();
   const { user, fetchCurrentUser } = useUserContext();
+  const { identity } = useIntegrations();
   const currentOrg = user?.currentOrganization;
   const orgId =
     typeof currentOrg === "object" && currentOrg ? currentOrg._id : undefined;
+
+  const isSmartConnectEligible = useMemo(() => {
+    return Boolean(
+      platform &&
+      isMetaSurface(platform) &&
+      identity &&
+      identity.status === "active"
+    );
+  }, [platform, identity]);
 
   const closePopup = useCallback(() => {
     if (pollRef.current) {
@@ -93,8 +312,12 @@ export function ConnectDialog({
       setPhase("idle");
       setErrorMessage(null);
       setConnectedAccount(null);
+      setCredentialValue("");
     }
   }, [open, closePopup]);
+
+  const isCredentialMode = platform ? isCredentialPlatform(platform) : false;
+  const credentialConfig = platform ? CREDENTIAL_INPUT[platform] : undefined;
 
   useEffect(() => {
     if (!platform) return;
@@ -135,16 +358,47 @@ export function ConnectDialog({
     setPhase("connecting");
     setErrorMessage(null);
 
+    let response: ConnectUrlResponse;
     try {
-      const url = await requestConnectUrl(platform);
+      response = await requestConnectUrl(platform);
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to start connection";
+      setErrorMessage(msg);
+      setPhase("error");
+      toast.error("Could not start connection", { description: msg });
+      return;
+    }
+
+    // Smart-connect fast path: the org already has a Meta identity with
+    // sufficient scopes for this surface. No popup needed — backend already
+    // provisioned the Integration rows.
+    if (response.skipOAuth) {
+      const provisioned = response.provisioned;
+      const name =
+        provisioned.pages?.[0]?.pageName ||
+        provisioned.instagram?.[0]?.username ||
+        provisioned.adAccounts?.[0]?.name ||
+        provisioned.whatsapp?.[0]?.displayPhoneNumber ||
+        null;
+      setConnectedAccount(name);
+      setPhase("success");
+      qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+      toast.success(`Connected ${platformName}`, {
+        description: name ? `@${name}` : undefined,
+      });
+      return;
+    }
+
+    try {
       const width = 600;
       const height = 720;
       const left = window.screenX + (window.outerWidth - width) / 2;
       const top = window.screenY + (window.outerHeight - height) / 2;
-
-      console.log("hitting connection btn")
       const popup = window.open(
-        url,
+        response.authorizeUrl,
         "gennit_oauth",
         `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
       );
@@ -164,15 +418,53 @@ export function ConnectDialog({
           );
         }
       }, 600);
-
     } catch (err: any) {
       const msg =
-        err?.response?.data?.message || err?.message || "Failed to start OAuth";
+        err?.response?.data?.message || err?.message || "Failed to open popup";
       setErrorMessage(msg);
       setPhase("error");
       toast.error("Could not start connection", { description: msg });
     }
-  }, [platform, platformName]);
+  }, [platform, platformName, qc, orgId]);
+
+  const handleCredentialSubmit = useCallback(async () => {
+    if (!platform) return;
+    const value = credentialValue.trim();
+    if (!value) {
+      setErrorMessage("Token is required");
+      setPhase("error");
+      return;
+    }
+    setPhase("connecting");
+    setErrorMessage(null);
+    try {
+      let name: string | null = null;
+      if (platform === "telegram") {
+        const result = await connectTelegramWithToken(value);
+        name = result.username ? `@${result.username}` : `Bot ${result.botId}`;
+      } else if (platform === "brevo") {
+        const result = await connectBrevoWithApiKey(value);
+        name = result.displayName || result.email;
+      } else {
+        throw new Error(`Credential connect not implemented for ${platform}`);
+      }
+      setConnectedAccount(name);
+      setPhase("success");
+      qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+      toast.success(`Connected ${platformName}`, {
+        description: name ?? undefined,
+      });
+      return;
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to validate credential";
+      setErrorMessage(msg);
+      setPhase("error");
+      toast.error("Could not connect", { description: msg });
+    }
+  }, [platform, platformName, credentialValue, qc, orgId]);
 
   function handleDone() {
     onOpenChange(false);
@@ -191,9 +483,9 @@ export function ConnectDialog({
       >
         <div
           className='relative px-6 pt-7 pb-6'
-          style={{
-            background: `radial-gradient(circle 280px at 12% 0%, ${glow}, transparent 60%)`,
-          }}
+          // style={{
+          //   background: `radial-gradient(circle 280px at 12% 0%, ${glow}, transparent 60%)`,
+          // }}
         >
           <button
             type='button'
@@ -229,23 +521,27 @@ export function ConnectDialog({
                 </div>
               ) : (
                 <>
-                  <p className='text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase'>
-                    Gennit will be able to
-                  </p>
-                  <ul className='space-y-2'>
-                    {scopes.map((scope) => (
-                      <li
-                        key={scope}
-                        className='text-foreground flex items-start gap-2 text-sm'
-                      >
-                        <CheckCircle2 className='mt-0.5 h-4 w-4 shrink-0 text-emerald-500' />
-                        <span>{scope}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className='relative bg-neutral-50 px-3 py-3 dark:bg-neutral-800'>
+                    <GradientFrame />
+                    <p className='text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase'>
+                      Gennit will be able to
+                    </p>
+                    <ul className='space-y-2'>
+                      {scopes.map((scope) => (
+                        <li
+                          key={scope}
+                          className='text-foreground flex items-start gap-2 text-sm'
+                        >
+                          <CheckCircle2 className='mt-0.5 h-4 w-4 shrink-0 text-emerald-500' />
+                          <span>{scope}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
                   {requirements.length > 0 && (
-                    <div className='mt-4 rounded-md border border-neutral-300 bg-neutral-50 px-3 py-3 dark:border-neutral-700 dark:bg-neutral-800'>
+                    <div className='relative mt-4 bg-neutral-50 px-3 py-3 dark:bg-neutral-800'>
+                      <GradientFrame />
                       <p className='text-foreground mb-1 text-xs font-medium'>
                         Before you continue
                       </p>
@@ -257,6 +553,67 @@ export function ConnectDialog({
                           </li>
                         ))}
                       </ul>
+                    </div>
+                  )}
+
+                  {isSmartConnectEligible && (
+                    <div className='mt-4 flex items-start gap-2 rounded-md border border-violet-500/30 bg-violet-500/4 px-3 py-2.5 dark:border-violet-300/30'>
+                      <Sparkles className='mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-500 dark:text-violet-300' />
+                      <p className='text-foreground text-xs'>
+                        You&apos;re already signed in to Meta as{" "}
+                        <span className='font-medium'>
+                          {identity?.metaUserName}
+                        </span>
+                        . We&apos;ll reuse that login when possible — you may
+                        not see a popup.
+                      </p>
+                    </div>
+                  )}
+
+                  {isCredentialMode && credentialConfig && (
+                    <div className='mt-4'>
+                      <label
+                        htmlFor='credential-input'
+                        className='text-muted-foreground mb-1.5 block text-xs font-medium tracking-wide uppercase'
+                      >
+                        {credentialConfig.label}
+                      </label>
+                      <div className='relative'>
+                        <KeyRound className='text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2' />
+                        <input
+                          id='credential-input'
+                          type='password'
+                          autoComplete={credentialConfig.autoComplete ?? "off"}
+                          spellCheck={false}
+                          value={credentialValue}
+                          onChange={(e) => setCredentialValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              handleCredentialSubmit();
+                            }
+                          }}
+                          placeholder={credentialConfig.placeholder}
+                          className='border-border bg-card/60 text-foreground placeholder:text-muted-foreground w-full rounded-md border py-2 pr-3 pl-9 font-mono text-xs backdrop-blur transition focus:ring-1 focus:ring-cyan-500/40 focus:outline-none dark:border-white/10 dark:bg-white/5'
+                        />
+                      </div>
+                      <p className='text-muted-foreground mt-1.5 text-[11px]'>
+                        Paste the key from{" "}
+                        {credentialConfig.helpUrl ? (
+                          <a
+                            href={credentialConfig.helpUrl}
+                            target='_blank'
+                            rel='noreferrer'
+                            className='text-foreground underline-offset-2 hover:underline'
+                          >
+                            {credentialConfig.helpUrlLabel ?? "the provider"}
+                          </a>
+                        ) : (
+                          credentialConfig.helpUrlLabel ?? "the provider"
+                        )}
+                        {credentialConfig.helpSuffix ??
+                          ". We'll encrypt it before storing."}
+                      </p>
                     </div>
                   )}
                 </>
@@ -276,11 +633,14 @@ export function ConnectDialog({
                 </div>
               </div>
               <p className='text-foreground mt-4 text-sm font-medium'>
-                Waiting for {platformName}…
+                {isCredentialMode
+                  ? `Validating with ${platformName}…`
+                  : `Waiting for ${platformName}…`}
               </p>
               <p className='text-muted-foreground mt-1 text-center text-xs'>
-                Complete sign-in in the popup window. This dialog will update
-                automatically.
+                {isCredentialMode
+                  ? "Checking the token with the platform. This usually takes a second."
+                  : "Complete sign-in in the popup window. This dialog will update automatically."}
               </p>
             </div>
           )}
@@ -303,7 +663,8 @@ export function ConnectDialog({
 
           {phase === "error" && (
             <div className='relative z-10 mt-6'>
-              <div className='0 rounded-md border-neutral-300 bg-neutral-50 px-3 py-3 text-sm dark:bg-neutral-800'>
+              <div className='relative bg-neutral-50 px-3 py-3 text-sm dark:bg-neutral-800'>
+                <GradientFrame />
                 <p className='text-foreground font-medium'>Connection failed</p>
                 <p className='text-muted-foreground mt-1 text-xs'>
                   {errorMessage}
@@ -313,23 +674,26 @@ export function ConnectDialog({
           )}
         </div>
 
-        <div className='border-border bg-muted/30 flex items-center justify-between gap-3 border-t px-6 py-3 dark:border-white/10 dark:bg-white/[0.02]'>
+        <div className='border-border bg-muted/30 flex items-center justify-between gap-3 border-t px-6 py-3 dark:border-white/10 dark:bg-white/2'>
           <div className='text-muted-foreground flex items-center gap-1.5 text-[11px]'>
             <ShieldCheck className='h-3.5 w-3.5' />
-            <span>Tokens encrypted at rest (AES-256)</span>
+            <span>All tokens are securely encrypted</span>
           </div>
 
           {phase === "idle" && (
             <Button
               type='button'
               size='sm'
-              onClick={handleConnect}
-              disabled={!isSupported}
+              onClick={isCredentialMode ? handleCredentialSubmit : handleConnect}
+              disabled={
+                !isSupported ||
+                (isCredentialMode && !credentialValue.trim())
+              }
               className='bg-linear-to-r from-cyan-500 to-blue-500 text-white transition-all hover:bg-linear-to-bl'
             >
               {isSupported ? (
                 <>
-                  Continue
+                  {isCredentialMode ? "Save key" : "Continue"}
                   <ArrowRight className='ml-1 h-3.5 w-3.5' />
                 </>
               ) : (
@@ -379,7 +743,10 @@ export function ConnectDialog({
               <Button
                 type='button'
                 size='sm'
-                onClick={handleConnect}
+                onClick={() => {
+                  setPhase("idle");
+                  if (!isCredentialMode) handleConnect();
+                }}
                 className='bg-linear-to-r from-cyan-500 to-blue-500 text-white'
               >
                 Try again

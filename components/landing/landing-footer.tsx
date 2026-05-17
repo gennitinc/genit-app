@@ -271,7 +271,7 @@ export function LandingFooter() {
             </div>
             <div className='mx-auto max-w-3xl text-center'>
               <h2 className='mb-6 font-serif text-4xl leading-tight font-bold tracking-tight text-gray-200 sm:text-5xl lg:text-6xl'>
-                Idea to Design in Seconds
+                Ready? Set, Gennit.
               </h2>
               <p className='mx-auto mb-10 max-w-xl text-lg leading-relaxed text-gray-400'>
                 Join a community of Creatives who have created

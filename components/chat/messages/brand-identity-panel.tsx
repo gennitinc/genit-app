@@ -102,10 +102,17 @@ export function BrandIdentityPanel() {
   // If the panel has an active org context, re-import edits should land
   // on that org instead of the user's onboarding doc — so switching org and
   // editing the brand keeps things in sync.
-  const hasActiveOrg =
-    !!(user?.currentOrganization && typeof user.currentOrganization === "object") ||
-    !!(user?.business && typeof user.business === "object");
+  const activeOrg: Organization | null =
+    user?.currentOrganization && typeof user.currentOrganization === "object"
+      ? user.currentOrganization
+      : user?.business && typeof user.business === "object"
+        ? (user.business as Organization)
+        : null;
+  const hasActiveOrg = !!activeOrg;
   const dialogMode = hasActiveOrg ? "edit-org" : "user-onboarding";
+  const canReimport = hasActiveOrg
+    ? !!user?._id && activeOrg?.owner === user._id
+    : true;
 
   if (!o || !hasBrandData) {
     return (
@@ -291,14 +298,16 @@ export function BrandIdentityPanel() {
           >
             Edit brand identity →
           </Link>
-          <button
-            type='button'
-            onClick={() => setIsImportOpen(true)}
-            className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 rounded-md border border-neutral-200 px-2 py-1 text-[10px] font-medium transition-colors hover:bg-neutral-100 dark:border-white/10 dark:hover:bg-white/5'
-          >
-            <Download className='h-3 w-3' />
-            Re-import
-          </button>
+          {canReimport && (
+            <button
+              type='button'
+              onClick={() => setIsImportOpen(true)}
+              className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 rounded-md border border-neutral-200 px-2 py-1 text-[10px] font-medium transition-colors hover:bg-neutral-100 dark:border-white/10 dark:hover:bg-white/5'
+            >
+              <Download className='h-3 w-3' />
+              Re-import
+            </button>
+          )}
         </div>
       </div>
     </div>

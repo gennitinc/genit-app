@@ -24,6 +24,7 @@ import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import {
   ImageIcon,
   Loader2,
+  Lock,
   Palette,
   Plus,
   Save,
@@ -158,6 +159,9 @@ export default function BrandSettings() {
     return null;
   }, [user?.currentOrganization, user?.business]);
 
+  const isOwner = !!user?._id && !!currentOrg && currentOrg.owner === user._id;
+  const isReadOnly = !!currentOrg && !isOwner;
+
   const [form, setForm] = useState<BrandForm>(emptyBrandForm);
   const [initial, setInitial] = useState<BrandForm>(emptyBrandForm);
   const [isSaving, setIsSaving] = useState(false);
@@ -238,6 +242,7 @@ export default function BrandSettings() {
   );
 
   const handleLogoSelect = async (file: File) => {
+    if (isReadOnly) return;
     if (file.size > 5 * 1024 * 1024) {
       toast({
         title: "Logo too large",
@@ -278,6 +283,7 @@ export default function BrandSettings() {
   };
 
   const handleSave = async () => {
+    if (isReadOnly) return;
     if (!currentOrg?._id) {
       toast({
         title: "No organization selected",
@@ -328,6 +334,19 @@ export default function BrandSettings() {
 
   return (
     <div className='space-y-6'>
+      {isReadOnly && (
+        <div className='border-border bg-muted/40 flex items-start gap-3 rounded-lg border px-4 py-3 text-sm'>
+          <Lock className='text-muted-foreground mt-0.5 h-4 w-4 shrink-0' />
+          <div>
+            <p className='text-foreground font-medium'>View-only access</p>
+            <p className='text-muted-foreground mt-0.5 text-xs'>
+              Only the organization owner can edit this brand. Ask the owner if
+              something needs to change.
+            </p>
+          </div>
+        </div>
+      )}
+      <fieldset disabled={isReadOnly} className='contents'>
       <Card>
         <CardHeader>
           <CardTitle className='flex items-center gap-2'>
@@ -561,28 +580,31 @@ export default function BrandSettings() {
         </CardContent>
       </Card>
 
-      <div className='bg-background/80 sticky bottom-0 -mx-1 flex items-center justify-end gap-2 border-t py-3 backdrop-blur'>
-        <Button
-          variant='ghost'
-          onClick={handleReset}
-          disabled={!dirty || isSaving}
-        >
-          Reset
-        </Button>
-        <Button onClick={handleSave} disabled={!dirty || isSaving}>
-          {isSaving ? (
-            <>
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-              Saving...
-            </>
-          ) : (
-            <>
-              <Save className='mr-2 h-4 w-4' />
-              Save changes
-            </>
-          )}
-        </Button>
-      </div>
+      {!isReadOnly && (
+        <div className='bg-background/80 sticky bottom-0 -mx-1 flex items-center justify-end gap-2 border-t py-3 backdrop-blur'>
+          <Button
+            variant='ghost'
+            onClick={handleReset}
+            disabled={!dirty || isSaving}
+          >
+            Reset
+          </Button>
+          <Button onClick={handleSave} disabled={!dirty || isSaving}>
+            {isSaving ? (
+              <>
+                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className='mr-2 h-4 w-4' />
+                Save changes
+              </>
+            )}
+          </Button>
+        </div>
+      )}
+      </fieldset>
     </div>
   );
 }

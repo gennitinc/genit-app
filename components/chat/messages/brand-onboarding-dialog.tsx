@@ -20,7 +20,7 @@ import {
 } from "@/context/AuthenticatedContext";
 import { apiResponse } from "@/utils/apiResponse";
 import { toast } from "sonner";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const STEP_ORDER: OnboardingStep[] = ["import", "dna", "questions"];
 
@@ -69,12 +69,17 @@ export function BrandOnboardingDialog({
     return null;
   }, [user?.currentOrganization, user?.business]);
 
-  // Hydrate brand whenever the dialog opens. Source depends on mode:
-  // - create-org: start fresh
-  // - edit-org:   prefill from the active organization
-  // - default:    prefill from the user's onboarding doc (legacy)
+  // Hydrate brand once per open. We must NOT re-hydrate when user/activeOrg
+  // changes mid-flow — persistOrg() updates currentOrganization, which would
+  // otherwise reset the step back to "import" after a successful import.
+  const hydratedRef = useRef(false);
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      hydratedRef.current = false;
+      return;
+    }
+    if (hydratedRef.current) return;
+    hydratedRef.current = true;
     if (isCreateOrg) {
       setBrand(emptyBrand);
       setStep("import");
@@ -227,13 +232,9 @@ export function BrandOnboardingDialog({
   const handleImportComplete = useCallback(
     async (imported: BrandData) => {
       setBrand(imported);
-      if (isEditOrg) {
-        try {
-          await persistOrg(imported);
-        } catch (err) {
-          console.error("persist after import failed (edit-org)", err);
-        }
-      } else if (!isCreateOrg) {
+      // edit-org defers all writes to handleFinish so a re-import that's
+      // abandoned mid-flow doesn't overwrite the live organization.
+      if (!isCreateOrg && !isEditOrg) {
         try {
           await persist({ ...imported, onboardingStep: "dna" });
         } catch (err) {
@@ -242,26 +243,22 @@ export function BrandOnboardingDialog({
       }
       setStep("dna");
     },
-    [persist, persistOrg, isCreateOrg, isEditOrg]
+    [persist, isCreateOrg, isEditOrg]
   );
 
   const handleDnaContinue = useCallback(async () => {
-    if (isCreateOrg) {
+    if (isCreateOrg || isEditOrg) {
       setStep("questions");
       return;
     }
     try {
-      if (isEditOrg) {
-        await persistOrg(brand);
-      } else {
-        await persist({ ...brand, onboardingStep: "questions" });
-      }
+      await persist({ ...brand, onboardingStep: "questions" });
       setStep("questions");
     } catch (err) {
       console.error("persist DNA failed", err);
       toast.error("Could not save brand DNA. Try again.");
     }
-  }, [brand, persist, persistOrg, isCreateOrg, isEditOrg]);
+  }, [brand, persist, isCreateOrg, isEditOrg]);
 
   const handleFinish = useCallback(
     async ({ role, hearAboutUs }: { role: string; hearAboutUs: string }) => {

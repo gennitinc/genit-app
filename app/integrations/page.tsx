@@ -1,14 +1,16 @@
+import { IntegrationsExplorer } from "./integrations-explorer";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
-import {
-  ArrowRight,
-  Code,
-  GitBranchPlus,
-  Plus,
-  Zap,
-} from "lucide-react";
+import { GradientFrame } from "@/utils/gradient-frame";
+import { ArrowRight, Code, GitBranchPlus, Plus, Zap } from "lucide-react";
 import type { Metadata } from "next";
-import { IntegrationsExplorer } from "./integrations-explorer";
+
+
+
+
+
+
+
 
 export const metadata: Metadata = {
   title: "Integrations – Gennit AI",
@@ -36,12 +38,11 @@ export default function IntegrationsPage() {
                 Works with your favorite tools
               </h2>
               <p className='text-muted-foreground mt-3 text-base'>
-                Connect Gennit with the tools you already use every day
+                Connect to the tools your brands already use every day
               </p>
             </div>
-
+            Custom Integration
             <IntegrationsExplorer />
-
             <section className='mt-16'>
               <div className='mb-6 flex items-baseline gap-3'>
                 <h3 className='text-foreground text-xl font-semibold tracking-tight'>
@@ -52,9 +53,7 @@ export default function IntegrationsPage() {
                 </span>
               </div>
               <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
-                <div
-                  className='integration-card relative z-1 rounded-md p-px [background:radial-gradient(230px_at_0%_0%,rgba(0,0,0,0.08),#ffffff)] dark:[background:radial-gradient(230px_at_0%_0%,rgba(113,113,122,0.4),rgb(12,13,13))]'
-                >
+                <div className='integration-card relative z-1 rounded-md p-px [background:radial-gradient(230px_at_0%_0%,rgba(0,0,0,0.08),#ffffff)] dark:[background:radial-gradient(230px_at_0%_0%,rgba(113,113,122,0.4),rgb(12,13,13))]'>
                   <div
                     className='animated-dot absolute z-2 h-[5px] w-[5px] rounded-full bg-zinc-400 dark:bg-zinc-400'
                     style={{
@@ -81,7 +80,7 @@ export default function IntegrationsPage() {
                       </div>
                       <span className='inline-flex items-center gap-1.5 rounded-md bg-zinc-500/10 px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
                         <Zap className='h-3 w-3' />
-                        API
+                        API - Coming Soon
                       </span>
                     </div>
                     <h3 className='text-foreground relative z-10 mt-4 text-lg font-semibold tracking-tight'>
@@ -100,55 +99,11 @@ export default function IntegrationsPage() {
                         <ArrowRight className='h-3 w-3' />
                       </a>
                     </div>
-                    <div
-                      className='absolute h-px w-full [background:linear-gradient(90deg,rgba(0,0,0,0.15)_30%,rgba(0,0,0,0.04)_70%)] dark:[background:linear-gradient(90deg,rgba(136,136,136,0.3)_30%,#1d1f1f_70%)]'
-                      style={{
-                        top: "10%",
-                        left: "0%",
-                        maskImage:
-                          "linear-gradient(90deg, transparent, black 15%, black 85%, transparent)",
-                        WebkitMaskImage:
-                          "linear-gradient(90deg, transparent, black 15%, black 85%, transparent)",
-                      }}
-                    />
-                    <div
-                      className='absolute z-1 h-full w-px [background:linear-gradient(180deg,rgba(0,0,0,0.15)_30%,rgba(0,0,0,0.04)_70%)] dark:[background:linear-gradient(180deg,rgba(116,116,116,0.3)_30%,#222424_70%)]'
-                      style={{
-                        left: "10%",
-                        top: "0%",
-                        maskImage:
-                          "linear-gradient(0deg, transparent, black 15%, black 85%, transparent)",
-                        WebkitMaskImage:
-                          "linear-gradient(0deg, transparent, black 15%, black 85%, transparent)",
-                      }}
-                    />
-                    <div
-                      className='absolute h-px w-full bg-zinc-200 dark:bg-[#2c2c2c]'
-                      style={{
-                        bottom: "10%",
-                        left: "0%",
-                        maskImage:
-                          "linear-gradient(90deg, transparent, black 15%, black 85%, transparent)",
-                        WebkitMaskImage:
-                          "linear-gradient(90deg, transparent, black 15%, black 85%, transparent)",
-                      }}
-                    />
-                    <div
-                      className='absolute h-full w-px bg-zinc-200 dark:bg-[#2c2c2c]'
-                      style={{
-                        right: "10%",
-                        top: "0%",
-                        maskImage:
-                          "linear-gradient(10deg, transparent, black 15%, black 85%, transparent)",
-                        WebkitMaskImage:
-                          "linear-gradient(10deg, transparent, black 15%, black 85%, transparent)",
-                      }}
-                    />
+                   <GradientFrame />
                   </div>
                 </div>
               </div>
             </section>
-
             <div className='mt-12 text-center'>
               <p className='text-muted-foreground mb-4 text-sm'>
                 Need another integration?
@@ -157,6 +112,16 @@ export default function IntegrationsPage() {
                 <Plus className='h-4 w-4' />
                 Request integration
               </button>
+              <p className='text-muted-foreground mt-6 text-xs'>
+                Need to disconnect or delete your data?{" "}
+                <a
+                  href='/removal-instructions'
+                  className='text-foreground underline-offset-4 hover:underline'
+                >
+                  Removal instructions
+                </a>
+                .
+              </p>
             </div>
             <style
               dangerouslySetInnerHTML={{

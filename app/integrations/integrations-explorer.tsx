@@ -1,16 +1,42 @@
 "use client";
 
-import { BrevoBrand, FacebookBrand, GmailBrand, InstagramBrand, LinkedinBrand, MicrosoftOutlookBrand, PinterestBrand, SnapchatBrand, TelegramBrand, TikTokBrand, WhatsAppBrand, XBrand, YoutubeBrand } from "@/app/(auth)/onboarding/_components/social-icons";
+import { ConnectDialog } from "./_components/connect-dialog";
+import { ManageDialog } from "./_components/manage-dialog";
+import {
+  BrevoBrand,
+  FacebookBrand,
+  GmailBrand,
+  InstagramBrand,
+  LinkedinBrand,
+  MicrosoftOutlookBrand,
+  PinterestBrand,
+  SnapchatBrand,
+  TelegramBrand,
+  TikTokBrand,
+  WhatsAppBrand,
+  XBrand,
+  YoutubeBrand,
+} from "@/app/(auth)/onboarding/_components/social-icons";
 import { useIntegrations } from "@/hooks/use-integrations";
 import {
   IntegrationConnection,
   IntegrationPlatform,
-  isPlatformSupported,
 } from "@/lib/integrations-api";
-import { ArrowRight, AtSign, CheckCircle2, Megaphone, Search, TrendingUp } from "lucide-react";
-import { type CSSProperties, type ComponentType, useMemo, useState } from "react";
-import { ConnectDialog } from "./_components/connect-dialog";
-import { ManageDialog } from "./_components/manage-dialog";
+import { GradientFrame } from "@/utils/gradient-frame";
+import {
+  ArrowRight,
+  AtSign,
+  CheckCircle2,
+  Megaphone,
+  Search,
+  TrendingUp,
+} from "lucide-react";
+import {
+  type CSSProperties,
+  type ComponentType,
+  useMemo,
+  useState,
+} from "react";
 
 type BaseStatus = "available" | "soon";
 type CardStatus = "connected" | "available" | "soon";
@@ -58,54 +84,54 @@ const INTEGRATIONS: Integration[] = [
       "Publish threads, replies and quotes. Track conversation reach in real time.",
     category: "Socials",
     icon: AtSign,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(244, 244, 245, 0.6)",
   },
   {
     platform: "linkedin",
     name: "LinkedIn",
     description:
-      "Post to company pages, publish articles and capture leads from your campaigns.",
+      "Post to your profile and company pages. Read comments and track post analytics.",
     category: "Socials",
     icon: LinkedinBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(14, 165, 233, 0.8)",
   },
   {
     platform: "x",
     name: "X (Twitter)",
     description:
-      "Compose tweets, threads and media posts. Track replies and surface viral moments.",
+      "Compose tweets and threads. Pull mentions, replies and per-tweet analytics.",
     category: "Socials",
     icon: XBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(244, 244, 245, 0.7)",
   },
   {
     platform: "tiktok",
     name: "TikTok",
     description:
-      "Publish videos, sync creator analytics and grow audiences through trending sounds.",
+      "Direct-publish videos, track per-video metrics and read viewer comments.",
     category: "Socials",
     icon: TikTokBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(12, 12, 12, 1)",
   },
   {
     platform: "youtube",
     name: "YouTube",
     description:
-      "Upload videos and shorts, manage thumbnails and respond to comments at scale.",
+      "Resumable video uploads, comment moderation and channel + per-video analytics.",
     category: "Socials",
     icon: YoutubeBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(239, 68, 68, 0.8)",
   },
   {
     platform: "pinterest",
     name: "Pinterest",
     description:
-      "Publish pins, run shopping ads and surface trend insights for your audience.",
+      "Create pins on your boards, list recent pins and pull per-pin + account analytics.",
     category: "Socials",
     icon: PinterestBrand,
     baseStatus: "soon",
@@ -113,12 +139,12 @@ const INTEGRATIONS: Integration[] = [
   },
   {
     platform: "snapchat",
-    name: "Snapchat",
+    name: "Snapchat Ads",
     description:
-      "Reach Gen Z with story posts and Snap ads, all from one creative pipeline.",
-    category: "Socials",
+      "Manage Snap ad campaigns and read account-level + per-campaign performance stats.",
+    category: "Ads Campaigns",
     icon: SnapchatBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(250, 204, 21, 0.8)",
   },
   {
@@ -128,27 +154,27 @@ const INTEGRATIONS: Integration[] = [
       "Spin up campaigns, ad sets and creatives. Let agents optimize budgets across Meta.",
     category: "Ads Campaigns",
     icon: FacebookBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(59, 130, 246, 0.8)",
   },
   {
     platform: "google_ads",
     name: "Google Ads",
     description:
-      "Launch search, YouTube and display ads. Auto-tune bids based on conversion signals.",
+      "List Google Ads campaigns across your manager + child accounts and pull per-day performance metrics.",
     category: "Ads Campaigns",
     icon: TrendingUp,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(250, 204, 21, 0.8)",
   },
   {
     platform: "tiktok_ads",
     name: "TikTok Ads",
     description:
-      "Promote videos, build look-alike audiences and track creator ad performance.",
+      "List authorized advertiser campaigns and pull TikTok Marketing API reports for any date range.",
     category: "Ads Campaigns",
     icon: TikTokBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(12, 12, 12, 1)",
   },
   {
@@ -178,7 +204,7 @@ const INTEGRATIONS: Integration[] = [
       "Send broadcasts and replies. AI drafts responses from your brand voice memory.",
     category: "Email Campaigns",
     icon: GmailBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(239, 68, 68, 0.8)",
   },
   {
@@ -205,10 +231,10 @@ const INTEGRATIONS: Integration[] = [
     platform: "brevo",
     name: "Brevo",
     description:
-      "Run transactional and marketing email together — handed to agents to A/B test.",
+      "Send transactional email, sync contacts and pull aggregated delivery + open + click stats.",
     category: "Email Campaigns",
     icon: BrevoBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(34, 197, 94, 0.8)",
   },
   {
@@ -218,7 +244,7 @@ const INTEGRATIONS: Integration[] = [
       "Run AI customer chats, broadcast campaigns and reply automatically at scale.",
     category: "Messaging",
     icon: WhatsAppBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(34, 197, 94, 0.8)",
   },
   {
@@ -228,7 +254,7 @@ const INTEGRATIONS: Integration[] = [
       "Deploy bots, broadcast updates and engage community channels conversationally.",
     category: "Messaging",
     icon: TelegramBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(14, 165, 233, 0.8)",
   },
 ];
@@ -242,11 +268,14 @@ const CATEGORY_ORDER = [
 
 function resolveStatus(
   integration: Integration,
-  connection?: IntegrationConnection
+  connections?: IntegrationConnection[]
 ): CardStatus {
-  if (connection && connection.status === "active") return "connected";
-  // Allow already-supported platforms even if the user hasn't connected yet.
-  if (isPlatformSupported(integration.platform)) return "available";
+  if (connections && connections.some((c) => c.status === "active"))
+    return "connected";
+  // Drive the connect button purely off the explorer's `baseStatus`. This
+  // way a platform's card stays disabled until the operator has set the
+  // backend env vars and flipped it to "available" here, even if the
+  // controllers / routes ship.
   return integration.baseStatus;
 }
 
@@ -273,24 +302,19 @@ function ConnectButton({
       </button>
     );
   }
-  if (status === "soon") {
-    return (
-      <button
-        type='button'
-        disabled
-        aria-label={`${name} is coming soon`}
-        className='border-border bg-card/40 text-muted-foreground inline-flex cursor-not-allowed items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-medium dark:border-white/5 dark:bg-white/[0.02] dark:text-zinc-500'
-      >
-        Coming soon
-      </button>
-    );
-  }
+  const isSoon = status === "soon";
   return (
     <button
       type='button'
-      aria-label={`Connect ${name}`}
-      onClick={onConnect}
-      className='inline-flex items-center gap-1 rounded-md bg-linear-to-r from-cyan-500 to-blue-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800'
+      disabled={isSoon}
+      aria-label={isSoon ? `${name} is coming soon` : `Connect ${name}`}
+      title={isSoon ? `${name} is coming soon` : undefined}
+      onClick={isSoon ? undefined : onConnect}
+      className={
+        isSoon
+          ? "border-border bg-card/40 text-muted-foreground inline-flex cursor-not-allowed items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-medium opacity-60 dark:border-white/5 dark:bg-white/[0.02] dark:text-zinc-500"
+          : "inline-flex items-center gap-1 rounded-md bg-linear-to-r from-cyan-500 to-blue-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800"
+      }
     >
       Connect
       <ArrowRight className='h-3 w-3' />
@@ -298,12 +322,18 @@ function ConnectButton({
   );
 }
 
-function StatusBadge({ status }: { status: CardStatus }) {
+function StatusBadge({
+  status,
+  count,
+}: {
+  status: CardStatus;
+  count?: number;
+}) {
   if (status === "connected") {
     return (
       <span className='inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300 dark:ring-emerald-400/20'>
         <CheckCircle2 className='h-3 w-3' />
-        Connected
+        {count && count > 1 ? `Connected · ${count}` : "Connected"}
       </span>
     );
   }
@@ -324,11 +354,13 @@ function StatusBadge({ status }: { status: CardStatus }) {
 function IntegrationCard({
   integration,
   status,
+  connectionCount,
   onConnect,
   onManage,
 }: {
   integration: Integration;
   status: CardStatus;
+  connectionCount: number;
   onConnect: () => void;
   onManage: () => void;
 }) {
@@ -358,7 +390,7 @@ function IntegrationCard({
           <div className='flex h-12 w-12 items-center justify-center rounded-xl'>
             <Icon className='h-6 w-6 text-slate-700 dark:text-slate-300' />
           </div>
-          <StatusBadge status={status} />
+          <StatusBadge status={status} count={connectionCount} />
         </div>
         <h3 className='text-foreground relative z-10 mt-4 text-lg font-semibold tracking-tight'>
           {integration.name}
@@ -377,50 +409,7 @@ function IntegrationCard({
             onManage={onManage}
           />
         </div>
-        <div
-          className='absolute h-px w-full [background:linear-gradient(90deg,rgba(0,0,0,0.15)_30%,rgba(0,0,0,0.04)_70%)] dark:[background:linear-gradient(90deg,rgba(136,136,136,0.3)_30%,rgb(29,31,31)_70%)]'
-          style={{
-            top: "10%",
-            left: "0%",
-            maskImage:
-              "linear-gradient(90deg, transparent, black 15%, black 85%, transparent)",
-            WebkitMaskImage:
-              "linear-gradient(90deg, transparent, black 15%, black 85%, transparent)",
-          }}
-        />
-        <div
-          className='absolute h-full w-px [background:linear-gradient(rgba(0,0,0,0.15)_30%,rgba(0,0,0,0.04)_70%)] dark:[background:linear-gradient(rgba(116,116,116,0.3)_30%,rgb(34,36,36)_70%)]'
-          style={{
-            left: "10%",
-            top: "0%",
-            maskImage:
-              "linear-gradient(0deg, transparent, black 15%, black 85%, transparent)",
-            WebkitMaskImage:
-              "linear-gradient(0deg, transparent, black 15%, black 85%, transparent)",
-          }}
-        />
-        <div
-          className='absolute z-1 h-px w-full bg-zinc-200 dark:bg-white/[0.05]'
-          style={{
-            bottom: "10%",
-            left: "0%",
-            maskImage:
-              "linear-gradient(90deg, transparent, black 15%, black 85%, transparent)",
-            WebkitMaskImage:
-              "linear-gradient(90deg, transparent, black 15%, black 85%, transparent)",
-          }}
-        />
-        <div
-          className='absolute h-full w-px bg-zinc-200 dark:bg-white/[0.05]'
-          style={{
-            right: "10%",
-            top: "0%",
-            maskImage:
-              "linear-gradient(0deg, transparent, black 15%, black 85%, transparent)",
-            WebkitMaskImage:
-              "linear-gradient(0deg, transparent, black 15%, black 85%, transparent)",
-          }}
-        />
+        <GradientFrame />
       </div>
     </div>
   );
@@ -439,7 +428,7 @@ export function IntegrationsExplorer() {
           (i) =>
             i.name.toLowerCase().includes(q) ||
             i.description.toLowerCase().includes(q) ||
-            i.category.toLowerCase().includes(q),
+            i.category.toLowerCase().includes(q)
         )
       : INTEGRATIONS;
 
@@ -451,11 +440,13 @@ export function IntegrationsExplorer() {
     }
 
     return CATEGORY_ORDER.filter((c) => byCategory.has(c)).map(
-      (c) => [c, byCategory.get(c) as Integration[]] as const,
+      (c) => [c, byCategory.get(c) as Integration[]] as const
     );
   }, [query]);
 
-  const manageConnection = manageFor ? byPlatform.get(manageFor.platform) : null;
+  const manageConnections = manageFor
+    ? (byPlatform.get(manageFor.platform) ?? [])
+    : [];
 
   return (
     <>
@@ -493,13 +484,14 @@ export function IntegrationsExplorer() {
               </div>
               <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
                 {items.map((integration) => {
-                  const connection = byPlatform.get(integration.platform);
-                  const status = resolveStatus(integration, connection);
+                  const connections = byPlatform.get(integration.platform);
+                  const status = resolveStatus(integration, connections);
                   return (
                     <IntegrationCard
                       key={integration.name}
                       integration={integration}
                       status={status}
+                      connectionCount={connections?.length ?? 0}
                       onConnect={() => setConnectFor(integration)}
                       onManage={() => setManageFor(integration)}
                     />
@@ -524,7 +516,8 @@ export function IntegrationsExplorer() {
       <ManageDialog
         open={Boolean(manageFor)}
         onOpenChange={(o) => !o && setManageFor(null)}
-        connection={manageConnection ?? null}
+        connections={manageConnections}
+        platform={manageFor?.platform ?? null}
         platformName={manageFor?.name ?? ""}
         Icon={manageFor?.icon ?? (() => null)}
         glow={manageFor?.glow ?? "rgba(113,113,122,0.4)"}
