@@ -41,7 +41,6 @@ export default function IntegrationsPage() {
                 Connect to the tools your brands already use every day
               </p>
             </div>
-            Custom Integration
             <IntegrationsExplorer />
             <section className='mt-16'>
               <div className='mb-6 flex items-baseline gap-3'>
