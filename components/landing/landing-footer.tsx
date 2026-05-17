@@ -91,7 +91,6 @@ export function LandingFooter() {
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle subscription logic here
-    console.log("Subscribed with:", email);
     setEmail("");
     // Show success message or toast notification
   };

@@ -20,12 +20,6 @@ export function ChatLayout() {
   const isMobile = useIsMobile();
   const isDesktop = !isMobile;
 
-  console.log(
-    "[ChatLayout] Rendering. isMobile:",
-    isMobile,
-    "isDesktop:",
-    isDesktop
-  );
 
   return (
     <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-[#09090b]'>

@@ -80,7 +80,6 @@ export const AudioNode = memo(
     const [isAudioReady, setIsAudioReady] = useState(false);
 
     const handleSave = () => {
-      console.log("Saving audio node data:", editData);
       setIsEditOpen(false);
     };
 

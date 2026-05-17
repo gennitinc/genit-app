@@ -70,7 +70,6 @@ export const TikTokNode = memo(
     const [isEditOpen, setIsEditOpen] = useState(false);
 
     const handleSave = () => {
-      console.log("[v0] Saving TikTok node data:", editData);
       setIsEditOpen(false);
     };
 

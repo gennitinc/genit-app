@@ -94,14 +94,12 @@ const PresenterPage = () => {
               }))
           : [];
 
-        console.log("av", avatars);
 
         setPresenters(avatars);
       } else {
         setPresenters([]);
       }
     } catch (e) {
-      console.error(e);
       toast.error("Failed to load presenters");
     } finally {
       setLoadingPresenters(false);
@@ -209,7 +207,7 @@ const PresenterPage = () => {
       <AppSidebar />
       <div className='scroll-container flex flex-1 flex-col overflow-auto will-change-scroll'>
         <TopNavWithAurora />
-        <div id='main-content' className='flex-1'>
+        <div id='main-content' className='flex-1 rounded-t-4xl border-2'>
           <main className='flex-grow pt-12'>
             <div className='animate-fadeInUp mb-10 px-2 text-center md:px-4'>
               <h1 className='text-2xl font-semibold tracking-tight lg:text-4xl'>

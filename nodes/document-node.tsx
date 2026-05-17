@@ -74,7 +74,6 @@ export const DocumentNode = memo(
     const [isEditOpen, setIsEditOpen] = useState(false);
 
     const handleSave = () => {
-      console.log("Saving document node data:", editData);
       data.onDataChange?.(editData);
       setIsEditOpen(false);
     };

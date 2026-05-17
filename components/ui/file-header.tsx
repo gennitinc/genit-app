@@ -20,7 +20,6 @@ export function FileHeader({ fileName, content }: FileHeaderProps) {
   const handleCopy = () => {
     navigator.clipboard.writeText(content).then(() => {
       // You could add a toast notification here to confirm the copy action
-      console.log("Content copied to clipboard");
     });
   };
 

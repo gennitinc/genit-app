@@ -34,8 +34,6 @@ async function getCreatorProfile(
 
     const url = `${finalBaseURL.endsWith("/") ? finalBaseURL : finalBaseURL + "/"}inspire/creator/${encodeURIComponent(username)}`;
 
-    console.log("Fetching creator profile metadata from:", url); // Debug log
-
     // Create AbortController for timeout - increased to 10 seconds
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);

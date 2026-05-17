@@ -153,11 +153,9 @@ export function InputLandingMediaChat() {
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
   };
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("submitted");
   };
   return (
     <div className='flex h-fit flex-col items-center justify-center px-4'>

@@ -71,7 +71,6 @@ export const TwitterNode = memo(
     const [isEditOpen, setIsEditOpen] = useState(false);
 
     const handleSave = () => {
-      console.log("[v0] Saving Twitter node data:", editData);
       setIsEditOpen(false);
     };
 

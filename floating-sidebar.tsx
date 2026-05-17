@@ -292,7 +292,6 @@ export function FloatingSidebar({
         // Update the red to track successful load
         lastLoadedPage.current[category] = page;
       } catch (error) {
-        console.error(`Failed to fetch ${category} history:`, error);
         setHistoryPagination((prev) => ({
           ...prev,
           [category]: { ...prev[category], isLoading: false },
@@ -357,7 +356,6 @@ export function FloatingSidebar({
         setDbItems(res.data.data);
       }
     } catch (error) {
-      console.error("Failed to fetch database items:", error);
     } finally {
       setIsLoadingDb(false);
     }
@@ -370,7 +368,6 @@ export function FloatingSidebar({
       });
       setDbItems((prev) => prev.filter((item) => item._id !== id));
     } catch (error) {
-      console.error("Failed to delete database item:", error);
     }
   };
 
@@ -392,7 +389,6 @@ export function FloatingSidebar({
       }
       throw new Error(res.data.message || "Upload failed");
     } catch (error: any) {
-      console.error("Upload failed:", error);
       toast.error(error.response?.data?.message || "Failed to upload file");
       return null;
     } finally {
@@ -401,13 +397,6 @@ export function FloatingSidebar({
   };
 
   const handleIntegrationAdd = () => {
-    console.log("🎯 [Sidebar] handleIntegrationAdd called");
-    console.log(
-      "🎯 [Sidebar] selectedIntegrationType:",
-      selectedIntegrationType
-    );
-    console.log("🎯 [Sidebar] selectedItem:", selectedItem);
-    console.log("🎯 [Sidebar] inputData:", inputData);
 
     // For text content, require content or a selected item
     if (
@@ -682,7 +671,6 @@ export function FloatingSidebar({
     }
 
     if (selectedIntegrationType && nodeType) {
-      console.log("🎯 [Sidebar] Final nodeType:", nodeType);
 
       let finalData = { ...processedData };
 
@@ -701,9 +689,7 @@ export function FloatingSidebar({
           size: selectedItem.size || finalData.size,
           alreadyInBrain: true,
         };
-        console.log("🎯 [Sidebar] Using merged selectedItem data:", finalData);
       } else {
-        console.log("🎯 [Sidebar] Using processedData:", finalData);
       }
 
       onAddIntegration(nodeType, finalData);
@@ -962,7 +948,6 @@ export function FloatingSidebar({
       setRecordedChunks(chunks);
       setIsRecording(true);
     } catch (error) {
-      console.error("Error starting recording:", error);
       alert("Could not access microphone. Please check permissions.");
     }
   };

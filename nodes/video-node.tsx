@@ -79,7 +79,6 @@ export const VideoNode = memo(
     const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
 
     const handleSave = () => {
-      console.log("Saving video node data:", editData);
       setIsEditOpen(false);
     };
 

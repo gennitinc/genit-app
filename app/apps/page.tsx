@@ -4,24 +4,31 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
-import {
-  trackAppOpened,
-  trackEvent,
-  trackFeatureUsed,
-} from "@/lib/mixpanelClient";
+import { trackAppOpened, trackEvent, trackFeatureUsed } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { Filter } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { Toaster } from "sonner";
 import React, { useState } from "react";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const TryNowButton = ({ onClick }: { onClick?: () => void }) => (
   <button
@@ -220,7 +227,7 @@ const Apps = () => {
         />
         <div
           id='main-content'
-          className='flex-1'
+          className='flex-1 rounded-t-4xl border-2'
           style={{
             transform: "translateZ(0)",
             willChange: "transform",

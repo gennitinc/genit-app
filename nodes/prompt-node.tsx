@@ -63,7 +63,6 @@ export function PromptNode({
   // Fetch models
   const handleSelectHistoryItem = useCallback(
     (item: any) => {
-      console.log("📜 [PromptNode] Selected history item:", item);
       // Create a node based on the history item type
       const nodeType = item.type;
       const nodeData = {

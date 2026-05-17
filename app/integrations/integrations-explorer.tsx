@@ -6,6 +6,8 @@ import {
   BrevoBrand,
   FacebookBrand,
   GmailBrand,
+  GoogleCalendarBrand,
+  GoogleDriveBrand,
   InstagramBrand,
   LinkedinBrand,
   MicrosoftOutlookBrand,
@@ -26,6 +28,7 @@ import { GradientFrame } from "@/utils/gradient-frame";
 import {
   ArrowRight,
   AtSign,
+  Calendar,
   CheckCircle2,
   Megaphone,
   Search,
@@ -257,6 +260,26 @@ const INTEGRATIONS: Integration[] = [
     baseStatus: "available",
     glow: "rgba(14, 165, 233, 0.8)",
   },
+  {
+    platform: "google_calendar",
+    name: "Google Calendar",
+    description:
+      "List and create events on your Google calendars. Let agents schedule meetings and read upcoming events.",
+    category: "Productivity",
+    icon: GoogleCalendarBrand,
+    baseStatus: "available",
+    glow: "rgba(59, 130, 246, 0.8)",
+  },
+  {
+    platform: "google_drive",
+    name: "Google Drive",
+    description:
+      "Browse, upload and share files on your Drive. Let agents fetch assets and save generated content into folders.",
+    category: "Productivity",
+    icon: GoogleDriveBrand,
+    baseStatus: "available",
+    glow: "rgba(34, 197, 94, 0.8)",
+  },
 ];
 
 const CATEGORY_ORDER = [
@@ -264,6 +287,7 @@ const CATEGORY_ORDER = [
   "Ads Campaigns",
   "Email Campaigns",
   "Messaging",
+  "Productivity",
 ];
 
 function resolveStatus(

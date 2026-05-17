@@ -95,7 +95,6 @@ export const YouTubeNode = memo(
 
     const handleSave = () => {
       // Update the node data (in a real app, this would update the flow state)
-      console.log("[v0] Saving YouTube node data:", editData);
       setIsEditOpen(false);
     };
 

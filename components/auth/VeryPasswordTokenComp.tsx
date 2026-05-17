@@ -29,7 +29,6 @@ export function VerifyPasswordTokenComp() {
         const data = response.data;
 
         if (response.status === 200) {
-          console.log("data", data);
           setLoading(false);
           setverifymessage(data?.message);
           setTimeout(() => {
@@ -45,7 +44,6 @@ export function VerifyPasswordTokenComp() {
           return;
         }
       } catch (error: any) {
-        console.log(error);
         setLoading(false);
         setTimeout(() => {
           setError(error?.response?.data.message);

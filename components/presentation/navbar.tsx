@@ -97,7 +97,6 @@ export function PresentationNavbar({
   const handleTitleSave = () => {
     setIsEditingTitle(false);
     // Here you would typically save the project title to your backend
-    console.log("Project title saved:", projectTitle);
   };
 
   const handleTitleKeyDown = (e: React.KeyboardEvent) => {

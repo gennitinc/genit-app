@@ -15,14 +15,12 @@ self.addEventListener("install", (event) => {
     caches
       .open(CACHE_NAME)
       .then((cache) => {
-        console.log("[Service Worker] Caching assets");
         return cache.addAll(PRECACHE_ASSETS).catch((error) => {
           console.error("[Service Worker] Error caching assets:", error);
           // Continue even if some assets fail to cache
         });
       })
       .then(() => {
-        console.log("[Service Worker] Installation complete");
         return self.skipWaiting();
       })
       .catch((error) => {
@@ -43,7 +41,6 @@ self.addEventListener("activate", (event) => {
               return cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE;
             })
             .map((cacheName) => {
-              console.log("[Service Worker] Deleting old cache:", cacheName);
               return caches.delete(cacheName);
             })
         );

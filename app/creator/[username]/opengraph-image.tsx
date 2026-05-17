@@ -35,7 +35,6 @@ async function getCreatorProfile(
 
     const url = `${finalBaseURL.endsWith("/") ? finalBaseURL : finalBaseURL + "/"}inspire/creator/${encodeURIComponent(username)}`;
 
-    console.log("Fetching OG image profile from:", url);
 
     const response = await fetch(url, {
       method: "GET",

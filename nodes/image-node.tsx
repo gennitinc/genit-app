@@ -71,7 +71,6 @@ export const ImageNode = memo(
     const [isEditOpen, setIsEditOpen] = useState(false);
 
     const handleSave = () => {
-      console.log("Saving image node data:", editData);
       data.onDataChange?.(editData);
       setIsEditOpen(false);
     };

@@ -16,10 +16,6 @@ export const PreviewPanel = () => {
 
   React.useEffect(() => {
     if (project) {
-      console.log(
-        "[PreviewPanel] Project Category used for branch choice:",
-        project.category
-      );
     }
   }, [project]);
 

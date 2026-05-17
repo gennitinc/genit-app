@@ -437,11 +437,6 @@ export default function TemplateGridAll() {
       setInputError(null);
 
       try {
-        console.log("Creating project with:", {
-          inputValue,
-          attachedFiles,
-          selectedFiles,
-        });
         const result = await createProject(
           inputValue,
           attachedFiles,

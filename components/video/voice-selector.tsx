@@ -267,7 +267,6 @@ export function VoiceSelector({
           }
         } catch (error: any) {
           // Silently fail for user voices - user might not be authenticated
-          console.log("User voices not available (may require authentication)");
           setUserVoices([]);
         } finally {
           setLoading(false);

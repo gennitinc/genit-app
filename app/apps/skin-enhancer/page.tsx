@@ -532,7 +532,7 @@ const SkinEnhancerPage = () => {
         <TopNavWithAurora />
         <div
           id='main-content'
-          className='flex-1'
+          className='flex-1 rounded-t-4xl border-2'
           style={{
             transform: "translateZ(0)",
             willChange: "transform",

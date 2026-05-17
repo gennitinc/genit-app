@@ -398,7 +398,6 @@ export function IdeaSection() {
           customSize.width && customSize.height ? customSize : undefined
         );
 
-        console.log("Project creation result:", res);
 
         clearInput();
         setSelectedDesignTypeId("flier");

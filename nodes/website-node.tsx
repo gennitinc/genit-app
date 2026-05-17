@@ -75,7 +75,6 @@ export const WebsiteNode = memo(
     };
 
     const handleSave = () => {
-      console.log("[v0] Saving website node data:", editData);
       setIsEditOpen(false);
     };
 

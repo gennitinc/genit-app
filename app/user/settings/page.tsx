@@ -53,7 +53,7 @@ function SettingsPage() {
         />
         <div
           id='main-content'
-          className='flex-1'
+          className='flex-1 rounded-t-4xl border-2'
           style={{
             // Optimize rendering performance
             transform: "translateZ(0)",

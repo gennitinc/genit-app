@@ -724,7 +724,6 @@ export function IdeaSection() {
           }
         );
 
-        console.log("Project creation result:", res);
         trackEvent("idea_project_created", {
           design_type: selectedDesignTypeId,
           orientation: selectedOrientation,
@@ -1049,7 +1048,7 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Agents that creates, designs, post, run ads, and handles <br />{" "}
+              Agents that designs, post, run ads, & handles <br />{" "}
               your brand marketing across every channel.
             </motion.p>
           </motion.div>
@@ -1790,7 +1789,7 @@ export function IdeaSection() {
           <div className="absolute top-0 right-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-20 pointer-events-none rounded-r-3xl" />
         </div> */}
 
-        <div className='mx-auto mt-8 w-full max-w-4xl min-w-0 px-4'>
+        {/* <div className='mx-auto mt-8 w-full max-w-4xl min-w-0 px-4'>
           <div className='mb-2 flex items-center justify-between'>
             <h2 className='text-sm font-bold text-black lg:ml-4 lg:text-lg dark:text-white'>
               Feature Apps
@@ -1878,15 +1877,11 @@ export function IdeaSection() {
                       )
                     )}
                   </div>
-
-                  {/* Edge Fades */}
-                  <div className='from-background pointer-events-none absolute top-0 bottom-0 left-0 z-10 w-12 bg-gradient-to-r to-transparent' />
-                  <div className='from-background pointer-events-none absolute top-0 right-0 bottom-0 z-10 w-12 bg-gradient-to-l to-transparent' />
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Presentation Organization Drawer */}

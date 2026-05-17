@@ -24,7 +24,7 @@ function ChatPageForAuthenticatedUsers() {
         />
         <div
           id='main-content'
-          className='flex-1'
+          className='flex-1 rounded-t-3xl border-2'
           style={{
             transform: "translateZ(0)",
             willChange: "transform",

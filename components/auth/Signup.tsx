@@ -164,7 +164,6 @@ export const SignupComp = () => {
         withCredentials: true,
       });
       const User = response?.data;
-      console.log("user", User);
       const userId = User?.user?._id.toString();
       if (response.status === 200) {
         toast.success(
@@ -215,7 +214,6 @@ export const SignupComp = () => {
       }
     } catch (error: any) {
       setLoading(false);
-      console.log(error);
       trackEvent("signup_failed", {
         auth_method: "password",
         reason: error?.response?.data?.message || error?.message,
@@ -228,7 +226,6 @@ export const SignupComp = () => {
   };
 
   const handleGoogleSignUp = async (provider: string, data: any) => {
-    console.log("data", data);
     trackEvent("signup_attempted", { auth_method: "google" });
 
     const referralCode = getReferralCode();
@@ -240,14 +237,12 @@ export const SignupComp = () => {
       ...(referralCode && { referralCode }),
     };
 
-    console.log("formdata", Formdata);
     if (data.email_verified === true) {
       try {
         const response = await apiResponse.post("auth/google", Formdata, {
           withCredentials: true,
         });
         const User = response?.data;
-        console.log("user", User);
         const userId = User?.user?._id.toString();
         if (response.status === 200) {
           toast.success("Account Created Successfully!");
@@ -296,7 +291,6 @@ export const SignupComp = () => {
         }
       } catch (error: any) {
         setLoading2(false);
-        console.log(error);
         trackEvent("signup_failed", {
           auth_method: "google",
           reason: error?.response?.data?.message || error?.message,
@@ -1212,7 +1206,6 @@ export const SignupComp = () => {
                     handleGoogleSignUp(provider, data);
                   },
                   onReject: (err: any) => {
-                    console.log(err);
                     setLoading2(false);
                   },
                   className: "w-full",

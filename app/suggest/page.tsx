@@ -139,7 +139,6 @@ function Page() {
       formData.append("ticketType", supportTicketType);
       formData.append("status", "pending");
 
-      console.log("data", formData);
 
       if (supportFile) {
         formData.append("support-file", supportFile);
@@ -185,7 +184,6 @@ function Page() {
             </button>
           ),
         });
-        console.log("Support ticket submitted", response.data);
         setSupportSubmitted(true);
         setSupportName("");
         setSupportEmail("");
@@ -245,7 +243,6 @@ function Page() {
         status: "pending",
       };
 
-      console.log("data", newData);
 
       const response = await apiResponseFileUpload.post(
         "customer/suggest",
@@ -287,7 +284,6 @@ function Page() {
           ),
         });
 
-        console.log("Suggestion submitted", response.data);
         setSuggestionSubmitted(true);
         setSuggestionName("");
         setSuggestionEmail("");

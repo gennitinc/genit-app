@@ -19,7 +19,6 @@ export function ServiceWorkerRegister() {
     const isProductionBuild = process.env.NODE_ENV === "production";
 
     if (!isProduction && !isProductionBuild) {
-      console.log("[Service Worker] Skipping registration in development");
       return;
     }
 
@@ -29,10 +28,6 @@ export function ServiceWorkerRegister() {
         scope: "/",
       })
       .then((registration) => {
-        console.log(
-          "[Service Worker] Registration successful:",
-          registration.scope
-        );
 
         // Check for updates on page load
         registration.update();
@@ -57,15 +52,11 @@ export function ServiceWorkerRegister() {
     navigator.serviceWorker.addEventListener("controllerchange", () => {
       if (refreshing) return;
       refreshing = true;
-      console.log(
-        "[Service Worker] New service worker activated, reloading..."
-      );
       window.location.reload();
     });
 
     // Listen for service worker messages
     navigator.serviceWorker.addEventListener("message", (event) => {
-      console.log("[Service Worker] Message received:", event.data);
     });
   }, []);
 

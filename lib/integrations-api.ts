@@ -20,7 +20,9 @@ export type IntegrationPlatform =
   | "mailchimp"
   | "brevo"
   | "whatsapp"
-  | "telegram";
+  | "telegram"
+  | "google_calendar"
+  | "google_drive";
 
 export type MetaSurface = "facebook" | "instagram" | "meta_ads" | "whatsapp";
 
@@ -77,6 +79,8 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "snapchat",
   "google_ads",
   "tiktok_ads",
+  "google_calendar",
+  "google_drive",
 ]);
 
 // Platforms that connect via a credential-entry form (no OAuth popup).
@@ -1757,4 +1761,251 @@ export async function fetchTikTokAdsReport(
     };
   }>(`/integrations/tiktok_ads/${integrationId}/report?${params}`);
   return { rows: data.rows, pageInfo: data.pageInfo };
+}
+
+// -----------------------------------------------------------------------------
+// Google Calendar
+// -----------------------------------------------------------------------------
+
+export interface GoogleCalendarEventDateTime {
+  dateTime?: string;
+  date?: string;
+  timeZone?: string;
+}
+
+export interface GoogleCalendarAttendee {
+  email: string;
+  displayName?: string;
+  optional?: boolean;
+  responseStatus?: "needsAction" | "declined" | "tentative" | "accepted";
+}
+
+export interface GoogleCalendarEvent {
+  id: string;
+  status?: string;
+  summary?: string;
+  description?: string;
+  location?: string;
+  start?: GoogleCalendarEventDateTime;
+  end?: GoogleCalendarEventDateTime;
+  attendees?: GoogleCalendarAttendee[];
+  htmlLink?: string;
+  hangoutLink?: string;
+  created?: string;
+  updated?: string;
+}
+
+export interface ListGoogleCalendarEventsQuery {
+  calendarId?: string;
+  q?: string;
+  timeMin?: string;
+  timeMax?: string;
+  maxResults?: number;
+  pageToken?: string;
+  orderBy?: "startTime" | "updated";
+}
+
+export async function listGoogleCalendarEvents(
+  integrationId: string,
+  q: ListGoogleCalendarEventsQuery = {}
+): Promise<{ events: GoogleCalendarEvent[]; nextPageToken?: string }> {
+  const params = new URLSearchParams();
+  if (q.calendarId) params.set("calendarId", q.calendarId);
+  if (q.q) params.set("q", q.q);
+  if (q.timeMin) params.set("timeMin", q.timeMin);
+  if (q.timeMax) params.set("timeMax", q.timeMax);
+  if (q.maxResults) params.set("maxResults", String(q.maxResults));
+  if (q.pageToken) params.set("pageToken", q.pageToken);
+  if (q.orderBy) params.set("orderBy", q.orderBy);
+  const qs = params.toString();
+  const { data } = await apiResponse.get<{
+    success: boolean;
+    events: GoogleCalendarEvent[];
+    nextPageToken?: string;
+  }>(
+    `/integrations/google_calendar/${integrationId}/events${qs ? `?${qs}` : ""}`
+  );
+  return { events: data.events, nextPageToken: data.nextPageToken };
+}
+
+export interface CreateGoogleCalendarEventInput {
+  calendarId?: string;
+  summary: string;
+  description?: string;
+  location?: string;
+  start: GoogleCalendarEventDateTime;
+  end: GoogleCalendarEventDateTime;
+  attendees?: GoogleCalendarAttendee[];
+  sendUpdates?: "all" | "externalOnly" | "none";
+}
+
+export async function createGoogleCalendarEvent(
+  integrationId: string,
+  input: CreateGoogleCalendarEventInput
+): Promise<GoogleCalendarEvent> {
+  const { data } = await apiResponse.post<{
+    success: boolean;
+    event: GoogleCalendarEvent;
+  }>(`/integrations/google_calendar/${integrationId}/events`, input);
+  return data.event;
+}
+
+export interface GoogleCalendarSummary {
+  id: string;
+  summary: string;
+  primary?: boolean;
+  accessRole?: string;
+  timeZone?: string;
+  backgroundColor?: string;
+}
+
+export async function listGoogleCalendars(
+  integrationId: string
+): Promise<GoogleCalendarSummary[]> {
+  const { data } = await apiResponse.get<{
+    success: boolean;
+    calendars: GoogleCalendarSummary[];
+  }>(`/integrations/google_calendar/${integrationId}/calendars`);
+  return data.calendars;
+}
+
+export interface GoogleDriveFile {
+  id: string;
+  name: string;
+  mimeType: string;
+  parents?: string[];
+  size?: string;
+  modifiedTime?: string;
+  createdTime?: string;
+  webViewLink?: string;
+  webContentLink?: string;
+  iconLink?: string;
+  thumbnailLink?: string;
+  trashed?: boolean;
+}
+
+export interface ListGoogleDriveFilesQuery {
+  q?: string;
+  folderId?: string;
+  pageSize?: number;
+  pageToken?: string;
+  orderBy?: string;
+  trashed?: boolean;
+  fields?: string;
+}
+
+export async function listGoogleDriveFiles(
+  integrationId: string,
+  q: ListGoogleDriveFilesQuery = {}
+): Promise<{ files: GoogleDriveFile[]; nextPageToken?: string }> {
+  const params = new URLSearchParams();
+  if (q.q) params.set("q", q.q);
+  if (q.folderId) params.set("folderId", q.folderId);
+  if (q.pageSize) params.set("pageSize", String(q.pageSize));
+  if (q.pageToken) params.set("pageToken", q.pageToken);
+  if (q.orderBy) params.set("orderBy", q.orderBy);
+  if (q.fields) params.set("fields", q.fields);
+  if (q.trashed !== undefined) params.set("trashed", String(q.trashed));
+  const qs = params.toString();
+  const { data } = await apiResponse.get<{
+    success: boolean;
+    files: GoogleDriveFile[];
+    nextPageToken?: string;
+  }>(
+    `/integrations/google_drive/${integrationId}/files${qs ? `?${qs}` : ""}`
+  );
+  return { files: data.files, nextPageToken: data.nextPageToken };
+}
+
+export async function getGoogleDriveFile(
+  integrationId: string,
+  fileId: string,
+  fields?: string
+): Promise<GoogleDriveFile> {
+  const qs = fields ? `?fields=${encodeURIComponent(fields)}` : "";
+  const { data } = await apiResponse.get<{
+    success: boolean;
+    file: GoogleDriveFile;
+  }>(
+    `/integrations/google_drive/${integrationId}/files/${encodeURIComponent(fileId)}${qs}`
+  );
+  return data.file;
+}
+
+export async function createGoogleDriveFolder(
+  integrationId: string,
+  input: { name: string; parentId?: string }
+): Promise<GoogleDriveFile> {
+  const { data } = await apiResponse.post<{
+    success: boolean;
+    folder: GoogleDriveFile;
+  }>(`/integrations/google_drive/${integrationId}/folders`, input);
+  return data.folder;
+}
+
+export interface InitGoogleDriveUploadInput {
+  name: string;
+  mimeType: string;
+  contentLength: number;
+  parentId?: string;
+  // If set, this becomes an in-place update of an existing file (PATCH) — the
+  // bytes you stream to `uploadUrl` overwrite the file's content while keeping
+  // its id and shareable link stable.
+  fileId?: string;
+}
+
+export interface InitGoogleDriveUploadResult {
+  uploadUrl: string;
+  expiresAt: string;
+  fileId?: string;
+}
+
+export async function initGoogleDriveUpload(
+  integrationId: string,
+  input: InitGoogleDriveUploadInput
+): Promise<InitGoogleDriveUploadResult> {
+  const { data } = await apiResponse.post<{
+    success: boolean;
+    uploadUrl: string;
+    expiresAt: string;
+    fileId?: string;
+  }>(`/integrations/google_drive/${integrationId}/uploads/init`, input);
+  return {
+    uploadUrl: data.uploadUrl,
+    expiresAt: data.expiresAt,
+    fileId: data.fileId,
+  };
+}
+
+export async function deleteGoogleDriveFile(
+  integrationId: string,
+  fileId: string
+): Promise<void> {
+  await apiResponse.delete(
+    `/integrations/google_drive/${integrationId}/files/${encodeURIComponent(fileId)}`
+  );
+}
+
+export interface GoogleDriveAbout {
+  user: {
+    displayName?: string;
+    emailAddress?: string;
+    photoLink?: string;
+  };
+  storageQuota?: {
+    limit?: string;
+    usage?: string;
+    usageInDrive?: string;
+    usageInDriveTrash?: string;
+  };
+}
+
+export async function getGoogleDriveAbout(
+  integrationId: string
+): Promise<GoogleDriveAbout> {
+  const { data } = await apiResponse.get<{
+    success: boolean;
+    about: GoogleDriveAbout;
+  }>(`/integrations/google_drive/${integrationId}/about`);
+  return data.about;
 }

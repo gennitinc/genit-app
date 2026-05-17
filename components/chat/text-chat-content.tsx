@@ -43,11 +43,6 @@ export function TextChatContent() {
   } = useProjectDesign();
 
   useEffect(() => {
-    console.log(
-      "[TextChatContent] Messages State Updated:",
-      messages?.length,
-      messages
-    );
   }, [messages]);
 
   const skeletonRef = useRef<HTMLDivElement | null>(null);
@@ -203,7 +198,6 @@ export function TextChatContent() {
 
   useEffect(() => {
     const handler = () => {
-      console.log("Auto-scroll triggered via event");
       doScrollToBottom({ behavior: "smooth" });
     };
     window.addEventListener("scroll-chat-to-bottom", handler as EventListener);

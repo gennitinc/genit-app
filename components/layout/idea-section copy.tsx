@@ -239,7 +239,6 @@ export function IdeaSection() {
       try {
         const res = await createProject(inputValue, attachedFiles as any);
 
-        console.log("Project creation result:", res);
 
         if (res.type && res.id) {
           // Clear state before redirect

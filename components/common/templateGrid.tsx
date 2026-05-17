@@ -150,7 +150,6 @@ export default function TemplateGrid() {
 
         const data = res.data;
 
-        console.log("res", data);
 
         if (data.success && data.data?.templates) {
           const mapped: TemplateItem[] = data.data.templates.map(
@@ -388,11 +387,6 @@ export default function TemplateGrid() {
       setInputError(null);
 
       try {
-        console.log("Creating project with:", {
-          inputValue,
-          attachedFiles,
-          selectedFiles,
-        });
 
         const result = await createProject(
           inputValue,

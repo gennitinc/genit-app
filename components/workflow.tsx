@@ -152,10 +152,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         });
         if (res.data.success) {
           setBrainItems(res.data.data);
-          console.log(
-            "🧠 [Workflow] Loaded brain items:",
-            res.data.data.length
-          );
         }
       } catch (error) {
         console.error("Failed to fetch brain items:", error);
@@ -216,7 +212,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       setHistoryIndex((prevIndex) => {
         const nextIndex = Math.min(prevIndex + 1, 49);
         historyIndexRef.current = nextIndex; // keep ref in sync immediately
-        console.log("📜 [History] Added state. New index:", nextIndex);
         return nextIndex;
       });
     },
@@ -225,7 +220,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
   const addNode = useCallback(
     (node: Node) => {
-      console.log("🎯 [GennittWorkflow] Adding node:", node);
       trackFeatureUsed("workflow_node_added", {
         node_type: node.type,
       });
@@ -242,7 +236,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   // Remove node from state
   const removeNode = useCallback(
     (nodeId: string) => {
-      console.log("🗑️ [GennittWorkflow] Removing node:", nodeId);
       const newNodes = nodesRef.current.filter((node) => node.id !== nodeId);
       setNodes(newNodes);
       addToHistory(newNodes, edgesRef.current);
@@ -254,7 +247,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   const handleConnect = useCallback(
     (connection: Connection) => {
       if (!connection.source || !connection.target) return;
-      console.log("🔗 [GennittWorkflow] Connection attempt:", connection);
       trackFeatureUsed("workflow_node_connection_attempted", {
         source: connection.source,
         target: connection.target,
@@ -274,7 +266,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             edge.targetHandle === connection.targetHandle
         );
         if (isDuplicate) {
-          console.log("🚫 [GennittWorkflow] Connection ignored (duplicate)");
           return prevEdges;
         }
 
@@ -324,7 +315,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   // Node creation function - single source of truth
   const createNode = useCallback(
     async (type: string, data: any) => {
-      console.log("🎨 [GennittWorkflow] Creating node:", type, data);
 
       // Place node at the center of the current viewport so it's always visible
       let position = data.position;
@@ -394,7 +384,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
               },
               { withCredentials: true }
             );
-            console.log("✅ [GennittWorkflow] Item saved to database");
             if (res.data.success) {
               const savedItem = res.data.data;
               setBrainItems((prev) => [savedItem, ...prev]);
@@ -407,9 +396,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             console.error("Failed to save item to database:", error);
           }
         } else {
-          console.log(
-            "ℹ️ [GennittWorkflow] Item already exists in brain, skipping save"
-          );
           data.dbId = existingItem._id;
           data.analyzed = existingItem.analyzed;
           data.analysis = existingItem.analysis;
@@ -665,7 +651,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           return;
       }
 
-      console.log("✅ [GennittWorkflow] Created node:", newNode);
       addNode(newNode);
       return newNode;
     },
@@ -733,7 +718,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
   const applyAIActions = useCallback(
     async (sourceNodeId: string, actions: any[]): Promise<any[]> => {
-      console.log("🤖 [Workflow] Applying AI actions:", actions);
       const results = [];
 
       // Track how many create_node actions we process so we can offset vertically
@@ -759,9 +743,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
           });
 
           if (newNode && sourceNodeId) {
-            console.log(
-              `🔗 [Workflow] Auto-connecting ${sourceNodeId} -> ${newNode.id}`
-            );
             handleConnect({ source: sourceNodeId, target: newNode.id } as any);
           }
 
@@ -781,10 +762,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
   // Helper to re-inject functional properties into nodes loaded from serializable state
   const injectNodeCallbacks = useCallback(
     (nodesToInject: Node[]) => {
-      console.log(
-        "💉 [Workflow] Injecting callbacks into nodes:",
-        nodesToInject.length
-      );
       return nodesToInject.map((node) => ({
         ...node,
         data: {
@@ -825,7 +802,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         (n) => n.type === "prompt" && !n.data.projectId
       );
       if (someNodeMissingId) {
-        console.log("🔄 [Workflow] Re-injecting project properties into nodes");
         setNodes((nds) => injectNodeCallbacks(nds));
       }
     }
@@ -842,12 +818,10 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         setEdges(previousState.edges);
         setHistoryIndex(historyIndex - 1);
         setIsUndoRedoAction(false);
-        console.log("✅ [Undo] Restored to history index:", historyIndex - 1);
       } else {
         console.warn("⚠️ [Undo] Invalid previous state found");
       }
     } else {
-      console.log("ℹ️ [Undo] No history to undo");
     }
   }, [history, historyIndex, injectNodeCallbacks, setNodes, setEdges]);
 
@@ -862,7 +836,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         setEdges(nextState.edges);
         setHistoryIndex(historyIndex + 1);
         setIsUndoRedoAction(false);
-        console.log("✅ [Redo] Restored to history index:", historyIndex + 1);
       }
     }
   }, [history, historyIndex, injectNodeCallbacks, setNodes, setEdges]);
@@ -879,7 +852,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
   // Handle node drag events
   const onNodeDragStart = useCallback((event: any, node: Node) => {
-    console.log("🎯 [GennittWorkflow] Node drag started:", node.id);
   }, []);
 
   const onNodeDrag = useCallback((event: any, node: Node) => {
@@ -904,10 +876,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
   const onNodesDelete = useCallback(
     (deletedNodes: Node[]) => {
-      console.log(
-        "🗑️ [Workflow] Nodes deleted:",
-        deletedNodes.map((n) => n.id)
-      );
       const deletedNodeIds = new Set(deletedNodes.map((n) => n.id));
 
       // Find edges that are being removed because their source/target nodes were deleted
@@ -953,10 +921,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
   const onEdgesDelete = useCallback(
     (deletedEdges: Edge[]) => {
-      console.log(
-        "✂️ [Workflow] Edges deleted:",
-        deletedEdges.map((e) => e.id)
-      );
 
       setNodes((prevNodes) => {
         const updatedNodes = prevNodes.map((node) => {
@@ -992,12 +956,10 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
   // Undo/Redo/Zoom functions
   const memoizedHandleUndo = useCallback(() => {
-    console.log("Undo");
     undo();
   }, [undo]);
 
   const memoizedHandleRedo = useCallback(() => {
-    console.log("Redo");
     redo();
   }, [redo]);
 
@@ -1056,7 +1018,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
       slug &&
       slug !== "create"
     ) {
-      console.log("📍 [Workflow] Applying saved viewport:", viewport);
       reactFlowInstance.setViewport(viewport);
       setInitialViewportApplied(true);
     }
@@ -1099,7 +1060,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
             { nodes, edges, viewport },
             { withCredentials: true }
           );
-          console.log("💾 [Workflow] Auto-saved project state");
         } catch (error) {
           console.error("Failed to auto-save workflow:", error);
         }
@@ -1182,7 +1142,6 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
 
     // Use ref so the handler is never stale but the effect only runs when projectId changes
     socket.on("workflow:ai:update", (data: any) => {
-      console.log("📡 [Workflow] Received real-time AI update:", data);
       if (data.actions && data.actions.length > 0) {
         applyAIActionsRef.current(data.nodeId, data.actions);
       }

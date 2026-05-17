@@ -114,7 +114,6 @@ export function ImageCommunityTab({
     socketRef.current = socket;
 
     socket.on("connect", () => {
-      console.log("Socket connected");
     });
 
     socket.on(

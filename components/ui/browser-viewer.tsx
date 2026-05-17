@@ -45,7 +45,6 @@ export function BrowserViewer({
         // Add a timestamp parameter to bypass caching
         processedUrl = `${processedUrl}?t=${Date.now()}`;
 
-        console.log(`Processed WebContainer URL: ${processedUrl}`);
       }
 
       return processedUrl;
@@ -72,7 +71,6 @@ export function BrowserViewer({
           (iframeWindow.document.readyState === "complete" ||
             iframeDoc?.readyState === "complete")
         ) {
-          console.log("✅ iframe loaded successfully");
           setIsLoading(false);
           return true;
         }
@@ -83,9 +81,6 @@ export function BrowserViewer({
       retryCount.current++;
 
       if (retryCount.current <= maxRetries) {
-        console.log(
-          `⚠️ Retry ${retryCount.current}/${maxRetries} loading iframe...`
-        );
         setTimeout(checkIframeLoaded, 2000); // Retry after 2 seconds
         return false;
       } else {
@@ -103,7 +98,6 @@ export function BrowserViewer({
     const handleMessage = (event: MessageEvent) => {
       // Check if message is from our iframe
       if (event.data === "iframe-loaded") {
-        console.log("✅ Received loaded message from iframe");
         setIsLoading(false);
       }
     };
@@ -114,7 +108,6 @@ export function BrowserViewer({
 
   // Handle iframe load event
   const handleIframeLoad = () => {
-    console.log("iframe onLoad event fired");
     setIsLoading(false);
   };
 

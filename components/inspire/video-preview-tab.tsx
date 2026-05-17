@@ -224,7 +224,6 @@ export function VideoPreviewTab({
     }
 
     try {
-      console.log("publishing video", currentVideo);
       setPublishing(true);
 
       // Use the selected aspect ratio

@@ -173,10 +173,6 @@ export default function PresentationStudioPage() {
             response.data.project.customSize ||
             response.data.project.orientation
           ) {
-            console.log("Presentation dimensions:", {
-              customSize: response.data.project.customSize,
-              orientation: response.data.project.orientation,
-            });
           }
           // Initialize slides with blocks from content if blocks don't exist
           const loadedSlides = (response.data.project.outline || []).map(

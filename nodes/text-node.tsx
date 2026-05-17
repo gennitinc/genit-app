@@ -80,7 +80,6 @@ export const TextNode = memo(
     };
 
     const handleSave = () => {
-      console.log("Saving text node data:", editData);
       setIsEditOpen(false);
     };
 

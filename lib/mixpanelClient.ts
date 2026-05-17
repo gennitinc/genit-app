@@ -49,10 +49,6 @@ export const initMixpanel = () => {
       api_host: "https://api-eu.mixpanel.com",
       loaded: (instance) => {
         if (!IS_PROD) {
-          console.log("[mixpanel] initialized", {
-            distinct_id: instance.get_distinct_id?.(),
-            token: MIXPANEL_TOKEN,
-          });
         }
       },
     });
@@ -80,7 +76,6 @@ export const trackEvent = (eventName: string, properties?: MixpanelProps) => {
   try {
     mixpanel.track(eventName, withDefaults(properties), (response) => {
       if (!IS_PROD) {
-        console.log("[mixpanel] track callback", { eventName, response });
       }
     });
   } catch (error) {

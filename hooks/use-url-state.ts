@@ -13,7 +13,6 @@ export function useUrlState() {
   if (
     Object.keys(params).some((key) => key.toLowerCase().includes("pricing"))
   ) {
-    console.log("pricing");
   }
 
   const setUrlState = (type: string, message: string) => {

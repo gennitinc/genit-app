@@ -64,7 +64,6 @@ export function UserMessage({
         throw new Error("Network error: Failed to save message");
       }
 
-      console.log("Saving message:", { newContent, files });
 
       if (onEdit) {
         await onEdit(newContent, files);

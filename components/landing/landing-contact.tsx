@@ -139,7 +139,6 @@ export default function LandingContact() {
         toast.success("Form submitted successfully");
         form.reset();
       }
-      console.log("✅ Email sent:");
       setLoading(false);
     } catch (error) {
       console.error("❌ Email failed:", error);

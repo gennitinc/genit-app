@@ -70,7 +70,6 @@ export const InstagramNode = memo(
     const [isEditOpen, setIsEditOpen] = useState(false);
 
     const handleSave = () => {
-      console.log("[v0] Saving Instagram node data:", editData);
       setIsEditOpen(false);
     };
 

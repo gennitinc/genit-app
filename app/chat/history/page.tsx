@@ -288,7 +288,7 @@ function ChatHistoryPage() {
             scrollContainerRef as React.RefObject<HTMLDivElement>
           }
         />
-        <div className='flex-1 p-4 lg:p-8'>
+        <div className='flex-1 rounded-t-4xl border-2 p-4 lg:p-8'>
           {/* Centered container with custom width for desktop */}
           <div className='mx-auto max-w-4xl'>
             {/* Header */}

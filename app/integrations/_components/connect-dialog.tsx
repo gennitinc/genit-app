@@ -166,6 +166,18 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
     "Pull /report/integrated/get/ data at campaign, ad-group, or ad level",
     "Filter reports by campaign id and choose your own metrics + dimensions",
   ],
+  google_calendar: [
+    "Identify your Google account (email + profile picture)",
+    "List events on your primary and secondary calendars",
+    "Create events with attendees, locations and timezones",
+    "Send invitation emails on your behalf when you add attendees",
+  ],
+  google_drive: [
+    "Identify your Google account (email + profile picture)",
+    "Browse files and folders across My Drive and shared drives",
+    "Create folders and upload new files to locations you choose",
+    "Update or delete files Gennit creates on your behalf",
+  ],
 };
 
 const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
@@ -228,6 +240,14 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
   tiktok_ads: [
     "Register a TikTok Business Marketing API app (separate from the regular TikTok developer app) and set TIKTOK_ADS_APP_ID / TIKTOK_ADS_SECRET",
     "During the TikTok consent screen you choose which advertisers to authorize — we provision one connection per choice",
+  ],
+  google_calendar: [
+    "Gennit is a verified Google app — if you see a warning screen, click Advanced → Continue",
+    "Workspace admins may need to allow third-party calendar apps for the domain",
+  ],
+  google_drive: [
+    "Drive's full-access scope is restricted — your Google Cloud app must be verified before going to production (development users work without verification)",
+    "Add /api/v1/integrations/google_drive/callback as an authorized redirect URI on your Google OAuth client",
   ],
 };
 

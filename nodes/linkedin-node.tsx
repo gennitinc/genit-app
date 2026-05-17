@@ -71,7 +71,6 @@ export const LinkedInNode = memo(
     const [isEditOpen, setIsEditOpen] = useState(false);
 
     const handleSave = () => {
-      console.log("[v0] Saving LinkedIn node data:", editData);
       setIsEditOpen(false);
     };
 

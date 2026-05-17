@@ -824,7 +824,6 @@ function VideoCreatePage() {
       socketRef.current = socket;
 
       socket.on("connect", () => {
-        console.log("Socket connected for video generation");
       });
 
       socket.on(
@@ -844,7 +843,6 @@ function VideoCreatePage() {
       );
 
       socket.on("disconnect", () => {
-        console.log("Socket disconnected");
       });
     }
 

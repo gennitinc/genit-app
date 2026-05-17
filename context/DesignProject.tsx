@@ -158,10 +158,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         }
 
         // Fallback for older message format or missing parts
-        console.log(
-          `[DesignProject] Message at index ${index} missing parts, using fallback transformation`,
-          msg
-        );
         return {
           ...msg,
           id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
@@ -216,9 +212,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
     // If project has changed, reset project-specific states to ensure isolation
     if (newProjectIdStr !== projectIdRef.current) {
-      console.log(
-        `🔄 [DesignProject] Project switching detected: ${projectIdRef.current} -> ${newProjectIdStr}. Resetting state...`
-      );
       setMessages([]);
       setLiveNodes([]);
       setAiStatus(null);
@@ -250,13 +243,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         const newHexes = selections.selectedColorScales.map((s: any) => s.base).join(',');
         
         if (currentHexes !== newHexes) {
-          console.log("[DesignProject] Hydrating colors from project metadata");
           setSelectedColorScales(selections.selectedColorScales);
         }
       }
       
       if (selections.primaryFont && selections.primaryFont !== primaryFont) {
-        console.log("[DesignProject] Hydrating font from project metadata");
         setPrimaryFont(selections.primaryFont);
       }
     }
@@ -283,11 +274,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     socketRef.current = socket;
 
     const handleConnect = () => {
-      console.log("Socket connected");
     };
 
     const handleNewMessage = (projectData: any) => {
-      console.log("New message received", projectData);
 
       // Ignore messages from other projects
       const incomingProjectId = projectData?._id || projectData?.id;
@@ -559,7 +548,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setAiStatus(null);
         setStreamingContent("");
 
-        console.log("⚡ Generating message...");
 
         const now = Date.now();
         const generateId = () =>
@@ -688,20 +676,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
         // Debugging — see what's really inside FormData
         console.group("📦 FormData Content");
-        console.log("Files to upload:", blobFilesToUpload.length);
-        console.log("Selected files:", selectedFiles?.length || 0);
         for (const [key, value] of formData.entries()) {
           // Fix: Use typeof for correct instanceof check in TS
           if (
             (typeof File !== "undefined" && value instanceof File) ||
             (typeof Blob !== "undefined" && value instanceof Blob)
           ) {
-            console.log(
-              key,
-              `[File: ${(value as File).name}, size: ${(value as File).size}]`
-            );
           } else {
-            console.log(key, value);
           }
         }
         console.groupEnd();
@@ -717,7 +698,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           }
         );
 
-        console.log("✅ Server response:", response.data);
       } catch (error) {
         console.error("❌ Error sending message:", error);
         setError(
@@ -774,7 +754,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (!draft) return;
 
-      console.log("new d", draft);
       try {
         setIsProcessingDraft(true);
         hasProcessedDraftRef.current = true;
@@ -810,7 +789,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           }
         }
 
-        console.log("rest", restoredFiles);
 
         // Set restored files to attachedFiles state so they show in the UI
         if (restoredFiles.length > 0) {
@@ -906,7 +884,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
         const projectId = data.project._id.toString();
 
-        console.log("pcreated", data.project);
 
         const filesArray = Array.isArray(attachedFiles)
           ? attachedFiles
@@ -1005,15 +982,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           const currentIdStr = String(
             projectData?._id || projectData?.id || ""
           );
-          console.log(
-            `[DesignProject] Fetched ID: ${currentIdStr}, Last ID: ${lastFetchedProjectIdRef.current}`
-          );
 
           // If switching to a different project, reset UI message state first
           if (lastFetchedProjectIdRef.current !== currentIdStr) {
-            console.log(
-              `[DesignProject] Project ID mismatch. Resetting messages for new project: ${currentIdStr}`
-            );
             // Update the ref immediately to prevent the isolation useEffect from wiping out these messages
             projectIdRef.current = currentIdStr;
             lastFetchedProjectIdRef.current = currentIdStr;
@@ -1043,31 +1014,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           }
 
           setProject(projectData);
-          console.log(
-            `[DesignProject] Project State Updated:`,
-            projectData?._id
-          );
-          console.log(
-            `[DesignProject] raw messages count:`,
-            projectData?.messages?.length || 0
-          );
 
           if (Array.isArray(projectData?.messages)) {
-            console.log(
-              `[DesignProject] Messages array found. Length: ${projectData.messages.length}`
-            );
             if (projectData.messages.length > 0) {
-              console.log(
-                `[DesignProject] Sample raw message [0]:`,
-                JSON.stringify(projectData.messages[0]).slice(0, 200)
-              );
             }
             if (projectData.messages.length >= 1) {
               const serverMessages = transformMessages(
                 projectData.messages || []
-              );
-              console.log(
-                `[DesignProject] Transformed ${serverMessages.length} messages`
               );
               setMessages((prev: any[]) => {
                 const serverIds = new Set(
@@ -1106,9 +1059,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                   }
                   return true;
                 });
-                console.log(
-                  `[DesignProject] Final setMessages called with ${serverMessages.length} items`
-                );
                 return [...optimistic, ...serverMessages];
               });
               setIsTyping(false);
@@ -1122,7 +1072,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             handleLocalStorageDraft(projectData);
           }
 
-          console.log("Project fetched successfully:", projectData);
 
           return { success: true };
         } else {
@@ -1164,7 +1113,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const retryLoading = (id: string) => {
-    console.log(`Retrying generation with ID: ${id}`);
   };
 
   const editMessage = async (
@@ -1281,7 +1229,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
-      console.log("messageId", messageId);
 
       // Update local state optimistically
       setMessages((prev: any[]) =>
@@ -1360,7 +1307,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const handleGenerationItemClick = (generationId: string) => {
-    console.log(`Clicked generation item: ${generationId}`);
   };
 
   const handleInput = (event?: React.ChangeEvent<HTMLTextAreaElement>) => {

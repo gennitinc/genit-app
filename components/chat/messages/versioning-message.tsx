@@ -498,7 +498,6 @@ export function VersioningMessage({
   };
 
   const handleDownload = async (file: { filePath?: string; name?: string }) => {
-    console.log("hit download");
     try {
       if (!file || !file.filePath) return;
 

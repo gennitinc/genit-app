@@ -250,7 +250,6 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
 
   const handleHoverStart = useCallback(() => {
     if (!state.isMobile) {
-      console.log("Hover start");
       setState((prev) => ({ ...prev, isHovering: true }));
       onHoverStart?.();
     }
@@ -258,7 +257,6 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
 
   const handleHoverEnd = useCallback(() => {
     if (!state.isMobile) {
-      console.log("Hover end");
       setState((prev) => ({ ...prev, isHovering: false }));
       onHoverEnd?.();
     }
@@ -267,19 +265,10 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
   // Video Playback Controls
   const playVideo = useCallback(() => {
     if (!videoRef.current || !state.isInView) {
-      console.log("PlayVideo blocked:", {
-        hasVideo: !!videoRef.current,
-        isInView: state.isInView,
-      });
       return;
     }
 
     const video = videoRef.current;
-    console.log("Attempting to play video:", {
-      readyState: video.readyState,
-      paused: video.paused,
-      currentSrc: video.currentSrc,
-    });
 
     // Reset loading state when attempting to play
     setState((prev) => ({ ...prev, isLoading: true }));
@@ -289,7 +278,6 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
       video
         .play()
         .then(() => {
-          console.log("Video play success");
           setState((prev) => ({
             ...prev,
             isLoading: false,
@@ -298,7 +286,6 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
           }));
         })
         .catch((error) => {
-          console.log("Video play error:", error.name);
           if (error.name === "NotAllowedError") {
             // User interaction required - show thumbnail
             setState((prev) => ({
@@ -318,12 +305,9 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
     };
 
     if (video.readyState >= 3) {
-      console.log("Video ready, attempting immediate play");
       attemptPlay();
     } else {
-      console.log("Video not ready, waiting for canplay event");
       const handleCanPlay = () => {
-        console.log("Canplay event fired");
         video.removeEventListener("canplay", handleCanPlay);
         attemptPlay();
       };
@@ -392,31 +376,18 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
 
     const handlers = {
       loadstart: () => {
-        console.log("Video loadstart");
         setState((prev) => ({ ...prev, isLoading: true }));
       },
       loadeddata: () => {
-        console.log("Video loadeddata", {
-          readyState: video.readyState,
-          duration: video.duration,
-          paused: video.paused,
-          isHovering: state.isHovering,
-          controlsVisible: state.controlsVisible,
-        });
         setState((prev) => ({ ...prev, isLoading: false }));
         // Only attempt to play if we're hovering or controls are visible
         if (state.isHovering || state.controlsVisible) {
-          console.log(
-            "Video loaded and hover/controls active, attempting play"
-          );
           playVideo();
         }
       },
       canplay: () => {
-        console.log("Video canplay event");
       },
       playing: () => {
-        console.log("Video playing");
         setState((prev) => ({
           ...prev,
           isLoading: false,
@@ -425,7 +396,6 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
         }));
       },
       pause: () => {
-        console.log("Video paused");
         setState((prev) => ({
           ...prev,
           isPlaying: false,
@@ -454,7 +424,6 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
 
     // Set initial source and load the video
     if (!video.src) {
-      console.log("Setting video source:", videoSrc);
       video.src = videoSrc;
       video.load();
     }
@@ -474,15 +443,8 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
 
   // Playback control effect
   useEffect(() => {
-    console.log("Playback control effect:", {
-      isInView: state.isInView,
-      isMobile: state.isMobile,
-      controlsVisible: state.controlsVisible,
-      isHovering: state.isHovering,
-    });
 
     if (!state.isInView) {
-      console.log("Not in view, skipping playback");
       return;
     }
 
@@ -490,29 +452,20 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
 
     if (state.isMobile) {
       if (state.controlsVisible) {
-        console.log("Mobile controls visible, playing");
         playVideo();
       } else {
-        console.log("Mobile controls hidden, pausing");
         pauseVideo();
       }
     } else if (state.isHovering) {
-      console.log(
-        "Hovering, scheduling playback with delay:",
-        playbackStartDelay
-      );
       playbackTimeout = setTimeout(() => {
-        console.log("Playback delay completed, attempting to play");
         playVideo();
       }, playbackStartDelay);
     } else {
-      console.log("Not hovering, pausing");
       pauseVideo();
     }
 
     return () => {
       if (playbackTimeout) {
-        console.log("Clearing playback timeout");
         clearTimeout(playbackTimeout);
       }
     };
@@ -707,7 +660,6 @@ const HoverVideoPlayerVideo: React.FC<{
         playerRef.current = player;
 
         player.ready().then(() => {
-          console.log("Vimeo video loaded");
           if (isHovering) {
             player?.play();
           }

@@ -70,7 +70,6 @@ export const FacebookNode = memo(
     const [isEditOpen, setIsEditOpen] = useState(false);
 
     const handleSave = () => {
-      console.log("[v0] Saving Facebook node data:", editData);
       setIsEditOpen(false);
     };
 

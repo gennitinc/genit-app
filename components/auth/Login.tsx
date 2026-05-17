@@ -98,7 +98,6 @@ export const LoginComp = () => {
         withCredentials: true,
       });
 
-      console.log(response);
       if (response.status === 200) {
         toast.success("Logged in Successfully");
 
@@ -116,7 +115,6 @@ export const LoginComp = () => {
         // Check verification and onboarding status, redirect accordingly
         const userData = await apiResponse.get("/user/active-user");
         const currentUser = userData.data.user;
-        console.log("currentUser", currentUser);
         identifyAndTrackAuth(
           {
             id: currentUser._id,
@@ -147,7 +145,6 @@ export const LoginComp = () => {
       }
     } catch (error: any) {
       setLoading(false);
-      console.log(error?.message);
       trackEvent("login_failed", {
         auth_method: "password",
         reason: error?.response?.data?.message || error?.message,
@@ -176,7 +173,6 @@ export const LoginComp = () => {
           withCredentials: true,
         });
 
-        console.log(response);
         if (response.status === 200) {
           // Check if it's a new sign-up or existing sign-in based on response message
           const isNewUser =
@@ -233,7 +229,6 @@ export const LoginComp = () => {
         }
       } catch (error: any) {
         setLoading2(false);
-        console.log(error?.message);
         trackEvent("login_failed", {
           auth_method: "google",
           reason: error?.response?.data?.message || error?.message,
@@ -1143,7 +1138,6 @@ export const LoginComp = () => {
                     handleGoogleSignIn(provider, data);
                   },
                   onReject: (err: any) => {
-                    console.log(err);
                     setLoading2(false);
                   },
                   className: "w-full",
