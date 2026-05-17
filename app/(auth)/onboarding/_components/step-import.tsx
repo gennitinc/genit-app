@@ -124,7 +124,7 @@ export function StepImport({ onComplete, onSkip, isSkipping }: StepImportProps) 
       {/* Hero */}
       <div className='text-center'>
       
-        <h1 className='onb-animate-in onb-stagger-1 mt-4 text-4xl font-semibold tracking-tight text-neutral-900 dark:text-white sm:text-5xl lg:mt-16'>
+        <h1 className='onb-animate-in onb-stagger-1 mt-4 text-4xl font-semibold tracking-tight text-neutral-900 dark:text-white sm:text-4xl lg:mt-14'>
           <Karaoke text="Let's import your brand" />
         </h1>
         <p className='onb-animate-in onb-stagger-2 text-neutral-600 dark:text-neutral-300 mx-auto mt-3 max-w-2xl text-sm sm:text-base'>
