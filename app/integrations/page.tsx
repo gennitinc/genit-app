@@ -21,6 +21,17 @@ import type { Metadata } from "next";
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // export const metadata: Metadata = {
 //   title: "Integrations – Gennit AI",
 //   description:
@@ -49,7 +60,7 @@ export default function IntegrationsPage() {
                 <div className='mb-16 text-center'>
                   <div className='border-border bg-card/60 text-muted-foreground mb-6 inline-flex items-center gap-2 rounded-md border px-3 py-1 text-xs font-medium backdrop-blur dark:border-white/10 dark:bg-white/5 dark:text-zinc-200'>
                     <GitBranchPlus className='h-3.5 w-3.5 text-violet-500 dark:text-violet-300' />
-                    Integrations
+                    Tool kit connect
                   </div>
                   <h2 className='text-foreground text-3xl font-semibold tracking-tight sm:text-4xl'>
                     Integrations your favorite tools
