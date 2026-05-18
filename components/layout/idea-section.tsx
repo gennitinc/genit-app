@@ -7,77 +7,29 @@ import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
 import { HomeInfoGrid } from "../common/homeInfoGrid";
 import HomeGrid from "../common/templateGrid";
 import { ModelSelector } from "../inspire/model-selector";
+import { AnimatedShinyText } from "../ui/animated-shinny-text";
 import { BorderBeam } from "../ui/border-beam";
 import ShinyText from "../ui/shiny-text";
+import { BrevoBrand, FacebookBrand, GmailBrand, GoogleCalendarBrand, GoogleDriveBrand, InstagramBrand, LinkedinBrand, MicrosoftOutlookBrand, PinterestBrand, SnapchatBrand, TelegramBrand, TikTokBrand, WhatsAppBrand, XBrand, YoutubeBrand } from "@/app/(auth)/onboarding/_components/social-icons";
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+// import { BorderBeam } from "@/registry/magicui/border-beam"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { PointerHighlight } from "@/components/ui/pointer-highlight";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
-import {
-  trackAppOpened,
-  trackEvent,
-  trackFeatureUsed,
-} from "@/lib/mixpanelClient";
+import { trackAppOpened, trackEvent, trackFeatureUsed } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
+import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  Camera,
-  CheckCircle2,
-  FileText,
-  Grid2X2Plus,
-  Image,
-  Image as ImageIcon,
-  Layout,
-  Loader2,
-  MessageSquare,
-  Mic,
-  Music,
-  Paintbrush,
-  Palette,
-  PaperclipIcon,
-  Play,
-  Presentation,
-  Settings,
-  Settings2,
-  Sparkles,
-  Table,
-  TrendingUp,
-  Type,
-  User,
-  Users,
-  Video,
-  Volume2,
-  Wand2,
-  WandSparklesIcon,
-  Workflow,
-  X,
-  XIcon,
-  Youtube,
-  Zap,
-} from "lucide-react";
+import { AlertCircle, ArrowRightIcon, Camera, CheckCircle2, FileText, Grid2X2Plus, Image, Image as ImageIcon, Layout, Loader2, MessageSquare, Mic, Music, Paintbrush, Palette, PaperclipIcon, Play, Presentation, Settings, Settings2, Sparkles, Table, TrendingUp, Type, User, Users, Video, Volume2, Wand2, WandSparklesIcon, Workflow, X, XIcon, Youtube, Zap } from "lucide-react";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -85,6 +37,179 @@ import { toast } from "sonner";
 import { div } from "three/src/nodes/math/OperatorNode.js";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const INTEGRATION_BRANDS = [
+  { name: "Instagram", Icon: InstagramBrand },
+  { name: "Facebook", Icon: FacebookBrand },
+  { name: "LinkedIn", Icon: LinkedinBrand },
+  { name: "YouTube", Icon: YoutubeBrand },
+  { name: "X", Icon: XBrand },
+  { name: "TikTok", Icon: TikTokBrand },
+  { name: "Pinterest", Icon: PinterestBrand },
+  { name: "Snapchat", Icon: SnapchatBrand },
+  { name: "WhatsApp", Icon: WhatsAppBrand },
+  { name: "Telegram", Icon: TelegramBrand },
+  { name: "Brevo", Icon: BrevoBrand },
+  { name: "Gmail", Icon: GmailBrand },
+  { name: "Outlook", Icon: MicrosoftOutlookBrand },
+  { name: "Google Calendar", Icon: GoogleCalendarBrand },
+  { name: "Google Drive", Icon: GoogleDriveBrand },
+] as const;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 interface TypewriterEffectProps {
   words: string[];
@@ -1003,6 +1128,11 @@ export function IdeaSection() {
             // animate={{ opacity: 1, y: 0 }}
             // transition={{ duration: 0.6 }}
           >
+            <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400'>
+              <span className="text-xs">✨ Introducing Magic UI</span>
+              <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
+            </AnimatedShinyText>
+
             <motion.h1
               className='text-foreground mt-8 mb-2 flex items-center gap-1 text-3xl leading-none font-semibold sm:text-3xl md:mb-2.5 md:gap-0 md:text-5xl'
               custom={1}
@@ -1048,8 +1178,8 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Agents that designs, post, run ads, & handles <br />{" "}
-              your brand marketing across every channel.
+              Agents that designs, post, run ads, & handles <br /> your brand
+              marketing across every channel.
             </motion.p>
           </motion.div>
         </div>
@@ -1256,18 +1386,18 @@ export function IdeaSection() {
                     }
                     className='group relative flex w-full flex-col gap-2 rounded-lg border border-white bg-white/80 p-3 text-base shadow-md ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
                   >
-                    <BorderBeam
+                    {/* <BorderBeam
                       duration={6}
                       size={40}
                       className='from-transparent via-red-500 to-transparent'
                     />
                     <BorderBeam
                       duration={6}
-                      delay={3}
+                      delay={10}
                       size={40}
                       borderWidth={2}
                       className='from-transparent via-blue-500 to-transparent'
-                    />
+                    /> */}
                     <div className='w-full min-w-0'>
                       <div className='relative flex flex-1 items-center'>
                         <textarea
@@ -1440,6 +1570,7 @@ export function IdeaSection() {
                         onClick={() => router.push("/signin")}
                       ></div>
                     )}
+                    <GradientFrame />
                   </form>
                 </div>
               </div>
@@ -1882,6 +2013,37 @@ export function IdeaSection() {
             </div>
           </div>
         </div> */}
+
+        <section className='relative mt-10 space-y-4 border-t pt-6 pb-10'>
+          <h2 className='text-muted-foreground text-center text-lg tracking-tight md:text-lg'>
+            with over 23+ marketing{" "}
+            <span className='text-foreground font-medium md:text-xl'>
+              Integrations
+            </span>
+          </h2>
+          <div className='relative z-10 mx-auto max-w-5xl'>
+            <div className='overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4'>
+              <div className='animate-marquee flex w-max gap-10 hover:[animation-play-state:paused]'>
+                {[...INTEGRATION_BRANDS, ...INTEGRATION_BRANDS].map(
+                  ({ name, Icon }, i) => (
+                    <Link
+                      key={`${name}-${i}`}
+                      href={`/integrations#${name.toLowerCase().replace(/\s+/g, "-")}`}
+                      className='group text-muted-foreground hover:text-foreground flex shrink-0 items-center gap-2 transition-colors'
+                    >
+                      <span className='flex h-6 items-center md:h-7'>
+                        <Icon className='h-full w-auto' />
+                      </span>
+                      <span className='text-sm font-medium whitespace-nowrap md:text-base'>
+                        {name}
+                      </span>
+                    </Link>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
       {/* Presentation Organization Drawer */}
