@@ -11,6 +11,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { AgentRunsProvider } from "@/context/AgentRunsContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useRef } from "react";
 import React from "react";
@@ -22,6 +23,7 @@ export function ChatLayout() {
 
 
   return (
+    <AgentRunsProvider>
     <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-[#09090b]'>
       <AppSidebar />
       <div
@@ -79,5 +81,6 @@ export function ChatLayout() {
         )}
       </div>
     </div>
+    </AgentRunsProvider>
   );
 }

@@ -23,9 +23,11 @@ import { useIntegrations } from "@/hooks/use-integrations";
 import {
   IntegrationConnection,
   IntegrationPlatform,
+  isMetaSurface,
 } from "@/lib/integrations-api";
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
+  AlertTriangle,
   ArrowRight,
   AtSign,
   Calendar,
@@ -42,7 +44,12 @@ import {
 } from "react";
 
 type BaseStatus = "available" | "soon";
-type CardStatus = "connected" | "available" | "soon";
+// `partial` = the user has authorized Meta (identity row exists) but the
+// per-surface provisioning produced zero Integration rows — e.g. they
+// granted scopes but have no Facebook Page / no IG Business account /
+// no Ad account. The card shows Manage (so they can revoke or retry)
+// instead of Connect (which would just hit the same dead-end again).
+type CardStatus = "connected" | "partial" | "available" | "soon";
 
 type IntegrationIcon = ComponentType<{
   className?: string;
@@ -97,7 +104,7 @@ const INTEGRATIONS: Integration[] = [
       "Post to your profile and company pages. Read comments and track post analytics.",
     category: "Socials",
     icon: LinkedinBrand,
-    baseStatus: "available",
+    baseStatus: "soon",
     glow: "rgba(14, 165, 233, 0.8)",
   },
   {
@@ -107,7 +114,7 @@ const INTEGRATIONS: Integration[] = [
       "Compose tweets and threads. Pull mentions, replies and per-tweet analytics.",
     category: "Socials",
     icon: XBrand,
-    baseStatus: "available",
+    baseStatus: "soon",
     glow: "rgba(244, 244, 245, 0.7)",
   },
   {
@@ -117,7 +124,7 @@ const INTEGRATIONS: Integration[] = [
       "Direct-publish videos, track per-video metrics and read viewer comments.",
     category: "Socials",
     icon: TikTokBrand,
-    baseStatus: "available",
+    baseStatus: "soon",
     glow: "rgba(12, 12, 12, 1)",
   },
   {
@@ -147,7 +154,7 @@ const INTEGRATIONS: Integration[] = [
       "Manage Snap ad campaigns and read account-level + per-campaign performance stats.",
     category: "Ads Campaigns",
     icon: SnapchatBrand,
-    baseStatus: "available",
+    baseStatus: "soon",
     glow: "rgba(250, 204, 21, 0.8)",
   },
   {
@@ -167,7 +174,7 @@ const INTEGRATIONS: Integration[] = [
       "List Google Ads campaigns across your manager + child accounts and pull per-day performance metrics.",
     category: "Ads Campaigns",
     icon: TrendingUp,
-    baseStatus: "available",
+    baseStatus: "soon",
     glow: "rgba(250, 204, 21, 0.8)",
   },
   {
@@ -177,7 +184,7 @@ const INTEGRATIONS: Integration[] = [
       "List authorized advertiser campaigns and pull TikTok Marketing API reports for any date range.",
     category: "Ads Campaigns",
     icon: TikTokBrand,
-    baseStatus: "available",
+    baseStatus: "soon",
     glow: "rgba(12, 12, 12, 1)",
   },
   {
@@ -292,10 +299,18 @@ const CATEGORY_ORDER = [
 
 function resolveStatus(
   integration: Integration,
-  connections?: IntegrationConnection[]
+  connections: IntegrationConnection[] | undefined,
+  hasIdentityForSurface: boolean
 ): CardStatus {
   if (connections && connections.some((c) => c.status === "active"))
     return "connected";
+  // Meta surface with a stored identity for THIS specific surface but no
+  // provisioned targets — user authorized FB/IG/Ads/WhatsApp but no Pages /
+  // IG accounts / Ad accounts / WA numbers were available. Let them open
+  // Manage to revoke the identity or try again after fixing their Meta
+  // setup. Each surface checks its own identity independently now.
+  if (hasIdentityForSurface && isMetaSurface(integration.platform))
+    return "partial";
   // Drive the connect button purely off the explorer's `baseStatus`. This
   // way a platform's card stays disabled until the operator has set the
   // backend env vars and flipped it to "available" here, even if the
@@ -321,6 +336,18 @@ function ConnectButton({
         aria-label={`Manage ${name} connection`}
         onClick={onManage}
         className='inline-flex items-center gap-1 rounded-md bg-linear-to-r from-emerald-500 to-teal-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-emerald-300 focus:outline-none dark:focus:ring-emerald-800'
+      >
+        Manage
+      </button>
+    );
+  }
+  if (status === "partial") {
+    return (
+      <button
+        type='button'
+        aria-label={`Manage ${name} Meta access`}
+        onClick={onManage}
+        className='inline-flex items-center gap-1 rounded-md bg-linear-to-r from-amber-500 to-orange-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-amber-300 focus:outline-none dark:focus:ring-amber-800'
       >
         Manage
       </button>
@@ -358,6 +385,14 @@ function StatusBadge({
       <span className='inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300 dark:ring-emerald-400/20'>
         <CheckCircle2 className='h-3 w-3' />
         {count && count > 1 ? `Connected · ${count}` : "Connected"}
+      </span>
+    );
+  }
+  if (status === "partial") {
+    return (
+      <span className='inline-flex items-center gap-1.5 rounded-md bg-amber-500/10 px-2 py-1 text-xs text-amber-700 ring-1 ring-amber-500/30 dark:text-amber-300 dark:ring-amber-400/20'>
+        <AlertTriangle className='h-3 w-3' />
+        Needs setup
       </span>
     );
   }
@@ -443,7 +478,7 @@ export function IntegrationsExplorer() {
   const [query, setQuery] = useState("");
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
-  const { byPlatform } = useIntegrations();
+  const { byPlatform, identityBySurface } = useIntegrations();
 
   const grouped = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -509,7 +544,16 @@ export function IntegrationsExplorer() {
               <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
                 {items.map((integration) => {
                   const connections = byPlatform.get(integration.platform);
-                  const status = resolveStatus(integration, connections);
+                  const hasIdentityForSurface = isMetaSurface(
+                    integration.platform
+                  )
+                    ? identityBySurface.has(integration.platform)
+                    : false;
+                  const status = resolveStatus(
+                    integration,
+                    connections,
+                    hasIdentityForSurface
+                  );
                   return (
                     <IntegrationCard
                       key={integration.name}

@@ -9,6 +9,7 @@ import {
   IntegrationConnection,
   IntegrationPlatform,
   MetaIdentitySummary,
+  MetaSurface,
   requestConnectUrl,
   setPrimaryIntegrationById,
 } from "@/lib/integrations-api";
@@ -33,7 +34,7 @@ export function useIntegrations() {
   });
 
   const integrations: IntegrationConnection[] = query.data?.integrations ?? [];
-  const identity: MetaIdentitySummary | null = query.data?.identity ?? null;
+  const identities: MetaIdentitySummary[] = query.data?.identities ?? [];
 
   // Group integrations by platform. Primary first, then by createdAt desc.
   const byPlatform = useMemo(() => {
@@ -53,10 +54,22 @@ export function useIntegrations() {
     return map;
   }, [integrations]);
 
+  // Identities indexed by surface so callers can pull "the identity for
+  // Facebook" without scanning the array. Each Meta surface (facebook,
+  // instagram, meta_ads, whatsapp) is fully independent.
+  const identityBySurface = useMemo(() => {
+    const map = new Map<MetaSurface, MetaIdentitySummary>();
+    for (const id of identities) {
+      map.set(id.surface, id);
+    }
+    return map;
+  }, [identities]);
+
   return {
     orgId,
     integrations,
-    identity,
+    identities,
+    identityBySurface,
     byPlatform,
     isLoading: query.isLoading,
     isFetching: query.isFetching,

@@ -1,6 +1,7 @@
 "use client";
 
 import { ChatInput } from "./chat-input";
+import { AgentMessage } from "./agent/agent-message";
 import {
   Conversation,
   ConversationContent,
@@ -14,6 +15,7 @@ import {
   VersioningMessage,
 } from "@/components/chat/messages";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -41,6 +43,8 @@ export function TextChatContent() {
     generateMessage,
     aiStatus,
   } = useProjectDesign();
+
+  const { runs: agentRuns } = useAgentRunsContext();
 
   useEffect(() => {
   }, [messages]);
@@ -432,6 +436,10 @@ export function TextChatContent() {
 
               return null;
             })}
+
+            {agentRuns.map((run) => (
+              <AgentMessage key={run.runId} run={run} userAvatar={userAvatar} />
+            ))}
 
             {status === "submitted" && <Loader />}
 

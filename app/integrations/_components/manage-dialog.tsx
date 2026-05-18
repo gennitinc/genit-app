@@ -19,6 +19,7 @@ import {
   IntegrationPlatform,
   isMetaSurface,
 } from "@/lib/integrations-api";
+import { GradientFrame } from "@/utils/gradient-frame";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -63,6 +64,42 @@ function targetLabel(platform: IntegrationPlatform): string {
   return "Target";
 }
 
+// Where the user can manage their connected app on the platform's own site
+// (to revoke server-side, audit scopes, see device sessions, etc.).
+// Meta surfaces share one Business settings page; Google surfaces share the
+// account-permissions page. Returns null for platforms without a stable URL.
+const PLATFORM_SETTINGS_URL: Partial<Record<IntegrationPlatform, string>> = {
+  facebook: "https://www.facebook.com/settings?tab=business_tools",
+  instagram: "https://business.facebook.com/settings/instagram-accounts",
+  threads: "https://www.threads.net/settings/account",
+  linkedin: "https://www.linkedin.com/psettings/permitted-services",
+  x: "https://x.com/settings/connected_apps",
+  tiktok: "https://www.tiktok.com/setting/apps-and-data",
+  youtube: "https://myaccount.google.com/permissions",
+  pinterest: "https://www.pinterest.com/settings/apps",
+  snapchat: "https://accounts.snapchat.com/accounts/connected-apps",
+  meta_ads: "https://business.facebook.com/settings/people",
+  google_ads: "https://myaccount.google.com/permissions",
+  tiktok_ads: "https://ads.tiktok.com/i18n/account/info",
+  linkedin_ads: "https://www.linkedin.com/psettings/permitted-services",
+  x_ads: "https://x.com/settings/connected_apps",
+  gmail: "https://myaccount.google.com/permissions",
+  outlook: "https://account.microsoft.com/privacy/app-access",
+  mailchimp: "https://us1.admin.mailchimp.com/account/api/",
+  brevo: "https://app.brevo.com/security/login_session",
+  whatsapp: "https://business.facebook.com/wa/manage/",
+  telegram: "https://my.telegram.org/auth",
+  google_calendar: "https://myaccount.google.com/permissions",
+  google_drive: "https://myaccount.google.com/permissions",
+};
+
+function platformSettingsUrl(
+  platform: IntegrationPlatform | null
+): string | null {
+  if (!platform) return null;
+  return PLATFORM_SETTINGS_URL[platform] ?? null;
+}
+
 export function ManageDialog({
   open,
   onOpenChange,
@@ -79,9 +116,13 @@ export function ManageDialog({
   const disconnectOne = useDisconnectIntegration();
   const disconnectIdentity = useDisconnectMetaIdentity();
   const setPrimary = useSetPrimaryIntegration();
-  const { identity } = useIntegrations();
+  const { identityBySurface } = useIntegrations();
 
+  // Each Meta surface (FB, IG, Meta Ads, WhatsApp) has its own identity row
+  // now. Pull the one for THIS dialog's platform — revoking it should only
+  // affect this surface, never the others.
   const surface = platform && isMetaSurface(platform) ? platform : null;
+  const identity = surface ? identityBySurface.get(surface) ?? null : null;
   const showIdentitySection = surface !== null && identity;
 
   const sortedConnections = useMemo(() => {
@@ -130,9 +171,8 @@ export function ManageDialog({
     if (!identity) return;
     try {
       await disconnectIdentity.mutateAsync(identity._id);
-      toast.success("Meta access revoked", {
-        description:
-          "All Facebook, Instagram, and Meta Ads connections for this org were removed.",
+      toast.success(`${platformName} Meta access revoked`, {
+        description: `All ${platformName} connections for this org were removed. Other Meta surfaces (Facebook, Instagram, Meta Ads, WhatsApp) are untouched.`,
       });
       onOpenChange(false);
       setConfirmIdentityWipe(false);
@@ -156,14 +196,12 @@ export function ManageDialog({
       >
         <div
           className='relative px-6 pt-7 pb-6'
-          style={{
-            background: `radial-gradient(circle 280px at 12% 0%, ${glow}, transparent 60%)`,
-          }}
+
         >
           <button
             type='button'
             onClick={() => handleClose(false)}
-            className='text-muted-foreground hover:text-foreground absolute top-4 right-4 rounded-full p-1 transition'
+            className='text-muted-foreground hover:text-foreground absolute top-4 right-4 z-20 rounded-full p-1 transition'
             aria-label='Close'
           >
             <X className='h-4 w-4' />
@@ -179,9 +217,11 @@ export function ManageDialog({
                   {platformName} connections
                 </DialogTitle>
                 <DialogDescription className='text-xs'>
-                  {hasMultiple
-                    ? `${sortedConnections.length} ${label.toLowerCase()}s connected for this organization.`
-                    : `Manage the connected ${label.toLowerCase()} or revoke access.`}
+                  {sortedConnections.length === 0
+                    ? `No ${label.toLowerCase()}s provisioned yet.`
+                    : hasMultiple
+                      ? `${sortedConnections.length} ${label.toLowerCase()}s connected for this organization.`
+                      : `Manage the connected ${label.toLowerCase()} or revoke access.`}
                 </DialogDescription>
               </DialogHeader>
             </div>
@@ -194,16 +234,33 @@ export function ManageDialog({
                 <span className='font-semibold'>{identity?.metaUserName}</span>
               </p>
               <p className='text-muted-foreground mt-0.5 text-[11px]'>
-                This single Meta identity powers Facebook, Instagram, and Meta
-                Ads for your organization.
+                This identity is scoped to {platformName} only. Your other
+                Meta connections (Facebook, Instagram, Meta Ads, WhatsApp)
+                each have their own independent login.
               </p>
             </div>
           )}
 
           <div className='relative z-10 mt-5 space-y-2'>
+            <GradientFrame />
             {sortedConnections.length === 0 && (
-              <div className='border-border bg-card/60 text-muted-foreground rounded-md border px-3 py-4 text-center text-sm dark:border-white/10 dark:bg-white/5'>
-                No active connections for {platformName}.
+              <div className='border-border bg-card/60 rounded-md border px-3 py-4 text-center dark:border-white/10 dark:bg-white/5'>
+                <p className='text-foreground text-sm'>
+                  No {label.toLowerCase()}s provisioned for {platformName}.
+                </p>
+                {showIdentitySection ? (
+                  <p className='text-muted-foreground mt-1 text-[11px]'>
+                    Your Meta login is authorized, but no usable{" "}
+                    {label.toLowerCase()}s were found on this account. Fix it
+                    on the Meta side and click Connect again, or revoke Meta
+                    access below to start clean.
+                  </p>
+                ) : (
+                  <p className='text-muted-foreground mt-1 text-[11px]'>
+                    Click Connect from the integrations page to set up{" "}
+                    {platformName}.
+                  </p>
+                )}
               </div>
             )}
             {sortedConnections.map((conn) => {
@@ -337,7 +394,10 @@ export function ManageDialog({
                           type='button'
                           size='sm'
                           variant='ghost'
-                          onClick={() => setConfirmDisconnectId(null)}
+                          onClick={() => {
+                            setConfirmDisconnectId(null);
+                            handleClose(false);
+                          }}
                           disabled={disconnectOne.isPending}
                           className='h-7 px-2 text-[11px]'
                         >
@@ -368,11 +428,12 @@ export function ManageDialog({
                 <div className='flex items-start justify-between gap-3'>
                   <div>
                     <p className='text-foreground text-xs font-medium'>
-                      Revoke Meta access entirely
+                      Revoke {platformName} access
                     </p>
                     <p className='text-muted-foreground mt-1 text-[11px]'>
-                      Removes Facebook, Instagram, and Meta Ads connections
-                      tied to this Meta login.
+                      Removes the Meta login tied to {platformName} and every{" "}
+                      {label.toLowerCase()} provisioned under it. Your other
+                      Meta surfaces stay connected.
                     </p>
                   </div>
                   <Button
@@ -388,14 +449,17 @@ export function ManageDialog({
               ) : (
                 <div>
                   <p className='text-foreground text-xs font-medium'>
-                    This wipes every Meta connection. Sure?
+                    Revoke all {platformName} access on this Meta login?
                   </p>
                   <div className='mt-2 flex justify-end gap-2'>
                     <Button
                       type='button'
                       size='sm'
                       variant='ghost'
-                      onClick={() => setConfirmIdentityWipe(false)}
+                      onClick={() => {
+                        setConfirmIdentityWipe(false);
+                        handleClose(false);
+                      }}
                       disabled={disconnectIdentity.isPending}
                       className='h-7 px-2 text-[11px]'
                     >
@@ -410,7 +474,7 @@ export function ManageDialog({
                     >
                       {disconnectIdentity.isPending
                         ? "Revoking…"
-                        : "Yes, revoke Meta"}
+                        : `Yes, revoke ${platformName}`}
                     </Button>
                   </div>
                 </div>
@@ -420,15 +484,19 @@ export function ManageDialog({
         </div>
 
         <div className='border-border bg-muted/30 flex items-center justify-between gap-3 border-t px-6 py-3 dark:border-white/10 dark:bg-white/[0.02]'>
-          <a
-            href='https://www.facebook.com/settings?tab=business_tools'
-            target='_blank'
-            rel='noreferrer'
-            className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-[11px]'
-          >
-            Platform settings
-            <ExternalLink className='h-3 w-3' />
-          </a>
+          {platformSettingsUrl(platform) ? (
+            <a
+              href={platformSettingsUrl(platform) as string}
+              target='_blank'
+              rel='noreferrer'
+              className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-[11px]'
+            >
+              {platformName} settings
+              <ExternalLink className='h-3 w-3' />
+            </a>
+          ) : (
+            <span />
+          )}
           <span className='text-muted-foreground inline-flex items-center gap-1 text-[11px]'>
             <CheckCircle2 className='h-3 w-3' />
             All tokens encrypted at rest

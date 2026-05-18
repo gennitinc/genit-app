@@ -4,12 +4,7 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Toaster } from "@/components/ui/sonner";
 import AccountActionModal from "@/components/user/account-action-modal";
 import { ProjectActionModal } from "@/components/user/project-action-moda";
@@ -17,23 +12,32 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import withAuth from "@/helper/hoc/withAuth";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  Archive,
-  ChevronRight,
-  Clock,
-  Image as ImageIcon,
-  Loader,
-  MessageSquare,
-  MoreHorizontal,
-  Presentation,
-  Trash2,
-  Video,
-} from "lucide-react";
+import { Archive, ChevronRight, Clock, Image as ImageIcon, Loader, MessageSquare, MoreHorizontal, Presentation, Trash2, Video } from "lucide-react";
 import { RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useCallback, useEffect, useState } from "react";
 import { useRef } from "react";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 interface Project {
   _id: string;
@@ -288,7 +292,7 @@ function ChatHistoryPage() {
             scrollContainerRef as React.RefObject<HTMLDivElement>
           }
         />
-        <div className='flex-1 rounded-t-4xl border-2 p-4 lg:p-8'>
+        <div className='flex-1 rounded-t-4xl border-2 border-b-0 p-4 lg:p-8'>
           {/* Centered container with custom width for desktop */}
           <div className='mx-auto max-w-4xl'>
             {/* Header */}

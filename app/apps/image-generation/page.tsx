@@ -318,7 +318,7 @@ function ImageGenerationPage() {
         />
         <div
           id='main-content'
-          className='mt-10 flex-1 rounded-t-4xl border-2 lg:mt-0'
+          className='flex-1 rounded-t-2xl border-2 border-b-0'
           // style={{
           //   transform: "translateZ(0)",
           //   willChange: "transform",

@@ -8,6 +8,7 @@ import {
 } from "./messages/brand-identity-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
@@ -77,6 +78,8 @@ export function ChatInput({
     updateProjectModel,
     brandSaveStatus,
   } = useProjectDesign();
+
+  const { startAgent, isAgenticQuery } = useAgentRunsContext();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputSectionRef = useRef<HTMLDivElement>(null);
@@ -212,7 +215,19 @@ export function ChatInput({
         attachment_count: attachedFiles.length,
         project_id: project._id,
       });
-      await generateMessage(inputValue, attachedFiles, project._id);
+
+      // Route agentic queries (calendar, schedule, etc.) to the Claude agent
+      // orchestrator. Everything else stays on the existing /generate flow
+      // (image gen, design generation) until those tools migrate.
+      if (
+        attachedFiles.length === 0 &&
+        isAgenticQuery(inputValue)
+      ) {
+        await startAgent(inputValue);
+      } else {
+        await generateMessage(inputValue, attachedFiles, project._id);
+      }
+
       trackEvent("generation_request_submitted", {
         project_id: project._id,
       });

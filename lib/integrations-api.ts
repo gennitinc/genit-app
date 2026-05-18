@@ -46,6 +46,10 @@ export interface IntegrationConnection {
 
 export interface MetaIdentitySummary {
   _id: string;
+  // Which Meta product this identity authorizes. Each surface (Facebook,
+  // Instagram, Meta Ads, WhatsApp) has its own identity row so connect /
+  // revoke are independent.
+  surface: MetaSurface;
   metaUserId: string;
   metaUserName: string;
   metaUserAvatar?: string;
@@ -59,6 +63,9 @@ export interface MetaIdentitySummary {
 export interface ListIntegrationsResponse {
   success: boolean;
   integrations: IntegrationConnection[];
+  // Per-surface identities. Use this going forward.
+  identities: MetaIdentitySummary[];
+  // Deprecated: first identity, for backwards compat only.
   identity: MetaIdentitySummary | null;
 }
 
@@ -108,12 +115,15 @@ export function isMetaSurface(platform: IntegrationPlatform): platform is MetaSu
 
 export async function fetchIntegrations(): Promise<{
   integrations: IntegrationConnection[];
-  identity: MetaIdentitySummary | null;
+  identities: MetaIdentitySummary[];
 }> {
   const { data } = await apiResponse.get<ListIntegrationsResponse>(
     "/integrations"
   );
-  return { integrations: data.integrations, identity: data.identity };
+  return {
+    integrations: data.integrations,
+    identities: data.identities ?? [],
+  };
 }
 
 export interface FacebookProvisionedTarget {
@@ -139,6 +149,18 @@ export interface WhatsAppProvisionedTarget {
   wabaId: string;
 }
 
+// One Instagram Business account discovered through the user's Pages.
+// The user picks one or more of these from the connect dialog's selection
+// step before any Integration row is written.
+export interface InstagramCandidate {
+  igAccountId: string;
+  username: string;
+  name?: string;
+  profilePictureUrl?: string;
+  parentPageId: string;
+  parentPageName: string;
+}
+
 export type ConnectUrlResponse =
   | {
       success: true;
@@ -155,6 +177,16 @@ export type ConnectUrlResponse =
         adAccounts?: MetaAdsProvisionedTarget[];
         whatsapp?: WhatsAppProvisionedTarget[];
       };
+    }
+  | {
+      // Instagram fast-path: identity already exists with the right scopes,
+      // so OAuth is skipped, but we still hand back candidates so the user
+      // can pick which IG account to provision in the dialog.
+      success: true;
+      skipOAuth: true;
+      surface: "instagram";
+      identityId: string;
+      candidates: InstagramCandidate[];
     };
 
 export async function requestConnectUrl(
@@ -164,6 +196,18 @@ export async function requestConnectUrl(
     `/integrations/${platform}/connect-url`
   );
   return data;
+}
+
+// Step 2 of the Instagram connect flow: takes the IG account IDs the user
+// picked in the selection UI and asks the server to provision them.
+export async function provisionInstagramSelected(
+  igAccountIds: string[]
+): Promise<{ provisioned: InstagramProvisionedTarget[] }> {
+  const { data } = await apiResponse.post<{
+    success: boolean;
+    provisioned: InstagramProvisionedTarget[];
+  }>("/integrations/instagram/provision", { igAccountIds });
+  return { provisioned: data.provisioned };
 }
 
 export async function disconnectIntegrationById(id: string): Promise<void> {

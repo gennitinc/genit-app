@@ -6,44 +6,36 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { GridPattern } from "@/components/ui/grid-pattern";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Download,
-  HistoryIcon,
-  ImageIcon,
-  Minus,
-  Plus,
-  Sparkles,
-  Trash,
-  Trash2,
-  X,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, HistoryIcon, ImageIcon, Minus, Plus, Sparkles, Trash, Trash2, X } from "lucide-react";
 import { Toaster } from "sonner";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 interface GeneratedAngle {
   id: string;
@@ -639,7 +631,7 @@ const AnglesReshapePage = () => {
         />
         <div
           id='main-content'
-          className='flex-1 rounded-t-4xl border-2'
+          className='flex-1 rounded-t-2xl border-2 border-b-0'
           // style={{
           //   transform: "translateZ(0)",
           //   willChange: "transform",

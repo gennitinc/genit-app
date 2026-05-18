@@ -15,12 +15,14 @@ import {
 } from "@/hooks/use-integrations";
 import {
   ConnectUrlResponse,
+  InstagramCandidate,
   IntegrationPlatform,
   connectBrevoWithApiKey,
   connectTelegramWithToken,
   isCredentialPlatform,
   isMetaSurface,
   isPlatformSupported,
+  provisionInstagramSelected,
   requestConnectUrl,
 } from "@/lib/integrations-api";
 import { GradientFrame } from "@/utils/gradient-frame";
@@ -57,6 +59,20 @@ type PopupMessage =
       type: "gennit:integration:error";
       platform: IntegrationPlatform;
       message?: string;
+    }
+  | {
+      // Instagram-only: server discovered IG candidates and is waiting
+      // for the user to pick which account(s) to provision before any
+      // Integration row is written.
+      type: "gennit:integration:select_target";
+      platform: IntegrationPlatform;
+      identityId: string;
+      candidates: Array<{
+        id: string;
+        label: string;
+        subtitle?: string;
+        avatar?: string;
+      }>;
     };
 
 interface ConnectDialogProps {
@@ -69,7 +85,10 @@ interface ConnectDialogProps {
   glow: string;
 }
 
-type Phase = "idle" | "connecting" | "success" | "error";
+// `select` = user must pick which IG account(s) to provision before any
+// Integration row is written. Triggered by either the OAuth callback or
+// the smart-connect fast path returning candidates.
+type Phase = "idle" | "connecting" | "select" | "success" | "error";
 
 const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
   facebook: [
@@ -224,6 +243,7 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
   brevo: [
     "Generate a v3 API key in Brevo → SMTP & API → API Keys (not the older v2 key)",
     "Sending requires at least one verified sender address on your Brevo account",
+    "If your key has IP restrictions on, add this server's IP at app.brevo.com/security/authorised_ips first",
   ],
   pinterest: [
     "Your Pinterest app must be approved for the boards / pins scopes — apps in trial mode are limited to the app owner's account",
@@ -283,6 +303,31 @@ const CREDENTIAL_INPUT: Partial<
   },
 };
 
+// Turn any URL embedded in a requirement string into a clickable blue link.
+// Matches both full https:// URLs and bare domain forms like
+// "app.brevo.com/security/authorised_ips" — the latter gets an implicit
+// https:// prefix when used as the anchor href.
+const URL_PATTERN =
+  /(https?:\/\/[^\s]+|(?:[a-z0-9-]+\.)+[a-z]{2,}(?:\/[^\s]*)?)/gi;
+
+function renderRequirement(text: string): React.ReactNode {
+  const parts = text.split(URL_PATTERN);
+  return parts.map((part, i) => {
+    if (i % 2 === 0) return part;
+    const href = part.startsWith("http") ? part : `https://${part}`;
+    return (
+      <a
+        key={i}
+        href={href}
+        target='_blank'
+        rel='noreferrer'
+        className='text-blue-500 underline underline-offset-2 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300'
+      >
+        {part}
+      </a>
+    );
+  });
+}
 
 export function ConnectDialog({
   open,
@@ -297,23 +342,28 @@ export function ConnectDialog({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
   const [credentialValue, setCredentialValue] = useState("");
+  // Instagram selection flow: candidates discovered by the server, the IDs
+  // the user picks, and the in-flight POST state.
+  const [igCandidates, setIgCandidates] = useState<InstagramCandidate[]>([]);
+  const [selectedIgIds, setSelectedIgIds] = useState<Set<string>>(new Set());
+  const [provisionLoading, setProvisionLoading] = useState(false);
   const popupRef = useRef<Window | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const qc = useQueryClient();
   const { user, fetchCurrentUser } = useUserContext();
-  const { identity } = useIntegrations();
+  const { identityBySurface } = useIntegrations();
   const currentOrg = user?.currentOrganization;
   const orgId =
     typeof currentOrg === "object" && currentOrg ? currentOrg._id : undefined;
 
+  // Smart-connect eligibility is now per-surface: only valid when THIS
+  // specific Meta surface already has its own identity row. Other Meta
+  // logins don't count.
   const isSmartConnectEligible = useMemo(() => {
-    return Boolean(
-      platform &&
-      isMetaSurface(platform) &&
-      identity &&
-      identity.status === "active"
-    );
-  }, [platform, identity]);
+    if (!platform || !isMetaSurface(platform)) return false;
+    const identity = identityBySurface.get(platform);
+    return Boolean(identity && identity.status === "active");
+  }, [platform, identityBySurface]);
 
   const closePopup = useCallback(() => {
     if (pollRef.current) {
@@ -346,12 +396,35 @@ export function ConnectDialog({
       if (!data || typeof data !== "object") return;
       if (
         data.type !== "gennit:integration:connected" &&
-        data.type !== "gennit:integration:error"
+        data.type !== "gennit:integration:error" &&
+        data.type !== "gennit:integration:select_target"
       )
         return;
       if (data.platform !== platform) return;
 
       closePopup();
+
+      if (data.type === "gennit:integration:select_target") {
+        // Instagram-only path: server discovered candidates and asks the
+        // user to pick which IG account(s) to actually connect. The popup
+        // sends a compact { id, label, subtitle, avatar } shape; expand
+        // back into InstagramCandidate.
+        const expanded: InstagramCandidate[] = data.candidates.map((c) => ({
+          igAccountId: c.id,
+          username: c.label.replace(/^@/, ""),
+          profilePictureUrl: c.avatar,
+          parentPageId: "",
+          parentPageName: c.subtitle?.replace(/^via /, "") ?? "",
+        }));
+        setIgCandidates(expanded);
+        // Pre-select if there's only one candidate so the button is
+        // immediately actionable.
+        setSelectedIgIds(
+          new Set(expanded.length === 1 ? [expanded[0].igAccountId] : [])
+        );
+        setPhase("select");
+        return;
+      }
 
       if (data.type === "gennit:integration:connected") {
         setConnectedAccount(data.accountName || null);
@@ -393,15 +466,23 @@ export function ConnectDialog({
     }
 
     // Smart-connect fast path: the org already has a Meta identity with
-    // sufficient scopes for this surface. No popup needed — backend already
-    // provisioned the Integration rows.
+    // sufficient scopes for this surface. No popup needed.
     if (response.skipOAuth) {
-      const provisioned = response.provisioned;
+      // Instagram fast-path: server returns candidates instead of
+      // provisioned rows. Show the picker, same as the OAuth route.
+      if (response.surface === "instagram" && "candidates" in response) {
+        setIgCandidates(response.candidates);
+        setSelectedIgIds(new Set());
+        setPhase("select");
+        return;
+      }
+      const provisioned =
+        "provisioned" in response ? response.provisioned : undefined;
       const name =
-        provisioned.pages?.[0]?.pageName ||
-        provisioned.instagram?.[0]?.username ||
-        provisioned.adAccounts?.[0]?.name ||
-        provisioned.whatsapp?.[0]?.displayPhoneNumber ||
+        provisioned?.pages?.[0]?.pageName ||
+        provisioned?.instagram?.[0]?.username ||
+        provisioned?.adAccounts?.[0]?.name ||
+        provisioned?.whatsapp?.[0]?.displayPhoneNumber ||
         null;
       setConnectedAccount(name);
       setPhase("success");
@@ -491,6 +572,40 @@ export function ConnectDialog({
     if (fetchCurrentUser) fetchCurrentUser();
   }
 
+  // Final step of the Instagram connect flow: user picked accounts in the
+  // select phase, now ask the server to actually create Integration rows
+  // for those IG accounts only.
+  const handleProvisionInstagram = useCallback(async () => {
+    if (selectedIgIds.size === 0) return;
+    setProvisionLoading(true);
+    setErrorMessage(null);
+    try {
+      const result = await provisionInstagramSelected(
+        Array.from(selectedIgIds)
+      );
+      const first = result.provisioned[0];
+      setConnectedAccount(first ? `@${first.username}` : null);
+      setPhase("success");
+      qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+      toast.success(
+        `Connected ${result.provisioned.length} Instagram ${
+          result.provisioned.length === 1 ? "account" : "accounts"
+        }`,
+        { description: first ? `@${first.username}` : undefined }
+      );
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to connect the selected Instagram account";
+      setErrorMessage(msg);
+      setPhase("error");
+      toast.error("Connection failed", { description: msg });
+    } finally {
+      setProvisionLoading(false);
+    }
+  }, [selectedIgIds, qc, orgId]);
+
   const isSupported = platform ? isPlatformSupported(platform) : false;
   const scopes = platform ? (PLATFORM_SCOPES[platform] ?? []) : [];
   const requirements = platform ? (REQUIREMENTS[platform] ?? []) : [];
@@ -510,7 +625,7 @@ export function ConnectDialog({
           <button
             type='button'
             onClick={() => onOpenChange(false)}
-            className='text-muted-foreground hover:text-foreground absolute top-4 right-4 rounded-full p-1 transition'
+            className='text-muted-foreground hover:text-foreground absolute top-4 right-4 z-20 rounded-full p-1 transition'
             aria-label='Close'
           >
             <X className='h-4 w-4' />
@@ -569,20 +684,21 @@ export function ConnectDialog({
                         {requirements.map((r) => (
                           <li key={r}>
                             {"• "}
-                            {r}
+                            {renderRequirement(r)}
                           </li>
                         ))}
                       </ul>
                     </div>
                   )}
 
-                  {isSmartConnectEligible && (
+                  {isSmartConnectEligible && platform && isMetaSurface(platform) && (
                     <div className='mt-4 flex items-start gap-2 rounded-md border border-violet-500/30 bg-violet-500/4 px-3 py-2.5 dark:border-violet-300/30'>
                       <Sparkles className='mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-500 dark:text-violet-300' />
                       <p className='text-foreground text-xs'>
-                        You&apos;re already signed in to Meta as{" "}
+                        You&apos;re already signed in to Meta for{" "}
+                        {platformName} as{" "}
                         <span className='font-medium'>
-                          {identity?.metaUserName}
+                          {identityBySurface.get(platform)?.metaUserName}
                         </span>
                         . We&apos;ll reuse that login when possible — you may
                         not see a popup.
@@ -646,7 +762,7 @@ export function ConnectDialog({
               <div className='relative h-14 w-14'>
                 <div
                   className='absolute inset-0 animate-ping rounded-full'
-                  style={{ background: glow, opacity: 0.5 }}
+                  // style={{ background: glow, opacity: 0.5 }}
                 />
                 <div className='border-border bg-card relative flex h-14 w-14 items-center justify-center rounded-full border dark:border-white/10'>
                   <Loader2 className='h-6 w-6 animate-spin' />
@@ -733,10 +849,43 @@ export function ConnectDialog({
               onClick={() => {
                 closePopup();
                 setPhase("idle");
+                onOpenChange(false);
               }}
             >
               Cancel
             </Button>
+          )}
+
+          {phase === "select" && (
+            <div className='flex gap-2'>
+              <Button
+                type='button'
+                size='sm'
+                variant='ghost'
+                onClick={() => onOpenChange(false)}
+                disabled={provisionLoading}
+              >
+                Cancel
+              </Button>
+              <Button
+                type='button'
+                size='sm'
+                onClick={handleProvisionInstagram}
+                disabled={provisionLoading || selectedIgIds.size === 0}
+                className='bg-linear-to-r from-fuchsia-500 to-pink-500 text-white'
+              >
+                {provisionLoading ? (
+                  <>
+                    <Loader2 className='mr-1 h-3 w-3 animate-spin' />
+                    Connecting…
+                  </>
+                ) : (
+                  `Connect ${selectedIgIds.size || ""} ${
+                    selectedIgIds.size === 1 ? "account" : "accounts"
+                  }`.trim()
+                )}
+              </Button>
+            </div>
           )}
 
           {phase === "success" && (

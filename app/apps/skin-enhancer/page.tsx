@@ -10,31 +10,32 @@ import { Button } from "@/components/ui/button";
 import { Compare } from "@/components/ui/compare";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { PremiumInput } from "@/components/ui/premium-input";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Download,
-  HistoryIcon,
-  MessageSquare,
-  Minus,
-  Plus,
-  Settings2,
-  Sparkles,
-  Trash,
-  Trash2,
-  X,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, HistoryIcon, MessageSquare, Minus, Plus, Settings2, Sparkles, Trash, Trash2, X } from "lucide-react";
 import { Toaster } from "sonner";
 import React, { useCallback, useState } from "react";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -532,7 +533,7 @@ const SkinEnhancerPage = () => {
         <TopNavWithAurora />
         <div
           id='main-content'
-          className='flex-1 rounded-t-4xl border-2'
+          className='flex-1 rounded-t-2xl border-2 border-b-0'
           style={{
             transform: "translateZ(0)",
             willChange: "transform",
