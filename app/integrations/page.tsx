@@ -52,7 +52,7 @@ export default function IntegrationsPage() {
                     Integrations
                   </div>
                   <h2 className='text-foreground text-3xl font-semibold tracking-tight sm:text-4xl'>
-                    Works with your favorite tools
+                    Integrations your favorite tools
                   </h2>
                   <p className='text-muted-foreground mt-3 text-base'>
                     Connect to the tools your brands already use every day
