@@ -1413,7 +1413,7 @@ export function IdeaSection() {
                               : isListening
                                 ? "Listening... speak now ✦"
                                 : placeholderText
-                                  ? placeholderText + " ✦"
+                                  ? placeholderText + " |"
                                   : "Ask Gennit to create a design... ✦"
                           }
                           disabled={isGenerating || isSubmitting}
@@ -2015,9 +2015,9 @@ export function IdeaSection() {
         </div> */}
 
         <section className='relative mt-10 space-y-4 border-t pt-6 pb-10'>
-          <h2 className='text-muted-foreground text-center text-lg tracking-tight md:text-lg'>
+          <h2 className='text-muted-foreground text-center text-lg tracking-tight text-sm md:text-lg'>
             with over 23+ marketing{" "}
-            <span className='text-foreground font-medium md:text-xl'>
+            <span className='text-foreground font-medium text-base md:text-lg'>
               Integrations
             </span>
           </h2>
