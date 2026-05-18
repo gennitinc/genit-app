@@ -1129,7 +1129,7 @@ export function IdeaSection() {
             // transition={{ duration: 0.6 }}
           >
             <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400'>
-              <span className="text-xs">✨ Introducing Magic UI</span>
+              <span className="text-xs">✨ Introducing Gennit v2</span>
               <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
             </AnimatedShinyText>
 
