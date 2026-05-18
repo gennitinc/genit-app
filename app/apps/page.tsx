@@ -178,10 +178,10 @@ const Apps = () => {
                       Apps
                     </div>
                     <h2 className='text-foreground text-3xl font-semibold tracking-tight sm:text-4xl'>
-                      Pre-built apps for every channel
+                      AI Productivity Apps
                     </h2>
                     <p className='text-muted-foreground mt-3 text-base'>
-                      Pick a starting point — Gennit handles the rest
+                      Pick a starting point. your ai game just got smarter
                     </p>
                   </div>
 
@@ -217,7 +217,7 @@ const Apps = () => {
                               {section.apps.length === 1 ? "app" : "apps"}
                             </span>
                           </div> */}
-                          <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+                          <div className='grid grid-cols-2 gap-6 lg:grid-cols-3'>
                             {section.apps.map((app) => (
                               <AppCard
                                 key={app.id}
