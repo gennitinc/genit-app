@@ -1041,7 +1041,7 @@ export function IdeaSection() {
                 rectangleClassName='
       bg-blue-100 dark:bg-blue-900
       border-blue-300 dark:border-blue-700
-      rounded-xl
+      rounded-base
       px-1 sm:px-2
       py-0.5
     '
