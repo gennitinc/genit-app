@@ -63,7 +63,7 @@ export default function IntegrationsPage() {
                     Tool kit connect
                   </div>
                   <h2 className='text-foreground text-3xl font-semibold tracking-tight sm:text-4xl'>
-                    Integrations your favorite tools
+                    Integrations your favorite tools 
                   </h2>
                   <p className='text-muted-foreground mt-3 text-base'>
                     Connect to the tools your brands already use every day

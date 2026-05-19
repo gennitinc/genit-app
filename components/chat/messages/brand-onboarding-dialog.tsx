@@ -69,9 +69,19 @@ export function BrandOnboardingDialog({
     return null;
   }, [user?.currentOrganization, user?.business]);
 
-  // Hydrate brand once per open. We must NOT re-hydrate when user/activeOrg
-  // changes mid-flow — persistOrg() updates currentOrganization, which would
-  // otherwise reset the step back to "import" after a successful import.
+  // Hydrate brand once per open-transition. Reads user/activeOrg/mode via
+  // refs so context updates (e.g. an unrelated setuser elsewhere) can't
+  // re-trigger this effect mid-flow and reset `step` back to "import".
+  const hydrationCtxRef = useRef({ user, activeOrg, isCreateOrg, isEditOrg });
+  useEffect(() => {
+    hydrationCtxRef.current = { user, activeOrg, isCreateOrg, isEditOrg };
+  });
+
+  const stepRef = useRef(step);
+  useEffect(() => {
+    stepRef.current = step;
+  }, [step]);
+
   const hydratedRef = useRef(false);
   useEffect(() => {
     if (!open) {
@@ -80,17 +90,30 @@ export function BrandOnboardingDialog({
     }
     if (hydratedRef.current) return;
     hydratedRef.current = true;
-    if (isCreateOrg) {
+
+    // Defensive: if anything has already moved us past the import screen
+    // (e.g. a remount that preserved step via parent state, or a stale-effect
+    // race), don't smash it back to "import".
+    if (stepRef.current !== "import") return;
+
+    const {
+      user: u,
+      activeOrg: org,
+      isCreateOrg: createMode,
+      isEditOrg: editMode,
+    } = hydrationCtxRef.current;
+
+    if (createMode) {
       setBrand(emptyBrand);
       setStep("import");
       setIsSubmitting(false);
       return;
     }
 
-    if (isEditOrg && activeOrg) {
+    if (editMode && org) {
       const socials: SocialUrls = {};
-      if (Array.isArray(activeOrg.socialMediaUrls)) {
-        for (const entry of activeOrg.socialMediaUrls) {
+      if (Array.isArray(org.socialMediaUrls)) {
+        for (const entry of org.socialMediaUrls) {
           if (entry?.platform && entry?.url) {
             socials[entry.platform as SocialPlatform] = entry.url;
           }
@@ -98,22 +121,22 @@ export function BrandOnboardingDialog({
       }
       setBrand({
         ...emptyBrand,
-        companyWebsite: activeOrg.businessWebsite || "",
-        businessName: activeOrg.businessName || "",
-        businessBio: activeOrg.businessBio || "",
-        industry: activeOrg.industry || "",
-        brandLogo: activeOrg.businessLogo || "",
-        brandColors: activeOrg.brandColors || [],
-        primaryColor: activeOrg.primaryColor || "",
-        secondaryColor: activeOrg.secondaryColor || "",
-        fontHeadline: activeOrg.fontHeadline || "",
-        fontBody: activeOrg.fontBody || "",
-        aboutUs: activeOrg.aboutUs || "",
-        mission: activeOrg.mission || "",
-        vision: activeOrg.vision || "",
-        slogan: activeOrg.slogan || "",
-        values: activeOrg.values || [],
-        voiceTone: activeOrg.voiceTone || [],
+        companyWebsite: org.businessWebsite || "",
+        businessName: org.businessName || "",
+        businessBio: org.businessBio || "",
+        industry: org.industry || "",
+        brandLogo: org.businessLogo || "",
+        brandColors: org.brandColors || [],
+        primaryColor: org.primaryColor || "",
+        secondaryColor: org.secondaryColor || "",
+        fontHeadline: org.fontHeadline || "",
+        fontBody: org.fontBody || "",
+        aboutUs: org.aboutUs || "",
+        mission: org.mission || "",
+        vision: org.vision || "",
+        slogan: org.slogan || "",
+        values: org.values || [],
+        voiceTone: org.voiceTone || [],
         socials,
       });
       setStep("import");
@@ -121,7 +144,7 @@ export function BrandOnboardingDialog({
       return;
     }
 
-    const o = user?.onboarding;
+    const o = u?.onboarding;
     if (o) {
       const socials: SocialUrls = {};
       if (Array.isArray(o.socialMediaUrls)) {
@@ -159,7 +182,7 @@ export function BrandOnboardingDialog({
     }
     setStep("import");
     setIsSubmitting(false);
-  }, [open, user, activeOrg, isCreateOrg, isEditOrg]);
+  }, [open]);
 
   const persist = useCallback(
     async (

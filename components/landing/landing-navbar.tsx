@@ -314,9 +314,15 @@ export function LandingNavbar() {
                       )}
                       <Link
                         className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                        href='/integrations'
+                      >
+                        Integrations
+                      </Link>
+                      <Link
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                         href='/apps'
                       >
-                        Agents
+                        Apps
                       </Link>
                       {/* <Link
                         className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"

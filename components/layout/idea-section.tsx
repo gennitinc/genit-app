@@ -78,44 +78,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const INTEGRATION_BRANDS = [
   { name: "Instagram", Icon: InstagramBrand },
   { name: "Facebook", Icon: FacebookBrand },
@@ -133,83 +95,6 @@ const INTEGRATION_BRANDS = [
   { name: "Google Calendar", Icon: GoogleCalendarBrand },
   { name: "Google Drive", Icon: GoogleDriveBrand },
 ] as const;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 interface TypewriterEffectProps {
   words: string[];
@@ -537,7 +422,7 @@ export function IdeaSection() {
   const [inputError, setInputError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedDesignTypeId, setSelectedDesignTypeId] =
-    useState<string>("flier");
+    useState<string>("auto");
   const [selectedOrientation, setSelectedOrientation] = useState<string | null>(
     "portrait"
   );
@@ -858,7 +743,7 @@ export function IdeaSection() {
         });
 
         clearInput();
-        setSelectedDesignTypeId("flier");
+        setSelectedDesignTypeId("auto");
         setSelectedOrientation(null);
         setShowOrientationSelection(false);
         setCustomSize({ width: "", height: "" });
@@ -1129,12 +1014,12 @@ export function IdeaSection() {
             // transition={{ duration: 0.6 }}
           >
             <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400'>
-              <span className="text-xs">✨ Introducing Gennit v2</span>
+              <span className='text-xs'>✨ Introducing Gennit v2</span>
               <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
             </AnimatedShinyText>
 
             <motion.h1
-              className='text-foreground mt-8 mb-2 flex items-center gap-1 text-3xl leading-none font-semibold sm:text-3xl md:mb-2.5 md:gap-0 md:text-5xl'
+              className='text-foreground xs:text-5xl mt-6 mb-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight sm:mt-8 sm:mb-2 sm:text-6xl md:mb-2.5 md:justify-start md:gap-x-1 md:text-left md:text-7xl lg:text-5xl'
               custom={1}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -1150,19 +1035,27 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Ai
+              <span>Ai</span>
+
               <PointerHighlight
-                rectangleClassName='bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700 leading-loose'
-                pointerClassName='text-blue-500 h-3 w-3'
-                containerClassName='inline-block mx-1'
+                rectangleClassName='
+      bg-blue-100 dark:bg-blue-900
+      border-blue-300 dark:border-blue-700
+      rounded-xl
+      px-1 sm:px-2
+      py-0.5
+    '
+                pointerClassName='text-blue-500 h-2.5 w-2.5 sm:h-3 sm:w-3'
+                containerClassName='inline-flex items-center'
               >
-                <span className='relative z-10 mx-2'> Design </span>
-              </PointerHighlight>{" "}
-              & Marketing
+                <span className='relative z-10 px-1 sm:px-2'>Design</span>
+              </PointerHighlight>
+
+              <span>& Marketing</span>
             </motion.h1>
 
             <motion.p
-              className='text-foreground/80 mt-2 mb-6 max-w-full text-center text-base'
+              className='text-foreground/80 mt-2 mb-6 max-w-full text-center text-sm lg:text-base'
               custom={2}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -1489,7 +1382,7 @@ export function IdeaSection() {
                         </div>
 
                         <button
-                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground hover:bg-primary/5 relative box-border hidden h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 lg:inline-flex dark:hover:bg-white/5'
+                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground hover:bg-primary/5 relative box-border hidden h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5'
                           type='button'
                           aria-label='Settings'
                           onClick={() => {
@@ -2015,9 +1908,9 @@ export function IdeaSection() {
         </div> */}
 
         <section className='relative mt-10 space-y-4 border-t pt-6 pb-10'>
-          <h2 className='text-muted-foreground text-center text-lg tracking-tight text-sm md:text-lg'>
+          <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
             with over 23+ marketing{" "}
-            <span className='text-foreground font-medium text-base md:text-lg'>
+            <span className='text-foreground text-sm font-medium md:text-base'>
               Integrations
             </span>
           </h2>

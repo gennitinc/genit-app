@@ -262,29 +262,17 @@ const GraphicsCanvasContent = () => {
           </Button>
         </Panel>
 
-        {/* { (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="text-center space-y-2 opacity-20 select-none text-foreground">
-              <LayoutGrid className="w-12 h-12 mx-auto text-neutral-200 dark:text-neutral-900" />
-              <p className="text-sm font-medium uppercase tracking-[0.2em] text-neutral-200 dark:text-neutral-900">
-                Design Workspace
-              </p>
-              <p className="text-xs text-neutral-200 dark:text-neutral-900">
-                Generated designs will appear here
-              </p>
-            </div>
-          </div>
-        )} */}
+      
 
         {nodes.length === 0 &&  (
           <div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
             <div className='text-foreground space-y-2 text-center opacity-20 select-none'>
               <LayoutGrid className='mx-auto h-12 w-12 text-neutral-200 dark:text-neutral-900' />
               <p className='text-sm font-medium tracking-[0.2em] text-neutral-200 uppercase dark:text-neutral-900'>
-                Design Workspace
+                Gennit Workspace
               </p>
               <p className='text-xs text-neutral-200 dark:text-neutral-900'>
-                Generated designs will appear here
+                Project files will appear here
               </p>
             </div>
           </div>
