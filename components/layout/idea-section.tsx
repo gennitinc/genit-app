@@ -1005,7 +1005,7 @@ export function IdeaSection() {
     <div className='w-full md:px-4'>
       <div className='mx-auto flex w-full flex-col items-center justify-center space-y-2 lg:space-y-6'>
         {/* Header */}
-        <div className='mt-7 space-y-2 text-center lg:mt-0'>
+        <div className='mt4 space-y-2 text-center lg:mt-0'>
           {/* <AnimatedTooltipPreview /> */}
           <motion.div
             className='mt-2 mb-2 flex flex-col items-center justify-center md:mt-8 lg:mt-24 lg:mb-2'
@@ -1019,7 +1019,7 @@ export function IdeaSection() {
             </AnimatedShinyText>
 
             <motion.h1
-              className='text-foreground xs:text-5xl mt-6 mb-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight sm:mt-8 sm:mb-2 sm:text-6xl md:mb-2.5 md:justify-start md:gap-x-1 md:text-left md:text-7xl lg:text-5xl'
+              className='text-foreground xs:text-5xl mt-6 mb-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight sm:mt-8 sm:mb-2 sm:text-6xl md:mb-2.5 md:justify-start md:gap-x-1 md:text-left md:text-2xl lg:text-5xl'
               custom={1}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -1907,7 +1907,7 @@ export function IdeaSection() {
           </div>
         </div> */}
 
-        <section className='relative mt-10 space-y-4 border-t pt-6 pb-10'>
+        <section className='relative mt-5 lg:mt-10 space-y-4 border-t pt-6 pb-10'>
           <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
             with over 23+ marketing{" "}
             <span className='text-foreground text-sm font-medium md:text-base'>
