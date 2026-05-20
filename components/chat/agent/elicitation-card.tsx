@@ -3,6 +3,7 @@
 import { Loader2, MessageCircleQuestion, Send } from "lucide-react";
 import { useState } from "react";
 import type { AgentElicitation } from "@/lib/agents-api";
+import { AgentButton, AgentCard, AgentInput } from "./agent-card";
 
 export function ElicitationCard({
   elicitation,
@@ -15,10 +16,12 @@ export function ElicitationCard({
 }) {
   const [value, setValue] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [pickedValue, setPickedValue] = useState<string | null>(null);
 
   const submit = async (v: string) => {
     if (!v.trim()) return;
     setSubmitting(true);
+    setPickedValue(v);
     try {
       await onSubmit(v);
     } finally {
@@ -26,61 +29,81 @@ export function ElicitationCard({
     }
   };
 
+  const hasOptions = !!elicitation.options && elicitation.options.length > 0;
+
   return (
-    <div className='my-2 rounded-md border border-violet-500/30 bg-violet-500/[0.04] p-3 dark:bg-violet-500/[0.06]'>
-      <div className='flex items-start gap-2'>
-        <MessageCircleQuestion className='mt-0.5 h-4 w-4 shrink-0 text-violet-500' />
-        <div className='min-w-0 flex-1'>
-          <div className='text-foreground text-sm font-medium'>
-            {elicitation.question}
-          </div>
-          {elicitation.options && elicitation.options.length > 0 ? (
-            <div className='mt-2 flex flex-wrap gap-1.5'>
-              {elicitation.options.map((opt) => (
-                <button
-                  key={opt.value}
-                  type='button'
-                  disabled={disabled || submitting}
-                  onClick={() => submit(opt.value)}
-                  className='border-border bg-card/60 hover:bg-card text-foreground rounded-md border px-2.5 py-1 text-xs transition-colors disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10'
-                  title={opt.description}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          ) : (
-            <form
-              className='mt-2 flex gap-2'
-              onSubmit={(e) => {
-                e.preventDefault();
-                submit(value);
-              }}
-            >
-              <input
-                type='text'
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                disabled={disabled || submitting}
-                placeholder='Type your answer…'
-                className='border-border bg-card/60 placeholder:text-muted-foreground flex-1 rounded-md border px-2.5 py-1 text-xs focus:ring-1 focus:ring-violet-500/40 focus:outline-none dark:border-white/10 dark:bg-white/5'
-              />
+    <AgentCard
+      icon={<MessageCircleQuestion className='h-3.5 w-3.5' />}
+      title='Needs your input'
+      tone='neutral'
+    >
+      <p className='text-foreground text-sm leading-relaxed'>
+        {elicitation.question}
+      </p>
+
+      {hasOptions ? (
+        <div
+          className='mt-3 flex flex-wrap gap-1.5'
+          role='radiogroup'
+          aria-label='Answer choices'
+        >
+          {elicitation.options!.map((opt) => {
+            const isPicked = pickedValue === opt.value;
+            return (
               <button
-                type='submit'
-                disabled={disabled || submitting || !value.trim()}
-                className='inline-flex items-center gap-1 rounded-md bg-linear-to-r from-violet-500 to-fuchsia-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl disabled:opacity-60'
+                key={opt.value}
+                type='button'
+                role='radio'
+                aria-checked={isPicked}
+                disabled={disabled || submitting}
+                onClick={() => submit(opt.value)}
+                title={opt.description}
+                className={
+                  isPicked
+                    ? "bg-foreground text-background inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60"
+                    : "border-border/70 bg-background text-foreground hover:bg-accent inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
+                }
               >
-                {submitting ? (
+                {isPicked && submitting && (
                   <Loader2 className='h-3 w-3 animate-spin' />
-                ) : (
-                  <Send className='h-3 w-3' />
                 )}
-                Send
+                {opt.label}
               </button>
-            </form>
-          )}
+            );
+          })}
         </div>
-      </div>
-    </div>
+      ) : (
+        <form
+          className='mt-3 flex items-center gap-2'
+          onSubmit={(e) => {
+            e.preventDefault();
+            submit(value);
+          }}
+        >
+          <AgentInput
+            type='text'
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            disabled={disabled || submitting}
+            placeholder='Type your answer…'
+            autoFocus
+          />
+          <AgentButton
+            type='submit'
+            variant='primary'
+            disabled={disabled || submitting || !value.trim()}
+            className='h-8'
+            aria-label='Send'
+          >
+            {submitting ? (
+              <Loader2 className='h-3 w-3 animate-spin' />
+            ) : (
+              <Send className='h-3 w-3' />
+            )}
+            Send
+          </AgentButton>
+        </form>
+      )}
+    </AgentCard>
   );
 }

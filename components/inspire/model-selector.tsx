@@ -5,16 +5,8 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Model, ModelType } from "@/types/inspire";
 import { modelApi } from "@/utils/inspire-api";
-import { Crown, FileText, Image as ImageIcon, Loader2, Music, Share2, Type as TypeIcon, Video } from "lucide-react";
+import { Crown, FileText, Image as ImageIcon, Loader2, Music, Share2, Sparkles, Type as TypeIcon, Video } from "lucide-react";
 import { useEffect, useState } from "react";
-
-
-
-
-
-
-
-
 
 
 interface ModelSelectorProps {
@@ -61,6 +53,7 @@ function ModelIcon({
   }
 
   // Default icon based on type
+  if (type === "general") return <Sparkles className='h-4 w-4 flex-shrink-0' />;
   if (type === "video") return <Video className='h-4 w-4 flex-shrink-0' />;
   if (type === "audio") return <Music className='h-4 w-4 flex-shrink-0' />;
   if (type === "text") return <TypeIcon className='h-4 w-4 flex-shrink-0' />;

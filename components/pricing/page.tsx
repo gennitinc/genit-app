@@ -7,6 +7,7 @@ import { Spotlight } from "@/components/ui/spotlight-new";
 import { trackEvent, trackExperimentExposure } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
+import { GradientFrame } from "@/utils/gradient-frame";
 import { ArrowRight, Check, Crown, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
@@ -459,64 +460,7 @@ export default function PricingComponent() {
                     : "bg-transparent dark:bg-black"
                 )}
               >
-                {/* Dashed Border Effect for Popular Card */}
-                {plan.popular && (
-                  <>
-                    <div
-                      className='absolute -top-[2px] left-[calc(var(--offset)/2*-1)] z-30 h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
-                      style={
-                        {
-                          "--background": "hsl(var(--background))",
-                          "--height": "1px",
-                          "--width": "5px",
-                          "--fade-stop": "90%",
-                          "--offset": "100px",
-                          maskComposite: "exclude",
-                        } as React.CSSProperties
-                      }
-                    ></div>
-
-                    <div
-                      className='absolute -bottom-[2px] left-[calc(var(--offset)/2*-1)] z-30 h-[var(--height)] w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
-                      style={
-                        {
-                          "--background": "hsl(var(--background))",
-                          "--height": "1px",
-                          "--width": "5px",
-                          "--fade-stop": "90%",
-                          "--offset": "100px",
-                          maskComposite: "exclude",
-                        } as React.CSSProperties
-                      }
-                    ></div>
-                    <div
-                      className='absolute top-[calc(var(--offset)/2*-1)] -left-[2px] z-30 h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
-                      style={
-                        {
-                          "--background": "hsl(var(--background))",
-                          "--height": "5px",
-                          "--width": "1px",
-                          "--fade-stop": "90%",
-                          "--offset": "100px",
-                          maskComposite: "exclude",
-                        } as React.CSSProperties
-                      }
-                    ></div>
-                    <div
-                      className='absolute top-[calc(var(--offset)/2*-1)] -right-[2px] left-auto z-30 h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
-                      style={
-                        {
-                          "--background": "hsl(var(--background))",
-                          "--height": "5px",
-                          "--width": "1px",
-                          "--fade-stop": "90%",
-                          "--offset": "100px",
-                          maskComposite: "exclude",
-                        } as React.CSSProperties
-                      }
-                    ></div>
-                  </>
-                )}
+                <GradientFrame />
 
                 <div className='flex h-full flex-col justify-start gap-1 p-4'>
                   <div className='flex items-start justify-between'>

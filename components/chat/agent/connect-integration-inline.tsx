@@ -1,12 +1,11 @@
 "use client";
 
 import { requestConnectUrl } from "@/lib/integrations-api";
-import type {
-  AgentIntegrationRequired,
-} from "@/lib/agents-api";
-import { ArrowRight, Loader2, Plug } from "lucide-react";
+import type { AgentIntegrationRequired } from "@/lib/agents-api";
+import { ArrowRight, CheckCircle2, Loader2, Plug, ShieldCheck } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { AgentButton, AgentCard } from "./agent-card";
 
 // Inline "Connect this integration to continue" card shown inside an
 // in-progress agent message. After successful OAuth, the server's callback
@@ -99,49 +98,80 @@ export function ConnectIntegrationInline({
   }, [required.platform, onConnected]);
 
   return (
-    <div className='border-border bg-card/40 my-2 rounded-md border p-3 dark:border-white/10 dark:bg-white/[0.02]'>
+    <AgentCard
+      icon={<Plug className='h-3.5 w-3.5' />}
+      title='Connection required'
+      meta={required.platformName}
+      tone='neutral'
+    >
       <div className='flex items-start gap-3'>
-        <div className='bg-card/60 mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md ring-1 ring-violet-500/30 dark:bg-white/5'>
-          <Plug className='h-4 w-4 text-violet-500' />
+        <div className='border-border/70 bg-muted/40 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border dark:border-white/10 dark:bg-white/[0.04]'>
+          <Plug className='text-foreground h-4 w-4' />
         </div>
         <div className='min-w-0 flex-1'>
-          <div className='text-foreground text-sm font-medium'>
+          <div className='text-foreground text-sm leading-snug font-medium'>
             Connect {required.platformName} to continue
           </div>
-          <p className='text-muted-foreground mt-0.5 text-xs'>
+          <p className='text-muted-foreground mt-1 text-[12.5px] leading-relaxed'>
             {required.reason}
           </p>
-          {errorMessage && (
-            <p className='mt-1 text-xs text-rose-600 dark:text-rose-400'>
+          <div className='text-muted-foreground mt-2 flex items-center gap-1.5 text-[11px]'>
+            <ShieldCheck className='h-3 w-3' />
+            <span>
+              You'll authorize in a popup. We never see your password.
+            </span>
+          </div>
+
+          {errorMessage && phase === "error" && (
+            <p className='text-rose-600 mt-2 text-[12px] dark:text-rose-400'>
               {errorMessage}
             </p>
           )}
-          {phase === "connected" ? (
-            <div className='mt-2 text-xs text-emerald-600 dark:text-emerald-400'>
-              Connected — resuming…
-            </div>
-          ) : (
-            <button
-              type='button'
-              onClick={handleConnect}
-              disabled={phase === "connecting"}
-              className='mt-2 inline-flex items-center gap-1.5 rounded-md bg-linear-to-r from-violet-500 to-fuchsia-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl disabled:opacity-60'
-            >
-              {phase === "connecting" ? (
-                <>
-                  <Loader2 className='h-3 w-3 animate-spin' />
-                  Connecting…
-                </>
-              ) : (
-                <>
-                  Connect {required.platformName}
-                  <ArrowRight className='h-3 w-3' />
-                </>
-              )}
-            </button>
-          )}
+
+          <div className='mt-3 flex items-center gap-2'>
+            {phase === "connected" ? (
+              <div className='inline-flex items-center gap-1.5 text-[12px] font-medium text-emerald-600 dark:text-emerald-400'>
+                <CheckCircle2 className='h-3.5 w-3.5' />
+                Connected — resuming
+              </div>
+            ) : (
+              <>
+                <AgentButton
+                  type='button'
+                  variant='primary'
+                  onClick={handleConnect}
+                  disabled={phase === "connecting"}
+                  className='h-8 px-3'
+                >
+                  {phase === "connecting" ? (
+                    <>
+                      <Loader2 className='h-3 w-3 animate-spin' />
+                      Connecting…
+                    </>
+                  ) : (
+                    <>
+                      Connect {required.platformName}
+                      <ArrowRight className='h-3 w-3' />
+                    </>
+                  )}
+                </AgentButton>
+                {phase === "error" && (
+                  <AgentButton
+                    type='button'
+                    variant='ghost'
+                    onClick={() => {
+                      setPhase("idle");
+                      setErrorMessage(null);
+                    }}
+                  >
+                    Dismiss
+                  </AgentButton>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </AgentCard>
   );
 }

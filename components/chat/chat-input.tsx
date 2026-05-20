@@ -14,6 +14,7 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { trackEvent } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
+import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
@@ -446,7 +447,7 @@ export function ChatInput({
 
               <div className='flex items-center gap-1.5'>
                 <ModelSelector
-                  type='image'
+                  type='general'
                   selectedModel={selectedModel}
                   initialModelId={imageModel}
                   onSelectModel={(model) => {
@@ -549,6 +550,7 @@ export function ChatInput({
                 </button>
               </div>
             </div>
+            <GradientFrame />
           </form>
 
           <AnimatePresence>

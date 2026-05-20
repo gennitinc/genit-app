@@ -1,55 +1,57 @@
 "use client";
 
-import {
-  CheckCircle2,
-  Circle,
-  Loader2,
-  XCircle,
-} from "lucide-react";
+import { CheckCircle2, Circle, ListTodo, Loader2, XCircle } from "lucide-react";
 import type { AgentTask } from "@/lib/agents-api";
+import { AgentCard } from "./agent-card";
 
 function Icon({ status }: { status: AgentTask["status"] }) {
   if (status === "running")
-    return <Loader2 className='h-3.5 w-3.5 animate-spin text-blue-500' />;
+    return <Loader2 className='text-foreground h-3.5 w-3.5 animate-spin' />;
   if (status === "done")
-    return <CheckCircle2 className='h-3.5 w-3.5 text-emerald-500' />;
+    return <CheckCircle2 className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />;
   if (status === "failed")
-    return <XCircle className='h-3.5 w-3.5 text-rose-500' />;
-  return <Circle className='text-muted-foreground/50 h-3.5 w-3.5' />;
+    return <XCircle className='h-3.5 w-3.5 text-rose-600 dark:text-rose-400' />;
+  return <Circle className='text-muted-foreground/40 h-3.5 w-3.5' />;
 }
 
 export function AgentPlan({ tasks }: { tasks: AgentTask[] }) {
   if (!tasks || tasks.length === 0) return null;
+  const done = tasks.filter((t) => t.status === "done").length;
   return (
-    <div className='border-border bg-card/40 my-2 rounded-md border px-3 py-2 dark:border-white/10 dark:bg-white/[0.02]'>
-      <div className='text-muted-foreground mb-1.5 text-[10px] font-medium tracking-wide uppercase'>
-        Plan
-      </div>
-      <ul className='space-y-1'>
+    <AgentCard
+      icon={<ListTodo className='h-3.5 w-3.5' />}
+      title='Plan'
+      meta={`${done}/${tasks.length}`}
+    >
+      <ol className='space-y-1.5'>
         {tasks.map((t) => (
-          <li key={t.id} className='flex items-start gap-2 text-xs'>
-            <span className='mt-0.5'>
+          <li key={t.id} className='flex items-start gap-2.5 text-[12.5px]'>
+            <span className='mt-[2px] shrink-0'>
               <Icon status={t.status} />
             </span>
-            <span
-              className={
-                t.status === "done"
-                  ? "text-muted-foreground line-through"
-                  : t.status === "failed"
-                    ? "text-rose-600 dark:text-rose-400"
-                    : "text-foreground"
-              }
-            >
-              {t.title}
+            <span className='min-w-0 flex-1 leading-relaxed'>
+              <span
+                className={
+                  t.status === "done"
+                    ? "text-muted-foreground line-through decoration-muted-foreground/40"
+                    : t.status === "failed"
+                      ? "text-rose-700 dark:text-rose-300"
+                      : t.status === "running"
+                        ? "text-foreground font-medium"
+                        : "text-foreground"
+                }
+              >
+                {t.title}
+              </span>
               {t.detail && (
-                <span className='text-muted-foreground ml-1.5 text-[11px] italic'>
+                <span className='text-muted-foreground ml-1.5 text-[11.5px]'>
                   · {t.detail}
                 </span>
               )}
             </span>
           </li>
         ))}
-      </ul>
-    </div>
+      </ol>
+    </AgentCard>
   );
 }

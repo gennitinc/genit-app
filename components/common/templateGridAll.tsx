@@ -30,6 +30,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
+import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
@@ -973,6 +974,7 @@ export default function TemplateGridAll() {
                           </button>
                         </div>
                       </div>
+                      <GradientFrame />
                     </form>
                   </div>
                 </div>
@@ -1253,6 +1255,7 @@ export default function TemplateGridAll() {
                           </button>
                         </div>
                       </div>
+                      <GradientFrame />
                     </form>
                   </div>
                 </div>

@@ -156,7 +156,7 @@ export default function LandingContact() {
         <div className='grid w-full grid-cols-1 gap-x-32 overflow-hidden px-4 md:px-8 lg:grid-cols-2 lg:px-16'>
           <div className='w-full pb-10 md:space-y-10 md:pb-0'>
             <div className='space-y-6 md:max-w-[40rem]'>
-              <h1 className='text-4xl font-extrabold tracking-tight md:text-5xl lg:text-7xl xl:text-8xl'>
+              <h1 className='text-4xl font-extrabold md:text-xl lg:text-5xl'>
                 Ready. Set.{" "}
                 <span className='from-primary via-accent to-primary animate-gradient-x bg-gradient-to-r bg-clip-text text-transparent'>
                   Design

@@ -24,7 +24,7 @@ function ReferralPage() {
       <AppSidebar />
       <div
         ref={scrollContainerRef}
-        className='scroll-container flex flex-1 flex-col overflow-auto will-change-scroll'
+        className='scroll-container flex flex-1 flex-col overflow-x-hidden overflow-y-auto will-change-scroll'
       >
         <TopNavWithAurora
           scrollContainerRef={

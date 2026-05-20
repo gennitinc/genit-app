@@ -13,34 +13,26 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import { AgentCard } from "./agent-card";
 
-// Shared "card" frame so every result has consistent chrome.
-function CardFrame({
-  icon,
-  title,
-  account,
+// Tiny inline link with a trailing icon — consistent treatment across cards.
+function ExternalLinkInline({
+  href,
   children,
-  accent = "text-blue-500",
 }: {
-  icon: React.ReactNode;
-  title: string;
-  account?: string;
+  href: string;
   children: React.ReactNode;
-  accent?: string;
 }) {
   return (
-    <div className='border-border bg-card/40 my-2 overflow-hidden rounded-md border dark:border-white/10 dark:bg-white/[0.02]'>
-      <div className='border-border bg-card/60 flex items-center gap-2 border-b px-3 py-2 dark:border-white/10 dark:bg-white/[0.04]'>
-        <span className={`h-3.5 w-3.5 ${accent}`}>{icon}</span>
-        <span className='text-xs font-medium'>{title}</span>
-        {account && (
-          <span className='text-muted-foreground ml-auto text-[10px]'>
-            {account}
-          </span>
-        )}
-      </div>
-      <div className='px-3 py-2.5'>{children}</div>
-    </div>
+    <a
+      href={href}
+      target='_blank'
+      rel='noreferrer'
+      className='text-foreground hover:text-foreground/80 inline-flex items-center gap-1 text-[12px] font-medium underline-offset-2 hover:underline'
+    >
+      {children}
+      <ExternalLink className='h-3 w-3' />
+    </a>
   );
 }
 
@@ -54,33 +46,30 @@ export function SocialPostPublishedCard({ data }: { data: any }) {
     item?.data?.url ||
     data?.permalink;
   return (
-    <CardFrame
+    <AgentCard
       icon={<CheckCircle2 className='h-3.5 w-3.5' />}
       title={item?.name || "Post published"}
-      account={data?.account}
-      accent='text-emerald-500'
+      meta={data?.account}
+      tone='success'
     >
       {item?.text && (
-        <div className='text-foreground line-clamp-3 text-sm'>{item.text}</div>
+        <div className='text-foreground line-clamp-3 text-[13.5px] leading-relaxed'>
+          {item.text}
+        </div>
       )}
       {item?.data?.mediaUrl && (
         <img
           src={item.data.mediaUrl}
           alt=''
-          className='mt-2 max-h-48 w-auto rounded-md object-cover'
+          className='border-border/70 mt-3 max-h-48 w-auto rounded-md border object-cover dark:border-white/10'
         />
       )}
       {url && (
-        <a
-          href={url}
-          target='_blank'
-          rel='noreferrer'
-          className='mt-2 inline-flex items-center gap-1 text-xs text-blue-500 hover:underline'
-        >
-          Open <ExternalLink className='h-3 w-3' />
-        </a>
+        <div className='mt-3'>
+          <ExternalLinkInline href={url}>Open post</ExternalLinkInline>
+        </div>
       )}
-    </CardFrame>
+    </AgentCard>
   );
 }
 
@@ -89,35 +78,36 @@ export function PostListCard({ data }: { data: any }) {
   const items: any[] =
     data?.posts || data?.media || data?.tweets || data?.videos || data?.pins || [];
   return (
-    <CardFrame
+    <AgentCard
       icon={<FileText className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "post" : "posts"}`}
-      account={data?.account}
+      meta={data?.account}
     >
       {items.length === 0 ? (
-        <div className='text-muted-foreground text-xs'>No posts found.</div>
+        <div className='text-muted-foreground text-[12.5px]'>
+          No posts found.
+        </div>
       ) : (
-        <ul className='divide-border divide-y dark:divide-white/10'>
+        <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {items.slice(0, 5).map((p, i) => (
-            <li key={p.id || i} className='py-1.5'>
-              <div className='text-foreground line-clamp-2 text-xs'>
+            <li key={p.id || i} className='px-3.5 py-2.5'>
+              <div className='text-foreground line-clamp-2 text-[12.5px] leading-relaxed'>
                 {p.message || p.caption || p.text || p.title || "(no caption)"}
               </div>
               {(p.permalink_url || p.permalink || p.url) && (
-                <a
-                  href={p.permalink_url || p.permalink || p.url}
-                  target='_blank'
-                  rel='noreferrer'
-                  className='text-[10px] text-blue-500 hover:underline'
-                >
-                  Open
-                </a>
+                <div className='mt-1'>
+                  <ExternalLinkInline
+                    href={p.permalink_url || p.permalink || p.url}
+                  >
+                    Open
+                  </ExternalLinkInline>
+                </div>
               )}
             </li>
           ))}
         </ul>
       )}
-    </CardFrame>
+    </AgentCard>
   );
 }
 
@@ -125,32 +115,50 @@ export function PostListCard({ data }: { data: any }) {
 export function CommentsListCard({ data }: { data: any }) {
   const items: any[] = data?.comments || data?.replies || [];
   return (
-    <CardFrame
+    <AgentCard
       icon={<MessageSquare className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "comment" : "comments"}`}
-      account={data?.account}
+      meta={data?.account}
     >
       {items.length === 0 ? (
-        <div className='text-muted-foreground text-xs'>No comments.</div>
+        <div className='text-muted-foreground text-[12.5px]'>No comments.</div>
       ) : (
-        <ul className='divide-border space-y-1.5 divide-y dark:divide-white/10'>
+        <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {items.slice(0, 5).map((c, i) => (
-            <li key={c.id || i} className='pt-1.5 first:pt-0'>
-              <div className='text-foreground text-xs font-medium'>
+            <li key={c.id || i} className='px-3.5 py-2.5'>
+              <div className='text-foreground text-[12.5px] font-medium'>
                 {c.from?.name || c.username || c.author || "User"}
               </div>
-              <div className='text-muted-foreground line-clamp-2 text-xs'>
+              <div className='text-muted-foreground mt-0.5 line-clamp-2 text-[12.5px] leading-relaxed'>
                 {c.message || c.text}
               </div>
             </li>
           ))}
         </ul>
       )}
-    </CardFrame>
+    </AgentCard>
   );
 }
 
 // ─── Insights / analytics ───
+function formatMetricValue(v: unknown): string {
+  if (typeof v === "number") return v.toLocaleString();
+  if (typeof v === "string") return v;
+  if (v === null || v === undefined) return "—";
+  try {
+    return JSON.stringify(v).slice(0, 40);
+  } catch {
+    return String(v);
+  }
+}
+
+function humanizeKey(key: string): string {
+  return key
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .trim();
+}
+
 export function InsightsCard({ data }: { data: any }) {
   const metrics =
     data?.metrics || data?.insights || data?.stats || data?.report || data;
@@ -161,33 +169,30 @@ export function InsightsCard({ data }: { data: any }) {
           .slice(0, 8)
       : [];
   return (
-    <CardFrame
+    <AgentCard
       icon={<TrendingUp className='h-3.5 w-3.5' />}
       title='Insights'
-      account={data?.account}
-      accent='text-violet-500'
+      meta={data?.account}
     >
       {entries.length === 0 ? (
-        <div className='text-muted-foreground text-xs'>No metrics returned.</div>
+        <div className='text-muted-foreground text-[12.5px]'>
+          No metrics returned.
+        </div>
       ) : (
-        <dl className='grid grid-cols-2 gap-2'>
+        <dl className='grid grid-cols-2 gap-x-4 gap-y-3'>
           {entries.map(([k, v]) => (
-            <div key={k}>
-              <dt className='text-muted-foreground text-[10px] uppercase tracking-wide'>
-                {k}
+            <div key={k} className='min-w-0'>
+              <dt className='text-muted-foreground text-[10.5px] tracking-[0.04em] uppercase'>
+                {humanizeKey(k)}
               </dt>
-              <dd className='text-foreground text-sm font-medium'>
-                {typeof v === "number"
-                  ? v.toLocaleString()
-                  : typeof v === "string"
-                    ? v
-                    : JSON.stringify(v).slice(0, 40)}
+              <dd className='text-foreground mt-0.5 truncate text-[15px] font-semibold tabular-nums'>
+                {formatMetricValue(v)}
               </dd>
             </div>
           ))}
         </dl>
       )}
-    </CardFrame>
+    </AgentCard>
   );
 }
 
@@ -196,23 +201,23 @@ export function EmailSentCard({ data }: { data: any }) {
   const item = data?.actionItem;
   const d = item?.data || {};
   return (
-    <CardFrame
+    <AgentCard
       icon={<Send className='h-3.5 w-3.5' />}
-      title={`Email sent · ${d.to || data?.to || "recipient"}`}
-      account={data?.account}
-      accent='text-emerald-500'
+      title='Email sent'
+      meta={d.to || data?.to}
+      tone='success'
     >
       {(d.subject || data?.subject) && (
-        <div className='text-foreground text-sm font-medium'>
+        <div className='text-foreground text-[13.5px] font-medium'>
           {d.subject || data?.subject}
         </div>
       )}
       {(d.snippet || d.body) && (
-        <div className='text-muted-foreground mt-1 line-clamp-3 text-xs'>
+        <div className='text-muted-foreground mt-1 line-clamp-3 text-[12.5px] leading-relaxed'>
           {d.snippet || d.body}
         </div>
       )}
-    </CardFrame>
+    </AgentCard>
   );
 }
 
@@ -220,28 +225,34 @@ export function EmailSentCard({ data }: { data: any }) {
 export function EmailListCard({ data }: { data: any }) {
   const items: any[] = data?.messages || data?.emails || [];
   return (
-    <CardFrame
+    <AgentCard
       icon={<Mail className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "email" : "emails"}`}
-      account={data?.account}
+      meta={data?.account}
     >
       {items.length === 0 ? (
-        <div className='text-muted-foreground text-xs'>Inbox is clear.</div>
+        <div className='text-muted-foreground text-[12.5px]'>
+          Inbox is clear.
+        </div>
       ) : (
-        <ul className='divide-border divide-y dark:divide-white/10'>
+        <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {items.slice(0, 5).map((m, i) => (
-            <li key={m.id || i} className='py-1.5'>
-              <div className='text-foreground line-clamp-1 text-xs font-medium'>
+            <li key={m.id || i} className='px-3.5 py-2.5'>
+              <div className='text-foreground line-clamp-1 text-[12.5px] font-medium'>
                 {m.subject || "(no subject)"}
               </div>
-              <div className='text-muted-foreground line-clamp-1 text-[11px]'>
-                {m.from || m.sender} · {m.snippet || ""}
+              <div className='text-muted-foreground mt-0.5 line-clamp-1 text-[11.5px]'>
+                <span className='text-foreground/80'>
+                  {m.from || m.sender}
+                </span>
+                {(m.from || m.sender) && m.snippet ? " · " : ""}
+                {m.snippet || ""}
               </div>
             </li>
           ))}
         </ul>
       )}
-    </CardFrame>
+    </AgentCard>
   );
 }
 
@@ -250,18 +261,18 @@ export function MessageSentCard({ data }: { data: any }) {
   const item = data?.actionItem;
   const d = item?.data || {};
   return (
-    <CardFrame
+    <AgentCard
       icon={<Send className='h-3.5 w-3.5' />}
-      title={`Sent · ${d.recipient || d.chat || d.to || "chat"}`}
-      account={data?.account}
-      accent='text-emerald-500'
+      title='Message sent'
+      meta={d.recipient || d.chat || d.to}
+      tone='success'
     >
       {(d.message || d.text) && (
-        <div className='text-foreground line-clamp-3 text-sm'>
+        <div className='text-foreground line-clamp-3 text-[13.5px] leading-relaxed'>
           {d.message || d.text}
         </div>
       )}
-    </CardFrame>
+    </AgentCard>
   );
 }
 
@@ -269,19 +280,22 @@ export function MessageSentCard({ data }: { data: any }) {
 export function DriveFilesCard({ data }: { data: any }) {
   const items: any[] = data?.files || [];
   return (
-    <CardFrame
+    <AgentCard
       icon={<Folder className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "file" : "files"}`}
-      account={data?.account}
+      meta={data?.account}
     >
       {items.length === 0 ? (
-        <div className='text-muted-foreground text-xs'>No files.</div>
+        <div className='text-muted-foreground text-[12.5px]'>No files.</div>
       ) : (
-        <ul className='divide-border divide-y dark:divide-white/10'>
+        <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {items.slice(0, 6).map((f, i) => (
-            <li key={f.id || i} className='flex items-center gap-2 py-1.5'>
-              <FileIcon className='text-muted-foreground h-3 w-3' />
-              <span className='text-foreground line-clamp-1 flex-1 text-xs'>
+            <li
+              key={f.id || i}
+              className='flex items-center gap-2.5 px-3.5 py-2'
+            >
+              <FileIcon className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
+              <span className='text-foreground line-clamp-1 flex-1 text-[12.5px]'>
                 {f.name}
               </span>
               {f.webViewLink && (
@@ -289,41 +303,59 @@ export function DriveFilesCard({ data }: { data: any }) {
                   href={f.webViewLink}
                   target='_blank'
                   rel='noreferrer'
-                  className='text-muted-foreground hover:text-foreground'
+                  className='text-muted-foreground hover:text-foreground shrink-0'
                   aria-label='Open'
                 >
-                  <ExternalLink className='h-3 w-3' />
+                  <ExternalLink className='h-3.5 w-3.5' />
                 </a>
               )}
             </li>
           ))}
         </ul>
       )}
-    </CardFrame>
+    </AgentCard>
   );
 }
 
 // ─── Campaign list (Meta Ads / Google Ads / TikTok Ads / Snapchat / Brevo) ───
+function statusDotClass(status?: string): string {
+  const s = String(status || "").toLowerCase();
+  if (s.includes("active") || s.includes("live") || s.includes("running"))
+    return "bg-emerald-500";
+  if (s.includes("pause")) return "bg-amber-500";
+  if (s.includes("end") || s.includes("archive") || s.includes("delete"))
+    return "bg-muted-foreground/50";
+  return "bg-muted-foreground/40";
+}
+
 export function CampaignListCard({ data }: { data: any }) {
   const items: any[] = data?.campaigns || [];
   return (
-    <CardFrame
+    <AgentCard
       icon={<BarChart3 className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "campaign" : "campaigns"}`}
-      account={data?.account}
-      accent='text-amber-500'
+      meta={data?.account}
     >
       {items.length === 0 ? (
-        <div className='text-muted-foreground text-xs'>No campaigns.</div>
+        <div className='text-muted-foreground text-[12.5px]'>No campaigns.</div>
       ) : (
-        <ul className='divide-border divide-y dark:divide-white/10'>
+        <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {items.slice(0, 6).map((c, i) => (
-            <li key={c.id || i} className='py-1.5'>
-              <div className='text-foreground line-clamp-1 text-xs font-medium'>
-                {c.name || c.campaign_name || "Untitled"}
+            <li
+              key={c.id || i}
+              className='flex items-center gap-2.5 px-3.5 py-2.5'
+            >
+              <span
+                className={`h-1.5 w-1.5 shrink-0 rounded-full ${statusDotClass(c.status)}`}
+                aria-hidden
+              />
+              <div className='min-w-0 flex-1'>
+                <div className='text-foreground line-clamp-1 text-[12.5px] font-medium'>
+                  {c.name || c.campaign_name || "Untitled"}
+                </div>
               </div>
               {c.status && (
-                <span className='text-muted-foreground text-[10px]'>
+                <span className='text-muted-foreground text-[10.5px] tracking-[0.04em] uppercase'>
                   {String(c.status).toLowerCase()}
                 </span>
               )}
@@ -331,7 +363,7 @@ export function CampaignListCard({ data }: { data: any }) {
           ))}
         </ul>
       )}
-    </CardFrame>
+    </AgentCard>
   );
 }
 
@@ -339,25 +371,25 @@ export function CampaignListCard({ data }: { data: any }) {
 export function ContactListCard({ data }: { data: any }) {
   const items: any[] = data?.contacts || [];
   return (
-    <CardFrame
+    <AgentCard
       icon={<Users className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "contact" : "contacts"}`}
-      account={data?.account}
+      meta={data?.account}
     >
       {items.length === 0 ? (
-        <div className='text-muted-foreground text-xs'>No contacts.</div>
+        <div className='text-muted-foreground text-[12.5px]'>No contacts.</div>
       ) : (
-        <ul className='divide-border divide-y dark:divide-white/10'>
+        <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {items.slice(0, 6).map((c, i) => (
-            <li key={c.id || i} className='py-1.5'>
-              <div className='text-foreground line-clamp-1 text-xs'>
+            <li key={c.id || i} className='px-3.5 py-2'>
+              <div className='text-foreground line-clamp-1 text-[12.5px]'>
                 {c.email || c.name}
               </div>
             </li>
           ))}
         </ul>
       )}
-    </CardFrame>
+    </AgentCard>
   );
 }
 

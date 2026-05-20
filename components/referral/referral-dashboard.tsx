@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { apiResponse } from "@/utils/apiResponse";
+import { GradientFrame } from "@/utils/gradient-frame";
 import {
   Code,
   Copy,
@@ -265,25 +266,42 @@ export default function ReferralDashboard() {
   }
 
   return (
-    <div className='container mx-auto space-y-6 p-6'>
-      <div className='columns-1 gap-6 md:columns-2 lg:columns-3'>
-        {/* Total Revenue Card */}
-        <Card className='mb-6 break-inside-avoid'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Total Revenue</CardTitle>
-            <Button
-              variant='ghost'
-              size='icon'
-              onClick={handleRefresh}
-              disabled={refreshing}
-            >
-              <RefreshCw
-                className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
-              />
-            </Button>
+    <div className='mx-auto w-full max-w-6xl space-y-8 px-6 pt-10 pb-16'>
+      {/* Page Header */}
+      <header className='flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
+        <div>
+          <h1 className='text-foreground text-2xl font-semibold tracking-tight md:text-3xl'>
+            Referral Dashboard
+          </h1>
+          <p className='text-muted-foreground mt-1 text-sm'>
+            Track your earnings and grow your supporter community.
+          </p>
+        </div>
+        <Button
+          variant='outline'
+          size='sm'
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className='self-start sm:self-auto'
+        >
+          <RefreshCw
+            className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
+          />
+          Refresh
+        </Button>
+      </header>
+
+      {/* KPI Row */}
+      <section className='grid grid-cols-1 gap-6 md:grid-cols-3'>
+        <Card className='relative'>
+          <GradientFrame />
+          <CardHeader className='pb-2'>
+            <CardTitle className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
+              Total Revenue
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className='text-3xl font-bold'>
+            <div className='text-foreground text-3xl font-semibold'>
               $
               {stats.totalRevenue.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
@@ -296,33 +314,64 @@ export default function ReferralDashboard() {
           </CardContent>
         </Card>
 
-        {/* Total Supporters Card */}
-        <Card className='mb-6 break-inside-avoid'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>
-              Referral Analytics
+        <Card className='relative'>
+          <GradientFrame />
+          <CardHeader className='pb-2'>
+            <CardTitle className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
+              Total Supporters
             </CardTitle>
-            <Button
-              variant='ghost'
-              size='icon'
-              onClick={handleRefresh}
-              disabled={refreshing}
-            >
-              <RefreshCw
-                className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
-              />
-            </Button>
           </CardHeader>
           <CardContent>
-            <div className='relative flex h-[200px] items-center justify-center'>
+            <div className='text-foreground text-3xl font-semibold'>
+              {stats.totalSupporters}
+            </div>
+            <p className='text-muted-foreground mt-1 text-xs'>
+              <span className='text-green-600'>
+                {stats.activeSupporters} active
+              </span>{" "}
+              · {stats.expiringSupporters} expiring
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className='relative'>
+          <GradientFrame />
+          <CardHeader className='pb-2'>
+            <CardTitle className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
+              Revenue Share
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className='text-foreground text-3xl font-semibold'>
+              {stats.revenueShare}%
+            </div>
+            <p className='text-muted-foreground mt-1 text-xs'>
+              Earned on every supported plan
+            </p>
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* Analytics Row */}
+      <section className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
+        <Card className='relative lg:col-span-2'>
+          <GradientFrame />
+          <CardHeader>
+            <CardTitle className='text-sm font-medium'>
+              Supporters Distribution
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className='relative flex h-[240px] items-center justify-center'>
               <ResponsiveContainer width='100%' height='100%'>
                 <PieChart>
                   <Pie
                     data={chartData}
                     cx='50%'
                     cy='50%'
-                    innerRadius={60}
-                    outerRadius={80}
+                    innerRadius={70}
+                    outerRadius={95}
+                    paddingAngle={2}
                     dataKey='value'
                   >
                     {chartData.map((entry, index) => (
@@ -333,35 +382,45 @@ export default function ReferralDashboard() {
               </ResponsiveContainer>
               <div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
                 <div className='text-center'>
-                  <div className='text-3xl font-bold'>
+                  <div className='text-foreground text-3xl font-semibold'>
                     {stats.totalSupporters}
                   </div>
                   <div className='text-muted-foreground text-xs'>Total</div>
                 </div>
               </div>
             </div>
-            <div className='mt-4 flex flex-col gap-2'>
-              <div className='flex items-center gap-2'>
-                <div className='h-3 w-3 rounded bg-green-500'></div>
-                <span className='text-xs'>
-                  Supporting &gt; 7 days: {stats.activeSupporters}
-                </span>
+            <div className='mt-6 grid grid-cols-2 gap-4'>
+              <div className='flex items-start gap-2'>
+                <div className='mt-1 h-3 w-3 shrink-0 rounded bg-green-500'></div>
+                <div>
+                  <p className='text-foreground text-sm font-medium'>
+                    {stats.activeSupporters}
+                  </p>
+                  <p className='text-muted-foreground text-xs'>
+                    Supporting &gt; 7 days
+                  </p>
+                </div>
               </div>
-              <div className='flex items-center gap-2'>
-                <div className='h-3 w-3 rounded bg-orange-500'></div>
-                <span className='text-xs'>
-                  Expiring in &lt; 7 days: {stats.expiringSupporters}
-                </span>
+              <div className='flex items-start gap-2'>
+                <div className='mt-1 h-3 w-3 shrink-0 rounded bg-orange-500'></div>
+                <div>
+                  <p className='text-foreground text-sm font-medium'>
+                    {stats.expiringSupporters}
+                  </p>
+                  <p className='text-muted-foreground text-xs'>
+                    Expiring &lt; 7 days
+                  </p>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Top Supporters Card */}
-        <Card className='mb-6 h-fit break-inside-avoid'>
+        <Card className='relative h-fit lg:col-span-1'>
+          <GradientFrame />
           <CardHeader>
             <CardTitle className='text-sm font-medium'>
-              Total Referred Users: {stats.referredUsers.length}
+              Top Supporters
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -400,94 +459,95 @@ export default function ReferralDashboard() {
             </div>
           </CardContent>
         </Card>
+      </section>
 
-        {/* Share Link Card */}
-        <Card className='mb-6 break-inside-avoid'>
+      {/* Engagement Row */}
+      <section className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
+        <Card className='relative'>
+          <GradientFrame />
           <CardHeader>
             <CardTitle className='text-sm font-medium'>
-              Share your Link
+              Share Your Link
             </CardTitle>
           </CardHeader>
-          <CardContent className='space-y-4'>
-            {/* QR Code Section */}
+          <CardContent className='space-y-6'>
             <div className='space-y-3'>
-              <div className='text-sm font-medium'>QR code</div>
+              <div className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
+                QR Code
+              </div>
               <div className='flex items-center justify-center rounded-lg border bg-white p-4'>
                 <img src={qrCodeUrl} alt='QR Code' className='h-48 w-48' />
               </div>
-              <div className='grid w-full grid-cols-1 gap-3 xl:grid-cols-2'>
+              <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
                 <Button
                   variant='outline'
                   size='sm'
                   onClick={() => handleDownloadQR("png")}
-                  className='flex w-full items-center justify-center'
+                  className='w-full'
                 >
                   <Download className='mr-2 h-4 w-4' />
                   Download PNG
                 </Button>
-
                 <Button
                   variant='outline'
                   size='sm'
                   onClick={handleCopyCode}
-                  className='flex w-full items-center justify-center'
+                  className='w-full'
                 >
                   <Code className='mr-2 h-4 w-4' />
-                  Copy Code
+                  Copy Embed
                 </Button>
               </div>
             </div>
 
-            {/* Share Link Section */}
             <div className='space-y-3'>
-              <div className='text-sm font-medium'>Share Link</div>
+              <div className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
+                Referral Link
+              </div>
               <div className='flex items-center gap-2'>
-                <LinkIcon className='text-muted-foreground h-4 w-4' />
+                <LinkIcon className='text-muted-foreground h-4 w-4 shrink-0' />
                 <Input value={stats.referralLink} readOnly className='flex-1' />
               </div>
-              <Button
-                onClick={handleCopyLink}
-                className='w-full'
-                variant='default'
-              >
+              <Button onClick={handleCopyLink} className='w-full'>
                 <Copy className='mr-2 h-4 w-4' />
                 Copy Link
               </Button>
               <p className='text-muted-foreground text-xs'>
-                Users support you for 365 days after they select you as a
-                Creator. You should regularly remind them to maintain their
-                support.
+                Supporters back you for 365 days after picking you as their
+                Creator. Re-engage them regularly to keep your support active.
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Media Kit Card */}
-        <Card className='mb-6 h-fit break-inside-avoid'>
+        <Card className='relative h-fit'>
+          <GradientFrame />
           <CardHeader>
             <CardTitle className='text-sm font-medium'>Media Kit</CardTitle>
           </CardHeader>
           <CardContent className='space-y-4'>
+            <p className='text-muted-foreground text-sm'>
+              A complete brand toolkit to help you stand out and onboard new
+              supporters.
+            </p>
             <div>
-              <div className='mb-2 text-sm font-medium'>Including:</div>
-              <ul className='text-muted-foreground list-inside list-disc space-y-1 text-sm'>
-                <li>Logo</li>
-                <li>Colors</li>
-                <li>Font</li>
-                <li>Elements</li>
+              <div className='text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase'>
+                Includes
+              </div>
+              <ul className='text-foreground grid grid-cols-2 gap-y-1 text-sm'>
+                <li>· Logo</li>
+                <li>· Colors</li>
+                <li>· Font</li>
+                <li>· Elements</li>
               </ul>
             </div>
-            <Button variant='default' className='w-full'>
+            <Button className='w-full'>
               <Download className='mr-2 h-4 w-4' />
               Download from Google Drive
             </Button>
-            <p className='text-muted-foreground text-xs'>
-              Our Media Kit provides a comprehensive selection of resources to
-              help you successfully apply as a Creator and gain more supporters.
-            </p>
           </CardContent>
         </Card>
-      </div>
+      </section>
     </div>
   );
 }

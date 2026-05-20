@@ -12,6 +12,7 @@ import { Organization, Plan, User, useUserContext } from "@/context/Authenticate
 import { useAccountActions } from "@/hooks/use-account-actions";
 import { useToast } from "@/hooks/use-toast";
 import { apiResponse } from "@/utils/apiResponse";
+import { GradientFrame } from "@/utils/gradient-frame";
 import { Check, ChevronRight, CreditCard, Edit3, Loader2, Palette, Save, Shield, User as UserIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
@@ -136,6 +137,7 @@ const SettingsHome = () => {
           {/* Sidebar Navigation */}
           <div className='lg:col-span-1'>
             <Card className='sticky top-8'>
+              <GradientFrame />
               <CardContent className='p-0'>
                 <div className='border-border border-b p-4'>
                   <div className='flex items-center justify-between'>
@@ -186,7 +188,8 @@ const SettingsHome = () => {
             {/* Account Settings */}
             {activeTab === "account" && (
               <div className='space-y-6'>
-                <Card>
+                <Card className='relative'>
+                  <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
                       <UserIcon className='h-5 w-5' />
@@ -253,7 +256,8 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className='relative'>
+                  <GradientFrame />
                   <CardHeader>
                     <CardTitle>Password & Security</CardTitle>
                     <CardDescription>
@@ -305,7 +309,8 @@ const SettingsHome = () => {
             {/* Billing Settings */}
             {activeTab === "billing" && (
               <div className='space-y-6'>
-                <Card>
+                <Card className='relative'>
+                  <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
                       <CreditCard className='h-5 w-5' />
@@ -375,7 +380,8 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className='relative'>
+                  <GradientFrame />
                   <CardHeader>
                     <CardTitle>Billing History</CardTitle>
                     <CardDescription>
@@ -444,7 +450,8 @@ const SettingsHome = () => {
             {/* Security Settings */}
             {activeTab === "security" && (
               <div className='space-y-6'>
-                <Card>
+                <Card className='relative'>
+                  <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
                       <Shield className='h-5 w-5' />
@@ -506,7 +513,8 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className='relative'>
+                  <GradientFrame />
                   <CardHeader>
                     <CardTitle>Sign out</CardTitle>
                     <CardDescription>
@@ -535,7 +543,8 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className='relative'>
+                  <GradientFrame />
                   <CardHeader>
                     <CardTitle>Danger Zone</CardTitle>
                     <CardDescription>
@@ -577,7 +586,8 @@ const SettingsHome = () => {
             {/* Preferences Settings */}
             {activeTab === "preferences" && (
               <div className='space-y-6'>
-                <Card>
+                <Card className='relative'>
+                  <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
                       <Palette className='h-5 w-5' />

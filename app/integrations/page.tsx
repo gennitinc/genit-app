@@ -10,28 +10,6 @@ import { GradientFrame } from "@/utils/gradient-frame";
 import { ArrowRight, Code, GitBranchPlus, Plus, Zap } from "lucide-react";
 import type { Metadata } from "next";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // export const metadata: Metadata = {
 //   title: "Integrations – Gennit AI",
 //   description:
@@ -47,7 +25,7 @@ export default function IntegrationsPage() {
     <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>
       <Toaster />
       <AppSidebar />
-      <div className='scroll-container flex flex-1 flex-col overflow-auto will-change-scroll'>
+      <div className='scroll-container flex flex-1 flex-col overflow-x-hidden overflow-y-auto will-change-scroll'>
         <TopNavWithAurora />
 
         <div

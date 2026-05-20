@@ -101,7 +101,7 @@ export function ChatLayout() {
               <button
                 type='button'
                 onClick={() => setIsPreviewOpen((v) => !v)}
-                className='border-border/50 bg-background/80 hover:bg-accent absolute top-3 right-3 z-30 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
+                className='border-border/50 bg-background/80 hover:bg-accent absolute top-0 right-3 z-30 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
                 aria-label={
                   isPreviewOpen ? "Close preview panel" : "Open preview panel"
                 }
@@ -131,7 +131,7 @@ export function ChatLayout() {
                 <motion.div
                   key='preview-pane'
                   initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: "65%", opacity: 1 }}
+                  animate={{ width: "62.5%", opacity: 1 }}
                   exit={{ width: 0, opacity: 0 }}
                   transition={{
                     type: "spring",

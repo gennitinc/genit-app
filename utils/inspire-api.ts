@@ -12,6 +12,7 @@ import {
   ImageGenTemplatesResponse,
   Model,
   ModelResponse,
+  ModelType,
   Presenter,
   PresenterResponse,
   TemplateQueryParams,
@@ -591,7 +592,7 @@ export const modelApi = {
    * Get all models
    */
   getAll: async (params?: {
-    type?: "image" | "video" | "audio" | "text" | "social" | "docs";
+    type?: ModelType;
   }): Promise<ModelResponse> => {
     const response = await apiResponse.get(`/inspire/models`, { params });
     return response.data;
@@ -609,7 +610,7 @@ export const modelApi = {
    * Get default model for type
    */
   getDefault: async (
-    type: "image" | "video" | "audio" | "text" | "social" | "docs"
+    type: ModelType
   ): Promise<ApiResponse<Model>> => {
     const response = await apiResponse.get(`/inspire/models/default/${type}`);
     return response.data;
@@ -629,7 +630,7 @@ export const modelApi = {
   create: async (
     data: {
       name: string;
-      type: "image" | "video" | "audio" | "text" | "social" | "docs";
+      type: ModelType;
       provider: string;
       modelId: string;
       description?: string;
@@ -682,7 +683,7 @@ export const modelApi = {
     id: string,
     data: {
       name?: string;
-      type?: "image" | "video" | "audio" | "text" | "social" | "docs";
+      type?: ModelType;
       provider?: string;
       modelId?: string;
       description?: string;

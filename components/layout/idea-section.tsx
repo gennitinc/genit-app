@@ -10,26 +10,95 @@ import { ModelSelector } from "../inspire/model-selector";
 import { AnimatedShinyText } from "../ui/animated-shinny-text";
 import { BorderBeam } from "../ui/border-beam";
 import ShinyText from "../ui/shiny-text";
-import { BrevoBrand, FacebookBrand, GmailBrand, GoogleCalendarBrand, GoogleDriveBrand, InstagramBrand, LinkedinBrand, MicrosoftOutlookBrand, PinterestBrand, SnapchatBrand, TelegramBrand, TikTokBrand, WhatsAppBrand, XBrand, YoutubeBrand } from "@/app/(auth)/onboarding/_components/social-icons";
+import {
+  BrevoBrand,
+  FacebookBrand,
+  GmailBrand,
+  GoogleCalendarBrand,
+  GoogleDriveBrand,
+  InstagramBrand,
+  LinkedinBrand,
+  MicrosoftOutlookBrand,
+  PinterestBrand,
+  SnapchatBrand,
+  TelegramBrand,
+  TikTokBrand,
+  WhatsAppBrand,
+  XBrand,
+  YoutubeBrand,
+} from "@/app/(auth)/onboarding/_components/social-icons";
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 // import { BorderBeam } from "@/registry/magicui/border-beam"
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { PointerHighlight } from "@/components/ui/pointer-highlight";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
-import { trackAppOpened, trackEvent, trackFeatureUsed } from "@/lib/mixpanelClient";
+import {
+  trackAppOpened,
+  trackEvent,
+  trackFeatureUsed,
+} from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, ArrowRightIcon, Camera, CheckCircle2, FileText, Grid2X2Plus, Image, Image as ImageIcon, Layout, Loader2, MessageSquare, Mic, Music, Paintbrush, Palette, PaperclipIcon, Play, Presentation, Settings, Settings2, Sparkles, Table, TrendingUp, Type, User, Users, Video, Volume2, Wand2, WandSparklesIcon, Workflow, X, XIcon, Youtube, Zap } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowRightIcon,
+  Camera,
+  CheckCircle2,
+  FileText,
+  Grid2X2Plus,
+  Image,
+  Image as ImageIcon,
+  Layout,
+  Loader2,
+  MessageSquare,
+  Mic,
+  Music,
+  Paintbrush,
+  Palette,
+  PaperclipIcon,
+  Play,
+  Presentation,
+  Settings,
+  Settings2,
+  Sparkles,
+  Table,
+  TrendingUp,
+  Type,
+  User,
+  Users,
+  Video,
+  Volume2,
+  Wand2,
+  WandSparklesIcon,
+  Workflow,
+  X,
+  XIcon,
+  Youtube,
+  Zap,
+} from "lucide-react";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -37,46 +106,6 @@ import { toast } from "sonner";
 import { div } from "three/src/nodes/math/OperatorNode.js";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const INTEGRATION_BRANDS = [
   { name: "Instagram", Icon: InstagramBrand },
@@ -1371,7 +1400,7 @@ export function IdeaSection() {
                         )}
                         <div className='flex items-center gap-1.5'>
                           <ModelSelector
-                            type='image'
+                            type='general'
                             selectedModel={selectedModel}
                             initialModelId={imageModel}
                             onSelectModel={(model) => {
@@ -1907,12 +1936,16 @@ export function IdeaSection() {
           </div>
         </div> */}
 
-        <section className='relative mt-5 lg:mt-10 space-y-4 border-t pt-6 pb-10'>
+        <section className='relative mt-5 space-y-4 border-t pt-6 pb-10 lg:mt-10'>
           <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
             with over 23+ marketing{" "}
-            <span className='text-foreground text-sm font-medium md:text-base'>
+            <Link
+              href='/integrations'
+              target='_blank'
+              className='text-foreground text-sm font-medium md:text-base'
+            >
               Integrations
-            </span>
+            </Link>
           </h2>
           <div className='relative z-10 mx-auto max-w-5xl'>
             <div className='overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4'>

@@ -349,6 +349,7 @@ export interface CloneVoiceRequest {
 // ============================================
 
 export type ModelType =
+  | "general"
   | "image"
   | "video"
   | "audio"

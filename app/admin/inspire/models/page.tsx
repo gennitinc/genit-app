@@ -33,6 +33,7 @@ import {
   Plus,
   Search,
   Share2,
+  Sparkles,
   Trash2,
   Type as TypeIcon,
   Video,
@@ -59,7 +60,7 @@ export default function AdminModelsPage() {
   // Form state
   const [formData, setFormData] = useState({
     name: "",
-    type: "image" as ModelType,
+    type: "general" as ModelType,
     provider: "",
     modelId: "",
     description: "",
@@ -137,7 +138,7 @@ export default function AdminModelsPage() {
   const handleCreateClick = () => {
     setFormData({
       name: "",
-      type: "image",
+      type: "general",
       provider: "",
       modelId: "",
       description: "",
@@ -282,6 +283,7 @@ export default function AdminModelsPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='all'>All Types</SelectItem>
+            <SelectItem value='general'>General (Agent) Models</SelectItem>
             <SelectItem value='image'>Image Models</SelectItem>
             <SelectItem value='video'>Video Models</SelectItem>
             <SelectItem value='audio'>Audio Models</SelectItem>
@@ -312,6 +314,9 @@ export default function AdminModelsPage() {
             >
               <div className='mb-3 flex items-start justify-between'>
                 <div className='flex items-center gap-2'>
+                  {model.type === "general" && (
+                    <Sparkles className='h-5 w-5 text-indigo-500' />
+                  )}
                   {model.type === "image" && (
                     <ImageIcon className='h-5 w-5 text-blue-500' />
                   )}
@@ -421,7 +426,7 @@ export default function AdminModelsPage() {
                 <Label htmlFor='type'>Type *</Label>
                 <Select
                   value={formData.type}
-                  onValueChange={(v: "image" | "video" | "audio" | "text") =>
+                  onValueChange={(v: ModelType) =>
                     setFormData({ ...formData, type: v })
                   }
                 >
@@ -429,6 +434,7 @@ export default function AdminModelsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value='general'>General (Agent)</SelectItem>
                     <SelectItem value='image'>Image</SelectItem>
                     <SelectItem value='video'>Video</SelectItem>
                     <SelectItem value='audio'>Audio</SelectItem>
@@ -740,6 +746,7 @@ export default function AdminModelsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value='general'>General (Agent)</SelectItem>
                     <SelectItem value='image'>Image</SelectItem>
                     <SelectItem value='video'>Video</SelectItem>
                     <SelectItem value='audio'>Audio</SelectItem>
