@@ -1,7 +1,7 @@
 "use client";
 
-import { ChatInput } from "./chat-input";
 import { AgentMessage } from "./agent/agent-message";
+import { ChatInput } from "./chat-input";
 import {
   Conversation,
   ConversationContent,
@@ -46,8 +46,7 @@ export function TextChatContent() {
 
   const { runs: agentRuns } = useAgentRunsContext();
 
-  useEffect(() => {
-  }, [messages]);
+  useEffect(() => {}, [messages]);
 
   const skeletonRef = useRef<HTMLDivElement | null>(null);
   const scrollElRef = useRef<HTMLElement | null>(null);
