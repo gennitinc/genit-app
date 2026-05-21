@@ -4,6 +4,7 @@ import {
   FacebookBrand,
   InstagramBrand,
   LinkedinBrand,
+  TikTokBrand,
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
@@ -28,7 +29,6 @@ import {
   Palette,
   Plus,
   Save,
-  Sparkles,
   X,
 } from "lucide-react";
 import {
@@ -136,7 +136,7 @@ const SOCIAL_META: Record<
   },
   tiktok: {
     label: "TikTok",
-    icon: Sparkles,
+    icon: TikTokBrand,
     placeholder: "tiktok.com/@you",
   },
 };

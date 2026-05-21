@@ -1,40 +1,42 @@
 import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import BrandSettings from "@/components/user-settings/brand-settings";
 import AccountActionModal from "@/components/user/account-action-modal";
-import { Organization, Plan, User, useUserContext } from "@/context/AuthenticatedContext";
+import {
+  Organization,
+  Plan,
+  User,
+  useUserContext,
+} from "@/context/AuthenticatedContext";
 import { useAccountActions } from "@/hooks/use-account-actions";
 import { useToast } from "@/hooks/use-toast";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
-import { Check, ChevronRight, CreditCard, Edit3, Loader2, Palette, Save, Shield, User as UserIcon } from "lucide-react";
+import {
+  Check,
+  ChevronRight,
+  CreditCard,
+  Edit3,
+  Loader2,
+  Palette,
+  Save,
+  Shield,
+  User as UserIcon,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const SettingsHome = () => {
   const [activeTab, setActiveTab] = useState("account");
@@ -123,11 +125,11 @@ const SettingsHome = () => {
   ];
 
   return (
-    <div className='min-h-screen'>
-      <div className='container mx-auto max-w-7xl px-4 py-8'>
+    <div className='max-w-6xl min-h-screen mx-auto'>
+      <div className='container max-w-6xl px-4 py-8 mx-auto'>
         {/* Header */}
         <div className='mb-8'>
-          <h1 className='text-foreground mb-2 text-3xl font-bold'>Settings</h1>
+          <h1 className='mb-2 text-3xl font-bold text-foreground'>Settings</h1>
           <p className='text-muted-foreground'>
             Manage your account settings and preferences
           </p>
@@ -136,13 +138,13 @@ const SettingsHome = () => {
         <div className='grid grid-cols-1 gap-8 lg:grid-cols-4'>
           {/* Sidebar Navigation */}
           <div className='lg:col-span-1'>
-            <Card className='sticky top-8'>
+            <Card className='sticky overflow-hidden top-12'>
               <GradientFrame />
               <CardContent className='p-0'>
-                <div className='border-border border-b p-4'>
+                <div className='p-4 border-b border-border'>
                   <div className='flex items-center justify-between'>
                     <div>
-                      <p className='text-muted-foreground text-sm'>Credits</p>
+                      <p className='text-sm text-muted-foreground'>Credits</p>
                       <p className='font-semibold'>
                         {user?.creditsRemaining ?? 0}
                       </p>
@@ -159,7 +161,7 @@ const SettingsHome = () => {
                     </div>
                   </div>
                 </div>
-                <nav className='space-y-1 p-4'>
+                <nav className='p-4 space-y-1'>
                   {settingsTabs.map((tab) => {
                     const Icon = tab.icon;
                     return (
@@ -172,9 +174,9 @@ const SettingsHome = () => {
                             : "text-muted-foreground hover:text-foreground hover:bg-muted"
                         }`}
                       >
-                        <Icon className='h-4 w-4' />
+                        <Icon className='w-4 h-4' />
                         {tab.label}
-                        <ChevronRight className='ml-auto h-4 w-4' />
+                        <ChevronRight className='w-4 h-4 ml-auto' />
                       </button>
                     );
                   })}
@@ -188,11 +190,11 @@ const SettingsHome = () => {
             {/* Account Settings */}
             {activeTab === "account" && (
               <div className='space-y-6'>
-                <Card className='relative'>
+                <Card className='relative overflow-hidden'>
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
-                      <UserIcon className='h-5 w-5' />
+                      <UserIcon className='w-5 h-5' />
                       Account Information
                     </CardTitle>
                     <CardDescription>
@@ -224,7 +226,7 @@ const SettingsHome = () => {
                             className='flex-1'
                           />
                           <Button variant='outline' size='sm'>
-                            <Edit3 className='mr-2 h-4 w-4' />
+                            <Edit3 className='w-4 h-4 mr-2' />
                             Change
                           </Button>
                         </div>
@@ -241,22 +243,22 @@ const SettingsHome = () => {
                     <div className='flex items-center justify-between'>
                       <div>
                         <h4 className='font-medium'>Account Status</h4>
-                        <p className='text-muted-foreground text-sm'>
+                        <p className='text-sm text-muted-foreground'>
                           Your account is active and verified
                         </p>
                       </div>
                       <Badge
                         variant='secondary'
-                        className='bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                        className='text-green-800 bg-green-100 dark:bg-green-900 dark:text-green-200'
                       >
-                        <Check className='mr-1 h-3 w-3' />
+                        <Check className='w-3 h-3 mr-1' />
                         Verified
                       </Badge>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className='relative'>
+                <Card className='relative overflow-hidden'>
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle>Password & Security</CardTitle>
@@ -291,9 +293,9 @@ const SettingsHome = () => {
                         placeholder='Confirm new password'
                       />
                     </div>
-                    <div className='flex flex-col space-y-2 lg:flex-row gap-2'>
+                    <div className='flex flex-col gap-2 space-y-2 lg:flex-row'>
                       <Button>
-                        <Save className='mr-2 h-4 w-4' />
+                        <Save className='w-4 h-4 mr-2' />
                         Update Password
                       </Button>
                       <Button variant='outline'>Forgot Password?</Button>
@@ -309,11 +311,11 @@ const SettingsHome = () => {
             {/* Billing Settings */}
             {activeTab === "billing" && (
               <div className='space-y-6'>
-                <Card className='relative'>
+                <Card className='relative overflow-hidden'>
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
-                      <CreditCard className='h-5 w-5' />
+                      <CreditCard className='w-5 h-5' />
                       Billing Information
                     </CardTitle>
                     <CardDescription>
@@ -324,12 +326,12 @@ const SettingsHome = () => {
                     <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                       <div className='space-y-2'>
                         <Label>Current Plan</Label>
-                        <div className='flex items-center justify-between rounded-lg border p-4'>
+                        <div className='flex items-center justify-between p-4 border rounded-lg'>
                           <div>
                             <h4 className='font-semibold'>
                               {user?.userPlan || "Free Plan"}
                             </h4>
-                            <p className='text-muted-foreground text-sm'>
+                            <p className='text-sm text-muted-foreground'>
                               {user?.userPlan === Plan.BASIC
                                 ? "Free"
                                 : currentOrg?.businessPlan || "No plan"}
@@ -353,7 +355,7 @@ const SettingsHome = () => {
                       {/* <h4 className="font-semibold">Payment Method</h4>
                       <div className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-6 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
+                          <div className="flex items-center justify-center w-8 h-6 text-xs font-bold text-white bg-blue-600 rounded">
                             VISA
                           </div>
                           <div>
@@ -364,7 +366,7 @@ const SettingsHome = () => {
                           </div>
                         </div>
                         <Button variant="outline" size="sm">
-                          <Edit3 className="h-4 w-4 mr-2" />
+                          <Edit3 className="w-4 h-4 mr-2" />
                           Update
                         </Button>
                       </div> */}
@@ -380,7 +382,7 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card className='relative'>
+                <Card className='relative overflow-hidden'>
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle>Billing History</CardTitle>
@@ -391,14 +393,14 @@ const SettingsHome = () => {
                   <CardContent>
                     <div className='space-y-3'>
                       {billingHistory.length === 0 ? (
-                        <p className='text-muted-foreground text-sm'>
+                        <p className='text-sm text-muted-foreground'>
                           No billing history yet.
                         </p>
                       ) : (
                         billingHistory.map((rec: any) => (
                           <div
                             key={rec._id || rec.invoiceId || rec.providerId}
-                            className='flex items-center justify-between rounded-lg border p-4'
+                            className='flex items-center justify-between p-4 border rounded-lg'
                           >
                             <div>
                               <p className='font-medium'>
@@ -406,7 +408,7 @@ const SettingsHome = () => {
                                   ? `Invoice #${rec.invoiceNumber}`
                                   : rec.description || rec.type}
                               </p>
-                              <p className='text-muted-foreground text-sm'>
+                              <p className='text-sm text-muted-foreground'>
                                 {rec.billingPeriodStart
                                   ? new Date(
                                       rec.billingPeriodStart
@@ -450,11 +452,11 @@ const SettingsHome = () => {
             {/* Security Settings */}
             {activeTab === "security" && (
               <div className='space-y-6'>
-                <Card className='relative'>
+                <Card className='relative overflow-hidden'>
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
-                      <Shield className='h-5 w-5' />
+                      <Shield className='w-5 h-5' />
                       Security Settings
                     </CardTitle>
                     <CardDescription>
@@ -468,7 +470,7 @@ const SettingsHome = () => {
                           <h4 className='font-medium'>
                             Two-Factor Authentication
                           </h4>
-                          <p className='text-muted-foreground text-sm'>
+                          <p className='text-sm text-muted-foreground'>
                             Add an extra layer of security to your account
                           </p>
                         </div>
@@ -482,7 +484,7 @@ const SettingsHome = () => {
                       <div className='flex items-center justify-between'>
                         <div>
                           <h4 className='font-medium'>Login Notifications</h4>
-                          <p className='text-muted-foreground text-sm'>
+                          <p className='text-sm text-muted-foreground'>
                             Get notified when someone logs into your account
                           </p>
                         </div>
@@ -501,7 +503,7 @@ const SettingsHome = () => {
                       <div className='flex items-center justify-between'>
                         <div>
                           <h4 className='font-medium'>Session Management</h4>
-                          <p className='text-muted-foreground text-sm'>
+                          <p className='text-sm text-muted-foreground'>
                             Control active sessions across devices
                           </p>
                         </div>
@@ -513,7 +515,7 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card className='relative'>
+                <Card className='relative overflow-hidden'>
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle>Sign out</CardTitle>
@@ -522,7 +524,7 @@ const SettingsHome = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className='flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
-                    <p className='text-muted-foreground text-sm'>
+                    <p className='text-sm text-muted-foreground'>
                       Signing out will require you to log back in to continue
                       using Gennit.
                     </p>
@@ -533,7 +535,7 @@ const SettingsHome = () => {
                     >
                       {isSigningOut ? (
                         <>
-                          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                          <Loader2 className='w-4 h-4 mr-2 animate-spin' />
                           Signing out...
                         </>
                       ) : (
@@ -543,7 +545,7 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card className='relative'>
+                <Card className='relative overflow-hidden'>
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle>Danger Zone</CardTitle>
@@ -553,11 +555,11 @@ const SettingsHome = () => {
                   </CardHeader>
                   <CardContent>
                     <div className='space-y-4'>
-                      <div className='border-destructive/20 bg-destructive/5 rounded-lg border p-4'>
-                        <h4 className='text-destructive font-medium'>
+                      <div className='p-4 border border-dashed rounded-lg'>
+                        <h4 className='font-medium text-destructive'>
                           Delete Account
                         </h4>
-                        <p className='text-muted-foreground mb-4 text-sm'>
+                        <p className='mb-4 text-xs text-muted-foreground'>
                           Once you delete your account, there is no going back.
                           Please be certain.
                         </p>
@@ -569,7 +571,7 @@ const SettingsHome = () => {
                         >
                           {isDeletingAccount ? (
                             <>
-                              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                              <Loader2 className='w-4 h-4 mr-2 animate-spin' />
                               Deleting...
                             </>
                           ) : (
@@ -586,11 +588,11 @@ const SettingsHome = () => {
             {/* Preferences Settings */}
             {activeTab === "preferences" && (
               <div className='space-y-6'>
-                <Card className='relative'>
+                <Card className='relative overflow-hidden'>
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
-                      <Palette className='h-5 w-5' />
+                      <Palette className='w-5 h-5' />
                       Appearance & Preferences
                     </CardTitle>
                     <CardDescription>
@@ -602,7 +604,7 @@ const SettingsHome = () => {
                       <div className='flex items-center justify-between'>
                         <div>
                           <h4 className='font-medium'>Theme</h4>
-                          <p className='text-muted-foreground text-sm'>
+                          <p className='text-sm text-muted-foreground'>
                             Choose your preferred theme
                           </p>
                         </div>
@@ -633,7 +635,7 @@ const SettingsHome = () => {
                       <div className='flex items-center justify-between'>
                         <div>
                           <h4 className='font-medium'>Email Notifications</h4>
-                          <p className='text-muted-foreground text-sm'>
+                          <p className='text-sm text-muted-foreground'>
                             Receive email updates about your account
                           </p>
                         </div>
@@ -652,7 +654,7 @@ const SettingsHome = () => {
                       <div className='flex items-center justify-between'>
                         <div>
                           <h4 className='font-medium'>Marketing Emails</h4>
-                          <p className='text-muted-foreground text-sm'>
+                          <p className='text-sm text-muted-foreground'>
                             Receive promotional content and updates
                           </p>
                         </div>
