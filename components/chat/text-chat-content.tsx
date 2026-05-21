@@ -438,7 +438,7 @@ export function TextChatContent() {
             })}
 
             {agentRuns.map((run) => (
-              <AgentMessage key={run.runId} run={run} userAvatar={userAvatar} />
+              <AgentMessage key={run.runId} run={run} />
             ))}
 
             {status === "submitted" && <Loader />}
