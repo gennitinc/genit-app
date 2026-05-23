@@ -1,6 +1,7 @@
 import { demoMessages } from "../components/chat/dummyMessage";
 import { useUserContext } from "./AuthenticatedContext";
 import { toast } from "@/hooks/use-toast";
+import { startAgentRun } from "@/lib/agents-api";
 import {
   IDesignProject,
   IProjectDesignContext,
@@ -254,6 +255,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [project?._id, project?.imageModel, project?.metadata?.finalizedSelections]);
 
   const isGeneratingImageRef = useRef(isGeneratingImage);
+  
   useEffect(() => {
     isGeneratingImageRef.current = isGeneratingImage;
   }, [isGeneratingImage]);
@@ -795,16 +797,41 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           setAttachedFiles(restoredFiles);
         }
 
-        // Show typing indicator while processing the initial draft
-        setIsTyping(true);
-        // Pass restored File objects to generateMessage
-        await generateMessage(
-          prompt,
-          restoredFiles.length > 0 ? restoredFiles : null,
-          project._id,
-          selectedFiles,
-          metadata
-        );
+        const isAgentic = (p: string) => {
+          const lower = ` ${p.toLowerCase()} `;
+          return ["post", "publish", "schedule", "send", "email", "dm", "message", "reply", "broadcast", "tweet", "draft", "upload", "share", "calendar", "meeting", "event", "appointment", "today", "tomorrow", "this week", "next week", "drive", "folder", "file", "insights", "analytics", "report", "stats", "metrics", "performance", "facebook", "instagram", "threads", "linkedin", "twitter", " x ", "tiktok", "youtube", "pinterest", "snapchat", "meta ads", "google ads", "tiktok ads", "gmail", "outlook", "brevo", "mailchimp", "whatsapp", "telegram", "campaign", "content", "audience", "followers", "comments", "brand", "strategy", "strategies", "growth", "grow", "analysis", "analyze"].some(k => lower.includes(k));
+        };
+
+        if (restoredFiles.length === 0 && (!selectedFiles || selectedFiles.length === 0) && isAgentic(prompt)) {
+          // Add the user message directly to UI
+          setMessages((prev) => [
+            ...prev,
+            transformMessages([{
+              id: `msg-${Date.now()}`,
+              role: "user",
+              type: "user",
+              parts: [{ type: "text", text: prompt }],
+              createdAt: new Date(),
+            }])[0],
+          ]);
+          try {
+            await startAgentRun({
+              projectId: project._id,
+              prompt,
+            });
+          } catch (err) {
+            console.error("Failed to start agent run", err);
+          }
+        } else {
+          // Pass restored File objects to generateMessage
+          await generateMessage(
+            prompt,
+            restoredFiles.length > 0 ? restoredFiles : null,
+            project._id,
+            selectedFiles,
+            metadata
+          );
+        }
         // Remove draft after successful generation
         localStorage.removeItem("newData");
       } catch (error) {

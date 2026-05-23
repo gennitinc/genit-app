@@ -10,26 +10,95 @@ import { ModelSelector } from "../inspire/model-selector";
 import { AnimatedShinyText } from "../ui/animated-shinny-text";
 import { BorderBeam } from "../ui/border-beam";
 import ShinyText from "../ui/shiny-text";
-import { BrevoBrand, FacebookBrand, GmailBrand, GoogleCalendarBrand, GoogleDriveBrand, InstagramBrand, LinkedinBrand, MicrosoftOutlookBrand, PinterestBrand, SnapchatBrand, TelegramBrand, TikTokBrand, WhatsAppBrand, XBrand, YoutubeBrand } from "@/app/(auth)/onboarding/_components/social-icons";
+import {
+  BrevoBrand,
+  FacebookBrand,
+  GmailBrand,
+  GoogleCalendarBrand,
+  GoogleDriveBrand,
+  InstagramBrand,
+  LinkedinBrand,
+  MicrosoftOutlookBrand,
+  PinterestBrand,
+  SnapchatBrand,
+  TelegramBrand,
+  TikTokBrand,
+  WhatsAppBrand,
+  XBrand,
+  YoutubeBrand,
+} from "@/app/(auth)/onboarding/_components/social-icons";
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 // import { BorderBeam } from "@/registry/magicui/border-beam"
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { PointerHighlight } from "@/components/ui/pointer-highlight";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
-import { trackAppOpened, trackEvent, trackFeatureUsed } from "@/lib/mixpanelClient";
+import {
+  trackAppOpened,
+  trackEvent,
+  trackFeatureUsed,
+} from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, ArrowRightIcon, Camera, CheckCircle2, FileText, Grid2X2Plus, Image, Image as ImageIcon, Layout, Loader2, MessageSquare, Mic, Music, Paintbrush, Palette, PaperclipIcon, Play, Presentation, Settings, Settings2, Sparkles, Table, TrendingUp, Type, User, Users, Video, Volume2, Wand2, WandSparklesIcon, Workflow, X, XIcon, Youtube, Zap } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowRightIcon,
+  Camera,
+  CheckCircle2,
+  FileText,
+  Grid2X2Plus,
+  Image,
+  Image as ImageIcon,
+  Layout,
+  Loader2,
+  MessageSquare,
+  Mic,
+  Music,
+  Paintbrush,
+  Palette,
+  PaperclipIcon,
+  Play,
+  Presentation,
+  Settings,
+  Settings2,
+  Sparkles,
+  Table,
+  TrendingUp,
+  Type,
+  User,
+  Users,
+  Video,
+  Volume2,
+  Wand2,
+  WandSparklesIcon,
+  Workflow,
+  X,
+  XIcon,
+  Youtube,
+  Zap,
+} from "lucide-react";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -37,45 +106,6 @@ import { toast } from "sonner";
 import { div } from "three/src/nodes/math/OperatorNode.js";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const INTEGRATION_BRANDS = [
   { name: "Instagram", Icon: InstagramBrand },
@@ -291,7 +321,7 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
     >
       {/* Background Glow for All Apps when sticky */}
       {item.id === "all-agents" && (
-        <div className='absolute inset-y-0 left-0 w-full -my-2 from-background via-background bg-gradient-to-r to-transparent md:hidden' />
+        <div className='from-background via-background absolute inset-y-0 left-0 -my-2 w-full bg-gradient-to-r to-transparent md:hidden' />
       )}
 
       <Link
@@ -315,12 +345,12 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
         >
           {/* Dark-mode override via a pseudo-layer — swap background inline */}
           <div
-            className='absolute inset-0 transition-opacity duration-300 opacity-0 dark:opacity-100'
+            className='absolute inset-0 opacity-0 transition-opacity duration-300 dark:opacity-100'
             style={{ backgroundColor: item.darkBg }}
           />
 
           {/* Subtle inner highlight */}
-          <div className='absolute inset-0 pointer-events-none bg-gradient-to-br from-white/20 to-transparent opacity-60 dark:opacity-30' />
+          <div className='pointer-events-none absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-60 dark:opacity-30' />
 
           {/* Border: visible in light, subtle in dark */}
           <div className='absolute inset-0 rounded-2xl ring-1 ring-black/[0.07] ring-inset dark:ring-white/[0.06]' />
@@ -361,7 +391,7 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
       </Link>
 
       {item.badge && (
-        <div className='absolute z-30 -top-1 -right-1'>
+        <div className='absolute -top-1 -right-1 z-30'>
           <Badge className='border-none bg-[#FFCB0F] px-1.5 py-0 text-[9px] text-black shadow-sm'>
             {item.badge}
           </Badge>
@@ -1002,17 +1032,17 @@ export function IdeaSection() {
 
   return (
     <div className='w-full md:px-4'>
-      <div className='flex flex-col items-center justify-center w-full mx-auto space-y-2 lg:space-y-6'>
+      <div className='mx-auto flex w-full flex-col items-center justify-center space-y-2 lg:space-y-6'>
         {/* Header */}
-        <div className='space-y-2 text-center mt4 lg:mt-0'>
+        <div className='mt4 space-y-2 text-center lg:mt-0'>
           {/* <AnimatedTooltipPreview /> */}
           <motion.div
-            className='flex flex-col items-center justify-center mt-2 mb-2 md:mt-8 lg:mt-24 lg:mb-2'
+            className='mt-2 mb-2 flex flex-col items-center justify-center md:mt-8 lg:mt-24 lg:mb-2'
             // initial={{ opacity: 0, y: 20 }}
             // animate={{ opacity: 1, y: 0 }}
             // transition={{ duration: 0.6 }}
           >
-            <AnimatedShinyText className='inline-flex items-center justify-center px-4 py-1 transition ease-out border-2 rounded-full hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400'>
+            <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400'>
               <span className='text-xs'>✨ Introducing Gennit v2</span>
               <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
             </AnimatedShinyText>
@@ -1054,7 +1084,7 @@ export function IdeaSection() {
             </motion.h1>
 
             <motion.p
-              className='max-w-full mt-2 mb-6 text-sm text-center text-foreground/80 lg:text-base'
+              className='text-foreground/80 mt-2 mb-6 max-w-full text-center text-sm lg:text-base'
               custom={2}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -1076,9 +1106,9 @@ export function IdeaSection() {
           </motion.div>
         </div>
 
-        <div className='flex flex-row items-center justify-center w-full'>
+        <div className='flex w-full flex-row items-center justify-center'>
           <motion.div
-            className='relative flex flex-col w-full max-w-2xl mx-auto'
+            className='relative mx-auto flex w-full max-w-2xl flex-col'
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -1086,7 +1116,7 @@ export function IdeaSection() {
             <div className='relative'>
               {/* File Attachments */}
               {attachedFiles.length > 0 && !isGenerating && (
-                <div className='flex flex-wrap gap-2 mb-3 custom-scrollbar-horizontal'>
+                <div className='custom-scrollbar-horizontal mb-3 flex flex-wrap gap-2'>
                   {attachedFiles.map((file: any, index: number) => {
                     const fileKey = file.fileKey || `${file.name}-${index}`;
                     return (
@@ -1094,14 +1124,14 @@ export function IdeaSection() {
                         key={fileKey}
                         className='group bg-muted-foreground/5 border-border hover:bg-background/50 relative flex max-w-[200px] items-center gap-2 rounded-lg border p-2 transition-colors'
                       >
-                        <div className='relative flex items-center justify-center flex-shrink-0 w-8 h-8 border rounded bg-background border-border'>
+                        <div className='bg-background border-border relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded border'>
                           {file.type && file.type.startsWith("image/") ? (
                             <img
                               src={
                                 URL.createObjectURL(file) || "/placeholder.svg"
                               }
                               alt={file.name}
-                              className='object-cover w-full h-full rounded'
+                              className='h-full w-full rounded object-cover'
                               onLoad={(e) =>
                                 URL.revokeObjectURL(
                                   (e.target as HTMLImageElement).src
@@ -1114,7 +1144,7 @@ export function IdeaSection() {
                             </div>
                           ) : (
                             <svg
-                              className='w-4 h-4 text-muted-foreground'
+                              className='text-muted-foreground h-4 w-4'
                               fill='none'
                               stroke='currentColor'
                               viewBox='0 0 24 24'
@@ -1128,27 +1158,27 @@ export function IdeaSection() {
                             </svg>
                           )}
                         </div>
-                        <div className='flex-1 min-w-0'>
-                          <p className='text-xs font-medium truncate text-foreground'>
+                        <div className='min-w-0 flex-1'>
+                          <p className='text-foreground truncate text-xs font-medium'>
                             {file.name && file.name.length > 15
                               ? `${file.name.substring(0, 15)}...`
                               : file.name || "Unknown file"}
                           </p>
-                          <p className='text-xs text-muted-foreground'>
+                          <p className='text-muted-foreground text-xs'>
                             {formatFileSize(file.size)}
                           </p>
                         </div>
                         <button
                           onClick={() => handleFileRemove(index)}
-                          className='absolute flex items-center justify-center w-4 h-4 text-xs text-white transition-opacity rounded-full opacity-100 bg-muted-foreground -top-1 -right-1 group-hover:opacity-100 hover:bg-red-500 lg:opacity-0'
+                          className='bg-muted-foreground absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-xs text-white opacity-100 transition-opacity group-hover:opacity-100 hover:bg-red-500 lg:opacity-0'
                           disabled={isGenerating}
                           aria-label={`Remove ${file.name}`}
                         >
                           &times;
                         </button>
                         {file.type && file.type.startsWith("image/") && (
-                          <div className='absolute z-50 mb-2 transition-opacity transform -translate-x-1/2 opacity-0 pointer-events-none bottom-full left-1/2 group-hover:opacity-100'>
-                            <div className='p-2 border rounded-lg shadow-md bg-background border-border'>
+                          <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
+                            <div className='bg-background border-border rounded-lg border p-2 shadow-md'>
                               <img
                                 src={
                                   URL.createObjectURL(file) ||
@@ -1176,13 +1206,13 @@ export function IdeaSection() {
             </div>
             <div
               ref={chatContainerRef}
-              className='relative flex w-full max-w-3xl mx-auto'
+              className='relative mx-auto flex w-full max-w-3xl'
               onDragOver={handleDragOver}
               onDrop={handleDrop}
             >
               {/* Animated beam with smoother transitions */}
               <motion.div
-                className='absolute z-0 w-full h-40 rounded-full pointer-events-none bg-neutral-400/20 blur-3xl md:w-40 dark:bg-neutral-500/20'
+                className='pointer-events-none absolute z-0 h-40 w-full rounded-full bg-neutral-400/20 blur-3xl md:w-40 dark:bg-neutral-500/20'
                 animate={{
                   left: `${beamPosition.x}%`,
                   top: `${beamPosition.y}%`,
@@ -1194,21 +1224,21 @@ export function IdeaSection() {
                 style={{ transform: "translate(-50%, -50%)" }}
               />
 
-              <div className='z-10 flex flex-col items-center w-full'>
+              <div className='z-10 flex w-full flex-col items-center'>
                 <div className='relative size-full'>
                   {/* Credit info and typing indicator */}
-                  <div className='flex items-center justify-between mx-4 mt-3 mb-2 text-sm'>
+                  <div className='mx-4 mt-3 mb-2 flex items-center justify-between text-sm'>
                     {!isGenerating && (
-                      <div className='flex items-center justify-between w-full gap-1'>
-                        <div className='flex items-center text-muted-foreground dark:text-zinc-400'>
-                          <Zap className='inline-block w-3 h-3 mr-2 text-emerald-500' />
+                      <div className='flex w-full items-center justify-between gap-1'>
+                        <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
+                          <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                           {user ? (
-                            <span className='text-xs text-muted-foreground'>
+                            <span className='text-muted-foreground text-xs'>
                               {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
                               Credits left
                             </span>
                           ) : (
-                            <span className='text-xs text-muted-foreground'>
+                            <span className='text-muted-foreground text-xs'>
                               Get a 50 free credit
                             </span>
                           )}
@@ -1227,14 +1257,14 @@ export function IdeaSection() {
                           <div className='text-xs font-medium'>
                             {String(user?.userPlan) === "Basic" ? (
                               <span
-                                className='text-blue-500 cursor-pointer hover:underline'
+                                className='cursor-pointer text-blue-500 hover:underline'
                                 onClick={() => router.push("/pricing")}
                               >
                                 Upgrade
                               </span>
                             ) : (
                               <span
-                                className='text-blue-500 cursor-pointer hover:underline'
+                                className='cursor-pointer text-blue-500 hover:underline'
                                 onClick={() =>
                                   router.push("/user/settings?tab=billing")
                                 }
@@ -1259,7 +1289,7 @@ export function IdeaSection() {
                   {/* Error message */}
                   <AnimatePresence>
                     {(inputError || error) && (
-                      <p className='flex items-center mx-4 mb-2 text-xs font-medium text-red-500'>
+                      <p className='mx-4 mb-2 flex items-center text-xs font-medium text-red-500'>
                         <AlertCircle className='mr-2 size-3.5' />
                         {inputError || error}
                       </p>
@@ -1279,7 +1309,7 @@ export function IdeaSection() {
                     className='group relative flex w-full flex-col gap-2 rounded-lg border border-white bg-white/80 p-3 text-base shadow-md ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
                   >
                     <div className='w-full min-w-0'>
-                      <div className='relative flex items-center flex-1'>
+                      <div className='relative flex flex-1 items-center'>
                         <textarea
                           ref={textareaRef}
                           id='chatinput'
@@ -1329,7 +1359,7 @@ export function IdeaSection() {
                             setShowOrientationSelection(false);
                           }}
                         >
-                          <selectedDesignType.icon className='w-3 h-3' />
+                          <selectedDesignType.icon className='h-3 w-3' />
                           {selectedDesignType.label}
                           {selectedOrientation &&
                             selectedOrientation !== "custom" &&
@@ -1351,7 +1381,7 @@ export function IdeaSection() {
                               </>
                             ) : (
                               <>
-                                <CheckCircle2 className='text-green-500 size-3' />
+                                <CheckCircle2 className='size-3 text-green-500' />
                               </>
                             )}
                           </div>
@@ -1436,7 +1466,7 @@ export function IdeaSection() {
                             className='from-transparent via-blue-500 to-transparent'
                           />
                           {isGenerating || isSubmitting ? (
-                            <Loader2 className='w-4 h-4 animate-spin' />
+                            <Loader2 className='h-4 w-4 animate-spin' />
                           ) : (
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
@@ -1458,7 +1488,7 @@ export function IdeaSection() {
                     </div>
                     {!user && (
                       <div
-                        className='absolute top-0 bottom-0 left-0 right-0 z-50 w-full h-full bg-transparent'
+                        className='absolute top-0 right-0 bottom-0 left-0 z-50 h-full w-full bg-transparent'
                         onClick={() => router.push("/signin")}
                       ></div>
                     )}
@@ -1481,9 +1511,9 @@ export function IdeaSection() {
                 >
                   <div className='flex flex-col p-4'>
                     {/* Header */}
-                    <div className='flex items-center justify-between pb-3 mb-4 border-b border-border'>
+                    <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
                       <div className='flex items-center gap-2'>
-                        <h3 className='text-sm font-semibold text-foreground'>
+                        <h3 className='text-foreground text-sm font-semibold'>
                           Advanced Settings
                         </h3>
                       </div>
@@ -1493,10 +1523,10 @@ export function IdeaSection() {
                           setIsSettingsOpen(false);
                           setShowOrientationSelection(false);
                         }}
-                        className='flex items-center justify-center w-6 h-6 text-gray-400 transition-colors rounded-full hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
+                        className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
                         aria-label='Close settings'
                       >
-                        <X className='w-4 h-4' />
+                        <X className='h-4 w-4' />
                       </button>
                     </div>
 
@@ -1596,10 +1626,10 @@ export function IdeaSection() {
                             onClick={() => {
                               setShowOrientationSelection(false);
                             }}
-                            className='flex items-center gap-2 mb-2 text-sm transition-colors text-muted-foreground hover:text-foreground'
+                            className='text-muted-foreground hover:text-foreground mb-2 flex items-center gap-2 text-sm transition-colors'
                           >
                             <svg
-                              className='w-4 h-4'
+                              className='h-4 w-4'
                               fill='none'
                               stroke='currentColor'
                               viewBox='0 0 24 24'
@@ -1613,7 +1643,7 @@ export function IdeaSection() {
                             </svg>
                             Change Design Type
                           </button>
-                          <div className='px-3 mb-3 text-xs text-muted-foreground'>
+                          <div className='text-muted-foreground mb-3 px-3 text-xs'>
                             {selectedDesignType?.label} Settings
                           </div>
 
@@ -1621,7 +1651,7 @@ export function IdeaSection() {
                           <div className='space-y-0.5'>
                             {orientationOptions.length > 0 && (
                               <>
-                                <p className='px-3 mb-2 text-xs text-muted-foreground'>
+                                <p className='text-muted-foreground mb-2 px-3 text-xs'>
                                   Select orientation
                                 </p>
                                 {orientationOptions.map((option) => (
@@ -1660,7 +1690,7 @@ export function IdeaSection() {
                                     </div>
                                     <div className='flex items-center gap-2'>
                                       {option.dimensions && (
-                                        <span className='text-xs text-muted-foreground'>
+                                        <span className='text-muted-foreground text-xs'>
                                           {option.dimensions}
                                         </span>
                                       )}
@@ -1698,7 +1728,7 @@ export function IdeaSection() {
                               </button>
 
                               {selectedOrientation === "custom" && (
-                                <div className='px-3 py-3 space-y-2'>
+                                <div className='space-y-2 px-3 py-3'>
                                   <div className='flex items-center gap-2'>
                                     <Input
                                       type='number'
@@ -1713,7 +1743,7 @@ export function IdeaSection() {
                                       className='h-8 text-sm'
                                       min='1'
                                     />
-                                    <span className='text-xs text-muted-foreground'>
+                                    <span className='text-muted-foreground text-xs'>
                                       ×
                                     </span>
                                     <Input
@@ -1771,20 +1801,20 @@ export function IdeaSection() {
                 >
                   <div className='flex flex-col p-4'>
                     {/* Header */}
-                    <div className='flex items-center justify-between pb-3 mb-4 border-b border-border'>
+                    <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
                       <div className='flex items-center gap-2'>
-                        <Palette className='w-4 h-4 text-primary' />
-                        <h3 className='text-sm font-semibold text-foreground'>
+                        <Palette className='text-primary h-4 w-4' />
+                        <h3 className='text-foreground text-sm font-semibold'>
                           Brand Identity
                         </h3>
                       </div>
                       <button
                         type='button'
                         onClick={() => setIsBrandSettingsOpen(false)}
-                        className='flex items-center justify-center w-6 h-6 text-gray-400 transition-colors rounded-full hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
+                        className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
                         aria-label='Close brand settings'
                       >
-                        <X className='w-4 h-4' />
+                        <X className='h-4 w-4' />
                       </button>
                     </div>
 
@@ -1906,18 +1936,18 @@ export function IdeaSection() {
           </div>
         </div> */}
 
-        <section className='relative pt-6 pb-10 mt-5 space-y-4 border-t lg:mt-10'>
-          <h2 className='text-sm tracking-tight text-center text-muted-foreground md:text-base'>
+        <section className='relative mt-5 space-y-4 border-t pt-6 pb-10 lg:mt-10'>
+          <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
             with over 23+ marketing{" "}
             <Link
               href='/integrations'
               target='_blank'
-              className='text-sm font-medium text-foreground md:text-base'
+              className='text-foreground text-sm font-medium md:text-base'
             >
               Integrations
             </Link>
           </h2>
-          <div className='relative z-10 max-w-5xl mx-auto'>
+          <div className='relative z-10 mx-auto max-w-5xl'>
             <div className='overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4'>
               <div className='animate-marquee flex w-max gap-10 hover:[animation-play-state:paused]'>
                 {[...INTEGRATION_BRANDS, ...INTEGRATION_BRANDS].map(
@@ -1925,10 +1955,10 @@ export function IdeaSection() {
                     <Link
                       key={`${name}-${i}`}
                       href={`/integrations#${name.toLowerCase().replace(/\s+/g, "-")}`}
-                      className='flex items-center gap-2 transition-colors group text-muted-foreground hover:text-foreground shrink-0'
+                      className='group text-muted-foreground hover:text-foreground flex shrink-0 items-center gap-2 transition-colors'
                     >
-                      <span className='flex items-center h-6 md:h-7'>
-                        <Icon className='w-auto h-full' />
+                      <span className='flex h-6 items-center md:h-7'>
+                        <Icon className='h-full w-auto' />
                       </span>
                       <span className='text-sm font-medium whitespace-nowrap md:text-base'>
                         {name}
@@ -1954,11 +1984,11 @@ export function IdeaSection() {
               Review and modify your presentation structure before generating
             </DrawerDescription>
           </DrawerHeader>
-          <div className='px-4 pb-4 space-y-4 overflow-y-auto'>
+          <div className='space-y-4 overflow-y-auto px-4 pb-4'>
             {isGeneratingOutline ? (
               <div className='flex flex-col items-center justify-center py-12'>
-                <Loader2 className='w-8 h-8 mb-4 text-muted-foreground animate-spin' />
-                <p className='text-sm text-muted-foreground'>
+                <Loader2 className='text-muted-foreground mb-4 h-8 w-8 animate-spin' />
+                <p className='text-muted-foreground text-sm'>
                   Generating presentation outline...
                 </p>
               </div>
@@ -1967,12 +1997,12 @@ export function IdeaSection() {
                 {presentationOutline.map((slide, index) => (
                   <div
                     key={slide.id}
-                    className='p-4 border rounded-lg border-border bg-muted/30'
+                    className='border-border bg-muted/30 rounded-lg border p-4'
                   >
                     <div className='flex items-start gap-3'>
-                      <div className='flex items-center flex-shrink-0 gap-2 pt-1'>
-                        <GripVertical className='w-4 h-4 cursor-move text-muted-foreground' />
-                        <span className='w-8 text-xs font-medium text-muted-foreground'>
+                      <div className='flex flex-shrink-0 items-center gap-2 pt-1'>
+                        <GripVertical className='text-muted-foreground h-4 w-4 cursor-move' />
+                        <span className='text-muted-foreground w-8 text-xs font-medium'>
                           {index + 1}
                         </span>
                       </div>
@@ -1993,7 +2023,7 @@ export function IdeaSection() {
                               key={pointIndex}
                               className='flex items-center gap-2'
                             >
-                              <span className='text-xs text-muted-foreground'>
+                              <span className='text-muted-foreground text-xs'>
                                 •
                               </span>
                               <Input
@@ -2017,9 +2047,9 @@ export function IdeaSection() {
                                   );
                                   setPresentationOutline(newOutline);
                                 }}
-                                className='transition-colors text-muted-foreground hover:text-destructive'
+                                className='text-muted-foreground hover:text-destructive transition-colors'
                               >
-                                <Trash2 className='w-4 h-4' />
+                                <Trash2 className='h-4 w-4' />
                               </button>
                             </div>
                           ))}
@@ -2030,9 +2060,9 @@ export function IdeaSection() {
                               newOutline[index].content.push("");
                               setPresentationOutline(newOutline);
                             }}
-                            className='flex items-center gap-2 mt-2 text-sm transition-colors text-muted-foreground hover:text-foreground'
+                            className='text-muted-foreground hover:text-foreground mt-2 flex items-center gap-2 text-sm transition-colors'
                           >
-                            <Plus className='w-4 h-4' />
+                            <Plus className='h-4 w-4' />
                             Add bullet point
                           </button>
                         </div>
@@ -2045,9 +2075,9 @@ export function IdeaSection() {
                           );
                           setPresentationOutline(newOutline);
                         }}
-                        className='flex-shrink-0 transition-colors text-muted-foreground hover:text-destructive'
+                        className='text-muted-foreground hover:text-destructive flex-shrink-0 transition-colors'
                       >
-                        <Trash2 className='w-4 h-4' />
+                        <Trash2 className='h-4 w-4' />
                       </button>
                     </div>
                   </div>
@@ -2064,21 +2094,21 @@ export function IdeaSection() {
                       },
                     ]);
                   }}
-                  className='flex items-center justify-center w-full gap-2 p-4 transition-colors border-2 border-dashed rounded-lg border-border text-muted-foreground hover:text-foreground hover:border-foreground/50'
+                  className='border-border text-muted-foreground hover:text-foreground hover:border-foreground/50 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 transition-colors'
                 >
-                  <Plus className='w-4 h-4' />
+                  <Plus className='h-4 w-4' />
                   Add Slide
                 </button>
 
                 {/* Customization Sections */}
-                <div className='pt-6 space-y-6 border-t border-border'>
+                <div className='border-border space-y-6 border-t pt-6'>
                   {/* Text Content Section */}
                   <div className='space-y-3'>
                     <div>
                       <h3 className='mb-1 text-sm font-semibold'>
                         Text Content
                       </h3>
-                      <p className='text-xs text-muted-foreground'>
+                      <p className='text-muted-foreground text-xs'>
                         Amount of text per card
                       </p>
                     </div>
@@ -2133,7 +2163,7 @@ export function IdeaSection() {
                   <div className='space-y-3'>
                     <div>
                       <h3 className='mb-1 text-sm font-semibold'>Visuals</h3>
-                      <p className='text-xs text-muted-foreground'>Theme</p>
+                      <p className='text-muted-foreground text-xs'>Theme</p>
                     </div>
                     <div className='grid grid-cols-3 gap-2'>
                       {[
@@ -2196,13 +2226,13 @@ export function IdeaSection() {
                               Body & <span className={theme.text}>link</span>
                             </div>
                           </div>
-                          <span className='block mt-2 text-xs font-medium text-center'>
+                          <span className='mt-2 block text-center text-xs font-medium'>
                             {theme.label}
                           </span>
                           {selectedTheme === theme.id && (
-                            <div className='absolute flex items-center justify-center w-5 h-5 rounded-full bg-foreground -top-1 -right-1'>
+                            <div className='bg-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full'>
                               <svg
-                                className='w-3 h-3 text-background'
+                                className='text-background h-3 w-3'
                                 fill='none'
                                 stroke='currentColor'
                                 viewBox='0 0 24 24'
@@ -2259,7 +2289,7 @@ export function IdeaSection() {
                             {style.label}
                           </span>
                           {imageStyle === style.id && (
-                            <div className='flex items-center justify-center w-4 h-4 rounded-full bg-foreground'>
+                            <div className='bg-foreground flex h-4 w-4 items-center justify-center rounded-full'>
                               <svg
                                 className='text-background h-2.5 w-2.5'
                                 fill='none'
@@ -2286,7 +2316,7 @@ export function IdeaSection() {
                       <h3 className='mb-1 text-sm font-semibold'>
                         Add extra keywords
                       </h3>
-                      <p className='text-xs text-muted-foreground'>
+                      <p className='text-muted-foreground text-xs'>
                         Optional: Add keywords to maintain consistency in image
                         style
                       </p>
@@ -2358,12 +2388,12 @@ export function IdeaSection() {
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className='w-4 h-4 mr-2 animate-spin' />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Creating...
                 </>
               ) : (
                 <>
-                  <WandSparklesIcon className='w-4 h-4 mr-2' />
+                  <WandSparklesIcon className='mr-2 h-4 w-4' />
                   Generate Presentation
                 </>
               )}
