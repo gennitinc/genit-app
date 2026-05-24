@@ -802,7 +802,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           return ["post", "publish", "schedule", "send", "email", "dm", "message", "reply", "broadcast", "tweet", "draft", "upload", "share", "calendar", "meeting", "event", "appointment", "today", "tomorrow", "this week", "next week", "drive", "folder", "file", "insights", "analytics", "report", "stats", "metrics", "performance", "facebook", "instagram", "threads", "linkedin", "twitter", " x ", "tiktok", "youtube", "pinterest", "snapchat", "meta ads", "google ads", "tiktok ads", "gmail", "outlook", "brevo", "mailchimp", "whatsapp", "telegram", "campaign", "content", "audience", "followers", "comments", "brand", "strategy", "strategies", "growth", "grow", "analysis", "analyze"].some(k => lower.includes(k));
         };
 
-        if (restoredFiles.length === 0 && (!selectedFiles || selectedFiles.length === 0) && isAgentic(prompt)) {
+        if (isAgentic(prompt)) {
           // Add the user message directly to UI
           setMessages((prev) => [
             ...prev,
@@ -815,9 +815,34 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             }])[0],
           ]);
           try {
+            let agentFiles = undefined;
+            
+            if (restoredFiles.length > 0) {
+              const formData = new FormData();
+              let hasUploads = false;
+              for (const file of restoredFiles as any[]) {
+                if (file instanceof File || file instanceof Blob) {
+                  formData.append("files", file);
+                  hasUploads = true;
+                }
+              }
+              
+              if (hasUploads) {
+                const res = await apiResponseFileUpload.post("/agents/upload", formData);
+                agentFiles = res.data.files;
+              } else {
+                agentFiles = restoredFiles.map((f: any) => ({
+                  name: f.name || "file",
+                  type: f.type || "application/octet-stream",
+                  url: f.filePath || f.url
+                }));
+              }
+            }
+
             await startAgentRun({
               projectId: project._id,
               prompt,
+              attachedFiles: agentFiles,
             });
           } catch (err) {
             console.error("Failed to start agent run", err);

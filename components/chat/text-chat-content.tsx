@@ -46,7 +46,21 @@ export function TextChatContent() {
 
   const { runs: agentRuns } = useAgentRunsContext();
 
-  useEffect(() => {}, [messages]);
+  // Merge regular messages and agent runs into a single chronologically-sorted list.
+  const allItems: { type: "message" | "agent"; createdAt: number; data: any }[] = [
+    ...(messages || []).map((m: any) => ({
+      type: "message" as const,
+      createdAt: m.createdAt ? new Date(m.createdAt).getTime() : 0,
+      data: m,
+    })),
+    ...agentRuns.map((r) => ({
+      type: "agent" as const,
+      createdAt: r.createdAt,
+      data: r,
+    })),
+  ].sort((a, b) => a.createdAt - b.createdAt);
+
+  const isEmpty = allItems.length === 0 && !isTyping;
 
   const skeletonRef = useRef<HTMLDivElement | null>(null);
   const scrollElRef = useRef<HTMLElement | null>(null);
@@ -141,7 +155,7 @@ export function TextChatContent() {
     if (!el) return;
 
     const prev = previousMessagesLengthRef.current;
-    const curr = messages?.length || 0;
+    const curr = allItems.length;
     const isNew = curr !== prev;
 
     if (firstRenderRef.current) {
@@ -168,7 +182,7 @@ export function TextChatContent() {
     previousMessagesLengthRef.current = curr;
     firstRenderRef.current = false;
   }, [
-    messages,
+    allItems.length,
     streamingContent,
     isGeneratingImage,
     generatingForMessageId,
@@ -296,7 +310,20 @@ export function TextChatContent() {
       >
         <Conversation className='m-0 px-0'>
           <ConversationContent className='m-0 min-h-full space-y-4 overflow-x-hidden px-0 pb-10'>
-            {messages?.map((message: any, index: number) => {
+            {allItems.map((item, index) => {
+              if (item.type === "agent") {
+                return (
+                  <AgentMessage
+                    key={item.data.runId}
+                    run={item.data}
+                    userAvatar={userAvatar}
+                    userName={userName}
+                  />
+                );
+              }
+
+              const message = item.data;
+
               if (message.type === "user") {
                 const imageAttachment = message.fileAttachments?.find(
                   (f: any) => f.type?.startsWith("image/")
@@ -342,13 +369,6 @@ export function TextChatContent() {
               }
 
               if (message.type === "ai") {
-                // Find the first AI message index
-                const firstAIMessageIndex = messages?.findIndex(
-                  (msg: any) => msg.type === "ai"
-                );
-                const isFirstAIResponse =
-                  firstAIMessageIndex !== -1 && index === firstAIMessageIndex;
-
                 return (
                   <div key={message.id || index} className='space-y-4'>
                     <AIMessage
@@ -381,7 +401,6 @@ export function TextChatContent() {
                     />
 
                     {message.generationGroups?.map((group: GenerationGroup) => {
-                      // Extract original prompt from message parts
                       const originalPrompt = message.parts?.find(
                         (part: any) => part.type === "text"
                       )?.text;
@@ -436,10 +455,6 @@ export function TextChatContent() {
               return null;
             })}
 
-            {agentRuns.map((run) => (
-              <AgentMessage key={run.runId} run={run} />
-            ))}
-
             {status === "submitted" && <Loader />}
 
             {isTyping &&
@@ -463,12 +478,11 @@ export function TextChatContent() {
                 <AIThinkingContent status={aiStatus} />
               ))}
 
-            {(!messages || messages.length === 0) && !isTyping && (
+            {isEmpty && (
               <div className='flex min-h-[40vh] flex-1 flex-col items-center justify-center'>
                 <div className='mb-8 text-center text-gray-500 dark:text-gray-400'>
                   <p className='mb-2 text-lg font-medium'>
                     Start a conversation
-                    {/* {project?.title} */}
                   </p>
                   <p className='text-sm'>
                     Ask me anything or describe what you'd like to create

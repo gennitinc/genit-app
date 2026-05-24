@@ -7,6 +7,7 @@ import type {
   AgentTask,
   AgentToolCall,
 } from "@/lib/agents-api";
+import { listAgentRuns } from "@/lib/agents-api";
 import { serverUrlSocket } from "@/utils/apiResponse";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { io as ioClient, Socket } from "socket.io-client";
@@ -42,6 +43,32 @@ export function useAgentRuns(projectId: string | undefined) {
 
   useEffect(() => {
     projectIdRef.current = projectId;
+  }, [projectId]);
+
+  useEffect(() => {
+    if (!projectId) return;
+    let mounted = true;
+    listAgentRuns(projectId)
+      .then((historyRuns) => {
+        if (!mounted) return;
+        setRuns((prev) => {
+          // Merge history runs with any incoming socket runs.
+          // History runs replace existing ones if they match runId,
+          // otherwise they are added.
+          const runMap = new Map<string, AgentRunView>();
+          for (const r of historyRuns) runMap.set(r.runId, r as AgentRunView);
+          for (const r of prev) runMap.set(r.runId, r);
+          
+          return Array.from(runMap.values()).sort(
+            (a, b) => a.createdAt - b.createdAt
+          );
+        });
+      })
+      .catch((err) => console.error("Failed to load agent history:", err));
+      
+    return () => {
+      mounted = false;
+    };
   }, [projectId]);
 
   const upsert = useCallback(

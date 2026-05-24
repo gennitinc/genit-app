@@ -38,6 +38,7 @@ export interface AgentIntegrationRequired {
 export async function startAgentRun(input: {
   projectId: string;
   prompt: string;
+  attachedFiles?: { name: string; type: string; url: string }[];
   selectedIntegrations?: Record<string, string>;
 }): Promise<{ runId: string }> {
   const { data } = await apiResponse.post<{ success: boolean; runId: string }>(
@@ -66,3 +67,11 @@ export async function resumeAgentRunIntegration(
     platform,
   });
 }
+
+export async function listAgentRuns(projectId: string): Promise<any[]> {
+  const { data } = await apiResponse.get<{ success: boolean; runs: any[] }>(
+    `/agents/project/${projectId}`
+  );
+  return data.runs;
+}
+

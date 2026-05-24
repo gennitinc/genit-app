@@ -2,6 +2,7 @@
 
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { Response } from "@/components/ai-elements/response";
+import { UserMessage } from "@/components/chat/messages/user-message";
 import { resumeAgentRunUserInput } from "@/lib/agents-api";
 import type {
   AgentElicitation,
@@ -21,6 +22,7 @@ import { renderToolResult } from "./result-cards";
 
 export interface AgentRunView {
   runId: string;
+  prompt: string;
   status: AgentRunStatus;
   plan: AgentTask[];
   thinking: string;
@@ -142,7 +144,15 @@ function StatusDot({ status }: { status: AgentRunStatus }) {
   );
 }
 
-export function AgentMessage({ run }: { run: AgentRunView }) {
+export function AgentMessage({
+  run,
+  userAvatar,
+  userName,
+}: {
+  run: AgentRunView;
+  userAvatar?: string;
+  userName?: string;
+}) {
   const active =
     run.status === "running" ||
     run.status === "awaiting_input" ||
@@ -162,7 +172,21 @@ export function AgentMessage({ run }: { run: AgentRunView }) {
               : "";
 
   return (
-    <div className='flex flex-col gap-1.5'>
+    <div className='flex flex-col gap-4'>
+      {/* User prompt bubble */}
+      {run.prompt && (
+        <UserMessage
+          message={{
+            type: "user",
+            parts: [{ type: "text", text: run.prompt }],
+          }}
+          userAvatar={userAvatar}
+          userName={userName}
+        />
+      )}
+
+      {/* Agent response */}
+      <div className='flex flex-col gap-1.5'>
       <div className='flex items-center gap-2.5'>
         <AvatarDisplay
           variant='ai'
@@ -219,6 +243,7 @@ export function AgentMessage({ run }: { run: AgentRunView }) {
             {run.error}
           </div>
         )}
+      </div>
       </div>
     </div>
   );

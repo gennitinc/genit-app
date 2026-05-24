@@ -15,6 +15,7 @@ interface AgentRunsContextValue {
   runs: AgentRunView[];
   startAgent: (
     prompt: string,
+    attachedFiles?: { name: string; type: string; url: string }[],
     selectedIntegrations?: Record<string, string>
   ) => Promise<{ runId: string } | null>;
   isAgenticQuery: (prompt: string) => boolean;
@@ -108,12 +109,17 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
   const { runs, registerNewRun, clear } = useAgentRuns(projectId);
 
   const startAgent = useCallback(
-    async (prompt: string, selectedIntegrations?: Record<string, string>) => {
+    async (
+      prompt: string,
+      attachedFiles?: { name: string; type: string; url: string }[],
+      selectedIntegrations?: Record<string, string>
+    ) => {
       if (!projectId) return null;
       try {
         const { runId } = await startAgentRun({
           projectId,
           prompt,
+          attachedFiles,
           selectedIntegrations,
         });
         registerNewRun(runId, prompt);

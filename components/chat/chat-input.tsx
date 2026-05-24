@@ -14,6 +14,7 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { trackEvent } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
+import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -220,11 +221,40 @@ export function ChatInput({
       // Route agentic queries (calendar, schedule, etc.) to the Claude agent
       // orchestrator. Everything else stays on the existing /generate flow
       // (image gen, design generation) until those tools migrate.
-      if (
-        attachedFiles.length === 0 &&
-        isAgenticQuery(inputValue)
-      ) {
-        await startAgent(inputValue);
+      if (isAgenticQuery(inputValue)) {
+        let uploadedFiles: { name: string; type: string; url: string }[] | undefined;
+        
+        if (attachedFiles.length > 0) {
+          const formData = new FormData();
+          for (const file of attachedFiles as any[]) {
+            if (file instanceof File || file instanceof Blob) {
+              formData.append("files", file);
+            } else if (file && (file.url || file.filePath)) {
+              if (!uploadedFiles) uploadedFiles = [];
+              uploadedFiles.push({
+                name: file.name || "file",
+                type: file.type || "application/octet-stream",
+                url: file.url || file.filePath
+              });
+            }
+          }
+          
+          if (formData.has("files")) {
+            toast.loading("Uploading files...", { id: "agent-upload" });
+            try {
+              const res = await apiResponseFileUpload.post("/agents/upload", formData);
+              if (!uploadedFiles) uploadedFiles = [];
+              uploadedFiles.push(...res.data.files);
+              toast.dismiss("agent-upload");
+            } catch (err) {
+              toast.dismiss("agent-upload");
+              toast.error("Failed to upload files");
+              throw err;
+            }
+          }
+        }
+        
+        await startAgent(inputValue, uploadedFiles);
       } else {
         await generateMessage(inputValue, attachedFiles, project._id);
       }
