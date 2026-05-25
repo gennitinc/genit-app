@@ -46,7 +46,7 @@ const ChatIdPage = () => {
   }
 
   return (
-    <div>
+    <div className="">
       <Toaster />
       <ChatLayout />
     </div>

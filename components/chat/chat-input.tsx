@@ -154,26 +154,6 @@ export function ChatInput({
     autoResize();
   }, [inputValue, autoResize]);
 
-  //     let scrollTimeout: NodeJS.Timeout;
-  //     const handleScroll = () => {
-  //       clearTimeout(scrollTimeout);
-  //       scrollTimeout = setTimeout(() => {
-  //         checkScrollPosition();
-  //       }, 50);
-  //     };
-
-  //     chatContentElement.addEventListener("scroll", handleScroll, {
-  //       passive: true,
-  //     });
-  //     checkScrollPosition();
-
-  //     return () => {
-  //       chatContentElement.removeEventListener("scroll", handleScroll);
-  //       clearTimeout(scrollTimeout);
-  //     };
-  //   }
-  // }, [checkScrollPosition]);
-
   // FIXED: Handle sending messages with proper project identification
   const handlegenerateMessage = async () => {
     // Check for low credits
@@ -200,6 +180,7 @@ export function ChatInput({
       inputValue,
       attachedFiles as unknown as File[]
     );
+
     if (validationError) {
       console.error("Validation error:", validationError);
       return;

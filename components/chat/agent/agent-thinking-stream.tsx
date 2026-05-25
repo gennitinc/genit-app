@@ -10,7 +10,7 @@ export function AgentThinkingStream({
   text: string;
   active: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   if (!text && !active) return null;
   return (
     <div className='border-border/70 bg-card text-card-foreground my-3 overflow-hidden rounded-xl border shadow-[0_1px_0_rgba(0,0,0,0.02),0_1px_2px_rgba(0,0,0,0.04)] dark:border-white/10 dark:bg-white/[0.02] dark:shadow-none'>

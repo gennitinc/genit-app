@@ -63,11 +63,11 @@ export function ChatLayout() {
 
   return (
     <AgentRunsProvider>
-    <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-[#09090b]'>
+    <div className='relative flex h-[100dvh] w-full overflow-hidden'>
       <AppSidebar />
       <div
         ref={scrollContainerRef}
-        className='relative flex h-full min-w-0 flex-1 flex-col overflow-hidden'
+        className='relative flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-white dark:bg-black'
       >
         <div className='flex-none'>
           <TopNavWithAurora

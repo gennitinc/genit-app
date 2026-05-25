@@ -88,7 +88,7 @@ const AGENTIC_KEYWORDS = [
   "audience",
   "followers",
   "comments",
-  // brand & strategy
+  // brand & strategy & research
   "brand",
   "strategy",
   "strategies",
@@ -96,6 +96,12 @@ const AGENTIC_KEYWORDS = [
   "grow",
   "analysis",
   "analyze",
+  "search",
+  "research",
+  "competitor",
+  "competitors",
+  "find",
+  "look up",
 ];
 
 function detectAgentic(prompt: string): boolean {

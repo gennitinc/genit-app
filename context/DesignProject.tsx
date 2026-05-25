@@ -799,21 +799,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
         const isAgentic = (p: string) => {
           const lower = ` ${p.toLowerCase()} `;
-          return ["post", "publish", "schedule", "send", "email", "dm", "message", "reply", "broadcast", "tweet", "draft", "upload", "share", "calendar", "meeting", "event", "appointment", "today", "tomorrow", "this week", "next week", "drive", "folder", "file", "insights", "analytics", "report", "stats", "metrics", "performance", "facebook", "instagram", "threads", "linkedin", "twitter", " x ", "tiktok", "youtube", "pinterest", "snapchat", "meta ads", "google ads", "tiktok ads", "gmail", "outlook", "brevo", "mailchimp", "whatsapp", "telegram", "campaign", "content", "audience", "followers", "comments", "brand", "strategy", "strategies", "growth", "grow", "analysis", "analyze"].some(k => lower.includes(k));
+          return ["post", "publish", "schedule", "send", "email", "dm", "message", "reply", "broadcast", "tweet", "draft", "upload", "share", "calendar", "meeting", "event", "appointment", "today", "tomorrow", "this week", "next week", "drive", "folder", "file", "insights", "analytics", "report", "stats", "metrics", "performance", "facebook", "instagram", "threads", "linkedin", "twitter", " x ", "tiktok", "youtube", "pinterest", "snapchat", "meta ads", "google ads", "tiktok ads", "gmail", "outlook", "brevo", "mailchimp", "whatsapp", "telegram", "campaign", "content", "audience", "followers", "comments", "brand", "strategy", "strategies", "growth", "grow", "analysis", "analyze", "search", "research", "competitor", "competitors", "find", "look up"].some(k => lower.includes(k));
         };
 
         if (isAgentic(prompt)) {
-          // Add the user message directly to UI
-          setMessages((prev) => [
-            ...prev,
-            transformMessages([{
-              id: `msg-${Date.now()}`,
-              role: "user",
-              type: "user",
-              parts: [{ type: "text", text: prompt }],
-              createdAt: new Date(),
-            }])[0],
-          ]);
           try {
             let agentFiles = undefined;
             

@@ -292,7 +292,7 @@ function ChatHistoryPage() {
             scrollContainerRef as React.RefObject<HTMLDivElement>
           }
         />
-        <div className='flex-1 rounded-t-4xl border-2 border-b-0 p-4 lg:p-8'>
+        <div className='flex-1 rounded-t-2xl border-2 border-b-0 p-4 lg:p-8'>
           {/* Centered container with custom width for desktop */}
           <div className='mx-auto max-w-4xl'>
             {/* Header */}
@@ -466,7 +466,7 @@ function ChatHistoryPage() {
                               {(project.type === "chat" || !project.type) && (
                                 <div className='flex items-center gap-1'>
                                   <MessageSquare className='h-3 w-3' />
-                                  {project.messages?.length || 0}
+                                  {(project.messages?.length || 0) + ((project as any).agentRunCount || 0)}
                                 </div>
                               )}
                               {project.type === "presentations" && (
