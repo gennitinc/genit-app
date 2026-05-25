@@ -64,6 +64,7 @@ export function LandingNavbar() {
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
 
   const navigation = [
+    { name: "Chat", href: "/chat" },
     { name: "Integrations", href: "/integrations" },
     { name: "Apps", href: "/apps" },
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
@@ -121,14 +122,20 @@ export function LandingNavbar() {
                   <div className='flex items-center gap-2 sm:gap-2'>
                     {/* Main user avatar with popover */}
                     <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
-                      {user && (
-                        <Link
-                          className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                          href='/integrations'
-                        >
-                          Integrations
-                        </Link>
-                      )}
+                      {/* {user && (
+                      )} */}
+                      <Link
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                        href='/chat'
+                      >
+                        Chat
+                      </Link>
+                      <Link
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                        href='/integrations'
+                      >
+                        Integrations
+                      </Link>
                       <Link
                         className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                         href='/apps'
@@ -309,7 +316,7 @@ export function LandingNavbar() {
                           className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                           href='/chat'
                         >
-                          Agentic Chat
+                          Chat
                         </Link>
                       )}
                       <Link
