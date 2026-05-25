@@ -149,7 +149,7 @@ export function NavMain() {
                 <Link href={item.href} className='flex w-full items-center'>
                   <item.icon
                     className={cn(
-                      "h-6 w-6 flex-shrink-0",
+                      "h-6 w-6 flex-shrink-0 rounded-full",
                       shouldShowCollapsed ? "mx-auto" : "mr-2",
                       // Make icons more visible on mobile/tablet
                       isMobile && "h-7 w-7",
