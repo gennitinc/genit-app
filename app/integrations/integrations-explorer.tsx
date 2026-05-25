@@ -32,6 +32,7 @@ import {
   AtSign,
   Calendar,
   CheckCircle2,
+  Cog,
   Megaphone,
   Search,
   TrendingUp,
@@ -337,6 +338,7 @@ function ConnectButton({
         onClick={onManage}
         className='inline-flex items-center gap-1 rounded-md bg-linear-to-r from-emerald-500 to-teal-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-emerald-300 focus:outline-none dark:focus:ring-emerald-800'
       >
+  <Cog className="size-4" />
         Manage
       </button>
     );
@@ -349,6 +351,7 @@ function ConnectButton({
         onClick={onManage}
         className='inline-flex items-center gap-1 rounded-md bg-linear-to-r from-amber-500 to-orange-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-amber-300 focus:outline-none dark:focus:ring-amber-800'
       >
+              <Cog className="size-4" />
         Manage
       </button>
     );
@@ -382,7 +385,7 @@ function StatusBadge({
 }) {
   if (status === "connected") {
     return (
-      <span className='inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300 dark:ring-emerald-400/20'>
+      <span className='inline-flex items-center gap-1.5 rounded-md bg-background px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300 '>
         <CheckCircle2 className='h-3 w-3' />
         {count && count > 1 ? `Connected · ${count}` : "Connected"}
       </span>
@@ -390,7 +393,7 @@ function StatusBadge({
   }
   if (status === "partial") {
     return (
-      <span className='inline-flex items-center gap-1.5 rounded-md bg-amber-500/10 px-2 py-1 text-xs text-amber-700 ring-1 ring-amber-500/30 dark:text-amber-300 dark:ring-amber-400/20'>
+      <span className='inline-flex items-center gap-1.5 rounded-md bg-background px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
         <AlertTriangle className='h-3 w-3' />
         Needs setup
       </span>
@@ -398,13 +401,13 @@ function StatusBadge({
   }
   if (status === "soon") {
     return (
-      <span className='text-muted-foreground inline-flex items-center gap-1.5 rounded-md bg-zinc-500/10 px-2 py-1 text-xs ring-1 ring-zinc-500/20 dark:text-zinc-400 dark:ring-zinc-400/20'>
+      <span className='inline-flex items-center gap-1.5 rounded-md bg-background px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
         Coming soon
       </span>
     );
   }
   return (
-    <span className='inline-flex items-center gap-1.5 rounded-md bg-zinc-500/10 px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
+    <span className='inline-flex items-center gap-1.5 rounded-md bg-background px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
       Available
     </span>
   );
