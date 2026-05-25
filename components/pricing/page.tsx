@@ -325,7 +325,7 @@ export default function PricingComponent() {
   };
 
   return (
-    <section className='bg-background relative' id='pricing'>
+    <section className='relative' id='pricing'>
       <div className='mx-auto max-w-7xl px-0 py-24 md:px-6 md:py-32 lg:px-8'>
         {/* Header */}
         <div className='animate-fadeInUp text-center'>

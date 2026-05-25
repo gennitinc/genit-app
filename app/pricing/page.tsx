@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 
 export default function Pricing() {
   return (
-    <div className='bg-background min-h-screen'>
+    <div className='min-h-screen bg-white dark:bg-black'>
       <LandingNavbar />
       <PricingComponent />
       <LandingFooter />

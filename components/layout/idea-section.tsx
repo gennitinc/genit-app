@@ -1942,7 +1942,7 @@ export function IdeaSection() {
             <Link
               href='/integrations'
               target='_blank'
-              className='text-foreground text-sm font-medium md:text-base'
+              className='text-foreground text-sm font-medium md:text-base underline'
             >
               Integrations
             </Link>
