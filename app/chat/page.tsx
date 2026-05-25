@@ -7,13 +7,6 @@ import withAuth from "@/helper/hoc/withAuth";
 import { useRef } from "react";
 
 
-
-
-
-
-
-
-
 function ChatPageForAuthenticatedUsers() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 

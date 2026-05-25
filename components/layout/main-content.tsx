@@ -12,7 +12,6 @@ export function MainContent() {
     <div className='w-full overflow-x-hidden py-8 sm:px-2 lg:px-8'>
       <div className='relative flex w-full flex-col items-center justify-center'>
       
-
         <IdeaSection />
       </div>
 
