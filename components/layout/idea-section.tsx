@@ -1842,7 +1842,44 @@ export function IdeaSection() {
           <div className="absolute top-0 bottom-0 right-0 z-20 w-20 pointer-events-none bg-gradient-to-l from-background to-transparent rounded-r-3xl" />
         </div> */}
 
-        {/* <div className='w-full max-w-4xl min-w-0 px-4 mx-auto mt-8'>
+       
+
+        <section className='relative mt-5 space-y-4 border-t pt-6 pb-10 lg:mt-10'>
+          <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
+            with over 23+ marketing{" "}
+            <Link
+              href='/integrations'
+              target='_blank'
+              className='text-foreground text-sm font-medium md:text-base underline'
+            >
+              Integrations
+            </Link>
+          </h2>
+          <div className='relative z-10 mx-auto max-w-5xl'>
+            <div className='overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4'>
+              <div className='animate-marquee flex w-max gap-10 hover:[animation-play-state:paused]'>
+                {[...INTEGRATION_BRANDS, ...INTEGRATION_BRANDS].map(
+                  ({ name, Icon }, i) => (
+                    <Link
+                      key={`${name}-${i}`}
+                      href={`/integrations#${name.toLowerCase().replace(/\s+/g, "-")}`}
+                      className='group text-muted-foreground hover:text-foreground flex shrink-0 items-center gap-2 transition-colors'
+                    >
+                      <span className='flex h-6 items-center md:h-7'>
+                        <Icon className='h-full w-auto' />
+                      </span>
+                      <span className='text-sm font-medium whitespace-nowrap md:text-base'>
+                        {name}
+                      </span>
+                    </Link>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+         {/* <div className='w-full max-w-4xl min-w-0 px-4 mx-auto mt-8'>
           <div className='flex items-center justify-between mb-2'>
             <h2 className='text-sm font-bold text-black lg:ml-4 lg:text-lg dark:text-white'>
               Feature Apps
@@ -1935,41 +1972,6 @@ export function IdeaSection() {
             </div>
           </div>
         </div> */}
-
-        <section className='relative mt-5 space-y-4 border-t pt-6 pb-10 lg:mt-10'>
-          <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
-            with over 23+ marketing{" "}
-            <Link
-              href='/integrations'
-              target='_blank'
-              className='text-foreground text-sm font-medium md:text-base underline'
-            >
-              Integrations
-            </Link>
-          </h2>
-          <div className='relative z-10 mx-auto max-w-5xl'>
-            <div className='overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4'>
-              <div className='animate-marquee flex w-max gap-10 hover:[animation-play-state:paused]'>
-                {[...INTEGRATION_BRANDS, ...INTEGRATION_BRANDS].map(
-                  ({ name, Icon }, i) => (
-                    <Link
-                      key={`${name}-${i}`}
-                      href={`/integrations#${name.toLowerCase().replace(/\s+/g, "-")}`}
-                      className='group text-muted-foreground hover:text-foreground flex shrink-0 items-center gap-2 transition-colors'
-                    >
-                      <span className='flex h-6 items-center md:h-7'>
-                        <Icon className='h-full w-auto' />
-                      </span>
-                      <span className='text-sm font-medium whitespace-nowrap md:text-base'>
-                        {name}
-                      </span>
-                    </Link>
-                  )
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
 
       {/* Presentation Organization Drawer */}

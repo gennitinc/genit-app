@@ -12,42 +12,42 @@ import { ArrowRight, Check, Crown, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const plansDev = [
-  {
-    id: "basic",
-    name: "Basic",
-    monthlyPrice: 0,
-    yearlyPrice: 0,
-    productIds: {
-      monthly: null,
-      yearly: null,
-    },
-    features: [
-      "Limited monthly credits",
-      "HD image generation",
-      "Short video creation",
-      "Basic templates library",
-      "Community support",
-    ],
-    popular: false,
-  },
-  {
-    id: "creator",
-    name: "Creator",
-    monthlyPrice: 5,
-    yearlyPrice: 48,
-    productIds: {
-      monthly: "ADD_CREATOR_MONTHLY_ID",
-      yearly: "ADD_CREATOR_YEARLY_ID",
-    },
-    features: [
-      "500 credits per month",
-      "HD image generation",
-      "Short-form video exports",
-      "Expanded templates library",
-      "Standard support",
-    ],
-    popular: false,
-  },
+  // {
+  //   id: "basic",
+  //   name: "Basic",
+  //   monthlyPrice: 0,
+  //   yearlyPrice: 0,
+  //   productIds: {
+  //     monthly: null,
+  //     yearly: null,
+  //   },
+  //   features: [
+  //     "Limited monthly credits",
+  //     "HD image generation",
+  //     "Short video creation",
+  //     "Basic templates library",
+  //     "Community support",
+  //   ],
+  //   popular: false,
+  // },
+  // {
+  //   id: "creator",
+  //   name: "Creator",
+  //   monthlyPrice: 5,
+  //   yearlyPrice: 48,
+  //   productIds: {
+  //     monthly: "ADD_CREATOR_MONTHLY_ID",
+  //     yearly: "ADD_CREATOR_YEARLY_ID",
+  //   },
+  //   features: [
+  //     "500 credits per month",
+  //     "HD image generation",
+  //     "Short-form video exports",
+  //     "Expanded templates library",
+  //     "Standard support",
+  //   ],
+  //   popular: false,
+  // },
   {
     id: "studio",
     name: "Studio",
