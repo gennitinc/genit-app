@@ -534,7 +534,7 @@ export function ChatInput({
                       : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
                   }`}
                   onClick={handleMicClick}
-                  disabled={!isSupported || isGenerating}
+                  disabled={!isSupported || isGenerating || isAgenticQuery(inputValue)}
                 >
                   <Mic className='size-4 shrink-0' />
                 </button>
@@ -542,11 +542,11 @@ export function ChatInput({
                   type='submit'
                   disabled={
                     isGenerating ||
-                    (!inputValue.trim() && attachedFiles.length === 0)
+                    (!inputValue.trim() && attachedFiles.length === 0) || isAgenticQuery(inputValue)
                   }
                   className='bg-primary text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
                 >
-                  {isGenerating ? (
+                  {isGenerating || isAgenticQuery(inputValue) ? (
                     <Loader2 className='h-4 w-4 animate-spin' />
                   ) : (
                     <svg
