@@ -186,6 +186,15 @@ export function useAgentRuns(projectId: string | undefined) {
       if (!matchProject(p)) return;
       upsert(p.runId, undefined, (r) => ({ ...r, text: r.text + (p.delta || "") }));
     };
+    const onRunResume = (p: AnyEvent) => {
+      if (!matchProject(p)) return;
+      upsert(p.runId, undefined, (r) => ({
+        ...r,
+        status: "running",
+        elicitation: undefined,
+        integrationRequired: undefined,
+      }));
+    };
     const onRunEnd = (p: AnyEvent) => {
       if (!matchProject(p)) return;
       upsert(p.runId, undefined, (r) => ({
@@ -205,6 +214,7 @@ export function useAgentRuns(projectId: string | undefined) {
     };
 
     socket.on("agent:run:start", onRunStart);
+    socket.on("agent:run:resume", onRunResume);
     socket.on("agent:plan", onPlan);
     socket.on("agent:task:update", onTaskUpdate);
     socket.on("agent:thinking:delta", onThinkingDelta);
@@ -218,6 +228,7 @@ export function useAgentRuns(projectId: string | undefined) {
 
     return () => {
       socket.off("agent:run:start", onRunStart);
+      socket.off("agent:run:resume", onRunResume);
       socket.off("agent:plan", onPlan);
       socket.off("agent:task:update", onTaskUpdate);
       socket.off("agent:thinking:delta", onThinkingDelta);

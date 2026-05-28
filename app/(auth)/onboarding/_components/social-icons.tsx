@@ -757,3 +757,23 @@ export const GoogleDriveBrand = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+
+export function EyeIcon({ className, style }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      style={style}
+      aria-hidden
+    >
+      <path d="M2 12c0 0 4.4-8 10-8s10 8 10 8-4.4 8-10 8-10-8-10-8Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}

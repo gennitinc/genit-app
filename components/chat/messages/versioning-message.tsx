@@ -23,6 +23,7 @@ import {
   Edit,
   Eye,
   File,
+  GitBranch,
   Image as ImageIcon,
   LayoutGrid,
   Loader,
@@ -35,6 +36,7 @@ import {
   Trash2,
   Video,
   Wand2,
+  Zap,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { MaskEditor, toMask } from "react-mask-editor";
@@ -54,6 +56,7 @@ interface GenerationItem {
   videoConfig?: any; // Remotion JSON config
   publishStatus?: "published" | "pending" | "rejected" | null;
   isActive?: boolean; // NEW: Track the currently selected item in a group
+  data?: any; // Added for workflow snapshot data
 }
 
 interface GenerationGroup {
@@ -161,7 +164,7 @@ export function VersioningMessage({
 }: VersioningMessageProps) {
   const router = useRouter();
   const { user } = useUserContext();
-  const { setFocusedGenerationId } = useProjectDesign();
+  const { setFocusedGenerationId, focusedGenerationId } = useProjectDesign();
   const [publishing, setPublishing] = useState<string | null>(null);
   const [checkingPublishStatus, setCheckingPublishStatus] = useState(false);
   const [publishedItems, setPublishedItems] = useState<Set<string>>(new Set());
@@ -771,10 +774,12 @@ export function VersioningMessage({
 
     const getMediaType = (
       mimeType: string
-    ): "image" | "video" | "file" | "remotion" => {
+    ): "image" | "video" | "file" | "remotion" | "workflow" | "automation" => {
       if (mimeType?.startsWith("image/")) return "image";
       if (mimeType?.startsWith("video/")) return "video";
       if (mimeType === "application/json+remotion") return "remotion";
+      if (mimeType === "application/json+workflow") return "workflow";
+      if (mimeType === "application/json+automation") return "automation";
       return "file";
     };
 
@@ -1162,6 +1167,100 @@ export function VersioningMessage({
                       </Button>
                     )}
                   </div>
+                </div>
+              </div>
+            ) : mediaType === "workflow" ? (
+              <div className='flex w-full flex-col items-start gap-3 rounded-lg border border-violet-500/20 bg-violet-500/5 p-3.5 transition-all duration-200 hover:border-violet-500/30 hover:bg-violet-500/10'>
+                <div className='flex w-full items-start gap-3'>
+                  <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-violet-500/20 bg-violet-500/10 text-violet-500 sm:h-12 sm:w-12'>
+                    <GitBranch className='h-5 w-5 sm:h-6 sm:w-6' />
+                  </div>
+                  <div className='min-w-0 flex-1'>
+                    <p className='text-foreground truncate text-xs font-semibold sm:text-sm'>
+                      {item.name || "Workflow Canvas"}
+                    </p>
+                    <div className='mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground'>
+                      <span className='inline-flex items-center gap-1 font-medium text-violet-500 bg-violet-500/10 px-1.5 py-0.5 rounded'>
+                        Workflow
+                      </span>
+                      <span>•</span>
+                      <span>{item.data?.nodes?.length || 0} nodes</span>
+                      <span>•</span>
+                      <span>{item.data?.edges?.length || 0} connections</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className='flex items-center gap-2 mt-1 w-full'>
+                  <Button
+                    variant='outline'
+                    size='sm'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSetAsActive(item.id);
+                      if (setFocusedGenerationId) {
+                        setFocusedGenerationId(item.id);
+                        toast({
+                          title: "Canvas loaded",
+                          description: `Loaded snapshot with ${item.data?.nodes?.length || 0} nodes.`,
+                        });
+                      }
+                    }}
+                    className={cn(
+                      "h-8 w-full gap-1.5 px-3 text-xs font-medium sm:w-auto rounded-lg transition-colors border-violet-500/30 text-violet-600 hover:text-violet-700 hover:bg-violet-500/10",
+                      focusedGenerationId === item.id && "bg-violet-500 text-white hover:bg-violet-600 hover:text-white border-violet-500"
+                    )}
+                  >
+                    <LayoutGrid className='h-3.5 w-3.5' />
+                    {focusedGenerationId === item.id ? "Viewing Canvas" : "View Canvas"}
+                  </Button>
+                </div>
+              </div>
+            ) : mediaType === "automation" ? (
+              <div className='flex w-full flex-col items-start gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-3.5 transition-all duration-200 hover:border-amber-500/30 hover:bg-amber-500/10'>
+                <div className='flex w-full items-start gap-3'>
+                  <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-500 sm:h-12 sm:w-12'>
+                    <Zap className='h-5 w-5 sm:h-6 sm:w-6 fill-amber-500/10' />
+                  </div>
+                  <div className='min-w-0 flex-1'>
+                    <p className='text-foreground truncate text-xs font-semibold sm:text-sm'>
+                      {item.name || "Automation Canvas"}
+                    </p>
+                    <div className='mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground'>
+                      <span className='inline-flex items-center gap-1 font-medium text-amber-600 bg-amber-500/10 px-1.5 py-0.5 rounded'>
+                        Automation
+                      </span>
+                      <span>•</span>
+                      <span>{item.data?.nodes?.length || 0} nodes</span>
+                      <span>•</span>
+                      <span>{item.data?.edges?.length || 0} connections</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className='flex items-center gap-2 mt-1 w-full'>
+                  <Button
+                    variant='outline'
+                    size='sm'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSetAsActive(item.id);
+                      if (setFocusedGenerationId) {
+                        setFocusedGenerationId(item.id);
+                        toast({
+                          title: "Automation loaded",
+                          description: `Loaded snapshot with ${item.data?.nodes?.length || 0} nodes.`,
+                        });
+                      }
+                    }}
+                    className={cn(
+                      "h-8 w-full gap-1.5 px-3 text-xs font-medium sm:w-auto rounded-lg transition-colors border-amber-500/30 text-amber-600 hover:text-amber-700 hover:bg-amber-500/10",
+                      focusedGenerationId === item.id && "bg-amber-500 text-white hover:bg-amber-600 hover:text-white border-amber-500"
+                    )}
+                  >
+                    <LayoutGrid className='h-3.5 w-3.5' />
+                    {focusedGenerationId === item.id ? "Viewing Canvas" : "View Canvas"}
+                  </Button>
                 </div>
               </div>
             ) : (

@@ -5,37 +5,56 @@ import { TextChatContent } from "../chat/text-chat-content";
 import { AppSidebar } from "./app-sidebar";
 import TopNavWithAurora from "./top-nav-with-aurora";
 import { useSidebar } from "@/components/ui/sidebar";
-import { AgentRunsProvider } from "@/context/AgentRunsContext";
+import { AgentRunsProvider, useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { PanelRightClose, PanelRightOpen } from "lucide-react";
+import { PanelRightClose, PanelRightOpen, Maximize2, Minimize2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
 
 export function ChatLayout() {
+  return (
+    <AgentRunsProvider>
+      <ChatLayoutInner />
+    </AgentRunsProvider>
+  );
+}
+
+function ChatLayoutInner() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const isDesktop = !isMobile;
 
-  const { isGeneratingImage, liveNodes, messages, project } = useProjectDesign();
+  const { isGeneratingImage, liveNodes, messages, project, isGenerating } = useProjectDesign();
+  const { runs: agentRuns } = useAgentRunsContext();
   const { setOpen: setSidebarOpen } = useSidebar();
 
+  const isAutomationProject = project?.category === "automation";
+
+  // Agent is actively running (not just awaiting user input)
+  const isAgentRunning = agentRuns.some((r) => r.status === "running");
+
   const isGenerationActive =
-    Boolean(isGeneratingImage) || (liveNodes?.length ?? 0) > 0;
+    Boolean(isGeneratingImage) ||
+    (liveNodes?.length ?? 0) > 0 ||
+    (isAgentRunning && isAutomationProject);
 
   const hasAnyPreview =
     isGenerationActive ||
-    (messages?.some(
-      (m: any) => (m.generationGroups?.length ?? 0) > 0
-    ) ?? false);
+    // Design projects: open when there are generated images
+    (messages?.some((m: any) => (m.generationGroups?.length ?? 0) > 0) ?? false) ||
+    // Automation projects: always show the canvas if the project exists
+    isAutomationProject;
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const prevActiveRef = useRef(false);
   const initialOpenForProjectRef = useRef<string | null>(null);
 
-  // First load of a project: if there's existing preview history, open the panel once.
+  // First load of a project: if there's existing preview history (or it's an
+  // automation project), open the panel once.
   useEffect(() => {
     const pid = project?._id?.toString?.() ?? null;
     if (!pid) return;
@@ -62,7 +81,6 @@ export function ChatLayout() {
   }, [isPreviewOpen, isDesktop, setSidebarOpen]);
 
   return (
-    <AgentRunsProvider>
     <div className='relative flex h-[100dvh] w-full overflow-hidden'>
       <AppSidebar />
       <div
@@ -87,7 +105,10 @@ export function ChatLayout() {
                 stiffness: 220,
                 mass: 0.8,
               }}
-              className='relative flex h-full min-w-0 flex-1 flex-col overflow-hidden'
+              className={cn(
+                'relative flex h-full min-w-0 flex-col overflow-hidden',
+                isFullscreen ? 'hidden' : 'flex-1'
+              )}
             >
               <div
                 className={cn(
@@ -131,7 +152,7 @@ export function ChatLayout() {
                 <motion.div
                   key='preview-pane'
                   initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: "62.5%", opacity: 1 }}
+                  animate={{ width: isFullscreen ? "100%" : "62.5%", opacity: 1 }}
                   exit={{ width: 0, opacity: 0 }}
                   transition={{
                     type: "spring",
@@ -139,16 +160,19 @@ export function ChatLayout() {
                     stiffness: 220,
                     mass: 0.8,
                   }}
-                  className='relative h-full shrink-0 overflow-hidden bg-[#fafafa] dark:bg-[#09090b]'
+                  className={cn(
+                    'relative h-full shrink-0 overflow-hidden',
+                    isFullscreen ? 'p-0' : 'p-2'
+                  )}
                 >
                   <motion.div
                     initial={{ x: 40, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: 40, opacity: 0 }}
                     transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                    className='relative h-full w-full p-4'
+                    className='relative h-full w-full'
                   >
-                    <PreviewPanel />
+                    <PreviewPanel isFullscreen={isFullscreen} onToggleFullscreen={() => setIsFullscreen(!isFullscreen)} />
                   </motion.div>
                 </motion.div>
               )}
@@ -163,6 +187,5 @@ export function ChatLayout() {
         )}
       </div>
     </div>
-    </AgentRunsProvider>
   );
 }

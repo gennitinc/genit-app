@@ -41,6 +41,7 @@ import "reactflow/dist/style.css";
 import { io } from "socket.io-client";
 import { toast } from "sonner";
 import React, { useCallback, useEffect, useState } from "react";
+import { useProjectDesign } from "@/context/DesignProject";
 
 
 
@@ -139,7 +140,8 @@ const getDocumentType = (url: string, fileName?: string) => {
   }
 };
 
-const GennittWorkflow = ({ slug }: { slug?: string }) => {
+const GennittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?: boolean }) => {
+  const { focusedGenerationId, messages } = useProjectDesign();
   const router = useRouter();
   const [projectId, setProjectId] = useState<string | null>(null);
   const [projectName, setProjectName] = useState("");
@@ -1165,6 +1167,39 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
     };
   }, [projectId]); // removed applyAIActions — prevents listener re-registration on every drag
 
+  // Load snapshot version if focusedGenerationId is selected
+  useEffect(() => {
+    if (focusedGenerationId && messages) {
+      let foundSnapshot = null;
+      for (const msg of messages) {
+        if (msg.generationGroups) {
+          for (const group of msg.generationGroups) {
+            const item = group.items?.find(
+              (it: any) => it.id === focusedGenerationId
+            );
+            if (item && item.type === "application/json+workflow" && item.data) {
+              foundSnapshot = item.data;
+              break;
+            }
+          }
+        }
+        if (foundSnapshot) break;
+      }
+
+      if (foundSnapshot) {
+        const loadedNodes = injectNodeCallbacks(foundSnapshot.nodes || []);
+        const loadedEdges = foundSnapshot.edges || [];
+        setNodes(loadedNodes);
+        setEdges(loadedEdges);
+        if (reactFlowInstance) {
+          setTimeout(() => {
+            reactFlowInstance.fitView({ duration: 400, padding: 0.2 });
+          }, 100);
+        }
+      }
+    }
+  }, [focusedGenerationId, messages, reactFlowInstance, injectNodeCallbacks]);
+
   if (isLoading) {
     return (
       <div className='flex flex-col items-center justify-center h-screen bg-background'>
@@ -1172,6 +1207,127 @@ const GennittWorkflow = ({ slug }: { slug?: string }) => {
         <p className='text-muted-foreground animate-pulse'>
           Loading your workflow...
         </p>
+      </div>
+    );
+  }
+
+  if (embedMode) {
+    return (
+      <div className='relative w-full h-full bg-background flex flex-col'>
+        <div className='bg-background relative h-full w-full flex-1 min-h-0'>
+          <div className='absolute z-10 flex items-center space-x-2 -translate-x-1/2 top-4 left-1/2'>
+            <div className='flex items-center p-2 space-x-1 border rounded-sm shadow-lg bg-muted/50 border-border backdrop-blur-sm'>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={memoizedHandleUndo}
+                disabled={historyIndex <= 0}
+                className='w-8 h-8 p-0 rounded-sm hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50'
+                title='Undo (Ctrl+Z)'
+              >
+                <Undo2 className='w-4 h-4' />
+              </Button>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={memoizedHandleRedo}
+                disabled={historyIndex >= history.length - 1}
+                className='w-8 h-8 p-0 rounded-sm hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50'
+                title='Redo (Ctrl+Y)'
+              >
+                <Redo2 className='w-4 h-4' />
+              </Button>
+              <div className='w-px h-6 mx-1 bg-border'></div>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={() => reactFlowInstance?.zoomIn({ duration: 200 })}
+                className='w-8 h-8 p-0 rounded-sm hover:bg-accent'
+                title='Zoom In'
+              >
+                <Plus className='w-4 h-4' />
+              </Button>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={() => reactFlowInstance?.zoomOut({ duration: 200 })}
+                className='w-8 h-8 p-0 rounded-sm hover:bg-accent'
+                title='Zoom Out'
+              >
+                <Minus className='w-4 h-4' />
+              </Button>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={() =>
+                  reactFlowInstance?.fitView({ padding: 0.1, duration: 200 })
+                }
+                className='w-8 h-8 p-0 rounded-sm hover:bg-accent'
+                title='Fit View'
+              >
+                <Maximize2 className='w-4 h-4' />
+              </Button>
+            </div>
+          </div>
+          <ReactFlow
+            proOptions={{ hideAttribution: true }}
+            nodes={nodes}
+            edges={edges}
+            nodeTypes={nodeTypes}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onNodesDelete={onNodesDelete}
+            onEdgesDelete={onEdgesDelete}
+            onConnect={handleConnect}
+            onNodeClick={onNodeClick}
+            onPaneClick={onPaneClick}
+            onNodeDragStart={onNodeDragStart}
+            onNodeDrag={onNodeDrag}
+            onNodeDragStop={onNodeDragStop}
+            onEdgeClick={(event, edge) => {
+              setNodes((prevNodes) => {
+                const updatedNodes = prevNodes.map((node) => {
+                  if (node.id === edge.target) {
+                    return {
+                      ...node,
+                      data: {
+                        ...node.data,
+                        connectedItems: (
+                          node.data.connectedItems || []
+                        ).filter((id: string) => id !== edge.source),
+                      },
+                    };
+                  }
+                  return node;
+                });
+                setEdges((eds) => {
+                  const newEdges = eds.filter((e) => e.id !== edge.id);
+                  addToHistory(updatedNodes, newEdges);
+                  return newEdges;
+                });
+                return updatedNodes;
+              });
+            }}
+            onInit={setReactFlowInstance}
+            onMoveEnd={onMoveEnd}
+            defaultViewport={viewport}
+            panOnDrag={true}
+            zoomOnScroll={true}
+            zoomOnPinch={true}
+            zoomOnDoubleClick={true}
+            minZoom={0.1}
+            maxZoom={2}
+            selectNodesOnDrag={false}
+            nodesDraggable={true}
+            nodesConnectable={true}
+            elementsSelectable={true}
+            fitView={false}
+            fitViewOptions={{ padding: 0.1 }}
+            preventScrolling={false}
+          >
+            <Background />
+          </ReactFlow>
+        </div>
       </div>
     );
   }

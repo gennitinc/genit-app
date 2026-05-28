@@ -1,5 +1,7 @@
 "use client";
 
+import { MessageContainer } from "@/components/chat/messages/message-container";
+import { MessageContent } from "@/components/chat/messages/message-content";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { Response } from "@/components/ai-elements/response";
 import { UserMessage } from "@/components/chat/messages/user-message";
@@ -11,7 +13,7 @@ import type {
   AgentTask,
   AgentToolCall,
 } from "@/lib/agents-api";
-import { AlertTriangle, CalendarCheck2, Loader2 } from "lucide-react";
+import { AlertTriangle, CalendarCheck2, Loader2, CheckCircle2, XCircle, Clock } from "lucide-react";
 import { AgentCard } from "./agent-card";
 import { AgentPlan } from "./agent-plan";
 import { AgentThinkingStream } from "./agent-thinking-stream";
@@ -44,6 +46,13 @@ function humanizeToolName(name: string): string {
 }
 
 function ToolCallView({ call }: { call: AgentToolCall }) {
+  // Hide request_user_input tool calls from the tool call UI list completely,
+  // since the elicitation card itself handles asking the user, and a tool card
+  // for "request_user_input" is redundant and clutters the UI.
+  if (call.name === "request_user_input") {
+    return null;
+  }
+
   // Pending — tool still running.
   if (!call.result) {
     return (
@@ -125,23 +134,49 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
   );
 }
 
-function StatusDot({ status }: { status: AgentRunStatus }) {
-  const cls =
-    status === "running"
-      ? "bg-foreground animate-pulse"
-      : status === "awaiting_input" || status === "awaiting_integration"
-        ? "bg-amber-500"
-        : status === "completed"
-          ? "bg-emerald-500"
-          : status === "failed"
-            ? "bg-rose-500"
-            : "bg-muted-foreground/40";
-  return (
-    <span
-      aria-hidden
-      className={`h-1.5 w-1.5 rounded-full ${cls}`}
-    />
-  );
+/** Small inline status badge that sits right next to the "Gennit" name in the header. */
+function StatusBadge({ status }: { status: AgentRunStatus }) {
+  if (status === "running") {
+    return (
+      <span className='inline-flex items-center gap-1 rounded-full bg-foreground/[0.06] px-2 py-0.5 text-[10.5px] font-medium text-muted-foreground dark:bg-white/[0.06]'>
+        <Loader2 className='h-2.5 w-2.5 animate-spin' />
+        Working
+      </span>
+    );
+  }
+  if (status === "awaiting_input") {
+    return (
+      <span className='inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10.5px] font-medium text-amber-600 dark:text-amber-400'>
+        <span className='h-1.5 w-1.5 rounded-full bg-amber-500' />
+        Waiting on you
+      </span>
+    );
+  }
+  if (status === "awaiting_integration") {
+    return (
+      <span className='inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10.5px] font-medium text-amber-600 dark:text-amber-400'>
+        <span className='h-1.5 w-1.5 rounded-full bg-amber-500' />
+        Connect account
+      </span>
+    );
+  }
+  if (status === "completed") {
+    return (
+      <span className='inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10.5px] font-medium text-emerald-600 dark:text-emerald-400'>
+        <CheckCircle2 className='h-2.5 w-2.5' />
+        Done
+      </span>
+    );
+  }
+  if (status === "failed") {
+    return (
+      <span className='inline-flex items-center gap-1 rounded-full bg-rose-500/10 px-2 py-0.5 text-[10.5px] font-medium text-rose-600 dark:text-rose-400'>
+        <XCircle className='h-2.5 w-2.5' />
+        Failed
+      </span>
+    );
+  }
+  return null;
 }
 
 export function AgentMessage({
@@ -153,27 +188,9 @@ export function AgentMessage({
   userAvatar?: string;
   userName?: string;
 }) {
-  const active =
-    run.status === "running" ||
-    run.status === "awaiting_input" ||
-    run.status === "awaiting_integration";
-
-  const label =
-    active && run.status === "running"
-      ? "Working"
-      : run.status === "awaiting_integration"
-        ? "Waiting on connection"
-        : run.status === "awaiting_input"
-          ? "Waiting on you"
-          : run.status === "completed"
-            ? "Done"
-            : run.status === "failed"
-              ? "Failed"
-              : "";
-
   return (
     <div className='flex flex-col gap-4'>
-      {/* User prompt bubble */}
+      {/* User prompt bubble — same as a regular user message */}
       {run.prompt && (
         <UserMessage
           message={{
@@ -185,66 +202,70 @@ export function AgentMessage({
         />
       )}
 
-      {/* Agent response */}
-      <div className='flex flex-col gap-1.5'>
-      <div className='flex items-center gap-2.5'>
-        <AvatarDisplay
-          variant='ai'
-          alt='Gennit'
-          src='../../resources/images/gennit2.png'
-          fallback='../../resources/images/gennit2.png'
-        />
-        <div className='flex items-center gap-2'>
+      {/* Agent response — wrapped in the same MessageContainer as AIMessage */}
+      <MessageContainer
+        avatar={
+          <AvatarDisplay
+            variant='ai'
+            alt='Gennit'
+            src='../../resources/images/gennit2.png'
+            fallback='../../resources/images/gennit2.png'
+          />
+        }
+      >
+        {/* Header row: name + inline status badge */}
+        <div className='mb-2 flex items-center gap-2'>
           <span className='text-foreground text-[12px] font-medium tracking-tight'>
             Gennit
           </span>
-          {label && (
-            <>
-              <span className='text-muted-foreground/50 text-[12px]'>·</span>
-              <StatusDot status={run.status} />
-              <span className='text-muted-foreground text-[11.5px]'>
-                {label}
-              </span>
-            </>
-          )}
+          <StatusBadge status={run.status} />
         </div>
-      </div>
 
-      <div className='ml-9'>
-        <AgentPlan tasks={run.plan} />
-        <AgentThinkingStream
-          text={run.thinking}
-          active={run.thinkingActive && run.status === "running"}
-        />
+        <MessageContent variant='ai' className='bg-transparent'>
+          <div className='space-y-1'>
+            {/* Thinking stream — collapsible, same border/bg style as the rest */}
+            <AgentThinkingStream
+              text={run.thinking}
+              active={run.thinkingActive && run.status === "running"}
+            />
 
-        {run.toolCalls.map((tc) => (
-          <ToolCallView key={tc.id} call={tc} />
-        ))}
+            {/* Plan — only shown while running or if not all done */}
+            <AgentPlan tasks={run.plan} />
 
-        {run.integrationRequired && run.status === "awaiting_integration" && (
-          <ConnectIntegrationInline required={run.integrationRequired} />
-        )}
+            {/* Tool calls */}
+            {run.toolCalls.map((tc) => (
+              <ToolCallView key={tc.id} call={tc} />
+            ))}
 
-        {run.elicitation && run.status === "awaiting_input" && (
-          <ElicitationCard
-            elicitation={run.elicitation}
-            onSubmit={(v) => resumeAgentRunUserInput(run.runId, v)}
-          />
-        )}
+            {/* Integration connect prompt */}
+            {run.integrationRequired && run.status === "awaiting_integration" && (
+              <ConnectIntegrationInline required={run.integrationRequired} />
+            )}
 
-        {run.text && (
-          <div className='text-foreground mt-1 text-sm'>
-            <Response>{run.text}</Response>
+            {/* Elicitation — user clarification needed */}
+            {run.elicitation && run.status === "awaiting_input" && (
+              <ElicitationCard
+                elicitation={run.elicitation}
+                onSubmit={(v) => resumeAgentRunUserInput(run.runId, v)}
+              />
+            )}
+
+            {/* Final text response */}
+            {run.text && (
+              <div className='text-foreground mt-1 text-sm'>
+                <Response>{run.text}</Response>
+              </div>
+            )}
+
+            {/* Error */}
+            {run.error && (
+              <div className='my-2 rounded-md border border-rose-500/30 bg-rose-500/[0.04] px-3 py-2 text-xs text-rose-700 dark:bg-rose-500/[0.06] dark:text-rose-300'>
+                {run.error}
+              </div>
+            )}
           </div>
-        )}
-
-        {run.error && (
-          <div className='my-2 rounded-md border border-rose-500/30 bg-rose-500/[0.04] px-3 py-2 text-xs text-rose-700 dark:bg-rose-500/[0.06] dark:text-rose-300'>
-            {run.error}
-          </div>
-        )}
-      </div>
-      </div>
+        </MessageContent>
+      </MessageContainer>
     </div>
   );
 }

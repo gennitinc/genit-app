@@ -18,96 +18,10 @@ interface AgentRunsContextValue {
     attachedFiles?: { name: string; type: string; url: string }[],
     selectedIntegrations?: Record<string, string>
   ) => Promise<{ runId: string } | null>;
-  isAgenticQuery: (prompt: string) => boolean;
   clear: () => void;
 }
 
 const AgentRunsContext = createContext<AgentRunsContextValue | null>(null);
-
-// Keyword router. The existing /generate flow stays the default for pure
-// design/image generation (no integration verbs). Anything that names a
-// platform, asks about scheduling, publishing, sending, reading insights,
-// or interacting with connected accounts goes to the Claude agent.
-const AGENTIC_KEYWORDS = [
-  // verbs that imply taking action across integrations
-  "post",
-  "publish",
-  "schedule",
-  "send",
-  "email",
-  "dm",
-  "message",
-  "reply",
-  "broadcast",
-  "tweet",
-  "draft",
-  "upload",
-  "share",
-  // calendar / drive / docs
-  "calendar",
-  "meeting",
-  "event",
-  "appointment",
-  "today",
-  "tomorrow",
-  "this week",
-  "next week",
-  "drive",
-  "folder",
-  "file",
-  // analytics / insights
-  "insights",
-  "analytics",
-  "report",
-  "stats",
-  "metrics",
-  "performance",
-  // platforms (catch any prompt that names one)
-  "facebook",
-  "instagram",
-  "threads",
-  "linkedin",
-  "twitter",
-  " x ",
-  "tiktok",
-  "youtube",
-  "pinterest",
-  "snapchat",
-  "meta ads",
-  "google ads",
-  "tiktok ads",
-  "gmail",
-  "outlook",
-  "brevo",
-  "mailchimp",
-  "whatsapp",
-  "telegram",
-  // generic content workflow
-  "campaign",
-  "content",
-  "audience",
-  "followers",
-  "comments",
-  // brand & strategy & research
-  "brand",
-  "strategy",
-  "strategies",
-  "growth",
-  "grow",
-  "analysis",
-  "analyze",
-  "search",
-  "research",
-  "competitor",
-  "competitors",
-  "find",
-  "look up",
-];
-
-function detectAgentic(prompt: string): boolean {
-  const p = ` ${prompt.toLowerCase()} `;
-  return AGENTIC_KEYWORDS.some((k) => p.includes(k));
-}
 
 export function AgentRunsProvider({ children }: { children: ReactNode }) {
   const { project } = useProjectDesign();
@@ -139,7 +53,7 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
   );
 
   const value = useMemo<AgentRunsContextValue>(
-    () => ({ runs, startAgent, isAgenticQuery: detectAgentic, clear }),
+    () => ({ runs, startAgent, clear }),
     [runs, startAgent, clear]
   );
 

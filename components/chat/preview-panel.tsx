@@ -7,11 +7,33 @@ import {
   WebPreviewUrl,
 } from "../ai-elements/web-preview";
 import { GraphicsCanvas } from "./graphics-canvas";
+import GennittWorkflow from "../workflow";
+import AutomationWorkflow from "../automation";
 import { useProjectDesign } from "@/context/DesignProject";
-import { Globe, Image as ImageIcon, Layout, Loader2 } from "lucide-react";
+import { Globe, Image as ImageIcon, Layout, Loader2, Workflow, Settings, Maximize2, Minimize2 } from "lucide-react";
 import React from "react";
 
-export const PreviewPanel = () => {
+export const PreviewPanel = ({ isFullscreen, onToggleFullscreen }: { isFullscreen?: boolean; onToggleFullscreen?: () => void }) => {
+  const { project } = useProjectDesign();
+  const isAutomation = project?.category === "automation";
+
+  return (
+    <>
+      <PreviewPanelContent isFullscreen={isFullscreen} onToggleFullscreen={onToggleFullscreen} />
+      {onToggleFullscreen && !isAutomation && (
+        <button
+          onClick={onToggleFullscreen}
+          className="absolute top-4 right-4 z-50 flex h-8 w-8 items-center justify-center rounded-md border border-border/50 bg-background/80 text-foreground shadow-sm backdrop-blur hover:bg-accent"
+          title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+        >
+          {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+        </button>
+      )}
+    </>
+  );
+};
+
+const PreviewPanelContent = ({ isFullscreen, onToggleFullscreen }: { isFullscreen?: boolean; onToggleFullscreen?: () => void }) => {
   const { project, isLoadingProject } = useProjectDesign();
 
   React.useEffect(() => {
@@ -60,6 +82,19 @@ export const PreviewPanel = () => {
   const isWebsite =
     project.category?.includes("website") ||
     project.category?.includes("landing");
+
+  const isAutomation = project.category === "automation";
+
+
+  if (isAutomation) {
+    return (
+      <div className='bg-muted/5 flex h-full flex-col border p-0 border-zinc-200 dark:border-zinc-800/50 overflow-hidden rounded-3xl'>
+        <div className='flex-1 min-h-0 relative'>
+          <AutomationWorkflow slug={project._id} embedMode={true} isFullscreen={isFullscreen} onToggleFullscreen={onToggleFullscreen} />
+        </div>
+      </div>
+    );
+  }
 
   if (isWebsite) {
     // We expect website data to be in messages or a specific field

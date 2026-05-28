@@ -42,6 +42,7 @@ export function TextChatContent() {
     generatingForMessageId,
     generateMessage,
     aiStatus,
+    isLoadingProject,
   } = useProjectDesign();
 
   const { runs: agentRuns } = useAgentRunsContext();
@@ -53,14 +54,18 @@ export function TextChatContent() {
       createdAt: m.createdAt ? new Date(m.createdAt).getTime() : 0,
       data: m,
     })),
-    ...agentRuns.map((r) => ({
-      type: "agent" as const,
-      createdAt: r.createdAt,
-      data: r,
-    })),
+    ...agentRuns
+      .filter((r) => r.status !== "completed")
+      .map((r) => ({
+        type: "agent" as const,
+        createdAt: r.createdAt,
+        data: r,
+      })),
   ].sort((a, b) => a.createdAt - b.createdAt);
 
-  const isEmpty = allItems.length === 0 && !isTyping;
+  // Don't show empty state while the project is still loading — it causes a
+  // 'Start a conversation' flash on redirect to a chat URL.
+  const isEmpty = allItems.length === 0 && !isTyping && !isLoadingProject;
 
   const skeletonRef = useRef<HTMLDivElement | null>(null);
   const scrollElRef = useRef<HTMLElement | null>(null);
@@ -487,6 +492,17 @@ export function TextChatContent() {
                   <p className='text-sm'>
                     Ask me anything or describe what you'd like to create
                   </p>
+                </div>
+              </div>
+            )}
+
+            {/* Loading skeleton while project is fetching on first redirect */}
+            {isLoadingProject && allItems.length === 0 && (
+              <div className='flex min-h-[40vh] flex-1 flex-col items-center justify-center gap-3'>
+                <div className='flex flex-col items-center gap-4 w-full max-w-md px-6'>
+                  <div className='h-4 w-3/4 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
+                  <div className='h-4 w-1/2 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
+                  <div className='h-4 w-5/6 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
                 </div>
               </div>
             )}

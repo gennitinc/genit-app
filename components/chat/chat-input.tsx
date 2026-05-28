@@ -12,6 +12,7 @@ import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
+import { classifyPrompt } from "@/lib/agents-api";
 import { trackEvent } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
@@ -81,7 +82,14 @@ export function ChatInput({
     brandSaveStatus,
   } = useProjectDesign();
 
-  const { startAgent, isAgenticQuery } = useAgentRunsContext();
+  const { startAgent, runs } = useAgentRunsContext();
+  // Spin + disable while the agent is actively processing tool calls in the background.
+  const isAgentRunning = runs.some((r) => r.status === "running");
+  // Disable (no spin) when the agent is paused waiting for the user to reply in-thread.
+  const isAgentAwaitingInput = runs.some(
+    (r) => r.status === "awaiting_input" || r.status === "awaiting_integration"
+  );
+  const [isClassifying, setIsClassifying] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputSectionRef = useRef<HTMLDivElement>(null);
@@ -192,19 +200,22 @@ export function ChatInput({
     }
 
     try {
-      // Use projectId for proper server routing
       trackEvent("generation_requested", {
         prompt_length: inputValue.trim().length,
         attachment_count: attachedFiles.length,
         project_id: project._id,
       });
 
-      // Route agentic queries (calendar, schedule, etc.) to the Claude agent
-      // orchestrator. Everything else stays on the existing /generate flow
-      // (image gen, design generation) until those tools migrate.
-      if (isAgenticQuery(inputValue)) {
+      // Ask the backend AI classifier to decide routing — reasoning-based, not keyword-based.
+      // This handles typos ("calender"), short follow-ups ("delete them", "yes", "do it"), etc.
+      setIsClassifying(true);
+      const isAgentic = await classifyPrompt(inputValue);
+      setIsClassifying(false);
+
+      if (isAgentic) {
+        // Build uploaded file list for the agent
         let uploadedFiles: { name: string; type: string; url: string }[] | undefined;
-        
+
         if (attachedFiles.length > 0) {
           const formData = new FormData();
           for (const file of attachedFiles as any[]) {
@@ -215,11 +226,11 @@ export function ChatInput({
               uploadedFiles.push({
                 name: file.name || "file",
                 type: file.type || "application/octet-stream",
-                url: file.url || file.filePath
+                url: file.url || file.filePath,
               });
             }
           }
-          
+
           if (formData.has("files")) {
             toast.loading("Uploading files...", { id: "agent-upload" });
             try {
@@ -234,23 +245,25 @@ export function ChatInput({
             }
           }
         }
-        
+
         await startAgent(inputValue, uploadedFiles);
       } else {
+        // Design/image/text generation flow
         await generateMessage(inputValue, attachedFiles, project._id);
       }
 
       trackEvent("generation_request_submitted", {
         project_id: project._id,
+        routed_to: isAgentic ? "agent" : "design",
       });
 
       clearInput();
 
-      // Force scroll to bottom when sending a new message
       setTimeout(() => {
         window.dispatchEvent(new Event("scroll-chat-to-bottom"));
       }, 100);
     } catch (error) {
+      setIsClassifying(false);
       console.error("Failed to send message:", error);
       trackEvent("generation_request_failed", {
         project_id: project?._id,
@@ -534,7 +547,7 @@ export function ChatInput({
                       : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
                   }`}
                   onClick={handleMicClick}
-                  disabled={!isSupported || isGenerating || isAgenticQuery(inputValue)}
+                  disabled={!isSupported || isGenerating || isAgentRunning || isAgentAwaitingInput || isClassifying}
                 >
                   <Mic className='size-4 shrink-0' />
                 </button>
@@ -542,11 +555,14 @@ export function ChatInput({
                   type='submit'
                   disabled={
                     isGenerating ||
-                    (!inputValue.trim() && attachedFiles.length === 0) || isAgenticQuery(inputValue)
+                    isClassifying ||
+                    isAgentRunning ||
+                    isAgentAwaitingInput ||
+                    (!inputValue.trim() && attachedFiles.length === 0)
                   }
                   className='bg-primary text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
                 >
-                  {isGenerating || isAgenticQuery(inputValue) ? (
+                  {isGenerating || isAgentRunning || isClassifying ? (
                     <Loader2 className='h-4 w-4 animate-spin' />
                   ) : (
                     <svg

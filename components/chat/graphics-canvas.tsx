@@ -272,7 +272,7 @@ const GraphicsCanvasContent = () => {
                 Gennit Workspace
               </p>
               <p className='text-xs text-neutral-200 dark:text-neutral-900'>
-                Project files will appear here
+                Project files will appear here if any
               </p>
             </div>
           </div>

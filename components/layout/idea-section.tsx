@@ -1245,12 +1245,12 @@ export function IdeaSection() {
                         </div>
 
                         <div className='flex items-center gap-3'>
-                          <BrandIndicator
+                          {/* <BrandIndicator
                             onClick={() => {
                               setIsBrandSettingsOpen(!isBrandSettingsOpen);
                               setIsSettingsOpen(false);
                             }}
-                          />
+                          /> */}
                         </div>
 
                         {user && (user?.creditsRemaining ?? 0) === 0 && (

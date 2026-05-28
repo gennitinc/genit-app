@@ -1,7 +1,7 @@
 import { demoMessages } from "../components/chat/dummyMessage";
 import { useUserContext } from "./AuthenticatedContext";
 import { toast } from "@/hooks/use-toast";
-import { startAgentRun } from "@/lib/agents-api";
+import { startAgentRun, classifyPrompt } from "@/lib/agents-api";
 import {
   IDesignProject,
   IProjectDesignContext,
@@ -135,7 +135,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           return null;
         }
 
-        if (msg.parts && Array.isArray(msg.parts)) {
+        if (msg.parts && Array.isArray(msg.parts) && msg.parts.length > 0) {
           return {
             ...msg,
             id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
@@ -797,12 +797,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           setAttachedFiles(restoredFiles);
         }
 
-        const isAgentic = (p: string) => {
-          const lower = ` ${p.toLowerCase()} `;
-          return ["post", "publish", "schedule", "send", "email", "dm", "message", "reply", "broadcast", "tweet", "draft", "upload", "share", "calendar", "meeting", "event", "appointment", "today", "tomorrow", "this week", "next week", "drive", "folder", "file", "insights", "analytics", "report", "stats", "metrics", "performance", "facebook", "instagram", "threads", "linkedin", "twitter", " x ", "tiktok", "youtube", "pinterest", "snapchat", "meta ads", "google ads", "tiktok ads", "gmail", "outlook", "brevo", "mailchimp", "whatsapp", "telegram", "campaign", "content", "audience", "followers", "comments", "brand", "strategy", "strategies", "growth", "grow", "analysis", "analyze", "search", "research", "competitor", "competitors", "find", "look up"].some(k => lower.includes(k));
-        };
+        // Use backend AI classifier to decide routing — handles typos + follow-ups correctly
+        const isAgenticPrompt = await classifyPrompt(prompt);
 
-        if (isAgentic(prompt)) {
+        if (isAgenticPrompt) {
           try {
             let agentFiles = undefined;
             
