@@ -234,7 +234,7 @@ export function AutomationNodeCreatedCard({ data }: { data: any }) {
         <span className='flex items-center gap-1.5'>
           <span>Node added</span>
           <span className='text-muted-foreground font-normal'>·</span>
-          <span className={config.color}>{config.label}</span>
+          <span className={"text-foreground"}>{config.label}</span>
         </span>
       }
       meta={

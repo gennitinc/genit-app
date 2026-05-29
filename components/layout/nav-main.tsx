@@ -28,12 +28,12 @@ export function NavMain() {
       title: "Integrations",
       icon: GitBranchPlus,
       href: "/integrations",
+      badge: "New",
     },
     {
       title: "Apps",
       icon: Grid2X2Plus,
       href: "/apps",
-      badge: "New",
     },
     // {
     //   title: "Workflow",
