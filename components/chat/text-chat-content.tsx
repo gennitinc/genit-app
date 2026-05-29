@@ -47,15 +47,30 @@ export function TextChatContent() {
 
   const { runs: agentRuns } = useAgentRunsContext();
 
+  // We filter out regular messages that exactly match AgentRun prompts or final texts.
+  // This cleans up historical database records from before we stopped duplicating AgentRuns as plain messages.
+  const agentPrompts = new Set(agentRuns.map(r => r.prompt?.trim()).filter(Boolean));
+  const agentTexts = new Set(agentRuns.map(r => r.text?.trim()).filter(Boolean));
+
   // Merge regular messages and agent runs into a single chronologically-sorted list.
   const allItems: { type: "message" | "agent"; createdAt: number; data: any }[] = [
-    ...(messages || []).map((m: any) => ({
-      type: "message" as const,
-      createdAt: m.createdAt ? new Date(m.createdAt).getTime() : 0,
-      data: m,
-    })),
+    ...(messages || [])
+      .filter((m: any) => {
+        const text = m.parts?.find((p: any) => p.type === "text")?.text?.trim() || m.text?.trim() || "";
+        if (!text) return true;
+        if (m.type === "user" || m.role === "user") {
+          if (agentPrompts.has(text)) return false;
+        } else if (m.type === "ai" || m.role === "assistant") {
+          if (agentTexts.has(text)) return false;
+        }
+        return true;
+      })
+      .map((m: any) => ({
+        type: "message" as const,
+        createdAt: m.createdAt ? new Date(m.createdAt).getTime() : 0,
+        data: m,
+      })),
     ...agentRuns
-      .filter((r) => r.status !== "completed")
       .map((r) => ({
         type: "agent" as const,
         createdAt: r.createdAt,

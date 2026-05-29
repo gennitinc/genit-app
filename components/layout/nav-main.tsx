@@ -33,13 +33,14 @@ export function NavMain() {
       title: "Apps",
       icon: Grid2X2Plus,
       href: "/apps",
-    },
-    {
-      title: "Workflow",
-      icon: Workflow,
-      href: "/apps/workflow",
       badge: "New",
     },
+    // {
+    //   title: "Workflow",
+    //   icon: Workflow,
+    //   href: "/apps/workflow",
+    //   badge: "New",
+    // },
     {
       title: "Community",
       icon: Users,

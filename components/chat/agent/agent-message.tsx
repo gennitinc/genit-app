@@ -53,13 +53,25 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
     return null;
   }
 
+  // Friendlier in-progress label for automation tools
+  const pendingLabel = (() => {
+    if (call.name === "create_automation_node") {
+      const title = call.args?.data?.title || call.args?.type || "node";
+      return `Creating ${title}`;
+    }
+    if (call.name === "connect_automation_nodes") {
+      return "Connecting nodes";
+    }
+    return humanizeToolName(call.name);
+  })();
+
   // Pending — tool still running.
   if (!call.result) {
     return (
       <div className='border-border/70 bg-card text-muted-foreground my-3 flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-[12.5px] shadow-[0_1px_0_rgba(0,0,0,0.02)] dark:border-white/10 dark:bg-white/[0.02] dark:shadow-none'>
         <Loader2 className='text-foreground h-3.5 w-3.5 animate-spin' />
         <span className='text-foreground font-medium'>
-          {humanizeToolName(call.name)}
+          {pendingLabel}
         </span>
         <span className='text-muted-foreground'>running…</span>
       </div>

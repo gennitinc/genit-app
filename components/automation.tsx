@@ -55,6 +55,7 @@ import {
   ArrowLeftRight,
   Globe,
   View,
+  GitBranchIcon,
 } from "lucide-react";
 import {
   EyeIcon as Eye,
@@ -783,7 +784,7 @@ export default function AutomationWorkflow({
       {/* ── Header with Title & Toolbar (side-by-side) ──────────────── */}
       <div className='flex items-center justify-between px-4 py-2 border-b border-border/80 bg-background/50 backdrop-blur-sm shrink-0 z-10'>
         <div className='flex items-center gap-2 text-foreground'>
-          <Settings className='text-primary h-4 w-4 animate-spin-slow text-amber-500' />
+          <GitBranchIcon className='text-primary h-4 w-4 animate-spin-slow text-amber-500' />
           <span className='text-sm font-semibold'>Automation</span>
         </div>
 
@@ -802,7 +803,7 @@ export default function AutomationWorkflow({
                 )}
                 title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
               >
-                <View className='h-3.5 w-3.5' />
+                <Maximize2 className='h-3.5 w-3.5' />
               </Button>
               <div className='w-px h-5 bg-border' />
             </>
@@ -893,7 +894,7 @@ export default function AutomationWorkflow({
             className='w-7 h-7 p-0 rounded hover:bg-accent'
             title='Fit View'
           >
-            <Maximize2 className='w-3.5 h-3.5' />
+            <View className='w-3.5 h-3.5' />
           </Button>
 
           {/* Add Node (edit mode only) */}

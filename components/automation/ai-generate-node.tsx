@@ -1,10 +1,9 @@
-"use client";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Handle, type NodeProps, Position } from "reactflow";
-import { Sparkles, Trash2 } from "lucide-react";
+import { Sparkles, Trash2, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AI_CONTENT_TYPES, type AIContentType } from "./automation-types";
+import { modelApi } from "@/utils/inspire-api";
 
 interface AIGenerateNodeData {
   title: string;
@@ -31,6 +30,27 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
   const contentLabel =
     AI_CONTENT_TYPES.find((c) => c.id === data.contentType)?.label ||
     data.contentType;
+
+  const [serverModels, setServerModels] = useState<any[]>([]);
+  const [isLoadingModels, setIsLoadingModels] = useState(false);
+
+  useEffect(() => {
+    if (!isEdit) return;
+    const fetchModels = async () => {
+      setIsLoadingModels(true);
+      try {
+        const response = await modelApi.getAll({ type: data.contentType });
+        if (response.data) {
+          setServerModels(response.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch models:", error);
+      } finally {
+        setIsLoadingModels(false);
+      }
+    };
+    fetchModels();
+  }, [data.contentType, isEdit]);
 
   return (
     <div
@@ -88,7 +108,7 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
                   <button
                     key={ct.id}
                     onClick={() =>
-                      data.onNodeDataChange(id, { contentType: ct.id })
+                      data.onNodeDataChange(id, { contentType: ct.id, model: "" })
                     }
                     className={cn(
                       "flex-1 rounded-md px-1.5 py-1 text-[10px] font-medium transition-colors border border-transparent",
@@ -103,43 +123,28 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
               </div>
             </div>
 
-            <div>
+            <div className="relative">
               <label className={labelCls}>Model</label>
-              <select
-                value={data.model || ""}
-                onChange={(e) =>
-                  data.onNodeDataChange(id, { model: e.target.value })
-                }
-                className={selectCls}
-              >
-                <option value="" className="bg-neutral-900 text-neutral-200">Auto (default)</option>
-                {data.contentType === "text" && (
-                  <>
-                    <option value="gpt-4o" className="bg-neutral-900 text-neutral-200">GPT-4o</option>
-                    <option value="claude-3-5-sonnet" className="bg-neutral-900 text-neutral-200">Claude 3.5 Sonnet</option>
-                    <option value="gemini-1-5-pro" className="bg-neutral-900 text-neutral-200">Gemini 1.5 Pro</option>
-                  </>
+              <div className="relative">
+                <select
+                  value={data.model || ""}
+                  onChange={(e) =>
+                    data.onNodeDataChange(id, { model: e.target.value })
+                  }
+                  className={cn(selectCls, isLoadingModels && "opacity-50")}
+                  disabled={isLoadingModels}
+                >
+                  <option value="" className="bg-neutral-900 text-neutral-200">Auto (default)</option>
+                  {serverModels.map((m) => (
+                    <option key={m.modelId} value={m.modelId} className="bg-neutral-900 text-neutral-200">
+                      {m.name}
+                    </option>
+                  ))}
+                </select>
+                {isLoadingModels && (
+                  <Loader2 className="absolute right-6 top-1/2 -translate-y-1/2 h-3.5 w-3.5 animate-spin text-neutral-400 pointer-events-none" />
                 )}
-                {data.contentType === "image" && (
-                  <>
-                    <option value="stable-diffusion-3" className="bg-neutral-900 text-neutral-200">Stable Diffusion 3</option>
-                    <option value="dalle-3" className="bg-neutral-900 text-neutral-200">DALL-E 3</option>
-                    <option value="midjourney-v6" className="bg-neutral-900 text-neutral-200">Midjourney v6</option>
-                  </>
-                )}
-                {data.contentType === "video" && (
-                  <>
-                    <option value="sora" className="bg-neutral-900 text-neutral-200">Sora</option>
-                    <option value="runway-gen-2" className="bg-neutral-900 text-neutral-200">Runway Gen-2</option>
-                  </>
-                )}
-                {data.contentType === "audio" && (
-                  <>
-                    <option value="elevenlabs" className="bg-neutral-900 text-neutral-200">ElevenLabs</option>
-                    <option value="suno-v3" className="bg-neutral-900 text-neutral-200">Suno v3</option>
-                  </>
-                )}
-              </select>
+              </div>
             </div>
 
             {(data.contentType === "image" || data.contentType === "video") && (

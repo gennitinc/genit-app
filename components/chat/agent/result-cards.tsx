@@ -14,6 +14,10 @@ import {
   Users,
 } from "lucide-react";
 import { AgentCard } from "./agent-card";
+import {
+  AutomationNodeCreatedCard,
+  AutomationNodesConnectedCard,
+} from "./automation-cards";
 
 // Tiny inline link with a trailing icon — consistent treatment across cards.
 function ExternalLinkInline({
@@ -424,6 +428,10 @@ export function renderToolResult(
     case "contact_list":
     case "contact_created":
       return <ContactListCard data={data} />;
+    case "automation_node_created":
+      return <AutomationNodeCreatedCard data={data} />;
+    case "automation_nodes_connected":
+      return <AutomationNodesConnectedCard data={data} />;
     default:
       return null;
   }
