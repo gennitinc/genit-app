@@ -70,6 +70,7 @@ export interface IMessage {
   metadata?: Record<string, any>;
   parts: IMessagePart[];
   generationGroups?: IGenerationGroup[];
+  isHidden?: boolean;
   feedback?: {
     like?: number;
     dislike?: number;

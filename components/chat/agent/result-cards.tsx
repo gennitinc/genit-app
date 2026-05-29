@@ -7,6 +7,7 @@ import {
   File as FileIcon,
   FileText,
   Folder,
+  LayoutGrid,
   Mail,
   MessageSquare,
   Send,
@@ -18,6 +19,10 @@ import {
   AutomationNodeCreatedCard,
   AutomationNodesConnectedCard,
 } from "./automation-cards";
+import { Button } from "@/components/ui/button";
+import { useProjectDesign } from "@/context/DesignProject";
+import { apiResponse } from "@/utils/apiResponse";
+import { toast } from "@/hooks/use-toast";
 
 // Tiny inline link with a trailing icon — consistent treatment across cards.
 function ExternalLinkInline({
@@ -397,6 +402,124 @@ export function ContactListCard({ data }: { data: any }) {
   );
 }
 
+// ─── Generated Design/Video ───
+export function GeneratedDesignCard({ data }: { data: any }) {
+  const isVideo = data.url?.endsWith(".mp4") || data.message?.includes("video");
+  const { project, setFocusedGenerationId } = useProjectDesign();
+  const projectId = project?._id;
+
+  const handleSetAsActive = async (itemId: string, generationGroupId: string) => {
+    if (!projectId) return;
+    try {
+      const response = await apiResponse.post(
+        `/projects/${projectId}/set-active-generation`,
+        {
+          generationGroupId,
+          itemId,
+        },
+        { withCredentials: true }
+      );
+
+      if (response.data?.success) {
+        toast({
+          title: "Selection saved",
+          description: "This version is now the active one for this card.",
+        });
+      } else {
+        throw new Error(response.data?.message || "Failed to update selection");
+      }
+    } catch (err: any) {
+      toast({
+        title: "Error",
+        description: err.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  return (
+    <AgentCard
+      icon={isVideo ? <TrendingUp className="h-3.5 w-3.5" /> : <FileIcon className='h-3.5 w-3.5' />}
+      title={isVideo ? 'Generated Video' : 'Generated Design'}
+      tone='success'
+    >
+      <div className='text-foreground text-[13.5px] font-medium'>
+        {data.name || "Design generated"}
+      </div>
+      {isVideo ? (
+         <video src={data.url} controls className='border-border/70 mt-3 max-h-48 w-auto rounded-md border object-cover dark:border-white/10' />
+      ) : (
+         <img
+           src={data.url}
+           alt={data.name || 'Design'}
+           className='border-border/70 mt-3 max-h-48 w-auto rounded-md border object-cover dark:border-white/10'
+         />
+      )}
+      {data.url && (
+        <div className='mt-3 flex items-center gap-3'>
+          {!isVideo && (
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={(e) => {
+                e.stopPropagation();
+                const cleanId = data.id || data.url;
+                if (data.id && data.generationGroupId) {
+                  handleSetAsActive(data.id, data.generationGroupId);
+                }
+                if (setFocusedGenerationId) {
+                  setFocusedGenerationId(null);
+                  setTimeout(() => {
+                    setFocusedGenerationId(cleanId);
+                  }, 10);
+                }
+              }}
+              className='border-primary/30 text-primary hover:bg-primary/5 h-7 w-fit gap-1.5 px-2 text-xs flex'
+            >
+              <LayoutGrid className='h-3 w-3' />
+              View
+            </Button>
+          )}
+          <ExternalLinkInline href={data.url}>Open {isVideo ? "Video" : "Image"}</ExternalLinkInline>
+        </div>
+      )}
+    </AgentCard>
+  );
+}
+
+// ─── Design Inspiration List ───
+export function DesignInspirationCard({ data }: { data: any }) {
+  const items: any[] = Array.isArray(data) ? data : (data?.pins || data?.inspirations || []);
+  return (
+    <AgentCard
+      icon={<TrendingUp className='h-3.5 w-3.5' />}
+      title={`${items.length} design ${items.length === 1 ? "inspiration" : "inspirations"}`}
+    >
+      {items.length === 0 ? (
+        <div className='text-muted-foreground text-[12.5px]'>No inspirations found.</div>
+      ) : (
+        <div className='mt-2 grid grid-cols-2 gap-2'>
+          {items.slice(0, 4).map((item, i) => (
+            <a
+              key={item.id || i}
+              href={item.url || item.image}
+              target='_blank'
+              rel='noreferrer'
+              className='group relative block aspect-square overflow-hidden rounded-md border border-border/50 dark:border-white/10'
+            >
+              <img
+                src={item.image}
+                alt={item.alt || "Design inspiration"}
+                className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
+              />
+            </a>
+          ))}
+        </div>
+      )}
+    </AgentCard>
+  );
+}
+
 // ─── Dispatcher: pick the right card for a render hint ───
 export function renderToolResult(
   hint: string | undefined,
@@ -432,6 +555,10 @@ export function renderToolResult(
       return <AutomationNodeCreatedCard data={data} />;
     case "automation_nodes_connected":
       return <AutomationNodesConnectedCard data={data} />;
+    case "generated_design":
+      return <GeneratedDesignCard data={data} />;
+    case "design_inspiration":
+      return <DesignInspirationCard data={data} />;
     default:
       return null;
   }

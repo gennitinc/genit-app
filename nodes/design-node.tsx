@@ -20,6 +20,7 @@ import "react-mask-editor/dist/style.css";
 import { Handle, NodeProps, Position } from "reactflow";
 import { toast } from "sonner";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { serverUrlSocket } from "@/utils/apiResponse";
 
 export interface DesignNodeData {
   url: string;
@@ -27,13 +28,30 @@ export interface DesignNodeData {
   title?: string;
   status?: string;
   generationGroupId?: string;
+  type?: string;
 }
+
+const getFullUrl = (url: string) => {
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+  const baseUrl = serverUrlSocket ? serverUrlSocket.replace(/\/$/, "") : "http://localhost:8000";
+  return `${baseUrl}${url.startsWith("/") ? "" : "/"}${url}`;
+};
 
 export const DesignNode = memo(
   ({ data, selected, id }: NodeProps<DesignNodeData>) => {
-    const { url, title, instruction, generationGroupId } = data;
+    const { url, title, instruction, generationGroupId, type } = data;
     const { project } = useProjectDesign();
     const { inpaint, isInpainting } = useInpaint();
+
+    const isVideo =
+      type?.startsWith("video/") ||
+      url?.toLowerCase().endsWith(".mp4") ||
+      url?.toLowerCase().endsWith(".webm") ||
+      url?.toLowerCase().endsWith(".mov") ||
+      url?.toLowerCase().endsWith(".ogg");
 
     const [isInpaintMode, setIsInpaintMode] = useState(false);
     const [brushSize, setBrushSize] = useState(40);
@@ -45,18 +63,19 @@ export const DesignNode = memo(
       e.stopPropagation();
       if (!url) return;
       try {
-        const response = await fetch(url);
+        const fullUrl = getFullUrl(url);
+        const response = await fetch(fullUrl);
         const blob = await response.blob();
         const blobUrl = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = blobUrl;
-        link.download = title || "design.png";
+        link.download = title || (isVideo ? "video.mp4" : "design.png");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(blobUrl);
       } catch (error) {
-        window.open(url, "_blank");
+        window.open(getFullUrl(url), "_blank");
       }
     };
 
@@ -87,206 +106,236 @@ export const DesignNode = memo(
     };
 
     return (
-      <div className='group relative flex w-[350px] flex-col gap-2'>
-        {/* Node Title */}
-        <div className='flex items-center justify-between px-1'>
-          <h4 className='text-muted-foreground flex flex-row items-center text-[10px] font-medium'>
-            {title || "Design Variant"}
-            {selected && !isInpaintMode && (
-              <div className='flex flex-row items-center gap-2'>
-                - active{" "}
-                <div className='h-1.5 w-1.5 animate-pulse rounded-full bg-green-500' />
-              </div>
-            )}
-          </h4>
-          {isInpaintMode && (
-            <span className='text-primary animate-pulse text-[9px] font-bold tracking-tight uppercase'>
-              Inpaint Mode
-            </span>
-          )}
-        </div>
-
-        {/* Main Image Card */}
-        <div
-          className={cn(
-            "ring-offset-background relative border bg-white transition-all duration-500 dark:bg-zinc-900",
-            selected
-              ? "border-primary ring-primary z-20 scale-[1.02] shadow-[0_0_60px_-15px_rgba(var(--primary-rgb),0.6)] ring-2 ring-offset-2"
-              : "border-border shadow-sm group-hover:border-zinc-400 dark:group-hover:border-zinc-500"
-          )}
+  <div
+    className={cn(
+      "group relative flex w-[340px] flex-col",
+      selected && "z-20"
+    )}
+  >
+    {/* Floating Header */}
+    <div
+      className={cn(
+        "mb-2 flex h-10 items-center justify-between rounded-sm border border-zinc-200/70 bg-white/90 px-3 backdrop-blur-md transition-all dark:border-zinc-800 dark:bg-zinc-900/90",
+        selected &&
+          "border-primary/30"
+      )}
+    >
+      <div className={`flex min-w-0 items-center gap-2 ${selected ? "border border-purple-300 px-1 rounded-lg" : ""}`}>
+        <h4
+          className="truncate text-[11px] font-medium text-zinc-700 dark:text-zinc-300 w-20"
+          style={{ maxWidth: 180 }}
+          title={title || (isVideo ? "Video Variant" : "Design Variant")}
         >
-          <div className='bg-muted/20 relative flex h-fit w-fit items-center justify-center overflow-hidden'>
-            {url ? (
-              <img
-                src={url}
-                alt={instruction || "Design"}
-                className={cn(
-                  "h-full w-fit object-cover transition-transform duration-500",
-                  !isInpaintMode && "group-hover:scale-105"
-                )}
-                loading='lazy'
-              />
-            ) : (
-              <div className='flex flex-col items-center gap-2 opacity-50'>
-                <ImageIcon className='h-8 w-8' />
-                <span className='text-xs font-medium'>No Image</span>
-              </div>
-            )}
+          {title || (isVideo ? "Video Variant" : "Design Variant")}
+        </h4>
 
-            {/* MaskEditor Overlay */}
-            {isInpaintMode && (
-              <div className='absolute inset-0 z-40 bg-black/20'>
-                <MaskEditor
-                  src={url}
-                  canvasRef={
-                    canvasRef as React.MutableRefObject<HTMLCanvasElement>
-                  }
-                  cursorSize={brushSize}
-                  onCursorSizeChange={setBrushSize}
-                  maskOpacity={0.65}
-                  maskColor='#7c3aed'
-                  maskBlendMode='normal'
-                />
-                {/* Drawing Tooltip */}
-                <div className='pointer-events-none absolute bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-full bg-black/80 px-3 py-1 text-[10px] text-white/80 backdrop-blur'>
-                  Draw to highlight area
-                </div>
-              </div>
-            )}
+        
 
-            {/* Hover Main Actions (Normal Mode) */}
-            {!isInpaintMode && (
-              <div className='absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-between gap-2 bg-gradient-to-t from-black/60 via-black/20 to-transparent p-4 transition-transform duration-300 group-hover:translate-y-0'>
-                {/* <Button
-                variant="outline"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsInpaintMode(true);
-                }}
-                className="h-fit p-2 rounded-full bg-white/10 border-white/20 hover:bg-white text-white hover:text-black flex items-center gap-2 backdrop-blur-md"
-              >
-                <Brush className="w-2.5 h-2.5" />
-                <span className="text-[11px] font-bold">Inpaint</span>
-              </Button> */}
+     
+      </div>
 
-                <div className='flex gap-1.5'>
-                  <button
-                    onClick={handleDownload}
-                    className='flex h-fit items-center justify-center rounded-full border border-white/20 bg-white/10 p-2 text-white transition-all hover:bg-white/90 hover:text-black'
-                  >
-                    <Download className='h-2 w-2' />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.open(url, "_blank");
-                    }}
-                    className='flex h-fit items-center justify-center rounded-full border border-white/20 bg-white/10 p-2 text-white transition-all hover:bg-white/90 hover:text-black'
-                  >
-                    <ExternalLink className='h-2 w-2' />
-                  </button>
-                </div>
-              </div>
+      <div className="flex items-center gap-0.5">
+        {!isVideo && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsInpaintMode(!isInpaintMode);
+            }}
+            className={cn(
+              "h-7 w-7 rounded-xl text-zinc-500 transition-all hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white",
+              isInpaintMode &&
+                "bg-violet-100 text-violet-600 dark:bg-violet-950 dark:text-violet-400"
             )}
+          >
+            <Brush className="h-3.5 w-3.5" />
+          </Button>
+        )}
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleDownload}
+          className="h-7 w-7 rounded-xl text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white"
+        >
+          <Download className="h-3.5 w-3.5" />
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(getFullUrl(url), "_blank");
+          }}
+          className="h-7 w-7 rounded-xl text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white"
+        >
+          <ExternalLink className="h-3.5 w-3.5" />
+        </Button>
+      </div>
+    </div>
+
+    {/* Image/Video Surface */}
+    <div
+      className={cn(
+        "relative overflow-hidden rounded-sm bg-white transition-all dark:bg-zinc-955",
+        selected &&
+          "ring-1 ring-primary/20"
+      )}
+    >
+      {url ? (
+        isVideo ? (
+          <video
+            src={getFullUrl(url)}
+            className="block w-full border-b border-zinc-200 dark:border-zinc-800"
+            controls
+            preload="metadata"
+          />
+        ) : (
+          <img
+            src={getFullUrl(url)}
+            alt={instruction || "Design"}
+            className="block w-full"
+            loading="lazy"
+          />
+        )
+      ) : (
+        <div className="flex h-[300px] flex-col items-center justify-center gap-2">
+          <ImageIcon className="h-8 w-8 text-zinc-400" />
+          <span className="text-xs text-zinc-500">No Content</span>
+        </div>
+      )}
+
+      {isInpaintMode && !isVideo && (
+        <div
+          className="absolute inset-0 z-40 nodrag nopan"
+          onMouseDown={(e) => e.stopPropagation()}
+          onMouseMove={(e) => e.stopPropagation()}
+          onMouseUp={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => e.stopPropagation()}
+        >
+          <MaskEditor
+            src={getFullUrl(url)}
+            canvasRef={
+              canvasRef as React.MutableRefObject<HTMLCanvasElement>
+            }
+            cursorSize={brushSize}
+            onCursorSizeChange={setBrushSize}
+            maskOpacity={0.65}
+            maskColor="#7c3aed"
+            maskBlendMode="normal"
+          />
+
+          <div className="pointer-events-none absolute bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-full bg-black/80 px-3 py-1 text-[10px] text-white backdrop-blur">
+            Paint area to edit
+          </div>
+        </div>
+      )}
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/20 via-black/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+    </div>
+
+    {/* Inpaint Panel */}
+    {isInpaintMode && (
+      <div
+        className="mt-2 rounded-sm border border-zinc-200 bg-white p-2 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 nodrag nopan"
+        onMouseDown={(e) => e.stopPropagation()}
+        onMouseMove={(e) => e.stopPropagation()}
+        onMouseUp={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+      >
+        <div className="space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500">
+              Brush Size
+            </span>
+
+            <span className="font-mono text-[10px] text-zinc-500">
+              {brushSize}px
+            </span>
           </div>
 
-          {/* Inpaint Controls Panel (Inpaint Mode Only) */}
-          {isInpaintMode && (
-            <div className='border-border animate-in slide-in-from-bottom space-y-4 border-t bg-zinc-50 p-4 duration-300 dark:bg-zinc-900'>
-              {/* Brush & Prompt */}
-              <div className='space-y-3'>
-                <div className='flex items-center justify-between'>
-                  <span className='text-muted-foreground text-[10px] font-bold tracking-widest uppercase'>
-                    Brush Size
-                  </span>
-                  <span className='font-mono text-[10px]'>{brushSize}px</span>
-                </div>
-                <input
-                  type='range'
-                  min='10'
-                  max='100'
-                  value={brushSize}
-                  onChange={(e) => setBrushSize(parseInt(e.target.value))}
-                  className='accent-primary h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-zinc-200 dark:bg-zinc-800'
-                />
+          <input
+            type="range"
+            min="10"
+            max="100"
+            value={brushSize}
+            onChange={(e) => setBrushSize(Number(e.target.value))}
+            className="h-1.5 w-full cursor-pointer accent-primary"
+          />
 
-                <div className='space-y-1.5'>
-                  <span className='text-muted-foreground text-[10px] font-bold tracking-widest uppercase'>
-                    Instruction
-                  </span>
-                  <textarea
-                    value={inpaintPrompt}
-                    onChange={(e) => setInpaintPrompt(e.target.value)}
-                    placeholder='What would you like to change in this area?'
-                    className='border-border focus:ring-primary min-h-[80px] w-full resize-none rounded-xl border bg-white p-3 text-xs transition-all outline-none focus:ring-1 dark:bg-black'
-                  />
-                </div>
-              </div>
-
-              {/* Inpaint Actions */}
-              <div className='flex items-center gap-2'>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={() => {
-                    setIsInpaintMode(false);
-                  }}
-                  className='border-border h-10 flex-1 gap-2 rounded-xl border'
-                >
-                  <X className='h-3.5 w-3.5' />
-                  <span className='text-[11px] font-bold uppercase'>
-                    Cancel
-                  </span>
-                </Button>
-
-                <Button
-                  variant='ghost'
-                  size='icon'
-                  onClick={() => {
-                    // The MaskEditor doesn't have an easy clear ref, but we can re-toggle mode
-                    setIsInpaintMode(false);
-                    setTimeout(() => setIsInpaintMode(true), 10);
-                  }}
-                  className='border-border h-10 w-10 rounded-xl border'
-                  title='Clear mask'
-                >
-                  <Eraser className='h-4 w-4' />
-                </Button>
-
-                <Button
-                  size='sm'
-                  disabled={isInpainting || !inpaintPrompt.trim()}
-                  onClick={handleSubmitInpaint}
-                  className='bg-primary hover:bg-primary/90 h-10 flex-[2] gap-2 rounded-xl text-white'
-                >
-                  {isInpainting ? (
-                    <Loader2 className='h-3.5 w-3.5 animate-spin' />
-                  ) : (
-                    <Check className='h-3.5 w-3.5' />
-                  )}
-                  <span className='text-[11px] font-bold uppercase'>
-                    Generate Edit
-                  </span>
-                </Button>
-              </div>
-            </div>
-          )}
+          <textarea
+            value={inpaintPrompt}
+            onChange={(e) => setInpaintPrompt(e.target.value)}
+            placeholder="Describe the change..."
+            className="min-h-[72px] w-full resize-none rounded-xl border border-zinc-200 bg-transparent px-3 py-2 text-xs outline-none transition-all focus:border-primary dark:border-zinc-800"
+          />
         </div>
 
-        {/* Invisible Handles */}
-        <Handle
-          type='target'
-          position={Position.Top}
-          style={{ opacity: 0, pointerEvents: "none" }}
-        />
-        <Handle
-          type='source'
-          position={Position.Bottom}
-          style={{ opacity: 0, pointerEvents: "none" }}
-        />
+        <div className="mt-1 flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setIsInpaintMode(false)}
+          className="h-9 w-9 rounded-xl"
+            title="Cancel"
+          >
+            <X className="h-3.5 w-3.5" />
+            
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              setIsInpaintMode(false);
+              setTimeout(() => setIsInpaintMode(true), 10);
+            }}
+            className="h-9 w-9 rounded-xl"
+          >
+            <Eraser className="h-4 w-4" />
+          </Button>
+
+          <Button
+            disabled={isInpainting || !inpaintPrompt.trim()}
+            onClick={handleSubmitInpaint}
+            className="h-9 flex-[1.4] rounded-xl"
+          >
+            {isInpainting ? (
+              <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Wand2 className="mr-1 h-3.5 w-3.5" />
+            )}
+
+            Generate
+          </Button>
+        </div>
       </div>
-    );
+    )}
+
+    <Handle
+      type="target"
+      position={Position.Top}
+      style={{
+        opacity: 0,
+        pointerEvents: "none",
+      }}
+    />
+
+    <Handle
+      type="source"
+      position={Position.Bottom}
+      style={{
+        opacity: 0,
+        pointerEvents: "none",
+      }}
+    />
+  </div>
+);
   }
 );
 

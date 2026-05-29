@@ -35,6 +35,38 @@ import {
 import Markdown from "react-markdown";
 import { useEffect, useState } from "react";
 
+/** Strip raw JSON / API error dumps from AI text and replace with a friendly message. */
+function sanitizeTextContent(text: string): string {
+  if (!text) return text;
+  const trimmed = text.trim();
+  // Detect if the entire message is a JSON error blob
+  if (trimmed.startsWith("{") && trimmed.includes('"error"')) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (parsed.error) {
+        const code = parsed.error?.code || parsed.code;
+        const status = parsed.error?.status;
+        if (code === 429 || status === "RESOURCE_EXHAUSTED" || status === "Too Many Requests") {
+          return "We're experiencing high demand right now. Please try again in a moment.";
+        }
+        if (code === 401 || code === 403) {
+          return "There was an authentication issue. Please reconnect your account and try again.";
+        }
+        return "Something went wrong while processing your request. Please try again.";
+      }
+    } catch {
+      // Not valid JSON, fall through
+    }
+  }
+  // If the text contains an embedded JSON error (e.g. model echoed it), strip it
+  const jsonErrorMatch = trimmed.match(/\{"error":\{[\s\S]*\}\}/);
+  if (jsonErrorMatch && jsonErrorMatch[0].length > text.length * 0.5) {
+    const cleaned = text.replace(jsonErrorMatch[0], "").trim();
+    return cleaned || "Something went wrong while processing your request. Please try again.";
+  }
+  return text;
+}
+
 interface AIMessageProps {
   message: any;
   analysis?: string;
@@ -129,6 +161,8 @@ export function AIMessage({
                   // Clean up excessive whitespace
                   textContent = textContent.replace(/\n{3,}/g, "\n\n").trim();
                 }
+                // Sanitize any raw error JSON that may have leaked into the message
+                textContent = sanitizeTextContent(textContent);
                 if (!textContent) return null;
                 return (
                   <Response key={`${message.id}-${i}`}>{textContent}</Response>

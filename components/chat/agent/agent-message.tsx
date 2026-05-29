@@ -45,6 +45,43 @@ function humanizeToolName(name: string): string {
   return tail ? `${head} · ${tail}` : head;
 }
 
+function formatErrorMessage(error: string | undefined): string {
+  if (!error) return "";
+  try {
+    let parsed = JSON.parse(error);
+    
+    // Sometimes the message itself is a stringified JSON from nested API errors
+    if (parsed.error && typeof parsed.error.message === "string") {
+       try {
+          let innerParsed = JSON.parse(parsed.error.message);
+          parsed = innerParsed;
+       } catch (e) {
+          // ignore
+       }
+    }
+
+    if (parsed.error) {
+       let msg = parsed.error.message || parsed.error.code;
+       if (parsed.error.status === "RESOURCE_EXHAUSTED" || parsed.error.code === 429) {
+          return "We're currently experiencing high demand and have reached our API limits. Please try again in a few moments.";
+       }
+       return typeof msg === "string" ? msg : JSON.stringify(msg);
+    }
+    
+    if (parsed.message) {
+      return parsed.message;
+    }
+  } catch (e) {
+    // If it's not JSON, or parsing fails, check if it contains common quota/rate limit text
+    const lowerError = error.toLowerCase();
+    if (lowerError.includes("429") || lowerError.includes("resource_exhausted") || lowerError.includes("quota") || lowerError.includes("rate limit")) {
+       return "We're currently experiencing high demand and have reached our API limits. Please try again in a few moments.";
+    }
+  }
+  
+  return error;
+}
+
 function ToolCallView({ call }: { call: AgentToolCall }) {
   // Hide request_user_input tool calls from the tool call UI list completely,
   // since the elicitation card itself handles asking the user, and a tool card
@@ -87,7 +124,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
         tone='error'
       >
         <p className='text-foreground text-[12.5px] leading-relaxed'>
-          {call.result.error}
+          {formatErrorMessage(call.result.error)}
         </p>
       </AgentCard>
     );
@@ -272,7 +309,7 @@ export function AgentMessage({
             {/* Error */}
             {run.error && (
               <div className='my-2 rounded-md border border-rose-500/30 bg-rose-500/[0.04] px-3 py-2 text-xs text-rose-700 dark:bg-rose-500/[0.06] dark:text-rose-300'>
-                {run.error}
+                {formatErrorMessage(run.error)}
               </div>
             )}
           </div>

@@ -5,15 +5,15 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { DesignNode } from "@/nodes/design-node";
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
+  Image as ImageIcon,
   LayoutGrid,
   Maximize2,
+  Minimize2,
   Minus,
-  MousePointer2,
-  Move,
   Plus,
-  Redo2,
-  Undo2,
+  View,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import ReactFlow, {
   Background,
   Controls,
@@ -26,6 +26,7 @@ import ReactFlow, {
   useNodesState,
   useReactFlow,
 } from "reactflow";
+
 import "reactflow/dist/style.css";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -34,15 +35,20 @@ const nodeTypes: NodeTypes = {
   design: DesignNode,
 };
 
-export const GraphicsCanvas = () => {
+interface GraphicsCanvasProps {
+  isFullscreen?: boolean;
+  onToggleFullscreen?: () => void;
+}
+
+export const GraphicsCanvas = ({ isFullscreen, onToggleFullscreen }: GraphicsCanvasProps) => {
   return (
     <ReactFlowProvider>
-      <GraphicsCanvasContent />
+      <GraphicsCanvasContent isFullscreen={isFullscreen} onToggleFullscreen={onToggleFullscreen} />
     </ReactFlowProvider>
   );
 };
 
-const GraphicsCanvasContent = () => {
+const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCanvasProps) => {
   const {
     project,
     messages,
@@ -78,7 +84,10 @@ const GraphicsCanvasContent = () => {
 
         group.items?.forEach((item: any) => {
           if (
-            (item.type === "image" || item.type?.startsWith("image/")) &&
+            (item.type === "image" ||
+              item.type?.startsWith("image/") ||
+              item.type === "video" ||
+              item.type?.startsWith("video/")) &&
             item.filePath
           ) {
             const nodeId = `node-${item.id || item.filePath}`;
@@ -103,7 +112,8 @@ const GraphicsCanvasContent = () => {
                 },
                 data: {
                   url: item.filePath,
-                  title: `${cleanTitle} (v${rowIndex + 1})`,
+                  type: item.type,
+                  title: `v${rowIndex + 1} - ${cleanTitle}`,
                   instruction: item.name || group.title || "AI Generation",
                   status: "public",
                   generationGroupId: group.id,
@@ -139,7 +149,8 @@ const GraphicsCanvasContent = () => {
             },
             data: {
               url: live.filePath,
-              title: `${live.name.replace(/^(gennit-design-|image|variant)-/i, "")} (Live)`,
+              type: live.name?.toLowerCase().includes("video") || live.filePath?.toLowerCase().endsWith(".mp4") ? "video/mp4" : "image/png",
+              title: `Live - ${live.name.replace(/^(gennit-design-|image|variant)-/i, "")}`,
               instruction: live.prompt || "Generating...",
               status: "public",
             },
@@ -167,9 +178,19 @@ const GraphicsCanvasContent = () => {
   useEffect(() => {
     if (focusedGenerationId && nodes.length > 0) {
       const nodeId = `node-${focusedGenerationId}`;
-      const exists = nodes.find((n) => n.id === nodeId);
-      if (exists) {
-        fitView({ nodes: [{ id: nodeId }], duration: 800, padding: 0.5 });
+      let targetNode = nodes.find((n) => n.id === nodeId);
+      
+      // Fallback: search by matching the file URL or matching the ID directly
+      if (!targetNode) {
+        targetNode = nodes.find(
+          (n) =>
+            n.data?.url === focusedGenerationId ||
+            n.id === focusedGenerationId
+        );
+      }
+
+      if (targetNode) {
+        fitView({ nodes: [{ id: targetNode.id }], duration: 800, padding: 0.5 });
       }
     }
   }, [focusedGenerationId, nodes, fitView]);
@@ -187,82 +208,96 @@ const GraphicsCanvasContent = () => {
   }, [isGenerating, isGeneratingImage, nodes.length, fitView]);
 
   return (
-    <div className='group relative h-full'>
-      <ReactFlow
-        proOptions={{ hideAttribution: true }}
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        nodeTypes={nodeTypes}
-        onInit={setReactFlowInstance}
-        fitView={!focusedGenerationId}
-        fitViewOptions={{ padding: 0.2 }}
-        maxZoom={1.5}
-        minZoom={0.1}
-        className='rounded-3xl border border-zinc-200 bg-[#09090b] shadow-xl dark:border-zinc-800/50 dark:bg-[#fafafa]'
-      >
+    <div className='bg-background relative flex h-full w-full flex-col overflow-hidden'>
+      {/* ── Header with Title & Toolbar (side-by-side) ──────────────── */}
+      <div className='flex items-center justify-between px-4 py-1 border-b border-border/80 bg-background/50 backdrop-blur-sm shrink-0 z-10'>
+        <div className='flex items-center gap-2 text-foreground'>
+          <div className="w-full h-fit flex justify-start items-center space-x-1.5 px-2">
+            <span className="w-2 h-2 rounded-full bg-red-400" />
+            <span className="w-2 h-2 rounded-full bg-yellow-400" />
+            <span className="w-2 h-2 rounded-full bg-green-400" />
+          </div>
+
+          <span className='text-sm font-semibold'>Graphics</span>
+        </div>
+
+        {/* Toolbar items at the far right */}
+        <div className='flex items-center p-1 space-x-1 border rounded-md bg-background/80 border-border backdrop-blur-sm shadow-sm'>
+          {/* Fullscreen Toggle */}
+          {onToggleFullscreen && (
+            <>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={onToggleFullscreen}
+                className={cn(
+                  'h-7 w-7 p-0 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-muted-foreground hover:text-foreground',
+                  isFullscreen && 'bg-muted text-foreground'
+                )}
+                title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+              >
+                {isFullscreen ? <Minimize2 className='h-3.5 w-3.5' /> : <Maximize2 className='h-3.5 w-3.5' />}
+              </Button>
+              <div className='w-px h-5 bg-border mx-1' />
+            </>
+          )}
+
+          {/* Fit View */}
+          <Button
+            variant='ghost'
+            size='sm'
+            onClick={() => reactFlowInstance?.fitView({ duration: 400, padding: 0.2 })}
+            className='h-7 w-7 p-0 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-muted-foreground hover:text-foreground'
+            title='Fit View'
+          >
+            <View className='h-3.5 w-3.5' />
+          </Button>
+
+          {/* Zoom In */}
+          <Button
+            variant='ghost'
+            size='sm'
+            onClick={() => reactFlowInstance?.zoomIn({ duration: 200 })}
+            className='h-7 w-7 p-0 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-muted-foreground hover:text-foreground'
+            title='Zoom In'
+          >
+            <Plus className='h-3.5 w-3.5' />
+          </Button>
+
+          {/* Zoom Out */}
+          <Button
+            variant='ghost'
+            size='sm'
+            onClick={() => reactFlowInstance?.zoomOut({ duration: 200 })}
+            className='h-7 w-7 p-0 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-muted-foreground hover:text-foreground'
+            title='Zoom Out'
+          >
+            <Minus className='h-3.5 w-3.5' />
+          </Button>
+        </div>
+      </div>
+     
+      <div className='relative flex-1 min-h-0 w-full'>
+        <ReactFlow
+          proOptions={{ hideAttribution: true }}
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          nodeTypes={nodeTypes}
+          onInit={setReactFlowInstance}
+          fitView={!focusedGenerationId}
+          fitViewOptions={{ padding: 0.2 }}
+          maxZoom={1.5}
+          minZoom={0.1}
+          className='h-full w-full bg-transparent'
+        >
         <Background
           gap={25}
           size={1}
-          className='opacity-[0.4] dark:opacity-[0.15]'
+          // className='opacity-[0.4] dark:opacity-[0.15]'
           color='currentColor'
         />
-
-        {/* Floating Toolkit: Glassmorphic refinement to match Workflow */}
-        <Panel
-          position='top-right'
-          className='m-6 flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white/90 p-1.5 shadow-2xl backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90'
-        >
-          {/* <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 hover:bg-zinc-100 dark:hover:bg-zinc-800 opacity-50 cursor-not-allowed"
-            title="Undo (Not implemented)"
-          >
-            <Undo2 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 hover:bg-zinc-100 dark:hover:bg-zinc-800 opacity-50 cursor-not-allowed"
-            title="Redo (Not implemented)"
-          >
-            <Redo2 className="h-4 w-4" />
-          </Button> */}
-          <div className='mx-1 h-4 w-px bg-zinc-200 dark:bg-zinc-800' />
-          <Button
-            variant='ghost'
-            size='icon'
-            className='h-8 w-8 hover:bg-zinc-100 dark:hover:bg-zinc-800'
-            title='Fit View'
-            onClick={() =>
-              reactFlowInstance?.fitView({ duration: 400, padding: 0.2 })
-            }
-          >
-            <Maximize2 className='h-4 w-4' />
-          </Button>
-          <Button
-            variant='ghost'
-            size='icon'
-            className='h-8 w-8 hover:bg-zinc-100 dark:hover:bg-zinc-800'
-            title='Zoom In'
-            onClick={() => reactFlowInstance?.zoomIn({ duration: 200 })}
-          >
-            <Plus className='h-4 w-4' />
-          </Button>
-          <Button
-            variant='ghost'
-            size='icon'
-            className='h-8 w-8 hover:bg-zinc-100 dark:hover:bg-zinc-800'
-            title='Zoom Out'
-            onClick={() => reactFlowInstance?.zoomOut({ duration: 200 })}
-          >
-            <Minus className='h-4 w-4' />
-          </Button>
-        </Panel>
-
-      
 
         {nodes.length === 0 &&  (
           <div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
@@ -301,6 +336,7 @@ const GraphicsCanvasContent = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

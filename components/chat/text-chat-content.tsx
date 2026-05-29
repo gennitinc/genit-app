@@ -56,8 +56,19 @@ export function TextChatContent() {
   const allItems: { type: "message" | "agent"; createdAt: number; data: any }[] = [
     ...(messages || [])
       .filter((m: any) => {
+        if (m.isHidden) return false;
         const text = m.parts?.find((p: any) => p.type === "text")?.text?.trim() || m.text?.trim() || "";
         if (!text) return true;
+        
+        // Hide image/video version notification messages (both new and historical)
+        if (
+          text.startsWith("Here is the generated design") ||
+          text.startsWith("Here is the generated video") ||
+          text.startsWith("Here is your generated AI video")
+        ) {
+          return false;
+        }
+
         if (m.type === "user" || m.role === "user") {
           if (agentPrompts.has(text)) return false;
         } else if (m.type === "ai" || m.role === "assistant") {

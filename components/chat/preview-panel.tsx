@@ -16,11 +16,24 @@ import React from "react";
 export const PreviewPanel = ({ isFullscreen, onToggleFullscreen }: { isFullscreen?: boolean; onToggleFullscreen?: () => void }) => {
   const { project } = useProjectDesign();
   const isAutomation = project?.category === "automation";
+  const isGraphics =
+    project?.category === "flier" ||
+    project?.category === "image" ||
+    project?.category === "instagram_post" ||
+    project?.category === "poster" ||
+    project?.category === "youtube_thumbnail" ||
+    project?.category === "facebook_post" ||
+    project?.category === "facebook_cover" ||
+    project?.category === "banner" ||
+    project?.category === "logo" ||
+    project?.category === "presentation" ||
+    project?.category === "auto" ||
+    project?.category === "generic_design";
 
   return (
     <>
       <PreviewPanelContent isFullscreen={isFullscreen} onToggleFullscreen={onToggleFullscreen} />
-      {onToggleFullscreen && !isAutomation && (
+      {onToggleFullscreen && !isAutomation && !isGraphics && (
         <button
           onClick={onToggleFullscreen}
           className="absolute top-4 right-4 z-50 flex h-8 w-8 items-center justify-center rounded-md border border-border/50 bg-background/80 text-foreground shadow-sm backdrop-blur hover:bg-accent"
@@ -114,7 +127,13 @@ const PreviewPanelContent = ({ isFullscreen, onToggleFullscreen }: { isFullscree
   }
 
   if (isGraphics) {
-    return <GraphicsCanvas />;
+    return (
+      <div className='bg-muted/5 flex h-full w-full flex-col border p-0 border-zinc-200 dark:border-zinc-800/50 overflow-hidden rounded-3xl'>
+        <div className='flex-1 min-h-0 relative w-full h-full'>
+          <GraphicsCanvas isFullscreen={isFullscreen} onToggleFullscreen={onToggleFullscreen} />
+        </div>
+      </div>
+    );
   }
 
   // Default fallback

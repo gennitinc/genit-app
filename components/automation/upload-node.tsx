@@ -69,19 +69,19 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
   return (
     <div
       className={cn(
-        "w-[280px] overflow-hidden bg-neutral-900 border border-neutral-800 rounded-2xl relative shadow-xl text-neutral-200 transition-all duration-200",
-        isEdit ? "ring-2 ring-emerald-500/40 border-neutral-700" : ""
+        "w-[280px] overflow-hidden bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-neutral-800 rounded-2xl relative shadow-xl text-zinc-800 dark:text-neutral-200 transition-all duration-200",
+        isEdit ? "ring-2 ring-emerald-500/40 border-zinc-300 dark:border-neutral-700" : ""
       )}
     >
       <Handle
         type="target"
         position={Position.Top}
-        className="!w-2 !h-2 !bg-emerald-500 !border-2 !border-neutral-900"
+        className="!w-2 !h-2 !bg-emerald-500 !border-2 !border-white dark:!border-neutral-900"
       />
 
       {/* Card Header */}
-      <div className="px-4 py-3 flex items-center justify-between border-b border-neutral-800/70 bg-neutral-950/40">
-        <div className="flex items-center gap-1.5 text-neutral-400">
+      <div className="px-4 py-3 flex items-center justify-between border-b border-zinc-200 dark:border-neutral-800/70 bg-zinc-50/50 dark:bg-neutral-950/40">
+        <div className="flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400">
           <Upload className="h-4 w-4" />
           <span className="text-[10px] font-semibold uppercase tracking-wider font-sans">
             Upload Asset
@@ -90,7 +90,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
         {isEdit && (
           <button
             onClick={() => data.onRemoveNode(id)}
-            className="text-neutral-400 hover:text-red-400 transition-colors p-1 rounded"
+            className="text-zinc-500 dark:text-neutral-400 hover:text-red-500 dark:hover:text-red-400 transition-colors p-1 rounded"
           >
             <Trash2 className="h-3.5 w-3.5" />
           </button>
@@ -110,7 +110,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
         {isEdit ? (
           <>
             <div className="space-y-1">
-              <label className="text-[9px] font-medium text-neutral-400 uppercase tracking-wider">
+              <label className="text-[9px] font-medium text-zinc-500 dark:text-neutral-400 uppercase tracking-wider">
                 Title
               </label>
               <input
@@ -119,7 +119,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
                 onChange={(e) =>
                   data.onNodeDataChange(id, { title: e.target.value })
                 }
-                className="w-full bg-neutral-950 border border-neutral-800 rounded px-2.5 py-1.5 text-xs text-neutral-200 outline-none focus:border-emerald-500/50 transition-colors"
+                className="w-full bg-zinc-50 dark:bg-neutral-950 border border-zinc-200 dark:border-neutral-800 rounded px-2.5 py-1.5 text-xs text-zinc-800 dark:text-neutral-200 outline-none focus:border-emerald-500/50 transition-colors"
                 placeholder="Asset Step Name"
               />
             </div>
@@ -133,25 +133,25 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
                   <Upload className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-neutral-200">
+                  <p className="text-xs font-medium text-zinc-800 dark:text-neutral-200">
                     Click to upload prep work
                   </p>
-                  <p className="text-[9px] text-neutral-400 mt-0.5">
+                  <p className="text-[9px] text-zinc-500 dark:text-neutral-400 mt-0.5">
                     Images, videos, audio, or docs
                   </p>
                 </div>
               </div>
             ) : (
-              <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-3 space-y-3">
+              <div className="rounded-xl border border-zinc-200 dark:border-neutral-800 bg-zinc-50 dark:bg-neutral-950 p-3 space-y-3">
                 <div className="flex items-start gap-2.5">
-                  <div className="mt-0.5 w-7 h-7 rounded-lg bg-neutral-800/40 flex items-center justify-center text-neutral-400 shrink-0">
+                  <div className="mt-0.5 w-7 h-7 rounded-lg bg-zinc-200 dark:bg-neutral-800/40 flex items-center justify-center text-zinc-500 dark:text-neutral-400 shrink-0">
                     <IconComponent className="h-4 w-4" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-neutral-100 truncate">
+                    <p className="text-xs font-medium text-zinc-900 dark:text-neutral-100 truncate">
                       {data.fileName}
                     </p>
-                    <p className="text-[10px] text-neutral-400 mt-0.5">
+                    <p className="text-[10px] text-zinc-500 dark:text-neutral-400 mt-0.5">
                       {data.fileSize} · {data.fileType}
                     </p>
                   </div>
@@ -160,13 +160,13 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
                 <div className="flex gap-2">
                   <button
                     onClick={triggerFileSelect}
-                    className="flex-1 bg-neutral-800 hover:bg-neutral-750 text-neutral-200 text-[10px] font-medium py-1.5 rounded-lg border border-neutral-750 transition"
+                    className="flex-1 bg-zinc-100 dark:bg-neutral-800 hover:bg-zinc-200 dark:hover:bg-neutral-750 text-zinc-700 dark:text-neutral-200 text-[10px] font-medium py-1.5 rounded-lg border border-zinc-200 dark:border-neutral-750 transition"
                   >
                     Replace
                   </button>
                   <button
                     onClick={clearFile}
-                    className="flex-1 bg-red-950/20 hover:bg-red-950/40 text-red-400 text-[10px] font-medium py-1.5 rounded-lg border border-red-900/30 transition"
+                    className="flex-1 bg-red-50 dark:bg-red-950/20 hover:bg-red-100 dark:hover:bg-red-950/40 text-red-600 dark:text-red-400 text-[10px] font-medium py-1.5 rounded-lg border border-red-200 dark:border-red-900/30 transition"
                   >
                     Remove
                   </button>
@@ -176,26 +176,26 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
           </>
         ) : (
           <div className="space-y-3">
-            <h4 className="text-xs font-medium text-neutral-100 truncate">
+            <h4 className="text-xs font-medium text-zinc-900 dark:text-neutral-100 truncate">
               {data.title}
             </h4>
 
             {data.fileName ? (
-              <div className="rounded-xl border border-neutral-800 bg-neutral-950/60 p-3 space-y-2">
+              <div className="rounded-xl border border-zinc-200 dark:border-neutral-800 bg-zinc-50 dark:bg-neutral-950/60 p-3 space-y-2">
                 <div className="flex items-center gap-2">
-                  <IconComponent className="h-4 w-4 text-neutral-400 shrink-0" />
-                  <p className="text-xs text-neutral-200 truncate flex-1">
+                  <IconComponent className="h-4 w-4 text-zinc-500 dark:text-neutral-400 shrink-0" />
+                  <p className="text-xs text-zinc-800 dark:text-neutral-200 truncate flex-1">
                     {data.fileName}
                   </p>
                 </div>
-                <div className="flex items-center justify-between text-[10px] text-neutral-400 pt-1 border-t border-neutral-900">
+                <div className="flex items-center justify-between text-[10px] text-zinc-500 dark:text-neutral-400 pt-1 border-t border-zinc-200 dark:border-neutral-900">
                   <span>{data.fileSize}</span>
                   {data.fileUrl && (
                     <a
                       href={data.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-neutral-400 hover:text-neutral-200 flex items-center gap-1 transition-colors"
+                      className="text-zinc-500 dark:text-neutral-400 hover:text-zinc-700 dark:hover:text-neutral-200 flex items-center gap-1 transition-colors"
                     >
                       <LinkIcon className="h-3 w-3" />
                       View File
@@ -204,8 +204,8 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
                 </div>
               </div>
             ) : (
-              <div className="rounded-xl border border-dashed border-neutral-800 bg-neutral-950/20 p-4 text-center">
-                <p className="text-xs text-neutral-400">No file uploaded yet</p>
+              <div className="rounded-xl border border-dashed border-zinc-200 dark:border-neutral-800 bg-zinc-50/20 dark:bg-neutral-950/20 p-4 text-center">
+                <p className="text-xs text-zinc-500 dark:text-neutral-400">No file uploaded yet</p>
               </div>
             )}
           </div>
@@ -215,7 +215,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
       <Handle
         type="source"
         position={Position.Bottom}
-        className="!w-2 !h-2 !bg-emerald-500 !border-2 !border-neutral-900"
+        className="!w-2 !h-2 !bg-emerald-500 !border-2 !border-white dark:!border-neutral-900"
       />
     </div>
   );

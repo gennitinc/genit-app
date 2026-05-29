@@ -782,9 +782,14 @@ export default function AutomationWorkflow({
   return (
     <div className='bg-background relative flex h-full w-full flex-col'>
       {/* ── Header with Title & Toolbar (side-by-side) ──────────────── */}
-      <div className='flex items-center justify-between px-4 py-2 border-b border-border/80 bg-background/50 backdrop-blur-sm shrink-0 z-10'>
+      <div className='flex items-center justify-between px-4 py-1 border-b border-border/80 bg-background/50 backdrop-blur-sm shrink-0 z-10'>
         <div className='flex items-center gap-2 text-foreground'>
-          <GitBranchIcon className='text-primary h-4 w-4 animate-spin-slow text-amber-500' />
+          <div className="w-full h-fit flex justify-start items-center space-x-1.5 px-2">
+            <span className="w-2 h-2 rounded-full bg-red-400" />
+            <span className="w-2 h-2 rounded-full bg-yellow-400" />
+            <span className="w-2 h-2 rounded-full bg-green-400" />
+          </div>
+
           <span className='text-sm font-semibold'>Automation</span>
         </div>
 
