@@ -4,6 +4,7 @@ import { Loader2, MessageCircleQuestion, Send } from "lucide-react";
 import { useState } from "react";
 import type { AgentElicitation } from "@/lib/agents-api";
 import { AgentButton, AgentCard, AgentInput } from "./agent-card";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 export function ElicitationCard({
   elicitation,
@@ -36,7 +37,21 @@ export function ElicitationCard({
       icon={<MessageCircleQuestion className='h-3.5 w-3.5' />}
       title='Needs your input'
       tone='neutral'
+      className="relative"
     >
+      <BorderBeam
+                                  duration={6}
+                                  size={40}
+                                  className='from-transparent via-red-500 to-transparent'
+                                />
+                                <BorderBeam
+                                  duration={6}
+                                  delay={10}
+                                  size={40}
+                                  borderWidth={2}
+                                  className='from-transparent via-blue-500 to-transparent'
+                                />
+       
       <p className='text-foreground text-sm leading-relaxed'>
         {elicitation.question}
       </p>
