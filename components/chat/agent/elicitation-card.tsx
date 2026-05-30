@@ -41,13 +41,13 @@ export function ElicitationCard({
     >
       <BorderBeam
                                   duration={6}
-                                  size={40}
+                                  size={90}
                                   className='from-transparent via-red-500 to-transparent'
                                 />
                                 <BorderBeam
                                   duration={6}
                                   delay={10}
-                                  size={40}
+                                  size={90}
                                   borderWidth={2}
                                   className='from-transparent via-blue-500 to-transparent'
                                 />
