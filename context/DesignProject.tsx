@@ -1502,6 +1502,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         streamingFiles,
         streamingContent,
         streamingAnalysis,
+        isProcessingDraft,
         handleInput,
         handleKeyDown,
         handlePaste,

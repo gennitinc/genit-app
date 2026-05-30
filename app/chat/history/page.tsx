@@ -12,12 +12,13 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import withAuth from "@/helper/hoc/withAuth";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
-import { Archive, ChevronRight, Clock, Image as ImageIcon, Loader, MessageSquare, MoreHorizontal, Presentation, Trash2, Video } from "lucide-react";
+import { Archive, ChevronRight, Clock, Image as ImageIcon, Loader, MessageSquare, MoreHorizontal, Presentation, Trash2, Video, Search, X } from "lucide-react";
 import { RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useCallback, useEffect, useState } from "react";
-import { useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
+import { Input } from "@/components/ui/input";
+
 
 
 
@@ -60,8 +61,6 @@ interface Project {
   updatedAt: string;
 }
 
-type FilterType = "chat" | "ai-image-gen" | "ai-video-gen" | "presentations";
-
 function ChatHistoryPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { user } = useUserContext();
@@ -73,12 +72,17 @@ function ChatHistoryPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeletingProject, setIsDeletingProject] = useState(false);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
-  const [activeFilter, setActiveFilter] = useState<FilterType>("chat");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchInputVal, setSearchInputVal] = useState("");
+  const [isRestored, setIsRestored] = useState(false);
+
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const activeOrgId = user?.currentOrganization?._id || (user?.business && typeof user.business === "object" ? user.business._id : user?.business);
 
   const fetchAllProjects = useCallback(
-    async (pageNumber: number = 1, append: boolean = false) => {
+    async (pageNumber: number = 1, append: boolean = false, searchVal: string = searchQuery) => {
       try {
         if (append) {
           setLoadingMore(true);
@@ -89,8 +93,9 @@ function ChatHistoryPage() {
 
         // Build query parameters
         const params = new URLSearchParams();
-        if (activeFilter) {
-          params.append("type", activeFilter);
+        params.append("type", "chat");
+        if (searchVal) {
+          params.append("search", searchVal);
         }
         params.append("page", pageNumber.toString());
         params.append("limit", "10");
@@ -122,23 +127,144 @@ function ChatHistoryPage() {
         setLoadingMore(false);
       }
     },
-    [activeFilter]
+    [searchQuery]
   );
 
   // Load more projects when scrolling
   const loadMoreProjects = useCallback(() => {
     if (!loadingMore && hasMore) {
-      fetchAllProjects(page + 1, true);
+      fetchAllProjects(page + 1, true, searchQuery);
     }
-  }, [loadingMore, hasMore, page, fetchAllProjects]);
+  }, [loadingMore, hasMore, page, fetchAllProjects, searchQuery]);
 
-  // Handle scroll to load more
+  // Load state from sessionStorage on mount (if organization matches)
+  useEffect(() => {
+    const cachedOrgId = sessionStorage.getItem("gennit_history_orgId");
+    const activeOrgIdStr = activeOrgId ? String(activeOrgId) : null;
+    
+    if (activeOrgIdStr && cachedOrgId === activeOrgIdStr) {
+      const cachedProjects = sessionStorage.getItem("gennit_history_projects");
+      const cachedPage = sessionStorage.getItem("gennit_history_page");
+      const cachedHasMore = sessionStorage.getItem("gennit_history_hasMore");
+      const cachedSearchQuery = sessionStorage.getItem("gennit_history_searchQuery");
+      const cachedScrollTop = sessionStorage.getItem("gennit_history_scrollTop");
+
+      if (cachedProjects) {
+        try {
+          setProjects(JSON.parse(cachedProjects));
+          if (cachedPage) setPage(parseInt(cachedPage, 10));
+          if (cachedHasMore) setHasMore(cachedHasMore === "true");
+          if (cachedSearchQuery) {
+            setSearchQuery(cachedSearchQuery);
+            setSearchInputVal(cachedSearchQuery);
+          }
+          
+          setLoading(false);
+          setIsRestored(true);
+
+          // Wait for the next tick to ensure DOM is rendered, then scroll
+          setTimeout(() => {
+            if (scrollContainerRef.current && cachedScrollTop) {
+              scrollContainerRef.current.scrollTop = parseInt(cachedScrollTop, 10);
+            }
+          }, 100);
+          return;
+        } catch (e) {
+          console.error("Failed to parse cached history state", e);
+        }
+      }
+    }
+
+    // If cache does not exist or organization mismatched, start fresh
+    setProjects([]);
+    setPage(1);
+    setHasMore(true);
+    setSearchQuery("");
+    setSearchInputVal("");
+    setIsRestored(true);
+  }, []); // Run ONLY on mount!
+
+  const lastOrgIdRef = useRef<string | null>(null);
+
+  // Switch organizations cleanly and fetch fresh chats
+  useEffect(() => {
+    if (!activeOrgId || !isRestored) return;
+
+    const orgIdStr = String(activeOrgId);
+    
+    // Ignore initial mount setting
+    if (lastOrgIdRef.current === null) {
+      lastOrgIdRef.current = orgIdStr;
+      return;
+    }
+
+    // If organization actually changed
+    if (lastOrgIdRef.current !== orgIdStr) {
+      lastOrgIdRef.current = orgIdStr;
+
+      // Clear cache
+      sessionStorage.removeItem("gennit_history_orgId");
+      sessionStorage.removeItem("gennit_history_projects");
+      sessionStorage.removeItem("gennit_history_page");
+      sessionStorage.removeItem("gennit_history_hasMore");
+      sessionStorage.removeItem("gennit_history_searchQuery");
+      sessionStorage.removeItem("gennit_history_scrollTop");
+
+      // Reset state
+      setProjects([]);
+      setPage(1);
+      setHasMore(true);
+      setSearchQuery("");
+      setSearchInputVal("");
+      
+      // Fetch fresh
+      fetchAllProjects(1, false, "");
+    }
+  }, [activeOrgId, isRestored, fetchAllProjects]);
+
+  // Sync state to sessionStorage when state updates (but only after restoring on mount)
+  useEffect(() => {
+    if (isRestored && activeOrgId) {
+      sessionStorage.setItem("gennit_history_orgId", String(activeOrgId));
+      sessionStorage.setItem("gennit_history_projects", JSON.stringify(projects));
+      sessionStorage.setItem("gennit_history_page", page.toString());
+      sessionStorage.setItem("gennit_history_hasMore", String(hasMore));
+      sessionStorage.setItem("gennit_history_searchQuery", searchQuery);
+    }
+  }, [projects, page, hasMore, searchQuery, isRestored]);
+
+  // Fetch projects when searchQuery changes (unless on initial mount restoration)
+  useEffect(() => {
+    if (isRestored && user?._id) {
+      const cachedSearchQuery = sessionStorage.getItem("gennit_history_searchQuery") || "";
+      const isInitialRestore = projects.length > 0 && searchQuery === cachedSearchQuery;
+      if (!isInitialRestore) {
+        setPage(1);
+        setProjects([]);
+        setHasMore(true);
+        fetchAllProjects(1, false, searchQuery);
+      }
+    }
+  }, [searchQuery, isRestored, user?._id]);
+
+  // Initial fetch if nothing was restored from sessionStorage
+  useEffect(() => {
+    if (isRestored && user?._id && projects.length === 0 && !searchQuery) {
+      fetchAllProjects(1, false, "");
+    }
+  }, [isRestored, user?._id, projects.length, searchQuery, fetchAllProjects]);
+
+  // Handle scroll to load more and save scroll position
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = container;
+      
+      // Save scroll top to sessionStorage
+      sessionStorage.setItem("gennit_history_scrollTop", scrollTop.toString());
+
       // Load more when user is 200px from bottom
       if (
         scrollHeight - scrollTop - clientHeight < 200 &&
@@ -153,15 +279,28 @@ function ChatHistoryPage() {
     return () => container.removeEventListener("scroll", handleScroll);
   }, [hasMore, loadingMore, loadMoreProjects]);
 
-  // Reset pagination when filter changes
+  // Clean up search debouncing timeout
   useEffect(() => {
-    if (user?._id) {
-      setPage(1);
-      setHasMore(true);
-      setProjects([]);
-      fetchAllProjects(1, false);
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchInputVal(val);
+
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
     }
-  }, [user?._id, activeFilter, fetchAllProjects]);
+
+    searchTimeoutRef.current = setTimeout(() => {
+      setSearchQuery(val);
+    }, 400);
+  };
+
 
   // Format timestamp to relative time
   const formatTimestamp = (dateString: string) => {
@@ -279,6 +418,8 @@ function ChatHistoryPage() {
     }
   };
 
+
+
   return (
     <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>
       <Toaster />
@@ -313,76 +454,37 @@ function ChatHistoryPage() {
                     setPage(1);
                     setHasMore(true);
                     setProjects([]);
-                    fetchAllProjects(1, false);
+                    fetchAllProjects(1, false, searchQuery);
                   }}
                   disabled={loading}
                   className='gap-2'
                 >
-                  <RefreshCw className={`h-3 w-3`} />
+                  <RefreshCw className={`h-3 w-3 ${loading ? 'animate-spin' : ''}`} />
                   Refresh
                 </Button>
               </div>
 
-              {/* Filter Buttons */}
-              <div className='flex flex-wrap items-center gap-2'>
-                <Button
-                  variant={activeFilter === "chat" ? "default" : "outline"}
-                  size='sm'
-                  onClick={() => setActiveFilter("chat")}
-                  className={cn(
-                    "gap-2",
-                    activeFilter === "chat" &&
-                      "bg-primary text-primary-foreground"
-                  )}
-                >
-                  <MessageSquare className='h-3 w-3' />
-                  Chat
-                </Button>
-                <Button
-                  variant={
-                    activeFilter === "ai-image-gen" ? "default" : "outline"
-                  }
-                  size='sm'
-                  onClick={() => setActiveFilter("ai-image-gen")}
-                  className={cn(
-                    "gap-2",
-                    activeFilter === "ai-image-gen" &&
-                      "bg-primary text-primary-foreground"
-                  )}
-                >
-                  <ImageIcon className='h-3 w-3' />
-                  AI Image Gen
-                </Button>
-                <Button
-                  variant={
-                    activeFilter === "ai-video-gen" ? "default" : "outline"
-                  }
-                  size='sm'
-                  onClick={() => setActiveFilter("ai-video-gen")}
-                  className={cn(
-                    "gap-2",
-                    activeFilter === "ai-video-gen" &&
-                      "bg-primary text-primary-foreground"
-                  )}
-                >
-                  <Video className='h-3 w-3' />
-                  AI Video Gen
-                </Button>
-                <Button
-                  variant={
-                    activeFilter === "presentations" ? "default" : "outline"
-                  }
-                  size='sm'
-                  onClick={() => setActiveFilter("presentations")}
-                  className={cn(
-                    "gap-2",
-                    activeFilter === "presentations" &&
-                      "bg-primary text-primary-foreground"
-                  )}
-                >
-                  <Presentation className='h-3 w-3' />
-                  Presentations
-                </Button>
+              {/* Search Bar */}
+              <div className='relative mb-4 w-full'>
+                <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+                <Input
+                  type='text'
+                  value={searchInputVal}
+                  onChange={handleSearchChange}
+                  placeholder='Search projects by title or prompt...'
+                  className='pl-9 pr-9 h-10 w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800'
+                />
+                {searchInputVal && (
+                  <button
+                    onClick={() => {
+                      setSearchInputVal("");
+                      setSearchQuery("");
+                    }}
+                    className='absolute top-1/2 right-3 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200'
+                  >
+                    <X className='h-4 w-4' />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -409,7 +511,7 @@ function ChatHistoryPage() {
                       setPage(1);
                       setHasMore(true);
                       setProjects([]);
-                      fetchAllProjects(1, false);
+                      fetchAllProjects(1, false, searchQuery);
                     }}
                   >
                     Try Again
@@ -419,24 +521,12 @@ function ChatHistoryPage() {
                 <div className='py-16 text-center'>
                   <MessageSquare className='text-muted-foreground mx-auto mb-3 h-8 w-8' />
                   <h3 className='text-foreground mb-1 text-sm font-medium'>
-                    No{" "}
-                    {activeFilter === "chat"
-                      ? "conversations"
-                      : activeFilter === "ai-image-gen"
-                        ? "image generations"
-                        : activeFilter === "ai-video-gen"
-                          ? "video generations"
-                          : "presentations"}{" "}
-                    yet
+                    {searchQuery ? "No results found" : "No projects or conversations yet"}
                   </h3>
                   <p className='text-muted-foreground text-xs'>
-                    {activeFilter === "chat"
-                      ? "Start a new conversation to see it here"
-                      : activeFilter === "ai-image-gen"
-                        ? "Generate an image to see it here"
-                        : activeFilter === "ai-video-gen"
-                          ? "Generate a video to see it here"
-                          : "Create a presentation to see it here"}
+                    {searchQuery
+                      ? "Try searching for a different term"
+                      : "Start a conversation, generate an image/video, or create a presentation to see it here"}
                   </p>
                 </div>
               ) : (
@@ -458,27 +548,18 @@ function ChatHistoryPage() {
                               {getLastMessage(project)}
                             </p>
 
-                            <div className='text-muted-foreground flex items-center gap-3 text-xs'>
+                            <div className='text-muted-foreground flex flex-wrap items-center gap-3 text-xs'>
                               <div className='flex items-center gap-1'>
                                 <Clock className='h-3 w-3' />
-                                {formatTimestamp(project.updatedAt)}
+                                {formatTimestamp(project.updatedAt || project.createdAt)}
                               </div>
-                              {(project.type === "chat" || !project.type) && (
-                                <div className='flex items-center gap-1'>
-                                  <MessageSquare className='h-3 w-3' />
-                                  {(project.messages?.length || 0) + ((project as any).agentRunCount || 0)}
-                                </div>
-                              )}
-                              {project.type === "presentations" && (
-                                <div className='flex items-center gap-1'>
-                                  <Presentation className='h-3 w-3' />
-                                  {(project as any).presentationData?.outline
-                                    ?.length || 0}{" "}
-                                  slides
-                                </div>
-                              )}
+                              <div className='flex items-center gap-1'>
+                                <MessageSquare className='h-3 w-3' />
+                                {(project.messages?.length || 0) + ((project as any).agentRunCount || 0)}
+                              </div>
                             </div>
                           </div>
+
 
                           <div className='ml-3 flex items-center gap-1'>
                             <DropdownMenu>

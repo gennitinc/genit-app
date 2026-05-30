@@ -80,6 +80,7 @@ export function ChatInput({
     setImageModel,
     updateProjectModel,
     brandSaveStatus,
+    isProcessingDraft,
   } = useProjectDesign();
 
   const { startAgent, runs } = useAgentRunsContext();
@@ -433,18 +434,18 @@ export function ChatInput({
               <div className='relative flex items-center'>
                 <textarea
                   ref={textareaRef}
-                  value={isGenerating ? "" : inputValue}
+                  value={isGenerating || isProcessingDraft ? "" : inputValue}
                   onChange={handleInput}
                   onKeyDown={handleEnhancedKeyDown}
                   onPaste={handlePaste}
                   placeholder={
-                    isGenerating
+                    isGenerating || isProcessingDraft
                       ? ""
                       : isListening
                         ? "Listening... speak now ✦"
                         : placeholder
                   }
-                  disabled={isGenerating}
+                  disabled={isGenerating || isProcessingDraft}
                   className='placeholder:text-muted-foreground/60 scrollbar-none max-h-[300px] w-full resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                   style={{ height: "60px", minHeight: "60px" }}
                 />
@@ -456,7 +457,7 @@ export function ChatInput({
                 type='button'
                 className='bg-secondary text-primary relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-sm brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
                 onClick={() => fileInputRef.current?.click()}
-                disabled={isGenerating}
+                disabled={isGenerating || isProcessingDraft}
               >
                 <Plus className='size-5 shrink-0' />
               </button>
@@ -547,7 +548,7 @@ export function ChatInput({
                       : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
                   }`}
                   onClick={handleMicClick}
-                  disabled={!isSupported || isGenerating || isAgentRunning || isAgentAwaitingInput || isClassifying}
+                  disabled={!isSupported || isGenerating || isAgentRunning || isAgentAwaitingInput || isClassifying || isProcessingDraft}
                 >
                   <Mic className='size-4 shrink-0' />
                 </button>
@@ -558,11 +559,12 @@ export function ChatInput({
                     isClassifying ||
                     isAgentRunning ||
                     isAgentAwaitingInput ||
+                    isProcessingDraft ||
                     (!inputValue.trim() && attachedFiles.length === 0)
                   }
                   className='bg-primary text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
                 >
-                  {isGenerating || isAgentRunning || isClassifying ? (
+                  {isGenerating || isAgentRunning || isClassifying || isProcessingDraft ? (
                     <Loader2 className='h-4 w-4 animate-spin' />
                   ) : (
                     <svg

@@ -43,6 +43,7 @@ export function TextChatContent() {
     generateMessage,
     aiStatus,
     isLoadingProject,
+    isProcessingDraft,
   } = useProjectDesign();
 
   const { runs: agentRuns } = useAgentRunsContext();
@@ -89,9 +90,9 @@ export function TextChatContent() {
       })),
   ].sort((a, b) => a.createdAt - b.createdAt);
 
-  // Don't show empty state while the project is still loading — it causes a
+  // Don't show empty state while the project is still loading or draft is processing — it causes a
   // 'Start a conversation' flash on redirect to a chat URL.
-  const isEmpty = allItems.length === 0 && !isTyping && !isLoadingProject;
+  const isEmpty = allItems.length === 0 && !isTyping && !isLoadingProject && !isProcessingDraft;
 
   const skeletonRef = useRef<HTMLDivElement | null>(null);
   const scrollElRef = useRef<HTMLElement | null>(null);
@@ -522,13 +523,13 @@ export function TextChatContent() {
               </div>
             )}
 
-            {/* Loading skeleton while project is fetching on first redirect */}
-            {isLoadingProject && allItems.length === 0 && (
-              <div className='flex min-h-[40vh] flex-1 flex-col items-center justify-center gap-3'>
-                <div className='flex flex-col items-center gap-4 w-full max-w-md px-6'>
-                  <div className='h-4 w-3/4 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
-                  <div className='h-4 w-1/2 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
-                  <div className='h-4 w-5/6 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
+            {/* Loading skeleton / spinner while project is fetching on first redirect or draft is processing */}
+            {(isLoadingProject || isProcessingDraft) && allItems.length === 0 && (
+              <div className='flex min-h-[40vh] flex-1 flex-col items-center justify-center gap-4'>
+                <Loader size={32} className="text-primary animate-spin" />
+                <div className='flex flex-col items-center gap-3 w-full max-w-sm px-6'>
+                  <div className='h-3 w-2/3 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
+                  <div className='h-3 w-1/2 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
                 </div>
               </div>
             )}

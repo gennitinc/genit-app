@@ -225,6 +225,7 @@ export interface IProjectDesignContext {
   streamingContent: string;
   streamingAnalysis: string;
   isGeneratingImage: boolean;
+  isProcessingDraft: boolean;
   handleInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   handleKeyDown: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
   handlePaste: () => void;
