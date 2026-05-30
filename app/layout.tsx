@@ -21,50 +21,6 @@ import Script from "next/script";
 import type React from "react";
 import { Suspense } from "react";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const inter = Inter({ subsets: ["latin"] });
 
 const metadata: Metadata = {
