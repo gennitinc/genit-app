@@ -831,7 +831,7 @@ export default function TemplateGridAll() {
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
                             <span className="ml-2 text-xs text-muted-foreground">
-                              Get a 50 free credit
+                              Get started for free
                             </span>
                           )}
                         </div>
@@ -1115,7 +1115,7 @@ export default function TemplateGridAll() {
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
                             <span className="ml-2 text-xs text-muted-foreground">
-                              Get a 50 free credit
+                              Get started for free
                             </span>
                           )}
                         </div>

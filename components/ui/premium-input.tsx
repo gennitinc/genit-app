@@ -142,7 +142,7 @@ export function PremiumInput({
                   </span>
                 ) : (
                   <span className='text-muted-foreground text-xs'>
-                    Get a 50 free credit
+                    Get started for free
                   </span>
                 )}
               </div>

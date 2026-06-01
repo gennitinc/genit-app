@@ -501,7 +501,7 @@ export function IdeaSection() {
                 {!isGenerating && (
                   <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
                     <span className='mr-2 inline-block h-2 w-2 rounded-full bg-emerald-500'></span>
-                    50 AI Credits left
+                    0 AI Credits left
                   </div>
                 )}
                 {/* {isGenerating && (

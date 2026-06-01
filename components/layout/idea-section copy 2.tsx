@@ -902,7 +902,7 @@ export function IdeaSection() {
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
                             <span className='text-muted-foreground ml-2 text-xs'>
-                              Get a 50 free credit
+                              Get started for free
                             </span>
                           )}
                         </div>
