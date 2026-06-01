@@ -16,7 +16,8 @@ interface AgentRunsContextValue {
   startAgent: (
     prompt: string,
     attachedFiles?: { name: string; type: string; url: string }[],
-    selectedIntegrations?: Record<string, string>
+    selectedIntegrations?: Record<string, string>,
+    useBrandIdentity?: boolean
   ) => Promise<{ runId: string } | null>;
   clear: () => void;
 }
@@ -32,7 +33,8 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
     async (
       prompt: string,
       attachedFiles?: { name: string; type: string; url: string }[],
-      selectedIntegrations?: Record<string, string>
+      selectedIntegrations?: Record<string, string>,
+      useBrandIdentity?: boolean
     ) => {
       if (!projectId) return null;
       try {
@@ -41,6 +43,7 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
           prompt,
           attachedFiles,
           selectedIntegrations,
+          useBrandIdentity,
         });
         registerNewRun(runId, prompt);
         return { runId };

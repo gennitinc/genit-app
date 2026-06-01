@@ -76,7 +76,7 @@ export default function About2() {
               </a>
             </h2>
             <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-              Welcome to Gennit - Your AI-Powered Media Design Platform.
+              Welcome to Gennit - Your AI Agent Brand Management Platform.
             </p>
             <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
               <strong className='text-slate-12 font-semibold'>
@@ -93,9 +93,9 @@ export default function About2() {
               </a>{" "}
               (hereinafter referred to as{" "}
               <strong className='text-slate-12 font-semibold'>"Service"</strong>
-              ), an AI-powered media design platform that enables users to
-              create, edit, and manage various forms of digital media content
-              including graphics, videos, animations, and interactive designs.
+              ), an AI agent platform that helps businesses manage and grow
+              their brand from a single workspace by executing end-to-end
+              marketing activities.
             </p>
             <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
               Our Privacy Policy governs your visit to{" "}
@@ -108,7 +108,7 @@ export default function About2() {
                 https://gennit.online
               </a>
               , and explains how we collect, safeguard and disclose information
-              that results from your use of our AI media design Service.
+              that results from your use of our AI agent platform Service.
             </p>
             <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
               We use your data to provide and improve Service. By using Service,

@@ -67,11 +67,7 @@ export function DesignInspirationResults({
     ? finalized.selectedInspirations || []
     : selectedFiles;
 
-  // Group into pages of 4
-  const chunks: ScrapedPin[][] = [];
-  for (let i = 0; i < results.length; i += 4) {
-    chunks.push(results.slice(i, i + 4));
-  }
+  // Remove chunking - we want a continuous carousel
 
   const isSelected = (image: string) =>
     effectiveSelectedFiles?.includes(image) ?? false;
@@ -95,7 +91,7 @@ export function DesignInspirationResults({
         <p className='text-[11px] text-blue-500'>
           {isAutoSelected
             ? "AI Selected Foundation"
-            : "Design Inspirations Found"}{" "}
+            : "Deep Internet Search Results"}{" "}
           —{" "}
           <span className='text-foreground/70 font-mono normal-case italic'>
             "{query}"
@@ -110,70 +106,60 @@ export function DesignInspirationResults({
           className='group/carousel w-full'
         >
           <CarouselContent className='-ml-3'>
-            {chunks.map((chunk, chunkIdx) => (
-              <CarouselItem
-                key={`chunk-${chunkIdx}`}
-                className='shrink-0 basis-full pl-3'
-              >
-                {/* 2-col grid with fixed aspect ratio — height is stable */}
-                <div className='grid min-w-0 grid-cols-2 gap-3'>
-                  {chunk.map((pin, i) => {
-                    const globalIdx = chunkIdx * 4 + i;
-                    const selected = isSelected(pin.image);
-                    return (
-                      <div
-                        key={pin.id || `g-${globalIdx}`}
-                        className={cn(
-                          "flex flex-col gap-1.5 transition-all duration-300",
-                          selected
-                            ? "rounded-2xl border-2 border-blue-500/50 bg-blue-500/5 p-2 ring-4 ring-blue-500/10"
-                            : "border-2 border-transparent p-0"
-                        )}
-                      >
-                        {/* Image card — aspect-square keeps height fixed */}
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.96 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: i * 0.04 }}
-                          className={cn(
-                            "group/card relative aspect-square cursor-pointer overflow-hidden rounded-xl border transition-all duration-300",
-                            selected
-                              ? "border-primary/60 ring-primary/30 ring-1"
-                              : "border-white/8 hover:border-white/20"
-                          )}
-                          onClick={() => {
-                            setPreviewIndex(globalIdx);
-                            setIsPreviewOpen(true);
-                          }}
-                        >
-                          <img
-                            src={pin.image}
-                            alt={pin.alt}
-                            className='h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105'
-                            loading='lazy'
-                          />
-                          {/* Hover overlay */}
-                          <div className='absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover/card:opacity-100'>
-                            <ZoomIn className='h-5 w-5 text-white/70' />
-                          </div>
-                          {/* Selected badge */}
-                          {selected && (
-                            <div className='bg-primary absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full shadow-lg'>
-                              <Check className='h-3 w-3 text-white' />
-                            </div>
-                          )}
-                        </motion.div>
-
-                        {/* Select control removed - AI selects automatically */}
+            {results.map((pin, i) => {
+              const selected = isSelected(pin.image);
+              return (
+                <CarouselItem
+                  key={pin.id || `g-${i}`}
+                  className='shrink-0 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 pl-3'
+                >
+                  <div
+                    className={cn(
+                      "flex flex-col gap-1.5 transition-all duration-300",
+                      selected
+                        ? "rounded-2xl border-2 border-blue-500/50 bg-blue-500/5 p-2 ring-4 ring-blue-500/10"
+                        : "border-2 border-transparent p-0"
+                    )}
+                  >
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.96 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: i * 0.04 }}
+                      className={cn(
+                        "group/card relative aspect-square cursor-pointer overflow-hidden rounded-xl border transition-all duration-300",
+                        selected
+                          ? "border-primary/60 ring-primary/30 ring-1"
+                          : "border-white/8 hover:border-white/20"
+                      )}
+                      onClick={() => {
+                        setPreviewIndex(i);
+                        setIsPreviewOpen(true);
+                      }}
+                    >
+                      <img
+                        src={pin.image}
+                        alt={pin.alt}
+                        className='h-full w-full object-cover transition-transform duration-500 group-hover/card:scale-105'
+                        loading='lazy'
+                      />
+                      {/* Hover overlay */}
+                      <div className='absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover/card:opacity-100'>
+                        <ZoomIn className='h-5 w-5 text-white/70' />
                       </div>
-                    );
-                  })}
-                </div>
-              </CarouselItem>
-            ))}
+                      {/* Selected badge */}
+                      {selected && (
+                        <div className='bg-primary absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full shadow-lg'>
+                          <Check className='h-3 w-3 text-white' />
+                        </div>
+                      )}
+                    </motion.div>
+                  </div>
+                </CarouselItem>
+              );
+            })}
           </CarouselContent>
 
-          {chunks.length > 1 && (
+          {results.length > 2 && (
             <div className='mt-2 flex justify-end gap-1.5 opacity-0 transition-opacity duration-200 group-hover/carousel:opacity-100'>
               <CarouselPrevious className='static h-7 w-7 translate-y-0 rounded-full border-white/10 bg-white/5 hover:bg-white/10' />
               <CarouselNext className='static h-7 w-7 translate-y-0 rounded-full border-white/10 bg-white/5 hover:bg-white/10' />

@@ -13,6 +13,7 @@ import {
   Send,
   TrendingUp,
   Users,
+  Download,
 } from "lucide-react";
 import { AgentCard } from "./agent-card";
 import {
@@ -20,9 +21,27 @@ import {
   AutomationNodesConnectedCard,
 } from "./automation-cards";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useProjectDesign } from "@/context/DesignProject";
-import { apiResponse } from "@/utils/apiResponse";
+import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
+
+const getFullUrl = (url: string) => {
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+  const baseUrl = serverUrlSocket ? serverUrlSocket.replace(/\/$/, "") : "http://localhost:8000";
+  return `${baseUrl}${url.startsWith("/") ? "" : "/"}${url}`;
+};
 
 // Tiny inline link with a trailing icon — consistent treatment across cards.
 function ExternalLinkInline({
@@ -437,20 +456,37 @@ export function GeneratedDesignCard({ data }: { data: any }) {
     }
   };
 
+  const downloadUrl = data.url ? getFullUrl(data.url) : "";
+
   return (
     <AgentCard
       icon={isVideo ? <TrendingUp className="h-3.5 w-3.5" /> : <FileIcon className='h-3.5 w-3.5' />}
       title={isVideo ? 'Generated Video' : 'Generated Design'}
       tone='success'
+      meta={
+        downloadUrl ? (
+          <a
+            href={downloadUrl}
+            download
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-foreground text-muted-foreground transition-colors"
+            title="Download"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Download className="h-3.5 w-3.5" />
+          </a>
+        ) : null
+      }
     >
       <div className='text-foreground text-[13.5px] font-medium'>
         {data.name || "Design generated"}
       </div>
       {isVideo ? (
-         <video src={data.url} controls className='border-border/70 mt-3 max-h-48 w-auto rounded-md border object-cover dark:border-white/10' />
+         <video src={getFullUrl(data.url)} controls className='border-border/70 mt-3 max-h-48 w-auto rounded-md border object-cover dark:border-white/10' />
       ) : (
          <img
-           src={data.url}
+           src={getFullUrl(data.url)}
            alt={data.name || 'Design'}
            className='border-border/70 mt-3 max-h-48 w-auto rounded-md border object-cover dark:border-white/10'
          />
@@ -480,7 +516,7 @@ export function GeneratedDesignCard({ data }: { data: any }) {
               View
             </Button>
           )}
-          <ExternalLinkInline href={data.url}>Open {isVideo ? "Video" : "Image"}</ExternalLinkInline>
+          <ExternalLinkInline href={getFullUrl(data.url)}>Open {isVideo ? "Video" : "Image"}</ExternalLinkInline>
         </div>
       )}
     </AgentCard>
@@ -490,30 +526,87 @@ export function GeneratedDesignCard({ data }: { data: any }) {
 // ─── Design Inspiration List ───
 export function DesignInspirationCard({ data }: { data: any }) {
   const items: any[] = Array.isArray(data) ? data : (data?.pins || data?.inspirations || []);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [previewIndex, setPreviewIndex] = useState(0);
+
   return (
     <AgentCard
       icon={<TrendingUp className='h-3.5 w-3.5' />}
-      title={`${items.length} design ${items.length === 1 ? "inspiration" : "inspirations"}`}
+      title={`${items.length} internet search ${items.length === 1 ? "inspiration" : "inspirations"}`}
     >
       {items.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>No inspirations found.</div>
       ) : (
-        <div className='mt-2 grid grid-cols-2 gap-2'>
-          {items.slice(0, 4).map((item, i) => (
-            <a
-              key={item.id || i}
-              href={item.url || item.image}
-              target='_blank'
-              rel='noreferrer'
-              className='group relative block aspect-square overflow-hidden rounded-md border border-border/50 dark:border-white/10'
-            >
-              <img
-                src={item.image}
-                alt={item.alt || "Design inspiration"}
-                className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
-              />
-            </a>
-          ))}
+        <div className='mt-2'>
+          <Carousel
+            opts={{ align: "start", loop: false }}
+            className='group/carousel w-full'
+          >
+            <CarouselContent className='-ml-2'>
+              {items.map((item, i) => (
+                <CarouselItem key={item.id || i} className='basis-1/2 sm:basis-1/3 pl-2'>
+                  <div
+                    onClick={() => {
+                      setPreviewIndex(i);
+                      setIsPreviewOpen(true);
+                    }}
+                    className='group relative block aspect-square cursor-pointer overflow-hidden rounded-md border border-border/50 dark:border-white/10'
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.alt || "Design inspiration"}
+                      className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            {items.length > 2 && (
+              <div className='mt-2 flex justify-end gap-1.5 opacity-0 transition-opacity duration-200 group-hover/carousel:opacity-100'>
+                <CarouselPrevious className='static h-6 w-6 translate-y-0 rounded-full border-border/50 bg-background/50 hover:bg-background/80' />
+                <CarouselNext className='static h-6 w-6 translate-y-0 rounded-full border-border/50 bg-background/50 hover:bg-background/80' />
+              </div>
+            )}
+          </Carousel>
+
+          <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+            <DialogContent className='flex h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-black p-0 shadow-2xl'>
+              <Carousel
+                opts={{ loop: true, align: "center", startIndex: previewIndex }}
+                className='flex min-h-0 flex-1 flex-col'
+              >
+                <CarouselContent className='ml-0 h-full flex-1'>
+                  {items.map((item, idx) => (
+                    <CarouselItem
+                      key={`preview-${idx}`}
+                      className='flex h-full basis-full flex-col items-center justify-center p-6 pb-4'
+                    >
+                      <div className='relative flex min-h-0 w-full flex-1 items-center justify-center'>
+                        <img
+                          src={item.image}
+                          alt={item.alt || "Design inspiration"}
+                          className='max-h-full max-w-full rounded-xl object-contain shadow-2xl'
+                          style={{ maxHeight: "calc(88vh - 120px)" }}
+                        />
+                      </div>
+                      <div className='mt-3 flex w-full items-center justify-center gap-4'>
+                        <CarouselPrevious className='static size-7 translate-y-0 rounded-full border-none bg-white/10 text-white hover:bg-white/20' />
+                        <div className='text-center'>
+                          <p className='line-clamp-1 text-[11px] text-white/60'>
+                            {item.alt || "Design Concept"}
+                          </p>
+                          <p className='mt-0.5 font-mono text-[9px] tracking-widest text-white/25'>
+                            {idx + 1} / {items.length}
+                          </p>
+                        </div>
+                        <CarouselNext className='static size-7 translate-y-0 rounded-full border-none bg-white/10 text-white hover:bg-white/20' />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+            </DialogContent>
+          </Dialog>
         </div>
       )}
     </AgentCard>

@@ -44,6 +44,15 @@ import "react-mask-editor/dist/style.css";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 
+const getFullUrl = (url: string) => {
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+  const baseUrl = serverUrlSocket ? serverUrlSocket.replace(/\/$/, "") : "http://localhost:8000";
+  return `${baseUrl}${url.startsWith("/") ? "" : "/"}${url}`;
+};
+
 interface GenerationItem {
   id: string;
   name: string;
@@ -867,7 +876,7 @@ export function VersioningMessage({
                 >
                   {/* Base image */}
                   <img
-                    src={mediaUrl}
+                    src={getFullUrl(mediaUrl)}
                     alt={item.name}
                     className='block h-full w-full object-cover'
                     onError={(e) => {
@@ -883,7 +892,7 @@ export function VersioningMessage({
                   {inpaintMode && inpaintItem?.id === item.id && (
                     <div className='absolute inset-0 z-10 h-full w-full'>
                       <MaskEditor
-                        src={mediaUrl}
+                        src={getFullUrl(mediaUrl)}
                         canvasRef={
                           maskCanvasRef as React.MutableRefObject<HTMLCanvasElement>
                         }
@@ -1105,10 +1114,10 @@ export function VersioningMessage({
                 </div>
               </div>
             ) : mediaType === "video" && mediaUrl ? (
-              <div className='flex flex-col items-start gap-2'>
-                <div className='border-border bg-muted relative h-full w-full flex-shrink-0 overflow-hidden rounded-md border sm:h-full sm:w-full'>
+              <div className='flex flex-col items-start gap-2 w-full'>
+                <div className='border-border bg-muted relative aspect-video w-full flex-shrink-0 overflow-hidden rounded-md border'>
                   <video
-                    src={mediaUrl}
+                    src={getFullUrl(mediaUrl)}
                     className='h-full w-full object-cover'
                     muted
                     preload='metadata'

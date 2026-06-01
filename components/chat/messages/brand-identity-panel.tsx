@@ -19,11 +19,30 @@ export function useBrandIdentityEnabled() {
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored !== null) setEnabled(stored === "true");
+
+    const storageListener = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY) {
+        setEnabled(e.newValue === "true");
+      }
+    };
+    window.addEventListener("storage", storageListener);
+
+    const customListener = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      setEnabled(customEvent.detail === "true");
+    };
+    window.addEventListener(STORAGE_KEY, customListener);
+
+    return () => {
+      window.removeEventListener("storage", storageListener);
+      window.removeEventListener(STORAGE_KEY, customListener);
+    };
   }, []);
 
   const update = (next: boolean) => {
     setEnabled(next);
     localStorage.setItem(STORAGE_KEY, String(next));
+    window.dispatchEvent(new CustomEvent(STORAGE_KEY, { detail: String(next) }));
   };
 
   return [enabled, update] as const;
@@ -43,7 +62,7 @@ type BrandView = {
   values?: string[];
 };
 
-export function BrandIdentityPanel() {
+export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
   const { user } = useUserContext();
   const [enabled, setEnabled] = useBrandIdentityEnabled();
   const [isImportOpen, setIsImportOpen] = useState(false);
@@ -165,6 +184,7 @@ export function BrandIdentityPanel() {
         <Switch
           checked={enabled}
           onCheckedChange={setEnabled}
+          disabled={disabled}
           aria-label='Toggle brand identity'
         />
       </div>

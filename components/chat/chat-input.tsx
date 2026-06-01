@@ -98,7 +98,7 @@ export function ChatInput({
   const { user } = useUserContext();
   const router = useRouter();
   const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 10;
-  const [brandIdentityEnabled] = useBrandIdentityEnabled();
+  const [brandIdentityEnabled, setBrandIdentityEnabled] = useBrandIdentityEnabled();
   const activeOrg =
     user?.currentOrganization && typeof user.currentOrganization === "object"
       ? user.currentOrganization
@@ -129,6 +129,12 @@ export function ChatInput({
   useEffect(() => {
     setSelectedModel(null);
   }, [project?._id]);
+
+  useEffect(() => {
+    if (project?.metadata?.finalizedSelections?.useBrandIdentity !== undefined) {
+      setBrandIdentityEnabled(project.metadata.finalizedSelections.useBrandIdentity);
+    }
+  }, [project?._id, project?.metadata?.finalizedSelections?.useBrandIdentity, setBrandIdentityEnabled]);
 
   const { isListening, startListening, stopListening, isSupported } =
     useSpeechToText({
@@ -247,10 +253,10 @@ export function ChatInput({
           }
         }
 
-        await startAgent(inputValue, uploadedFiles);
+        await startAgent(inputValue, uploadedFiles, undefined, brandIdentityEnabled);
       } else {
         // Design/image/text generation flow
-        await generateMessage(inputValue, attachedFiles, project._id);
+        await generateMessage(inputValue, attachedFiles, project._id, undefined, { useBrandIdentity: brandIdentityEnabled });
       }
 
       trackEvent("generation_request_submitted", {
@@ -612,7 +618,7 @@ export function ChatInput({
 
                   {/* Brand Settings Content */}
                   <div className='custom-scrollbar max-h-[400px] overflow-y-auto pr-1'>
-                    <BrandIdentityPanel />
+                    <BrandIdentityPanel disabled={isGenerating || isAgentRunning} />
                   </div>
                 </div>
               </motion.div>

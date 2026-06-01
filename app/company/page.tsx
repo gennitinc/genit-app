@@ -20,22 +20,24 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "About Gennit – AI Media Design Company",
+  title: "About Gennit – Your AI Marketing Team & Agent Platform",
   description:
-    "Learn about Gennit AI, the company revolutionizing media design with AI-powered solutions. Our mission is to democratize professional design for everyone.",
+    "Gennit is an AI agent platform that helps businesses manage and grow their brand from a single workspace, executing marketing tasks end-to-end.",
   keywords: [
     "about gennit",
     "company",
     "mission",
     "vision",
-    "AI media design company",
+    "AI marketing platform",
+    "AI agents marketing",
+    "brand management workspace",
+    "marketing automation",
     "team",
-    "media creation tools",
   ],
   openGraph: {
-    title: "About Gennit – AI Media Design Company",
+    title: "About Gennit – Your AI Marketing Team & Agent Platform",
     description:
-      "Discover Gennit's mission to revolutionize media design through AI-powered solutions.",
+      "Connect your website and let Gennit's AI marketing agents create content, plan calendars, and execute growth activities at scale.",
     url: "https://www.gennit.online/company",
     type: "website",
     images: [
@@ -43,7 +45,7 @@ export const metadata: Metadata = {
         url: "https://www.gennit.online/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Gennit AI Company",
+        alt: "Gennit AI Agent Platform",
       },
     ],
   },
@@ -64,26 +66,17 @@ export default function About2() {
             <div className='space-y-5 md:space-y-8'>
               <div className='space-y-3'>
                 <h1 className='text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl'>
-                  AI Media{" "}
+                  AI Agent{" "}
                   <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
-                    Design Company
+                    Marketing Platform
                   </span>
                 </h1>
                 <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                  At Gennit, our mission is to revolutionize media design
-                  through AI-powered solutions. We specialize in creating
-                  intelligent design tools that generate stunning graphics,
-                  videos, animations, and multimedia content. Our AI understands
-                  your brand, vision, and creative goals to empower creators,
-                  marketers, agencies, and businesses to produce professional
-                  media content at scale without traditional design complexity.
+                  At Gennit, our mission is to give every business its own AI marketing team that can help plan, create, and execute growth activities at scale. Gennit is an AI agent platform that helps businesses manage and grow their brand from a single workspace. Businesses can connect their website, and Gennit learns about their products, audience, brand voice, and goals. From there, AI agents can create content, design marketing assets, plan content calendars, schedule and publish posts, send emails, generate insights, and automate marketing workflows across multiple platforms.
                 </p>
               </div>
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                We're proud to be at the forefront of AI-powered media creation,
-                democratizing professional design across all media formats. Our
-                platform makes advanced media design accessible to everyone,
-                regardless of their technical expertise or creative background.
+                Unlike traditional AI tools that only generate content, Gennit is designed to take action. It combines AI agents with 23+ integrations to help businesses execute marketing tasks end-to-end, reducing the need to switch between multiple tools or hire large marketing teams.
               </p>
               <figure>
                 <img
@@ -92,18 +85,11 @@ export default function About2() {
                   alt='Blog Image'
                 />
                 <figcaption className='mt-3 text-center text-sm text-gray-500 dark:text-neutral-500'>
-                  AI-powered media design tools creating graphics, videos, and
-                  animations.
+                  AI agents executing end-to-end marketing activities from a single workspace.
                 </figcaption>
               </figure>
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                As we've grown, we've seen how Gennit has helped businesses such
-                as startups, marketing agencies, e-commerce brands, content
-                creators, and media companies produce professional graphics,
-                videos, animations, and multimedia content at scale. We've
-                learned that when media design tools are intuitive and
-                AI-powered, teams can focus on creativity and strategy rather
-                than technical barriers.
+                As businesses adopt Gennit, they experience the power of having a full-scale marketing execution engine operating 24/7. Whether it is planning campaigns, scheduling social posts, designing brand-consistent assets, or generating deep analytics, our platform takes the busywork out of growth so that teams can focus on strategic decisions rather than administrative friction.
               </p>
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
                 That's why we are excited to offer{" "}
@@ -113,16 +99,14 @@ export default function About2() {
                 >
                   our free Basic plan
                 </a>
-                , which allows individual creators, startups, and small teams to
-                access professional AI media design tools and create stunning
-                graphics, videos, and animations without any upfront investment.
+                , which allows startups, small business owners, and creators to connect their website, onboard their brand voice, and let AI agents start automating their first marketing activities without upfront investment.
               </p>
               <blockquote className='p-4 text-center sm:px-7'>
                 <p className='text-xl font-medium text-gray-800 md:text-2xl md:leading-normal xl:text-2xl xl:leading-normal dark:text-neutral-200'>
                   To say that switching to Gennit has been life-changing is an
-                  understatement. My media production output has tripled and I
-                  can focus on strategy instead of technical design work. The AI
-                  handles everything from graphics to video creation.
+                  understatement. Our marketing execution rate has tripled, and
+                  the AI agents handle everything from social media scheduling
+                  to automated email outreach based on our brand voice.
                 </p>
                 <p className='mt-5 text-gray-800 dark:text-neutral-200'>
                   Sarah Chen, Marketing Director
@@ -135,30 +119,20 @@ export default function About2() {
                   alt='Blog Image'
                 />
                 <figcaption className='mt-3 text-center text-sm text-gray-500 dark:text-neutral-500'>
-                  Teams collaborating on AI-generated media content across
-                  multiple formats.
+                  AI agents and marketing integrations automating brand workflows.
                 </figcaption>
               </figure>
               <div className='space-y-3'>
                 <h3 className='text-2xl font-semibold dark:text-white'>
-                  Bringing professional media design to everyone
+                  Bringing an AI marketing team to every business
                 </h3>
                 <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                  We know the power of great media design is real, and we want
-                  to create an opportunity for everyone to access professional
-                  AI-powered media creation tools. Our platform enables teams of
-                  any size to create stunning graphics, videos, animations, and
-                  multimedia content with smart templates, brand kits, and AI
-                  assistance that understands your vision across all media
-                  formats.
+                  We believe that professional marketing should not be restricted by budget or size. Our platform makes advanced execution tools available to everyone. From small teams to large enterprises, Gennit provides a collaborative workspace where AI agents integrate seamlessly with your brand assets, messaging, and 23+ daily tools.
                 </p>
               </div>
               <ul className='list-outside list-disc space-y-5 ps-5 text-lg text-gray-800 dark:text-neutral-200'>
                 <li className='ps-2'>
-                  Gennit allows us to create professional media content in real
-                  time and is a really great way for our marketing team to stay
-                  consistent with brand guidelines while producing high-quality
-                  graphics, videos, and animations,"{" "}
+                  Gennit allows us to run multi-channel campaigns in real-time, staying perfectly consistent with our brand voice while publishing high-quality assets and emails,"{" "}
                   <a
                     className='font-medium text-blue-600 decoration-2 hover:underline focus:underline focus:outline-hidden dark:text-blue-500'
                     href='#'
@@ -168,10 +142,7 @@ export default function About2() {
                   Alex Rodriguez, Creative Director at TechStart.
                 </li>
                 <li className='ps-2'>
-                  Gennit opened a new way of media creation. It's an intuitive
-                  way for everyone to create and iterate on designs, videos, and
-                  animations without technical barriers," said Maria Santos,
-                  Marketing Manager at{" "}
+                  Gennit redefined how we manage our growth. It is an intuitive workspace where anyone can launch automated marketing flows with zero complexity," said Maria Santos, Marketing Manager at{" "}
                   <a
                     className='font-medium text-blue-600 decoration-2 hover:underline focus:underline focus:outline-hidden dark:text-blue-500'
                     href='#'
@@ -182,45 +153,38 @@ export default function About2() {
                 </li>
               </ul>
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                Small teams and individual creators need tools where they can
-                create professional media content quickly, both for themselves
-                and for the people they work with – no matter if it's a fellow
-                marketer, product manager, developer or client. Gennit allows
-                you to collaborate seamlessly, creating a central place for
-                brand-consistent media design across graphics, videos, and
-                animations. As those teams grow, consistency and efficiency
-                becomes integrated in how they communicate and work together.
+                Small teams and individual creators need tools where they can launch campaigns quickly, both for themselves and for the clients they support. Gennit allows you to collaborate seamlessly, creating a centralized workspace for brand-consistent marketing assets, automated scheduling, and email dispatch. As your business grows, Gennit scales your marketing execution alongside it.
               </p>
               <div>
                 <a
                   className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
                   href='#'
                 >
-                  AI Media Design
+                  AI Agents
                 </a>
                 <a
                   className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
                   href='#'
                 >
-                  Video Creation
+                  Marketing Automation
                 </a>
                 <a
                   className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
                   href='#'
                 >
-                  Brand Kits
+                  Brand Workspace
                 </a>
                 <a
                   className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
                   href='#'
                 >
-                  Animations
+                  Integrations
                 </a>
                 <a
                   className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
                   href='#'
                 >
-                  Free
+                  Free Plan
                 </a>
               </div>
             </div>

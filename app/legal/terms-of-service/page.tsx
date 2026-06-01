@@ -106,7 +106,7 @@ export default function About2() {
               <strong className='text-slate-12 font-semibold'>
                 Klip Technologies, Inc. ("Company", "We", "Our", "Us")
               </strong>{" "}
-              , the operator of Gennit, an AI-powered media design platform, and
+              , the operator of Gennit, an AI agent platform that helps businesses manage and grow their brand from a single workspace, and
               you (
               <strong className='text-slate-12 font-semibold'>"You"</strong> or
               the{" "}
@@ -482,17 +482,17 @@ export default function About2() {
               </a>
             </h2>
             <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-              Our AI-powered media design Service allows you to create, post,
+              Our AI agent platform allows you to create, post,
               link, store, share and otherwise make available certain
               information, text, graphics, videos, animations, interactive
-              designs, or other digital media content ("Content"). You are
+              designs, or other digital marketing and brand assets ("Content"). You are
               responsible for Content that you create, post, or upload on or
               through our Service, including its legality, reliability, and
               appropriateness.
             </p>
             <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
               By creating, posting, or uploading Content on or through our
-              AI-powered Service, You represent and warrant that: (i) Content is
+              AI agent platform, You represent and warrant that: (i) Content is
               yours (you own it) and/or you have the right to use it and the
               right to grant us the rights and license as provided in these
               Terms, and (ii) that the creation, posting, or uploading of your
@@ -503,12 +503,12 @@ export default function About2() {
             </p>
             <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
               You retain any and all of your rights to any Content you create,
-              submit, post or display on or through our AI-powered Service and
+              submit, post or display on or through our AI agent platform and
               you are responsible for protecting those rights. We take no
               responsibility and assume no liability for Content you or any
               third party creates, posts, or uploads on or through Service.
-              However, by creating or posting Content using our AI-powered
-              Service you grant us the right and license to use such Content for
+              However, by creating or posting Content using our AI agent
+              platform you grant us the right and license to use such Content for
               purposes of making Service available for other users. This license
               does not include the right for us to make your Content available
               to other users of Service without your approval.
@@ -545,7 +545,7 @@ export default function About2() {
               </a>
             </h2>
             <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-              You may use our AI-powered media design Service only for lawful
+              You may use our AI agent platform only for lawful
               purposes and in accordance with Terms. You agree not to use
               Service for:
             </p>
@@ -579,8 +579,7 @@ export default function About2() {
                 <strong className='text-slate-12 font-semibold'>
                   Illegal Activities
                 </strong>
-                : You are prohibited from using our AI-powered media design
-                Service to engage in any illegal activities or create content
+                : You are prohibited from using our AI agent platform to engage in any illegal activities or create content
                 that violates applicable laws.
               </li>
             </ol>
@@ -589,10 +588,10 @@ export default function About2() {
             </p>
             <ol className='text-slate-11 my-5 flex list-decimal flex-col gap-3 pl-5 text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
               <li>
-                Use our AI-powered Service in any manner that could disable,
+                Use our AI agent platform in any manner that could disable,
                 overburden, damage, or impair Service or interfere with any
-                other party's use of Service, including their ability to create
-                and manage media content.
+                other party's use of Service, including their ability to manage
+                their brand and execute marketing tasks.
               </li>
               <li>
                 Introduce any viruses, trojan horses, worms, logic bombs, or

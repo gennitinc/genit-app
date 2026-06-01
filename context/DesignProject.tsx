@@ -53,7 +53,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isMobile, setIsMobile] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [generations, setGenerations] = useState<any[]>([]);
+  const currentOrg = user?.currentOrganization && typeof user.currentOrganization === "object"
+    ? (user.currentOrganization as any)
+    : ((user?.allOrganizations || [])[0] || user?.business || null);
+  const orgLogo = currentOrg?.businessLogo || null;
+
   const userAvatar =
+    orgLogo ||
     user?.userdp ||
     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face";
   const userName = user?.username || "User";

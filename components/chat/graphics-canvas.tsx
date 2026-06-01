@@ -211,15 +211,15 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
     <div className='bg-background relative flex h-full w-full flex-col overflow-hidden'>
       {/* ── Header with Title & Toolbar (side-by-side) ──────────────── */}
       <div className='flex items-center justify-between px-4 py-1 border-b border-border/80 bg-background/50 backdrop-blur-sm shrink-0 z-10'>
-        <div className='flex items-center gap-2 text-foreground'>
-          <div className="w-full h-fit flex justify-start items-center space-x-1.5 px-2">
-            <span className="w-2 h-2 rounded-full bg-red-400" />
-            <span className="w-2 h-2 rounded-full bg-yellow-400" />
-            <span className="w-2 h-2 rounded-full bg-green-400" />
-          </div>
+       <div className="flex items-center gap-2 text-foreground">
+  <div className="flex items-center space-x-1.5 px-2">
+    <span className="w-2 h-2 rounded-full bg-red-400" />
+    <span className="w-2 h-2 rounded-full bg-yellow-400" />
+    <span className="w-2 h-2 rounded-full bg-green-400" />
+  </div>
 
-          <span className='text-sm font-semibold'>Graphics</span>
-        </div>
+  <span className="text-sm font-semibold">Design Studio</span>
+</div>
 
         {/* Toolbar items at the far right */}
         <div className='flex items-center p-1 space-x-1 border rounded-md bg-background/80 border-border backdrop-blur-sm shadow-sm'>

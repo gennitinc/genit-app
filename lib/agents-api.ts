@@ -40,6 +40,7 @@ export async function startAgentRun(input: {
   prompt: string;
   attachedFiles?: { name: string; type: string; url: string }[];
   selectedIntegrations?: Record<string, string>;
+  useBrandIdentity?: boolean;
 }): Promise<{ runId: string }> {
   const { data } = await apiResponse.post<{ success: boolean; runId: string }>(
     "/agents/run",

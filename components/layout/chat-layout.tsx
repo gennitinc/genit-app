@@ -7,7 +7,7 @@ import TopNavWithAurora from "./top-nav-with-aurora";
 import { useSidebar } from "@/components/ui/sidebar";
 import { AgentRunsProvider, useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { PanelRightClose, PanelRightOpen, Maximize2, Minimize2 } from "lucide-react";
@@ -24,8 +24,8 @@ export function ChatLayout() {
 
 function ChatLayoutInner() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
-  const isDesktop = !isMobile;
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   const { isGeneratingImage, liveNodes, messages, project, isGenerating } = useProjectDesign();
   const { runs: agentRuns } = useAgentRunsContext();
