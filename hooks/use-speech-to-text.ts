@@ -17,6 +17,14 @@ export function useSpeechToText({
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<any>(null);
 
+  const onTranscriptRef = useRef(onTranscript);
+  const onEndRef = useRef(onEnd);
+
+  useEffect(() => {
+    onTranscriptRef.current = onTranscript;
+    onEndRef.current = onEnd;
+  }, [onTranscript, onEnd]);
+
   useEffect(() => {
     const SpeechRecognition =
       (window as any).SpeechRecognition ||
@@ -43,8 +51,8 @@ export function useSpeechToText({
         .map((result: any) => result.transcript)
         .join("");
 
-      if (onTranscript) {
-        onTranscript(transcript);
+      if (onTranscriptRef.current) {
+        onTranscriptRef.current(transcript);
       }
     };
 
@@ -56,8 +64,8 @@ export function useSpeechToText({
 
     recognition.onend = () => {
       setIsListening(false);
-      if (onEnd) {
-        onEnd();
+      if (onEndRef.current) {
+        onEndRef.current();
       }
     };
 
@@ -68,7 +76,7 @@ export function useSpeechToText({
         recognitionRef.current.stop();
       }
     };
-  }, [onTranscript, onEnd, continuous]);
+  }, [continuous]);
 
   const startListening = useCallback(() => {
     if (recognitionRef.current && !isListening) {
