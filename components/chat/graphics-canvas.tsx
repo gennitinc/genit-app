@@ -324,11 +324,11 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
               <LoadingFileLoader />
 
               <div className='flex flex-col items-center gap-1.5 px-2'>
-                <p className='text-[11px] font-bold tracking-[0.2em] text-white/80 uppercase dark:text-black'>
+                <p className='text-[11px] font-bold tracking-[0.2em] text-black dark:text-white/80 uppercase '>
                   Agent Thinking
                 </p>
 
-                <p className='text-center text-[9px] leading-relaxed text-white/60 italic dark:text-black'>
+                <p className='text-center text-[9px] leading-relaxed text-black dark:text-white/60 italic'>
                   {aiStatus || "Crafting unique design concepts..."}
                 </p>
               </div>
