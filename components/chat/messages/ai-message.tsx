@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 import Markdown from "react-markdown";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 /** Strip raw JSON / API error dumps from AI text and replace with a friendly message. */
 function sanitizeTextContent(text: string): string {
@@ -164,8 +165,57 @@ export function AIMessage({
                 // Sanitize any raw error JSON that may have leaked into the message
                 textContent = sanitizeTextContent(textContent);
                 if (!textContent) return null;
+
+                const lowerText = textContent.toLowerCase();
+                const needsAdBalanceTopUp = lowerText.includes("ad balance") || lowerText.includes("top up");
+                const isMetaAdTopUp = needsAdBalanceTopUp && (lowerText.includes("meta") || lowerText.includes("facebook"));
+                const isGoogleAdTopUp = needsAdBalanceTopUp && (lowerText.includes("google"));
+
+                const integrationNames = [
+                  "Meta Ads", "Google Ads", "Facebook", "Instagram", "X Ads", "Twitter", "X", 
+                  "Pinterest", "TikTok", "LinkedIn", "Shopify", "Mailchimp", "Brevo"
+                ];
+                let integrationToConnect: string | null = null;
+                
+                for (const name of integrationNames) {
+                  if (lowerText.includes(`connect ${name.toLowerCase()}`) || 
+                      lowerText.includes(`connect your ${name.toLowerCase()}`) ||
+                      lowerText.includes(`no ${name.toLowerCase()} connection`)) {
+                    integrationToConnect = name;
+                    break;
+                  }
+                }
+
+                if (!integrationToConnect) {
+                  const match = textContent.match(/connect (?:your )?([A-Z][A-Za-z0-9\s]+?)(?: account| integration| in the integrations page)/);
+                  if (match && match[1].length < 20) {
+                    integrationToConnect = match[1].trim();
+                  }
+                }
+
                 return (
-                  <Response key={`${message.id}-${i}`}>{textContent}</Response>
+                  <div key={`${message.id}-${i}`} className="flex flex-col gap-2">
+                    <Response>{textContent}</Response>
+                    {(integrationToConnect || needsAdBalanceTopUp) && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {integrationToConnect && (
+                          <Button asChild size="sm" variant="default" className="w-fit">
+                            <Link href="/integrations">Connect {integrationToConnect}</Link>
+                          </Button>
+                        )}
+                        {isMetaAdTopUp && (
+                          <Button asChild size="sm" variant="secondary" className="w-fit">
+                            <a href="https://business.facebook.com/ads/manager/billing_history/summary/" target="_blank" rel="noopener noreferrer">Top Up Meta Ads Balance</a>
+                          </Button>
+                        )}
+                        {isGoogleAdTopUp && (
+                          <Button asChild size="sm" variant="secondary" className="w-fit">
+                            <a href="https://ads.google.com/aw/billing/summary" target="_blank" rel="noopener noreferrer">Top Up Google Ads Balance</a>
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 );
               }
               case "reasoning":
