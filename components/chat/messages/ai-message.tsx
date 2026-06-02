@@ -176,20 +176,31 @@ export function AIMessage({
                   "Pinterest", "TikTok", "LinkedIn", "Shopify", "Mailchimp", "Brevo"
                 ];
                 let integrationToConnect: string | null = null;
+                let isReconnect = false;
                 
                 for (const name of integrationNames) {
-                  if (lowerText.includes(`connect ${name.toLowerCase()}`) || 
-                      lowerText.includes(`connect your ${name.toLowerCase()}`) ||
-                      lowerText.includes(`no ${name.toLowerCase()} connection`)) {
+                  const n = name.toLowerCase();
+                  if (
+                    lowerText.includes(`connect ${n}`) || 
+                    lowerText.includes(`connect your ${n}`) ||
+                    lowerText.includes(`no ${n} connection`) ||
+                    lowerText.includes(`${n} needs reconnection`) ||
+                    lowerText.includes(`reconnect ${n}`) ||
+                    lowerText.includes(`reconnect your ${n}`) ||
+                    (lowerText.includes(n) && (lowerText.includes("token expired") || lowerText.includes("needs reconnection") || lowerText.includes("reconnect")))
+                  ) {
                     integrationToConnect = name;
+                    isReconnect = lowerText.includes("reconnect") || lowerText.includes("expired") || lowerText.includes("needs reconnection");
                     break;
                   }
                 }
 
                 if (!integrationToConnect) {
-                  const match = textContent.match(/connect (?:your )?([A-Z][A-Za-z0-9\s]+?)(?: account| integration| in the integrations page)/);
+                  const match = textContent.match(/(?:reconnect|connect) (?:your )?([A-Z][A-Za-z0-9\s]+?)(?: account| integration| in the integrations page)/i) || 
+                                textContent.match(/([A-Z][A-Za-z0-9\s]+?) needs reconnection/i);
                   if (match && match[1].length < 20) {
                     integrationToConnect = match[1].trim();
+                    isReconnect = lowerText.includes("reconnect") || lowerText.includes("expired") || lowerText.includes("needs reconnection");
                   }
                 }
 
@@ -200,7 +211,7 @@ export function AIMessage({
                       <div className="flex flex-wrap gap-2 mt-2">
                         {integrationToConnect && (
                           <Button asChild size="sm" variant="default" className="w-fit">
-                            <Link href="/integrations">Connect {integrationToConnect}</Link>
+                            <Link href="/integrations">{isReconnect ? "Reconnect / Manage" : "Connect"} {integrationToConnect}</Link>
                           </Button>
                         )}
                         {isMetaAdTopUp && (
