@@ -126,42 +126,42 @@ const plansDev = [
 ];
 
 const plansProd = [
-  {
-    id: "basic",
-    name: "Basic",
-    monthlyPrice: 0,
-    yearlyPrice: 0,
-    productIds: {
-      monthly: null,
-      yearly: null,
-    },
-    features: [
-      "Limited monthly credits",
-      "HD image generation",
-      "Short video creation",
-      "Basic templates library",
-      "Community support",
-    ],
-    popular: false,
-  },
-  {
-    id: "creator",
-    name: "Creator",
-    monthlyPrice: 5,
-    yearlyPrice: 48,
-    productIds: {
-      monthly: "21e60d79-cc2a-4c32-ab78-7eeadaabd60a",
-      yearly: "bbb454d7-742a-419d-ba18-94386be003fe",
-    },
-    features: [
-      "500 credits per month",
-      "HD image generation",
-      "Short-form video exports",
-      "Expanded templates library",
-      "Standard support",
-    ],
-    popular: false,
-  },
+  // {
+  //   id: "basic",
+  //   name: "Basic",
+  //   monthlyPrice: 0,
+  //   yearlyPrice: 0,
+  //   productIds: {
+  //     monthly: null,
+  //     yearly: null,
+  //   },
+  //   features: [
+  //     "Limited monthly credits",
+  //     "HD image generation",
+  //     "Short video creation",
+  //     "Basic templates library",
+  //     "Community support",
+  //   ],
+  //   popular: false,
+  // },
+  // {
+  //   id: "creator",
+  //   name: "Creator",
+  //   monthlyPrice: 5,
+  //   yearlyPrice: 48,
+  //   productIds: {
+  //     monthly: "21e60d79-cc2a-4c32-ab78-7eeadaabd60a",
+  //     yearly: "bbb454d7-742a-419d-ba18-94386be003fe",
+  //   },
+  //   features: [
+  //     "500 credits per month",
+  //     "HD image generation",
+  //     "Short-form video exports",
+  //     "Expanded templates library",
+  //     "Standard support",
+  //   ],
+  //   popular: false,
+  // },
   {
     id: "studio",
     name: "Studio",
