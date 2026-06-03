@@ -808,7 +808,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
         if (isAgenticPrompt) {
           try {
-            let agentFiles = undefined;
+            let agentFiles: any[] = [];
             
             if (restoredFiles.length > 0) {
               const formData = new FormData();
@@ -822,7 +822,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
               
               if (hasUploads) {
                 const res = await apiResponseFileUpload.post("/agents/upload", formData);
-                agentFiles = res.data.files;
+                agentFiles = res.data.files || [];
               } else {
                 agentFiles = restoredFiles.map((f: any) => ({
                   name: f.name || "file",
@@ -832,10 +832,19 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
               }
             }
 
+            if (selectedFiles && selectedFiles.length > 0) {
+              const selectedAgentFiles = selectedFiles.map((url: string) => ({
+                name: url.split("/").pop() || "selected-file",
+                type: url.endsWith(".png") ? "image/png" : "image/jpeg",
+                url: url
+              }));
+              agentFiles = [...agentFiles, ...selectedAgentFiles];
+            }
+
             await startAgentRun({
               projectId: project._id,
               prompt,
-              attachedFiles: agentFiles,
+              attachedFiles: agentFiles.length > 0 ? agentFiles : undefined,
             });
           } catch (err) {
             console.error("Failed to start agent run", err);

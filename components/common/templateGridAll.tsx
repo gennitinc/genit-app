@@ -1,6 +1,7 @@
 "use client";
 
 import { AIThinkingContent } from "../chat/messages";
+import { BrandIdentityPanel } from "../chat/messages/brand-identity-panel";
 import { BorderBeam } from "../ui/border-beam";
 import ShinyText from "../ui/shiny-text";
 import AnimatedTooltipPreview from "./homeAgentsTooltip";
@@ -28,7 +29,7 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
-import { cn } from "@/lib/utils";
+import { appendClientTimeContext, cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
@@ -42,6 +43,7 @@ import {
   MessageSquare,
   Mic,
   PaperclipIcon,
+  Palette,
   Pencil,
   Plus,
   Sparkles,
@@ -98,6 +100,7 @@ export default function TemplateGridAll() {
   const [new_error, setNewError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [limit, setLimit] = useState(20);
+  const [isBrandSettingsOpen, setIsBrandSettingsOpen] = useState(false);
   // Pagination & search
   const [page, setPage] = useState<number>(1);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
@@ -468,8 +471,9 @@ export default function TemplateGridAll() {
       setInputError(null);
 
       try {
+        const formattedInput = appendClientTimeContext(inputValue);
         const result = await createProject(
-          inputValue,
+          formattedInput,
           attachedFiles,
           selectedFiles
         );
@@ -935,6 +939,19 @@ export default function TemplateGridAll() {
                             type='button'
                             className={cn(
                               "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out",
+                              isBrandSettingsOpen
+                                ? "bg-primary/10 text-primary dark:bg-white/10"
+                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
+                            )}
+                            onClick={() => setIsBrandSettingsOpen(!isBrandSettingsOpen)}
+                            title='Brand settings'
+                          >
+                            <Palette className='size-4 shrink-0' />
+                          </button>
+                          <button
+                            type='button'
+                            className={cn(
+                              "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out",
                               isListening
                                 ? "animate-pulse bg-red-500/10 text-red-500"
                                 : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
@@ -980,6 +997,39 @@ export default function TemplateGridAll() {
                 </div>
               </div>
             </motion.div>
+
+            <AnimatePresence>
+              {isBrandSettingsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.2 }}
+                  className='border-border absolute bottom-[90px] right-4 left-4 z-[9999] mx-auto max-h-[500px] w-[calc(100%-32px)] max-w-md overflow-hidden rounded-xl border bg-white shadow-2xl dark:bg-zinc-950 md:right-8 md:left-auto md:mx-0'
+                >
+                  <div className='flex flex-col p-4'>
+                    <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
+                      <div className='flex items-center gap-2'>
+                        <Palette className='text-primary h-4 w-4' />
+                        <h3 className='text-foreground text-sm font-semibold'>
+                          Brand Identity
+                        </h3>
+                      </div>
+                      <button
+                        type='button'
+                        onClick={() => setIsBrandSettingsOpen(false)}
+                        className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
+                      >
+                        <X className='h-4 w-4' />
+                      </button>
+                    </div>
+                    <div className='custom-scrollbar max-h-[300px] overflow-y-auto'>
+                      <BrandIdentityPanel />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </DialogContent>
         </Dialog>
       )}
@@ -1216,6 +1266,19 @@ export default function TemplateGridAll() {
                             type='button'
                             className={cn(
                               "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out",
+                              isBrandSettingsOpen
+                                ? "bg-primary/10 text-primary dark:bg-white/10"
+                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
+                            )}
+                            onClick={() => setIsBrandSettingsOpen(!isBrandSettingsOpen)}
+                            title='Brand settings'
+                          >
+                            <Palette className='size-4 shrink-0' />
+                          </button>
+                          <button
+                            type='button'
+                            className={cn(
+                              "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out",
                               isListening
                                 ? "animate-pulse bg-red-500/10 text-red-500"
                                 : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
@@ -1261,6 +1324,39 @@ export default function TemplateGridAll() {
                 </div>
               </div>
             </motion.div>
+
+            <AnimatePresence>
+              {isBrandSettingsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.2 }}
+                  className='border-border absolute bottom-[90px] right-4 left-4 z-[9999] mx-auto max-h-[500px] w-[calc(100%-32px)] max-w-md overflow-hidden rounded-xl border bg-white shadow-2xl dark:bg-zinc-950'
+                >
+                  <div className='flex flex-col p-4'>
+                    <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
+                      <div className='flex items-center gap-2'>
+                        <Palette className='text-primary h-4 w-4' />
+                        <h3 className='text-foreground text-sm font-semibold'>
+                          Brand Identity
+                        </h3>
+                      </div>
+                      <button
+                        type='button'
+                        onClick={() => setIsBrandSettingsOpen(false)}
+                        className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
+                      >
+                        <X className='h-4 w-4' />
+                      </button>
+                    </div>
+                    <div className='custom-scrollbar max-h-[300px] overflow-y-auto'>
+                      <BrandIdentityPanel />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </DrawerContent>
         </Drawer>
       )}

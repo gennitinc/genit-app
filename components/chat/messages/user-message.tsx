@@ -14,6 +14,7 @@ import {
 import { HoverActions } from "@/components/ui/hover-actions";
 import { Download, Eye, File, FileText, ImageIcon } from "lucide-react";
 import Image from "next/image";
+import { stripClientTimeContext } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import { useEffect, useState } from "react";
 
@@ -83,7 +84,7 @@ export function UserMessage({
   const handleCopy = () => {
     const textContent =
       message.parts?.find((part: any) => part.type === "text")?.text || "";
-    navigator.clipboard.writeText(textContent);
+    navigator.clipboard.writeText(stripClientTimeContext(textContent));
     onCopy?.();
 
     setCopied(true);
@@ -148,9 +149,9 @@ export function UserMessage({
         className={className}
       >
         <MessageEditor
-          initialContent={
+          initialContent={stripClientTimeContext(
             message.parts?.find((part: any) => part.type === "text")?.text || ""
-          }
+          )}
           onSave={handleSave}
           onCancel={handleCancel}
           placeholder='Edit your message...'
@@ -180,8 +181,7 @@ export function UserMessage({
         >
           <MessageContent variant='user'>
             <ReactMarkdown>
-              {message.parts?.find((part: any) => part.type === "text")?.text ||
-                ""}
+              {stripClientTimeContext(message.parts?.find((part: any) => part.type === "text")?.text || "")}
             </ReactMarkdown>
           </MessageContent>
 

@@ -14,7 +14,7 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { classifyPrompt } from "@/lib/agents-api";
 import { trackEvent } from "@/lib/mixpanelClient";
-import { cn } from "@/lib/utils";
+import { appendClientTimeContext, cn } from "@/lib/utils";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
@@ -219,6 +219,8 @@ export function ChatInput({
       const isAgentic = await classifyPrompt(inputValue);
       setIsClassifying(false);
 
+      const formattedInput = appendClientTimeContext(inputValue);
+
       if (isAgentic) {
         // Build uploaded file list for the agent
         let uploadedFiles: { name: string; type: string; url: string }[] | undefined;
@@ -253,10 +255,10 @@ export function ChatInput({
           }
         }
 
-        await startAgent(inputValue, uploadedFiles, undefined, brandIdentityEnabled);
+        await startAgent(formattedInput, uploadedFiles, undefined, brandIdentityEnabled);
       } else {
         // Design/image/text generation flow
-        await generateMessage(inputValue, attachedFiles, project._id, undefined, { useBrandIdentity: brandIdentityEnabled });
+        await generateMessage(formattedInput, attachedFiles, project._id, undefined, { useBrandIdentity: brandIdentityEnabled });
       }
 
       trackEvent("generation_request_submitted", {

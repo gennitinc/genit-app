@@ -58,7 +58,7 @@ import {
   trackEvent,
   trackFeatureUsed,
 } from "@/lib/mixpanelClient";
-import { cn } from "@/lib/utils";
+import { appendClientTimeContext, cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
@@ -742,9 +742,10 @@ export function IdeaSection() {
       setInputError(null);
 
       try {
+        const formattedInput = appendClientTimeContext(inputValue);
         const isAuto = selectedDesignTypeId === "auto";
         const res = await createProject(
-          inputValue,
+          formattedInput,
           attachedFiles as any,
           undefined,
           selectedDesignTypeId || undefined,

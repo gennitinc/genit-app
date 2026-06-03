@@ -348,7 +348,7 @@ export function BrandOnboardingDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-h-[92vh] w-[95vw] gap-0 overflow-hidden p-0 sm:max-w-5xl rounded-2lx'>
+      <DialogContent className='max-h-[92vh] w-[95vw] gap-0 overflow-hidden p-0 sm:max-w-5xl rounded-2lx z-[99999]'>
         <div className='bg-background/70 sticky top-0 z-10 flex items-center gap-4 border-b px-4 py-3 backdrop-blur'>
           <p className='text-foreground text-sm font-medium'>
             Brand setup
