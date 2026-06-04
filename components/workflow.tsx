@@ -140,7 +140,7 @@ const getDocumentType = (url: string, fileName?: string) => {
   }
 };
 
-const genittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?: boolean }) => {
+const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?: boolean }) => {
   const { focusedGenerationId, messages } = useProjectDesign();
   const router = useRouter();
   const [projectId, setProjectId] = useState<string | null>(null);
@@ -1591,4 +1591,4 @@ const genittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
   );
 };
 
-export default genittWorkflow;
+export default GenittWorkflow;

@@ -1,4 +1,4 @@
-import genittWorkflow from "@/components/workflow";
+import GenittWorkflow from "@/components/workflow";
 import React, { use } from "react";
 
 const WorkflowProjectPage = ({
@@ -10,7 +10,7 @@ const WorkflowProjectPage = ({
 
   return (
     <div>
-      <genittWorkflow slug={resolvedParams.slug} />
+      <GenittWorkflow slug={resolvedParams.slug} />
     </div>
   );
 };
