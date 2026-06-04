@@ -1,5 +1,5 @@
-const CACHE_NAME = "gennit-ai-v2";
-const RUNTIME_CACHE = "gennit-runtime-v2";
+const CACHE_NAME = "genit-ai-v2";
+const RUNTIME_CACHE = "genit-runtime-v2";
 
 // Assets to cache on install
 const PRECACHE_ASSETS = [

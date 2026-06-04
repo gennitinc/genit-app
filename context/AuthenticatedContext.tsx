@@ -13,7 +13,7 @@ import cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect, useState } from "react";
 
-const uToken = cookie.get("gennituToken");
+const uToken = cookie.get("genituToken");
 
 export enum Plan {
   BASIC = "Basic",
@@ -253,7 +253,7 @@ export function AuthenticatedContextProvider({
       } else {
         // Authentication error (401, 403, etc.) - clear token and redirect to signin
         if (error.response.status === 401 || error.response.status === 403) {
-          cookie.remove("gennituToken");
+          cookie.remove("genituToken");
           setuser(null);
           setDataFetched(false);
           // Redirect to signin page

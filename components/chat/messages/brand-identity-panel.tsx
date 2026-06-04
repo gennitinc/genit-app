@@ -11,7 +11,7 @@ import { Download, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
-const STORAGE_KEY = "gennit:brandIdentityEnabled";
+const STORAGE_KEY = "genit:brandIdentityEnabled";
 
 export function useBrandIdentityEnabled() {
   const [enabled, setEnabled] = useState(true);
@@ -142,7 +142,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
             No brand identity yet
           </p>
           <p className='text-muted-foreground mt-1 text-xs'>
-            Import your brand to give Gennit your voice, colors, and logo.
+            Import your brand to give genit your voice, colors, and logo.
           </p>
           <button
             type='button'
@@ -177,7 +177,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
           </p>
           <p className='text-muted-foreground mt-0.5 text-[10px] leading-tight'>
             {enabled
-              ? "Gennit will use your brand's voice, colors, and assets."
+              ? "genit will use your brand's voice, colors, and assets."
               : "Generations will ignore your brand identity."}
           </p>
         </div>

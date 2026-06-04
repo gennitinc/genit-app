@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Creators Program - Gennit AI",
+  title: "Creators Program - Genit AI",
   description:
-    "Join the Gennit AI Creators Program. Monetize your designs and templates.",
+    "Join the Genit AI Creators Program. Monetize your designs and templates.",
 };
 
 export default function CreatorsProgramLayout({

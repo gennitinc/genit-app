@@ -176,7 +176,7 @@ export function LandingFooter() {
             <span
               className={`text-foreground text-xl font-semibold transition-colors duration-300`}
             >
-              Gennit
+              Genit
             </span>
           </Link>
 
@@ -348,7 +348,7 @@ export function LandingFooter() {
             </a>
           </div>
           <p className='mt-3 text-center'>
-            © 2026 <Link href='/'>Gennit AI</Link>
+            © 2026 <Link href='/'>Genit AI</Link>
           </p>
         </div>
       </footer>

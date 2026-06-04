@@ -110,7 +110,7 @@ export function LandingNavbar() {
             <span
               className={`text-foreground text-xl font-semibold transition-colors duration-300`}
             >
-              Gennit
+              Genit
             </span>
           </Link>
 
@@ -202,7 +202,7 @@ export function LandingNavbar() {
                       <Link
                         target='__blank'
                         className='hover:text-foreground/80 text-foreground/60 text-sm font-medium transition-colors'
-                        href='https://twitter.com/gennit_ai'
+                        href='https://twitter.com/genit_ai'
                       >
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
@@ -384,7 +384,7 @@ export function LandingNavbar() {
                       <Link
                         target='__blank'
                         className='hover:text-foreground/80 text-foreground/60 text-sm font-medium transition-colors'
-                        href='https://twitter.com/gennit_ai'
+                        href='https://twitter.com/genit_ai'
                       >
                         <svg
                           xmlns='http://www.w3.org/2000/svg'

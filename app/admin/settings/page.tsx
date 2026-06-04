@@ -65,7 +65,7 @@ export default function SettingsPage() {
               </Label>
               <Input
                 id='siteName'
-                defaultValue='Gennit AI'
+                defaultValue='Genit AI'
                 className='bg-background border-border/50 h-11 rounded-xl'
               />
             </div>
@@ -75,7 +75,7 @@ export default function SettingsPage() {
               </Label>
               <Input
                 id='adminEmail'
-                defaultValue='admin@gennit.online'
+                defaultValue='admin@genit.online'
                 className='bg-background border-border/50 h-11 rounded-xl'
               />
             </div>

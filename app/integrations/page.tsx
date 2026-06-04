@@ -11,9 +11,9 @@ import { ArrowRight, Code, GitBranchPlus, Plus, Zap } from "lucide-react";
 import type { Metadata } from "next";
 
 // export const metadata: Metadata = {
-//   title: "Integrations – Gennit AI",
+//   title: "Integrations – Genit AI",
 //   description:
-//     "Gennit connects to every channel your brand lives on — social, ads, email, CRM, commerce, and the AI infrastructure that powers autonomous marketing.",
+//     "genit connects to every channel your brand lives on — social, ads, email, CRM, commerce, and the AI infrastructure that powers autonomous marketing.",
 //   robots: {
 //     index: true,
 //     follow: true,

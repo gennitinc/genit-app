@@ -18,7 +18,7 @@ const reelsVideos = [
       "https://cdn.leonardo.ai/users/26ac8e01-36b5-47e7-b454-73e1f56828de/generations/f5c5461c-6f42-4518-aa35-1a4512dc1790/segments/1:1:1/motion2Fast_Korean_drama_emotional_scene_30yearold_Korean_woma_0.mp4",
     thumbnailUrl:
       "https://cdn.leonardo.ai/users/26ac8e01-36b5-47e7-b454-73e1f56828de/generations/f5c5461c-6f42-4518-aa35-1a4512dc1790/segments/1:1:1/motion2Fast_Korean_drama_emotional_scene_30yearold_Korean_woma_0.jpg?w=512",
-    username: "gennit_ai",
+    username: "genit_ai",
     profilePic: "https://picsum.photos/id/1027/150/150",
     location: "Product Commercial",
     likes: 92372,

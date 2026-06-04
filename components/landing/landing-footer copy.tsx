@@ -181,7 +181,7 @@ export function LandingFooter() {
             <div className='flex items-center gap-2'>
               <Logo className='h-12 w-12 flex-shrink-0' />
               <Link href='/' className='mr-6 flex items-center space-x-2'>
-                <span className='text-xl font-semibold'>Gennit</span>
+                <span className='text-xl font-semibold'>Genit</span>
               </Link>
             </div>
             <p className='text-muted-foreground max-w-md text-base'>
@@ -238,7 +238,7 @@ export function LandingFooter() {
               <div className='flex items-center space-x-3'>
                 <Mail className='text-primary h-5 w-5' />
                 <span className='text-muted-foreground text-sm'>
-                  contact@gennit.com
+                  contact@genit.com
                 </span>
               </div>
             </div>
@@ -396,7 +396,7 @@ export function LandingFooter() {
           )}
         >
           <p className='text-muted-foreground text-sm'>
-            &copy; {currentYear} Gennit, Inc. All rights reserved.
+            &copy; {currentYear} genit, Inc. All rights reserved.
           </p>
           <div className='flex flex-wrap justify-center gap-x-6 gap-y-2'>
             <Link

@@ -26,7 +26,7 @@ async function getCreatorProfile(
     const baseURL =
       process.env.NEXT_PUBLIC_LIVE_URL ||
       process.env.NEXT_PUBLIC_LOCAL_URL ||
-      "https://gennit-v1-server-production.up.railway.app/api/v1/";
+      "https://genit-v1-server-production.up.railway.app/api/v1/";
 
     // Ensure correct localhost port if fallback is hit
     const finalBaseURL = baseURL.includes("localhost:5000")
@@ -85,7 +85,7 @@ export default async function Image({
         }}
       >
         <div style={{ fontSize: 40, marginBottom: 20 }}>Creator Not Found</div>
-        <div style={{ fontSize: 24, opacity: 0.8 }}>Gennit AI</div>
+        <div style={{ fontSize: 24, opacity: 0.8 }}>Genit AI</div>
       </div>,
       {
         ...size,
@@ -101,7 +101,7 @@ export default async function Image({
     const baseURL =
       process.env.NEXT_PUBLIC_LIVE_URL ||
       process.env.NEXT_PUBLIC_LOCAL_URL ||
-      "https://gennit-v1-server-production.up.railway.app/api/v1/";
+      "https://genit-v1-server-production.up.railway.app/api/v1/";
 
     // Ensure correct localhost port
     const finalBaseURL = baseURL.includes("localhost:5000")
@@ -218,7 +218,7 @@ export default async function Image({
         </div>
 
         <div style={{ fontSize: 28, opacity: 0.9, marginBottom: "10px" }}>
-          Gennit Creator
+          genit Creator
         </div>
 
         <div

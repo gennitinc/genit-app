@@ -965,7 +965,7 @@ function VideoDetailContent({
                 const downloadUrl = window.URL.createObjectURL(blob);
                 const link = document.createElement("a");
                 link.href = downloadUrl;
-                link.download = `gennit-${video.id}.${video.videoUrl ? "mp4" : "jpg"}`;
+                link.download = `genit-${video.id}.${video.videoUrl ? "mp4" : "jpg"}`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);

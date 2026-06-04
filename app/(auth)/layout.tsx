@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Brand Onboarding - Gennit AI",
+  title: "Brand Onboarding - Genit AI",
   description:
-    "Set up your brand on Gennit AI. Connect your channels, define your brand identity, and launch AI-powered design, content, ads, and marketing automation across every platform.",
+    "Set up your brand on Genit AI. Connect your channels, define your brand identity, and launch AI-powered design, content, ads, and marketing automation across every platform.",
   openGraph: {
-    title: "Brand Onboarding - Gennit AI",
+    title: "Brand Onboarding - Genit AI",
     description:
-      "Set up your brand on Gennit AI. Connect your channels, define your brand identity, and launch AI-powered design, content, ads, and marketing automation across every platform.",
+      "Set up your brand on Genit AI. Connect your channels, define your brand identity, and launch AI-powered design, content, ads, and marketing automation across every platform.",
   },
 };
 

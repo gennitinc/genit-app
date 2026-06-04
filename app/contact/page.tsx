@@ -2,9 +2,9 @@ import LandingContact from "@/components/landing/landing-contact";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Us – Gennit AI | Get in Touch",
+  title: "Contact Us – Genit AI | Get in Touch",
   description:
-    "Get in touch with Gennit AI. Fill out our contact form and our team will reach out to provide personalized assistance and answers to your questions.",
+    "Get in touch with Genit AI. Fill out our contact form and our team will reach out to provide personalized assistance and answers to your questions.",
   keywords: [
     "contact us",
     "support",
@@ -14,16 +14,16 @@ export const metadata: Metadata = {
     "business inquiry",
   ],
   openGraph: {
-    title: "Contact Us – Gennit AI",
+    title: "Contact Us – Genit AI",
     description:
-      "Reach out to Gennit AI for support, sales, or partnership inquiries",
-    url: "https://www.gennit.online/contact",
+      "Reach out to Genit AI for support, sales, or partnership inquiries",
+    url: "https://www.genit.online/contact",
     images: [
       {
-        url: "https://www.gennit.online/opengraph-image.png",
+        url: "https://www.genit.online/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Gennit AI Contact",
+        alt: "Genit AI Contact",
       },
     ],
   },

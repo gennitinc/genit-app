@@ -200,10 +200,10 @@ export default function CreatorProfilePage() {
   // Set document title when profile is loaded
   useEffect(() => {
     if (profile) {
-      const title = `${profile.username}${profile.isVerified ? "" : ""} | Gennit Creator Profile`;
+      const title = `${profile.username}${profile.isVerified ? "" : ""} | genit Creator Profile`;
       document.title = title;
     } else if (!loading) {
-      document.title = "Creator Not Found | Gennit";
+      document.title = "Creator Not Found | genit";
     }
   }, [profile, loading]);
 
@@ -519,8 +519,8 @@ export default function CreatorProfilePage() {
     typeof window !== "undefined"
       ? `${window.location.origin}/creator/${username}`
       : "";
-  const shareText = `Follow ${profile?.username} on Gennit - Check out their amazing AI-generated content!`;
-  const shareTitle = `${profile?.username} on Gennit`;
+  const shareText = `Follow ${profile?.username} on genit - Check out their amazing AI-generated content!`;
+  const shareTitle = `${profile?.username} on genit`;
 
   const handleCopyLink = async () => {
     try {

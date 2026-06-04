@@ -113,7 +113,7 @@ export default function ReferralDashboard() {
     } catch (error: any) {
       console.error("Failed to fetch referral data:", error);
       // Set default data for development
-      const defaultLink = `https://www.gennit.online/signup#/?creator=@${user?.username}`;
+      const defaultLink = `https://www.genit.online/signup#/?creator=@${user?.username}`;
       setStats({
         totalRevenue: 6240.28,
         revenueChange: 10,
@@ -190,7 +190,7 @@ export default function ReferralDashboard() {
   };
 
   const handleCopyCode = () => {
-    const code = `<a href="${stats.referralLink}" target="_blank" rel="noopener noreferrer">Join me on Gennit</a>`;
+    const code = `<a href="${stats.referralLink}" target="_blank" rel="noopener noreferrer">Join me on genit</a>`;
     navigator.clipboard.writeText(code);
     toast.success("Code copied!", {
       description: "Referral code has been copied to clipboard.",

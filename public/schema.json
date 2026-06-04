@@ -3,49 +3,49 @@
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.gennit.online/#organization",
-      "name": "Gennit AI",
-      "url": "https://www.gennit.online",
+      "@id": "https://www.genit.online/#organization",
+      "name": "Genit AI",
+      "url": "https://www.genit.online",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.gennit.online/logo.png",
+        "url": "https://www.genit.online/logo.png",
         "width": 250,
         "height": 60
       },
-      "description": "Gennit AI is an intelligent media design platform that creates stunning graphics, videos, animations, brand assets, and marketing visuals using AI technology.",
+      "description": "Genit AI is an intelligent media design platform that creates stunning graphics, videos, animations, brand assets, and marketing visuals using AI technology.",
       "sameAs": [
-        "https://twitter.com/GennitAI",
-        "https://www.linkedin.com/company/gennit",
-        "https://www.facebook.com/gennitai"
+        "https://twitter.com/genitAI",
+        "https://www.linkedin.com/company/genit",
+        "https://www.facebook.com/genitai"
       ],
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer service",
-        "email": "support@gennit.online",
+        "email": "support@genit.online",
         "availableLanguage": "en"
       }
     },
     {
       "@type": "WebSite",
-      "@id": "https://www.gennit.online/#website",
-      "url": "https://www.gennit.online",
-      "name": "Gennit AI – Intelligent Media Design",
+      "@id": "https://www.genit.online/#website",
+      "url": "https://www.genit.online",
+      "name": "Genit AI – Intelligent Media Design",
       "description": "AI-powered media design platform for graphics, videos, animations, and brand assets",
       "publisher": {
-        "@id": "https://www.gennit.online/#organization"
+        "@id": "https://www.genit.online/#organization"
       },
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://www.gennit.online/search?q={search_term_string}"
+          "urlTemplate": "https://www.genit.online/search?q={search_term_string}"
         },
         "query-input": "required name=search_term_string"
       }
     },
     {
       "@type": "SoftwareApplication",
-      "name": "Gennit AI",
+      "name": "Genit AI",
       "applicationCategory": "DesignApplication",
       "offers": {
         "@type": "Offer",
@@ -53,7 +53,7 @@
         "priceCurrency": "USD"
       },
       "description": "AI-powered media design platform that generates graphics, videos, animations, and brand assets.",
-      "url": "https://www.gennit.online",
+      "url": "https://www.genit.online",
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.9",
@@ -65,10 +65,10 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "What is Gennit AI?",
+          "name": "What is Genit AI?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Gennit AI is an intelligent media design platform powered by artificial intelligence that enables users to create stunning graphics, videos, animations, brand assets, and marketing visuals without requiring design skills."
+            "text": "Genit AI is an intelligent media design platform powered by artificial intelligence that enables users to create stunning graphics, videos, animations, brand assets, and marketing visuals without requiring design skills."
           }
         },
         {
@@ -76,12 +76,12 @@
           "name": "Is there a free trial available?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, Gennit AI offers a free Basic plan that allows individuals, startups, and small teams to access professional AI media design tools."
+            "text": "Yes, Genit AI offers a free Basic plan that allows individuals, startups, and small teams to access professional AI media design tools."
           }
         },
         {
           "@type": "Question",
-          "name": "How can I get started with Gennit AI?",
+          "name": "How can I get started with Genit AI?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Simply sign up on our website with your email address or Google account, and you'll have immediate access to start creating AI-powered media designs."
@@ -92,15 +92,15 @@
           "name": "What types of media can I create?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "With Gennit AI, you can create graphics, videos, animations, brand assets, marketing visuals, social media content, presentations, and more."
+            "text": "With Genit AI, you can create graphics, videos, animations, brand assets, marketing visuals, social media content, presentations, and more."
           }
         },
         {
           "@type": "Question",
-          "name": "Do I need design experience to use Gennit?",
+          "name": "Do I need design experience to use genit?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No, Gennit AI is designed to be user-friendly for everyone, regardless of their design background. Our AI handles the complex design work for you."
+            "text": "No, Genit AI is designed to be user-friendly for everyone, regardless of their design background. Our AI handles the complex design work for you."
           }
         }
       ]

@@ -839,7 +839,7 @@ function ContentDetailContent({
                 const downloadUrl = window.URL.createObjectURL(blob);
                 const link = document.createElement("a");
                 link.href = downloadUrl;
-                link.download = `gennit-${content.id}.${
+                link.download = `genit-${content.id}.${
                   content.videoUrl ? "mp4" : "jpg"
                 }`;
                 document.body.appendChild(link);

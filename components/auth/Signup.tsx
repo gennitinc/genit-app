@@ -172,7 +172,7 @@ export const SignupComp = () => {
 
         const longerEXP = 1000 * 60 * 60 * 24 * 30;
 
-        cookie.set("gennituToken", response.data.token, {
+        cookie.set("genituToken", response.data.token, {
           expires: new Date(Date.now() + longerEXP),
           // secure: true,
           // sameSite: "strict",
@@ -249,7 +249,7 @@ export const SignupComp = () => {
 
           const longerEXP = 1000 * 60 * 60 * 24 * 30;
 
-          cookie.set("gennituToken", response.data.token, {
+          cookie.set("genituToken", response.data.token, {
             expires: new Date(Date.now() + longerEXP),
             // secure: true,
             // sameSite: "strict",
@@ -1175,7 +1175,7 @@ export const SignupComp = () => {
             <div className='mt-4 flex items-center justify-center gap-2'>
               <Logo />
               <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-                Gennit
+                Genit
               </h1>
             </div>
             <CardTitle className='text-2xl font-bold'>
@@ -1194,7 +1194,7 @@ export const SignupComp = () => {
                   redirect_uri:
                     typeof window !== "undefined"
                       ? window.location.origin
-                      : "http://gennit.app" + "/auth/google/callback",
+                      : "http://genit.app" + "/auth/google/callback",
                   scope: "openid profile email",
                   discoveryDocs: "claims_supported",
                   access_type: "online",
@@ -1500,7 +1500,7 @@ export const SignupComp = () => {
                 </a> */}
           </p>
           <p className='text-center text-xs text-gray-600 dark:text-gray-400'>
-            ©2026 Gennit. A product of{" "}
+            ©2026 genit. A product of{" "}
             <a
               className='font-medium text-gray-800 hover:text-blue-600 dark:text-white'
               href='#'

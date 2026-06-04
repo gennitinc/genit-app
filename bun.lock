@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "gennit",
+      "name": "genit",
       "dependencies": {
         "@ai-sdk/openai": "^2.0.31",
         "@ai-sdk/react": "^2.0.45",

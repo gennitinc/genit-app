@@ -16,7 +16,7 @@ export const apiResponse = axios.create({
 
 // Add request interceptor to dynamically add the token
 apiResponse.interceptors.request.use((config) => {
-  const token = cookie.get("gennituToken");
+  const token = cookie.get("genituToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

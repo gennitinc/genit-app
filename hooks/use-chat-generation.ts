@@ -145,7 +145,7 @@ export function useChatGeneration() {
         // Add authentication to SSE connection
         const token = document.cookie
           .split("; ")
-          .find((row) => row.startsWith("gennituToken="))
+          .find((row) => row.startsWith("genituToken="))
           ?.split("=")[1];
 
         if (token) {

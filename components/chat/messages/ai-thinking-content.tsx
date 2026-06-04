@@ -20,8 +20,8 @@ export function AIThinkingContent({
         <AvatarDisplay
           variant='ai'
           alt='AI Logo'
-          src='../../resources/images/gennit2.png'
-          fallback='../../resources/images/gennit2.png'
+          src='../../resources/images/genit2.png'
+          fallback='../../resources/images/genit2.png'
         />
 
         <ShinyText

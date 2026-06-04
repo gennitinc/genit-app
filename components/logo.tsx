@@ -13,7 +13,7 @@ export function Logo({ className }: { className?: string }) {
       <Image
         src={appLogo}
         className='h-8 w-8'
-        alt='gennit logo'
+        alt='genit logo'
         height={200}
         width={200}
       />

@@ -1,6 +1,6 @@
 # PWA Setup Guide
 
-Your Gennit AI app has been configured as a Progressive Web App (PWA). This allows users to install it on their devices and use it offline.
+Your Genit AI app has been configured as a Progressive Web App (PWA). This allows users to install it on their devices and use it offline.
 
 ## What's Been Configured
 

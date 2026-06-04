@@ -10,9 +10,9 @@ import { motion } from "framer-motion";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Inspirations – Gennit AI | Browse Design Templates & Ideas",
+  title: "Inspirations – Genit AI | Browse Design Templates & Ideas",
   description:
-    "Explore thousands of design inspirations, templates, flyers, and creative ideas. Get inspired by professional designs and start creating with Gennit AI.",
+    "Explore thousands of design inspirations, templates, flyers, and creative ideas. Get inspired by professional designs and start creating with Genit AI.",
   keywords: [
     "design inspirations",
     "templates",
@@ -23,16 +23,16 @@ export const metadata: Metadata = {
     "professional templates",
   ],
   openGraph: {
-    title: "Inspirations – Gennit AI",
+    title: "Inspirations – Genit AI",
     description:
       "Browse professional design templates and creative inspirations",
-    url: "https://www.gennit.online/inspirations",
+    url: "https://www.genit.online/inspirations",
     images: [
       {
-        url: "https://www.gennit.online/opengraph-image.png",
+        url: "https://www.genit.online/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Gennit AI Inspirations",
+        alt: "Genit AI Inspirations",
       },
     ],
   },

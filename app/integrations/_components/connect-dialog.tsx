@@ -50,13 +50,13 @@ import {
 
 type PopupMessage =
   | {
-      type: "gennit:integration:connected";
+      type: "genit:integration:connected";
       platform: IntegrationPlatform;
       integrationId: string;
       accountName?: string;
     }
   | {
-      type: "gennit:integration:error";
+      type: "genit:integration:error";
       platform: IntegrationPlatform;
       message?: string;
     }
@@ -64,7 +64,7 @@ type PopupMessage =
       // Instagram-only: server discovered IG candidates and is waiting
       // for the user to pick which account(s) to provision before any
       // Integration row is written.
-      type: "gennit:integration:select_target";
+      type: "genit:integration:select_target";
       platform: IntegrationPlatform;
       identityId: string;
       candidates: Array<{
@@ -195,7 +195,7 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
     "Identify your Google account (email + profile picture)",
     "Browse files and folders across My Drive and shared drives",
     "Create folders and upload new files to locations you choose",
-    "Update or delete files Gennit creates on your behalf",
+    "Update or delete files genit creates on your behalf",
   ],
 };
 
@@ -217,7 +217,7 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
     "The WABA must live in a Meta Business Manager you own or admin",
   ],
   gmail: [
-    "Gennit is a verified Google app — if you see a warning screen, click Advanced → Continue",
+    "genit is a verified Google app — if you see a warning screen, click Advanced → Continue",
     "Workspace admins may need to allow third-party Gmail apps for the domain",
   ],
   telegram: [
@@ -262,7 +262,7 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
     "During the TikTok consent screen you choose which advertisers to authorize — we provision one connection per choice",
   ],
   google_calendar: [
-    "Gennit is a verified Google app — if you see a warning screen, click Advanced → Continue",
+    "genit is a verified Google app — if you see a warning screen, click Advanced → Continue",
     "Workspace admins may need to allow third-party calendar apps for the domain",
   ],
   google_drive: [
@@ -395,16 +395,16 @@ export function ConnectDialog({
       const data = e.data as PopupMessage | undefined;
       if (!data || typeof data !== "object") return;
       if (
-        data.type !== "gennit:integration:connected" &&
-        data.type !== "gennit:integration:error" &&
-        data.type !== "gennit:integration:select_target"
+        data.type !== "genit:integration:connected" &&
+        data.type !== "genit:integration:error" &&
+        data.type !== "genit:integration:select_target"
       )
         return;
       if (data.platform !== platform) return;
 
       closePopup();
 
-      if (data.type === "gennit:integration:select_target") {
+      if (data.type === "genit:integration:select_target") {
         // Instagram-only path: server discovered candidates and asks the
         // user to pick which IG account(s) to actually connect. The popup
         // sends a compact { id, label, subtitle, avatar } shape; expand
@@ -426,7 +426,7 @@ export function ConnectDialog({
         return;
       }
 
-      if (data.type === "gennit:integration:connected") {
+      if (data.type === "genit:integration:connected") {
         setConnectedAccount(data.accountName || null);
         setPhase("success");
         qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
@@ -500,7 +500,7 @@ export function ConnectDialog({
       const top = window.screenY + (window.outerHeight - height) / 2;
       const popup = window.open(
         response.authorizeUrl,
-        "gennit_oauth",
+        "genit_oauth",
         `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
       );
       if (!popup) {
@@ -659,7 +659,7 @@ export function ConnectDialog({
                   <div className='relative bg-neutral-50 px-3 py-3 dark:bg-neutral-800'>
                     <GradientFrame />
                     <p className='text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase'>
-                      Gennit will be able to
+                      genit will be able to
                     </p>
                     <ul className='space-y-2'>
                       {scopes.map((scope) => (

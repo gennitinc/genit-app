@@ -172,7 +172,7 @@ export function PWAInstaller() {
           {/* Text */}
           <div className='space-y-2'>
             <DialogTitle className='text-xl font-semibold'>
-              Install Gennit AI
+              Install Genit AI
             </DialogTitle>
             <DialogDescription className='text-muted-foreground text-sm'>
               Get faster access, offline support, and a smoother experience when
@@ -183,7 +183,7 @@ export function PWAInstaller() {
           {/* Image */}
           <img
             src='https://i.pinimg.com/originals/ea/f6/81/eaf68175b624f9f2d9f681ffabc8d437.gif'
-            alt='Install Gennit App'
+            alt='Install genit App'
             className='h-40 w-40 rounded-xl object-contain'
             loading='lazy'
           />

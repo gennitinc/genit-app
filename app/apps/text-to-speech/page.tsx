@@ -400,7 +400,7 @@ function TextToSpeechPage() {
       icon: "📢",
       text: "Record an advertisement",
       content:
-        "Introducing the all-new Gennit Pro — the fastest way to bring your creative ideas to life with AI.",
+        "Introducing the all-new genit Pro — the fastest way to bring your creative ideas to life with AI.",
     },
     {
       icon: "🌍",

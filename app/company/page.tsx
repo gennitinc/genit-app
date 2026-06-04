@@ -20,11 +20,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "About Gennit – Your AI Marketing Team & Agent Platform",
+  title: "About genit – Your AI Marketing Team & Agent Platform",
   description:
-    "Gennit is an AI agent platform that helps businesses manage and grow their brand from a single workspace, executing marketing tasks end-to-end.",
+    "genit is an AI agent platform that helps businesses manage and grow their brand from a single workspace, executing marketing tasks end-to-end.",
   keywords: [
-    "about gennit",
+    "about genit",
     "company",
     "mission",
     "vision",
@@ -35,17 +35,17 @@ export const metadata: Metadata = {
     "team",
   ],
   openGraph: {
-    title: "About Gennit – Your AI Marketing Team & Agent Platform",
+    title: "About genit – Your AI Marketing Team & Agent Platform",
     description:
-      "Connect your website and let Gennit's AI marketing agents create content, plan calendars, and execute growth activities at scale.",
-    url: "https://www.gennit.online/company",
+      "Connect your website and let genit's AI marketing agents create content, plan calendars, and execute growth activities at scale.",
+    url: "https://www.genit.online/company",
     type: "website",
     images: [
       {
-        url: "https://www.gennit.online/opengraph-image.png",
+        url: "https://www.genit.online/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Gennit AI Agent Platform",
+        alt: "Genit AI Agent Platform",
       },
     ],
   },
@@ -72,11 +72,11 @@ export default function About2() {
                   </span>
                 </h1>
                 <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                  At Gennit, our mission is to give every business its own AI marketing team that can help plan, create, and execute growth activities at scale. Gennit is an AI agent platform that helps businesses manage and grow their brand from a single workspace. Businesses can connect their website, and Gennit learns about their products, audience, brand voice, and goals. From there, AI agents can create content, design marketing assets, plan content calendars, schedule and publish posts, send emails, generate insights, and automate marketing workflows across multiple platforms.
+                  At genit, our mission is to give every business its own AI marketing team that can help plan, create, and execute growth activities at scale. genit is an AI agent platform that helps businesses manage and grow their brand from a single workspace. Businesses can connect their website, and genit learns about their products, audience, brand voice, and goals. From there, AI agents can create content, design marketing assets, plan content calendars, schedule and publish posts, send emails, generate insights, and automate marketing workflows across multiple platforms.
                 </p>
               </div>
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                Unlike traditional AI tools that only generate content, Gennit is designed to take action. It combines AI agents with 23+ integrations to help businesses execute marketing tasks end-to-end, reducing the need to switch between multiple tools or hire large marketing teams.
+                Unlike traditional AI tools that only generate content, genit is designed to take action. It combines AI agents with 23+ integrations to help businesses execute marketing tasks end-to-end, reducing the need to switch between multiple tools or hire large marketing teams.
               </p>
               <figure>
                 <img
@@ -89,7 +89,7 @@ export default function About2() {
                 </figcaption>
               </figure>
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                As businesses adopt Gennit, they experience the power of having a full-scale marketing execution engine operating 24/7. Whether it is planning campaigns, scheduling social posts, designing brand-consistent assets, or generating deep analytics, our platform takes the busywork out of growth so that teams can focus on strategic decisions rather than administrative friction.
+                As businesses adopt genit, they experience the power of having a full-scale marketing execution engine operating 24/7. Whether it is planning campaigns, scheduling social posts, designing brand-consistent assets, or generating deep analytics, our platform takes the busywork out of growth so that teams can focus on strategic decisions rather than administrative friction.
               </p>
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
                 That's why we are excited to offer{" "}
@@ -103,7 +103,7 @@ export default function About2() {
               </p>
               <blockquote className='p-4 text-center sm:px-7'>
                 <p className='text-xl font-medium text-gray-800 md:text-2xl md:leading-normal xl:text-2xl xl:leading-normal dark:text-neutral-200'>
-                  To say that switching to Gennit has been life-changing is an
+                  To say that switching to genit has been life-changing is an
                   understatement. Our marketing execution rate has tripled, and
                   the AI agents handle everything from social media scheduling
                   to automated email outreach based on our brand voice.
@@ -127,12 +127,12 @@ export default function About2() {
                   Bringing an AI marketing team to every business
                 </h3>
                 <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                  We believe that professional marketing should not be restricted by budget or size. Our platform makes advanced execution tools available to everyone. From small teams to large enterprises, Gennit provides a collaborative workspace where AI agents integrate seamlessly with your brand assets, messaging, and 23+ daily tools.
+                  We believe that professional marketing should not be restricted by budget or size. Our platform makes advanced execution tools available to everyone. From small teams to large enterprises, genit provides a collaborative workspace where AI agents integrate seamlessly with your brand assets, messaging, and 23+ daily tools.
                 </p>
               </div>
               <ul className='list-outside list-disc space-y-5 ps-5 text-lg text-gray-800 dark:text-neutral-200'>
                 <li className='ps-2'>
-                  Gennit allows us to run multi-channel campaigns in real-time, staying perfectly consistent with our brand voice while publishing high-quality assets and emails,"{" "}
+                  genit allows us to run multi-channel campaigns in real-time, staying perfectly consistent with our brand voice while publishing high-quality assets and emails,"{" "}
                   <a
                     className='font-medium text-blue-600 decoration-2 hover:underline focus:underline focus:outline-hidden dark:text-blue-500'
                     href='#'
@@ -142,7 +142,7 @@ export default function About2() {
                   Alex Rodriguez, Creative Director at TechStart.
                 </li>
                 <li className='ps-2'>
-                  Gennit redefined how we manage our growth. It is an intuitive workspace where anyone can launch automated marketing flows with zero complexity," said Maria Santos, Marketing Manager at{" "}
+                  genit redefined how we manage our growth. It is an intuitive workspace where anyone can launch automated marketing flows with zero complexity," said Maria Santos, Marketing Manager at{" "}
                   <a
                     className='font-medium text-blue-600 decoration-2 hover:underline focus:underline focus:outline-hidden dark:text-blue-500'
                     href='#'
@@ -153,7 +153,7 @@ export default function About2() {
                 </li>
               </ul>
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                Small teams and individual creators need tools where they can launch campaigns quickly, both for themselves and for the clients they support. Gennit allows you to collaborate seamlessly, creating a centralized workspace for brand-consistent marketing assets, automated scheduling, and email dispatch. As your business grows, Gennit scales your marketing execution alongside it.
+                Small teams and individual creators need tools where they can launch campaigns quickly, both for themselves and for the clients they support. genit allows you to collaborate seamlessly, creating a centralized workspace for brand-consistent marketing assets, automated scheduling, and email dispatch. As your business grows, genit scales your marketing execution alongside it.
               </p>
               <div>
                 <a

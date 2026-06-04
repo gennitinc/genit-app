@@ -113,14 +113,14 @@ export default function LandingContact() {
       </div>
 
       <p style="margin-top: 30px; font-size: 12px; color: #888; text-align: center;">
-        Gennit Inc • ${new Date().toLocaleString()}
+        genit Inc • ${new Date().toLocaleString()}
       </p>
     </div>
   </div>`;
 
     const formData = new FormData();
     formData.append("email", data.email);
-    formData.append("subject", "Gennit contact request");
+    formData.append("subject", "genit contact request");
     formData.append("message", htmlMessage);
 
     if (data.attachment && data.attachment instanceof File) {
@@ -164,7 +164,7 @@ export default function LandingContact() {
               </h1>
 
               <div className='text-muted-foreground max-w-2xl text-sm lg:leading-relaxed'>
-                Gennit is your AI-powered media designer. Create stunning
+                genit is your AI-powered media designer. Create stunning
                 flyers, logos, posters, and social media graphics in seconds —
                 no design skills required. Just describe what you want and let
                 AI do the work.
@@ -216,7 +216,7 @@ export default function LandingContact() {
                     </div>
                     <div className='space-y-6'>
                       <p className='from-foreground to-foreground/60 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent'>
-                        Why creators choose Gennit
+                        Why creators choose genit
                       </p>
 
                       <div className='grid gap-6'>

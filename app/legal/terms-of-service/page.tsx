@@ -20,9 +20,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Terms of Service – Gennit AI",
+  title: "Terms of Service – Genit AI",
   description:
-    "Read Gennit AI's terms of service to understand the terms and conditions governing your use of our platform.",
+    "Read Genit AI's terms of service to understand the terms and conditions governing your use of our platform.",
   robots: {
     index: true,
     follow: true,
@@ -84,7 +84,7 @@ export default function About2() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='https://gennit.online/legal/privacy-policy'
+                href='https://genit.online/legal/privacy-policy'
               >
                 Privacy Policy
               </a>{" "}
@@ -93,7 +93,7 @@ export default function About2() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='https://gennit.online/legal/dpa'
+                href='https://genit.online/legal/dpa'
               >
                 Data Processing Addendum
               </a>{" "}
@@ -106,7 +106,7 @@ export default function About2() {
               <strong className='text-slate-12 font-semibold'>
                 Klip Technologies, Inc. ("Company", "We", "Our", "Us")
               </strong>{" "}
-              , the operator of Gennit, an AI agent platform that helps businesses manage and grow their brand from a single workspace, and
+              , the operator of genit, an AI agent platform that helps businesses manage and grow their brand from a single workspace, and
               you (
               <strong className='text-slate-12 font-semibold'>"You"</strong> or
               the{" "}
@@ -117,9 +117,9 @@ export default function About2() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='https://gennit.online'
+                href='https://genit.online'
               >
-                gennit.online
+                genit.online
               </a>{" "}
               (collectively, the{" "}
               <strong className='text-slate-12 font-semibold'>"Service"</strong>
@@ -614,9 +614,9 @@ export default function About2() {
               immediately by contacting{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@gennit.online'
+                href='mailto:support@genit.online'
               >
-                support@gennit.online
+                support@genit.online
               </a>
               .
             </p>
@@ -933,9 +933,9 @@ export default function About2() {
               via email to{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@gennit.online'
+                href='mailto:support@genit.online'
               >
-                support@gennit.online
+                support@genit.online
               </a>
               , with the subject line: "Copyright Infringement" and include in
               your claim a detailed description of the alleged Infringement as
@@ -1002,9 +1002,9 @@ export default function About2() {
               email at{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@gennit.online'
+                href='mailto:support@genit.online'
               >
-                support@gennit.online
+                support@genit.online
               </a>
             </p>
             <h2
@@ -1038,9 +1038,9 @@ export default function About2() {
               You may provide us either directly at{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@gennit.online'
+                href='mailto:support@genit.online'
               >
-                support@gennit.online
+                support@genit.online
               </a>{" "}
               or via third party sites and tools with information and feedback
               concerning errors, suggestions for improvements, ideas, problems,
@@ -1496,9 +1496,9 @@ export default function About2() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='https://gennit.online/legal/acceptable-use'
+                href='https://genit.online/legal/acceptable-use'
               >
-                gennit.online/legal/acceptable-use
+                genit.online/legal/acceptable-use
               </a>
               .
             </p>
@@ -1566,9 +1566,9 @@ export default function About2() {
               support: By email:{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@gennit.online'
+                href='mailto:support@genit.online'
               >
-                support@gennit.online
+                support@genit.online
               </a>
               .
             </p>

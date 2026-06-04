@@ -79,7 +79,7 @@ export function AppSidebar({
                 : "block"
             )}
           >
-            Gennit
+            Genit
           </span>
         </Link>
       </SidebarHeader>

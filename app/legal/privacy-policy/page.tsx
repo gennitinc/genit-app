@@ -20,9 +20,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy – Gennit AI",
+  title: "Privacy Policy – Genit AI",
   description:
-    "Read Gennit AI's privacy policy to understand how we collect, use, and protect your personal data.",
+    "Read Genit AI's privacy policy to understand how we collect, use, and protect your personal data.",
   robots: {
     index: true,
     follow: true,
@@ -76,7 +76,7 @@ export default function About2() {
               </a>
             </h2>
             <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-              Welcome to Gennit - Your AI Agent Brand Management Platform.
+              Welcome to genit - Your AI Agent Brand Management Platform.
             </p>
             <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
               <strong className='text-slate-12 font-semibold'>
@@ -87,9 +87,9 @@ export default function About2() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='https://gennit.online'
+                href='https://genit.online'
               >
-                https://gennit.online
+                https://genit.online
               </a>{" "}
               (hereinafter referred to as{" "}
               <strong className='text-slate-12 font-semibold'>"Service"</strong>
@@ -103,9 +103,9 @@ export default function About2() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='https://gennit.online'
+                href='https://genit.online'
               >
-                https://gennit.online
+                https://genit.online
               </a>
               , and explains how we collect, safeguard and disclose information
               that results from your use of our AI agent platform Service.
@@ -161,9 +161,9 @@ export default function About2() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='https://gennit.online'
+                href='https://genit.online'
               >
-                https://gennit.online
+                https://genit.online
               </a>{" "}
               website operated by Klip Technologies, Inc.
             </p>
@@ -710,9 +710,9 @@ export default function About2() {
               at{" "}
               <a
                 className='border-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@gennit.online'
+                href='mailto:support@genit.online'
               >
-                support@gennit.online
+                support@genit.online
               </a>
               .
             </p>
@@ -829,9 +829,9 @@ export default function About2() {
                 us at{" "}
                 <a
                   className='border-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                  href='mailto:support@gennit.online'
+                  href='mailto:support@genit.online'
                 >
-                  support@gennit.online
+                  support@genit.online
                 </a>
                 .
               </li>
@@ -1049,9 +1049,9 @@ export default function About2() {
               By email:{" "}
               <a
                 className='border-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@gennit.online'
+                href='mailto:support@genit.online'
               >
-                support@gennit.online
+                support@genit.online
               </a>
             </p>
             <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
@@ -1599,9 +1599,9 @@ export default function About2() {
               By email:{" "}
               <a
                 className='border-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@gennit.online'
+                href='mailto:support@genit.online'
               >
-                support@gennit.online
+                support@genit.online
               </a>
               .
             </p>

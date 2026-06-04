@@ -17,7 +17,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { cn } from "@/lib/utils";
-import appLogo from "@/resources/images/gennit.svg";
+import appLogo from "@/resources/images/genit.svg";
 import cookie from "js-cookie";
 import {
   Book,
@@ -78,7 +78,7 @@ export function Navbar({ title }: NavbarProps) {
   }, []);
 
   const handleSignOut = () => {
-    cookie.remove("gennituToken");
+    cookie.remove("genituToken");
     router.push("/signin");
   };
 
@@ -98,8 +98,8 @@ export function Navbar({ title }: NavbarProps) {
 
   // Share functionality
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
-  const shareText = "Check out this amazing project on Gennit!";
-  const shareTitle = "Gennit Project";
+  const shareText = "Check out this amazing project on genit!";
+  const shareTitle = "genit Project";
 
   const handleCopyLink = async () => {
     try {
@@ -174,7 +174,7 @@ export function Navbar({ title }: NavbarProps) {
                 //   : "block",
               )}
             >
-              Gennit
+              Genit
             </span>
           </Link>
           {/* Brand name and project - Responsive */}

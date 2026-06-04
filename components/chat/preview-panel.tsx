@@ -7,7 +7,7 @@ import {
   WebPreviewUrl,
 } from "../ai-elements/web-preview";
 import { GraphicsCanvas } from "./graphics-canvas";
-import GennittWorkflow from "../workflow";
+import genittWorkflow from "../workflow";
 import AutomationWorkflow from "../automation";
 import { useProjectDesign } from "@/context/DesignProject";
 import { Globe, Image as ImageIcon, Layout, Loader2, Workflow, Settings, Maximize2, Minimize2 } from "lucide-react";

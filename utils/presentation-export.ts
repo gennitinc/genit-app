@@ -11,8 +11,8 @@ export async function exportToPPTX(
   const pptx = new PptxGenJS();
 
   // Set presentation properties
-  pptx.author = "Gennit";
-  pptx.company = "Gennit";
+  pptx.author = "genit";
+  pptx.company = "genit";
   pptx.title = presentation.title;
   pptx.layout = "LAYOUT_WIDE";
 

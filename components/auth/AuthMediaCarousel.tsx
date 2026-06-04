@@ -415,7 +415,7 @@ export const loginCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://gennit-storage.s3.eu-north-1.amazonaws.com/templeajuzie%40gmail.com/generated/image/1766919857775-gennit-image-1766919857769-0.jpg",
+      src: "https://genit-storage.s3.eu-north-1.amazonaws.com/templeajuzie%40gmail.com/generated/image/1766919857775-genit-image-1766919857769-0.jpg",
       alt: "HD Image Generator",
       showControls: false,
       testimonial: {
@@ -434,7 +434,7 @@ export const loginCarouselData: { media: MediaItem[] } = {
       showControls: false,
       testimonial: {
         title: "Turn Creativity into Income",
-        description: "Sell services, content, and AI creations on Gennit.",
+        description: "Sell services, content, and AI creations on genit.",
         rating: 5,
         reviewCount: "Creators getting paid",
         avatars: defaultAvatars,
@@ -517,7 +517,7 @@ export const signupCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://gennit-storage.s3.eu-north-1.amazonaws.com/templeajuzie%40gmail.com/generated/image/1768029882257-gennit-image-1768029882254-0.jpg",
+      src: "https://genit-storage.s3.eu-north-1.amazonaws.com/templeajuzie%40gmail.com/generated/image/1768029882257-genit-image-1768029882254-0.jpg",
       alt: "HD Images",
       showControls: false,
       testimonial: {
@@ -537,7 +537,7 @@ export const signupCarouselData: { media: MediaItem[] } = {
       testimonial: {
         title: "Earn as a Creator",
         description:
-          "Monetize your skills, content, and AI creations on Gennit.",
+          "Monetize your skills, content, and AI creations on genit.",
         rating: 5,
         reviewCount: "Creators earning daily",
         avatars: defaultAvatars,

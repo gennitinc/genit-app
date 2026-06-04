@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Legal & Privacy - Gennit AI",
+  title: "Legal & Privacy - Genit AI",
   description:
-    "Read our Terms of Service, Privacy Policy, and other legal documents regarding Gennit AI usage.",
+    "Read our Terms of Service, Privacy Policy, and other legal documents regarding Genit AI usage.",
 };
 
 export default function LegalLayout({

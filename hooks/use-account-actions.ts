@@ -15,7 +15,7 @@ export const useAccountActions = () => {
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
   const cleanupSession = useCallback(() => {
-    cookie.remove("gennituToken");
+    cookie.remove("genituToken");
     setuser(null);
   }, [setuser]);
 

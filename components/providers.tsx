@@ -20,7 +20,7 @@ export function Providers({ children }: ProvidersProps) {
           defaultTheme='dark'
           enableSystem={false}
           disableTransitionOnChange
-          storageKey='gennit-theme'
+          storageKey='genit-theme'
         >
           {children}
         </ThemeProvider>

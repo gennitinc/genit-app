@@ -25,9 +25,9 @@ const inter = Inter({ subsets: ["latin"] });
 
 const metadata: Metadata = {
   title:
-    "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+    "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
   description:
-    "Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals in minutes—no design skills required. Free AI image generator and video creator.",
+    "Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals in minutes—no design skills required. Free AI image generator and video creator.",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -61,9 +61,9 @@ const metadata: Metadata = {
     "automated video generation",
     "automated image generation",
   ],
-  authors: [{ name: "Gennit Team" }],
-  creator: "Gennit",
-  metadataBase: new URL("https://www.gennit.online"),
+  authors: [{ name: "genit Team" }],
+  creator: "genit",
+  metadataBase: new URL("https://www.genit.online"),
   robots: {
     index: true,
     follow: true,
@@ -76,39 +76,39 @@ const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://www.gennit.online",
+    canonical: "https://www.genit.online",
   },
   twitter: {
     card: "summary_large_image",
     title:
-      "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+      "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
     description:
-      "Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos instantly—no design skills required.",
-    creator: "@GennitAI",
+      "Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos instantly—no design skills required.",
+    creator: "@genitAI",
     images: {
-      url: "https://www.gennit.online/opengraph-image.png",
-      alt: "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+      url: "https://www.genit.online/opengraph-image.png",
+      alt: "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
     },
   },
   openGraph: {
     title:
-      "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+      "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
     description:
-      "Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals instantly. Free AI image and video generator.",
-    url: "https://www.gennit.online",
-    siteName: "Gennit AI",
+      "Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals instantly. Free AI image and video generator.",
+    url: "https://www.genit.online",
+    siteName: "Genit AI",
     images: [
       {
-        url: "https://www.gennit.online/opengraph-image.png",
+        url: "https://www.genit.online/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+        alt: "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
       },
       {
-        url: "https://www.gennit.online/opengraph-image.png",
+        url: "https://www.genit.online/opengraph-image.png",
         width: 1200,
         height: 1200,
-        alt: "Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+        alt: "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
         type: "image/png",
       },
     ],
@@ -125,7 +125,7 @@ const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Gennit AI",
+    title: "Genit AI",
   },
   formatDetection: {
     telephone: false,
@@ -149,7 +149,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('gennit-theme') || 'dark';
+                  var theme = localStorage.getItem('genit-theme') || 'dark';
                   var systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                   var resolvedTheme = theme === 'system' ? systemTheme : theme;
                   
@@ -190,70 +190,70 @@ export default function RootLayout({
           name='apple-mobile-web-app-status-bar-style'
           content='black-translucent'
         />
-        <meta name='apple-mobile-web-app-title' content='Gennit AI' />
+        <meta name='apple-mobile-web-app-title' content='Genit AI' />
         <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
         <meta name='mobile-web-app-capable' content='yes' />
 
         {/* Enhanced OpenGraph Meta Tags for WhatsApp, Facebook, LinkedIn, etc. */}
         <meta property='og:type' content='website' />
-        <meta property='og:url' content='https://www.gennit.online' />
+        <meta property='og:url' content='https://www.genit.online' />
         <meta
           property='og:title'
-          content='Gennit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.'
+          content='Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.'
         />
         <meta
           property='og:description'
-          content='Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals instantly. Free AI image and video generator.'
+          content='Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals instantly. Free AI image and video generator.'
         />
         <meta
           property='og:image'
-          content='https://www.gennit.online/opengraph-image.png'
+          content='https://www.genit.online/opengraph-image.png'
         />
         <meta property='og:image:width' content='1200' />
         <meta property='og:image:height' content='630' />
         <meta
           property='og:image:alt'
-          content='Gennit AI – AI Media Design Platform'
+          content='Genit AI – AI Media Design Platform'
         />
         <meta property='og:image:type' content='image/png' />
-        <meta property='og:site_name' content='Gennit AI' />
+        <meta property='og:site_name' content='Genit AI' />
         <meta property='og:locale' content='en_US' />
         <meta property='og:locale:alternate' content='en_GB' />
 
         {/* WhatsApp specific (uses OpenGraph but prefers square images) */}
         <meta
           property='og:image:secure_url'
-          content='https://www.gennit.online/opengraph-image.png'
+          content='https://www.genit.online/opengraph-image.png'
         />
 
         {/* Facebook specific */}
         <meta property='fb:app_id' content='' />
         <meta
           property='article:author'
-          content='https://www.facebook.com/gennit'
+          content='https://www.facebook.com/genit'
         />
         <meta
           property='article:publisher'
-          content='https://www.facebook.com/gennit'
+          content='https://www.facebook.com/genit'
         />
 
         {/* LinkedIn specific */}
         <meta
           property='og:image:url'
-          content='https://www.gennit.online/opengraph-image.png'
+          content='https://www.genit.online/opengraph-image.png'
         />
 
         {/* Additional platform support */}
-        <meta name='author' content='Gennit Team' />
-        <meta name='publisher' content='Gennit AI' />
-        <meta name='copyright' content='Gennit AI' />
+        <meta name='author' content='genit Team' />
+        <meta name='publisher' content='Genit AI' />
+        <meta name='copyright' content='Genit AI' />
         <meta name='language' content='English' />
         <meta name='revisit-after' content='7 days' />
         <meta name='distribution' content='global' />
         <meta name='rating' content='general' />
 
         {/* Telegram */}
-        <meta name='telegram:channel' content='@GennitAI' />
+        <meta name='telegram:channel' content='@genitAI' />
 
         {/* Discord */}
         <meta property='og:image:width' content='1200' />
@@ -270,21 +270,21 @@ export default function RootLayout({
         {/* Additional image formats for better compatibility */}
         <link
           rel='image_src'
-          href='https://www.gennit.online/opengraph-image.png'
+          href='https://www.genit.online/opengraph-image.png'
         />
 
         {/* Schema.org for rich snippets */}
         <meta
           itemProp='name'
-          content='Gennit AI – AI Image & Video Generator'
+          content='Genit AI – AI Image & Video Generator'
         />
         <meta
           itemProp='description'
-          content='Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos instantly with advanced AI models.'
+          content='Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos instantly with advanced AI models.'
         />
         <meta
           itemProp='image'
-          content='https://www.gennit.online/opengraph-image.png'
+          content='https://www.genit.online/opengraph-image.png'
         />
         <meta itemProp='applicationCategory' content='DesignApplication' />
         <meta itemProp='operatingSystem' content='Web Browser' />
@@ -307,27 +307,27 @@ export default function RootLayout({
               {
                 "@context": "https://schema.org",
                 "@type": "Organization",
-                name: "Gennit AI",
-                url: "https://www.gennit.online",
-                logo: "https://www.gennit.online/logo.jpeg",
+                name: "Genit AI",
+                url: "https://www.genit.online",
+                logo: "https://www.genit.online/logo.jpeg",
                 description:
-                  "Gennit AI is an intelligent media design platform that supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals using artificial intelligence.",
+                  "Genit AI is an intelligent media design platform that supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals using artificial intelligence.",
                 foundingDate: "2024",
                 sameAs: [
-                  "https://twitter.com/GennitAI",
-                  "https://www.linkedin.com/company/gennit",
+                  "https://twitter.com/genitAI",
+                  "https://www.linkedin.com/company/genit",
                 ],
                 contactPoint: {
                   "@type": "ContactPoint",
                   contactType: "customer service",
-                  email: "support@gennit.online",
+                  email: "support@genit.online",
                   availableLanguage: "English",
                 },
               },
               {
                 "@context": "https://schema.org",
                 "@type": "WebApplication",
-                name: "Gennit AI",
+                name: "Genit AI",
                 applicationCategory: "DesignApplication",
                 operatingSystem: "Web Browser",
                 offers: {
@@ -338,12 +338,12 @@ export default function RootLayout({
                     "Free tier available with AI image and video generation",
                 },
                 description:
-                  "Gennit AI supports Image and Video Generation. AI-powered platform for creating images, videos, animations, and brand assets. Generate high-quality media content with artificial intelligence.",
-                url: "https://www.gennit.online",
+                  "Genit AI supports Image and Video Generation. AI-powered platform for creating images, videos, animations, and brand assets. Generate high-quality media content with artificial intelligence.",
+                url: "https://www.genit.online",
                 browserRequirements: "Requires JavaScript. Requires HTML5.",
                 softwareVersion: "1.0",
                 releaseNotes:
-                  "Gennit AI now supports both Image and Video Generation using advanced AI models.",
+                  "Genit AI now supports both Image and Video Generation using advanced AI models.",
                 featureList: [
                   "AI Image Generation",
                   "AI Video Generation",
@@ -368,7 +368,7 @@ export default function RootLayout({
               {
                 "@context": "https://schema.org",
                 "@type": "SoftwareApplication",
-                name: "Gennit AI - Image & Video Generator",
+                name: "Genit AI - Image & Video Generator",
                 applicationCategory: "DesignApplication",
                 operatingSystem: "Web",
                 offers: {
@@ -377,9 +377,9 @@ export default function RootLayout({
                   priceCurrency: "USD",
                 },
                 description:
-                  "Gennit AI supports Image and Video Generation. Create AI-generated images and videos instantly. Free AI image generator and video creator with advanced AI models.",
-                url: "https://www.gennit.online",
-                screenshot: "https://www.gennit.online/opengraph-image.png",
+                  "Genit AI supports Image and Video Generation. Create AI-generated images and videos instantly. Free AI image generator and video creator with advanced AI models.",
+                url: "https://www.genit.online",
+                screenshot: "https://www.genit.online/opengraph-image.png",
                 softwareVersion: "1.0",
                 releaseNotes:
                   "Now supports both AI Image Generation and AI Video Generation",
@@ -393,50 +393,50 @@ export default function RootLayout({
                 mainEntity: [
                   {
                     "@type": "Question",
-                    name: "Does Gennit AI support Image Generation?",
+                    name: "Does Genit AI support Image Generation?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "Yes, Gennit AI supports AI Image Generation. You can create stunning images from text prompts using advanced AI models. Generate high-quality images in various styles, aspect ratios, and resolutions.",
+                      text: "Yes, Genit AI supports AI Image Generation. You can create stunning images from text prompts using advanced AI models. Generate high-quality images in various styles, aspect ratios, and resolutions.",
                     },
                   },
                   {
                     "@type": "Question",
-                    name: "Does Gennit AI support Video Generation?",
+                    name: "Does Genit AI support Video Generation?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "Yes, Gennit AI supports AI Video Generation. Create videos from text prompts, images, or a combination of both. Generate professional videos with custom aspect ratios, durations, and styles.",
+                      text: "Yes, Genit AI supports AI Video Generation. Create videos from text prompts, images, or a combination of both. Generate professional videos with custom aspect ratios, durations, and styles.",
                     },
                   },
                   {
                     "@type": "Question",
-                    name: "What is Gennit AI?",
+                    name: "What is Genit AI?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "Gennit AI is an intelligent media design platform that supports both Image and Video Generation. It enables users to create stunning AI-generated images and videos, animations, brand assets, and marketing visuals without requiring design skills.",
+                      text: "Genit AI is an intelligent media design platform that supports both Image and Video Generation. It enables users to create stunning AI-generated images and videos, animations, brand assets, and marketing visuals without requiring design skills.",
                     },
                   },
                   {
                     "@type": "Question",
-                    name: "How do I generate images with Gennit AI?",
+                    name: "How do I generate images with Genit AI?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "To generate images with Gennit AI, simply enter a text prompt describing the image you want to create, select your preferred AI model, aspect ratio, and style, then click Generate. The AI will create your image in seconds.",
+                      text: "To generate images with Genit AI, simply enter a text prompt describing the image you want to create, select your preferred AI model, aspect ratio, and style, then click Generate. The AI will create your image in seconds.",
                     },
                   },
                   {
                     "@type": "Question",
-                    name: "How do I generate videos with Gennit AI?",
+                    name: "How do I generate videos with Genit AI?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "To generate videos with Gennit AI, enter a text prompt describing your video, optionally upload reference images or frames, select your video model, aspect ratio, and duration, then click Generate. The AI will create your video.",
+                      text: "To generate videos with Genit AI, enter a text prompt describing your video, optionally upload reference images or frames, select your video model, aspect ratio, and duration, then click Generate. The AI will create your video.",
                     },
                   },
                   {
                     "@type": "Question",
-                    name: "Is Gennit AI free to use?",
+                    name: "Is Genit AI free to use?",
                     acceptedAnswer: {
                       "@type": "Answer",
-                      text: "Yes, Gennit AI offers a free tier that allows you to generate images and videos. There are also premium plans available with more features and higher generation limits.",
+                      text: "Yes, Genit AI offers a free tier that allows you to generate images and videos. There are also premium plans available with more features and higher generation limits.",
                     },
                   },
                 ],
@@ -444,15 +444,15 @@ export default function RootLayout({
               {
                 "@context": "https://schema.org",
                 "@type": "HowTo",
-                name: "How to Generate Images and Videos with Gennit AI",
+                name: "How to Generate Images and Videos with Genit AI",
                 description:
-                  "Step-by-step guide to creating AI-generated images and videos using Gennit AI",
+                  "Step-by-step guide to creating AI-generated images and videos using Genit AI",
                 step: [
                   {
                     "@type": "HowToStep",
                     position: 1,
                     name: "Sign Up or Log In",
-                    text: "Create a free account on Gennit AI or log in to your existing account.",
+                    text: "Create a free account on Genit AI or log in to your existing account.",
                   },
                   {
                     "@type": "HowToStep",
@@ -476,7 +476,7 @@ export default function RootLayout({
                     "@type": "HowToStep",
                     position: 5,
                     name: "Generate",
-                    text: "Click the Generate button and wait for Gennit AI to create your image or video.",
+                    text: "Click the Generate button and wait for Genit AI to create your image or video.",
                   },
                   {
                     "@type": "HowToStep",
@@ -494,19 +494,19 @@ export default function RootLayout({
                     "@type": "ListItem",
                     position: 1,
                     name: "Home",
-                    item: "https://www.gennit.online",
+                    item: "https://www.genit.online",
                   },
                   {
                     "@type": "ListItem",
                     position: 2,
                     name: "AI Image Generator",
-                    item: "https://www.gennit.online/inspire/create?mode=ai-image-gen",
+                    item: "https://www.genit.online/inspire/create?mode=ai-image-gen",
                   },
                   {
                     "@type": "ListItem",
                     position: 3,
                     name: "AI Video Generator",
-                    item: "https://www.gennit.online/inspire/create?mode=ai-video-gen",
+                    item: "https://www.genit.online/inspire/create?mode=ai-video-gen",
                   },
                 ],
               },
@@ -515,11 +515,11 @@ export default function RootLayout({
         />
 
         {/* Additional AI Search Optimization */}
-        <meta name='application-name' content='Gennit AI' />
-        <meta name='apple-mobile-web-app-title' content='Gennit AI' />
+        <meta name='application-name' content='Genit AI' />
+        <meta name='apple-mobile-web-app-title' content='Genit AI' />
         <meta
           name='msapplication-tooltip'
-          content='Gennit AI - Image & Video Generator'
+          content='Genit AI - Image & Video Generator'
         />
         <meta name='msapplication-starturl' content='/' />
 
@@ -551,7 +551,7 @@ export default function RootLayout({
         />
         <meta
           name='summary'
-          content='Gennit AI supports Image and Video Generation. Create AI-generated images and videos instantly with advanced AI models.'
+          content='Genit AI supports Image and Video Generation. Create AI-generated images and videos instantly with advanced AI models.'
         />
         <meta
           name='classification'
@@ -564,21 +564,21 @@ export default function RootLayout({
         <meta name='coverage' content='Worldwide' />
         <meta name='target' content='all' />
         <meta name='audience' content='all' />
-        <meta name='DC.title' content='Gennit AI - Image & Video Generator' />
-        <meta name='DC.creator' content='Gennit Team' />
+        <meta name='DC.title' content='Genit AI - Image & Video Generator' />
+        <meta name='DC.creator' content='genit Team' />
         <meta name='DC.subject' content='AI Image and Video Generation' />
         <meta
           name='DC.description'
-          content='Gennit AI supports Image and Video Generation. Create stunning AI-generated images and videos.'
+          content='Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos.'
         />
-        <meta name='DC.publisher' content='Gennit AI' />
-        <meta name='DC.contributor' content='Gennit Team' />
+        <meta name='DC.publisher' content='Genit AI' />
+        <meta name='DC.contributor' content='genit Team' />
         <meta name='DC.date' content='2024' />
         <meta name='DC.type' content='Software' />
         <meta name='DC.format' content='text/html' />
-        <meta name='DC.identifier' content='https://www.gennit.online' />
+        <meta name='DC.identifier' content='https://www.genit.online' />
         <meta name='DC.language' content='en' />
-        <meta name='DC.rights' content='Copyright Gennit AI' />
+        <meta name='DC.rights' content='Copyright Genit AI' />
         <meta name='DC.coverage' content='Worldwide' />
         <meta name='geo.region' content='US' />
         <meta name='geo.placename' content='United States' />
@@ -597,7 +597,7 @@ export default function RootLayout({
                 defaultTheme='dark'
                 enableSystem
                 disableTransitionOnChange
-                storageKey='gennit-theme'
+                storageKey='genit-theme'
               >
                 <ProjectProvider>
                   <Suspense
@@ -630,7 +630,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('gennit-theme') || 'dark';
+                  var theme = localStorage.getItem('genit-theme') || 'dark';
                   var systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                   var resolvedTheme = theme === 'system' ? systemTheme : theme;
                   

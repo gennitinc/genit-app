@@ -579,7 +579,7 @@ export default function PricingComponent() {
                             trackEvent("enterprise_contact_intent", {
                               source: "pricing_page",
                             });
-                            window.location.href = "mailto:sales@gennit.com";
+                            window.location.href = "mailto:sales@genit.com";
                           })()
                         : handleCheckout(plan)
                     }

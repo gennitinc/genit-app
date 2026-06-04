@@ -3,7 +3,7 @@ import { apiResponse } from "@/utils/apiResponse";
 import { useQuery } from "@tanstack/react-query";
 import cookie from "js-cookie";
 
-const gennituToken = cookie.get("gennituToken");
+const genituToken = cookie.get("genituToken");
 
 export interface User {
   _id: any;
@@ -56,7 +56,7 @@ export function useUser() {
   return useQuery({
     queryKey: ["user"],
     queryFn: fetchCurrentUser,
-    enabled: !!gennituToken, // Only run query if token exists
+    enabled: !!genituToken, // Only run query if token exists
     retry: 1,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes

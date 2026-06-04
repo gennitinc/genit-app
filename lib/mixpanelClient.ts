@@ -64,7 +64,7 @@ export const initMixpanel = () => {
 };
 
 const withDefaults = (properties?: MixpanelProps): MixpanelProps => ({
-  app: "gennit-app",
+  app: "genit-app",
   environment: APP_ENV,
   ...properties,
 });

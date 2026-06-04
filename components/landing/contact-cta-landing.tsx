@@ -106,7 +106,7 @@ const ContactCtaLanding = () => {
         {/* Right-side testimonial */}
         <div className='border-t border-dashed p-8 md:border-t-0 md:border-l md:p-14'>
           <p className='text-base text-neutral-700 dark:text-neutral-200'>
-            Gennit transformed how we create content. The AI-generated images
+            genit transformed how we create content. The AI-generated images
             and videos are incredibly professional, and we've cut our design
             time by 80%. It's like having a design team at your fingertips.
           </p>

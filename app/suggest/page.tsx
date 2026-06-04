@@ -31,9 +31,9 @@ import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 // export const metadata: Metadata = {
-//   title: "Support & Suggestions – Gennit AI",
+//   title: "Support & Suggestions – Genit AI",
 //   description:
-//     "Submit support tickets or feature suggestions to the Gennit AI team. We value your feedback and are here to help.",
+//     "Submit support tickets or feature suggestions to the Genit AI team. We value your feedback and are here to help.",
 //   keywords: [
 //     "support",
 //     "suggestions",
@@ -43,15 +43,15 @@ import { ChangeEvent, FormEvent, useState } from "react";
 //     "help",
 //   ],
 //   openGraph: {
-//     title: "Support & Suggestions – Gennit AI",
-//     description: "Submit support tickets and feature suggestions to Gennit AI",
-//     url: "https://www.gennit.online/suggest",
+//     title: "Support & Suggestions – Genit AI",
+//     description: "Submit support tickets and feature suggestions to Genit AI",
+//     url: "https://www.genit.online/suggest",
 //     images: [
 //       {
-//         url: "https://www.gennit.online/opengraph-image.png",
+//         url: "https://www.genit.online/opengraph-image.png",
 //         width: 1200,
 //         height: 630,
-//         alt: "Gennit AI Support",
+//         alt: "Genit AI Support",
 //       },
 //     ],
 //   },

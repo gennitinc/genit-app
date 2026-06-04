@@ -526,7 +526,7 @@ const SettingsHome = () => {
                   <CardContent className='flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
                     <p className='text-sm text-muted-foreground'>
                       Signing out will require you to log back in to continue
-                      using Gennit.
+                      using genit.
                     </p>
                     <Button
                       variant='outline'
@@ -679,7 +679,7 @@ const SettingsHome = () => {
         onConfirm={signOut}
         loading={isSigningOut}
         title='Sign out?'
-        description="You'll need to enter your credentials the next time you want to use Gennit."
+        description="You'll need to enter your credentials the next time you want to use genit."
         confirmLabel='Sign out'
       />
       <AccountActionModal

@@ -231,7 +231,7 @@ export default function OnboardingPage() {
             <span
               className={`text-foreground text-xl font-semibold transition-colors duration-300`}
             >
-              Gennit
+              Genit
             </span>
           </Link>
           <div className='flex w-40 items-center gap-2'>

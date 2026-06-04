@@ -25,7 +25,7 @@ async function getCreatorProfile(
     const baseURL =
       process.env.NEXT_PUBLIC_LIVE_URL ||
       process.env.NEXT_PUBLIC_LOCAL_URL ||
-      "https://gennit-v1-server-production.up.railway.app/api/v1/"; // Fallback to hardcoded prod if env missing
+      "https://genit-v1-server-production.up.railway.app/api/v1/"; // Fallback to hardcoded prod if env missing
 
     // If we rely on localhost default, ensure it's correct port from .env observation (8000)
     const finalBaseURL = baseURL.includes("localhost:5000")
@@ -88,40 +88,40 @@ export async function generateMetadata({
 
   if (!profile) {
     return {
-      title: "Creator Not Found | Gennit",
+      title: "Creator Not Found | genit",
       description: "The creator profile you're looking for doesn't exist.",
     };
   }
 
-  const profileUrl = `https://www.gennit.online/creator/${username}`;
+  const profileUrl = `https://www.genit.online/creator/${username}`;
   // Use dynamic OG image route that will generate image with creator name and userdp
   const ogImage = `${profile.userdp}`;
   const description = profile.bio
-    ? `Follow ${profile.username} on Gennit to see their amazing AI-generated content! ${profile.stats?.totalPosts || 0} posts, ${profile.followers || 0} followers.`
-    : `Follow ${profile.username} on Gennit - Check out their amazing AI-generated content! ${profile.stats?.totalPosts || 0} posts, ${profile.followers || 0} followers.`;
+    ? `Follow ${profile.username} on genit to see their amazing AI-generated content! ${profile.stats?.totalPosts || 0} posts, ${profile.followers || 0} followers.`
+    : `Follow ${profile.username} on genit - Check out their amazing AI-generated content! ${profile.stats?.totalPosts || 0} posts, ${profile.followers || 0} followers.`;
 
   return {
-    title: `${profile.username}${profile.isVerified ? "" : ""} | Gennit Creator Profile`,
+    title: `${profile.username}${profile.isVerified ? "" : ""} | genit Creator Profile`,
     description,
     keywords: [
       profile.username,
-      "Gennit creator",
+      "genit creator",
       "AI content creator",
       "AI-generated content",
-      "Gennit profile",
+      "genit profile",
     ],
     authors: [{ name: profile.username }],
     openGraph: {
-      title: `${profile.username}${profile.isVerified ? "" : ""} on Gennit`,
+      title: `${profile.username}${profile.isVerified ? "" : ""} on genit`,
       description: description,
       url: profileUrl,
-      siteName: "Gennit AI",
+      siteName: "Genit AI",
       images: [
         {
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: `${profile.username}'s profile on Gennit`,
+          alt: `${profile.username}'s profile on genit`,
         },
       ],
       locale: "en_US",
@@ -129,7 +129,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${profile.username}${profile.isVerified ? "" : ""} on Gennit`,
+      title: `${profile.username}${profile.isVerified ? "" : ""} on genit`,
       description: description,
       images: [ogImage],
     },

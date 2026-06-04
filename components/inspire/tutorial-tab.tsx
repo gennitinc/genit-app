@@ -95,7 +95,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
             Tutorials are being added regularly. Check back soon!
           </p>
           <a
-            href='https://www.youtube.com/@gennit-tutorials'
+            href='https://www.youtube.com/@genit-tutorials'
             target='_blank'
             rel='noopener noreferrer'
             className='inline-flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
@@ -120,7 +120,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
           </p>
         </div>
         <a
-          href='https://www.youtube.com/@gennit-tutorials'
+          href='https://www.youtube.com/@genit-tutorials'
           target='_blank'
           rel='noopener noreferrer'
           className='flex items-center gap-1.5 text-sm font-medium text-cyan-500 transition-colors hover:text-cyan-600'
@@ -206,7 +206,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
 
       {/* View All Button */}
       <a
-        href='https://www.youtube.com/@gennit-tutorials'
+        href='https://www.youtube.com/@genit-tutorials'
         target='_blank'
         rel='noopener noreferrer'
         className='mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-3 font-medium text-white transition-all hover:from-cyan-600 hover:to-blue-600'

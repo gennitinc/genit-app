@@ -183,7 +183,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
   );
 }
 
-/** Small inline status badge that sits right next to the "Gennit" name in the header. */
+/** Small inline status badge that sits right next to the "genit" name in the header. */
 function StatusBadge({ status }: { status: AgentRunStatus }) {
   if (status === "running") {
     return (
@@ -256,16 +256,16 @@ export function AgentMessage({
         avatar={
           <AvatarDisplay
             variant='ai'
-            alt='Gennit'
-            src='../../resources/images/gennit2.png'
-            fallback='../../resources/images/gennit2.png'
+            alt='genit'
+            src='../../resources/images/genit2.png'
+            fallback='../../resources/images/genit2.png'
           />
         }
       >
         {/* Header row: name + inline status badge */}
         <div className='mb-2 flex items-center gap-2'>
           <span className='text-foreground text-[12px] font-medium tracking-tight'>
-            Gennit
+            genit
           </span>
           <StatusBadge status={run.status} />
         </div>

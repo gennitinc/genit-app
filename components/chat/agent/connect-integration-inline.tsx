@@ -40,13 +40,13 @@ export function ConnectIntegrationInline({
       const data = e.data as any;
       if (!data || typeof data !== "object") return;
       if (
-        data.type !== "gennit:integration:connected" &&
-        data.type !== "gennit:integration:error"
+        data.type !== "genit:integration:connected" &&
+        data.type !== "genit:integration:error"
       )
         return;
       if (data.platform !== required.platform) return;
       closePopup();
-      if (data.type === "gennit:integration:connected") {
+      if (data.type === "genit:integration:connected") {
         setPhase("connected");
         toast.success(`Connected ${required.platformName}`);
         onConnected?.();
@@ -78,7 +78,7 @@ export function ConnectIntegrationInline({
       const top = window.screenY + (window.outerHeight - height) / 2;
       const popup = window.open(
         response.authorizeUrl,
-        "gennit_oauth",
+        "genit_oauth",
         `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
       );
       if (!popup) throw new Error("Popup blocked. Allow popups and try again.");

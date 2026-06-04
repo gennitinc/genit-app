@@ -115,7 +115,7 @@ export default function TopNavWithAurora({
           )}
           <Link href='/' className='flex items-center gap-1 lg:hidden'>
             <Logo className='h-9 w-9' />
-            <span className='text-lg font-semibold'>Gennit</span>
+            <span className='text-lg font-semibold'>Genit</span>
           </Link>
         </div>
         <div className='z-20 flex items-center gap-4'>

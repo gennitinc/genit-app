@@ -69,7 +69,7 @@ export default function AcceptInvitationPage() {
     if (token) loadInvitation();
   }, [token, loadInvitation]);
 
-  const isAuthed = !!cookie.get("gennituToken") && !!user;
+  const isAuthed = !!cookie.get("genituToken") && !!user;
   const emailMatch =
     isAuthed &&
     invitation &&
@@ -124,7 +124,7 @@ export default function AcceptInvitationPage() {
             {error || "This invitation may have expired or been revoked."}
           </p>
           <Button className='mt-6' onClick={() => router.push("/")}>
-            Go to Gennit
+            Go to genit
           </Button>
         </div>
       </main>

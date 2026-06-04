@@ -6,9 +6,9 @@ import { Check } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing – Gennit AI | Affordable Plans for Media Design",
+  title: "Pricing – Genit AI | Affordable Plans for Media Design",
   description:
-    "Explore Gennit AI pricing plans. Free tier for individuals, paid plans for teams and enterprises. Get started with AI-powered media design today.",
+    "Explore Genit AI pricing plans. Free tier for individuals, paid plans for teams and enterprises. Get started with AI-powered media design today.",
   keywords: [
     "pricing",
     "AI media design pricing",
@@ -19,15 +19,15 @@ export const metadata: Metadata = {
     "enterprise pricing",
   ],
   openGraph: {
-    title: "Pricing – Gennit AI",
+    title: "Pricing – Genit AI",
     description: "Affordable AI-powered media design plans for all users",
-    url: "https://www.gennit.online/pricing",
+    url: "https://www.genit.online/pricing",
     images: [
       {
-        url: "https://www.gennit.online/opengraph-image.png",
+        url: "https://www.genit.online/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Gennit AI Pricing",
+        alt: "Genit AI Pricing",
       },
     ],
   },

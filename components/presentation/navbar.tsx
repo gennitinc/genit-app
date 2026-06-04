@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import appLogo from "@/resources/images/gennit.svg";
+import appLogo from "@/resources/images/genit.svg";
 import cookie from "js-cookie";
 import {
   Book,
@@ -90,7 +90,7 @@ export function PresentationNavbar({
   }, []);
 
   const handleSignOut = () => {
-    cookie.remove("gennituToken");
+    cookie.remove("genituToken");
     router.push("/signin");
   };
 
@@ -133,7 +133,7 @@ export function PresentationNavbar({
           <div className='group relative flex-shrink-0'>
             <Image
               src={appLogo || "/placeholder.svg"}
-              alt='Gennit Logo'
+              alt='genit Logo'
               width={200}
               height={80}
               className='relative z-10 h-5 w-5 transition-transform duration-300 group-hover:scale-110 sm:h-8 sm:w-8'
@@ -142,7 +142,7 @@ export function PresentationNavbar({
           {/* Brand name and project - Responsive */}
           <div className='flex min-w-0 items-center gap-1 sm:gap-2'>
             <span className='from-muted-foreground via-muted-foreground/90 to-muted-foreground relative flex-shrink-0 bg-gradient-to-r bg-clip-text text-base font-bold text-transparent sm:text-lg'>
-              Gennit
+              genit
               <div className='absolute inset-x-0 -bottom-0.5 h-0.5 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100'></div>
             </span>
             {/* Separator - Hidden on very small screens */}

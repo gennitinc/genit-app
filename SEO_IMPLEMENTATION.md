@@ -1,8 +1,8 @@
-# Gennit AI - SEO Implementation Guide
+# Genit AI - SEO Implementation Guide
 
 ## Overview
 
-This document outlines the comprehensive SEO implementation across the Gennit AI platform to improve search engine visibility and rankings.
+This document outlines the comprehensive SEO implementation across the Genit AI platform to improve search engine visibility and rankings.
 
 ## Implementation Summary
 
@@ -187,7 +187,7 @@ This document outlines the comprehensive SEO implementation across the Gennit AI
 
 ### Company Page
 
-- About gennit
+- About genit
 - Company mission
 - AI media design company
 - Media creation tools
@@ -316,7 +316,7 @@ This document outlines the comprehensive SEO implementation across the Gennit AI
 
 ## Notes
 
-- All URLs use absolute paths with https://www.gennit.online
+- All URLs use absolute paths with https://www.genit.online
 - Noindex applied to auth pages (signin, signup)
 - Chat and user pages excluded from public sitemap
 - Images use descriptive alt text

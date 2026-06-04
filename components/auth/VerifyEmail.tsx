@@ -120,7 +120,7 @@ const VerifyEmailComp = () => {
             <div className='flex items-center justify-center'>
               <Logo className='h-14 w-14' />
               <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-                Gennit
+                Genit
               </h1>
             </div>
             <CardTitle className='text-2xl font-bold'>
@@ -202,7 +202,7 @@ const VerifyEmailComp = () => {
                 </a> */}
           </p>
           <p className='text-center text-xs text-gray-600 dark:text-gray-400'>
-            ©2026 Gennit. A product of{" "}
+            ©2026 genit. A product of{" "}
             <a
               className='font-medium text-gray-800 hover:text-blue-600 dark:text-white'
               href='#'

@@ -2,8 +2,8 @@ import RecoverClient from "@/components/auth/RecoverClient";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Account recovery – Gennit AI",
-  description: "Recover your Gennit AI account and access your projects.",
+  title: "Account recovery – Genit AI",
+  description: "Recover your Genit AI account and access your projects.",
   robots: {
     index: false,
     follow: false,

@@ -22,26 +22,26 @@ export const VerificationEmail = ({
   return (
     <Html>
       <Head />
-      <Preview>Verify your email address for Gennit</Preview>
+      <Preview>Verify your email address for genit</Preview>
       <Body style={main}>
         <Container style={container}>
           <Heading style={h1}>Verify your email address</Heading>
           <Text style={text}>Hi {userFirstname},</Text>
           <Text style={text}>
-            Thanks for signing up for Gennit! Please verify your email address
+            Thanks for signing up for genit! Please verify your email address
             by clicking the button below:
           </Text>
           <Link href={verificationUrl} style={button}>
             Verify Email Address
           </Link>
           <Text style={text}>
-            If you didn't create an account with Gennit, you can safely ignore
+            If you didn't create an account with genit, you can safely ignore
             this email.
           </Text>
           <Text style={footer}>
             Best regards,
             <br />
-            The Gennit Team
+            The genit Team
           </Text>
         </Container>
       </Body>

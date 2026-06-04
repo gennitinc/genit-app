@@ -270,7 +270,7 @@ export function LandingFooter() {
             </div>
             <div className='mx-auto max-w-3xl text-center'>
               <h2 className='mb-6 font-serif text-4xl leading-tight font-bold tracking-tight text-gray-200 sm:text-5xl lg:text-6xl'>
-                Ready? Set, Gennit.
+                Ready? Set, Genit.
               </h2>
               <p className='mx-auto mb-10 max-w-xl text-lg leading-relaxed text-gray-400'>
                 Join a community of Creatives who have created
@@ -324,7 +324,7 @@ export function LandingFooter() {
                 <Link href='/' className='z-40 mb-1 flex items-center'>
                   <Logo className='h-12 w-12 flex-shrink-0' />
                   <span className='text-foreground text-xl font-semibold transition-colors duration-300'>
-                    Gennit
+                    Genit
                   </span>
                 </Link>
                 <p className='mb-1 w-full text-gray-400 md:max-w-[60vw] lg:max-w-60'>
@@ -332,7 +332,7 @@ export function LandingFooter() {
                 </p>
                 <div className='mt-8 mb-6 flex items-center gap-3'>
                   <a
-                    href='https://www.linkedin.com/company/gennit-ai/'
+                    href='https://www.linkedin.com/company/genit-ai/'
                     className='text-muted-foreground hover:text-foreground transition-colors'
                     aria-label='LinkedIn'
                   >
@@ -354,7 +354,7 @@ export function LandingFooter() {
                     </svg>
                   </a>
                   <a
-                    href='https://x.com/gennit_ai'
+                    href='https://x.com/genit_ai'
                     className='text-muted-foreground hover:text-foreground transition-colors'
                     aria-label='X'
                   >
@@ -369,7 +369,7 @@ export function LandingFooter() {
                   </a>
 
                   <a
-                    href='https://instagram.com/gennitai'
+                    href='https://instagram.com/genitai'
                     className='text-muted-foreground hover:text-foreground transition-colors'
                     aria-label='Instagram'
                   >
@@ -391,7 +391,7 @@ export function LandingFooter() {
                     </svg>
                   </a>
                   <a
-                    href='https://www.youtube.com/@gennitai'
+                    href='https://www.youtube.com/@genitai'
                     className='text-muted-foreground hover:text-foreground transition-colors'
                     aria-label='YouTube'
                   >
@@ -661,7 +661,7 @@ export function LandingFooter() {
 
             <p className='text-muted-foreground text-sm'>
               ©{currentYear},{" "}
-              <span className='text-foreground ml-1 font-medium'>Gennit</span>{" "}
+              <span className='text-foreground ml-1 font-medium'>genit</span>{" "}
               All Rights Reserved.
             </p>
           </div>

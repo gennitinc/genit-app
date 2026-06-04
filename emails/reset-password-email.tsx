@@ -22,13 +22,13 @@ export const ResetPasswordEmail = ({
   return (
     <Html>
       <Head />
-      <Preview>Reset your password for Gennit</Preview>
+      <Preview>Reset your password for genit</Preview>
       <Body style={main}>
         <Container style={container}>
           <Heading style={h1}>Reset your password</Heading>
           <Text style={text}>Hi {userFirstname},</Text>
           <Text style={text}>
-            You requested to reset your password for your Gennit account. Click
+            You requested to reset your password for your genit account. Click
             the button below to reset it:
           </Text>
           <Link href={resetUrl} style={button}>
@@ -44,7 +44,7 @@ export const ResetPasswordEmail = ({
           <Text style={footer}>
             Best regards,
             <br />
-            The Gennit Team
+            The genit Team
           </Text>
         </Container>
       </Body>

@@ -704,7 +704,7 @@ export function OrgSwitcher() {
           <DialogHeader>
             <DialogTitle>Invite to {inviteContext?.teamName || "team"}</DialogTitle>
             <DialogDescription>
-              They'll receive an email invitation. If they don't have a Gennit
+              They'll receive an email invitation. If they don't have a genit
               account yet, they can create one with this address.
             </DialogDescription>
           </DialogHeader>

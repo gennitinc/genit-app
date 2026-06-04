@@ -2,14 +2,14 @@
 
 ## Overview
 
-Gennit AI has been optimized for maximum visibility in both traditional search engines (Google, Bing) and AI-powered search engines (ChatGPT, Perplexity, Claude, etc.). This document outlines all optimizations implemented.
+Genit AI has been optimized for maximum visibility in both traditional search engines (Google, Bing) and AI-powered search engines (ChatGPT, Perplexity, Claude, etc.). This document outlines all optimizations implemented.
 
 ## Key Updates
 
 ### 1. Enhanced Metadata
 
 - **Title**: Updated to emphasize "AI Image & Video Generator"
-- **Description**: Explicitly states "Gennit AI supports Image and Video Generation"
+- **Description**: Explicitly states "Genit AI supports Image and Video Generation"
 - **Keywords**: Expanded with 25+ relevant keywords including:
   - AI image generator
   - AI video generator
@@ -46,8 +46,8 @@ Gennit AI has been optimized for maximum visibility in both traditional search e
 #### FAQPage Schema
 
 - 6 comprehensive FAQs covering:
-  - Does Gennit support Image Generation?
-  - Does Gennit support Video Generation?
+  - Does genit support Image Generation?
+  - Does genit support Video Generation?
   - How to generate images
   - How to generate videos
   - Free tier information
@@ -167,7 +167,7 @@ Added `itemProp` attributes:
 
 ## Best Practices Implemented
 
-1. **Clear Value Proposition**: "Gennit AI supports Image and Video Generation" is stated multiple times
+1. **Clear Value Proposition**: "Genit AI supports Image and Video Generation" is stated multiple times
 2. **Feature List**: Explicitly lists all capabilities
 3. **How-To Guides**: Step-by-step instructions for AI to reference
 4. **FAQs**: Answers common questions AI might be asked
@@ -181,13 +181,13 @@ Added `itemProp` attributes:
 
 1. Google Search Console: Submit sitemap
 2. Bing Webmaster Tools: Submit sitemap
-3. Test with: `site:gennit.online`
+3. Test with: `site:genit.online`
 
 ### AI Search Engines
 
-1. **ChatGPT**: Ask "What is Gennit AI?" or "How do I generate images with AI?"
+1. **ChatGPT**: Ask "What is Genit AI?" or "How do I generate images with AI?"
 2. **Perplexity**: Search "AI image generator" or "AI video generator"
-3. **Claude**: Ask about Gennit AI capabilities
+3. **Claude**: Ask about Genit AI capabilities
 4. **Google AI Overview**: Search "generate images with AI"
 
 ### Validation Tools
@@ -202,7 +202,7 @@ Added `itemProp` attributes:
 ### Key Metrics to Track
 
 1. **Search Rankings**: Track for "AI image generator", "AI video generator"
-2. **AI Mentions**: Monitor when AI assistants recommend Gennit
+2. **AI Mentions**: Monitor when AI assistants recommend genit
 3. **Traffic Sources**: Track referrals from AI search engines
 4. **Rich Snippets**: Monitor FAQ and HowTo appearances in search
 
@@ -217,7 +217,7 @@ Added `itemProp` attributes:
 
 1. **Add Facebook App ID**: Update `fb:app_id` in layout.tsx
 2. **Create browserconfig.xml**: For Microsoft tiles
-3. **Monitor AI Mentions**: Track when AI assistants recommend Gennit
+3. **Monitor AI Mentions**: Track when AI assistants recommend genit
 4. **Update Content**: Keep structured data updated with new features
 5. **Build Backlinks**: Get mentioned on AI-related sites
 6. **Create Content**: Blog posts about AI image/video generation
@@ -226,7 +226,7 @@ Added `itemProp` attributes:
 
 When AI search engines crawl your site, they'll understand:
 
-- "Gennit AI supports Image and Video Generation"
+- "Genit AI supports Image and Video Generation"
 - "AI image generator"
 - "AI video generator"
 - "Generate images with AI"
@@ -254,4 +254,4 @@ Your site is now optimized for:
 ✅ Rich snippets and featured results
 ✅ Voice search and AI assistants
 
-The comprehensive structured data and metadata ensure that AI systems can understand and recommend Gennit AI when users ask about image or video generation.
+The comprehensive structured data and metadata ensure that AI systems can understand and recommend Genit AI when users ask about image or video generation.

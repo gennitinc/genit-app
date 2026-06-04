@@ -139,15 +139,15 @@ function ChatHistoryPage() {
 
   // Load state from sessionStorage on mount (if organization matches)
   useEffect(() => {
-    const cachedOrgId = sessionStorage.getItem("gennit_history_orgId");
+    const cachedOrgId = sessionStorage.getItem("genit_history_orgId");
     const activeOrgIdStr = activeOrgId ? String(activeOrgId) : null;
     
     if (activeOrgIdStr && cachedOrgId === activeOrgIdStr) {
-      const cachedProjects = sessionStorage.getItem("gennit_history_projects");
-      const cachedPage = sessionStorage.getItem("gennit_history_page");
-      const cachedHasMore = sessionStorage.getItem("gennit_history_hasMore");
-      const cachedSearchQuery = sessionStorage.getItem("gennit_history_searchQuery");
-      const cachedScrollTop = sessionStorage.getItem("gennit_history_scrollTop");
+      const cachedProjects = sessionStorage.getItem("genit_history_projects");
+      const cachedPage = sessionStorage.getItem("genit_history_page");
+      const cachedHasMore = sessionStorage.getItem("genit_history_hasMore");
+      const cachedSearchQuery = sessionStorage.getItem("genit_history_searchQuery");
+      const cachedScrollTop = sessionStorage.getItem("genit_history_scrollTop");
 
       if (cachedProjects) {
         try {
@@ -203,12 +203,12 @@ function ChatHistoryPage() {
       lastOrgIdRef.current = orgIdStr;
 
       // Clear cache
-      sessionStorage.removeItem("gennit_history_orgId");
-      sessionStorage.removeItem("gennit_history_projects");
-      sessionStorage.removeItem("gennit_history_page");
-      sessionStorage.removeItem("gennit_history_hasMore");
-      sessionStorage.removeItem("gennit_history_searchQuery");
-      sessionStorage.removeItem("gennit_history_scrollTop");
+      sessionStorage.removeItem("genit_history_orgId");
+      sessionStorage.removeItem("genit_history_projects");
+      sessionStorage.removeItem("genit_history_page");
+      sessionStorage.removeItem("genit_history_hasMore");
+      sessionStorage.removeItem("genit_history_searchQuery");
+      sessionStorage.removeItem("genit_history_scrollTop");
 
       // Reset state
       setProjects([]);
@@ -225,18 +225,18 @@ function ChatHistoryPage() {
   // Sync state to sessionStorage when state updates (but only after restoring on mount)
   useEffect(() => {
     if (isRestored && activeOrgId) {
-      sessionStorage.setItem("gennit_history_orgId", String(activeOrgId));
-      sessionStorage.setItem("gennit_history_projects", JSON.stringify(projects));
-      sessionStorage.setItem("gennit_history_page", page.toString());
-      sessionStorage.setItem("gennit_history_hasMore", String(hasMore));
-      sessionStorage.setItem("gennit_history_searchQuery", searchQuery);
+      sessionStorage.setItem("genit_history_orgId", String(activeOrgId));
+      sessionStorage.setItem("genit_history_projects", JSON.stringify(projects));
+      sessionStorage.setItem("genit_history_page", page.toString());
+      sessionStorage.setItem("genit_history_hasMore", String(hasMore));
+      sessionStorage.setItem("genit_history_searchQuery", searchQuery);
     }
   }, [projects, page, hasMore, searchQuery, isRestored]);
 
   // Fetch projects when searchQuery changes (unless on initial mount restoration)
   useEffect(() => {
     if (isRestored && user?._id) {
-      const cachedSearchQuery = sessionStorage.getItem("gennit_history_searchQuery") || "";
+      const cachedSearchQuery = sessionStorage.getItem("genit_history_searchQuery") || "";
       const isInitialRestore = projects.length > 0 && searchQuery === cachedSearchQuery;
       if (!isInitialRestore) {
         setPage(1);
@@ -263,7 +263,7 @@ function ChatHistoryPage() {
       const { scrollTop, scrollHeight, clientHeight } = container;
       
       // Save scroll top to sessionStorage
-      sessionStorage.setItem("gennit_history_scrollTop", scrollTop.toString());
+      sessionStorage.setItem("genit_history_scrollTop", scrollTop.toString());
 
       // Load more when user is 200px from bottom
       if (

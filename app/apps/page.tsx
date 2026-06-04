@@ -178,7 +178,7 @@ const Apps = () => {
                       Apps
                     </div>
                     <h2 className='text-foreground text-3xl font-semibold tracking-tight sm:text-4xl'>
-                      Gennit Productivity Apps
+                      genit Productivity Apps
                     </h2>
                     <p className='text-muted-foreground mt-3 text-base'>
                       Pick a starting point. your ai game just got smarter

@@ -150,7 +150,7 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
             data: {
               url: live.filePath,
               type: live.name?.toLowerCase().includes("video") || live.filePath?.toLowerCase().endsWith(".mp4") ? "video/mp4" : "image/png",
-              title: `Live - ${live.name.replace(/^(gennit-design-|image|variant)-/i, "")}`,
+              title: `Live - ${live.name.replace(/^(genit-design-|image|variant)-/i, "")}`,
               instruction: live.prompt || "Generating...",
               status: "public",
             },
@@ -304,7 +304,7 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
             <div className='text-foreground space-y-2 text-center opacity-20 select-none'>
               <LayoutGrid className='mx-auto h-12 w-12 text-neutral-200 dark:text-neutral-900' />
               <p className='text-sm font-medium tracking-[0.2em] text-neutral-200 uppercase dark:text-neutral-900'>
-                Gennit Workspace
+                genit Workspace
               </p>
               <p className='text-xs text-neutral-200 dark:text-neutral-900'>
                 Project files will appear here if any

@@ -3,9 +3,9 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Data & Integration Removal Instructions – Gennit AI",
+  title: "Data & Integration Removal Instructions – Genit AI",
   description:
-    "Step-by-step instructions for disconnecting your Facebook, Instagram, Meta Ads, Threads and other integrations from Gennit AI and removing the data Gennit stored on your behalf.",
+    "Step-by-step instructions for disconnecting your Facebook, Instagram, Meta Ads, Threads and other integrations from Genit AI and removing the data genit stored on your behalf.",
   robots: {
     index: true,
     follow: true,
@@ -81,7 +81,7 @@ export default function RemovalInstructionsPage() {
 
           <SectionHeading id='1-overview' label='1. Overview' />
           <p className={P_CLASS}>
-            Gennit lets you connect third-party accounts — Facebook Pages,
+            genit lets you connect third-party accounts — Facebook Pages,
             Instagram Business profiles, Meta Ads accounts, Threads profiles
             and others — so our agents can publish content, read engagement and
             pull insights on your behalf. You stay in control: every connection
@@ -93,10 +93,10 @@ export default function RemovalInstructionsPage() {
           </p>
           <ul className={LIST_CLASS}>
             <li>
-              How to disconnect a single integration from inside Gennit.
+              How to disconnect a single integration from inside genit.
             </li>
             <li>
-              How to revoke Gennit&apos;s access directly from the third-party
+              How to revoke genit&apos;s access directly from the third-party
               platform (Facebook, Instagram, Meta Business, Threads, etc.).
             </li>
             <li>
@@ -106,24 +106,24 @@ export default function RemovalInstructionsPage() {
           </ul>
 
           <SectionHeading
-            id='2-remove-from-gennit'
-            label='2. Disconnect a single integration in Gennit'
+            id='2-remove-from-genit'
+            label='2. Disconnect a single integration in genit'
           />
           <p className={P_CLASS}>
-            The fastest way to remove an integration is from inside the Gennit
+            The fastest way to remove an integration is from inside the genit
             app. We immediately delete the encrypted access token we hold for
             that target and stop any scheduled work that depends on it.
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
-              Sign in to Gennit at{" "}
+              Sign in to genit at{" "}
               <a
                 target='_blank'
                 rel='noopener noreferrer'
                 className={LINK_CLASS}
-                href='https://gennit.online'
+                href='https://genit.online'
               >
-                gennit.online
+                genit.online
               </a>
               .
             </li>
@@ -162,7 +162,7 @@ export default function RemovalInstructionsPage() {
           />
           <p className={P_CLASS}>
             When you sign in with Meta, that single Meta login powers Facebook
-            Pages, Instagram Business accounts and Meta Ads inside Gennit. If
+            Pages, Instagram Business accounts and Meta Ads inside genit. If
             you want to wipe every Meta connection at once:
           </p>
           <ol className={ORDERED_CLASS}>
@@ -171,7 +171,7 @@ export default function RemovalInstructionsPage() {
               <a className={LINK_CLASS} href='/integrations'>
                 Integrations
               </a>{" "}
-              in Gennit.
+              in genit.
             </li>
             <li>
               Click <strong className={STRONG_CLASS}>Manage</strong> on any
@@ -186,7 +186,7 @@ export default function RemovalInstructionsPage() {
           <p className={P_CLASS}>
             This removes every Facebook, Instagram and Meta Ads integration
             tied to your Meta identity for this organization, and deletes the
-            encrypted token Gennit stored.
+            encrypted token genit stored.
           </p>
 
           <SectionHeading
@@ -194,8 +194,8 @@ export default function RemovalInstructionsPage() {
             label='4. Revoke from Facebook directly'
           />
           <p className={P_CLASS}>
-            You can also revoke Gennit&apos;s access from your Meta account
-            settings — this works even if you have lost access to Gennit.
+            You can also revoke genit&apos;s access from your Meta account
+            settings — this works even if you have lost access to genit.
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
@@ -212,19 +212,19 @@ export default function RemovalInstructionsPage() {
             </li>
             <li>
               Find{" "}
-              <strong className={STRONG_CLASS}>Gennit</strong> in the list of
+              <strong className={STRONG_CLASS}>genit</strong> in the list of
               connected apps.
             </li>
             <li>
               Click <strong className={STRONG_CLASS}>Remove</strong>, then tick{" "}
-              <em>&quot;Delete all posts, videos or events Gennit posted on
+              <em>&quot;Delete all posts, videos or events genit posted on
               your timeline.&quot;</em> if you also want to remove the content
-              created via Gennit.
+              created via genit.
             </li>
             <li>Confirm by clicking <strong className={STRONG_CLASS}>Remove</strong>.</li>
           </ol>
           <p className={P_CLASS}>
-            Facebook will instantly invalidate the access token. Gennit detects
+            Facebook will instantly invalidate the access token. genit detects
             the revocation on the next request and marks the integration as{" "}
             <strong className={STRONG_CLASS}>revoked</strong> in your dashboard.
           </p>
@@ -247,7 +247,7 @@ export default function RemovalInstructionsPage() {
               Open the <strong className={STRONG_CLASS}>Active</strong> tab.
             </li>
             <li>
-              Find <strong className={STRONG_CLASS}>Gennit</strong> and tap{" "}
+              Find <strong className={STRONG_CLASS}>genit</strong> and tap{" "}
               <strong className={STRONG_CLASS}>Remove</strong>.
             </li>
           </ol>
@@ -262,7 +262,7 @@ export default function RemovalInstructionsPage() {
             label='6. Revoke Meta Ads / Business Manager access'
           />
           <p className={P_CLASS}>
-            To remove Gennit from your Meta Business Manager:
+            To remove genit from your Meta Business Manager:
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
@@ -278,7 +278,7 @@ export default function RemovalInstructionsPage() {
               .
             </li>
             <li>
-              Select <strong className={STRONG_CLASS}>Gennit</strong> from the
+              Select <strong className={STRONG_CLASS}>genit</strong> from the
               connected apps list.
             </li>
             <li>
@@ -287,7 +287,7 @@ export default function RemovalInstructionsPage() {
             </li>
           </ol>
           <p className={P_CLASS}>
-            This severs Gennit&apos;s ability to read or write any ad accounts,
+            This severs genit&apos;s ability to read or write any ad accounts,
             campaigns or insights under your Business Manager.
           </p>
 
@@ -306,7 +306,7 @@ export default function RemovalInstructionsPage() {
               Websites and apps</strong>.
             </li>
             <li>
-              Find <strong className={STRONG_CLASS}>Gennit</strong> in the list
+              Find <strong className={STRONG_CLASS}>genit</strong> in the list
               of connected apps.
             </li>
             <li>
@@ -315,7 +315,7 @@ export default function RemovalInstructionsPage() {
             </li>
           </ol>
           <p className={P_CLASS}>
-            You can also disconnect from inside Gennit by following Step 2 and
+            You can also disconnect from inside genit by following Step 2 and
             selecting your Threads profile.
           </p>
 
@@ -326,24 +326,24 @@ export default function RemovalInstructionsPage() {
           <p className={P_CLASS}>
             Disconnecting an integration immediately deletes the encrypted
             access token we held for it. However, depending on what you used
-            Gennit for, we may also have stored: cached account metadata
+            genit for, we may also have stored: cached account metadata
             (profile name, account id), the content of scheduled or published
             posts you composed, and aggregate engagement metrics fetched on
             your behalf.
           </p>
           <p className={P_CLASS}>
-            To request a permanent deletion of all data Gennit holds for you:
+            To request a permanent deletion of all data genit holds for you:
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
               Email{" "}
               <a
                 className={LINK_CLASS}
-                href='mailto:support@gennit.online?subject=Data%20deletion%20request'
+                href='mailto:support@genit.online?subject=Data%20deletion%20request'
               >
-                support@gennit.online
+                support@genit.online
               </a>{" "}
-              from the email address associated with your Gennit account.
+              from the email address associated with your genit account.
             </li>
             <li>
               In the subject line, write{" "}
@@ -369,10 +369,10 @@ export default function RemovalInstructionsPage() {
           <SectionHeading id='9-questions' label='9. Questions?' />
           <p className={P_CLASS}>
             If anything in these steps doesn&apos;t work for you, or if you
-            can&apos;t find the Gennit entry in the third-party platform&apos;s
+            can&apos;t find the genit entry in the third-party platform&apos;s
             settings, please reach us at{" "}
-            <a className={LINK_CLASS} href='mailto:support@gennit.online'>
-              support@gennit.online
+            <a className={LINK_CLASS} href='mailto:support@genit.online'>
+              support@genit.online
             </a>{" "}
             and we&apos;ll help you complete the removal manually.
           </p>
