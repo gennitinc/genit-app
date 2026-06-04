@@ -1070,8 +1070,7 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              <span>Ai</span>
-
+            Marketing without
               <PointerHighlight
                 rectangleClassName='
       bg-blue-100 dark:bg-blue-900
@@ -1083,10 +1082,10 @@ export function IdeaSection() {
                 pointerClassName='text-blue-500 h-2.5 w-2.5 sm:h-3 sm:w-3'
                 containerClassName='inline-flex items-center'
               >
-                <span className='relative z-10 px-1 sm:px-2'>Marketing without</span>
+                <span className='relative z-10 px-1 sm:px-2'>Humans</span>
               </PointerHighlight>
 
-              <span>Humans</span>
+              {/* <span>Humans</span> */}
             </motion.h1>
 
             <motion.p

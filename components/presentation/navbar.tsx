@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import appLogo from "@/resources/images/genit.svg";
+import appLogo from "@/resources/images/gennit.svg";
 import cookie from "js-cookie";
 import {
   Book,
