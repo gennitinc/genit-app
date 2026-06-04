@@ -1107,7 +1107,7 @@ export function IdeaSection() {
               animate='visible'
             >
               Autonomous agents that designs, post, run ads, & handles <br />
-              your brand-end to end marketing across every channel.
+              your brand end to end marketing across every channel.
             </motion.p>
           </motion.div>
         </div>
