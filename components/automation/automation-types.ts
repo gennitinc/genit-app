@@ -26,6 +26,7 @@ export type TriggerSubtype =
   | "facebook_message"
   | "instagram_comment"
   | "instagram_dm"
+  | "messenger_message"
   | "calendar_event"
   | "form_submission"
   | "x_mention";
@@ -48,6 +49,7 @@ export const TRIGGER_SUBTYPES: TriggerSubtypeConfig[] = [
   { id: "facebook_message",    label: "Facebook Message",     integration: "Facebook",        iconName: "Facebook" },
   { id: "instagram_comment",   label: "Instagram Comment",    integration: "Instagram",       iconName: "Instagram" },
   { id: "instagram_dm",        label: "Instagram DM",         integration: "Instagram",       iconName: "Instagram" },
+  { id: "messenger_message",   label: "Messenger Message",    integration: "Messenger",       iconName: "MessageCircle" },
   { id: "calendar_event",      label: "Calendar Event",       integration: "Google Calendar", iconName: "GoogleCalendar" },
   { id: "form_submission",     label: "Form Submitted",       integration: "Built-in",        iconName: "ClipboardList" },
   { id: "x_mention",           label: "X Mention",            integration: "X",               iconName: "X" },
@@ -59,6 +61,7 @@ export type ActionSubtype =
   | "send_email"
   | "whatsapp_reply"
   | "whatsapp_template"
+  | "messenger_reply"
   | "post_facebook"
   | "post_instagram"
   | "post_linkedin"
@@ -83,6 +86,7 @@ export const ACTION_SUBTYPES: ActionSubtypeConfig[] = [
   { id: "send_email",          label: "Send Email",            integration: "Gmail / Brevo",   iconName: "Mail",         category: "messaging" },
   { id: "whatsapp_reply",      label: "WhatsApp Reply",        integration: "WhatsApp",        iconName: "WhatsApp",     category: "messaging" },
   { id: "whatsapp_template",   label: "WhatsApp Template",     integration: "WhatsApp",        iconName: "WhatsApp",     category: "messaging" },
+  { id: "messenger_reply",     label: "Messenger Reply",       integration: "Messenger",       iconName: "MessageCircle",category: "messaging" },
   { id: "post_facebook",       label: "Post to Facebook",      integration: "Facebook",        iconName: "Facebook",       category: "social" },
   { id: "post_instagram",      label: "Post to Instagram",     integration: "Instagram",       iconName: "Instagram",    category: "social" },
   { id: "post_linkedin",       label: "Post to LinkedIn",      integration: "LinkedIn",        iconName: "Linkedin",     category: "social" },

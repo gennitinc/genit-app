@@ -26,6 +26,7 @@ import {
   InstagramBrand,
   GoogleCalendarBrand,
   XBrand,
+  MessengerBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { cn } from "@/lib/utils";
 import { TRIGGER_SUBTYPES, type TriggerSubtype } from "./automation-types";
@@ -44,6 +45,7 @@ const TRIGGER_ICONS: Record<TriggerSubtype, any> = {
   calendar_event:      GoogleCalendarBrand,
   form_submission:     ClipboardList,
   x_mention:           XBrand,
+  messenger_message:   MessengerBrand,
 };
 
 interface TriggerNodeData {
@@ -162,6 +164,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
             {(data.triggerType === "whatsapp_message" ||
               data.triggerType === "facebook_message" ||
               data.triggerType === "instagram_dm" ||
+              data.triggerType === "messenger_message" ||
               data.triggerType === "facebook_comment" ||
               data.triggerType === "instagram_comment" ||
               data.triggerType === "x_mention") && (

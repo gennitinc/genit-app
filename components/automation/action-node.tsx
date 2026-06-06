@@ -27,6 +27,7 @@ import {
   TikTokBrand,
   GoogleCalendarBrand,
   GoogleDriveBrand,
+  MessengerBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { cn } from "@/lib/utils";
 import { ACTION_SUBTYPES, type ActionSubtype } from "./automation-types";
@@ -46,6 +47,7 @@ const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
   generate_audio: Mic,
   add_calendar_event: GoogleCalendarBrand,
   google_drive_upload: GoogleDriveBrand,
+  messenger_reply: MessengerBrand,
 };
 
 interface ActionNodeData {
@@ -221,8 +223,8 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
               </>
             )}
 
-            {/* ── WhatsApp reply ─────────────────────────────── */}
-            {data.actionType === "whatsapp_reply" && (
+            {/* ── WhatsApp/Messenger reply ─────────────────────────────── */}
+            {(data.actionType === "whatsapp_reply" || data.actionType === "messenger_reply") && (
               <div>
                 <label className={labelCls}>Reply Message</label>
                 <textarea

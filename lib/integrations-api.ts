@@ -21,10 +21,11 @@ export type IntegrationPlatform =
   | "brevo"
   | "whatsapp"
   | "telegram"
+  | "messenger"
   | "google_calendar"
   | "google_drive";
 
-export type MetaSurface = "facebook" | "instagram" | "meta_ads" | "whatsapp";
+export type MetaSurface = "facebook" | "instagram" | "meta_ads" | "whatsapp" | "messenger";
 
 export type ConnectionState = "active" | "expired" | "revoked" | "error";
 
@@ -75,6 +76,7 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "meta_ads",
   "threads",
   "whatsapp",
+  "messenger",
   "gmail",
   "telegram",
   "x",
@@ -109,7 +111,8 @@ export function isMetaSurface(platform: IntegrationPlatform): platform is MetaSu
     platform === "facebook" ||
     platform === "instagram" ||
     platform === "meta_ads" ||
-    platform === "whatsapp"
+    platform === "whatsapp" ||
+    platform === "messenger"
   );
 }
 
@@ -550,6 +553,31 @@ export async function fetchWhatsAppAnalytics(
     `/integrations/whatsapp/${integrationId}/analytics?${params}`
   );
   return (data as { analytics: unknown }).analytics;
+}
+
+// -----------------------------------------------------------------------------
+// Messenger
+// -----------------------------------------------------------------------------
+
+export interface SendMessengerMessageInput {
+  recipientId: string;
+  text: string;
+}
+
+export interface SentMessengerMessage {
+  recipient_id: string;
+  message_id: string;
+}
+
+export async function sendMessengerMessage(
+  integrationId: string,
+  input: SendMessengerMessageInput
+): Promise<SentMessengerMessage> {
+  const { data } = await apiResponse.post<{
+    success: boolean;
+    message: SentMessengerMessage;
+  }>(`/integrations/messenger/${integrationId}/send`, input);
+  return data.message;
 }
 
 // -----------------------------------------------------------------------------

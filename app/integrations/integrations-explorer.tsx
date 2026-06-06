@@ -11,6 +11,7 @@ import {
   InstagramBrand,
   LinkedinBrand,
   MicrosoftOutlookBrand,
+  MessengerBrand,
   PinterestBrand,
   SnapchatBrand,
   TelegramBrand,
@@ -257,6 +258,16 @@ const INTEGRATIONS: Integration[] = [
     icon: WhatsAppBrand,
     baseStatus: "available",
     glow: "rgba(34, 197, 94, 0.8)",
+  },
+  {
+    platform: "messenger",
+    name: "Messenger",
+    description:
+      "Automate Messenger replies, handle DMs, and build chat workflows from your AI agent.",
+    category: "Messaging",
+    icon: MessengerBrand,
+    baseStatus: "available",
+    glow: "rgba(10, 124, 255, 0.8)",
   },
   {
     platform: "telegram",

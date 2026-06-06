@@ -18,6 +18,7 @@ import {
 import { Label } from "@/components/ui/label";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import React, { useEffect, useState } from "react";
@@ -32,6 +33,8 @@ const ResetPassword = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [step, setStep] = useState<"verify" | "reset">("verify");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     // If no email parameter, redirect to recover page
@@ -216,26 +219,44 @@ const ResetPassword = () => {
                 <div className='space-y-4'>
                   <div>
                     <Label htmlFor='newPassword'>New Password</Label>
-                    <Input
-                      id='newPassword'
-                      type='password'
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder='Enter new password'
-                      className='mt-1'
-                    />
+                    <div className="relative mt-1">
+                      <Input
+                        id='newPassword'
+                        type={showPassword ? 'text' : 'password'}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder='Enter new password'
+                        className='pr-10'
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
                   </div>
 
                   <div>
                     <Label htmlFor='confirmPassword'>Confirm Password</Label>
-                    <Input
-                      id='confirmPassword'
-                      type='password'
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder='Confirm new password'
-                      className='mt-1'
-                    />
+                    <div className="relative mt-1">
+                      <Input
+                        id='confirmPassword'
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder='Confirm new password'
+                        className='pr-10'
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                      >
+                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
                   </div>
                 </div>
 

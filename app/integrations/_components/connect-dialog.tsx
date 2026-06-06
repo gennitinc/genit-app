@@ -103,6 +103,11 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
     "Read insights for the content we publish",
     "Manage comments and direct messages",
   ],
+  messenger: [
+    "Identify the Facebook Page connected to Messenger",
+    "Reply to direct messages sent to your Page",
+    "Build automated chat workflows and read incoming messages",
+  ],
   meta_ads: [
     "List your ad accounts in Business Manager",
     "Create and manage campaigns, ad sets and ads",
@@ -161,6 +166,16 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
     "Read and create contacts in your Brevo lists",
     "List your marketing campaigns and pull delivery / open / click stats",
   ],
+  outlook: [
+    "Identify your Microsoft account (email + profile)",
+    "Send email on your behalf via Outlook",
+    "Read your inbox to surface replies and threads",
+  ],
+  mailchimp: [
+    "Identify your Mailchimp account and audiences",
+    "Create and send marketing campaigns",
+    "Read subscriber lists and campaign analytics",
+  ],
   pinterest: [
     "Identify your Pinterest account (handle, avatar, business name)",
     "List your boards and create pins from image URLs",
@@ -185,6 +200,16 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
     "Pull /report/integrated/get/ data at campaign, ad-group, or ad level",
     "Filter reports by campaign id and choose your own metrics + dimensions",
   ],
+  linkedin_ads: [
+    "List your LinkedIn ad accounts and company pages",
+    "Create and manage campaigns, ad sets and creatives",
+    "Read ad performance and lead generation metrics",
+  ],
+  x_ads: [
+    "List your X ad accounts",
+    "Create and manage promoted tweets and campaigns",
+    "Pull ad performance and engagement metrics",
+  ],
   google_calendar: [
     "Identify your Google account (email + profile picture)",
     "List events on your primary and secondary calendars",
@@ -200,6 +225,9 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
 };
 
 const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
+  facebook: [
+    "You must be an admin or editor of the Facebook Page you want to connect",
+  ],
   instagram: [
     "Instagram account must be Business or Creator",
     "Instagram must be linked to a Facebook Page",
@@ -207,6 +235,10 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
   meta_ads: [
     "You must be admin on at least one ad account in Business Manager",
     "Two-factor auth must be enabled on your Meta account",
+  ],
+  messenger: [
+    "You need admin access to the Facebook Page you want to connect",
+    "The Page must not be restricted from messaging users",
   ],
   threads: [
     "You'll sign in directly with your Threads account",
@@ -245,6 +277,12 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
     "Sending requires at least one verified sender address on your Brevo account",
     "If your key has IP restrictions on, add this server's IP at app.brevo.com/security/authorised_ips first",
   ],
+  outlook: [
+    "Your IT administrator may need to approve third-party app access in Microsoft Entra ID (Azure AD)",
+  ],
+  mailchimp: [
+    "You need an active Mailchimp account with at least one audience list configured",
+  ],
   pinterest: [
     "Your Pinterest app must be approved for the boards / pins scopes — apps in trial mode are limited to the app owner's account",
     "Pin images must be publicly accessible https URLs at least 75×75 px",
@@ -260,6 +298,12 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
   tiktok_ads: [
     "Register a TikTok Business Marketing API app (separate from the regular TikTok developer app) and set TIKTOK_ADS_APP_ID / TIKTOK_ADS_SECRET",
     "During the TikTok consent screen you choose which advertisers to authorize — we provision one connection per choice",
+  ],
+  linkedin_ads: [
+    "You must be an admin or billing admin on the LinkedIn ad account you want to manage",
+  ],
+  x_ads: [
+    "You must have an active X Ads account with a valid payment method configured",
   ],
   google_calendar: [
     "genit is a verified Google app — if you see a warning screen, click Advanced → Continue",
