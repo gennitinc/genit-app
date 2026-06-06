@@ -21,10 +21,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Pricing – Genit AI",
     description: "Affordable AI-powered media design plans for all users",
-    url: "https://www.genit.online/pricing",
+    url: "https://www.trygenit.com/pricing",
     images: [
       {
-        url: "https://www.genit.online/opengraph-image.png",
+        url: "https://www.trygenit.com/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "Genit AI Pricing",

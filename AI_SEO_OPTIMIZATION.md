@@ -181,7 +181,7 @@ Added `itemProp` attributes:
 
 1. Google Search Console: Submit sitemap
 2. Bing Webmaster Tools: Submit sitemap
-3. Test with: `site:genit.online`
+3. Test with: `site:trygenit.com`
 
 ### AI Search Engines
 

@@ -45,10 +45,10 @@ import { ChangeEvent, FormEvent, useState } from "react";
 //   openGraph: {
 //     title: "Support & Suggestions – Genit AI",
 //     description: "Submit support tickets and feature suggestions to Genit AI",
-//     url: "https://www.genit.online/suggest",
+//     url: "https://www.trygenit.com/suggest",
 //     images: [
 //       {
-//         url: "https://www.genit.online/opengraph-image.png",
+//         url: "https://www.trygenit.com/opengraph-image.png",
 //         width: 1200,
 //         height: 630,
 //         alt: "Genit AI Support",

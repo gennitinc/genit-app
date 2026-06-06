@@ -3,12 +3,12 @@
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.genit.online/#organization",
+      "@id": "https://www.trygenit.com/#organization",
       "name": "Genit AI",
-      "url": "https://www.genit.online",
+      "url": "https://www.trygenit.com",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.genit.online/logo.png",
+        "url": "https://www.trygenit.com/logo.png",
         "width": 250,
         "height": 60
       },
@@ -21,24 +21,24 @@
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer service",
-        "email": "support@genit.online",
+        "email": "support@trygenit.com",
         "availableLanguage": "en"
       }
     },
     {
       "@type": "WebSite",
-      "@id": "https://www.genit.online/#website",
-      "url": "https://www.genit.online",
+      "@id": "https://www.trygenit.com/#website",
+      "url": "https://www.trygenit.com",
       "name": "Genit AI – Intelligent Media Design",
       "description": "AI-powered media design platform for graphics, videos, animations, and brand assets",
       "publisher": {
-        "@id": "https://www.genit.online/#organization"
+        "@id": "https://www.trygenit.com/#organization"
       },
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://www.genit.online/search?q={search_term_string}"
+          "urlTemplate": "https://www.trygenit.com/search?q={search_term_string}"
         },
         "query-input": "required name=search_term_string"
       }
@@ -53,7 +53,7 @@
         "priceCurrency": "USD"
       },
       "description": "AI-powered media design platform that generates graphics, videos, animations, and brand assets.",
-      "url": "https://www.genit.online",
+      "url": "https://www.trygenit.com",
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.9",

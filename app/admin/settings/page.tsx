@@ -75,7 +75,7 @@ export default function SettingsPage() {
               </Label>
               <Input
                 id='adminEmail'
-                defaultValue='admin@genit.online'
+                defaultValue='admin@trygenit.com'
                 className='bg-background border-border/50 h-11 rounded-xl'
               />
             </div>

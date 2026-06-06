@@ -113,7 +113,7 @@ export default function ReferralDashboard() {
     } catch (error: any) {
       console.error("Failed to fetch referral data:", error);
       // Set default data for development
-      const defaultLink = `https://www.genit.online/signup#/?creator=@${user?.username}`;
+      const defaultLink = `https://www.trygenit.com/signup#/?creator=@${user?.username}`;
       setStats({
         totalRevenue: 6240.28,
         revenueChange: 10,

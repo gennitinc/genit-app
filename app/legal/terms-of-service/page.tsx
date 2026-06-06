@@ -84,7 +84,7 @@ export default function About2() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='https://genit.online/legal/privacy-policy'
+                href='https://trygenit.com/legal/privacy-policy'
               >
                 Privacy Policy
               </a>{" "}
@@ -93,7 +93,7 @@ export default function About2() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='https://genit.online/legal/dpa'
+                href='https://trygenit.com/legal/dpa'
               >
                 Data Processing Addendum
               </a>{" "}
@@ -117,9 +117,9 @@ export default function About2() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='https://genit.online'
+                href='https://trygenit.com'
               >
-                genit.online
+                trygenit.com
               </a>{" "}
               (collectively, the{" "}
               <strong className='text-slate-12 font-semibold'>"Service"</strong>
@@ -614,9 +614,9 @@ export default function About2() {
               immediately by contacting{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@genit.online'
+                href='mailto:support@trygenit.com'
               >
-                support@genit.online
+                support@trygenit.com
               </a>
               .
             </p>
@@ -933,9 +933,9 @@ export default function About2() {
               via email to{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@genit.online'
+                href='mailto:support@trygenit.com'
               >
-                support@genit.online
+                support@trygenit.com
               </a>
               , with the subject line: "Copyright Infringement" and include in
               your claim a detailed description of the alleged Infringement as
@@ -1002,9 +1002,9 @@ export default function About2() {
               email at{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@genit.online'
+                href='mailto:support@trygenit.com'
               >
-                support@genit.online
+                support@trygenit.com
               </a>
             </p>
             <h2
@@ -1038,9 +1038,9 @@ export default function About2() {
               You may provide us either directly at{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@genit.online'
+                href='mailto:support@trygenit.com'
               >
-                support@genit.online
+                support@trygenit.com
               </a>{" "}
               or via third party sites and tools with information and feedback
               concerning errors, suggestions for improvements, ideas, problems,
@@ -1496,9 +1496,9 @@ export default function About2() {
                 target='_blank'
                 rel='noopener noreferrer'
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='https://genit.online/legal/acceptable-use'
+                href='https://trygenit.com/legal/acceptable-use'
               >
-                genit.online/legal/acceptable-use
+                trygenit.com/legal/acceptable-use
               </a>
               .
             </p>
@@ -1566,9 +1566,9 @@ export default function About2() {
               support: By email:{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@genit.online'
+                href='mailto:support@trygenit.com'
               >
-                support@genit.online
+                support@trygenit.com
               </a>
               .
             </p>

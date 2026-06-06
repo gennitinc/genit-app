@@ -63,7 +63,7 @@ const metadata: Metadata = {
   ],
   authors: [{ name: "genit Team" }],
   creator: "genit",
-  metadataBase: new URL("https://www.genit.online"),
+  metadataBase: new URL("https://www.trygenit.com"),
   robots: {
     index: true,
     follow: true,
@@ -76,7 +76,7 @@ const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://www.genit.online",
+    canonical: "https://www.trygenit.com",
   },
   twitter: {
     card: "summary_large_image",
@@ -86,7 +86,7 @@ const metadata: Metadata = {
       "Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos instantly—no design skills required.",
     creator: "@genitAI",
     images: {
-      url: "https://www.genit.online/opengraph-image.png",
+      url: "https://www.trygenit.com/opengraph-image.png",
       alt: "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
     },
   },
@@ -95,17 +95,17 @@ const metadata: Metadata = {
       "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
     description:
       "Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals instantly. Free AI image and video generator.",
-    url: "https://www.genit.online",
+    url: "https://www.trygenit.com",
     siteName: "Genit AI",
     images: [
       {
-        url: "https://www.genit.online/opengraph-image.png",
+        url: "https://www.trygenit.com/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
       },
       {
-        url: "https://www.genit.online/opengraph-image.png",
+        url: "https://www.trygenit.com/opengraph-image.png",
         width: 1200,
         height: 1200,
         alt: "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
@@ -196,7 +196,7 @@ export default function RootLayout({
 
         {/* Enhanced OpenGraph Meta Tags for WhatsApp, Facebook, LinkedIn, etc. */}
         <meta property='og:type' content='website' />
-        <meta property='og:url' content='https://www.genit.online' />
+        <meta property='og:url' content='https://www.trygenit.com' />
         <meta
           property='og:title'
           content='Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.'
@@ -207,7 +207,7 @@ export default function RootLayout({
         />
         <meta
           property='og:image'
-          content='https://www.genit.online/opengraph-image.png'
+          content='https://www.trygenit.com/opengraph-image.png'
         />
         <meta property='og:image:width' content='1200' />
         <meta property='og:image:height' content='630' />
@@ -223,7 +223,7 @@ export default function RootLayout({
         {/* WhatsApp specific (uses OpenGraph but prefers square images) */}
         <meta
           property='og:image:secure_url'
-          content='https://www.genit.online/opengraph-image.png'
+          content='https://www.trygenit.com/opengraph-image.png'
         />
 
         {/* Facebook specific */}
@@ -240,7 +240,7 @@ export default function RootLayout({
         {/* LinkedIn specific */}
         <meta
           property='og:image:url'
-          content='https://www.genit.online/opengraph-image.png'
+          content='https://www.trygenit.com/opengraph-image.png'
         />
 
         {/* Additional platform support */}
@@ -270,7 +270,7 @@ export default function RootLayout({
         {/* Additional image formats for better compatibility */}
         <link
           rel='image_src'
-          href='https://www.genit.online/opengraph-image.png'
+          href='https://www.trygenit.com/opengraph-image.png'
         />
 
         {/* Schema.org for rich snippets */}
@@ -284,7 +284,7 @@ export default function RootLayout({
         />
         <meta
           itemProp='image'
-          content='https://www.genit.online/opengraph-image.png'
+          content='https://www.trygenit.com/opengraph-image.png'
         />
         <meta itemProp='applicationCategory' content='DesignApplication' />
         <meta itemProp='operatingSystem' content='Web Browser' />
@@ -308,8 +308,8 @@ export default function RootLayout({
                 "@context": "https://schema.org",
                 "@type": "Organization",
                 name: "Genit AI",
-                url: "https://www.genit.online",
-                logo: "https://www.genit.online/logo.jpeg",
+                url: "https://www.trygenit.com",
+                logo: "https://www.trygenit.com/logo.jpeg",
                 description:
                   "Genit AI is an intelligent media design platform that supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals using artificial intelligence.",
                 foundingDate: "2024",
@@ -320,7 +320,7 @@ export default function RootLayout({
                 contactPoint: {
                   "@type": "ContactPoint",
                   contactType: "customer service",
-                  email: "support@genit.online",
+                  email: "support@trygenit.com",
                   availableLanguage: "English",
                 },
               },
@@ -339,7 +339,7 @@ export default function RootLayout({
                 },
                 description:
                   "Genit AI supports Image and Video Generation. AI-powered platform for creating images, videos, animations, and brand assets. Generate high-quality media content with artificial intelligence.",
-                url: "https://www.genit.online",
+                url: "https://www.trygenit.com",
                 browserRequirements: "Requires JavaScript. Requires HTML5.",
                 softwareVersion: "1.0",
                 releaseNotes:
@@ -378,8 +378,8 @@ export default function RootLayout({
                 },
                 description:
                   "Genit AI supports Image and Video Generation. Create AI-generated images and videos instantly. Free AI image generator and video creator with advanced AI models.",
-                url: "https://www.genit.online",
-                screenshot: "https://www.genit.online/opengraph-image.png",
+                url: "https://www.trygenit.com",
+                screenshot: "https://www.trygenit.com/opengraph-image.png",
                 softwareVersion: "1.0",
                 releaseNotes:
                   "Now supports both AI Image Generation and AI Video Generation",
@@ -494,19 +494,19 @@ export default function RootLayout({
                     "@type": "ListItem",
                     position: 1,
                     name: "Home",
-                    item: "https://www.genit.online",
+                    item: "https://www.trygenit.com",
                   },
                   {
                     "@type": "ListItem",
                     position: 2,
                     name: "AI Image Generator",
-                    item: "https://www.genit.online/inspire/create?mode=ai-image-gen",
+                    item: "https://www.trygenit.com/inspire/create?mode=ai-image-gen",
                   },
                   {
                     "@type": "ListItem",
                     position: 3,
                     name: "AI Video Generator",
-                    item: "https://www.genit.online/inspire/create?mode=ai-video-gen",
+                    item: "https://www.trygenit.com/inspire/create?mode=ai-video-gen",
                   },
                 ],
               },
@@ -576,7 +576,7 @@ export default function RootLayout({
         <meta name='DC.date' content='2024' />
         <meta name='DC.type' content='Software' />
         <meta name='DC.format' content='text/html' />
-        <meta name='DC.identifier' content='https://www.genit.online' />
+        <meta name='DC.identifier' content='https://www.trygenit.com' />
         <meta name='DC.language' content='en' />
         <meta name='DC.rights' content='Copyright Genit AI' />
         <meta name='DC.coverage' content='Worldwide' />

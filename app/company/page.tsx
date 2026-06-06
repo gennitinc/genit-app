@@ -38,11 +38,11 @@ export const metadata: Metadata = {
     title: "About genit – Your AI Marketing Team & Agent Platform",
     description:
       "Connect your website and let genit's AI marketing agents create content, plan calendars, and execute growth activities at scale.",
-    url: "https://www.genit.online/company",
+    url: "https://www.trygenit.com/company",
     type: "website",
     images: [
       {
-        url: "https://www.genit.online/opengraph-image.png",
+        url: "https://www.trygenit.com/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "Genit AI Agent Platform",

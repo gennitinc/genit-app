@@ -316,7 +316,7 @@ This document outlines the comprehensive SEO implementation across the Genit AI 
 
 ## Notes
 
-- All URLs use absolute paths with https://www.genit.online
+- All URLs use absolute paths with https://www.trygenit.com
 - Noindex applied to auth pages (signin, signup)
 - Chat and user pages excluded from public sitemap
 - Images use descriptive alt text

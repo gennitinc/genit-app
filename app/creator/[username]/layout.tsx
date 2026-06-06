@@ -93,7 +93,7 @@ export async function generateMetadata({
     };
   }
 
-  const profileUrl = `https://www.genit.online/creator/${username}`;
+  const profileUrl = `https://www.trygenit.com/creator/${username}`;
   // Use dynamic OG image route that will generate image with creator name and userdp
   const ogImage = `${profile.userdp}`;
   const description = profile.bio

@@ -26,10 +26,10 @@ export const metadata: Metadata = {
     title: "Inspirations – Genit AI",
     description:
       "Browse professional design templates and creative inspirations",
-    url: "https://www.genit.online/inspirations",
+    url: "https://www.trygenit.com/inspirations",
     images: [
       {
-        url: "https://www.genit.online/opengraph-image.png",
+        url: "https://www.trygenit.com/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "Genit AI Inspirations",
