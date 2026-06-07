@@ -393,6 +393,10 @@ export function ConnectDialog({
   const [provisionLoading, setProvisionLoading] = useState(false);
   const popupRef = useRef<Window | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Tracks whether a terminal postMessage (connected / error / select_target)
+  // has been received. Prevents the popup-closed poll from racing with
+  // the message handler and showing a false "error" flash.
+  const connectionResolvedRef = useRef(false);
   const qc = useQueryClient();
   const { user, fetchCurrentUser } = useUserContext();
   const { identityBySurface } = useIntegrations();
@@ -427,6 +431,7 @@ export function ConnectDialog({
       setErrorMessage(null);
       setConnectedAccount(null);
       setCredentialValue("");
+      connectionResolvedRef.current = false;
     }
   }, [open, closePopup]);
 
@@ -446,6 +451,9 @@ export function ConnectDialog({
         return;
       if (data.platform !== platform) return;
 
+      // Mark as resolved BEFORE any React state updates so the popup poll
+      // can never race ahead and flash an error.
+      connectionResolvedRef.current = true;
       closePopup();
 
       if (data.type === "genit:integration:select_target") {
@@ -553,14 +561,24 @@ export function ConnectDialog({
         );
       }
       popupRef.current = popup;
+      connectionResolvedRef.current = false;
       pollRef.current = setInterval(() => {
         if (popupRef.current && popupRef.current.closed) {
           if (pollRef.current) clearInterval(pollRef.current);
           pollRef.current = null;
-          setPhase((current) => (current === "connecting" ? "error" : current));
-          setErrorMessage(
-            (prev) => prev ?? "Window closed before the connection completed"
-          );
+
+          // The popup closed — but a postMessage may still be in flight.
+          // Wait a short grace period before declaring failure so the
+          // message handler has time to process.
+          if (connectionResolvedRef.current) return;
+          setTimeout(() => {
+            // Re-check: the message might have arrived during the grace period.
+            if (connectionResolvedRef.current) return;
+            setPhase((current) => (current === "connecting" ? "error" : current));
+            setErrorMessage(
+              (prev) => prev ?? "Window closed before the connection completed"
+            );
+          }, 1500);
         }
       }, 600);
     } catch (err: any) {
