@@ -366,6 +366,38 @@ export default function AutomationWorkflow({
     [setNodes]
   );
 
+  const onTestRun = useCallback(
+    async (nodeId: string) => {
+      if (!projectId) {
+        toast.error("Project ID is missing. Cannot run test.");
+        return;
+      }
+      try {
+        toast.loading("Triggering test run...", { id: `test-run-${nodeId}` });
+        const res = await apiResponse.post(
+          `/apps/automation/webhook/${projectId}/${nodeId}`
+        );
+        if (res.data?.success) {
+          toast.success(
+            `Test run triggered successfully. Queued ${
+              res.data.jobs?.length || 0
+            } actions.`,
+            { id: `test-run-${nodeId}` }
+          );
+        } else {
+          toast.error("Test run failed", { id: `test-run-${nodeId}` });
+        }
+      } catch (err: any) {
+        console.error(err);
+        toast.error(
+          err.response?.data?.message || "Failed to trigger test run",
+          { id: `test-run-${nodeId}` }
+        );
+      }
+    },
+    [projectId]
+  );
+
   const injectNodeCallbacks = useCallback(
     (nodesList: Node[]) => {
       return nodesList.map((node) => ({
@@ -375,10 +407,11 @@ export default function AutomationWorkflow({
           isEditMode,
           onRemoveNode: removeNode,
           onNodeDataChange: onNodeDataChange,
+          onTestRun: onTestRun,
         },
       }));
     },
-    [isEditMode, removeNode, onNodeDataChange]
+    [isEditMode, removeNode, onNodeDataChange, onTestRun]
   );
 
   // ── Fetch automation state ──────────────────────────────────────────────

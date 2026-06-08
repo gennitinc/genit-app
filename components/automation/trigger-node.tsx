@@ -36,7 +36,8 @@ const TRIGGER_ICONS: Record<TriggerSubtype, any> = {
   webhook:             Webhook,
   manual:              Play,
   whatsapp_message:    WhatsAppBrand,
-  email_received:      Mail,
+  gmail_received:      Mail,
+  outlook_email_received: Mail,
   brevo_contact_added: BrevoBrand,
   facebook_comment:    FacebookBrand,
   facebook_message:    FacebookBrand,
@@ -60,6 +61,7 @@ interface TriggerNodeData {
   nodeId: string;
   onRemoveNode: (id: string) => void;
   onNodeDataChange: (id: string, updatedData: any) => void;
+  onTestRun?: (id: string) => void;
 }
 
 const inputCls =
@@ -180,7 +182,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
               </div>
             )}
 
-            {data.triggerType === "email_received" && (
+
+
+            {(data.triggerType === "gmail_received" || data.triggerType === "outlook_email_received") && (
               <>
                 <div>
                   <label className={labelCls}>From</label>
@@ -209,6 +213,17 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                   <option value="updated">Updated</option>
                   <option value="cancelled">Cancelled</option>
                 </select>
+              </div>
+            )}
+            {isEdit && data.onTestRun && (
+              <div className="pt-2">
+                <button
+                  onClick={() => data.onTestRun!(id)}
+                  className="w-full flex items-center justify-center gap-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                >
+                  <Play className="h-3.5 w-3.5" />
+                  Test Run
+                </button>
               </div>
             )}
           </>

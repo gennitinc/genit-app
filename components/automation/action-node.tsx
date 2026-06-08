@@ -17,6 +17,8 @@ import {
   Video,
   Mic,
   Upload,
+  AtSign,
+  Image,
 } from "lucide-react";
 import {
   WhatsAppBrand,
@@ -33,7 +35,9 @@ import { cn } from "@/lib/utils";
 import { ACTION_SUBTYPES, type ActionSubtype } from "./automation-types";
 
 const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
-  send_email: Mail,
+  send_gmail: Mail,
+  send_brevo_email: Mail,
+  send_outlook_email: Mail,
   whatsapp_reply: WhatsAppBrand,
   whatsapp_template: WhatsAppBrand,
   post_facebook: FacebookBrand,
@@ -48,6 +52,18 @@ const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
   add_calendar_event: GoogleCalendarBrand,
   google_drive_upload: GoogleDriveBrand,
   messenger_reply: MessengerBrand,
+  update_facebook_post: FacebookBrand,
+  delete_facebook_post: FacebookBrand,
+  delete_linkedin_post: LinkedinBrand,
+  reply_linkedin_comment: LinkedinBrand,
+  update_pinterest_pin: Image,
+  delete_pinterest_pin: Image,
+  update_youtube_video: Video,
+  delete_youtube_video: Video,
+  reply_youtube_comment: MessageCircle,
+  delete_tweet: XBrand,
+  delete_threads_post: AtSign,
+  reply_instagram_comment: InstagramBrand,
 };
 
 interface ActionNodeData {
@@ -181,7 +197,7 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
             </div>
 
             {/* ── Send Email config ─────────────────────────── */}
-            {data.actionType === "send_email" && (
+            {(data.actionType === "send_gmail" || data.actionType === "send_brevo_email" || data.actionType === "send_outlook_email") && (
               <>
                 <div>
                   <label className={labelCls}>To</label>

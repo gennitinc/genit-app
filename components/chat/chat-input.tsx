@@ -112,8 +112,8 @@ export function ChatInput({
     if (!value.trim() && files.length === 0) {
       return "Please enter a prompt or attach files";
     }
-    if (value.trim().length < 10) {
-      return "Please provide a more detailed prompt (at least 10 characters)";
+    if (value.trim().length < 2) {
+      return "Please provide a more detailed prompt (at least 2 characters)";
     }
     if (value.trim().length > 5000) {
       return "Prompt is too long (maximum 5000 characters)";
@@ -568,7 +568,7 @@ export function ChatInput({
                     isAgentRunning ||
                     isAgentAwaitingInput ||
                     isProcessingDraft ||
-                    (!inputValue.trim() && attachedFiles.length === 0)
+                    (inputValue.trim().length < 2 && attachedFiles.length === 0)
                   }
                   className='bg-primary text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
                 >

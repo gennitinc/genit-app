@@ -431,7 +431,10 @@ export function ConnectDialog({
       setErrorMessage(null);
       setConnectedAccount(null);
       setCredentialValue("");
-      connectionResolvedRef.current = false;
+      // NOTE: we intentionally do NOT reset connectionResolvedRef here.
+      // It is only reset when a new connection attempt starts (handleConnect).
+      // Resetting here would allow a stale setTimeout from the poll to
+      // flash an error after the dialog re-opens.
     }
   }, [open, closePopup]);
 
@@ -502,6 +505,7 @@ export function ConnectDialog({
     }
     setPhase("connecting");
     setErrorMessage(null);
+    connectionResolvedRef.current = false;
 
     let response: ConnectUrlResponse;
     try {
@@ -568,17 +572,25 @@ export function ConnectDialog({
           pollRef.current = null;
 
           // The popup closed — but a postMessage may still be in flight.
-          // Wait a short grace period before declaring failure so the
-          // message handler has time to process.
+          // If we already resolved (message was received), do nothing.
           if (connectionResolvedRef.current) return;
+
+          // Give the postMessage up to 2 seconds to arrive before
+          // declaring the connection as failed.
           setTimeout(() => {
-            // Re-check: the message might have arrived during the grace period.
             if (connectionResolvedRef.current) return;
-            setPhase((current) => (current === "connecting" ? "error" : current));
-            setErrorMessage(
-              (prev) => prev ?? "Window closed before the connection completed"
-            );
-          }, 1500);
+            // Use functional updates so we only act when phase is still
+            // "connecting". This prevents overriding success/select/error
+            // if state changed between the setTimeout being scheduled and
+            // executing (e.g. due to a React re-render cycle).
+            setPhase((current) => {
+              if (current !== "connecting") return current;
+              setErrorMessage(
+                (prev) => prev ?? "Window closed before the connection completed"
+              );
+              return "error";
+            });
+          }, 2000);
         }
       }, 600);
     } catch (err: any) {

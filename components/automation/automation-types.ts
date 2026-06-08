@@ -20,7 +20,8 @@ export type TriggerSubtype =
   | "webhook"
   | "manual"
   | "whatsapp_message"
-  | "email_received"
+  | "gmail_received"
+  | "outlook_email_received"
   | "brevo_contact_added"
   | "facebook_comment"
   | "facebook_message"
@@ -43,7 +44,8 @@ export const TRIGGER_SUBTYPES: TriggerSubtypeConfig[] = [
   { id: "webhook",             label: "Webhook",              integration: "Built-in",        iconName: "Webhook" },
   { id: "manual",              label: "Manual Trigger",       integration: "Built-in",        iconName: "Play" },
   { id: "whatsapp_message",    label: "WhatsApp Message",     integration: "WhatsApp",        iconName: "WhatsApp" },
-  { id: "email_received",      label: "New Email",            integration: "Gmail / Outlook", iconName: "Mail" },
+  { id: "gmail_received",      label: "New Email (Gmail)",    integration: "Gmail",           iconName: "Mail" },
+  { id: "outlook_email_received",label:"New Email (Outlook)", integration: "Outlook",         iconName: "Mail" },
   { id: "brevo_contact_added", label: "New Contact (Brevo)",  integration: "Brevo",           iconName: "Brevo" },
   { id: "facebook_comment",    label: "Facebook Comment",     integration: "Facebook",        iconName: "Facebook" },
   { id: "facebook_message",    label: "Facebook Message",     integration: "Facebook",        iconName: "Facebook" },
@@ -58,7 +60,9 @@ export const TRIGGER_SUBTYPES: TriggerSubtypeConfig[] = [
 // ── Action Subtypes ─────────────────────────────────────────────────────────
 
 export type ActionSubtype =
-  | "send_email"
+  | "send_gmail"
+  | "send_brevo_email"
+  | "send_outlook_email"
   | "whatsapp_reply"
   | "whatsapp_template"
   | "messenger_reply"
@@ -72,7 +76,19 @@ export type ActionSubtype =
   | "generate_text"
   | "generate_audio"
   | "add_calendar_event"
-  | "google_drive_upload";
+  | "google_drive_upload"
+  | "update_facebook_post"
+  | "delete_linkedin_post"
+  | "reply_linkedin_comment"
+  | "update_pinterest_pin"
+  | "update_youtube_video"
+  | "reply_youtube_comment"
+  | "delete_facebook_post"
+  | "delete_pinterest_pin"
+  | "delete_youtube_video"
+  | "delete_tweet"
+  | "delete_threads_post"
+  | "reply_instagram_comment";
 
 export interface ActionSubtypeConfig {
   id: ActionSubtype;
@@ -83,7 +99,9 @@ export interface ActionSubtypeConfig {
 }
 
 export const ACTION_SUBTYPES: ActionSubtypeConfig[] = [
-  { id: "send_email",          label: "Send Email",            integration: "Gmail / Brevo",   iconName: "Mail",         category: "messaging" },
+  { id: "send_gmail",          label: "Send Gmail",            integration: "Gmail",           iconName: "Mail",         category: "messaging" },
+  { id: "send_brevo_email",    label: "Send Brevo Email",      integration: "Brevo",           iconName: "Mail",         category: "messaging" },
+  { id: "send_outlook_email",  label: "Send Outlook Email",    integration: "Outlook",         iconName: "Mail",         category: "messaging" },
   { id: "whatsapp_reply",      label: "WhatsApp Reply",        integration: "WhatsApp",        iconName: "WhatsApp",     category: "messaging" },
   { id: "whatsapp_template",   label: "WhatsApp Template",     integration: "WhatsApp",        iconName: "WhatsApp",     category: "messaging" },
   { id: "messenger_reply",     label: "Messenger Reply",       integration: "Messenger",       iconName: "MessageCircle",category: "messaging" },
@@ -98,6 +116,18 @@ export const ACTION_SUBTYPES: ActionSubtypeConfig[] = [
   { id: "generate_audio",      label: "Generate Audio",        integration: "Genit AI",       iconName: "Mic",          category: "ai" },
   { id: "add_calendar_event",  label: "Create Calendar Event", integration: "Google Calendar", iconName: "GoogleCalendar", category: "productivity" },
   { id: "google_drive_upload", label: "Upload to Drive",       integration: "Google Drive",    iconName: "GoogleDrive",  category: "productivity" },
+  { id: "update_facebook_post",  label: "Update FB Post",      integration: "Facebook",        iconName: "Facebook",     category: "social" },
+  { id: "delete_linkedin_post",  label: "Delete LI Post",      integration: "LinkedIn",        iconName: "Linkedin",     category: "social" },
+  { id: "reply_linkedin_comment",label: "Reply to LI Comment", integration: "LinkedIn",        iconName: "Linkedin",     category: "social" },
+  { id: "update_pinterest_pin",  label: "Update Pin",          integration: "Pinterest",       iconName: "Image",        category: "social" },
+  { id: "update_youtube_video",  label: "Update YT Video",     integration: "YouTube",         iconName: "Video",        category: "social" },
+  { id: "reply_youtube_comment", label: "Reply YT Comment",    integration: "YouTube",         iconName: "MessageCircle",category: "social" },
+  { id: "delete_facebook_post",  label: "Delete FB Post",      integration: "Facebook",        iconName: "Facebook",     category: "social" },
+  { id: "delete_pinterest_pin",  label: "Delete Pin",          integration: "Pinterest",       iconName: "Image",        category: "social" },
+  { id: "delete_youtube_video",  label: "Delete YT Video",     integration: "YouTube",         iconName: "Video",        category: "social" },
+  { id: "delete_tweet",          label: "Delete Tweet",        integration: "X",               iconName: "X",            category: "social" },
+  { id: "delete_threads_post",   label: "Delete Threads Post", integration: "Threads",         iconName: "AtSign",       category: "social" },
+  { id: "reply_instagram_comment",label: "Reply IG Comment",   integration: "Instagram",       iconName: "Instagram",    category: "social" },
 ];
 
 // ── Condition Operators ─────────────────────────────────────────────────────
