@@ -76,7 +76,7 @@ export default function About2() {
                 </p>
               </div>
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                Unlike traditional AI tools that only generate content, genit is designed to take action. It combines AI agents with 23+ integrations to help businesses execute marketing tasks end-to-end, reducing the need to switch between multiple tools or hire large marketing teams.
+                Unlike traditional AI tools that only generate content, genit is designed to take action. It combines AI agents with 25+ integrations to help businesses execute marketing tasks end-to-end, reducing the need to switch between multiple tools or hire large marketing teams.
               </p>
               <figure>
                 <img

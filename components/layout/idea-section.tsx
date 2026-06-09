@@ -1851,7 +1851,7 @@ export function IdeaSection() {
 
         <section className='relative mt-5 space-y-4 border-t pt-6 pb-10 lg:mt-10'>
           <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
-            with over 23+ marketing{" "}
+            with over 25+ marketing{" "}
             <Link
               href='/integrations'
               target='_blank'
