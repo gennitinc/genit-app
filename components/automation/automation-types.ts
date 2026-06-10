@@ -84,6 +84,7 @@ export type ActionSubtype =
   | "update_youtube_video"
   | "reply_youtube_comment"
   | "delete_facebook_post"
+  | "reply_facebook_comment"
   | "delete_pinterest_pin"
   | "delete_youtube_video"
   | "delete_tweet"
@@ -123,6 +124,7 @@ export const ACTION_SUBTYPES: ActionSubtypeConfig[] = [
   { id: "update_youtube_video",  label: "Update YT Video",     integration: "YouTube",         iconName: "Video",        category: "social" },
   { id: "reply_youtube_comment", label: "Reply YT Comment",    integration: "YouTube",         iconName: "MessageCircle",category: "social" },
   { id: "delete_facebook_post",  label: "Delete FB Post",      integration: "Facebook",        iconName: "Facebook",     category: "social" },
+  { id: "reply_facebook_comment",label: "Reply to FB Comment", integration: "Facebook",        iconName: "MessageCircle",category: "social" },
   { id: "delete_pinterest_pin",  label: "Delete Pin",          integration: "Pinterest",       iconName: "Image",        category: "social" },
   { id: "delete_youtube_video",  label: "Delete YT Video",     integration: "YouTube",         iconName: "Video",        category: "social" },
   { id: "delete_tweet",          label: "Delete Tweet",        integration: "X",               iconName: "X",            category: "social" },

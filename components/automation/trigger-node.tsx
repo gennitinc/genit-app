@@ -9,9 +9,11 @@ import {
   Clock,
   Image,
   Inbox,
+  Loader2,
   Mail,
   MessageCircle,
   MessageSquare,
+  Pause,
   Play,
   Send,
   Trash2,
@@ -54,9 +56,12 @@ interface TriggerNodeData {
   triggerType: TriggerSubtype;
   scheduleFrequency?: string;
   cronExpression?: string;
+  scheduleTime?: string;
   filterField?: string;
   filterValue?: string;
   webhookUrl?: string;
+  isActive?: boolean;
+  isTesting?: boolean;
   isEditMode: boolean;
   nodeId: string;
   onRemoveNode: (id: string) => void;
@@ -92,14 +97,21 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
             Trigger
           </span>
         </div>
-        {isEdit && (
-          <button
-            onClick={() => data.onRemoveNode(id)}
-            className="text-zinc-500 dark:text-neutral-400 hover:text-red-500 dark:hover:text-red-400 transition-colors p-1 rounded"
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-          </button>
-        )}
+        <div className="flex items-center gap-1">
+          {isEdit && (
+            <button
+              onClick={() => data.onRemoveNode(id)}
+              className="text-zinc-500 dark:text-neutral-400 hover:text-red-500 dark:hover:text-red-400 transition-colors p-1 rounded"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          )}
+          {!isEdit && data.isActive === false && (
+            <span className="text-[9px] font-semibold uppercase tracking-wider text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded">
+              Paused
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Body */}
@@ -134,11 +146,11 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
               <div>
                 <label className={labelCls}>Frequency</label>
                 <select
-                  value={data.scheduleFrequency || "Every Monday"}
+                  value={data.scheduleFrequency || "Once"}
                   onChange={(e) => data.onNodeDataChange(id, { scheduleFrequency: e.target.value })}
                   className={selectCls}
                 >
-                  {["Every 5 minutes","Hourly","Daily","Every Monday","Weekly","Monthly","Custom"].map((v) => (
+                  {["Once", "Every 5 minutes","Hourly","Daily","Every Monday","Weekly","Monthly","Custom"].map((v) => (
                     <option key={v} value={v}>{v}</option>
                   ))}
                 </select>
@@ -149,6 +161,14 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                     onChange={(e) => data.onNodeDataChange(id, { cronExpression: e.target.value })}
                     className={cn(inputCls, "mt-1.5 font-mono")}
                     placeholder="*/5 * * * *"
+                  />
+                )}
+                {(!data.scheduleFrequency || data.scheduleFrequency === "Once") && (
+                  <input
+                    type="datetime-local"
+                    value={data.scheduleTime || ""}
+                    onChange={(e) => data.onNodeDataChange(id, { scheduleTime: e.target.value })}
+                    className={cn(inputCls, "mt-1.5")}
                   />
                 )}
               </div>
@@ -216,13 +236,39 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
               </div>
             )}
             {isEdit && data.onTestRun && (
-              <div className="pt-2">
+              <div className="pt-2 flex items-center gap-2">
+                <button
+                  onClick={() => data.onNodeDataChange(id, { isActive: data.isActive === false ? true : false })}
+                  disabled={data.isTesting}
+                  className={cn(
+                    "flex-1 flex items-center justify-center gap-1.5 border rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+                    data.isActive === false
+                      ? "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800/50 hover:bg-amber-100 dark:hover:bg-amber-900/40"
+                      : "bg-zinc-50 dark:bg-zinc-900/20 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800/50 hover:bg-zinc-100 dark:hover:bg-zinc-900/40",
+                    data.isTesting && "opacity-50 cursor-not-allowed"
+                  )}
+                  title={data.isActive === false ? "Resume Automation" : "Pause Automation"}
+                >
+                  {data.isActive === false ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
+                  {data.isActive === false ? "Paused" : "Active"}
+                </button>
                 <button
                   onClick={() => data.onTestRun!(id)}
-                  className="w-full flex items-center justify-center gap-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                  disabled={data.isActive === false || data.isTesting}
+                  className={cn(
+                    "flex-1 flex items-center justify-center gap-1.5 border rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+                    data.isActive === false
+                      ? "bg-zinc-100 dark:bg-zinc-800/50 text-zinc-400 dark:text-zinc-500 border-transparent cursor-not-allowed"
+                      : "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800/50 hover:bg-blue-100 dark:hover:bg-blue-900/40",
+                    data.isTesting && "opacity-50 cursor-not-allowed"
+                  )}
                 >
-                  <Play className="h-3.5 w-3.5" />
-                  Test Run
+                  {data.isTesting ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    <Play className="h-3.5 w-3.5" />
+                  )}
+                  {data.isTesting ? "Testing..." : "Test Run"}
                 </button>
               </div>
             )}

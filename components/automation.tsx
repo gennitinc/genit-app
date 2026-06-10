@@ -56,6 +56,7 @@ import {
   Globe,
   View,
   GitBranchIcon,
+  SaveAll,
 } from "lucide-react";
 import {
   EyeIcon as Eye,
@@ -287,6 +288,8 @@ export default function AutomationWorkflow({
             delete cleanData.onRemoveNode;
             delete cleanData.onNodeDataChange;
             delete cleanData.isEditMode;
+            delete cleanData.onTestRun;
+            delete cleanData.isTesting;
             return {
               id: n.id,
               type: n.type,
@@ -373,15 +376,15 @@ export default function AutomationWorkflow({
         return;
       }
       try {
+        onNodeDataChange(nodeId, { isTesting: true });
         toast.loading("Triggering test run...", { id: `test-run-${nodeId}` });
         const res = await apiResponse.post(
-          `/apps/automation/webhook/${projectId}/${nodeId}`
+          `/apps/automation/${projectId}/test-run`,
+          { nodeId }
         );
         if (res.data?.success) {
           toast.success(
-            `Test run triggered successfully. Queued ${
-              res.data.jobs?.length || 0
-            } actions.`,
+            res.data.message || `Test run completed successfully.`,
             { id: `test-run-${nodeId}` }
           );
         } else {
@@ -389,13 +392,19 @@ export default function AutomationWorkflow({
         }
       } catch (err: any) {
         console.error(err);
-        toast.error(
-          err.response?.data?.message || "Failed to trigger test run",
-          { id: `test-run-${nodeId}` }
-        );
+        const data = err.response?.data;
+        const errorMessage = data?.message || "Failed to trigger test run";
+        const errorDetails = data?.errors?.length > 0 ? data.errors.join("\n") : undefined;
+
+        toast.error(errorMessage, { 
+          id: `test-run-${nodeId}`,
+          description: errorDetails
+        });
+      } finally {
+        onNodeDataChange(nodeId, { isTesting: false });
       }
     },
-    [projectId]
+    [projectId, onNodeDataChange]
   );
 
   const injectNodeCallbacks = useCallback(
@@ -998,7 +1007,9 @@ export default function AutomationWorkflow({
               </>
             )}
             {saveStatus === "idle" && (
-              <span className='opacity-50'>Auto-save</span>
+                <>
+                <SaveAll className='h-3 w-3 ' />
+                 </>
             )}
           </div>
         </div>

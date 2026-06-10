@@ -71,20 +71,43 @@ interface ActionNodeData {
   actionType: ActionSubtype;
   recipientList?: string;
   recipientEmail?: string;
+  recipientId?: string;
+  to?: string;
   subject?: string;
   messageBody?: string;
   templateId?: string;
+  templateName?: string;
   contentText?: string;
   imageUrl?: string;
+  videoUrl?: string;
   calendarSummary?: string;
   calendarDate?: string;
   driveFolderPath?: string;
   channels?: string[];
   instruction?: string;
+  postId?: string;
+  commentId?: string;
+  shareId?: string;
+  pinId?: string;
+  videoId?: string;
+  tweetId?: string;
+  mediaId?: string;
+  boardId?: string;
+  postTitle?: string;
+  description?: string;
+  privacy?: string;
+  disableComment?: boolean;
+  disableDuet?: boolean;
+  disableStitch?: boolean;
+  mode?: string;
+  categoryId?: string;
+  tags?: string;
+  privacyStatus?: string;
   isEditMode: boolean;
   nodeId: string;
   onRemoveNode: (id: string) => void;
   onNodeDataChange: (id: string, updatedData: any) => void;
+  [key: string]: any;
 }
 
 const inputCls =
@@ -241,33 +264,61 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
 
             {/* ── WhatsApp/Messenger reply ─────────────────────────────── */}
             {(data.actionType === "whatsapp_reply" || data.actionType === "messenger_reply") && (
-              <div>
-                <label className={labelCls}>Reply Message</label>
-                <textarea
-                  value={data.messageBody || ""}
-                  onChange={(e) =>
-                    data.onNodeDataChange(id, { messageBody: e.target.value })
-                  }
-                  className={cn(inputCls, "min-h-[40px] resize-none")}
-                  placeholder="Reply text or {{ ai_generate.output }}"
-                />
-              </div>
+              <>
+                <div>
+                  <label className={labelCls}>Recipient ID / To</label>
+                  <input
+                    type="text"
+                    value={data.recipientId || data.to || ""}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, { recipientId: e.target.value, to: e.target.value })
+                    }
+                    className={inputCls}
+                    placeholder="Recipient phone or ID"
+                  />
+                </div>
+                <div>
+                  <label className={labelCls}>Reply Message</label>
+                  <textarea
+                    value={data.messageBody || ""}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, { messageBody: e.target.value })
+                    }
+                    className={cn(inputCls, "min-h-[40px] resize-none")}
+                    placeholder="Reply text or {{ ai_generate.output }}"
+                  />
+                </div>
+              </>
             )}
 
             {/* ── WhatsApp template ──────────────────────────── */}
             {data.actionType === "whatsapp_template" && (
-              <div>
-                <label className={labelCls}>Template ID</label>
-                <input
-                  type="text"
-                  value={data.templateId || ""}
-                  onChange={(e) =>
-                    data.onNodeDataChange(id, { templateId: e.target.value })
-                  }
-                  className={inputCls}
-                  placeholder="Template name or ID"
-                />
-              </div>
+              <>
+                <div>
+                  <label className={labelCls}>Recipient ID / To</label>
+                  <input
+                    type="text"
+                    value={data.to || ""}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, { to: e.target.value })
+                    }
+                    className={inputCls}
+                    placeholder="Recipient phone number"
+                  />
+                </div>
+                <div>
+                  <label className={labelCls}>Template Name/ID</label>
+                  <input
+                    type="text"
+                    value={data.templateId || data.templateName || ""}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, { templateId: e.target.value, templateName: e.target.value })
+                    }
+                    className={inputCls}
+                    placeholder="Template name or ID"
+                  />
+                </div>
+              </>
             )}
 
             {/* ── Social post actions ────────────────────────── */}
@@ -277,8 +328,22 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
               data.actionType === "post_x" ||
               data.actionType === "post_tiktok") && (
               <>
+                {data.actionType === "post_tiktok" && (
+                  <div>
+                    <label className={labelCls}>Title</label>
+                    <input
+                      type="text"
+                      value={data.postTitle || ""}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, { postTitle: e.target.value })
+                      }
+                      className={inputCls}
+                      placeholder="Video Title"
+                    />
+                  </div>
+                )}
                 <div>
-                  <label className={labelCls}>Content</label>
+                  <label className={labelCls}>Content / Caption</label>
                   <textarea
                     value={data.contentText || ""}
                     onChange={(e) =>
@@ -289,17 +354,153 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                   />
                 </div>
                 <div>
-                  <label className={labelCls}>Image URL (optional)</label>
+                  <label className={labelCls}>Media URL (optional)</label>
                   <input
                     type="text"
-                    value={data.imageUrl || ""}
+                    value={data.imageUrl || data.videoUrl || ""}
                     onChange={(e) =>
-                      data.onNodeDataChange(id, { imageUrl: e.target.value })
+                      data.onNodeDataChange(id, { imageUrl: e.target.value, videoUrl: e.target.value })
                     }
                     className={inputCls}
                     placeholder="https:// or {{ ai_generate.url }}"
                   />
                 </div>
+                {data.actionType === "post_tiktok" && (
+                  <div>
+                    <label className={labelCls}>Privacy</label>
+                    <select
+                      value={data.privacy || "SELF_ONLY"}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, { privacy: e.target.value })
+                      }
+                      className={selectCls}
+                    >
+                      <option value="PUBLIC">Public</option>
+                      <option value="MUTUAL">Mutual</option>
+                      <option value="SELF_ONLY">Private (Self Only)</option>
+                    </select>
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* ── Social Media Updates/Deletions ────────────────────────── */}
+            {(data.actionType === "update_facebook_post" ||
+              data.actionType === "delete_facebook_post" ||
+              data.actionType === "reply_facebook_comment" ||
+              data.actionType === "delete_linkedin_post" ||
+              data.actionType === "reply_linkedin_comment" ||
+              data.actionType === "update_pinterest_pin" ||
+              data.actionType === "delete_pinterest_pin" ||
+              data.actionType === "update_youtube_video" ||
+              data.actionType === "delete_youtube_video" ||
+              data.actionType === "reply_youtube_comment" ||
+              data.actionType === "delete_tweet" ||
+              data.actionType === "delete_threads_post" ||
+              data.actionType === "reply_instagram_comment") && (
+              <>
+                {(data.actionType === "update_facebook_post" || data.actionType === "delete_facebook_post") && (
+                  <div>
+                    <label className={labelCls}>Post ID</label>
+                    <input type="text" value={data.postId || ""} onChange={(e) => data.onNodeDataChange(id, { postId: e.target.value })} className={inputCls} placeholder="Post ID" />
+                  </div>
+                )}
+                {(data.actionType === "reply_facebook_comment" || data.actionType === "reply_youtube_comment" || data.actionType === "reply_instagram_comment") && (
+                  <div>
+                    <label className={labelCls}>Comment ID</label>
+                    <input type="text" value={data.commentId || ""} onChange={(e) => data.onNodeDataChange(id, { commentId: e.target.value })} className={inputCls} placeholder="Comment ID" />
+                  </div>
+                )}
+                {data.actionType === "delete_linkedin_post" && (
+                  <div>
+                    <label className={labelCls}>Share ID</label>
+                    <input type="text" value={data.shareId || ""} onChange={(e) => data.onNodeDataChange(id, { shareId: e.target.value })} className={inputCls} placeholder="Share ID" />
+                  </div>
+                )}
+                {data.actionType === "reply_linkedin_comment" && (
+                  <div>
+                    <label className={labelCls}>Comment URN</label>
+                    <input type="text" value={data.commentUrn || ""} onChange={(e) => data.onNodeDataChange(id, { commentUrn: e.target.value })} className={inputCls} placeholder="Comment URN" />
+                  </div>
+                )}
+                {(data.actionType === "update_pinterest_pin" || data.actionType === "delete_pinterest_pin") && (
+                  <div>
+                    <label className={labelCls}>Pin ID</label>
+                    <input type="text" value={data.pinId || ""} onChange={(e) => data.onNodeDataChange(id, { pinId: e.target.value })} className={inputCls} placeholder="Pin ID" />
+                  </div>
+                )}
+                {(data.actionType === "update_youtube_video" || data.actionType === "delete_youtube_video") && (
+                  <div>
+                    <label className={labelCls}>Video ID</label>
+                    <input type="text" value={data.videoId || ""} onChange={(e) => data.onNodeDataChange(id, { videoId: e.target.value })} className={inputCls} placeholder="Video ID" />
+                  </div>
+                )}
+                {data.actionType === "delete_tweet" && (
+                  <div>
+                    <label className={labelCls}>Tweet ID</label>
+                    <input type="text" value={data.tweetId || ""} onChange={(e) => data.onNodeDataChange(id, { tweetId: e.target.value })} className={inputCls} placeholder="Tweet ID" />
+                  </div>
+                )}
+                {data.actionType === "delete_threads_post" && (
+                  <div>
+                    <label className={labelCls}>Media ID</label>
+                    <input type="text" value={data.mediaId || ""} onChange={(e) => data.onNodeDataChange(id, { mediaId: e.target.value })} className={inputCls} placeholder="Media ID" />
+                  </div>
+                )}
+                
+                {/* Content text for updates/replies */}
+                {(data.actionType === "update_facebook_post" ||
+                  data.actionType === "reply_facebook_comment" ||
+                  data.actionType === "reply_linkedin_comment" ||
+                  data.actionType === "reply_youtube_comment" ||
+                  data.actionType === "reply_instagram_comment" ||
+                  data.actionType === "update_pinterest_pin" ||
+                  data.actionType === "update_youtube_video") && (
+                  <div>
+                    <label className={labelCls}>Message/Content</label>
+                    <textarea value={data.contentText || ""} onChange={(e) => data.onNodeDataChange(id, { contentText: e.target.value })} className={cn(inputCls, "min-h-[40px] resize-none")} placeholder="Message text" />
+                  </div>
+                )}
+
+                {/* Additional fields for Pinterest Update */}
+                {data.actionType === "update_pinterest_pin" && (
+                  <>
+                    <div>
+                      <label className={labelCls}>Title</label>
+                      <input type="text" value={data.postTitle || ""} onChange={(e) => data.onNodeDataChange(id, { postTitle: e.target.value })} className={inputCls} placeholder="New Title" />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Board ID</label>
+                      <input type="text" value={data.boardId || ""} onChange={(e) => data.onNodeDataChange(id, { boardId: e.target.value })} className={inputCls} placeholder="Board ID" />
+                    </div>
+                  </>
+                )}
+
+                {/* Additional fields for YouTube Update */}
+                {data.actionType === "update_youtube_video" && (
+                  <>
+                    <div>
+                      <label className={labelCls}>Title</label>
+                      <input type="text" value={data.postTitle || ""} onChange={(e) => data.onNodeDataChange(id, { postTitle: e.target.value })} className={inputCls} placeholder="New Title" />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Category ID</label>
+                      <input type="text" value={data.categoryId || ""} onChange={(e) => data.onNodeDataChange(id, { categoryId: e.target.value })} className={inputCls} placeholder="Category ID" />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Tags</label>
+                      <input type="text" value={data.tags || ""} onChange={(e) => data.onNodeDataChange(id, { tags: e.target.value })} className={inputCls} placeholder="tag1, tag2" />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Privacy Status</label>
+                      <select value={data.privacyStatus || "private"} onChange={(e) => data.onNodeDataChange(id, { privacyStatus: e.target.value })} className={selectCls}>
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                        <option value="unlisted">Unlisted</option>
+                      </select>
+                    </div>
+                  </>
+                )}
               </>
             )}
 
