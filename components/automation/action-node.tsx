@@ -54,6 +54,7 @@ const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
   messenger_reply: MessengerBrand,
   update_facebook_post: FacebookBrand,
   delete_facebook_post: FacebookBrand,
+  reply_facebook_comment: FacebookBrand,
   delete_linkedin_post: LinkedinBrand,
   reply_linkedin_comment: LinkedinBrand,
   update_pinterest_pin: Image,
