@@ -525,7 +525,7 @@ export function LandingFooter() {
                     Inspirations
                   </Link>
                   <Link
-                    href='/inspirations'
+                    href='/contact'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     Contact
