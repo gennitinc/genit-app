@@ -99,7 +99,7 @@ export function useSpeechToText({
     startListening,
     stopListening,
     error,
-    isSupported: !!(
+    isSupported: typeof window !== "undefined" && !!(
       (window as any).SpeechRecognition ||
       (window as any).webkitSpeechRecognition
     ),
