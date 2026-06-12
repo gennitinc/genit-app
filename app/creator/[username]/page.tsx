@@ -45,6 +45,7 @@ import { cn } from "@/lib/utils";
 import { CommunityContent } from "@/types/inspire";
 import { apiResponse } from "@/utils/apiResponse";
 import { creatorApi } from "@/utils/inspire-api";
+import Loading from "@/utils/Loading";
 import {
   ArrowLeft,
   Camera,
@@ -489,7 +490,7 @@ export default function CreatorProfilePage() {
         <LandingNavbar />
 
         <div className='flex h-74 items-center justify-center'>
-          <Loader2 className='h-8 w-8 animate-spin text-neutral-400' />
+          <Loading/>
         </div>
 
         {/* Profile Header Card - Desktop */}
@@ -940,9 +941,9 @@ export default function CreatorProfilePage() {
                 {/* User Info */}
                 <div className='mt-0 flex-1'>
                   <div className='mb-2 flex items-center gap-2'>
-                    <h1 className='text-3xl font-bold text-neutral-900 dark:text-white'>
+                    <h3 className='text-2xl font-semibold text-neutral-900 dark:text-white'>
                       {profile.username}
-                    </h1>
+                    </h3>
                     {profile.isVerified && (
                       <svg
                         viewBox='0 0 22 22'
@@ -1345,9 +1346,9 @@ export default function CreatorProfilePage() {
             <div className='flex flex-col items-center text-center md:hidden'>
               {/* Username and Verification */}
               <div className='mb-2 flex items-center justify-center gap-2'>
-                <h1 className='text-2xl font-bold text-neutral-900 dark:text-white'>
+                <h3 className='text-xl font-semibold text-neutral-900 dark:text-white'>
                   {profile.username}
-                </h1>
+                </h3>
                 {profile.isVerified && (
                   <svg
                     viewBox='0 0 22 22'
@@ -1707,7 +1708,7 @@ export default function CreatorProfilePage() {
       </div>
 
       {/* Content Tabs */}
-      <div className='mx-auto max-w-6xl px-4 sm:px-6 lg:px-8'>
+      <div className='mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8'>
         <div className='sticky top-0 z-10 mb-6 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-950/80'>
           <div className='flex gap-1 pt-3 pb-0'>
             <button
