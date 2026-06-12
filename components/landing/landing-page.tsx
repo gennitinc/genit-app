@@ -19,7 +19,7 @@ export function LandingPage() {
   return (
     <div className='flex min-h-screen w-full flex-col bg-white dark:bg-black'>
       <Toaster />
-      <LandingPageBanner />
+      {/* <LandingPageBanner /> */}
       <LandingNavbar />
       <LandingHero />
       <LandingCommunityVideos />
