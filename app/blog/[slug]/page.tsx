@@ -231,11 +231,11 @@ export default async function BlogPostPage(props: {
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col justify-between">
+      <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col justify-between">
         <LandingNavbar />
         <div className="text-center py-40">
-          <h1 className="text-3xl font-bold text-white mb-4">Post Not Found</h1>
-          <p className="text-zinc-400 mb-8">The blog article you are looking for does not exist.</p>
+          <h1 className="text-3xl font-bold text-black dark:text-white mb-4">Post Not Found</h1>
+          <p className="text-zinc-600 dark:text-zinc-400 mb-8">The blog article you are looking for does not exist.</p>
           <Link href="/blog" className="text-cyan-500 hover:underline">
             Back to all posts
           </Link>
@@ -282,14 +282,14 @@ export default async function BlogPostPage(props: {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans">
       <LandingNavbar />
 
       <main className="flex-grow max-w-7xl mx-auto w-full px-6 md:px-12 lg:px-20 py-12">
         {/* Back Link */}
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white text-sm font-medium transition-colors mb-10 group"
+          className="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white text-sm font-medium transition-colors mb-10 group"
         >
           <span className="transform transition-transform group-hover:-translate-x-1">&larr;</span> All posts
         </Link>
@@ -297,16 +297,16 @@ export default async function BlogPostPage(props: {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Main Article Content (Left/Center) */}
           <div className="lg:col-span-8 flex flex-col">
-            <span className="text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-4">
+            <span className="text-zinc-600 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-4">
               Published {formatDate(post.publishedAt)} in <span className="text-cyan-500">{post.category}</span>
             </span>
 
-            <h1 className="text-3xl md:text-3xl font-semibold tracking-tight text-white leading-tight mb-8">
+            <h1 className="text-3xl md:text-3xl font-semibold tracking-tight text-black dark:text-white leading-tight mb-8">
               {post.title}
             </h1>
 
             {/* Author Info */}
-            <div className="flex items-center gap-3 mb-10 pb-6 border-b border-zinc-800/60">
+            <div className="flex items-center gap-3 mb-10 pb-6 border-b border-zinc-200 dark:border-zinc-800/60">
               <Image
                 src={post.author.avatar}
                 alt={post.author.name}
@@ -315,13 +315,13 @@ export default async function BlogPostPage(props: {
                 className="rounded-full object-cover size-8"
               />
               <div>
-                <div className="text-white text-sm font-medium">{post.author.name}</div>
-                {post.author.title && <div className="text-zinc-400 text-xs">{post.author.title}</div>}
+                <div className="text-black dark:text-white text-sm font-medium">{post.author.name}</div>
+                {post.author.title && <div className="text-zinc-600 dark:text-zinc-400 text-xs">{post.author.title}</div>}
               </div>
             </div>
 
             {/* Cover Image */}
-            <div className="relative aspect-video w-full rounded-3xl overflow-hidden mb-12 border border-zinc-800/80">
+            <div className="relative aspect-video w-full rounded-3xl overflow-hidden mb-12 border border-zinc-200 dark:border-zinc-800/80">
               <Image
                 src={post.coverImage}
                 alt={post.title}
@@ -330,45 +330,45 @@ export default async function BlogPostPage(props: {
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 60vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/10 dark:from-zinc-950/20 to-transparent" />
             </div>
 
             {/* Post Content Body */}
             <div
-              className="prose prose-invert max-w-none text-zinc-300 leading-relaxed space-y-6 
-              prose-h2:text-white prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-4
-              prose-p:mb-6 prose-p:text-zinc-300 prose-p:text-base md:prose-p:text-lg prose-strong:text-white 
-              prose-blockquote:border-l-4 prose-blockquote:border-cyan-500 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-zinc-200 prose-blockquote:my-8 prose-blockquote:text-lg
+              className="prose dark:prose-invert max-w-none text-zinc-800 dark:text-zinc-300 leading-relaxed space-y-6 
+              prose-h2:text-black dark:prose-h2:text-white prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-4
+              prose-p:mb-6 prose-p:text-zinc-800 dark:prose-p:text-zinc-300 prose-p:text-base md:prose-p:text-lg prose-strong:text-black dark:prose-strong:text-white 
+              prose-blockquote:border-l-4 prose-blockquote:border-cyan-500 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-zinc-700 dark:prose-blockquote:text-zinc-200 prose-blockquote:my-8 prose-blockquote:text-lg
               prose-ul:list-disc prose-ul:pl-6 prose-li:mb-2
-              [&_a]:text-cyan-400 [&_a]:underline hover:[&_a]:text-cyan-300
-              [&_pre]:bg-zinc-950 [&_pre]:p-5 [&_pre]:rounded-2xl [&_pre]:border [&_pre]:border-zinc-800 [&_pre]:overflow-x-auto [&_pre]:my-8 [&_pre]:scrollbar-hide
-              [&_code]:font-mono [&_code]:text-sm [&_code]:text-zinc-300
-              [&_img]:rounded-2xl [&_img]:border [&_img]:border-zinc-800/80 [&_img]:my-6
-              [&_.video-container]:my-8 [&_.video-container]:rounded-2xl [&_.video-container]:overflow-hidden [&_.video-container]:border [&_.video-container]:border-zinc-800"
+              [&_a]:text-cyan-600 dark:[&_a]:text-cyan-400 [&_a]:underline hover:[&_a]:text-cyan-500 dark:hover:[&_a]:text-cyan-300
+              [&_pre]:bg-zinc-100 dark:[&_pre]:bg-zinc-950 [&_pre]:p-5 [&_pre]:rounded-2xl [&_pre]:border [&_pre]:border-zinc-200 dark:[&_pre]:border-zinc-800 [&_pre]:overflow-x-auto [&_pre]:my-8 [&_pre]:scrollbar-hide
+              [&_code]:font-mono [&_code]:text-sm [&_code]:text-zinc-800 dark:[&_code]:text-zinc-300
+              [&_img]:rounded-2xl [&_img]:border [&_img]:border-zinc-200 dark:[&_img]:border-zinc-800/80 [&_img]:my-6
+              [&_.video-container]:my-8 [&_.video-container]:rounded-2xl [&_.video-container]:overflow-hidden [&_.video-container]:border [&_.video-container]:border-zinc-200 dark:[&_.video-container]:border-zinc-800"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </div>
 
           {/* Sidebar Info (Right) */}
-          <div className="lg:col-span-4 flex flex-col gap-10 lg:sticky lg:top-24 h-fit lg:pl-6 border-t lg:border-t-0 lg:border-l border-zinc-800/60 pt-10 lg:pt-0">
+          <div className="lg:col-span-4 flex flex-col gap-10 lg:sticky lg:top-24 h-fit lg:pl-6 border-t lg:border-t-0 lg:border-l border-zinc-200 dark:border-zinc-800/60 pt-10 lg:pt-0">
             {/* Reading Time */}
             <div>
-              <span className="text-white text-sm font-semibold tracking-wide block uppercase mb-1">
+              <span className="text-black dark:text-white text-sm font-semibold tracking-wide block uppercase mb-1">
                 Reading time
               </span>
-              <span className="text-zinc-400 text-sm">{post.readTime}</span>
+              <span className="text-zinc-600 dark:text-zinc-400 text-sm">{post.readTime}</span>
             </div>
 
             {/* Outline / Table of Contents */}
             {headings.length > 0 && (
               <div>
-                <span className="text-white text-sm font-semibold tracking-wide block uppercase mb-4">
+                <span className="text-black dark:text-white text-sm font-semibold tracking-wide block uppercase mb-4">
                   Outline
                 </span>
                 <ul className="space-y-3">
                   {headings.map((h, idx) => (
-                    <li key={idx} className="text-zinc-400 text-sm hover:text-zinc-200 transition-colors">
-                      <span className="text-zinc-600 mr-2">{(idx + 1).toString().padStart(2, "0")}</span>
+                    <li key={idx} className="text-zinc-600 dark:text-zinc-400 text-sm hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors">
+                      <span className="text-zinc-400 dark:text-zinc-600 mr-2">{(idx + 1).toString().padStart(2, "0")}</span>
                       {h}
                     </li>
                   ))}
@@ -378,7 +378,7 @@ export default async function BlogPostPage(props: {
 
             {/* Social Share Buttons */}
             <div>
-              <span className="text-white text-sm font-semibold tracking-wide block uppercase mb-4">
+              <span className="text-black dark:text-white text-sm font-semibold tracking-wide block uppercase mb-4">
                 Share this
               </span>
               <ShareButtons title={post.title} slug={slug} />
@@ -388,13 +388,13 @@ export default async function BlogPostPage(props: {
 
         {/* Related Articles row */}
         {relatedPosts.length > 0 && (
-          <div className="mt-16 pt-12 border-t border-zinc-800/60 w-full">
-            <h3 className="text-2xl font-bold text-white mb-8">Related articles</h3>
+          <div className="mt-16 pt-12 border-t border-zinc-200 dark:border-zinc-800/60 w-full">
+            <h3 className="text-2xl font-bold text-black dark:text-white mb-8">Related articles</h3>
             <div className="flex overflow-x-auto gap-6 pb-6 scrollbar-hide -mx-4 px-4 md:-mx-0 md:px-0 scroll-smooth">
               {relatedPosts.slice(0, 3).map((item) => (
                 <div
                   key={item._id}
-                  className="min-w-[285px] md:min-w-[340px] w-[285px] md:w-[340px] shrink-0 bg-zinc-900/40 border border-zinc-800/60 rounded-3xl overflow-hidden hover:border-zinc-700/80 transition-all duration-300 group flex flex-col"
+                  className="min-w-[285px] md:min-w-[340px] w-[285px] md:w-[340px] shrink-0 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/60 rounded-3xl overflow-hidden hover:border-zinc-300 dark:hover:border-zinc-700/80 transition-all duration-300 group flex flex-col"
                 >
                   <Link href={`/blog/${item.slug}`} className="block relative aspect-video overflow-hidden">
                     <Image
@@ -404,18 +404,18 @@ export default async function BlogPostPage(props: {
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, 30vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-zinc-950/20 to-transparent" />
                   </Link>
                   <div className="p-5 flex flex-col flex-grow">
                     <span className="text-[10px] font-semibold text-cyan-500 uppercase tracking-wider block mb-2">
                       {item.category}
                     </span>
-                    <h4 className="font-semibold text-white group-hover:text-cyan-400 transition-colors line-clamp-2 text-base leading-snug">
+                    <h4 className="font-semibold text-black dark:text-white group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-colors line-clamp-2 text-base leading-snug">
                       <Link href={`/blog/${item.slug}`}>
                         {item.title}
                       </Link>
                     </h4>
-                    <span className="text-[11px] text-zinc-500 block mt-4">
+                    <span className="text-[11px] text-zinc-500 dark:text-zinc-400 block mt-4">
                       {new Date(item.publishedAt).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "long",

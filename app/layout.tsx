@@ -194,70 +194,7 @@ export default function RootLayout({
         <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
         <meta name='mobile-web-app-capable' content='yes' />
 
-        {/* Enhanced OpenGraph Meta Tags for WhatsApp, Facebook, LinkedIn, etc. */}
-        <meta property='og:type' content='website' />
-        <meta property='og:url' content='https://www.trygenit.com' />
-        <meta
-          property='og:title'
-          content='Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.'
-        />
-        <meta
-          property='og:description'
-          content='Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals instantly. Free AI image and video generator.'
-        />
-        <meta
-          property='og:image'
-          content='https://www.trygenit.com/opengraph-image.png'
-        />
-        <meta property='og:image:width' content='1200' />
-        <meta property='og:image:height' content='630' />
-        <meta
-          property='og:image:alt'
-          content='Genit AI – AI Media Design Platform'
-        />
-        <meta property='og:image:type' content='image/png' />
-        <meta property='og:site_name' content='Genit AI' />
-        <meta property='og:locale' content='en_US' />
-        <meta property='og:locale:alternate' content='en_GB' />
 
-        {/* WhatsApp specific (uses OpenGraph but prefers square images) */}
-        <meta
-          property='og:image:secure_url'
-          content='https://www.trygenit.com/opengraph-image.png'
-        />
-
-        {/* Facebook specific */}
-        <meta property='fb:app_id' content='' />
-        <meta
-          property='article:author'
-          content='https://www.facebook.com/genit'
-        />
-        <meta
-          property='article:publisher'
-          content='https://www.facebook.com/genit'
-        />
-
-        {/* LinkedIn specific */}
-        <meta
-          property='og:image:url'
-          content='https://www.trygenit.com/opengraph-image.png'
-        />
-
-        {/* Additional platform support */}
-        <meta name='author' content='genit Team' />
-        <meta name='publisher' content='Genit AI' />
-        <meta name='copyright' content='Genit AI' />
-        <meta name='language' content='English' />
-        <meta name='revisit-after' content='7 days' />
-        <meta name='distribution' content='global' />
-        <meta name='rating' content='general' />
-
-        {/* Telegram */}
-        <meta name='telegram:channel' content='@genitAI' />
-
-        {/* Discord */}
-        <meta property='og:image:width' content='1200' />
-        <meta property='og:image:height' content='630' />
 
         {/* Slack */}
         <meta name='slack-app-id' content='' />
@@ -267,11 +204,7 @@ export default function RootLayout({
         <meta name='msapplication-TileImage' content='/icon-192x192.png' />
         <meta name='msapplication-config' content='/browserconfig.xml' />
 
-        {/* Additional image formats for better compatibility */}
-        <link
-          rel='image_src'
-          href='https://www.trygenit.com/opengraph-image.png'
-        />
+
 
         {/* Schema.org for rich snippets */}
         <meta

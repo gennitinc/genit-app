@@ -24,7 +24,13 @@ export function ShareButtons({ title, slug }: ShareButtonsProps) {
         href="https://discord.gg/ftZbQvCdN7"
         target="_blank"
         rel="noopener noreferrer"
-        className="p-3 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-xl hover:text-cyan-400 transition-all cursor-pointer"
+      className="
+  p-3 rounded-xl border transition-all cursor-pointer
+  bg-white border-zinc-200 text-zinc-700
+  hover:border-zinc-300 hover:text-cyan-600
+  dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-300
+  dark:hover:border-zinc-700 dark:hover:text-cyan-400
+"
         aria-label="Share on Discord"
       >
         <svg
@@ -50,7 +56,13 @@ export function ShareButtons({ title, slug }: ShareButtonsProps) {
         )}&url=${encodeURIComponent(url)}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-3 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-xl hover:text-cyan-400 transition-all cursor-pointer"
+        className="
+  p-3 rounded-xl border transition-all cursor-pointer
+  bg-white border-zinc-200 text-zinc-700
+  hover:border-zinc-300 hover:text-cyan-600
+  dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-300
+  dark:hover:border-zinc-700 dark:hover:text-cyan-400
+"
         aria-label="Share on X"
       >
         <svg
@@ -71,7 +83,13 @@ export function ShareButtons({ title, slug }: ShareButtonsProps) {
       <button
         type="button"
         onClick={handleCopyLink}
-        className="p-3 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-xl hover:text-cyan-400 transition-all cursor-pointer"
+  className="
+  p-3 rounded-xl border transition-all cursor-pointer
+  bg-white border-zinc-200 text-zinc-700
+  hover:border-zinc-300 hover:text-cyan-600
+  dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-300
+  dark:hover:border-zinc-700 dark:hover:text-cyan-400
+"
         aria-label="Copy Link"
       >
         <Copy className="h-5 w-5" />

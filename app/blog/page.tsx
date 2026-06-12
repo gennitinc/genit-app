@@ -91,7 +91,7 @@ export default function BlogIndex() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans">
       <LandingNavbar />
 
       <main className="flex-grow max-w-7xl mx-auto w-full px-6 md:px-12 lg:px-20 py-16">
@@ -99,15 +99,15 @@ export default function BlogIndex() {
           {/* Left Column - Category Sidebar */}
           <div className="w-full md:w-64 shrink-0 flex flex-col gap-8">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
+              <h1 className="text-3xl font-bold tracking-tight text-black dark:text-white mb-2">
                 Blog
               </h1>
-              <p className="text-zinc-400 text-sm">
+              <p className="text-zinc-600 dark:text-zinc-400 text-sm">
                 Compiled notes from the Genit team
               </p>
             </div>
 
-            <nav className="flex flex-row md:flex-col overflow-x-auto md:overflow-x-visible pb-4 md:pb-0 gap-1 md:gap-2 border-b border-zinc-800 md:border-b-0 scrollbar-hide">
+            <nav className="flex flex-row md:flex-col overflow-x-auto md:overflow-x-visible pb-4 md:pb-0 gap-1 md:gap-2 border-b border-zinc-200 dark:border-zinc-800 md:border-b-0 scrollbar-hide">
               {CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat;
                 return (
@@ -116,8 +116,8 @@ export default function BlogIndex() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`text-left px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer ${
                       isActive
-                        ? "bg-zinc-900 text-white shadow-sm"
-                        : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50"
+                        ? "bg-zinc-100 dark:bg-zinc-900 text-black dark:text-white shadow-sm"
+                        : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-900/50"
                     }`}
                   >
                     {cat}
@@ -134,15 +134,15 @@ export default function BlogIndex() {
                 <Loader2 className="h-8 w-8 text-cyan-500 animate-spin" />
               </div>
             ) : filteredPosts.length === 0 ? (
-              <div className="text-center py-24 border border-dashed border-zinc-800 rounded-3xl">
-                <p className="text-zinc-400">No posts found in this category.</p>
+              <div className="text-center py-24 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-3xl">
+                <p className="text-zinc-500 dark:text-zinc-400">No posts found in this category.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {filteredPosts.map((post) => (
                   <article
                     key={post._id}
-                    className="group relative flex flex-col bg-zinc-900/40 border border-zinc-800/60 rounded-3xl overflow-hidden hover:border-zinc-700/80 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/5"
+                    className="group relative flex flex-col bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/60 rounded-3xl overflow-hidden hover:border-zinc-300 dark:hover:border-zinc-700/80 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/5"
                   >
                     <Link href={`/blog/${post.slug}`} className="block relative aspect-video w-full overflow-hidden">
                       <Image
@@ -153,22 +153,22 @@ export default function BlogIndex() {
                         sizes="(max-width: 768px) 100vw, 40vw"
                         priority
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-zinc-950 via-transparent to-transparent opacity-60" />
                     </Link>
 
                     <div className="p-6 flex flex-col flex-grow">
                       <span className="text-xs font-semibold text-cyan-500 tracking-wider uppercase mb-3 block">
                         {post.category}
                       </span>
-                      <h2 className="text-xl font-semibold text-white tracking-tight leading-snug mb-3 transition-colors">
+                      <h2 className="text-xl font-semibold text-black dark:text-white tracking-tight leading-snug mb-3 transition-colors">
                         <Link href={`/blog/${post.slug}`}>
                           {post.title}
                         </Link>
                       </h2>
-                      <p className="text-zinc-400 text-sm line-clamp-3 mb-6 flex-grow">
+                      <p className="text-zinc-600 dark:text-zinc-400 text-sm line-clamp-3 mb-6 flex-grow">
                         {post.excerpt}
                       </p>
-                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-zinc-800/60 text-xs text-zinc-500">
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-zinc-200 dark:border-zinc-800/60 text-xs text-zinc-500 dark:text-zinc-400">
                         <span>{formatDate(post.publishedAt)}</span>
                         <span>{post.readTime}</span>
                       </div>
