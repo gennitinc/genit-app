@@ -1467,7 +1467,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         isLoadingProject,
         clearError,
         messages,
-        status,
+        status: "ready",
         setMessages,
         resetGenerationState,
         createProject,

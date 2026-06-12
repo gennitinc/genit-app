@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*",
       },
+      {
+        protocol: "https",
+        hostname: "gennit-storage.s3.eu-north-1.amazonaws.com",
+      },
     ],
   },
   // PWA configuration

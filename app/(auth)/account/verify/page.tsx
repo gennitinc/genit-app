@@ -1,9 +1,7 @@
 "use client";
 import VerifyEmailComp from "@/components/auth/VerifyEmail";
 import Loading from "@/utils/Loading";
-import { useRouter, useSearchParams } from "next/navigation";
-import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
-import React, { useEffect } from "react";
+import React from "react";
 
 const VerifyEmail = () => {
   return (

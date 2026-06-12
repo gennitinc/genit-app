@@ -147,7 +147,7 @@ export default function BlogIndex() {
                   >
                     <Link href={`/blog/${post.slug}`} className="block relative aspect-video w-full overflow-hidden">
                       <Image
-                        src={post.coverImage}
+                        src={decodeURI(post.coverImage)}
                         alt={post.title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"

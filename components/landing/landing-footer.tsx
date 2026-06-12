@@ -635,7 +635,7 @@ export function LandingFooter() {
               <div className='bg-muted/60 border-border flex items-center rounded-full border p-1'>
                 <button
                   onClick={() => setTheme("light")}
-                  className={`flex size-7 items-center justify-center rounded-full transition-all ${theme === "light" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
+                  className={`flex size-7 items-center justify-center rounded-full transition-all ${isLoaded && theme === "light" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
                   title='Light mode'
                 >
                   <Sun className='h-3.5 w-3.5' />
@@ -643,7 +643,7 @@ export function LandingFooter() {
 
                 <button
                   onClick={() => setTheme("dark")}
-                  className={`flex size-7 items-center justify-center rounded-full transition-all ${theme === "dark" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
+                  className={`flex size-7 items-center justify-center rounded-full transition-all ${isLoaded && theme === "dark" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
                   title='Dark mode'
                 >
                   <Moon className='h-3.5 w-3.5' />
@@ -651,7 +651,7 @@ export function LandingFooter() {
 
                 <button
                   onClick={() => setTheme("system")}
-                  className={`flex size-7 items-center justify-center rounded-full transition-all ${theme === "system" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
+                  className={`flex size-7 items-center justify-center rounded-full transition-all ${isLoaded && theme === "system" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
                   title='System theme'
                 >
                   <Monitor className='h-3.5 w-3.5' />

@@ -156,7 +156,7 @@ export async function generateMetadata(props: {
   let post: BlogPost | null = null;
 
   try {
-    const response = await apiResponse.get(`/blog/${slug}`);
+    const response = await apiResponse.get(`/blog/${slug}`, { timeout: 2500 });
     if (response.data && response.data.post) {
       post = response.data.post;
     }
@@ -204,8 +204,11 @@ export async function generateMetadata(props: {
 // Parses H2 tags from content to build the Table of Contents dynamically
 // and injects id attributes into the HTML for smooth scrolling navigation.
 function processContentWithHeadings(htmlContent: string = ""): { modifiedHtml: string; headings: { text: string; id: string }[] } {
+  // Strip out script tags to prevent React warnings and execution
+  const safeHtmlContent = htmlContent.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+
   const headings: { text: string; id: string }[] = [];
-  const modifiedHtml = htmlContent.replace(/<h2>(.*?)<\/h2>/g, (match, p1) => {
+  const modifiedHtml = safeHtmlContent.replace(/<h2>(.*?)<\/h2>/g, (match, p1) => {
     const text = p1.replace(/<[^>]*>/g, "");
     const id = text
       .toLowerCase()
@@ -226,7 +229,7 @@ export default async function BlogPostPage(props: {
   let post: BlogPost | null = null;
 
   try {
-    const response = await apiResponse.get(`/blog/${slug}`);
+    const response = await apiResponse.get(`/blog/${slug}`, { timeout: 2500 });
     if (response.data && response.data.post) {
       post = response.data.post;
     } else {
@@ -316,7 +319,7 @@ export default async function BlogPostPage(props: {
             {/* Author Info */}
             <div className="flex items-center gap-3 mb-10 pb-6 border-b border-zinc-200 dark:border-zinc-800/60">
               <Image
-                src={post.author.avatar}
+                src={decodeURI(post.author.avatar)}
                 alt={post.author.name}
                 width={40}
                 height={40}
@@ -331,7 +334,7 @@ export default async function BlogPostPage(props: {
             {/* Cover Image */}
             <div className="relative aspect-video w-full rounded-3xl overflow-hidden mb-12 border border-zinc-200 dark:border-zinc-800/80">
               <Image
-                src={post.coverImage}
+                src={decodeURI(post.coverImage)}
                 alt={post.title}
                 fill
                 priority
@@ -411,7 +414,7 @@ export default async function BlogPostPage(props: {
                 >
                   <Link href={`/blog/${item.slug}`} className="block relative aspect-video overflow-hidden">
                     <Image
-                      src={item.coverImage}
+                      src={decodeURI(item.coverImage)}
                       alt={item.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"

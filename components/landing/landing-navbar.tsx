@@ -63,6 +63,9 @@ export function LandingNavbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
 
+  const currentUser = mounted ? user : null;
+  const currentIsSmallScreen = mounted ? isSmallScreen : false;
+
   const navigation = [
     { name: "Chat", href: "/chat" },
     { name: "Integrations", href: "/integrations" },
@@ -70,18 +73,18 @@ export function LandingNavbar() {
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Community", href: "/community" },
     { name: "Blog", href: "/blog" },
-    { name: "History", href: user ? "/chat/history" : "/signin" },
+    { name: "History", href: currentUser ? "/chat/history" : "/signin" },
     {
       name: "Creator Program",
-      href: user ? `/user/referral` : "/creators-program",
+      href: currentUser ? `/user/referral` : "/creators-program",
     },
-    // user && {
+    // currentUser && {
     //   name: "Profile",
-    //   href: `/creator/${user?.username}`,
+    //   href: `/creator/${currentUser?.username}`,
     // },
     {
-      name: user ? "Billing" : "Pricing",
-      href: user ? "/user/settings?tab=billing" : "/pricing",
+      name: currentUser ? "Billing" : "Pricing",
+      href: currentUser ? "/user/settings?tab=billing" : "/pricing",
     },
     { name: "Company", href: "/company" },
     { name: "Contact", href: "/contact" },
@@ -116,14 +119,14 @@ export function LandingNavbar() {
           </Link>
 
           <div className='z-50 hidden items-center gap-4 md:flex'>
-            {user ? (
+            {currentUser ? (
               <>
                 {/* Right Section - Desktop */}
-                {!isSmallScreen && (
+                {!currentIsSmallScreen && (
                   <div className='flex items-center gap-2 sm:gap-2'>
                     {/* Main user avatar with popover */}
                     <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
-                      {/* {user && (
+                      {/* {currentUser && (
                       )} */}
                       <Link
                         className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
@@ -172,14 +175,14 @@ export function LandingNavbar() {
                       <Link
                         target='__blank'
                         className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href={user ? "/user/settings?tab=billing" : "/pricing"}
+                        href={currentUser ? "/user/settings?tab=billing" : "/pricing"}
                       >
-                        {user ? "Billing" : "Pricing"}
+                        {currentUser ? "Billing" : "Pricing"}
                       </Link>
                       <Link
                         target=''
                         className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href={user ? "/chat/history" : "/signin"}
+                        href={currentUser ? "/chat/history" : "/signin"}
                       >
                         History
                       </Link>
@@ -267,10 +270,14 @@ export function LandingNavbar() {
                       }
                       className='hover:bg-accent h-8 w-8 rounded-lg p-0'
                     >
-                      {theme === "dark" ? (
-                        <Sun className='h-4 w-4' />
+                      {mounted ? (
+                        theme === "dark" ? (
+                          <Sun className='h-4 w-4' />
+                        ) : (
+                          <Moon className='h-4 w-4' />
+                        )
                       ) : (
-                        <Moon className='h-4 w-4' />
+                        <div className='h-4 w-4' />
                       )}
                     </Button>
 
@@ -278,7 +285,7 @@ export function LandingNavbar() {
                   </div>
                 )}
                 {/* Mobile Right Section */}
-                {isSmallScreen && (
+                {currentIsSmallScreen && (
                   <div className='flex items-center gap-2'>
                     {/* Search - Mobile/Tablet */}
                     <Button
@@ -299,10 +306,14 @@ export function LandingNavbar() {
                       }
                       className='hover:bg-accent h-8 w-8 rounded-lg p-0'
                     >
-                      {theme === "dark" ? (
-                        <Sun className='h-4 w-4' />
+                      {mounted ? (
+                        theme === "dark" ? (
+                          <Sun className='h-4 w-4' />
+                        ) : (
+                          <Moon className='h-4 w-4' />
+                        )
                       ) : (
-                        <Moon className='h-4 w-4' />
+                        <div className='h-4 w-4' />
                       )}
                     </Button>
 
@@ -314,7 +325,7 @@ export function LandingNavbar() {
             ) : (
               <>
                 {/* Right Section - Desktop */}
-                {!isSmallScreen && (
+                {!currentIsSmallScreen && (
                   <div className='flex items-center gap-2 sm:gap-2'>
                     {/* Main user avatar with popover */}
                     <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
@@ -366,9 +377,9 @@ export function LandingNavbar() {
                       <Link
                         target='__blank'
                         className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href={user ? "/user/settings?tab=billing" : "/pricing"}
+                        href={currentUser ? "/user/settings?tab=billing" : "/pricing"}
                       >
-                        {user ? "Billing" : "Pricing"}
+                        {currentUser ? "Billing" : "Pricing"}
                       </Link>
 
                       <Link
@@ -455,10 +466,14 @@ export function LandingNavbar() {
                       }
                       className='hover:bg-accent h-8 w-8 rounded-lg p-0'
                     >
-                      {theme === "dark" ? (
-                        <Sun className='h-4 w-4' />
+                      {mounted ? (
+                        theme === "dark" ? (
+                          <Sun className='h-4 w-4' />
+                        ) : (
+                          <Moon className='h-4 w-4' />
+                        )
                       ) : (
-                        <Moon className='h-4 w-4' />
+                        <div className='h-4 w-4' />
                       )}
                     </Button>
 
@@ -481,7 +496,7 @@ export function LandingNavbar() {
                   </div>
                 )}
                 {/* Mobile Right Section */}
-                {isSmallScreen && (
+                {currentIsSmallScreen && (
                   <div className='flex items-center gap-2'>
                     {/* Search - Mobile/Tablet */}
                     <Button
@@ -502,10 +517,14 @@ export function LandingNavbar() {
                       }
                       className='hover:bg-accent h-8 w-8 rounded-lg p-0'
                     >
-                      {theme === "dark" ? (
-                        <Sun className='h-4 w-4' />
+                      {mounted ? (
+                        theme === "dark" ? (
+                          <Sun className='h-4 w-4' />
+                        ) : (
+                          <Moon className='h-4 w-4' />
+                        )
                       ) : (
-                        <Moon className='h-4 w-4' />
+                        <div className='h-4 w-4' />
                       )}
                     </Button>
 
@@ -534,7 +553,7 @@ export function LandingNavbar() {
 
           {/* Mobile Menu Section */}
           <div className='flex items-center gap-2 md:hidden'>
-            {user && <UserPopOver />}
+            {currentUser && <UserPopOver />}
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant='ghost' size='icon' className='z-50'>
@@ -554,19 +573,19 @@ export function LandingNavbar() {
                     </Link>
                   ))}
                   <hr className='my-4' />
-                  {user ? (
+                  {currentUser ? (
                     <Link
-                      href={`/creator/${user?.username}`}
+                      href={`/creator/${currentUser?.username}`}
                       className='flex items-center gap-2 rounded-lg p-2 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800'
                     >
                       <Avatar className='h-10 w-10'>
-                        <AvatarImage src={user?.userdp} alt={user?.username} />
-                        <AvatarFallback>{user?.username[0]}</AvatarFallback>
+                        <AvatarImage src={currentUser?.userdp} alt={currentUser?.username} />
+                        <AvatarFallback>{currentUser?.username[0]}</AvatarFallback>
                       </Avatar>
                       <div className='flex flex-col'>
-                        <span className='font-medium'>{user?.username}</span>
+                        <span className='font-medium'>{currentUser?.username}</span>
                         <span className='text-xs text-zinc-400'>
-                          {user?.email}
+                          {currentUser?.email}
                         </span>
                       </div>
                     </Link>
@@ -595,7 +614,7 @@ export function LandingNavbar() {
         </nav>
       </header>
       {/* Search experience: Drawer on mobile/tablet, Dialog on desktop */}
-      {isSmallScreen ? (
+      {currentIsSmallScreen ? (
         <Drawer open={isSearchOpen} onOpenChange={setIsSearchOpen}>
           <DrawerContent className='h-[85vh]'>
             <DrawerHeader className='border-b px-4 py-2'>
