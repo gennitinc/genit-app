@@ -2,10 +2,10 @@ import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Genit AI Blog – AI-Powered Marketing, SaaS Insights & Growth Hacks",
+  title: "Blog – AI-Powered Marketing, SaaS Insights & Growth Hacks",
   description: "Stay ahead with the latest from the Genit team. Discover how AI image and video generation, design automation, and content workflow scaling are reshaping startup marketing.",
   openGraph: {
-    title: "Genit AI Blog – AI-Powered Marketing, SaaS Insights & Growth Hacks",
+    title: "Blog – AI-Powered Marketing, SaaS Insights & Growth Hacks",
     description: "Stay ahead with the latest from the Genit team. Discover how AI image and video generation, design automation, and content workflow scaling are reshaping startup marketing.",
     url: "https://www.trygenit.com/blog",
     siteName: "Genit AI",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         url: "https://www.trygenit.com/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Genit AI Blog",
+        alt: "Blog",
       },
     ],
     locale: "en_US",

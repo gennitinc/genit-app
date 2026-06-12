@@ -25,9 +25,9 @@ const inter = Inter({ subsets: ["latin"] });
 
 const metadata: Metadata = {
   title:
-    "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+    "Genit AI – Marketing without Humans",
   description:
-    "Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals in minutes—no design skills required. Free AI image generator and video creator.",
+    "Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -81,20 +81,20 @@ const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title:
-      "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+      "Genit AI – Marketing without Humans",
     description:
-      "Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos instantly—no design skills required.",
+      "Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.",
     creator: "@genitAI",
     images: {
       url: "https://www.trygenit.com/opengraph-image.png",
-      alt: "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+      alt: "Genit AI – Marketing without Humans",
     },
   },
   openGraph: {
     title:
-      "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+      "Genit AI – Marketing without Humans",
     description:
-      "Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos, animations, brand assets, and marketing visuals instantly. Free AI image and video generator.",
+      "Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.",
     url: "https://www.trygenit.com",
     siteName: "Genit AI",
     images: [
@@ -102,13 +102,13 @@ const metadata: Metadata = {
         url: "https://www.trygenit.com/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+        alt: "Genit AI – Marketing without Humans",
       },
       {
         url: "https://www.trygenit.com/opengraph-image.png",
         width: 1200,
         height: 1200,
-        alt: "Genit AI – Create stunning graphics, commercial videos, stock images and brand assets, no design skills or expensive budget required.",
+        alt: "Genit AI – Marketing without Humans",
         type: "image/png",
       },
     ],
@@ -213,7 +213,7 @@ export default function RootLayout({
         />
         <meta
           itemProp='description'
-          content='Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos instantly with advanced AI models.'
+          content='Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.'
         />
         <meta
           itemProp='image'
@@ -271,7 +271,7 @@ export default function RootLayout({
                     "Free tier available with AI image and video generation",
                 },
                 description:
-                  "Genit AI supports Image and Video Generation. AI-powered platform for creating images, videos, animations, and brand assets. Generate high-quality media content with artificial intelligence.",
+                  "Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.",
                 url: "https://www.trygenit.com",
                 browserRequirements: "Requires JavaScript. Requires HTML5.",
                 softwareVersion: "1.0",
@@ -310,7 +310,7 @@ export default function RootLayout({
                   priceCurrency: "USD",
                 },
                 description:
-                  "Genit AI supports Image and Video Generation. Create AI-generated images and videos instantly. Free AI image generator and video creator with advanced AI models.",
+                  "Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.",
                 url: "https://www.trygenit.com",
                 screenshot: "https://www.trygenit.com/opengraph-image.png",
                 softwareVersion: "1.0",
@@ -484,7 +484,7 @@ export default function RootLayout({
         />
         <meta
           name='summary'
-          content='Genit AI supports Image and Video Generation. Create AI-generated images and videos instantly with advanced AI models.'
+          content='Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.'
         />
         <meta
           name='classification'
@@ -502,7 +502,7 @@ export default function RootLayout({
         <meta name='DC.subject' content='AI Image and Video Generation' />
         <meta
           name='DC.description'
-          content='Genit AI supports Image and Video Generation. Create stunning AI-generated images and videos.'
+          content='Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.'
         />
         <meta name='DC.publisher' content='Genit AI' />
         <meta name='DC.contributor' content='genit Team' />
