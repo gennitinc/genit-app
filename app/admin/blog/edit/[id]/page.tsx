@@ -197,6 +197,13 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
             </p>
           </div>
         </div>
+        <button
+          type="button"
+          onClick={handleSubmit}
+          className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold px-5 py-2 rounded-xl hover:shadow-lg hover:shadow-cyan-500/20 transition duration-200 cursor-pointer"
+        >
+          Save Changes <Save className="h-3.5 w-3.5" />
+        </button>
       </div>
 
       {/* Main Form */}
@@ -231,22 +238,6 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
             <NotionEditor value={content} onChange={setContent} />
           </div>
 
-          {/* Save Trigger Button */}
-          <div className="pt-6 border-t border-zinc-800/80 flex items-center justify-between gap-4">
-            <Link
-              href="/admin/blog"
-              className="inline-flex items-center justify-center border border-zinc-800 hover:border-zinc-700 bg-zinc-900/60 text-zinc-400 hover:text-white text-xs font-semibold px-4 py-2 rounded-xl transition cursor-pointer"
-            >
-              Cancel
-            </Link>
-
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:shadow-lg hover:shadow-cyan-500/20 transition duration-200 cursor-pointer"
-            >
-              Save Changes <Save className="h-3.5 w-3.5" />
-            </button>
-          </div>
         </div>
       </form>
 

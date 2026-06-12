@@ -44,7 +44,11 @@ import {
   CheckSquare,
   MessageSquarePlus,
   TextQuote,
+  Palette,
+  X,
 } from "lucide-react";
+import { Color } from "@tiptap/extension-color";
+import { TextStyle } from "@tiptap/extension-text-style";
 import { apiResponse } from "@/utils/apiResponse";
 import { toast } from "sonner";
 
@@ -314,8 +318,26 @@ function EditorInner({ value, onChange }: NotionEditorProps) {
             className={`p-1.5 rounded-lg cursor-pointer hover:bg-zinc-855 transition ${
               editor.isActive("link") ? "text-cyan-400" : "text-zinc-400"
             }`}
+            title="Add Link"
           >
             <Link2 className="h-3.5 w-3.5" />
+          </button>
+        </EditorBubbleItem>
+        {/* Color Options */}
+        <div className="w-px h-4 bg-zinc-800 mx-1" />
+        <EditorBubbleItem onSelect={(editor) => editor.chain().focus().setColor("#06b6d4").run()}>
+          <button type="button" className="p-1.5 rounded-lg cursor-pointer hover:bg-zinc-855 transition" title="Cyan">
+            <div className="w-3 h-3 rounded-full bg-cyan-500" />
+          </button>
+        </EditorBubbleItem>
+        <EditorBubbleItem onSelect={(editor) => editor.chain().focus().setColor("#a855f7").run()}>
+          <button type="button" className="p-1.5 rounded-lg cursor-pointer hover:bg-zinc-855 transition" title="Purple">
+            <div className="w-3 h-3 rounded-full bg-purple-500" />
+          </button>
+        </EditorBubbleItem>
+        <EditorBubbleItem onSelect={(editor) => editor.chain().focus().unsetColor().run()}>
+          <button type="button" className="p-1.5 rounded-lg cursor-pointer hover:bg-zinc-855 transition text-zinc-400 hover:text-white" title="Clear Color">
+            <X className="h-3.5 w-3.5" />
           </button>
         </EditorBubbleItem>
       </EditorBubble>
@@ -379,6 +401,8 @@ export function NotionEditor({ value, onChange }: NotionEditorProps) {
       },
       nested: true,
     }),
+    TextStyle,
+    Color,
   ];
 
   const editorProps = {

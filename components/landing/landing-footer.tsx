@@ -609,7 +609,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/#'
+                      href='/blog'
                     >
                       Blog
                     </Link>

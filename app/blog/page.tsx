@@ -45,72 +45,7 @@ export default function BlogIndex() {
   const [isLoading, setIsLoading] = useState(true);
 
   // Initial Seed fallback if backend is unreachable
-  const staticFallbackPosts: BlogPost[] = [
-    {
-      _id: "1",
-      title: "How Sentry uses Genit to build what can't be bought",
-      slug: "how-sentry-uses-genit",
-      excerpt: "Sentry, founded in 2012, is one of the most successful companies in dev tools. Like many companies that started with a product-led growth motion, Sentry has since added a sales motion.",
-      coverImage: "/blog/sentry-cover.png",
-      category: "Stories",
-      author: {
-        name: "Genit Team",
-        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
-        title: "Product Team",
-      },
-      publishedAt: "2025-11-18T00:00:00.000Z",
-      readTime: "5 min read",
-      tags: ["Sentry", "Stories"],
-    },
-    {
-      _id: "2",
-      title: "How AppDirect turned non-technical teams into builders with Genit",
-      slug: "how-appdirect-turned-non-technical-teams-into-builders-with-genit",
-      excerpt: "AppDirect is a leading subscription commerce platform that serves millions of businesses globally. Learn how AppDirect leveraged AI design to empower non-technical teams.",
-      coverImage: "/blog/appdirect-cover.png",
-      category: "Stories",
-      author: {
-        name: "Genit Team",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop",
-        title: "Content Director",
-      },
-      publishedAt: "2025-11-18T00:00:00.000Z",
-      readTime: "4 min read",
-      tags: ["AppDirect", "Stories"],
-    },
-    {
-      _id: "3",
-      title: "How Thinkific uses Genit to prototype the future",
-      slug: "how-thinkific-uses-genit-to-prototype",
-      excerpt: "Thinkific is a leading platform that enables creators to build, market, and sell online courses. Discover how their team prototypes new UI concepts in record time.",
-      coverImage: "/blog/thinkific-cover.png",
-      category: "Stories",
-      author: {
-        name: "Genit Team",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=256&auto=format&fit=crop",
-        title: "Design Lead",
-      },
-      publishedAt: "2025-11-18T00:00:00.000Z",
-      readTime: "6 min read",
-      tags: ["Thinkific", "Stories"],
-    },
-    {
-      _id: "4",
-      title: "Build apps from a link with Genit Build with URL",
-      slug: "build-apps-from-a-link-with-genit",
-      excerpt: "We are thrilled to launch Build with URL. You can now import any existing web page link and start modifying its design, components, and layout using natural conversation.",
-      coverImage: "/blog/build-with-url.png",
-      category: "Announcements",
-      author: {
-        name: "Genit Team",
-        avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop",
-        title: "Product Marketing",
-      },
-      publishedAt: "2025-11-18T00:00:00.000Z",
-      readTime: "3 min read",
-      tags: ["Announcements", "Build with URL"],
-    },
-  ];
+  const staticFallbackPosts: BlogPost[] = [];
 
   useEffect(() => {
     async function fetchPosts() {
@@ -225,7 +160,7 @@ export default function BlogIndex() {
                       <span className="text-xs font-semibold text-cyan-500 tracking-wider uppercase mb-3 block">
                         {post.category}
                       </span>
-                      <h2 className="text-xl font-semibold text-white tracking-tight leading-snug mb-3 group-hover:text-cyan-400 transition-colors">
+                      <h2 className="text-xl font-semibold text-white tracking-tight leading-snug mb-3 transition-colors">
                         <Link href={`/blog/${post.slug}`}>
                           {post.title}
                         </Link>

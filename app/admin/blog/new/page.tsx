@@ -259,13 +259,22 @@ export default function NewBlogPostPage() {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setIsAiModalOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-purple-600/10 hover:shadow-purple-600/20 transition duration-200 cursor-pointer"
-        >
-          <Sparkles className="h-4 w-4" /> Write with AI
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setIsAiModalOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-purple-600/10 hover:shadow-purple-600/20 transition duration-200 cursor-pointer"
+          >
+            <Sparkles className="h-4 w-4" /> Write with AI
+          </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold px-5 py-2 rounded-xl hover:shadow-lg hover:shadow-cyan-500/20 transition duration-200 cursor-pointer"
+          >
+            Publish Article <Save className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* Main Form */}
@@ -351,22 +360,6 @@ export default function NewBlogPostPage() {
             <NotionEditor value={content} onChange={setContent} />
           </div>
 
-          {/* Publish Trigger Button */}
-          <div className="pt-6 border-t border-zinc-800/80 flex items-center justify-between gap-4">
-            <Link
-              href="/admin/blog"
-              className="inline-flex items-center justify-center border border-zinc-800 hover:border-zinc-700 bg-zinc-900/60 text-zinc-400 hover:text-white text-xs font-semibold px-4 py-2 rounded-xl transition cursor-pointer"
-            >
-              Cancel
-            </Link>
-
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:shadow-lg hover:shadow-cyan-500/20 transition duration-200 cursor-pointer"
-            >
-              Publish Article <Save className="h-3.5 w-3.5" />
-            </button>
-          </div>
         </div>
       </form>
 

@@ -69,6 +69,7 @@ export function LandingNavbar() {
     { name: "Apps", href: "/apps" },
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Community", href: "/community" },
+    { name: "Blog", href: "/blog" },
     { name: "History", href: user ? "/chat/history" : "/signin" },
     {
       name: "Creator Program",
@@ -154,6 +155,12 @@ export function LandingNavbar() {
                         href='/community'
                       >
                         Community
+                      </Link>
+                      <Link
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                        href='/blog'
+                      >
+                        Blog
                       </Link>
                       {/* <Link
                         target=""
@@ -342,6 +349,12 @@ export function LandingNavbar() {
                         href='/community'
                       >
                         Community
+                      </Link>
+                      <Link
+                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                        href='/blog'
+                      >
+                        Blog
                       </Link>
                       {/* <Link
                         target="__blank"
