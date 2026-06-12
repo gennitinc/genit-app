@@ -560,7 +560,7 @@ export function AuthenticatedContextProvider({
         setIsReload,
       }}
     >
-      {loading ? (
+      {/* {loading ? (
         <div className='flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-white dark:bg-black'>
           <Loading />
         </div>
@@ -571,7 +571,8 @@ export function AuthenticatedContextProvider({
         />
       ) : (
         children
-      )}
+      )} */}
+      {children}
     </AuthenticatedContext.Provider>
   );
 }

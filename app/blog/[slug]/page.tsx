@@ -202,13 +202,21 @@ export async function generateMetadata(props: {
 }
 
 // Parses H2 tags from content to build the Table of Contents dynamically
-function parseHeadings(htmlContent: string): string[] {
-  const headings: string[] = [];
-  const matches = htmlContent.matchAll(/<h2>(.*?)<\/h2>/g);
-  for (const match of matches) {
-    headings.push(match[1].replace(/<[^>]*>/g, ""));
-  }
-  return headings;
+// and injects id attributes into the HTML for smooth scrolling navigation.
+function processContentWithHeadings(htmlContent: string = ""): { modifiedHtml: string; headings: { text: string; id: string }[] } {
+  const headings: { text: string; id: string }[] = [];
+  const modifiedHtml = htmlContent.replace(/<h2>(.*?)<\/h2>/g, (match, p1) => {
+    const text = p1.replace(/<[^>]*>/g, "");
+    const id = text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+    headings.push({ text, id });
+    return `<h2 id="${id}" style="scroll-margin-top: 100px;">${p1}</h2>`;
+  });
+  return { modifiedHtml, headings };
 }
 
 export default async function BlogPostPage(props: {
@@ -270,7 +278,7 @@ export default async function BlogPostPage(props: {
     }
   }
 
-  const headings = parseHeadings(post.content);
+  const { modifiedHtml, headings } = processContentWithHeadings(post.content);
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -345,7 +353,7 @@ export default async function BlogPostPage(props: {
               [&_code]:font-mono [&_code]:text-sm [&_code]:text-zinc-800 dark:[&_code]:text-zinc-300
               [&_img]:rounded-2xl [&_img]:border [&_img]:border-zinc-200 dark:[&_img]:border-zinc-800/80 [&_img]:my-6
               [&_.video-container]:my-8 [&_.video-container]:rounded-2xl [&_.video-container]:overflow-hidden [&_.video-container]:border [&_.video-container]:border-zinc-200 dark:[&_.video-container]:border-zinc-800"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: modifiedHtml }}
             />
           </div>
 
@@ -367,9 +375,14 @@ export default async function BlogPostPage(props: {
                 </span>
                 <ul className="space-y-3">
                   {headings.map((h, idx) => (
-                    <li key={idx} className="text-zinc-600 dark:text-zinc-400 text-sm hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors">
-                      <span className="text-zinc-400 dark:text-zinc-600 mr-2">{(idx + 1).toString().padStart(2, "0")}</span>
-                      {h}
+                    <li key={idx}>
+                      <a 
+                        href={`#${h.id}`}
+                        className="text-zinc-600 dark:text-zinc-400 text-sm hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors flex"
+                      >
+                        <span className="text-zinc-400 dark:text-zinc-600 mr-2 flex-shrink-0">{(idx + 1).toString().padStart(2, "0")}</span>
+                        <span>{h.text}</span>
+                      </a>
                     </li>
                   ))}
                 </ul>

@@ -528,11 +528,11 @@ export default function RootLayout({
               >
                 <ProjectProvider>
                   <Suspense
-                    fallback={
-                      <div className='flex h-screen flex-col items-center justify-center bg-white dark:bg-black'>
-                        <Loading />
-                      </div>
-                    }
+                    // fallback={
+                    //   <div className='flex h-screen flex-col items-center justify-center bg-white dark:bg-black'>
+                    //     <Loading />
+                    //   </div>
+                    // }
                   >
                     <Wrapper>
                       <MixpanelProvider>{children}</MixpanelProvider>
