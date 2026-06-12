@@ -18,6 +18,7 @@ import {
   Settings,
   Sparkles,
   Users,
+  FileText,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -59,11 +60,11 @@ export function AdminNavMain() {
       icon: Palette,
       href: "/admin/designinspirations",
     },
-    // {
-    //   title: "Inspire Management",
-    //   icon: Sparkles,
-    //   href: "/admin/inspire",
-    // },
+    {
+      title: "Blog Posts",
+      icon: FileText,
+      href: "/admin/blog",
+    },
   ];
 
   const secondaryNavItems = [
