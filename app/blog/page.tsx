@@ -7,6 +7,7 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { apiResponse } from "@/utils/apiResponse";
 import { Loader2 } from "lucide-react";
+import Loading from "@/utils/Loading";
 
 interface Author {
   name: string;
@@ -131,7 +132,7 @@ export default function BlogIndex() {
           <div className="flex-grow">
             {isLoading ? (
               <div className="flex items-center justify-center py-24">
-                <Loader2 className="h-8 w-8 text-cyan-500 animate-spin" />
+                <Loading/>
               </div>
             ) : filteredPosts.length === 0 ? (
               <div className="text-center py-24 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-3xl">
