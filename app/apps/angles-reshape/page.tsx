@@ -631,7 +631,7 @@ const AnglesReshapePage = () => {
         />
         <div
           id='main-content'
-          className='flex-1 rounded-t-2xl border-2 border-b-0'
+          className="flex-1 rounded-t-2xl lg:border-2 lg:border-b-0 mx-2 md:mx-4"
           // style={{
           //   transform: "translateZ(0)",
           //   willChange: "transform",
