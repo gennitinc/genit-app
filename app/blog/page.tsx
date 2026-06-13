@@ -95,7 +95,7 @@ export default function BlogIndex() {
     <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans">
       <LandingNavbar />
 
-      <main className="flex-grow max-w-7xl mx-auto w-full px-2 md:px-12 lg:px-20 py-16">
+      <main className="flex-grow max-w-7xl mx-auto w-full px-4 md:px-12 lg:px-20 py-16">
         <div className="flex flex-col md:flex-row gap-12">
           {/* Left Column - Category Sidebar */}
           <div className="w-full md:w-64 shrink-0 flex flex-col gap-8">

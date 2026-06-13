@@ -296,7 +296,7 @@ export default async function BlogPostPage(props: {
     <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans">
       <LandingNavbar />
 
-      <main className="flex-grow max-w-7xl mx-auto w-full px-6 md:px-12 lg:px-20 py-12">
+      <main className="flex-grow max-w-7xl mx-auto w-full px-4 md:px-12 lg:px-20 py-12">
         {/* Back Link */}
         <Link
           href="/blog"
