@@ -426,7 +426,7 @@ export default async function BlogPostPage(props: {
                     <span className="text-[10px] font-semibold text-cyan-500 uppercase tracking-wider block mb-2">
                       {item.category}
                     </span>
-                    <h4 className="font-semibold text-black dark:text-white group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-colors line-clamp-2 text-base leading-snug">
+                    <h4 className="font-semibold text-black dark:text-white transition-colors line-clamp-2 text-base leading-snug">
                       <Link href={`/blog/${item.slug}`}>
                         {item.title}
                       </Link>
