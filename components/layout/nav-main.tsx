@@ -4,7 +4,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { trackAppOpened, trackFeatureUsed } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
-import { BookOpen, Cog, CreditCard, GalleryHorizontal, Gift, GitBranchPlus, Grid2X2Plus, HelpCircle, History, Image as ImageIcon, Palette, Settings, SquarePen, UserPlus, Users, Video, WandSparklesIcon, Workflow } from "lucide-react";
+import { BookMarked, BookOpen, Cog, CreditCard, GalleryHorizontal, Gift, GitBranchPlus, Grid2X2Plus, HelpCircle, History, Image as ImageIcon, Palette, Settings, SquarePen, UserPlus, Users, Video, WandSparklesIcon, Workflow } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -71,7 +71,7 @@ export function NavMain() {
     },
     {
       title: "Blogs",
-      icon: BookOpen,
+      icon: BookMarked,
       href: "/blogs",
     },
     {
