@@ -70,9 +70,9 @@ export function NavMain() {
       href: "/pricing",
     },
     {
-      title: "Blogs",
+      title: "Blog",
       icon: BookMarked,
-      href: "/blogs",
+      href: "/blog",
     },
     {
       title: "Settings",
