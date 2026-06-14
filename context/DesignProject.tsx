@@ -9,6 +9,7 @@ import {
 } from "@/types/ProjectTypes";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
+import { stripClientTimeContext } from "@/lib/utils";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useRouter } from "next/navigation";
@@ -899,7 +900,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     const newProject = {
-      title: value,
+      title: stripClientTimeContext(value),
       status: ProjectStatus.ACTIVE,
       userId,
       userName,
