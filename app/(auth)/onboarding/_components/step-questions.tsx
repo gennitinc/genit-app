@@ -33,7 +33,7 @@ interface StepQuestionsProps {
 const ROLES = [
   { id: "founder", label: "Founder", icon: Rocket },
   { id: "marketing", label: "Marketing", icon: Megaphone },
-  { id: "side-hustle", label: "Side hustle", icon: Zap },
+  { id: "side-hustle", label: "Side Hustle", icon: Zap },
   { id: "freelancer", label: "Freelancer", icon: Briefcase },
   { id: "agency", label: "Agency", icon: Building2 },
   { id: "sales", label: "Sales", icon: TrendingUp },
@@ -67,49 +67,53 @@ export function StepQuestions({
   const canSubmit = !!role && !!hear;
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 pt-10 pb-16">
-      <div className="text-center mb-10">
-        <h1 className="onb-animate-in onb-stagger-1 mt-4 lg:mt-16 text-4xl md:text-5xl font-semibold tracking-tight text-neutral-900 dark:text-white">
-          Two quick questions
+    <div className="mx-auto w-full max-w-3xl px-6 py-12">
+      {/* Header */}
+      <div className="max-w-md mx-auto text-center mb-16">
+        <h1 className="text-3xl md:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white">
+          Tell us a little about yourself
         </h1>
-        <p className="onb-animate-in onb-stagger-2 mt-3 text-sm sm:text-base text-neutral-600 dark:text-neutral-300">
-          So we can personalize your experience.
+
+        <p className="mt-3 text-sm md:text-base text-neutral-500 dark:text-neutral-400">
+          This helps us tailor your experience.
         </p>
       </div>
 
-      <div className="onb-animate-in onb-stagger-3 rounded-lg border border-neutral-200 dark:border-white/10 bg-neutral-50 dark:bg-white/[0.03] p-6 md:p-10 space-y-10">
+      {/* Questions */}
+      <div className="space-y-12">
         <Section
-          number={1}
           title="What best describes you?"
           options={ROLES}
           value={role}
           onChange={setRole}
         />
+
         <Section
-          number={2}
-          title="How did you hear about us?"
+          title="How did you find us?"
           options={HEAR_OPTIONS}
           value={hear}
           onChange={setHear}
         />
       </div>
 
-      <div className="flex justify-center gap-3 mt-8">
+      {/* Actions */}
+      <div className="mt-16 flex items-center justify-between">
         <Button
           variant="ghost"
           onClick={onBack}
           disabled={isSubmitting}
-          className="text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/5"
+          className="text-neutral-600 dark:text-neutral-400"
         >
-          ← Back
+          Back
         </Button>
+
         <Button
-          onClick={() => onSubmit({ role, hearAboutUs: hear })}
-          disabled={!canSubmit || isSubmitting}
-          className="px-10 bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:from-cyan-400 hover:to-blue-400 font-medium disabled:bg-neutral-200 dark:disabled:bg-white/10 disabled:text-neutral-500"
-        >
-          {isSubmitting ? "Saving..." : "Get Started"}
-        </Button>
+  onClick={() => onSubmit({ role, hearAboutUs: hear })}
+  disabled={!canSubmit || isSubmitting}
+  className="px-6 bg-cyan-600 hover:bg-cyan-700 text-white"
+>
+  {isSubmitting ? "Saving..." : "Continue"}
+</Button>
       </div>
     </div>
   );
@@ -122,52 +126,48 @@ interface OptionDef {
 }
 
 function Section({
-  number,
   title,
   options,
   value,
   onChange,
 }: {
-  number: number;
   title: string;
   options: OptionDef[];
   value: string;
   onChange: (v: string) => void;
 }) {
   return (
-    <div>
-      <div className="flex items-center gap-3 mb-4">
-        <span className="size-7 rounded-full bg-cyan-400/10 ring-1 ring-cyan-300/30 text-cyan-700 dark:text-cyan-300 flex items-center justify-center text-sm font-medium">
-          {number}
-        </span>
-        <h3 className="font-medium text-neutral-900 dark:text-white">{title}</h3>
-      </div>
+    <section>
+      <h2 className="mb-4 text-sm font-medium text-neutral-900 dark:text-white">
+        {title}
+      </h2>
+
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {options.map((opt) => {
           const Icon = opt.icon;
           const active = value === opt.id;
+
           return (
             <button
               key={opt.id}
               type="button"
               onClick={() => onChange(opt.id)}
               className={cn(
-                "flex items-center gap-3 h-14 px-4 rounded-md border transition-all text-left",
+                "flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all duration-200",
                 active
-                  ? "border-cyan-300/50 bg-cyan-400/10 ring-1 ring-cyan-300/30"
-                  : "border-neutral-200 dark:border-white/10 bg-neutral-50 dark:bg-white/[0.03] hover:border-cyan-300/30 hover:bg-neutral-100 dark:hover:bg-white/[0.05]"
+                  ? "border-cyan-500 ring-2 ring-cyan-500/15"
+                  : "border-neutral-200 dark:border-white/10 hover:border-neutral-400 dark:hover:border-white/20"
               )}
             >
               <Icon
                 className={cn(
-                  "size-5 shrink-0",
-                  active ? "text-cyan-700 dark:text-cyan-300" : "text-neutral-500 dark:text-neutral-400"
+                  "size-4 shrink-0 text-neutral-500"
                 )}
               />
+
               <span
                 className={cn(
-                  "text-sm font-medium",
-                  active ? "text-neutral-900 dark:text-white" : "text-neutral-800 dark:text-neutral-200"
+                  "text-sm font-medium"
                 )}
               >
                 {opt.label}
@@ -176,6 +176,6 @@ function Section({
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }
