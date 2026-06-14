@@ -157,14 +157,33 @@ export function StepBrandDna({
 
   return (
     <div className='mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 pt-8 pb-16'>
-      <div className='text-center mb-8'>
-        <h1 className='onb-animate-in onb-stagger-1 mt-4 text-3xl md:text-4xl lg:mt-16 font-semibold tracking-tight text-neutral-900 dark:text-white'>
-          Your brand, distilled
-        </h1>
-        <p className="onb-animate-in onb-stagger-2 mt-2 text-sm sm:text-base text-neutral-600 dark:text-neutral-300">
-          Review and tweak anything that doesn&apos;t feel right.
-        </p>
-      </div>
+      <div className="text-center mb-8">
+  <h1 className="onb-animate-in onb-stagger-1 mt-4 text-3xl md:text-4xl lg:mt-16 font-semibold tracking-tight text-neutral-900 dark:text-white">
+    Your brand, distilled
+  </h1>
+
+  <p className="onb-animate-in onb-stagger-2 mt-2 text-sm sm:text-base text-neutral-600 dark:text-neutral-300">
+    Review and tweak anything that doesn&apos;t feel right.
+  </p>
+
+  <div className="flex justify-center gap-3 mt-8">
+    <Button
+      variant="ghost"
+      onClick={onBack}
+      className="text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/5"
+    >
+      ← Back
+    </Button>
+
+    <Button
+      onClick={onContinue}
+      className="md:px-10 bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:from-cyan-400 hover:to-blue-400 font-medium"
+    >
+      Save &amp; Continue
+      <ArrowRight className="size-4 ml-1" />
+    </Button>
+  </div>
+</div>
 
       {/* Header / source preview */}
       <div className="onb-animate-in onb-stagger-2 rounded-2xl border border-neutral-200 dark:border-white/10 bg-neutral-50 dark:bg-white/[0.03] p-5 md:p-6 mb-6">
@@ -363,22 +382,7 @@ export function StepBrandDna({
         </div>
       </div>
 
-      <div className="flex gap-3 mt-8">
-        <Button
-          variant="ghost"
-          onClick={onBack}
-          className="flex-1 md:flex-none text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/5"
-        >
-          ← Back
-        </Button>
-        <Button
-          onClick={onContinue}
-          className="flex-1 md:flex-none md:px-10 bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:from-cyan-400 hover:to-blue-400 font-medium"
-        >
-          Save &amp; Continue
-          <ArrowRight className="size-4 ml-1" />
-        </Button>
-      </div>
+     
     </div>
   );
 }
