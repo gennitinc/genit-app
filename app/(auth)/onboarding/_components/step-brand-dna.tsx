@@ -222,20 +222,20 @@ export function StepBrandDna({
               value={brand.businessName}
               onChange={(e) => onChange({ businessName: e.target.value })}
               placeholder="Brand name"
-              className="px-2 text-2xl font-semibold h-12 border-0 bg-transparent focus-visible:ring-0 shadow-none text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
+              className="px-2 md:px-4 lg:px-6 text-2xl font-semibold h-12 border-0 bg-transparent focus-visible:ring-0 shadow-none text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
             />
             <Input
               value={brand.companyWebsite}
               onChange={(e) => onChange({ companyWebsite: e.target.value })}
               placeholder="https://yoursite.com"
-              className="px-2 h-9 border-0 bg-transparent text-neutral-500 dark:text-neutral-400 focus-visible:ring-0 shadow-none placeholder:text-neutral-400 dark:placeholder:text-neutral-600"
+              className="px-2 md:px-4 lg:px-6 h-9 border-0 bg-transparent text-neutral-500 dark:text-neutral-400 focus-visible:ring-0 shadow-none placeholder:text-neutral-400 dark:placeholder:text-neutral-600"
             />
             <Textarea
               value={brand.businessBio}
               onChange={(e) => onChange({ businessBio: e.target.value })}
               placeholder="One-line description"
               rows={2}
-              className="px-2 border-0 bg-transparent resize-none focus-visible:ring-0 shadow-none text-neutral-800 dark:text-neutral-200 placeholder:text-neutral-400 dark:placeholder:text-neutral-600"
+              className="px-2 md:px-4 lg:px-6 border-0 bg-transparent resize-none focus-visible:ring-0 shadow-none text-neutral-800 dark:text-neutral-200 placeholder:text-neutral-400 dark:placeholder:text-neutral-600"
             />
           </div>
 
