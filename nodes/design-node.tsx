@@ -21,6 +21,7 @@ import { Handle, NodeProps, Position } from "reactflow";
 import { toast } from "sonner";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { serverUrlSocket } from "@/utils/apiResponse";
+import { IconBrush } from "@tabler/icons-react";
 
 export interface DesignNodeData {
   url: string;
@@ -113,68 +114,64 @@ export const DesignNode = memo(
     )}
   >
     {/* Floating Header */}
-    <div
-      className={cn(
-        "mb-2 flex h-10 items-center justify-between rounded-sm border border-zinc-200/70 bg-white/90 px-3 backdrop-blur-md transition-all dark:border-zinc-800 dark:bg-zinc-900/90",
-        selected &&
-          "border-primary/30"
-      )}
+ <div
+  className={cn(
+    "mb-1 flex h-9 items-center justify-between rounded-lg border border-zinc-200/60 bg-white px-2.5 transition-colors dark:border-zinc-800 dark:bg-zinc-900",
+    selected && "border-violet-400/40 bg-violet-50/40 dark:bg-violet-950/10"
+  )}
+>
+  <div className="flex min-w-0 items-center gap-1.5">
+    
+
+    <span
+      className="truncate text-xs font-medium text-zinc-700 w-40 dark:text-zinc-300"
+      title={title || (isVideo ? "Video Variant" : "Design Variant")}
     >
-      <div className={`flex min-w-0 items-center gap-2 ${selected ? "border border-purple-300 px-1 rounded-lg" : ""}`}>
-        <h4
-          className="truncate text-[11px] font-medium text-zinc-700 dark:text-zinc-300 w-20"
-          style={{ maxWidth: 180 }}
-          title={title || (isVideo ? "Video Variant" : "Design Variant")}
-        >
-          {title || (isVideo ? "Video Variant" : "Design Variant")}
-        </h4>
+      {title || (isVideo ? "Video Variant" : "Design Variant")}
+    </span>
+  </div>
 
-        
-
-     
-      </div>
-
-      <div className="flex items-center gap-0.5">
-        {!isVideo && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsInpaintMode(!isInpaintMode);
-            }}
-            className={cn(
-              "h-7 w-7 rounded-xl text-zinc-500 transition-all hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white",
-              isInpaintMode &&
-                "bg-violet-100 text-violet-600 dark:bg-violet-950 dark:text-violet-400"
-            )}
-          >
-            <Brush className="h-3.5 w-3.5" />
-          </Button>
+  <div className="flex items-center gap-4">
+    {!isVideo && (
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsInpaintMode(!isInpaintMode);
+        }}
+        className={cn(
+          "h-4 w-4 rounded-md text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800",
+          isInpaintMode &&
+            "bg-violet-100 text-violet-600 dark:bg-violet-950 dark:text-violet-400"
         )}
+      >
+        <IconBrush className="h-3 w-3" />
+      </Button>
+    )}
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleDownload}
-          className="h-7 w-7 rounded-xl text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white"
-        >
-          <Download className="h-3.5 w-3.5" />
-        </Button>
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={handleDownload}
+      className="h-4 w-4 rounded-md text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+    >
+      <Download className="h-3 w-3" />
+    </Button>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={(e) => {
-            e.stopPropagation();
-            window.open(getFullUrl(url), "_blank");
-          }}
-          className="h-7 w-7 rounded-xl text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-white"
-        >
-          <ExternalLink className="h-3.5 w-3.5" />
-        </Button>
-      </div>
-    </div>
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={(e) => {
+        e.stopPropagation();
+        window.open(getFullUrl(url), "_blank");
+      }}
+      className="h-4 w-4 rounded-md text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+    >
+      <ExternalLink className="h-3 w-3" />
+    </Button>
+  </div>
+</div>
 
     {/* Image/Video Surface */}
     <div
