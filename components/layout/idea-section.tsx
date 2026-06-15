@@ -749,10 +749,10 @@ export function IdeaSection() {
           attachedFiles as any,
           undefined,
           selectedDesignTypeId || undefined,
-          isAuto || selectedOrientation === "auto"
+          selectedOrientation === "auto"
             ? undefined
             : selectedOrientation || undefined,
-          isAuto || selectedOrientation === "auto"
+          selectedOrientation === "auto"
             ? undefined
             : customSize.width && customSize.height
               ? customSize
