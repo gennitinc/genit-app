@@ -6,7 +6,7 @@ import Image from "next/image";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { apiResponse } from "@/utils/apiResponse";
-import { Loader2 } from "lucide-react";
+import { Loader2, Heart, MessageSquare, Eye } from "lucide-react";
 import Loading from "@/utils/Loading";
 
 interface Author {
@@ -26,6 +26,9 @@ interface BlogPost {
   publishedAt: string;
   readTime: string;
   tags: string[];
+  viewsCount?: number;
+  likesCount?: number;
+  commentsCount?: number;
 }
 
 const CATEGORIES = [
@@ -183,9 +186,26 @@ export default function BlogIndex() {
                         <p className="text-zinc-600 dark:text-zinc-400 text-sm line-clamp-3 mb-6 flex-grow">
                           {post.excerpt}
                         </p>
-                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-zinc-200 dark:border-zinc-800/60 text-xs text-zinc-500 dark:text-zinc-400">
-                          <span>{formatDate(post.publishedAt)}</span>
-                          <span>{post.readTime}</span>
+                        <div className="flex flex-col gap-4 mt-auto pt-4 border-t border-zinc-200 dark:border-zinc-800/60">
+                          <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+                            <span>{formatDate(post.publishedAt)}</span>
+                            <span>{post.readTime}</span>
+                          </div>
+                          
+                          <div className="flex items-center gap-4 text-xs font-medium text-zinc-400 dark:text-zinc-500">
+                            <div className="flex items-center gap-1.5">
+                              <Eye className="w-3.5 h-3.5" />
+                              <span>{post.viewsCount || 0}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <Heart className="w-3.5 h-3.5" />
+                              <span>{post.likesCount || 0}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <MessageSquare className="w-3.5 h-3.5" />
+                              <span>{post.commentsCount || 0}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </article>

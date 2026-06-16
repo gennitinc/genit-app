@@ -4,6 +4,8 @@ import Image from "next/image";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { ShareButtons } from "@/components/blog/share-buttons";
+import { BlogSocial } from "@/components/blog/blog-social";
+import { BlogComments } from "@/components/blog/blog-comments";
 import { apiResponse, clientUrl } from "@/utils/apiResponse";
 import { Metadata } from "next";
 
@@ -25,6 +27,9 @@ interface BlogPost {
   publishedAt: string;
   readTime: string;
   tags: string[];
+  viewsCount?: number;
+  likesCount?: number;
+  commentsCount?: number;
 }
 
 const staticFallbackPosts: Record<string, BlogPost> = {
@@ -227,11 +232,13 @@ export default async function BlogPostPage(props: {
 }) {
   const { slug } = await props.params;
   let post: BlogPost | null = null;
+  let hasLiked = false;
 
   try {
     const response = await apiResponse.get(`/blog/${slug}`, { timeout: 2500 });
     if (response.data && response.data.post) {
       post = response.data.post;
+      hasLiked = !!response.data.hasLiked;
     } else {
       post = staticFallbackPosts[slug] || null;
     }
@@ -332,7 +339,7 @@ export default async function BlogPostPage(props: {
             </div>
 
             {/* Cover Image */}
-            <div className="relative aspect-video w-full rounded-3xl overflow-hidden mb-12 border border-zinc-200 dark:border-zinc-800/80">
+            <div className="relative aspect-video w-full rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800/80">
               <Image
                 src={decodeURI(post.coverImage)}
                 alt={post.title}
@@ -343,6 +350,15 @@ export default async function BlogPostPage(props: {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/10 dark:from-zinc-950/20 to-transparent" />
             </div>
+
+            <BlogSocial
+              postId={post._id}
+              initialViews={post.viewsCount || 0}
+              initialLikes={post.likesCount || 0}
+              initialComments={post.commentsCount || 0}
+              initialHasLiked={hasLiked}
+              recordView={false}
+            />
 
             {/* Post Content Body */}
             <div
@@ -358,6 +374,19 @@ export default async function BlogPostPage(props: {
               [&_.video-container]:my-8 [&_.video-container]:rounded-2xl [&_.video-container]:overflow-hidden [&_.video-container]:border [&_.video-container]:border-zinc-200 dark:[&_.video-container]:border-zinc-800"
               dangerouslySetInnerHTML={{ __html: modifiedHtml }}
             />
+
+            <BlogSocial
+              postId={post._id}
+              initialViews={post.viewsCount || 0}
+              initialLikes={post.likesCount || 0}
+              initialComments={post.commentsCount || 0}
+              initialHasLiked={hasLiked}
+            />
+            
+            <div id="blog-comments-desktop" className="hidden lg:flex justify-center w-full">
+               <BlogComments postId={post._id} />
+            </div>
+
           </div>
 
           {/* Sidebar Info (Right) */}
