@@ -2,6 +2,7 @@ import { demoMessages } from "../components/chat/dummyMessage";
 import { useUserContext } from "./AuthenticatedContext";
 import { toast } from "@/hooks/use-toast";
 import { startAgentRun, classifyPrompt } from "@/lib/agents-api";
+import { useBrandIdentityEnabled } from "../components/chat/messages/brand-identity-panel";
 import {
   IDesignProject,
   IProjectDesignContext,
@@ -23,7 +24,7 @@ import React, {
   useState,
 } from "react";
 
-const ProjectDesignContext = createContext<IProjectDesignContext | undefined>(
+export const ProjectDesignContext = createContext<IProjectDesignContext | undefined>(
   undefined
 );
 
@@ -117,6 +118,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     Array<{ id: string; filePath: string; name: string; prompt: string }>
   >([]);
 
+  const [brandIdentityEnabled, setBrandIdentityEnabled] = useBrandIdentityEnabled();
+
   const addLiveNode = useCallback(
     (node: { id: string; filePath: string; name: string; prompt: string }) => {
       setLiveNodes((prev) => {
@@ -153,8 +156,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             type: msg.type === "user" ? "user" : "ai",
             parts: msg.parts,
             ...(msg.type === "user" &&
-              msg.fileAttachments && {
-                attachedFiles: msg.fileAttachments.map((file: any) => ({
+              (msg.fileAttachments || msg.attachedFiles) && {
+                attachedFiles: (msg.fileAttachments || msg.attachedFiles).map((file: any) => ({
                   id: file.id || `file-${Date.now()}`,
                   name: file.name || "Untitled",
                   type: file.type || "unknown",
@@ -187,8 +190,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                   { type: "text" as const, text: msg.text || "" },
                 ],
           ...(msg.type === "user" &&
-            msg.fileAttachments && {
-              attachedFiles: msg.fileAttachments.map((file: any) => ({
+            (msg.fileAttachments || msg.attachedFiles) && {
+              attachedFiles: (msg.fileAttachments || msg.attachedFiles).map((file: any) => ({
                 id: file.id || `file-${Date.now()}`,
                 name: file.name || "Untitled",
                 type: file.type || "unknown",
@@ -239,27 +242,29 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       if (project?.imageModel) {
         setImageModel(project.imageModel);
       }
-    }
 
-    // Hydrate brand identity from project metadata if available
-    if (project?.metadata?.finalizedSelections) {
-      const selections = project.metadata.finalizedSelections;
-      
-      if (selections.selectedColorScales && selections.selectedColorScales.length > 0) {
-        // Only set if different to avoid unnecessary re-renders
-        const currentHexes = selectedColorScales.map(s => s.base).join(',');
-        const newHexes = selections.selectedColorScales.map((s: any) => s.base).join(',');
+      // Hydrate brand identity from project metadata if available
+      if (project?.metadata?.finalizedSelections) {
+        const selections = project.metadata.finalizedSelections;
         
-        if (currentHexes !== newHexes) {
+        if (selections.selectedColorScales && selections.selectedColorScales.length > 0) {
           setSelectedColorScales(selections.selectedColorScales);
         }
-      }
-      
-      if (selections.primaryFont && selections.primaryFont !== primaryFont) {
-        setPrimaryFont(selections.primaryFont);
+        
+        if (selections.primaryFont) {
+          setPrimaryFont(selections.primaryFont);
+        }
+        
+        if (selections.useBrandIdentity !== undefined) {
+          isHydratingRef.current = true;
+          setBrandIdentityEnabled(selections.useBrandIdentity);
+          setTimeout(() => {
+            isHydratingRef.current = false;
+          }, 100);
+        }
       }
     }
-  }, [project?._id, project?.imageModel, project?.metadata?.finalizedSelections]);
+  }, [project?._id, project?.imageModel, project?.metadata?.finalizedSelections, setSelectedColorScales, setPrimaryFont, setBrandIdentityEnabled]);
 
   const isGeneratingImageRef = useRef(isGeneratingImage);
   
@@ -525,9 +530,18 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     if (
       project?._id &&
       socketRef.current &&
-      !isHydratingRef.current &&
-      (selectedColorScales.length > 0 || primaryFont)
+      !isHydratingRef.current
     ) {
+      // Check if selections are actually changed before saving
+      const selections = project.metadata?.finalizedSelections;
+      const isColorsChanged = selections?.selectedColorScales?.map((s: any) => s.base).join(',') !== selectedColorScales.map(s => s.base).join(',');
+      const isFontChanged = selections?.primaryFont !== primaryFont;
+      const isEnabledChanged = selections?.useBrandIdentity !== brandIdentityEnabled;
+
+      if (!isColorsChanged && !isFontChanged && !isEnabledChanged) {
+        return;
+      }
+
       const timer = setTimeout(() => {
         setBrandSaveStatus("saving");
         socketRef.current.emit("update-brand-identity", {
@@ -535,13 +549,31 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           brandIdentity: {
             selectedColorScales,
             primaryFont,
+            useBrandIdentity: brandIdentityEnabled,
           },
+        });
+
+        // Synchronize the local project state immediately
+        setProject((prev) => {
+          if (!prev) return null;
+          return {
+            ...prev,
+            metadata: {
+              ...prev.metadata,
+              finalizedSelections: {
+                ...prev.metadata?.finalizedSelections,
+                selectedColorScales,
+                primaryFont,
+                useBrandIdentity: brandIdentityEnabled,
+              }
+            }
+          };
         });
       }, 800); // 800ms debounce
 
       return () => clearTimeout(timer);
     }
-  }, [selectedColorScales, primaryFont, project?._id]);
+  }, [selectedColorScales, primaryFont, brandIdentityEnabled, project?._id, project?.metadata?.finalizedSelections]);
 
   const generateMessage = useCallback(
     async (
@@ -1062,6 +1094,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             if (selections.primaryFont) {
               setPrimaryFont(selections.primaryFont);
             }
+            if (selections.useBrandIdentity !== undefined) {
+              setBrandIdentityEnabled(selections.useBrandIdentity);
+            }
             // Briefly wait for state updates to propagate
             setTimeout(() => {
               isHydratingRef.current = false;
@@ -1555,6 +1590,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         imageModel,
         setImageModel,
         updateProjectModel,
+        brandIdentityEnabled,
+        setBrandIdentityEnabled,
       }}
     >
       {children}

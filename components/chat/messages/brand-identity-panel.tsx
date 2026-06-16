@@ -9,7 +9,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Download, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useContext } from "react";
+import { ProjectDesignContext } from "@/context/DesignProject";
 
 const STORAGE_KEY = "genit:brandIdentityEnabled";
 
@@ -64,7 +65,12 @@ type BrandView = {
 
 export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
   const { user } = useUserContext();
-  const [enabled, setEnabled] = useBrandIdentityEnabled();
+  const projectContext = useContext(ProjectDesignContext);
+  const [localEnabled, setLocalEnabled] = useBrandIdentityEnabled();
+
+  const enabled = projectContext ? projectContext.brandIdentityEnabled : localEnabled;
+  const setEnabled = projectContext ? projectContext.setBrandIdentityEnabled : setLocalEnabled;
+
   const [isImportOpen, setIsImportOpen] = useState(false);
 
   // Prefer the current organization (the source of truth for brand);

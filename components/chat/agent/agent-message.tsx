@@ -34,6 +34,7 @@ export interface AgentRunView {
   elicitation?: AgentElicitation;
   integrationRequired?: AgentIntegrationRequired;
   error?: string;
+  attachedFiles?: { name: string; type: string; url: string }[];
 }
 
 // Humanize a tool name for display — "facebook_publish_post" → "Facebook · publish post".
@@ -240,11 +241,18 @@ export function AgentMessage({
   return (
     <div className='flex flex-col gap-4'>
       {/* User prompt bubble — same as a regular user message */}
-      {run.prompt && (
+      {(run.prompt || (run.attachedFiles && run.attachedFiles.length > 0)) && (
         <UserMessage
           message={{
             type: "user",
-            parts: [{ type: "text", text: run.prompt }],
+            parts: [{ type: "text", text: run.prompt || "" }],
+            attachedFiles: run.attachedFiles?.map((f, i) => ({
+              id: `file-${Date.now()}-${i}`,
+              name: f.name,
+              type: f.type,
+              filePath: f.url,
+              status: "uploaded"
+            })) || []
           }}
           userAvatar={userAvatar}
           userName={userName}

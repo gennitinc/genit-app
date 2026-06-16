@@ -45,7 +45,7 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
           selectedIntegrations,
           useBrandIdentity,
         });
-        registerNewRun(runId, prompt);
+        registerNewRun(runId, prompt, attachedFiles);
         return { runId };
       } catch (err) {
         console.error("[agent] startAgent failed", err);

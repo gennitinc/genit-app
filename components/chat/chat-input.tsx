@@ -4,7 +4,6 @@ import { ModelSelector } from "../inspire/model-selector";
 import ShinyText from "../ui/shiny-text";
 import {
   BrandIdentityPanel,
-  useBrandIdentityEnabled,
 } from "./messages/brand-identity-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,29 +23,39 @@ import {
   ChevronDown,
   Loader2,
   Mic,
+  MicOff,
   Palette,
   Paperclip,
   Plus,
+  SendHorizontal,
   Settings,
+  Sparkles,
   X,
   Zap,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import type React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-interface ChatInterfaceProps {
+interface ChatInputProps {
   children?: React.ReactNode;
   placeholder?: string;
   className?: string;
+  onHeightChange?: (height: number) => void;
 }
 
 export function ChatInput({
   children,
   placeholder = "Ask a follow up message...",
   className = "",
-}: ChatInterfaceProps) {
+  onHeightChange,
+}: ChatInputProps) {
   const {
     inputValue,
     attachedFiles,
@@ -81,6 +90,8 @@ export function ChatInput({
     updateProjectModel,
     brandSaveStatus,
     isProcessingDraft,
+    brandIdentityEnabled,
+    setBrandIdentityEnabled,
   } = useProjectDesign();
 
   const { startAgent, runs } = useAgentRunsContext();
@@ -98,7 +109,6 @@ export function ChatInput({
   const { user } = useUserContext();
   const router = useRouter();
   const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 10;
-  const [brandIdentityEnabled, setBrandIdentityEnabled] = useBrandIdentityEnabled();
   const activeOrg =
     user?.currentOrganization && typeof user.currentOrganization === "object"
       ? user.currentOrganization
@@ -129,12 +139,6 @@ export function ChatInput({
   useEffect(() => {
     setSelectedModel(null);
   }, [project?._id]);
-
-  useEffect(() => {
-    if (project?.metadata?.finalizedSelections?.useBrandIdentity !== undefined) {
-      setBrandIdentityEnabled(project.metadata.finalizedSelections.useBrandIdentity);
-    }
-  }, [project?._id, project?.metadata?.finalizedSelections?.useBrandIdentity, setBrandIdentityEnabled]);
 
   const { isListening, startListening, stopListening, isSupported } =
     useSpeechToText({

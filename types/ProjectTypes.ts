@@ -289,4 +289,6 @@ export interface IProjectDesignContext {
   imageModel: string;
   setImageModel: (model: string) => void;
   updateProjectModel: (projectId: string, model: string) => Promise<void>;
+  brandIdentityEnabled: boolean;
+  setBrandIdentityEnabled: (enabled: boolean) => void;
 }

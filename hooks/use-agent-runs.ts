@@ -15,6 +15,7 @@ import { io as ioClient, Socket } from "socket.io-client";
 export interface AgentRunView {
   runId: string;
   prompt: string;
+  attachedFiles?: { name: string; type: string; url: string }[];
   status: AgentRunStatus;
   plan: AgentTask[];
   thinking: string;
@@ -246,8 +247,8 @@ export function useAgentRuns(projectId: string | undefined) {
 
   // Insert a placeholder so the UI can render immediately after the POST.
   const registerNewRun = useCallback(
-    (runId: string, prompt: string) => {
-      upsert(runId, prompt, (r) => ({ ...r, prompt, status: "running" }));
+    (runId: string, prompt: string, attachedFiles?: { name: string; type: string; url: string }[]) => {
+      upsert(runId, prompt, (r) => ({ ...r, prompt, attachedFiles, status: "running" }));
     },
     [upsert]
   );

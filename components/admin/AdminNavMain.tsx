@@ -19,6 +19,9 @@ import {
   Sparkles,
   Users,
   FileText,
+  Cpu,
+  Mic,
+  UserSquare,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -64,6 +67,21 @@ export function AdminNavMain() {
       title: "Blog Posts",
       icon: FileText,
       href: "/admin/blog",
+    },
+    {
+      title: "AI Models",
+      icon: Cpu,
+      href: "/admin/inspire/models",
+    },
+    {
+      title: "AI Voices",
+      icon: Mic,
+      href: "/admin/inspire/voices",
+    },
+    {
+      title: "AI Presenters",
+      icon: UserSquare,
+      href: "/admin/inspire/presenters",
     },
   ];
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { AIThinkingContent } from "../chat/messages";
-import { BrandIdentityPanel, useBrandIdentityEnabled } from "../chat/messages/brand-identity-panel";
+import { BrandIdentityPanel } from "../chat/messages/brand-identity-panel";
 import { BrandIndicator } from "../common/brand-indicator";
 import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
 import { HomeInfoGrid } from "../common/homeInfoGrid";
@@ -444,6 +444,8 @@ export function IdeaSection() {
     setImageModel,
     project,
     brandSaveStatus,
+    brandIdentityEnabled,
+    setBrandIdentityEnabled,
   } = useProjectDesign();
 
   const [beamPosition, setBeamPosition] = useState({ x: 50, y: 50 });
@@ -504,7 +506,6 @@ export function IdeaSection() {
   const innerContainerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const user = useUserContext().user;
-  const [brandIdentityEnabled] = useBrandIdentityEnabled();
 
   const placeholderText = useTypewriterEffect({
     words: placeholders,
