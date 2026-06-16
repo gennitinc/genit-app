@@ -532,10 +532,10 @@ export const signupCarouselData: { media: MediaItem[] } = {
     {
       type: "image",
       src: "https://i.pinimg.com/videos/thumbnails/originals/aa/6b/de/aa6bde250e02a08fbfebf25688f85d91.0000000.jpg",
-      alt: "Earn as Creator",
+      alt: "Refer and earn",
       showControls: false,
       testimonial: {
-        title: "Earn as a Creator",
+        title: "Refer and earn",
         description:
           "Monetize your skills, content, and AI creations on genit.",
         rating: 5,
