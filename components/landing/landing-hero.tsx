@@ -9,6 +9,7 @@ import { SendIcon } from "lucide-react";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
+import { InstagramBrand, FacebookBrand, XBrand, LinkedinBrand, BrevoBrand, TikTokBrand, YoutubeBrand } from "@/app/(auth)/onboarding/_components/social-icons";
 
 // Video data for Reels carousel
 const reelsVideos = [
@@ -23,6 +24,7 @@ const reelsVideos = [
     location: "Product Commercial",
     likes: 92372,
     verified: true,
+    platform: "instagram",
   },
   {
     id: "2",
@@ -35,6 +37,7 @@ const reelsVideos = [
     location: "Brand Promo",
     likes: 45621,
     verified: true,
+    platform: "tiktok",
   },
   {
     id: "3",
@@ -47,100 +50,64 @@ const reelsVideos = [
     location: "Product Ad",
     likes: 78234,
     verified: true,
+    platform: "facebook",
   },
 ];
 
 const messages = [
   {
     type: "user",
-    text: "Create a product image for a shoe design",
+    text: "Generate a brand-tailored promotional visual for our upcoming product launch.",
   },
   {
     type: "ai",
-    text: "Here's your product image!",
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop",
+    text: "Here's your promotional visual, perfectly aligned with your brand identity and color palette!",
+    image: "./branding1.png",
   },
   {
     type: "user",
-    text: "Change the background to white and add a shadow",
+    text: "Looks amazing! Resize it for an Instagram story and schedule it to publish tomorrow.",
   },
   {
     type: "ai",
-    text: "Perfect! I've updated the background to white and added a subtle shadow for depth.",
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop",
+    text: "Done! The visual is resized for Instagram Stories and scheduled to post tomorrow at 10:00 AM via your connected account.",
+    icons: ["instagram"],
   },
   {
     type: "user",
-    text: "Can you make the shadow more dramatic?",
+    text: "Awesome. Let's also set up a Facebook ad campaign using this visual with a $50 daily budget.",
   },
   {
     type: "ai",
-    text: "Absolutely! I've enhanced the shadow to make it more dramatic and eye-catching.",
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop",
+    text: "Campaign created! Your Facebook ad is now configured with the visual, optimized for maximum conversions, and running at $50/day.",
+    icons: ["facebook"],
   },
   {
     type: "user",
-    text: "Now create a product image for Meta glasses",
+    text: "Perfect. Now generate engaging captions for X and LinkedIn.",
   },
   {
     type: "ai",
-    text: "Here's a sleek product image of Meta glasses!",
-    image:
-      "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&auto=format&fit=crop",
+    text: "Here you go!\n\nX: \"We're thrilled to announce our latest launch! 🚀 Discover innovation like never before.\"\n\nLinkedIn: \"We are excited to unveil our newest product line, designed to bring unparalleled value to our customers.\"",
   },
   {
     type: "user",
-    text: "Add a futuristic tech background",
+    text: "Publish both of those posts right now.",
   },
   {
     type: "ai",
-    text: "Great idea! I've added a futuristic tech background that complements the Meta glasses perfectly.",
-    image:
-      "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&auto=format&fit=crop",
+    text: "Published! The posts are now live on your connected X and LinkedIn integrations.",
+    icons: ["x", "linkedin"],
   },
   {
     type: "user",
-    text: "Can you create variations with different angles?",
+    text: "Great! Let's wrap up by sending an announcement email to our subscribers via Brevo.",
   },
   {
     type: "ai",
-    text: "Sure! I've generated multiple angle variations for you to choose from.",
-    image:
-      "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&auto=format&fit=crop",
-  },
-  {
-    type: "user",
-    text: "I love the side angle. Can you make it more premium looking?",
-  },
-  {
-    type: "ai",
-    text: "Perfect choice! I've enhanced the side angle with premium lighting and refined details.",
-    image:
-      "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&auto=format&fit=crop",
-  },
-  {
-    type: "user",
-    text: "Generate a product image for a smartwatch",
-  },
-  {
-    type: "ai",
-    text: "Here's a professional product image of a smartwatch!",
-    image:
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&auto=format&fit=crop",
-  },
-  {
-    type: "user",
-    text: "Show it on a wrist with a minimalist background",
-  },
-  {
-    type: "ai",
-    text: "Perfect! I've created a lifestyle shot with the smartwatch on a wrist against a clean, minimalist background.",
-    image:
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&auto=format&fit=crop",
-  },
+    text: "I've drafted a stunning newsletter template in Brevo featuring the new visual. The campaign is queued and ready to send to your mailing list!",
+    icons: ["brevo"],
+  }
 ];
 
 export function InputLandingMediaChat() {
@@ -268,6 +235,11 @@ const ReelsCarousel = () => {
             <span className='text-muted-foreground block text-xs'>
               {reelsVideos[currentIndex].location}
             </span>
+          </div>
+          <div className='ml-auto flex items-center justify-center'>
+            {reelsVideos[currentIndex].platform === "instagram" && <InstagramBrand className="h-6 w-6" />}
+            {reelsVideos[currentIndex].platform === "tiktok" && <TikTokBrand className="h-6 w-6" />}
+            {reelsVideos[currentIndex].platform === "facebook" && <FacebookBrand className="h-6 w-6" />}
           </div>
         </div>
 
@@ -680,15 +652,15 @@ const LandingHero = () => {
                     <div className='absolute -bottom-[10px] -left-[10px] h-4 w-4 rounded-bl-lg border-b-2 border-l-2 border-blue-500 bg-transparent' />
                     <div className='absolute -right-[10px] -bottom-[10px] h-4 w-4 rounded-br-lg border-r-2 border-b-2 border-blue-500 bg-transparent' />
                   </div>
-                  <span className='absolute inset-x-0 bottom-4 m-auto h-fit w-fit rounded-md border border-neutral-100 bg-white px-2 py-1 text-xs text-black'>
+                  {/* <span className='absolute inset-x-0 bottom-4 m-auto h-fit w-fit rounded-md border border-neutral-100 bg-white px-2 py-1 text-xs text-black'>
                     generated <span className='font-bold'>2.4k</span>
-                  </span>
+                  </span> */}
                   <img
                     alt='product image'
                     width={100}
                     height={140}
                     className='h-[200px] w-full rounded-lg object-cover object-center'
-                    src='https://cdn.shopify.com/s/files/1/2303/2711/files/2_e822dae0-14df-4cb8-b145-ea4dc0966b34.jpg?v=1617059123'
+                    src='./brandinglogo.png'
                   />
                 </div>
                 <div className='relative'>
@@ -697,7 +669,7 @@ const LandingHero = () => {
                     width={100}
                     height={140}
                     className='h-[200px] w-full rounded-lg object-cover object-center'
-                    src='https://d2v5dzhdg4zhx3.cloudfront.net/storyPage/webassets/3ce2396c-8566-4096-9818-0bcf234a41fa.webp'
+                    src='./branding1.png'
                   />
                 </div>
                 <div className='relative'>
@@ -706,7 +678,7 @@ const LandingHero = () => {
                     width={100}
                     height={140}
                     className='h-[200px] w-full rounded-lg object-cover object-center'
-                    src='https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&auto=format&fit=crop'
+                    src='./branding2.png'
                   />
                 </div>
                 <div
@@ -722,7 +694,7 @@ const LandingHero = () => {
                     width={100}
                     height={140}
                     className='h-[200px] w-full rounded-lg object-cover object-center'
-                    src='https://easy-peasy.ai/_next/image?url=https%3A%2F%2Fmedia.easy-peasy.ai%2F27feb2bb-aeb4-4a83-9fb6-8f3f2a15885e%2Fd4999910-07fc-4893-bf0f-40ffdf3fc649.png&w=828&q=75'
+                    src='./branding3.png'
                   />
                 </div>
               </div>
@@ -861,6 +833,19 @@ const LandingHero = () => {
                               <span className='ml-1 inline-block h-4 w-0.5 animate-pulse bg-neutral-700 dark:bg-neutral-300' />
                             )}
                           </p>
+                          {!isStreaming && message.icons && (
+                            <div className='mt-3 flex gap-2 animate-in fade-in zoom-in duration-500'>
+                              {message.icons.map((icon) => (
+                                <div key={icon} className='flex h-7 w-7 items-center justify-center rounded-md bg-neutral-100 dark:bg-neutral-900'>
+                                  {icon === "instagram" && <InstagramBrand className="h-4 w-4" />}
+                                  {icon === "facebook" && <FacebookBrand className="h-4 w-4" />}
+                                  {icon === "x" && <XBrand className="h-4 w-4" />}
+                                  {icon === "linkedin" && <LinkedinBrand className="h-4 w-4" />}
+                                  {icon === "brevo" && <BrevoBrand className="h-4 w-4" />}
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                         {showImage && (
                           <div className='animate-in fade-in zoom-in overflow-hidden rounded-lg border border-neutral-200 bg-white duration-500 dark:border-neutral-700'>
