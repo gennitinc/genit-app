@@ -407,15 +407,20 @@ export default async function BlogPostPage(props: {
                 </span>
                 <ul className="space-y-3">
                   {headings.map((h, idx) => (
-                    <li key={idx}>
-                      <a 
-                        href={`#${h.id}`}
-                        className="text-zinc-600 dark:text-zinc-400 text-sm hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors flex"
-                      >
-                        <span className="text-zinc-400 dark:text-zinc-600 mr-2 flex-shrink-0">{(idx + 1).toString().padStart(2, "0")}</span>
-                        <span>{h.text}</span>
-                      </a>
-                    </li>
+                 <li key={idx}>
+  <a
+    href={`#${h.id}`}
+    className="text-zinc-600 dark:text-zinc-400 text-sm hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors flex"
+  >
+    <span className="text-zinc-400 dark:text-zinc-600 mr-2 flex-shrink-0">
+      {(idx + 1).toString().padStart(2, "0")}
+    </span>
+
+    <span className="line-clamp-2">
+      {h.text}
+    </span>
+  </a>
+</li>
                   ))}
                 </ul>
               </div>
