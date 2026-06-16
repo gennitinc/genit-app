@@ -20,9 +20,9 @@ const reelsVideos = [
       "https://cdn.leonardo.ai/users/26ac8e01-36b5-47e7-b454-73e1f56828de/generations/f5c5461c-6f42-4518-aa35-1a4512dc1790/segments/1:1:1/motion2Fast_Korean_drama_emotional_scene_30yearold_Korean_woma_0.mp4",
     thumbnailUrl:
       "https://cdn.leonardo.ai/users/26ac8e01-36b5-47e7-b454-73e1f56828de/generations/f5c5461c-6f42-4518-aa35-1a4512dc1790/segments/1:1:1/motion2Fast_Korean_drama_emotional_scene_30yearold_Korean_woma_0.jpg?w=512",
-    username: "genit_ai",
-    profilePic: "https://picsum.photos/id/1027/150/150",
-    location: "Product Commercial",
+    username: "Kavero",
+    profilePic: "/brandlogo1.png",
+    location: "Instagram Ad",
     likes: 92372,
     verified: true,
     platform: "instagram",
@@ -33,9 +33,9 @@ const reelsVideos = [
       "https://cdn.leonardo.ai/users/578e674e-459e-4190-a8d2-1aed4b909bc8/generations/d3ff7032-d672-4ffc-82ac-3760ceb07a7a/segments/1:1:1/motion2Fast_A_lone_human_figure_in_a_space_suit_standing_still_0.mp4",
     thumbnailUrl:
       "https://cdn.leonardo.ai/users/578e674e-459e-4190-a8d2-1aed4b909bc8/generations/d3ff7032-d672-4ffc-82ac-3760ceb07a7a/segments/1:1:1/motion2Fast_A_lone_human_figure_in_a_space_suit_standing_still_0.jpg?w=512",
-    username: "brand_marketing",
-    profilePic: "https://picsum.photos/id/64/150/150",
-    location: "Brand Promo",
+    username: "Kavero",
+    profilePic: "/brandlogo1.png",
+    location: "Tiktok Ad",
     likes: 45621,
     verified: true,
     platform: "tiktok",
@@ -46,9 +46,9 @@ const reelsVideos = [
       "https://cdn.leonardo.ai/users/8ff3af02-0eb3-442b-af5f-6266be661fef/generations/1f0e41aa-b754-6f80-9119-11f0c6259841/veo-3.1-fast-generate-preview_A_confident_Black_woman_with_sleek_bob-length_hair_flawless_glowing_skin_soft_gl-0.mp4",
     thumbnailUrl:
       "https://cdn.leonardo.ai/users/8ff3af02-0eb3-442b-af5f-6266be661fef/generations/1f0e41aa-b754-6f80-9119-11f0c6259841/veo-3.1-fast-generate-preview_A_confident_Black_woman_with_sleek_bob-length_hair_flawless_glowing_skin_soft_gl-0.jpg?w=512",
-    username: "product_showcase",
-    profilePic: "https://picsum.photos/id/177/150/150",
-    location: "Product Ad",
+    username: "Kavero",
+    profilePic: "/brandlogo1.png",
+    location: "Facebook Ad",
     likes: 78234,
     verified: true,
     platform: "facebook",
@@ -212,7 +212,7 @@ const ReelsCarousel = () => {
 
         <div className='flex items-center border-b border-neutral-200 px-4 py-3 dark:border-neutral-700'>
           <Image
-            className='h-8 w-8 rounded-full object-cover'
+            className='h-8 w-8 rounded-full object-cover bg-black dark:bg-white'
             src={reelsVideos[currentIndex].profilePic}
             alt={reelsVideos[currentIndex].username}
             width={32}
