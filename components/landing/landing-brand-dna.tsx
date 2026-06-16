@@ -15,10 +15,8 @@ export const LandingBrandDNA = () => {
       
         
         <h2 className="mt-6 text-center text-4xl md:text-6xl font-semibold tracking-tight text-foreground dark:text-white">
-          One URL.
-          <span className="block text-purple-600 dark:text-purple-400">
-            Full Brand DNA.
-          </span>
+          One URL - Full Brand DNA.
+          
         </h2>
         <p className="mx-auto mt-5 max-w-2xl text-center text-base md:text-lg text-muted-foreground dark:text-white/60 font-normal">
           No tedious forms. No manual uploads. Paste your website and our AI instantly extracts your visual identity, tone of voice, and core assets in seconds.
