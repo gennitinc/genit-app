@@ -10,6 +10,7 @@ import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { InstagramBrand, FacebookBrand, XBrand, LinkedinBrand, BrevoBrand, TikTokBrand, YoutubeBrand } from "@/app/(auth)/onboarding/_components/social-icons";
+import Loading from "@/utils/Loading";
 
 // Video data for Reels carousel
 const reelsVideos = [
@@ -779,11 +780,11 @@ const LandingHero = () => {
           ></div>
           <div className='p-6'>
             <h3 className='font-sans text-sm font-medium tracking-tight text-neutral-700 dark:text-neutral-100'>
-              Instant product image generation
+              Autonomous marketing agents in your chat
             </h3>
             <h3 className='mt-2 max-w-xs font-sans text-sm font-normal tracking-tight text-neutral-500 dark:text-neutral-400'>
-              Get professional product images in seconds. Simply describe your
-              product in chat and watch it come to life.
+              Unleash your brand&apos;s full potential with AI agents without
+              lifting a finger.
             </h3>
           </div>
           <div className='flex h-full max-h-[500px] flex-col overflow-hidden'>
@@ -792,6 +793,11 @@ const LandingHero = () => {
               ref={chatContainerRef}
               className='flex-1 space-y-4 overflow-y-auto bg-neutral-50/50 p-4 [-ms-overflow-style:none] [scrollbar-width:none] lg:p-10 dark:bg-neutral-950/50 [&::-webkit-scrollbar]:hidden'
             >
+              {visibleMessages === 0 && (
+                <div className="flex h-full items-center justify-center text-neutral-400">
+                  <Loading size={32} />
+                </div>
+              )}
               {messages.map((message, index) => {
                 const isVisible = index < visibleMessages;
                 const isUser = message.type === "user";

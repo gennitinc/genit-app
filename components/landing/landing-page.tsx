@@ -3,6 +3,8 @@
 
 import TemplateGrid from "../common/templateGrid";
 import { IdeaSection } from "../layout/idea-section";
+import LandingBrandDNA from "./landing-brand-dna";
+import LandinngIntegrations from "./LandinngIntegrations";
 import PartnerLogos from "./Partners-Logos";
 import ContactCtaLanding from "./contact-cta-landing";
 import { LandingAvatar } from "./landing-avatar";
@@ -22,7 +24,8 @@ export function LandingPage() {
       {/* <LandingPageBanner /> */}
       <LandingNavbar />
       <LandingHero />
-      <LandingCommunityVideos />
+      <LandingBrandDNA />
+      <LandinngIntegrations />
       <LandingCreator />
       <LandingAvatar />
       <LandingVoiceClone />
