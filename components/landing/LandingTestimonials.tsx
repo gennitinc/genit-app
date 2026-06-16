@@ -89,7 +89,7 @@ const LandingTestimonials = () => {
             {[...testimonials, ...testimonials].map((t, i) => (
               <div
                 key={i}
-                className='group mx-4 flex w-[350px] shrink-0 flex-col overflow-hidden rounded-3xl border border-black/5 bg-black/[0.02] text-foreground shadow-sm transition-all duration-500 hover:border-black/10 hover:bg-black/5 md:w-[450px] dark:border-white/10 dark:bg-white/5 dark:text-white dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] dark:hover:border-white/20 dark:hover:bg-white/10'
+                className='group mx-4 flex w-[300px] shrink-0 flex-col overflow-hidden rounded-3xl border border-black/5 bg-black/[0.02] text-foreground shadow-sm transition-all duration-500 hover:border-black/10 hover:bg-black/5 md:w-[400px] dark:border-white/10 dark:bg-white/5 dark:text-white dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] dark:hover:border-white/20 dark:hover:bg-white/10'
               >
                 <div className='relative flex flex-1 flex-col p-6 md:p-8'>
                   <div className='pointer-events-none absolute inset-0 bg-gradient-to-br from-black/5 dark:from-white/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100'></div>

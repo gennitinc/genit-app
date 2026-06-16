@@ -116,8 +116,18 @@ const LandinngIntegrations = () => {
             </div>
             
             {/* Sliding list */}
-            <div className="overflow-hidden h-37 rounded-xl ring-black/5 dark:ring-white/10 ring-1 mt-3">
-              <ul className="relative flex flex-col gap-1 p-2">
+            <div className="relative overflow-hidden h-[160px] rounded-xl ring-black/5 dark:ring-white/10 ring-1 mt-3 [mask-image:_linear-gradient(to_bottom,transparent_0,_black_20px,_black_calc(100%-20px),transparent_100%)]">
+              <style dangerouslySetInnerHTML={{ __html: `
+                @keyframes slideUpIntegrations {
+                  0% { transform: translateY(0); }
+                  100% { transform: translateY(-50%); }
+                }
+                .animate-slide-up {
+                  animation: slideUpIntegrations 15s linear infinite;
+                }
+              `}} />
+              <ul className="relative flex flex-col gap-1 p-2 animate-slide-up hover:[animation-play-state:paused]">
+                {/* Original Items */}
                 <li className="flex items-center justify-between rounded-lg bg-black/[0.02] dark:bg-white/[0.04] p-2">
                   <div className="flex items-center gap-3">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
@@ -154,10 +164,122 @@ const LandinngIntegrations = () => {
                   </div>
                   <ShieldCheck className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                 </li>
+                
+                {/* New Items */}
+                <li className="flex items-center justify-between rounded-lg bg-black/[0.02] dark:bg-white/[0.04] p-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
+                      <FacebookBrand className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground dark:text-white/90">Facebook Page</p>
+                      <p className="text-[11px] text-emerald-600 dark:text-emerald-400">Published • 1h ago</p>
+                    </div>
+                  </div>
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                </li>
+                <li className="flex items-center justify-between rounded-lg bg-black/[0.02] dark:bg-white/[0.04] p-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
+                      <TikTokBrand className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground dark:text-white/90">TikTok Video</p>
+                      <p className="text-[11px] text-sky-600 dark:text-sky-400">Scheduled • Wed, 3 PM</p>
+                    </div>
+                  </div>
+                  <Clock className="h-4 w-4 text-sky-600 dark:text-sky-400" />
+                </li>
+                <li className="flex items-center justify-between rounded-lg bg-black/[0.02] dark:bg-white/[0.04] p-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
+                      <BrevoBrand className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground dark:text-white/90">Email Newsletter</p>
+                      <p className="text-[11px] text-amber-600 dark:text-amber-400">Draft • Editing</p>
+                    </div>
+                  </div>
+                  <ShieldCheck className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                </li>
+                
+                {/* Duplicated for infinite scroll */}
+                <li className="flex items-center justify-between rounded-lg bg-black/[0.02] dark:bg-white/[0.04] p-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
+                      <InstagramBrand className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground dark:text-white/90">Instagram Story</p>
+                      <p className="text-[11px] text-emerald-600 dark:text-emerald-400">Published • 2m ago</p>
+                    </div>
+                  </div>
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                </li>
+                <li className="flex items-center justify-between rounded-lg bg-black/[0.02] dark:bg-white/[0.04] p-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
+                      <LinkedinBrand className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground dark:text-white/90">LinkedIn Post</p>
+                      <p className="text-[11px] text-sky-600 dark:text-sky-400">Scheduled • Tomorrow</p>
+                    </div>
+                  </div>
+                  <Clock className="h-4 w-4 text-sky-600 dark:text-sky-400" />
+                </li>
+                <li className="flex items-center justify-between rounded-lg bg-black/[0.02] dark:bg-white/[0.04] p-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
+                      <XBrand className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground dark:text-white/90">X (Twitter) Thread</p>
+                      <p className="text-[11px] text-amber-600 dark:text-amber-400">Draft • Pending review</p>
+                    </div>
+                  </div>
+                  <ShieldCheck className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                </li>
+                <li className="flex items-center justify-between rounded-lg bg-black/[0.02] dark:bg-white/[0.04] p-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
+                      <FacebookBrand className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground dark:text-white/90">Facebook Page</p>
+                      <p className="text-[11px] text-emerald-600 dark:text-emerald-400">Published • 1h ago</p>
+                    </div>
+                  </div>
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                </li>
+                <li className="flex items-center justify-between rounded-lg bg-black/[0.02] dark:bg-white/[0.04] p-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
+                      <TikTokBrand className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground dark:text-white/90">TikTok Video</p>
+                      <p className="text-[11px] text-sky-600 dark:text-sky-400">Scheduled • Wed, 3 PM</p>
+                    </div>
+                  </div>
+                  <Clock className="h-4 w-4 text-sky-600 dark:text-sky-400" />
+                </li>
+                <li className="flex items-center justify-between rounded-lg bg-black/[0.02] dark:bg-white/[0.04] p-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
+                      <BrevoBrand className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground dark:text-white/90">Email Newsletter</p>
+                      <p className="text-[11px] text-amber-600 dark:text-amber-400">Draft • Editing</p>
+                    </div>
+                  </div>
+                  <ShieldCheck className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                </li>
               </ul>
             </div>
             
-            <div className="mt-4 flex items-center gap-2 text-[11px] text-muted-foreground dark:text-white/60">
+            <div className="mt-4 flex items-center gap-2 text-[11px] text-muted-foreground dark:text-white/60 relative z-10 pt-1">
               <Layers className="h-3.5 w-3.5" />
               Format once, publish everywhere
             </div>
