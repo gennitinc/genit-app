@@ -27,10 +27,8 @@ export function LandingPage() {
       <LandingHero />
       <LandingBrandDNA />
       <LandinngIntegrations />
-      <LandingCreator />
-      {/* <LandingAvatar />
-      <PartnerLogos /> */}
       <LandingVoiceClone />
+      <LandingCreator />
       <LandingTestimonials />
       <ContactCtaLanding />
       <LandingFooter />

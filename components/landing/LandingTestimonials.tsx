@@ -74,13 +74,10 @@ const LandingTestimonials = () => {
       `}} />
 
       <div
-        className='relative mt-16 w-full max-w-6xl mr-auto ml-auto overflow-hidden'
+        className='relative mt-16 w-full max-w-7xl mr-auto ml-auto overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]'
         onMouseEnter={() => setStopScroll(true)}
         onMouseLeave={() => setStopScroll(false)}
       >
-        {/* Left Fade */}
-        <div className='pointer-events-none absolute top-0 left-0 z-10 h-full w-24 bg-gradient-to-r from-background to-transparent dark:from-background md:w-48' />
-
         <div
           className='marquee-inner flex w-fit'
           style={{
@@ -147,9 +144,6 @@ const LandingTestimonials = () => {
             ))}
           </div>
         </div>
-
-        {/* Right Fade */}
-        <div className='pointer-events-none absolute top-0 right-0 z-10 h-full w-24 bg-gradient-to-l from-background to-transparent dark:from-background md:w-48' />
       </div>
     </div>
   );
