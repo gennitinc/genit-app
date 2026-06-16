@@ -10,7 +10,7 @@ import { GradientFrame } from '@/utils/gradient-frame';
 
 const LandinngIntegrations = () => {
   return (
-    <section className="md:px-10 md:pt-5 max-w-6xl mr-auto ml-auto pt-20 pr-6 pl-6">
+    <section className="px-2 md:px-6 md:pt-5 max-w-6xl mr-auto ml-auto pt-20">
       
       {/* Heading */}
       <h1 className="mt-6 text-center text-4xl md:text-6xl font-semibold tracking-tight text-foreground dark:text-white">
@@ -41,7 +41,7 @@ const LandinngIntegrations = () => {
               {/* Row 1 */}
               <div className="rounded-xl bg-black/[0.02] dark:bg-white/[0.04] p-3 ring-1 ring-black/5 dark:ring-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-white ring-1 ring-black/5 dark:ring-0">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-white ring-1 ring-black/5 dark:ring-0">
                     <FacebookBrand className="h-4 w-4" />
                   </div>
                   <div className="flex-1">
@@ -60,7 +60,7 @@ const LandinngIntegrations = () => {
               {/* Row 2 */}
               <div className="rounded-xl bg-black/[0.02] dark:bg-white/[0.04] p-3 ring-1 ring-black/5 dark:ring-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
                     <TikTokBrand className="h-4 w-4" />
                   </div>
                   <div className="flex-1">
@@ -211,15 +211,14 @@ const LandinngIntegrations = () => {
               </div>
               <div className="flex items-center gap-2 border-t border-black/5 dark:border-white/10 px-3 py-2">
                 <div className="flex -space-x-2">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#96bf48] ring-2 ring-white dark:ring-[#0a0a0a]">
-                    <span className="text-[10px] font-bold text-white">Sh</span>
-                  </div>
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#0B996E] ring-2 ring-white dark:ring-[#0a0a0a]">
-                    <span className="text-[10px] font-bold text-white">Br</span>
-                  </div>
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white ring-2 ring-white dark:ring-[#0a0a0a]">
-                    <span className="text-[10px] font-bold text-blue-500">G</span>
-                  </div>
+                  <img src="https://i.pinimg.com/736x/a0/cb/f8/a0cbf895e3e033b27a823ef8bb5b6a31.jpg" alt="User 1" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
+                  <img src="https://i.pinimg.com/736x/74/3d/88/743d88dd2675cd87baa1b560f500c69c.jpg" alt="User 2" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
+                  <img src="https://i.pinimg.com/736x/5f/5f/3c/5f5f3c82349c1dd8552ffa7e97423fb2.jpg" alt="User 3" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
+                  <img src="https://i.pinimg.com/736x/29/5f/f5/295ff586f4725e8b56b6ba08017e4a6d.jpg" alt="User 4" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
+                  <img src="https://i.pinimg.com/1200x/3e/f3/50/3ef350dc86cc82a092463e5d795654b5.jpg" alt="User 5" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
+                  <img src="https://i.pinimg.com/736x/eb/76/a4/eb76a46ab920d056b02d203ca95e9a22.jpg" alt="User 6" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
+                  <img src="https://i.pinimg.com/736x/48/08/6e/48086ebb8989d9d6dde7d12d9f2939fd.jpg" alt="User 7" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
+                  <img src="https://i.pinimg.com/1200x/b2/db/80/b2db80290f2aba3567213d4eab1117a5.jpg" alt="User 8" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
                 </div>
                 <span className="ml-2 text-[11px] text-muted-foreground dark:text-white/60">
                   Synced across tools

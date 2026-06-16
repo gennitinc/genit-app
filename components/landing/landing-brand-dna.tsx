@@ -8,7 +8,7 @@ import { GradientFrame } from '@/utils/gradient-frame';
 
 export const LandingBrandDNA = () => {
   return (
-    <section className="md:px-10 md:py-24 max-w-6xl mr-auto ml-auto py-16 pr-6 pl-6 relative">
+    <section className="px-2 md:px-6 md:pt-10 pb-20 max-w-6xl mr-auto ml-auto py-16 relative">
 
       {/* Header */}
       <div className="flex flex-col items-center mb-16 relative z-10">
@@ -19,12 +19,12 @@ export const LandingBrandDNA = () => {
           
         </h2>
         <p className="mx-auto mt-5 max-w-2xl text-center text-base md:text-lg text-muted-foreground dark:text-white/60 font-normal">
-          No tedious forms. No manual uploads. Paste your website and our AI instantly extracts your visual identity, tone of voice, and core assets in seconds.
+          Just paste your website and our AI instantly extracts your visual identity, tone of voice, and core assets in seconds.
         </p>
       </div>
 
       {/* Central Interactive Window */}
-      <div className="relative mx-auto max-w-5xl rounded-[2rem] bg-white dark:bg-zinc-950/50 p-2 md:p-4 ring-1 ring-black/5 dark:ring-white/10 backdrop-blur-xl shadow-xl dark:shadow-2xl">
+      <div className="relative mx-auto max-w-5xl rounded-[2rem] bg-white dark:bg-zinc-950/50 p-2 md:p-4 ring-1 ring-black/5 dark:ring-white/10 backdrop-blur-xl shadow-sm dark:shadow-sm">
         <GradientFrame />
         
         {/* Browser Top Bar */}
