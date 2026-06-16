@@ -232,9 +232,16 @@ const ReelsCarousel = () => {
   }, [currentIndex]);
 
   return (
-    <div className='flex h-full items-center justify-center bg-neutral-50 p-4 dark:bg-neutral-900'>
+    <div className='flex h-full flex-col items-center justify-center bg-neutral-50 p-4 dark:bg-neutral-900'>
+
+      
+        <h3 className='mb-6 font-sans text-sm font-medium tracking-tight text-neutral-700 dark:text-neutral-100'>
+        Run targeted ads to Meta, Google, and TikTok via chat
+      </h3>
       <div className='w-full max-w-md overflow-hidden rounded-sm border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'>
         {/* Header */}
+
+
         <div className='flex items-center border-b border-neutral-200 px-4 py-3 dark:border-neutral-700'>
           <Image
             className='h-8 w-8 rounded-full object-cover'
@@ -650,11 +657,11 @@ const LandingHero = () => {
           ></div>
           <div className='p-6'>
             <h3 className='font-sans text-sm font-medium tracking-tight text-neutral-700 dark:text-neutral-100'>
-              Generate product images with AI Chat
+              Generate brand tailored visuals
             </h3>
             <h3 className='mt-2 max-w-xs font-sans text-sm font-normal tracking-tight text-neutral-500 dark:text-neutral-400'>
-              Chat with AI to create stunning product images. Describe your
-              product and get professional images instantly.
+              Chat with AI to create stunning visuals that match your brand.
+              Describe your vision and get professional images instantly.
             </h3>
           </div>
           <div className=''>
