@@ -7,10 +7,10 @@ export function LandingVoiceClone() {
     <div className='mt-20'>
       <div className='mb-12 space-y-4 text-center md:mb-16'>
         <h2 className='text-foreground text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl'>
-          Clone your voice with AI
+          Tired of typing? Voice it
         </h2>
         <p className='text-muted-foreground mx-auto max-w-2xl text-base md:text-base'>
-          Speak like the real you with AI.
+          Skip the keyboard. Speak your ideas naturally and let Genit instantly turn your voice into perfectly formatted prompt.
         </p>
       </div>
       <div className='relative flex min-h-[300px] items-center justify-center'>

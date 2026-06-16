@@ -214,9 +214,9 @@ const LandinngIntegrations = () => {
                   <img src="https://i.pinimg.com/736x/a0/cb/f8/a0cbf895e3e033b27a823ef8bb5b6a31.jpg" alt="User 1" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
                   <img src="https://i.pinimg.com/736x/74/3d/88/743d88dd2675cd87baa1b560f500c69c.jpg" alt="User 2" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
                   <img src="https://i.pinimg.com/736x/5f/5f/3c/5f5f3c82349c1dd8552ffa7e97423fb2.jpg" alt="User 3" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
-                  <img src="https://i.pinimg.com/736x/29/5f/f5/295ff586f4725e8b56b6ba08017e4a6d.jpg" alt="User 4" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
-                  <img src="https://i.pinimg.com/1200x/3e/f3/50/3ef350dc86cc82a092463e5d795654b5.jpg" alt="User 5" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
-                  <img src="https://i.pinimg.com/736x/eb/76/a4/eb76a46ab920d056b02d203ca95e9a22.jpg" alt="User 6" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
+                  {/* <img src="https://i.pinimg.com/736x/29/5f/f5/295ff586f4725e8b56b6ba08017e4a6d.jpg" alt="User 4" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
+                  <img src="https://i.pinimg.com/1200x/3e/f3/50/3ef350dc86cc82a092463e5d795654b5.jpg" alt="User 5" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" /> */}
+                  {/* <img src="https://i.pinimg.com/736x/eb/76/a4/eb76a46ab920d056b02d203ca95e9a22.jpg" alt="User 6" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" /> */}
                   <img src="https://i.pinimg.com/736x/48/08/6e/48086ebb8989d9d6dde7d12d9f2939fd.jpg" alt="User 7" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
                   <img src="https://i.pinimg.com/1200x/b2/db/80/b2db80290f2aba3567213d4eab1117a5.jpg" alt="User 8" className="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-[#0a0a0a]" />
                 </div>

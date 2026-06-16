@@ -14,8 +14,9 @@ import LandingCreator from "./landing-creator";
 import { LandingFooter } from "./landing-footer";
 import LandingHero from "./landing-hero";
 import { LandingNavbar } from "./landing-navbar";
-import { LandingVoiceClone } from "./landing-voice-clone";
+import { LandingVoiceClone } from "./landing-voice-chat";
 import { Toaster } from "@/components/ui/sonner";
+import LandingTestimonials from "./LandingTestimonials";
 
 export function LandingPage() {
   return (
@@ -27,9 +28,10 @@ export function LandingPage() {
       <LandingBrandDNA />
       <LandinngIntegrations />
       <LandingCreator />
-      <LandingAvatar />
+      {/* <LandingAvatar />
+      <PartnerLogos /> */}
       <LandingVoiceClone />
-      <PartnerLogos />
+      <LandingTestimonials />
       <ContactCtaLanding />
       <LandingFooter />
     </div>
