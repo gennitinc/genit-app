@@ -51,15 +51,7 @@ export function LandingNavbar() {
   const { theme, setTheme } = useTheme();
   const user = useUserContext().user;
   const [mounted, setMounted] = useState(false);
-  const pathName = usePathname();
-  const RouteToShowAurora = ["/"];
-  const [isScrolled, setIsScrolled] = useState(false);
-  const router = useRouter();
-  const [isMobile, setIsMobile] = useState(false);
-  const [isUserPopoverOpen, setIsUserPopoverOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [projectTitle, setProjectTitle] = useState("Untitled Project");
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
+
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
 
@@ -94,16 +86,6 @@ export function LandingNavbar() {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setIsScrolled(scrollTop > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <>
       <header className='sticky top-0 z-50 w-full bg-transparent backdrop-blur-sm'>
@@ -118,442 +100,222 @@ export function LandingNavbar() {
             </span>
           </Link>
 
-          <div className='z-50 hidden items-center gap-4 md:flex'>
-            {currentUser ? (
-              <>
-                {/* Right Section - Desktop */}
-                {!currentIsSmallScreen && (
-                  <div className='flex items-center gap-2 sm:gap-2'>
-                    {/* Main user avatar with popover */}
-                    <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
-                      {/* {currentUser && (
-                      )} */}
-                      <Link
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='/chat'
-                      >
-                        Chat
-                      </Link>
-                      <Link
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='/integrations'
-                      >
-                        Integrations
-                      </Link>
-                      <Link
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='/apps'
-                      >
-                        Apps
-                      </Link>
-                      {/* <Link
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/inspire/create?mode=ai-video-gen"
-                      >
-                        Video & Image Gen
-                      </Link> */}
-                      <Link
-                        target=''
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='/community'
-                      >
-                        Community
-                      </Link>
-                      <Link
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='/blog'
-                      >
-                        Blog
-                      </Link>
-                      {/* <Link
-                        target=""
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/inspirations"
-                      >
-                        Inspirations
-                      </Link> */}
-                      <Link
-                        target='__blank'
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href={currentUser ? "/user/settings?tab=billing" : "/pricing"}
-                      >
-                        {currentUser ? "Billing" : "Pricing"}
-                      </Link>
-                      <Link
-                        target=''
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href={currentUser ? "/chat/history" : "/signin"}
-                      >
-                        History
-                      </Link>
-                      <Link
-                        target='k'
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='https://discord.gg/ftZbQvCdN7'
-                      >
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          width={24}
-                          height={24}
-                          viewBox='0 0 24 24'
-                          fill='none'
-                          stroke='currentColor'
-                          strokeWidth={2}
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          className='h-4 w-4 text-neutral-500 dark:text-neutral-500'
-                        >
-                          <path d='M8 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
-                          <path d='M14 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
-                          <path d='M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3' />
-                          <path d='M7 16.5c3.5 1 6.5 1 10 0' />
-                        </svg>
-                      </Link>
-                      <Link
-                        target='__blank'
-                        className='hover:text-foreground/80 text-foreground/60 text-sm font-medium transition-colors'
-                        href='https://twitter.com/genit_ai'
-                      >
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          width={24}
-                          height={24}
-                          viewBox='0 0 24 24'
-                          fill='none'
-                          stroke='currentColor'
-                          strokeWidth={2}
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          className='h-4 w-4 text-neutral-500 dark:text-neutral-500'
-                        >
-                          <path d='M4 4l11.733 16h4.267l-11.733 -16z' />
-                          <path d='M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772' />
-                        </svg>
-                      </Link>
-
-                      <button
-                        onClick={() => setIsSearchOpen(true)}
-                        className='text-muted-foreground bg-muted relative flex w-fit items-center justify-start rounded-xl border border-transparent px-4 py-2 text-sm shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] dark:border-white/[0.2]'
-                      >
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          width={24}
-                          height={24}
-                          viewBox='0 0 24 24'
-                          fill='none'
-                          stroke='currentColor'
-                          strokeWidth={2}
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          className='h-4 w-4 text-neutral-500'
-                        >
-                          <path d='M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0' />
-                          <path d='M21 21l-6 -6' />
-                        </svg>
-                        <span className='hover:text-foreground/80 text-foreground/60 rex pr-4 pl-2 text-xs font-medium transition-colors sm:text-sm'>
-                          Search{" "}
-                          <span className='hidden xl:inline-block'>
-                            Inspirations
-                          </span>
-                        </span>
-                        <kbd className='bg-muted pointer-events-none hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none sm:flex'>
-                          <span className='text-xs'>⌘</span>K
-                        </kbd>
-                      </button>
-                    </div>
-
-                    <Button
-                      variant='ghost'
-                      size='sm'
-                      onClick={() =>
-                        setTheme(theme === "dark" ? "light" : "dark")
-                      }
-                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
-                    >
-                      {mounted ? (
-                        theme === "dark" ? (
-                          <Sun className='h-4 w-4' />
-                        ) : (
-                          <Moon className='h-4 w-4' />
-                        )
-                      ) : (
-                        <div className='h-4 w-4' />
-                      )}
-                    </Button>
-
-                    <UserPopOver />
-                  </div>
+          <div className='z-50 hidden items-center gap-4 lg:flex'>
+            <div className='flex items-center gap-2 sm:gap-2'>
+              <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
+                <Link
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                  href='/chat'
+                >
+                  Chat
+                </Link>
+                <Link
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                  href='/integrations'
+                >
+                  Integrations
+                </Link>
+                <Link
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                  href='/apps'
+                >
+                  Apps
+                </Link>
+                <Link
+                  target='__blank'
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                  href='/community'
+                >
+                  Community
+                </Link>
+                <Link
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                  href='/blog'
+                >
+                  Blog
+                </Link>
+                <Link
+                  target='__blank'
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                  href={currentUser ? "/user/settings?tab=billing" : "/pricing"}
+                >
+                  {currentUser ? "Billing" : "Pricing"}
+                </Link>
+                {currentUser && (
+                  <Link
+                    target=''
+                    className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                    href='/chat/history'
+                  >
+                    History
+                  </Link>
                 )}
-                {/* Mobile Right Section */}
-                {currentIsSmallScreen && (
-                  <div className='flex items-center gap-2'>
-                    {/* Search - Mobile/Tablet */}
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      onClick={() => setIsSearchOpen(true)}
-                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
-                      aria-label='Search'
-                    >
-                      <Search className='h-4 w-4' />
-                    </Button>
-                    {/* Theme Toggle - Mobile */}
-                    <Button
-                      variant='ghost'
-                      size='sm'
-                      onClick={() =>
-                        setTheme(theme === "dark" ? "light" : "dark")
-                      }
-                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
-                    >
-                      {mounted ? (
-                        theme === "dark" ? (
-                          <Sun className='h-4 w-4' />
-                        ) : (
-                          <Moon className='h-4 w-4' />
-                        )
-                      ) : (
-                        <div className='h-4 w-4' />
-                      )}
-                    </Button>
+                <Link
+                  target='_blank'
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                  href='https://discord.gg/ftZbQvCdN7'
+                >
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    width={24}
+                    height={24}
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth={2}
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='h-4 w-4 text-neutral-500 dark:text-neutral-500'
+                  >
+                    <path d='M8 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
+                    <path d='M14 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
+                    <path d='M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3' />
+                    <path d='M7 16.5c3.5 1 6.5 1 10 0' />
+                  </svg>
+                </Link>
+                <Link
+                  target='_blank'
+                  className='hover:text-foreground/80 text-foreground/60 text-sm font-medium transition-colors'
+                  href='https://twitter.com/genit_ai'
+                >
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    width={24}
+                    height={24}
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth={2}
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='h-4 w-4 text-neutral-500 dark:text-neutral-500'
+                  >
+                    <path d='M4 4l11.733 16h4.267l-11.733 -16z' />
+                    <path d='M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772' />
+                  </svg>
+                </Link>
 
-                    {/* User Avatar - Mobile */}
-                    <UserPopOver />
-                  </div>
+                <button
+                  onClick={() => setIsSearchOpen(true)}
+                  className='text-muted-foreground bg-muted relative flex w-fit items-center justify-start rounded-xl border border-transparent px-4 py-2 text-sm shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] dark:border-white/[0.2]'
+                >
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    width={24}
+                    height={24}
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth={2}
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='h-4 w-4 text-neutral-500'
+                  >
+                    <path d='M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0' />
+                    <path d='M21 21l-6 -6' />
+                  </svg>
+                  <span className='hover:text-foreground/80 text-foreground/60 rex pr-4 pl-2 text-xs font-medium transition-colors sm:text-sm'>
+                    Search{" "}
+                    <span className='hidden xl:inline-block'>
+                      {currentUser ? "Inspirations" : "Templates"}
+                    </span>
+                  </span>
+                  <kbd className='bg-muted pointer-events-none hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none sm:flex'>
+                    <span className='text-xs'>⌘</span>K
+                  </kbd>
+                </button>
+              </div>
+
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className='hover:bg-accent h-8 w-8 rounded-lg p-0'
+              >
+                {mounted ? (
+                  theme === "dark" ? (
+                    <Sun className='h-4 w-4' />
+                  ) : (
+                    <Moon className='h-4 w-4' />
+                  )
+                ) : (
+                  <div className='h-4 w-4' />
                 )}
-              </>
-            ) : (
-              <>
-                {/* Right Section - Desktop */}
-                {!currentIsSmallScreen && (
-                  <div className='flex items-center gap-2 sm:gap-2'>
-                    {/* Main user avatar with popover */}
-                    <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
-                   
-                        <Link
-                          className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                          href='/chat'
-                        >
-                          Chat
-                        </Link>
-                      <Link
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='/integrations'
-                      >
-                        Integrations
-                      </Link>
-                      <Link
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='/apps'
-                      >
-                        Apps
-                      </Link>
-                      {/* <Link
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/inspire/create?mode=ai-video-gen"
-                      >
-                        Video & Image Gen
-                      </Link> */}
-                      <Link
-                        target='__blank'
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='/community'
-                      >
-                        Community
-                      </Link>
-                      <Link
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='/blog'
-                      >
-                        Blog
-                      </Link>
-                      {/* <Link
-                        target="__blank"
-                        className="hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors"
-                        href="/inspirations"
-                      >
-                        Inspirations
-                      </Link> */}
-                      <Link
-                        target='__blank'
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href={currentUser ? "/user/settings?tab=billing" : "/pricing"}
-                      >
-                        {currentUser ? "Billing" : "Pricing"}
-                      </Link>
+              </Button>
 
-                      <Link
-                        target='__blank'
-                        className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                        href='https://discord.gg/ftZbQvCdN7'
-                      >
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          width={24}
-                          height={24}
-                          viewBox='0 0 24 24'
-                          fill='none'
-                          stroke='currentColor'
-                          strokeWidth={2}
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          className='h-4 w-4 text-neutral-500 dark:text-neutral-500'
-                        >
-                          <path d='M8 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
-                          <path d='M14 12a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
-                          <path d='M15.5 17c0 1 1.5 3 2 3c1.5 0 2.833 -1.667 3.5 -3c.667 -1.667 .5 -5.833 -1.5 -11.5c-1.457 -1.015 -3 -1.34 -4.5 -1.5l-.972 1.923a11.913 11.913 0 0 0 -4.053 0l-.975 -1.923c-1.5 .16 -3.043 .485 -4.5 1.5c-2 5.667 -2.167 9.833 -1.5 11.5c.667 1.333 2 3 3.5 3c.5 0 2 -2 2 -3' />
-                          <path d='M7 16.5c3.5 1 6.5 1 10 0' />
-                        </svg>
-                      </Link>
-                      <Link
-                        target='__blank'
-                        className='hover:text-foreground/80 text-foreground/60 text-sm font-medium transition-colors'
-                        href='https://twitter.com/genit_ai'
-                      >
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          width={24}
-                          height={24}
-                          viewBox='0 0 24 24'
-                          fill='none'
-                          stroke='currentColor'
-                          strokeWidth={2}
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          className='h-4 w-4 text-neutral-500 dark:text-neutral-500'
-                        >
-                          <path d='M4 4l11.733 16h4.267l-11.733 -16z' />
-                          <path d='M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772' />
-                        </svg>
-                      </Link>
-
-                      <button
-                        onClick={() => setIsSearchOpen(true)}
-                        className='text-muted-foreground bg-muted relative flex w-fit items-center justify-start rounded-xl border border-transparent px-4 py-2 text-sm shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] dark:border-white/[0.2]'
-                      >
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          width={24}
-                          height={24}
-                          viewBox='0 0 24 24'
-                          fill='none'
-                          stroke='currentColor'
-                          strokeWidth={2}
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          className='h-4 w-4 text-neutral-500'
-                        >
-                          <path d='M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0' />
-                          <path d='M21 21l-6 -6' />
-                        </svg>
-                        <span className='hover:text-foreground/80 text-foreground/60 rex pr-4 pl-2 text-xs font-medium transition-colors sm:text-sm'>
-                          Search{" "}
-                          <span className='hidden xl:inline-block'>
-                            Templates
-                          </span>
-                        </span>
-                        <kbd className='bg-muted pointer-events-none hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none sm:flex'>
-                          <span className='text-xs'>⌘</span>K
-                        </kbd>
-                      </button>
-                    </div>
-
-                    <Button
-                      variant='ghost'
-                      size='sm'
-                      onClick={() =>
-                        setTheme(theme === "dark" ? "light" : "dark")
-                      }
-                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
-                    >
-                      {mounted ? (
-                        theme === "dark" ? (
-                          <Sun className='h-4 w-4' />
-                        ) : (
-                          <Moon className='h-4 w-4' />
-                        )
-                      ) : (
-                        <div className='h-4 w-4' />
-                      )}
-                    </Button>
-
-                    <div className='flex items-center gap-2'>
-                      <Link
-                        className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-2xl border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 lg:flex'
-                        data-state='closed'
-                        href='/signin'
-                      >
-                        Sign in
-                      </Link>
-                      <Link
-                        className='hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] border-cyan-500/20 bg-gradient-to-r from-cyan-500 to-blue-500 px-4 text-sm font-semibold text-white shadow-sm shadow-cyan-500/10 outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-gradient-to-bl focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
-                        href='/signup'
-                      >
-                        <span>Start for $0</span>
-                        <ArrowRight className='ml-1 h-4 w-4' />
-                      </Link>
-                    </div>
-                  </div>
-                )}
-                {/* Mobile Right Section */}
-                {currentIsSmallScreen && (
-                  <div className='flex items-center gap-2'>
-                    {/* Search - Mobile/Tablet */}
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      onClick={() => setIsSearchOpen(true)}
-                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
-                      aria-label='Search'
-                    >
-                      <Search className='h-4 w-4' />
-                    </Button>
-                    {/* Theme Toggle - Mobile */}
-                    <Button
-                      variant='ghost'
-                      size='sm'
-                      onClick={() =>
-                        setTheme(theme === "dark" ? "light" : "dark")
-                      }
-                      className='hover:bg-accent h-8 w-8 rounded-lg p-0'
-                    >
-                      {mounted ? (
-                        theme === "dark" ? (
-                          <Sun className='h-4 w-4' />
-                        ) : (
-                          <Moon className='h-4 w-4' />
-                        )
-                      ) : (
-                        <div className='h-4 w-4' />
-                      )}
-                    </Button>
-
-                    {/* User Avatar - Mobile */}
-                    <div className='flex items-center gap-2'>
-                      <Link
-                        className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-2xl border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 md:flex'
-                        data-state='closed'
-                        href='/signin'
-                      >
-                        Sign in
-                      </Link>
-                      <Link
-                        className='text-primary-foreground border-primary/20 bg-primary hover:bg-primary/90 hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
-                        href='/signup'
-                      >
-                        <span>Start for $0</span>
-                        <ArrowRight className='ml-1 h-4 w-4' />
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
+              {currentUser ? (
+                <UserPopOver />
+              ) : (
+                <div className='flex items-center gap-2'>
+                  <Link
+                    className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-2xl border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 lg:flex'
+                    data-state='closed'
+                    href='/signin'
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    className='hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] border-cyan-500/20 bg-gradient-to-r from-cyan-500 to-blue-500 px-4 text-sm font-semibold text-white shadow-sm shadow-cyan-500/10 outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-gradient-to-bl focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                    href='/signup'
+                  >
+                    <span>Start for $0</span>
+                    <ArrowRight className='ml-1 h-4 w-4' />
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Mobile Menu Section */}
-          <div className='flex items-center gap-2 md:hidden'>
-            {currentUser && <UserPopOver />}
+          {/* Mobile/Tablet Menu Section */}
+          <div className='flex items-center gap-2 lg:hidden'>
+            <Button
+              variant='ghost'
+              size='icon'
+              onClick={() => setIsSearchOpen(true)}
+              className='hover:bg-accent h-8 w-8 rounded-lg p-0'
+              aria-label='Search'
+            >
+              <Search className='h-4 w-4' />
+            </Button>
+            
+            <Button
+              variant='ghost'
+              size='sm'
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className='hover:bg-accent h-8 w-8 rounded-lg p-0'
+            >
+              {mounted ? (
+                theme === "dark" ? (
+                  <Sun className='h-4 w-4' />
+                ) : (
+                  <Moon className='h-4 w-4' />
+                )
+              ) : (
+                <div className='h-4 w-4' />
+              )}
+            </Button>
+
+            {currentUser ? (
+              <UserPopOver />
+            ) : (
+              <div className='flex items-center gap-2'>
+                <Link
+                  className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-2xl border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 md:flex'
+                  data-state='closed'
+                  href='/signin'
+                >
+                  Sign in
+                </Link>
+                <Link
+                  className='text-primary-foreground border-primary/20 bg-primary hover:bg-primary/90 hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                  href='/signup'
+                >
+                  <span>Start for $0</span>
+                  <ArrowRight className='ml-1 h-4 w-4' />
+                </Link>
+              </div>
+            )}
+            
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant='ghost' size='icon' className='z-50'>
