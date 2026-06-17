@@ -11,7 +11,7 @@ const LandingCreator = () => {
         <h2 className='text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl'>
          Refer and earn
         </h2>
-        <p className='text-muted-foreground mx-auto max-w-2xl text-base md:text-base'>
+        <p className='text-muted-foreground mx-auto w-[90%] max-w-2xl text-base md:w-full md:text-base'>
           Join the creators program and start earning money by referring others.
         </p>
 
@@ -346,7 +346,7 @@ const LandingCreator = () => {
                   <span className='inline-block'>referrals,</span>{" "}
                   <span className='inline-block'>effortlessly</span>
                 </h1>
-                <p className='text-muted-foreground mt-2 w-full text-start text-sm md:mt-4 md:w-[70%]'>
+                <p className='text-muted-foreground mt-2 w-[90%] text-start text-sm md:mt-4 md:w-[70%]'>
                   Visualize your referral performance with detailed analytics
                   and insights
                 </p>

@@ -135,7 +135,7 @@ export default function RootLayout({
 }) {
   const queryClient = new QueryClient();
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning className="overflow-x-hidden">
       <head>
         {/* Blocking script to prevent theme flash - must run before any content renders */}
         <Script
@@ -514,7 +514,7 @@ export default function RootLayout({
 
       <body
         suppressHydrationWarning
-        className={`${inter.className} custom-scrollbar`}
+        className={`${inter.className} custom-scrollbar overflow-x-hidden`}
       >
         <TooltipProvider>
           <QueryClientProvider client={queryClient}>
