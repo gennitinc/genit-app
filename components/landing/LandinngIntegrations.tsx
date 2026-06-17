@@ -63,7 +63,7 @@ const LandinngIntegrations = () => {
           {/* Inset UI preview */}
           <div className='rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='text-foreground mb-3 flex items-center gap-2 text-sm dark:text-white/80'>
-              <BarChart3 className='h-4 w-4 text-sky-500 dark:text-sky-300' />
+              <BarChart3 className='h-4 w-4 text-foreground dark:text-white' />
               <span className='font-medium'>Campaign Monitor</span>
             </div>
 
@@ -84,7 +84,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                     <div className='mt-2 h-2 w-full overflow-hidden rounded-full bg-black/5 dark:bg-white/10'>
-                      <div className='h-full w-[75%] rounded-full bg-sky-500' />
+                      <div className='h-full w-[75%] rounded-full bg-black dark:bg-white' />
                     </div>
                   </div>
                 </div>
@@ -109,7 +109,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                     <div className='mt-2 h-2 w-full overflow-hidden rounded-full bg-black/5 dark:bg-white/10'>
-                      <div className='h-full w-[45%] rounded-full bg-emerald-500' />
+                      <div className='h-full w-[45%] rounded-full bg-neutral-400 dark:bg-neutral-500' />
                     </div>
                   </div>
                 </div>
@@ -120,7 +120,7 @@ const LandinngIntegrations = () => {
             </div>
 
             <div className='mt-4 flex items-center justify-between'>
-              <button className='inline-flex items-center gap-2 rounded-full bg-sky-100 px-3 py-1.5 text-xs text-sky-700 ring-1 ring-sky-200 transition hover:bg-sky-200 dark:bg-sky-500/15 dark:text-sky-200 dark:ring-sky-400/30 dark:hover:bg-sky-500/20'>
+              <button className='inline-flex items-center gap-2 rounded-full bg-black px-3 py-1.5 text-xs text-white ring-1 ring-black/10 transition hover:bg-black/80 dark:bg-white dark:text-black dark:ring-white/10 dark:hover:bg-white/90'>
                 <Target className='h-4 w-4' />
                 Optimize Ads
               </button>
@@ -617,7 +617,7 @@ const LandinngIntegrations = () => {
             {/* Left: Text */}
             <div className="flex flex-col text-left md:px-4 z-10 relative">
               <h3 className='text-foreground text-2xl font-semibold tracking-tight md:text-4xl dark:text-white leading-tight'>
-                Multiplayer marketing
+                  Import your team
               </h3>
               <p className='text-muted-foreground mt-4 max-w-xl text-sm md:text-base dark:text-white/70 font-normal'>
                 Bring your entire team together. Review drafts, leave comments, and approve campaigns in real-time.
