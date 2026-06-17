@@ -84,7 +84,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                     <div className='mt-2 h-2 w-full overflow-hidden rounded-full bg-black/5 dark:bg-white/10'>
-                      <div className='h-full w-[75%] rounded-full bg-black dark:bg-white' />
+                      <div className='h-full w-[75%] rounded-full bg-emerald-500' />
                     </div>
                   </div>
                 </div>
