@@ -465,7 +465,7 @@ const LandingHero = () => {
     };
   }, []);
   return (
-    <section className='relative w-screen overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
+    <section className='relative w-full overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
       <div className='relative flex w-full flex-col items-center justify-center'>
      
         <IdeaSection />

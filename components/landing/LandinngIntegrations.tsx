@@ -662,14 +662,14 @@ const LandinngIntegrations = () => {
                   </div>
 
                   {/* Fake Cursors & Comments */}
-                  <div className="absolute left-[15%] top-[25%] hidden md:block animate-[bounce_4s_infinite]">
+                  <div className="absolute left-[15%] top-[25%] animate-[bounce_4s_infinite]">
                     <MousePointer2 className="h-5 w-5 text-emerald-500 fill-emerald-500 rotate-[-15deg]" />
                     <div className="ml-4 mt-1 rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-medium text-white shadow-sm">
                       Sarah J.
                     </div>
                   </div>
 
-                  <div className="absolute right-[20%] top-[45%] hidden md:block" style={{ transform: "translateY(-10px)" }}>
+                  <div className="absolute right-[20%] top-[45%]" style={{ transform: "translateY(-10px)" }}>
                     <div className="flex items-start gap-2">
                       <div className="relative">
                         <MousePointer2 className="h-5 w-5 text-fuchsia-500 fill-fuchsia-500 rotate-[-15deg] absolute -left-2 -top-2 z-10" />

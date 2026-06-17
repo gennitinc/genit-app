@@ -20,7 +20,7 @@ import LandingTestimonials from "./LandingTestimonials";
 
 export function LandingPage() {
   return (
-    <div className='flex min-h-screen w-full flex-col bg-white dark:bg-black'>
+    <div className='flex min-h-screen w-full flex-col overflow-x-hidden bg-white dark:bg-black'>
       <Toaster />
       {/* <LandingPageBanner /> */}
       <LandingNavbar />
