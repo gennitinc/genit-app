@@ -492,7 +492,7 @@ const LandinngIntegrations = () => {
           <div className='rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='flex items-center justify-between'>
               <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
-                <Workflow className='h-4 w-4 text-fuchsia-500 dark:text-fuchsia-300' />
+                <Calendar className='h-4 w-4 text-fuchsia-500 dark:text-fuchsia-300' />
                 <span className='font-medium'>Content Calendar</span>
               </div>
               <button className='text-foreground inline-flex items-center gap-1 rounded-full bg-black/5 px-2 py-1 text-[11px] ring-1 ring-black/5 transition hover:bg-black/10 dark:bg-white/5 dark:text-white/80 dark:ring-white/10 dark:hover:bg-white/10'>
@@ -514,6 +514,57 @@ const LandinngIntegrations = () => {
             </div>
 
             <div className='mt-3 space-y-2'>
+              {/* Calendar Grid */}
+              <div className='rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+                <div className='mb-2 grid grid-cols-7 gap-1 text-center text-[10px] font-medium text-muted-foreground dark:text-white/50'>
+                  <div>Mo</div>
+                  <div>Tu</div>
+                  <div>We</div>
+                  <div>Th</div>
+                  <div>Fr</div>
+                  <div>Sa</div>
+                  <div>Su</div>
+                </div>
+                <div className='grid grid-cols-7 gap-1 text-center text-xs text-foreground dark:text-white/80'>
+                  <div className='p-1 opacity-20'>28</div>
+                  <div className='p-1 opacity-20'>29</div>
+                  <div className='p-1 opacity-20'>30</div>
+                  <div className='cursor-pointer rounded-md p-1 transition hover:bg-black/5 dark:hover:bg-white/5'>1</div>
+                  <div className='relative cursor-pointer rounded-md p-1 transition hover:bg-black/5 dark:hover:bg-white/5'>
+                    2
+                    <div className='absolute bottom-0.5 left-1/2 flex -translate-x-1/2 gap-0.5'>
+                      <div className='h-1 w-1 rounded-full bg-emerald-500'></div>
+                    </div>
+                  </div>
+                  <div className='cursor-pointer rounded-md p-1 transition hover:bg-black/5 dark:hover:bg-white/5'>3</div>
+                  <div className='relative cursor-pointer rounded-md bg-fuchsia-500/10 p-1 font-semibold text-fuchsia-600 ring-1 ring-fuchsia-500/20 dark:text-fuchsia-400'>
+                    4
+                    <div className='absolute bottom-0.5 left-1/2 flex -translate-x-1/2 gap-0.5'>
+                      <div className='h-1 w-1 rounded-full bg-sky-500'></div>
+                      <div className='h-1 w-1 rounded-full bg-fuchsia-500'></div>
+                    </div>
+                  </div>
+                  <div className='cursor-pointer rounded-md p-1 transition hover:bg-black/5 dark:hover:bg-white/5'>5</div>
+                  <div className='relative cursor-pointer rounded-md p-1 transition hover:bg-black/5 dark:hover:bg-white/5'>
+                    6
+                    <div className='absolute bottom-0.5 left-1/2 flex -translate-x-1/2 gap-0.5'>
+                      <div className='h-1 w-1 rounded-full bg-amber-500'></div>
+                    </div>
+                  </div>
+                  <div className='cursor-pointer rounded-md p-1 transition hover:bg-black/5 dark:hover:bg-white/5'>7</div>
+                  <div className='cursor-pointer rounded-md p-1 transition hover:bg-black/5 dark:hover:bg-white/5'>8</div>
+                  <div className='relative cursor-pointer rounded-md p-1 transition hover:bg-black/5 dark:hover:bg-white/5'>
+                    9
+                    <div className='absolute bottom-0.5 left-1/2 flex -translate-x-1/2 gap-0.5'>
+                      <div className='h-1 w-1 rounded-full bg-indigo-500'></div>
+                    </div>
+                  </div>
+                  <div className='cursor-pointer rounded-md p-1 transition hover:bg-black/5 dark:hover:bg-white/5'>10</div>
+                  <div className='cursor-pointer rounded-md p-1 transition hover:bg-black/5 dark:hover:bg-white/5'>11</div>
+                </div>
+              </div>
+
+              {/* Selected Day Event */}
               <div className='flex items-center justify-between rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
                 <div className='flex items-center gap-3'>
                   <div className='flex h-7 w-7 items-center justify-center rounded-lg bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10'>
@@ -531,46 +582,6 @@ const LandinngIntegrations = () => {
                 <div className='flex items-center gap-2 text-[11px] text-sky-600 dark:text-sky-400'>
                   <Clock className='h-3.5 w-3.5' />
                   Scheduled
-                </div>
-              </div>
-
-              <div className='flex items-center justify-between rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
-                <div className='flex items-center gap-3'>
-                  <div className='flex h-7 w-7 items-center justify-center rounded-lg bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10'>
-                    <BrevoBrand className='h-4 w-4' />
-                  </div>
-                  <div>
-                    <p className='text-foreground text-sm dark:text-white/90'>
-                      New Shoe Collection
-                    </p>
-                    <p className='text-muted-foreground text-[11px] dark:text-white/50'>
-                      Brevo • 12:00 PM
-                    </p>
-                  </div>
-                </div>
-                <div className='flex items-center gap-2 text-[11px] text-emerald-600 dark:text-emerald-400'>
-                  <Send className='h-3.5 w-3.5' />
-                  Sent
-                </div>
-              </div>
-
-              <div className='flex items-center justify-between rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
-                <div className='flex items-center gap-3'>
-                  <div className='flex h-7 w-7 items-center justify-center rounded-lg bg-white ring-1 ring-black/5 dark:ring-0'>
-                    <FacebookBrand className='h-4 w-4' />
-                  </div>
-                  <div>
-                    <p className='text-foreground text-sm dark:text-white/90'>
-                      Retargeting Campaign
-                    </p>
-                    <p className='text-muted-foreground text-[11px] dark:text-white/50'>
-                      Meta Ads • Ongoing
-                    </p>
-                  </div>
-                </div>
-                <div className='flex items-center gap-2 text-[11px] text-emerald-600 dark:text-emerald-400'>
-                  <Activity className='h-3.5 w-3.5' />
-                  Active
                 </div>
               </div>
             </div>
