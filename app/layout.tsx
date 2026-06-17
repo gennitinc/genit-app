@@ -135,7 +135,7 @@ export default function RootLayout({
 }) {
   const queryClient = new QueryClient();
   return (
-    <html lang='en' suppressHydrationWarning className="overflow-x-hidden">
+    <html lang='en' suppressHydrationWarning>
       <head>
         {/* Blocking script to prevent theme flash - must run before any content renders */}
         <Script
@@ -176,6 +176,7 @@ export default function RootLayout({
             `,
           }}
         />
+        
         {/* PWA Meta Tags */}
         <link rel='manifest' href='/manifest.json' />
         <meta name='theme-color' content='#000000' />
@@ -514,7 +515,7 @@ export default function RootLayout({
 
       <body
         suppressHydrationWarning
-        className={`${inter.className} custom-scrollbar overflow-x-hidden`}
+        className={`${inter.className} custom-scrollbar`}
       >
         <TooltipProvider>
           <QueryClientProvider client={queryClient}>
