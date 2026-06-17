@@ -52,7 +52,7 @@ const LandingTestimonials = () => {
     <div className='mt-20 overflow-hidden py-16'>
       <div className='mr-auto ml-auto max-w-6xl px-6'>
         <h2 className='text-foreground mt-6 text-center text-4xl font-semibold tracking-tight md:text-6xl dark:text-white'>
-          Trusted by top creators
+          Testimonials
         </h2>
         <p className='text-muted-foreground mx-auto mt-5 max-w-2xl text-center text-base font-normal md:text-lg dark:text-white/70'>
           Real teams, real results. See how Genit is transforming modern marketing.
