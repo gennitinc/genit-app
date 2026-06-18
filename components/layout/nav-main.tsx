@@ -24,17 +24,17 @@ export function NavMain() {
       icon: SquarePen,
       href: "/chat",
     },
-    // {
-    //   title: "Visual Flow",
-    //   icon: GalleryHorizontal,
-    //   href: "/visuals",
-    //   badge: "New",
-    // },
+    {
+      title: "Visual Flow",
+      icon: GalleryHorizontal,
+      href: "/visuals",
+      badge: "New",
+    },
     {
       title: "Integrations",
       icon: GitBranchPlus,
       href: "/integrations",
-      badge: "New",
+      // badge: "New",
     },
     {
       title: "Apps",
