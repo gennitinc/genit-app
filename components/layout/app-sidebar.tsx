@@ -8,7 +8,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useUserContext } from "@/context/AuthenticatedContext";
@@ -20,7 +19,7 @@ import { Bolt, Crown, Sparkles, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import type * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export function AppSidebar({
   className,
@@ -34,13 +33,23 @@ export function AppSidebar({
   const params = useParams();
 
   const isChatIdPage = !!params.id && pathname.startsWith("/chat");
+  const isVisualsPage = pathname.startsWith("/visuals");
+
+  const lastCheckedPathname = useRef<string | null>(null);
+
   useEffect(() => {
-    // Auto-collapse on desktop and tablets if on the chat ID page
-    // Mobile users (Sheet version) should have it handled by the Sidebar component
-    if (isChatIdPage && state === "expanded" && !isMobile && !isLargeDesktop) {
-      setOpen(false);
+    // Auto-collapse on desktop and tablets if navigating to specific pages.
+    // By tracking the pathname, we allow the user to manually open the sidebar afterwards.
+    if (pathname !== lastCheckedPathname.current) {
+      lastCheckedPathname.current = pathname;
+
+      if (isVisualsPage && !isMobile) {
+        setOpen(false);
+      } else if (isChatIdPage && !isMobile && !isLargeDesktop) {
+        setOpen(false);
+      }
     }
-  }, [isChatIdPage, state, setOpen, isMobile, isLargeDesktop]);
+  }, [pathname, isVisualsPage, isChatIdPage, isMobile, isLargeDesktop, setOpen]);
 
   // Calculate credit stats from user data
   const creditsRemaining = user?.creditsRemaining || 0;
@@ -140,7 +149,7 @@ export function AppSidebar({
                 <div className='relative'>
                   <div className='h-1.5 w-full rounded-full border border-white/10 bg-white/20 backdrop-blur-sm'>
                     <div
-                      className='relative h-1.5 overflow-hidden rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 shadow-sm transition-all duration-500'
+                      className='relative h-1.5 overflow-hidden rounded-full bg-primary shadow-sm transition-all duration-500'
                       style={{ width: `${creditPercentage}%` }}
                     ></div>
                   </div>
@@ -218,7 +227,6 @@ export function AppSidebar({
       <SidebarFooter className='border-border border-t pt-2'>
         <OrgSwitcher />
       </SidebarFooter>
-      <SidebarRail className='border-border' />
     </Sidebar>
   );
 }

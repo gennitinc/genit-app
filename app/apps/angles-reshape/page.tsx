@@ -631,7 +631,7 @@ const AnglesReshapePage = () => {
         />
         <div
           id='main-content'
-          className="flex-1 rounded-t-2xl lg:border-2 lg:border-b-0 mx-2 md:mx-4"
+          className="flex-1 rounded-t-2xl lg:border-2 lg:border-b-0 ml-0 mr-2 md:mr-4"
           // style={{
           //   transform: "translateZ(0)",
           //   willChange: "transform",
@@ -1023,7 +1023,7 @@ const AnglesReshapePage = () => {
                             )}
 
                             <Button
-                              className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-gradient-to-bl focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800'
+                              className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-primary/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
                               disabled={!file || isGenerating}
                               onClick={handleGenerate}
                             >

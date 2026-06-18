@@ -533,7 +533,7 @@ const SkinEnhancerPage = () => {
         <TopNavWithAurora />
         <div
           id='main-content'
-          className="flex-1 rounded-t-2xl lg:border-2 lg:border-b-0 mx-2 md:mx-4"
+          className="flex-1 rounded-t-2xl lg:border-2 lg:border-b-0 ml-0 mr-2 md:mr-4"
           style={{
             transform: "translateZ(0)",
             willChange: "transform",
@@ -858,7 +858,7 @@ const SkinEnhancerPage = () => {
                               </p>
                             )}
                             <Button
-                              className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-gradient-to-bl focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800'
+                              className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-primary/90 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800'
                               disabled={!file || isGenerating}
                               onClick={handleEnhance}
                             >

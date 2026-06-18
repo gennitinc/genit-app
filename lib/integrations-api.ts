@@ -213,6 +213,16 @@ export async function provisionInstagramSelected(
   return { provisioned: data.provisioned };
 }
 
+export async function provisionFacebookSelected(
+  pageIds: string[]
+): Promise<{ provisioned: FacebookProvisionedTarget[] }> {
+  const { data } = await apiResponse.post<{
+    success: boolean;
+    provisioned: FacebookProvisionedTarget[];
+  }>("/integrations/facebook/provision", { pageIds });
+  return { provisioned: data.provisioned };
+}
+
 export async function disconnectIntegrationById(id: string): Promise<void> {
   await apiResponse.delete(`/integrations/${id}`);
 }

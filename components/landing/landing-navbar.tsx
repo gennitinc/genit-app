@@ -255,7 +255,7 @@ export function LandingNavbar() {
                     Sign in
                   </Link>
                   <Link
-                    className='hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] border-cyan-500/20 bg-gradient-to-r from-cyan-500 to-blue-500 px-4 text-sm font-semibold text-white shadow-sm shadow-cyan-500/10 outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-gradient-to-bl focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                    className='hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] border-primary/20 bg-primary px-4 text-sm font-semibold text-white shadow-sm shadow-primary/10 outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-primary/90 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                     href='/signup'
                   >
                     <span>Start for $0</span>

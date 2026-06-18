@@ -72,7 +72,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   // }, [pathName]);
 
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider defaultOpen={!pathName?.startsWith("/visuals")}>
       <div className='custom-scrollbar h-full w-full'>
         {children}
 

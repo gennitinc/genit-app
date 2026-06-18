@@ -18,7 +18,7 @@ const TryNowButton = () => (
     type='button'
     className='group relative inline-flex w-full items-center justify-center overflow-hidden rounded-md bg-gray-800 px-8 py-2.5 tracking-tighter text-white'
   >
-    <span className='absolute h-0 w-0 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500 ease-out group-hover:h-56 group-hover:w-56'></span>
+    <span className='absolute h-0 w-0 rounded-full bg-primary transition-all duration-500 ease-out group-hover:h-56 group-hover:w-56'></span>
     <span className='absolute bottom-0 left-0 -ml-2 h-full'>
       <svg
         xmlns='http://www.w3.org/2000/svg'
@@ -901,7 +901,7 @@ const Apps = () => {
                           className={cn(
                             "text-text-secondary text-body-s hover:text-text-primary hover:bg-white-12 flex h-9 items-center justify-center rounded-[0.625rem] border border-transparent px-4 py-2 !text-sm font-medium whitespace-nowrap transition-all duration-200",
                             isActive &&
-                              "text-text-primary bg-gradient-to-r from-cyan-500 to-blue-500 shadow-sm"
+                              "text-text-primary bg-primary shadow-sm"
                           )}
                         >
                           <span>{category.name}</span>

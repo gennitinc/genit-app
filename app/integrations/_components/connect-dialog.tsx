@@ -23,6 +23,7 @@ import {
   isMetaSurface,
   isPlatformSupported,
   provisionInstagramSelected,
+  provisionFacebookSelected,
   requestConnectUrl,
 } from "@/lib/integrations-api";
 import { GradientFrame } from "@/utils/gradient-frame";
@@ -646,39 +647,55 @@ export function ConnectDialog({
     if (fetchCurrentUser) fetchCurrentUser();
   }
 
-  // Final step of the Instagram connect flow: user picked accounts in the
+  // Final step of the connect flow: user picked accounts in the
   // select phase, now ask the server to actually create Integration rows
-  // for those IG accounts only.
-  const handleProvisionInstagram = useCallback(async () => {
+  // for those accounts only.
+  const handleProvisionSelected = useCallback(async () => {
     if (selectedIgIds.size === 0) return;
     setProvisionLoading(true);
     setErrorMessage(null);
     try {
-      const result = await provisionInstagramSelected(
-        Array.from(selectedIgIds)
-      );
-      const first = result.provisioned[0];
-      setConnectedAccount(first ? `@${first.username}` : null);
-      setPhase("success");
-      qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
-      toast.success(
-        `Connected ${result.provisioned.length} Instagram ${
-          result.provisioned.length === 1 ? "account" : "accounts"
-        }`,
-        { description: first ? `@${first.username}` : undefined }
-      );
+      if (platform === "facebook") {
+        const result = await provisionFacebookSelected(
+          Array.from(selectedIgIds)
+        );
+        const first = result.provisioned[0];
+        setConnectedAccount(first ? first.pageName : null);
+        setPhase("success");
+        qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+        toast.success(
+          `Connected ${result.provisioned.length} Facebook ${
+            result.provisioned.length === 1 ? "page" : "pages"
+          }`,
+          { description: first ? first.pageName : undefined }
+        );
+      } else {
+        const result = await provisionInstagramSelected(
+          Array.from(selectedIgIds)
+        );
+        const first = result.provisioned[0];
+        setConnectedAccount(first ? `@${first.username}` : null);
+        setPhase("success");
+        qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+        toast.success(
+          `Connected ${result.provisioned.length} Instagram ${
+            result.provisioned.length === 1 ? "account" : "accounts"
+          }`,
+          { description: first ? `@${first.username}` : undefined }
+        );
+      }
     } catch (err: any) {
       const msg =
         err?.response?.data?.message ||
         err?.message ||
-        "Failed to connect the selected Instagram account";
+        "Failed to connect the selected account";
       setErrorMessage(msg);
       setPhase("error");
       toast.error("Connection failed", { description: msg });
     } finally {
       setProvisionLoading(false);
     }
-  }, [selectedIgIds, qc, orgId]);
+  }, [selectedIgIds, qc, orgId, platform]);
 
   const isSupported = platform ? isPlatformSupported(platform) : false;
   const scopes = platform ? (PLATFORM_SCOPES[platform] ?? []) : [];
@@ -691,10 +708,7 @@ export function ConnectDialog({
         hideDialogClose
       >
         <div
-          className='relative px-6 pt-7 pb-6'
-          // style={{
-          //   background: `radial-gradient(circle 280px at 12% 0%, ${glow}, transparent 60%)`,
-          // }}
+          className='relative px-6 pt-7 pb-6 overflow-y-auto max-h-[calc(85vh-4rem)]'
         >
           <button
             type='button'
@@ -831,6 +845,41 @@ export function ConnectDialog({
             </div>
           )}
 
+          {phase === "select" && (
+            <div className='relative z-10 mt-5'>
+              <div className='relative bg-neutral-50 px-3 py-3 text-sm dark:bg-neutral-800'>
+                <GradientFrame />
+                <p className='text-foreground font-medium'>Select accounts to connect</p>
+                <p className='text-muted-foreground mt-1 text-xs'>
+                  Choose which accounts you want to manage with genit.
+                </p>
+              </div>
+              <div className="mt-4 space-y-2">
+                {igCandidates.map((c) => (
+                  <div key={c.igAccountId} className="flex items-center space-x-3 p-3 border rounded-md border-border bg-card/60 dark:border-white/10 dark:bg-white/5 cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => {
+                    const newSet = new Set(selectedIgIds);
+                    if (newSet.has(c.igAccountId)) newSet.delete(c.igAccountId);
+                    else newSet.add(c.igAccountId);
+                    setSelectedIgIds(newSet);
+                  }}>
+                    <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500 bg-transparent" checked={selectedIgIds.has(c.igAccountId)} readOnly />
+                    {c.profilePictureUrl ? (
+                      <img src={c.profilePictureUrl} alt={c.username} className="h-8 w-8 rounded-full bg-muted" />
+                    ) : (
+                      <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center font-bold text-xs text-muted-foreground">
+                        {c.username.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="flex flex-col flex-1 min-w-0">
+                      <span className="text-sm font-medium text-foreground truncate">{c.username}</span>
+                      {c.parentPageName && <span className="text-[11px] text-muted-foreground truncate">{c.parentPageName}</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {phase === "connecting" && (
             <div className='relative z-10 mt-6 flex flex-col items-center justify-center py-6'>
               <div className='relative h-14 w-14'>
@@ -944,7 +993,7 @@ export function ConnectDialog({
               <Button
                 type='button'
                 size='sm'
-                onClick={handleProvisionInstagram}
+                onClick={handleProvisionSelected}
                 disabled={provisionLoading || selectedIgIds.size === 0}
                 className='bg-linear-to-r from-fuchsia-500 to-pink-500 text-white'
               >

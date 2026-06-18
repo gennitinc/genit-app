@@ -40,6 +40,10 @@ import {
 } from "@/components/ui/carousel";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  Dialog,
+  DialogContent,
+} from "@/components/ui/dialog";
+import {
   Drawer,
   DrawerContent,
   DrawerDescription,
@@ -48,6 +52,7 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
+import { useIsMobile } from "@/components/ui/use-mobile";
 import { PointerHighlight } from "@/components/ui/pointer-highlight";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
@@ -99,7 +104,7 @@ import {
   Youtube,
   Zap,
 } from "lucide-react";
-import { GripVertical, Plus, Trash2 } from "lucide-react";
+import { Activity, Calendar, Layers, Megaphone, GripVertical, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -401,6 +406,93 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
   );
 };
 
+const EnterpriseAutoDialog = ({ isOpen, onOpenChange }: { isOpen: boolean, onOpenChange: (open: boolean) => void }) => {
+  const isMobile = useIsMobile();
+  const router = useRouter();
+
+  const content = (
+    <div className='flex flex-col md:flex-row group relative overflow-hidden bg-black/[0.02] dark:bg-white/[0.04] ring-1 ring-black/5 dark:ring-white/10 rounded-3xl w-full'>
+      <GradientFrame />
+      
+      {/* Image Container */}
+      <div className='w-full md:w-1/2 relative min-h-[220px] md:min-h-full flex-shrink-0'>
+        <img 
+          src="/genit-auto.png" 
+          alt="Enterprise AI Auto Mode" 
+    className="absolute inset-0 w-full h-full object-cover object-[center_12%] lg:object-cover  lg:object-[center_80%]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-l from-white/30 to-transparent dark:from-black/30 z-0"></div>
+      </div>
+
+      {/* Content Container */}
+      <div className='w-full md:w-1/2 p-5 md:p-8 relative z-10 flex flex-col justify-center bg-white/70 dark:bg-black/70 backdrop-blur-md md:bg-transparent md:dark:bg-transparent md:backdrop-blur-none'>
+        <div className='rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-none dark:ring-white/10 relative z-10'>
+          <div className='flex items-center justify-between'>
+            <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
+              <Workflow className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
+              <span className='font-medium'>Autonomous Agents</span>
+            </div>
+          </div>
+
+          <div className='mt-3 grid grid-cols-4 gap-2 md:gap-3'>
+            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 md:p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+              <MessageSquare className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
+              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>Tickets</span>
+            </div>
+            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 md:p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+              <Megaphone className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
+              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>Ads</span>
+            </div>
+            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 md:p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+              <Layers className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
+              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>Publish</span>
+            </div>
+            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 md:p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+              <Calendar className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
+              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>Schedule</span>
+            </div>
+          </div>
+
+          <div className='mt-4 flex items-center gap-2 text-[11px] text-gray-600 dark:text-gray-400'>
+            <Activity className='h-3.5 w-3.5' />
+            AI handles workflow 24/7
+          </div>
+        </div>
+
+        <h3 className='text-foreground mt-6 text-xl font-semibold tracking-tight md:text-2xl dark:text-white relative z-10'>
+          Upgrade to Enterprise
+        </h3>
+        <p className='text-muted-foreground mt-2 text-sm dark:text-white/70 relative z-10 font-normal'>
+          Auto mode is exclusive to the Enterprise plan. Let our AI handle content creation, scheduling, ad sponsoring, and ticket resolution entirely on its own.
+        </p>
+
+        <div className="mt-8 flex justify-end gap-3 relative z-10">
+          <Button variant="outline" className="rounded-full" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button className="rounded-full bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => router.push('/pricing')}>Upgrade Now</Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <Drawer open={isOpen} onOpenChange={onOpenChange}>
+        <DrawerContent className="p-0 border-none bg-transparent shadow-none">
+          {content}
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="p-0 border-none bg-transparent shadow-none sm:max-w-3xl md:max-w-4xl [&>button]:hidden">
+        {content}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export function IdeaSection() {
   const placeholders = [
     "Design high converting logo",
@@ -448,8 +540,19 @@ export function IdeaSection() {
     setBrandIdentityEnabled,
   } = useProjectDesign();
 
+  const { user, updateOrganization } = useUserContext();
+
+  const [mode, setMode] = useState<"chat" | "auto">("chat");
+
+  useEffect(() => {
+    if (user?.currentOrganization) {
+      setMode(user.currentOrganization.autoModeEnabled ? "auto" : "chat");
+    }
+  }, [user?.currentOrganization?.autoModeEnabled]);
+
   const [beamPosition, setBeamPosition] = useState({ x: 50, y: 50 });
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
+  const [isEnterpriseDialogOpen, setIsEnterpriseDialogOpen] = useState(false);
   const [inputError, setInputError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedDesignTypeId, setSelectedDesignTypeId] =
@@ -505,7 +608,6 @@ export function IdeaSection() {
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const innerContainerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const user = useUserContext().user;
 
   const placeholderText = useTypewriterEffect({
     words: placeholders,
@@ -1251,35 +1353,79 @@ export function IdeaSection() {
                         </div>
 
                         <div className='flex items-center gap-3'>
+                          <div className="flex bg-zinc-100 dark:bg-zinc-800 rounded-full p-0.5">
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                setMode('chat');
+                                if (user?.currentOrganization?._id) {
+                                  try {
+                                    await updateOrganization(user.currentOrganization._id, { autoModeEnabled: false });
+                                  } catch (err) {
+                                    console.error("Failed to disable auto mode", err);
+                                  }
+                                }
+                              }}
+                              className={cn(
+                                "px-2.5 py-0.5 text-[10px] font-medium rounded-full transition-colors",
+                                mode === 'chat' ? "bg-white dark:bg-zinc-600 text-black dark:text-white shadow-sm" : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                              )}
+                            >
+                              Chat
+                            </button>
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                if (String(user?.userPlan) !== "Enterprise") {
+                                  setIsEnterpriseDialogOpen(true);
+                                  return;
+                                }
+                                setMode('auto');
+                                if (user?.currentOrganization?._id) {
+                                  try {
+                                    await updateOrganization(user.currentOrganization._id, { autoModeEnabled: true });
+                                  } catch (err) {
+                                    console.error("Failed to enable auto mode", err);
+                                  }
+                                }
+                              }}
+                              className={cn(
+                                "px-2.5 py-0.5 text-[10px] font-medium rounded-full transition-colors",
+                                mode === 'auto' ? "bg-white dark:bg-zinc-600 text-black dark:text-white shadow-sm" : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                              )}
+                            >
+                              Auto
+                            </button>
+                          </div>
+
                           {/* <BrandIndicator
                             onClick={() => {
                               setIsBrandSettingsOpen(!isBrandSettingsOpen);
                               setIsSettingsOpen(false);
                             }}
                           /> */}
+                          {user && (user?.creditsRemaining ?? 0) === 0 && (
+                            <div className='text-xs font-medium'>
+                              {String(user?.userPlan) === "Basic" ? (
+                                <span
+                                  className='cursor-pointer text-blue-500 hover:underline'
+                                  onClick={() => router.push("/pricing")}
+                                >
+                                  Upgrade
+                                </span>
+                              ) : (
+                                <span
+                                  className='cursor-pointer text-blue-500 hover:underline'
+                                  onClick={() =>
+                                    router.push("/user/settings?tab=billing")
+                                  }
+                                >
+                                  Buy Credits
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </div>
-
-                        {user && (user?.creditsRemaining ?? 0) === 0 && (
-                          <div className='text-xs font-medium'>
-                            {String(user?.userPlan) === "Basic" ? (
-                              <span
-                                className='cursor-pointer text-blue-500 hover:underline'
-                                onClick={() => router.push("/pricing")}
-                              >
-                                Upgrade
-                              </span>
-                            ) : (
-                              <span
-                                className='cursor-pointer text-blue-500 hover:underline'
-                                onClick={() =>
-                                  router.push("/user/settings?tab=billing")
-                                }
-                              >
-                                Buy Credits
-                              </span>
-                            )}
-                          </div>
-                        )}
                       </div>
                     )}
                     {isGenerating && (
@@ -2409,6 +2555,8 @@ export function IdeaSection() {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
+
+      <EnterpriseAutoDialog isOpen={isEnterpriseDialogOpen} onOpenChange={setIsEnterpriseDialogOpen} />
     </div>
   );
 }

@@ -237,7 +237,7 @@ export default function OnboardingPage() {
           <div className='flex w-40 items-center gap-2'>
             <div className='bg-muted h-1.5 flex-1 overflow-hidden rounded-full'>
               <div
-                className='onb-animate-in onb-stagger-3 h-full bg-gradient-to-r from-cyan-500 to-blue-500 font-medium text-white'
+                className='onb-animate-in onb-stagger-3 h-full bg-primary font-medium text-white'
                 style={{ width: `${progress}%` }}
               />
             </div>

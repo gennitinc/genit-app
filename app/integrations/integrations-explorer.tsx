@@ -45,20 +45,20 @@ import {
   useState,
 } from "react";
 
-type BaseStatus = "available" | "soon";
+export type BaseStatus = "available" | "soon";
 // `partial` = the user has authorized Meta (identity row exists) but the
 // per-surface provisioning produced zero Integration rows — e.g. they
 // granted scopes but have no Facebook Page / no IG Business account /
 // no Ad account. The card shows Manage (so they can revoke or retry)
 // instead of Connect (which would just hit the same dead-end again).
-type CardStatus = "connected" | "partial" | "available" | "soon";
+export type CardStatus = "connected" | "partial" | "available" | "soon";
 
-type IntegrationIcon = ComponentType<{
+export type IntegrationIcon = ComponentType<{
   className?: string;
   style?: CSSProperties;
 }>;
 
-type Integration = {
+export type Integration = {
   platform: IntegrationPlatform;
   name: string;
   description: string;
@@ -68,7 +68,7 @@ type Integration = {
   glow: string;
 };
 
-const INTEGRATIONS: Integration[] = [
+export const INTEGRATIONS: Integration[] = [
   {
     platform: "facebook",
     name: "Facebook",
@@ -309,7 +309,7 @@ const CATEGORY_ORDER = [
   "Productivity",
 ];
 
-function resolveStatus(
+export function resolveStatus(
   integration: Integration,
   connections: IntegrationConnection[] | undefined,
   hasIdentityForSurface: boolean
@@ -378,7 +378,7 @@ function ConnectButton({
       className={
         isSoon
           ? "border-border bg-card/40 text-muted-foreground inline-flex cursor-not-allowed items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-medium opacity-60 dark:border-white/5 dark:bg-white/[0.02] dark:text-zinc-500"
-          : "inline-flex items-center gap-1 rounded-md bg-linear-to-r from-cyan-500 to-blue-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800"
+          : "inline-flex items-center gap-1 rounded-md bg-linear-to-r from-cyan-500 to-blue-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40"
       }
     >
       Connect

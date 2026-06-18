@@ -195,8 +195,7 @@ export function ManageDialog({
         hideDialogClose
       >
         <div
-          className='relative px-6 pt-7 pb-6'
-
+          className='relative px-6 pt-7 pb-6 overflow-y-auto max-h-[calc(85vh-4rem)]'
         >
           <button
             type='button'

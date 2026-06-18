@@ -3818,7 +3818,7 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "mic"
-                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+                ? "bg-primary text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
             title='Audio & Voice'
@@ -3835,7 +3835,7 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "image"
-                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+                ? "bg-primary text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
             title='Images'
@@ -3852,7 +3852,7 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "video"
-                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+                ? "bg-primary text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
             title='Video'
@@ -3869,7 +3869,7 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "text"
-                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+                ? "bg-primary text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
             title='Text'
@@ -3887,7 +3887,7 @@ export function FloatingSidebar({
               size="sm"
               className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
                 selectedIntegrationType === "database"
-                  ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+                  ? "bg-primary text-white"
                   : "bg-accent hover:bg-primary/20"
               }`}
               title="Database (Coming Soon)"
@@ -3910,7 +3910,7 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "globe"
-                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+                ? "bg-primary text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
             title='Social Media'
@@ -3940,7 +3940,7 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "file"
-                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white"
+                ? "bg-primary text-white"
                 : "bg-accent hover:bg-primary/20"
             }`}
             title='Documents'

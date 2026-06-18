@@ -1,0 +1,82 @@
+/* Custom Theme Overrides for Event Calendar Core */
+
+.ec-custom-theme {
+  --ec-border-color: rgba(0, 0, 0, 0.05);
+  --ec-bg-color: transparent;
+  --ec-text-color: inherit;
+  --ec-event-bg-color: transparent;
+  --ec-today-bg-color: rgba(16, 185, 129, 0.05); /* emerald-500/5 */
+  --ec-list-day-bg-color: transparent;
+  font-family: inherit;
+}
+
+.dark .ec-custom-theme {
+  --ec-border-color: rgba(255, 255, 255, 0.05);
+  --ec-today-bg-color: rgba(16, 185, 129, 0.1); /* emerald-500/10 */
+}
+
+/* Remove main border */
+.ec-custom-theme .ec {
+  border: none !important;
+  background-color: var(--ec-bg-color);
+}
+
+/* Headers */
+.ec-custom-theme .ec-header {
+  border-bottom: 1px solid var(--ec-border-color) !important;
+}
+
+.ec-custom-theme .ec-day-header {
+  padding: 16px 0 !important;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ec-text-color);
+  opacity: 0.7;
+}
+
+/* Grid lines */
+.ec-custom-theme .ec-day, 
+.ec-custom-theme .ec-day-header,
+.ec-custom-theme .ec-resource, 
+.ec-custom-theme .ec-resource-header {
+  border-right: 1px solid var(--ec-border-color) !important;
+}
+
+.ec-custom-theme .ec-time, 
+.ec-custom-theme .ec-line {
+  border-bottom: 1px solid var(--ec-border-color) !important;
+}
+
+.ec-custom-theme .ec-sidebar {
+  border-right: 1px solid var(--ec-border-color) !important;
+}
+
+.ec-custom-theme .ec-sidebar .ec-time {
+  font-size: 0.625rem;
+  font-weight: 500;
+  opacity: 0.5;
+  padding: 0 4px;
+}
+
+/* Make events fully transparent to allow custom HTML rendering */
+.ec-custom-theme .ec-event {
+  background: transparent !important;
+  border: none !important;
+  padding: 2px !important; /* tiny gap between events */
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.ec-custom-theme .ec-event-body {
+  height: 100%;
+  padding: 0 !important;
+}
+
+/* Hide the default time text in events since we render our own rich UI */
+.ec-custom-theme .ec-event-time, 
+.ec-custom-theme .ec-event-title {
+  display: none !important;
+}

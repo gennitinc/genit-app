@@ -532,7 +532,7 @@ export default function PricingComponent() {
                       </div>
                     </div>
                     {plan.popular && (
-                      <div className='rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-3 py-1 text-xs font-medium text-white shadow-[0_0_15px_rgba(6,182,212,0.3)]'>
+                      <div className='rounded-full bg-primary px-3 py-1 text-xs font-medium text-white shadow-[0_0_15px_rgba(6,182,212,0.3)]'>
                         Popular
                       </div>
                     )}
@@ -587,7 +587,7 @@ export default function PricingComponent() {
                     className={cn(
                       "mt-4 mb-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border border-transparent px-2 py-1.5 transition duration-200 active:scale-[0.98]",
                       plan.popular
-                        ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow ring shadow-cyan-500/15 ring-cyan-500/10 hover:bg-gradient-to-bl"
+                        ? "bg-primary text-white shadow ring shadow-cyan-500/15 ring-cyan-500/10 hover:bg-primary/90"
                         : "bg-secondary text-secondary-foreground dark:bg-secondary shadow ring shadow-black/15 ring-black/10"
                     )}
                   >
@@ -633,7 +633,7 @@ export default function PricingComponent() {
                             <div
                               className={cn(
                                 "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full transition-all",
-                                "bg-gradient-to-r from-cyan-500 to-blue-500"
+                                "bg-primary"
                               )}
                             >
                               <Check className='h-2 w-2 stroke-[4px] text-white' />

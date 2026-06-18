@@ -209,7 +209,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
         href='https://www.youtube.com/@genit-tutorials'
         target='_blank'
         rel='noopener noreferrer'
-        className='mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-3 font-medium text-white transition-all hover:from-cyan-600 hover:to-blue-600'
+        className='mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-medium text-white transition-all hover:bg-primary/90'
       >
         <PlayCircle className='h-5 w-5' />
         View All Tutorials on YouTube

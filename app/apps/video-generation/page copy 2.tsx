@@ -1569,7 +1569,7 @@ function VideoGenerationPage() {
                 <button
                   onClick={handleGenerate}
                   disabled={isGenerating}
-                  className='flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-transform active:scale-95'
+                  className='flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-transform active:scale-95'
                 >
                   {isGenerating ? (
                     <div className='flex items-center gap-2'>

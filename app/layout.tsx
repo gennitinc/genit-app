@@ -1,6 +1,7 @@
 "use client";
 
 import "./globals.css";
+import "./event-calendar.css";
 import Wrapper from "@/components/layout/wrapper";
 import { PWAInstaller } from "@/components/pwa/pwa-installer";
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";

@@ -612,7 +612,7 @@ function TextToSpeechPage() {
                     }
                     className={cn(
                       "flex h-9 flex-shrink-0 items-center justify-center gap-2 rounded-[10px] px-5 text-sm font-semibold transition-all duration-200",
-                      "bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:bg-gradient-to-bl hover:opacity-90 focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800",
+                      "bg-primary text-white hover:bg-primary/90 hover:opacity-90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40",
                       "disabled:cursor-not-allowed disabled:opacity-30",
                       "active:scale-[0.97]"
                     )}

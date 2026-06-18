@@ -1,3 +1,5 @@
+"use client";
+
 import { PricingDialog } from "../common/pricing-dialog";
 import { Logo } from "../logo";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -125,7 +127,7 @@ export default function TopNavWithAurora({
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className='hover:bg-accent h-8 w-8 rounded-lg p-0'
           >
-            {theme === "dark" ? (
+            {mounted && theme === "dark" ? (
               <Sun className='h-4 w-4' />
             ) : (
               <Moon className='h-4 w-4' />

@@ -2262,7 +2262,7 @@ function VideoCreatePage() {
                       }}
                       disabled={isGenerating}
                       tabIndex={0}
-                      className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-gradient-to-bl focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800'
+                      className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-primary/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
                       data-rac=''
                       id='react-aria3512376871-_r_1f_'
                       style={{ touchAction: "pan-x pan-y pinch-zoom" }}

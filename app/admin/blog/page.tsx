@@ -122,7 +122,7 @@ export default function AdminBlogPage() {
           </button>
           <Link
             href="/admin/blog/new"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-xl hover:shadow-lg hover:shadow-cyan-500/20 transition duration-200 cursor-pointer"
+            className="inline-flex items-center gap-2 bg-primary text-white text-xs font-semibold px-4 py-2 rounded-xl hover:shadow-lg hover:shadow-primary/20 transition duration-200 cursor-pointer"
           >
             <Plus className="h-4 w-4" /> Add Article
           </Link>

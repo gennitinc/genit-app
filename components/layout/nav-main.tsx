@@ -5,7 +5,7 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { trackAppOpened, trackFeatureUsed } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { BookMarked, BookOpen, Cog, CreditCard, GalleryHorizontal, Gift, GitBranchPlus, Grid2X2Plus, HelpCircle, History, Image as ImageIcon, Palette, Settings, SquarePen, UserPlus, Users, Video, WandSparklesIcon, Workflow } from "lucide-react";
-import { useTheme } from "next-themes";
+
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
@@ -15,7 +15,7 @@ export function NavMain() {
   const { state, setOpenMobile, isMobile } = useSidebar();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { theme } = useTheme();
+
 
   const user = useUserContext().user;
   const navItems = [
@@ -24,6 +24,12 @@ export function NavMain() {
       icon: SquarePen,
       href: "/chat",
     },
+    // {
+    //   title: "Visual Flow",
+    //   icon: GalleryHorizontal,
+    //   href: "/visuals",
+    //   badge: "New",
+    // },
     {
       title: "Integrations",
       icon: GitBranchPlus,
@@ -135,12 +141,8 @@ export function NavMain() {
                 className={cn(
                   "transition-colors duration-300",
                   isRouteActive(item.href)
-                    ? theme === "dark"
-                      ? "bg-zinc-800 text-white dark:text-white"
-                      : "bg-gray-200 text-black dark:text-black"
-                    : theme === "dark"
-                      ? "text-zinc-300 hover:bg-zinc-800 hover:text-white dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-gray-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
+                    ? "bg-gray-200 text-black dark:bg-zinc-800 dark:text-white"
+                    : "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
                 )}
                 onClick={() => {
                   handleLinkClick();
@@ -203,12 +205,8 @@ export function NavMain() {
                 className={cn(
                   "transition-colors duration-300",
                   isRouteActive(item.href)
-                    ? theme === "dark"
-                      ? "bg-zinc-800 text-white dark:text-white"
-                      : "bg-gray-200 text-black dark:text-black"
-                    : theme === "dark"
-                      ? "text-zinc-300 hover:bg-zinc-800 hover:text-white dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-gray-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-300"
+                    ? "bg-gray-200 text-black dark:bg-zinc-800 dark:text-white"
+                    : "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
                 )}
                 onClick={() => {
                   handleLinkClick();

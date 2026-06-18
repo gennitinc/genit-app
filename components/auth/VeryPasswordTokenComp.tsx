@@ -87,7 +87,7 @@ export function VerifyPasswordTokenComp() {
 
               <Link
                 href={`/auth/updatepassword?token=${token}`}
-                className='inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-gradient-to-bl focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800'
+                className='inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-primary/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
                 prefetch={false}
               >
                 Update Password
@@ -146,7 +146,7 @@ export function VerifyPasswordTokenComp() {
 
               <Link
                 href='/auth/recover'
-                className='inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-gradient-to-bl focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800'
+                className='inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-primary/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
                 prefetch={false}
               >
                 Back to Recovery

@@ -8,7 +8,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useUserContext } from "@/context/AuthenticatedContext";
@@ -59,7 +58,6 @@ export function AdminSidebar({
       <SidebarFooter className='border-border border-t pt-4'>
         <NavUser user={user} />
       </SidebarFooter>
-      <SidebarRail className='border-border' />
     </Sidebar>
   );
 }

@@ -72,7 +72,7 @@ import { toast } from "sonner";
 
 type CreateMode = "team" | null;
 
-export function OrgSwitcher() {
+export function OrgSwitcher({ forceExpanded }: { forceExpanded?: boolean } = {}) {
   const { isMobile, state } = useSidebar();
   const {
     user,
@@ -111,7 +111,7 @@ export function OrgSwitcher() {
   );
   const [inviting, setInviting] = useState(false);
 
-  const isCollapsed = !isMobile && state === "collapsed";
+  const isCollapsed = forceExpanded ? false : !isMobile && state === "collapsed";
 
   const isOwnerOf = useCallback(
     (org: Organization) => !!user?._id && org.owner === user._id,
@@ -328,7 +328,8 @@ export function OrgSwitcher() {
                 size={isCollapsed ? "sm" : "lg"}
                 className={cn(
                   "data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
-                  isCollapsed ? "justify-center !px-2" : "w-full"
+                  isCollapsed ? "justify-center !px-2" : "w-full",
+                  forceExpanded && "!w-full !h-12 !px-2 !justify-start"
                 )}
               >
                 <Avatar

@@ -270,7 +270,7 @@ export default function NewBlogPostPage() {
           <button
             type="button"
             onClick={handleSubmit}
-            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold px-5 py-2 rounded-xl hover:shadow-lg hover:shadow-cyan-500/20 transition duration-200 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 bg-primary text-white text-xs font-bold px-5 py-2 rounded-xl hover:shadow-lg hover:shadow-primary/20 transition duration-200 cursor-pointer"
           >
             Publish Article <Save className="h-3.5 w-3.5" />
           </button>
@@ -579,7 +579,7 @@ export default function NewBlogPostPage() {
                 type="button"
                 onClick={handleFinalSubmit}
                 disabled={isSubmitting}
-                className="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold py-2.5 rounded-xl hover:shadow-lg hover:shadow-cyan-500/20 transition duration-200 cursor-pointer disabled:opacity-50"
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-primary text-white text-xs font-bold py-2.5 rounded-xl hover:shadow-lg hover:shadow-primary/20 transition duration-200 cursor-pointer disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <>

@@ -50,6 +50,7 @@ export interface Organization {
   owner: string;
   members?: { user: string; role: string; joinedAt?: string }[];
   derivedFromOnboarding?: boolean;
+  autoModeEnabled?: boolean;
   createdAt?: string;
   updatedAt?: string;
   // Legacy fields kept for back-compat with existing settings UI

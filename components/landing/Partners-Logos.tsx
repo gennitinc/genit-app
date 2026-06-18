@@ -263,7 +263,7 @@ export default function PartnerLogos() {
                 </p>
                 <div className='flex flex-col gap-4 sm:flex-row'>
                   <Button
-                    className='group flex cursor-pointer items-center rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-300 hover:bg-gradient-to-bl hover:pr-4 focus:ring-4 focus:ring-cyan-300 focus:outline-none dark:focus:ring-cyan-800'
+                    className='group flex cursor-pointer items-center rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-300 hover:bg-primary/90 hover:pr-4 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
                     onClick={() => {
                       router.push("/contact");
                     }}
