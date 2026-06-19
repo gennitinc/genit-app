@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 function formatDate(value?: string) {
   if (!value) return "Not scheduled";
@@ -204,19 +205,35 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
 
   return (
     <div id='brand-activity' className='flex flex-col gap-6 pb-14'>
-      {postsQuery.isLoading && (
-        <div className='flex items-center gap-2 text-xs text-muted-foreground'>
-          <Loader2 className='h-3.5 w-3.5 animate-spin text-indigo-500' /> Refreshing content pipeline
-        </div>
-      )}
-      {postsQuery.isError && (
-        <div className='flex items-center justify-between gap-3 rounded-xl bg-rose-500/10 px-3 py-2 text-xs text-rose-700 ring-1 ring-rose-500/15 dark:text-rose-300'>
-          <span>Could not load the content pipeline. {errorMessage(postsQuery.error)}</span>
-          <button type='button' onClick={() => postsQuery.refetch()} className='shrink-0 font-semibold underline underline-offset-2'>Retry</button>
-        </div>
-      )}
+      
+<div className='h-fit min-h-[520px]'>
+  {postsQuery.isLoading ? (
+    <div className='flex h-[20px] items-center justify-center'>
+      <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+        <LoadingFileLoader className='h-4 w-4 animate-spin text-indigo-500' />
+      </div>
+    </div>
+  ) : postsQuery.isError ? (
+    <div className='flex h-[20px] items-center justify-center'>
+      <div className='max-w-md rounded-2xl bg-rose-500/10 p-5 text-center ring-1 ring-rose-500/15'>
+        <p className='text-sm text-rose-700 dark:text-rose-300'>
+          Could not load the content pipeline.
+        </p>
+        <p className='mt-1 text-xs text-rose-600/80 dark:text-rose-400/80'>
+          {errorMessage(postsQuery.error)}
+        </p>
 
-      <section className='grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(300px,.75fr)]'>
+        <button
+          type='button'
+          onClick={() => postsQuery.refetch()}
+          className='mt-4 rounded-full bg-rose-500 px-4 py-2 text-xs font-semibold text-white transition hover:bg-rose-600'
+        >
+          Retry
+        </button>
+      </div>
+    </div>
+  ) : (
+   <section className='grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(300px,.75fr)]'>
         <div className='overflow-hidden rounded-3xl bg-black/[0.015] shadow-sm ring-1 ring-black/5 dark:bg-white/[0.03] dark:ring-white/10'>
           <div className='flex items-center justify-between gap-3 border-b border-black/5 p-5 dark:border-white/10'>
             <div>
@@ -294,7 +311,8 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
           </Button>
         </div>
       </section>
-
+  )}
+</div>
       <PostEditorDialog
         open={editorOpen}
         onOpenChange={setEditorOpen}
