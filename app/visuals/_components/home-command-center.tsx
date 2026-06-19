@@ -204,7 +204,7 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
   }, [createRequest]);
 
   return (
-    <div id='brand-activity' className='flex flex-col gap-6 pb-14'>
+    <div id='brand-activity' className='flex flex-col gap-6 pb-14 pt-4 border-none '>
       
 <div className='h-fit'>
   {postsQuery.isLoading ? (
@@ -234,8 +234,8 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
     </div>
   ) : (
    <section className='grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(300px,.75fr)]'>
-        <div className='overflow-hidden rounded-3xl bg-black/[0.015] shadow-sm ring-1 ring-black/5 dark:bg-white/[0.03] dark:ring-white/10'>
-          <div className='flex items-center justify-between gap-3 border-b border-black/5 p-5 dark:border-white/10'>
+        <div className='overflow-hidden rounded-lg bg-black/[0.015] shadow-sm ring-1 ring-black/5 dark:bg-white/[0.03] dark:ring-white/10 border-none'>
+          <div className='flex items-center justify-between gap-3 border-black/5 p-2 py-1 dark:border-white/10'>
             <div>
               <h3 className='font-bold tracking-tight'>Content pipeline</h3>
               <p className='mt-1 text-xs text-muted-foreground'>Create, revise, schedule, and remove work from one place.</p>
@@ -280,7 +280,7 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
           )}
         </div>
 
-        <div className='rounded-3xl bg-slate-950 p-5 text-white shadow-sm ring-1 ring-white/10'>
+        <div className='rounded-lg bg-neutral-800 p-5 text-white shadow-sm ring-1 ring-white/10'>
           <div className='flex items-center justify-between'>
             <div>
               <h3 className='font-bold tracking-tight'>Coming up</h3>
