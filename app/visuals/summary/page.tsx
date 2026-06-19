@@ -1,24 +1,74 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import {
-  BrandReport, createBrandReport, deleteBrandReport, listBrandReports,
-  refreshBrandReport, updateBrandReport,
+  type BrandReport,
+  createBrandReport,
+  listBrandReports,
+  refreshBrandReport,
 } from "@/lib/brand-reports-api";
-import { ArrowUpRight, BarChart3, CalendarDays, FileClock, ImageIcon, Layers3, Loader2, Pencil, Plus, RefreshCw, Sparkles, Trash2 } from "lucide-react";
-import React, { useEffect, useMemo, useState } from "react";
+import {
+  Activity,
+  BarChart3,
+  CalendarDays,
+  Eye,
+  Loader2,
+  Plus,
+  RefreshCw,
+  Target,
+  TrendingUp,
+} from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+
+const COLORS = ["#6366f1", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b", "#f43f5e"];
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en", { day: "numeric", month: "short", year: "numeric" }).format(new Date(value));
 }
 
+function compact(value: number) {
+  return new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value || 0);
+}
+
 function errorMessage(error: any) {
   return error?.response?.data?.message || error?.message || "Something went wrong";
+}
+
+function ChartCard({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
+  return (
+    <section className='rounded-2xl border border-black/5 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-zinc-950'>
+      <div className='mb-5'>
+        <h2 className='text-sm font-semibold'>{title}</h2>
+        <p className='mt-1 text-xs text-muted-foreground'>{description}</p>
+      </div>
+      {children}
+    </section>
+  );
 }
 
 export default function SummaryPage() {
@@ -28,100 +78,252 @@ export default function SummaryPage() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
-  const [form, setForm] = useState({ title: "", notes: "", periodStart: "", periodEnd: "" });
+  const [period, setPeriod] = useState({ periodStart: "", periodEnd: "" });
 
-  const selected = useMemo(() => reports.find((report) => report._id === selectedId) || reports[0], [reports, selectedId]);
+  const selected = useMemo(
+    () => reports.find((report) => report._id === selectedId) || reports[0],
+    [reports, selectedId]
+  );
 
   useEffect(() => {
-    listBrandReports().then((items) => {
-      setReports(items);
-      if (items[0]) setSelectedId(items[0]._id);
-    }).catch((error) => toast({ title: "Could not load reports", description: errorMessage(error), variant: "destructive" })).finally(() => setLoading(false));
+    listBrandReports()
+      .then((items) => {
+        setReports(items);
+        setSelectedId(items[0]?._id || "");
+      })
+      .catch((error) => toast({ title: "Could not load brand metrics", description: errorMessage(error), variant: "destructive" }))
+      .finally(() => setLoading(false));
   }, [toast]);
 
+  const trendData = useMemo(
+    () => [...reports].reverse().map((report) => ({
+      name: new Intl.DateTimeFormat("en", { month: "short", day: "numeric" }).format(new Date(report.periodEnd)),
+      score: report.score,
+      consistency: report.metrics.consistency || 0,
+      engagementRate: report.metrics.engagementRate || 0,
+    })),
+    [reports]
+  );
+
+  const channelData = useMemo(() => {
+    if (!selected) return [];
+    const channels = new Map<string, { channel: string; posts: number; reach: number; engagement: number }>();
+    for (const platform of selected.metrics.platforms || []) {
+      channels.set(platform, { channel: platform, posts: 0, reach: 0, engagement: 0 });
+    }
+    for (const work of selected.work || []) {
+      if (!work.platform) continue;
+      const item = channels.get(work.platform) || { channel: work.platform, posts: 0, reach: 0, engagement: 0 };
+      item.posts += 1;
+      item.reach += Number(work.metrics?.impressions || work.metrics?.views || 0);
+      item.engagement += Number(work.metrics?.likes || 0) + Number(work.metrics?.comments || 0) + Number(work.metrics?.shares || 0) + Number(work.metrics?.clicks || 0);
+      channels.set(work.platform, item);
+    }
+    return [...channels.values()].map((item) => ({ ...item, channel: item.channel.charAt(0).toUpperCase() + item.channel.slice(1) }));
+  }, [selected]);
+
+  const contentMix = useMemo(
+    () => selected ? Object.entries(selected.metrics.typeCounts || {}).map(([name, value]) => ({
+      name: name.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase()),
+      value,
+    })) : [],
+    [selected]
+  );
+
+  const audienceData = selected ? [
+    { name: "Impressions", value: selected.metrics.impressions || 0 },
+    { name: "Views", value: selected.metrics.views || 0 },
+    { name: "Likes", value: selected.metrics.likes || 0 },
+    { name: "Comments", value: selected.metrics.comments || 0 },
+    { name: "Shares", value: selected.metrics.shares || 0 },
+    { name: "Clicks", value: selected.metrics.clicks || 0 },
+  ] : [];
+
   const replace = (report: BrandReport) => {
-    setReports((items) => [report, ...items.filter((item) => item._id !== report._id)]);
+    setReports((current) => [report, ...current.filter((item) => item._id !== report._id)]);
     setSelectedId(report._id);
   };
 
-  async function createReport() {
-    setBusy(true);
-    try {
-      const report = await createBrandReport(form);
-      replace(report); setCreateOpen(false);
-      toast({ title: "Brand report created", description: `${report.work.length} pieces of work were captured in this snapshot.` });
-    } catch (error) { toast({ title: "Could not create report", description: errorMessage(error), variant: "destructive" }); }
-    finally { setBusy(false); }
-  }
-
-  async function saveReport() {
-    if (!selected) return;
-    setBusy(true);
-    try {
-      replace(await updateBrandReport(selected._id, { title: form.title, notes: form.notes }));
-      setEditOpen(false); toast({ title: "Report updated" });
-    } catch (error) { toast({ title: "Could not update report", description: errorMessage(error), variant: "destructive" }); }
-    finally { setBusy(false); }
-  }
-
-  async function refresh() {
-    if (!selected) return;
-    setBusy(true);
-    try { replace(await refreshBrandReport(selected._id)); toast({ title: "Snapshot refreshed", description: "Work and recommendations now reflect the report period." }); }
-    catch (error) { toast({ title: "Could not refresh report", description: errorMessage(error), variant: "destructive" }); }
-    finally { setBusy(false); }
-  }
-
-  async function remove() {
-    if (!selected || !window.confirm(`Delete “${selected.title}”? This report history cannot be restored.`)) return;
-    setBusy(true);
-    try {
-      await deleteBrandReport(selected._id);
-      const next = reports.filter((report) => report._id !== selected._id);
-      setReports(next); setSelectedId(next[0]?._id || ""); toast({ title: "Report deleted" });
-    } catch (error) { toast({ title: "Could not delete report", description: errorMessage(error), variant: "destructive" }); }
-    finally { setBusy(false); }
-  }
-
   const openCreate = () => {
-    const end = new Date(); const start = new Date(end.getTime() - 30 * 86400000);
-    setForm({ title: "", notes: "", periodStart: start.toISOString().slice(0, 10), periodEnd: end.toISOString().slice(0, 10) }); setCreateOpen(true);
+    const end = new Date();
+    const start = new Date(end.getTime() - 30 * 86400000);
+    setPeriod({ periodStart: start.toISOString().slice(0, 10), periodEnd: end.toISOString().slice(0, 10) });
+    setCreateOpen(true);
   };
 
-  if (loading) return <div className="flex min-h-[500px] items-center justify-center"><Loader2 className="h-7 w-7 animate-spin text-violet-500" /></div>;
+  const createReport = async () => {
+    setBusy(true);
+    try {
+      replace(await createBrandReport(period));
+      setCreateOpen(false);
+      toast({ title: "Brand metrics updated" });
+    } catch (error) {
+      toast({ title: "Could not create report", description: errorMessage(error), variant: "destructive" });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const refresh = async () => {
+    if (!selected) return;
+    setBusy(true);
+    try {
+      replace(await refreshBrandReport(selected._id));
+      toast({ title: "Metrics refreshed" });
+    } catch (error) {
+      toast({ title: "Could not refresh metrics", description: errorMessage(error), variant: "destructive" });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (loading) return <div className='flex min-h-[500px] items-center justify-center'><Loader2 className='h-6 w-6 animate-spin text-indigo-500' /></div>;
 
   return (
-    <div className="flex w-full flex-col gap-6 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div><div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[.18em] text-violet-600"><BarChart3 className="h-4 w-4" />Brand intelligence</div><h1 className="text-3xl font-bold tracking-tight">Summary & reports</h1><p className="mt-1 max-w-2xl text-sm text-muted-foreground">Understand what your creative work means for the brand—not just how much was produced.</p></div>
-        <Button onClick={openCreate} className="rounded-full bg-violet-600 hover:bg-violet-700"><Plus className="h-4 w-4" />Create report</Button>
-      </div>
+    <div className='animate-in fade-in slide-in-from-bottom-4 flex w-full flex-col gap-5 pb-12 duration-500'>
+      <header className='flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
+        <div>
+          <h1 className='text-2xl font-bold tracking-tight'>Brand analytics</h1>
+          <p className='mt-1 text-sm text-muted-foreground'>Performance, audience response, and brand health in one view.</p>
+        </div>
+        <div className='flex flex-wrap items-center gap-2'>
+          {selected && (
+            <select
+              value={selected._id}
+              onChange={(event) => setSelectedId(event.target.value)}
+              className='h-9 max-w-56 rounded-md border bg-background px-3 text-xs font-medium outline-none focus:ring-2 focus:ring-indigo-500/20'
+              aria-label='Report period'
+            >
+              {reports.map((report) => <option key={report._id} value={report._id}>{report.title}</option>)}
+            </select>
+          )}
+          <Button variant='outline' size='sm' disabled={!selected || busy} onClick={refresh} className='rounded-md'>
+            <RefreshCw className={`h-4 w-4 ${busy ? "animate-spin" : ""}`} /> Refresh
+          </Button>
+          <Button size='sm' onClick={openCreate} className='rounded-md bg-indigo-600 text-white hover:bg-indigo-700'>
+            <Plus className='h-4 w-4' /> New period
+          </Button>
+        </div>
+      </header>
 
       {!selected ? (
-        <div className="rounded-3xl border border-dashed p-12 text-center"><div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-500/10"><FileClock className="h-7 w-7 text-violet-600" /></div><h2 className="text-lg font-semibold">Create your first brand snapshot</h2><p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">It will collect every recorded work item in the period, explain its brand impact, and preserve the result in report history.</p><Button onClick={openCreate} className="mt-5 rounded-full">Create report</Button></div>
+        <div className='flex min-h-[460px] flex-col items-center justify-center rounded-2xl border border-dashed text-center'>
+          <BarChart3 className='h-8 w-8 text-indigo-500' />
+          <h2 className='mt-4 font-semibold'>No brand metrics yet</h2>
+          <p className='mt-1 max-w-sm text-sm text-muted-foreground'>Create a reporting period to calculate brand health and channel performance.</p>
+          <Button onClick={openCreate} className='mt-5 rounded-md'>Create report</Button>
+        </div>
       ) : (
         <>
-          <div className="grid gap-3 lg:grid-cols-[1fr_310px]">
-            <section className="overflow-hidden rounded-3xl border bg-gradient-to-br from-violet-950 via-slate-950 to-black p-6 text-white md:p-8">
-              <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between"><div><Badge className="border-white/10 bg-white/10 text-white">Brand score {selected.score}/100</Badge><h2 className="mt-4 text-2xl font-semibold">{selected.title}</h2><p className="mt-2 text-sm text-white/55">{formatDate(selected.periodStart)} — {formatDate(selected.periodEnd)}</p></div><div className="flex gap-2"><Button size="sm" variant="outline" disabled={busy} onClick={refresh} className="rounded-full border-white/15 bg-white/5 text-white hover:bg-white/10 hover:text-white"><RefreshCw className={busy ? "h-4 w-4 animate-spin" : "h-4 w-4"} />Refresh</Button><Button size="icon" variant="outline" onClick={() => { setForm({ title: selected.title, notes: selected.notes || "", periodStart: "", periodEnd: "" }); setEditOpen(true); }} className="rounded-full border-white/15 bg-white/5 text-white hover:bg-white/10 hover:text-white"><Pencil className="h-4 w-4" /></Button><Button size="icon" variant="outline" onClick={remove} className="rounded-full border-white/15 bg-white/5 text-rose-300 hover:bg-rose-500/10 hover:text-rose-200"><Trash2 className="h-4 w-4" /></Button></div></div>
-              <div className="mt-8 grid gap-4 md:grid-cols-2"><div className="rounded-2xl border border-white/10 bg-white/[.06] p-5"><p className="text-xs font-semibold uppercase tracking-wider text-violet-300">What happened</p><p className="mt-3 text-sm leading-6 text-white/75">{selected.executiveSummary}</p></div><div className="rounded-2xl border border-white/10 bg-white/[.06] p-5"><p className="text-xs font-semibold uppercase tracking-wider text-emerald-300">What it means for your brand</p><p className="mt-3 text-sm leading-6 text-white/75">{selected.brandMeaning}</p></div></div>
-            </section>
-            <aside className="rounded-3xl border bg-card p-5"><div className="mb-4 flex items-center gap-2"><FileClock className="h-4 w-4 text-violet-600" /><h3 className="font-semibold">Report history</h3></div><div className="space-y-2">{reports.map((report) => <button key={report._id} onClick={() => setSelectedId(report._id)} className={`w-full rounded-2xl border p-3 text-left transition ${report._id === selected._id ? "border-violet-500 bg-violet-500/5" : "hover:bg-muted/50"}`}><div className="flex items-center justify-between gap-2"><span className="truncate text-sm font-medium">{report.title}</span><span className="text-xs font-semibold text-violet-600">{report.score}</span></div><p className="mt-1 text-xs text-muted-foreground">{formatDate(report.createdAt)} · {report.metrics.totalWork} works</p></button>)}</div></aside>
+          <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+            <CalendarDays className='h-3.5 w-3.5' />
+            {formatDate(selected.periodStart)} — {formatDate(selected.periodEnd)}
           </div>
 
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            {[{ label: "Work captured", value: selected.metrics.totalWork, icon: Layers3 }, { label: "Published", value: selected.metrics.published, icon: ArrowUpRight }, { label: "Engagement", value: selected.metrics.engagement?.toLocaleString() || "0", icon: Sparkles }, { label: "Brand consistency", value: `${selected.metrics.consistency}%`, icon: BarChart3 }].map(({ label, value, icon: Icon }) => <div key={label} className="rounded-2xl border bg-card p-4"><Icon className="mb-4 h-5 w-5 text-violet-600" /><p className="text-2xl font-bold">{value}</p><p className="mt-1 text-xs text-muted-foreground">{label}</p></div>)}
+          <div className='grid grid-cols-2 gap-3 lg:grid-cols-4'>
+            {[
+              { label: "Brand score", value: `${selected.score}/100`, icon: Target, tone: "text-indigo-600 bg-indigo-500/10" },
+              { label: "Total reach", value: compact((selected.metrics.impressions || 0) + (selected.metrics.views || 0)), icon: Eye, tone: "text-cyan-600 bg-cyan-500/10" },
+              { label: "Engagement", value: compact(selected.metrics.engagement || 0), icon: Activity, tone: "text-emerald-600 bg-emerald-500/10" },
+              { label: "Engagement rate", value: `${selected.metrics.engagementRate || 0}%`, icon: TrendingUp, tone: "text-violet-600 bg-violet-500/10" },
+            ].map(({ label, value, icon: Icon, tone }) => (
+              <div key={label} className='rounded-2xl border border-black/5 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-zinc-950'>
+                <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${tone}`}><Icon className='h-4 w-4' /></span>
+                <p className='mt-4 text-2xl font-bold tracking-tight'>{value}</p>
+                <p className='mt-1 text-xs text-muted-foreground'>{label}</p>
+              </div>
+            ))}
           </div>
 
-          <section className="rounded-3xl border bg-card p-5 md:p-6"><div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><div><h3 className="font-semibold">Every work in this report</h3><p className="text-xs text-muted-foreground">A preserved record of the work used to calculate this snapshot.</p></div><div className="flex flex-wrap gap-2">{Object.entries(selected.metrics.typeCounts || {}).map(([type, count]) => <Badge key={type} variant="secondary">{type.replace("_", " ")} · {count}</Badge>)}</div></div>
-            {selected.work.length ? <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">{selected.work.map((work) => <article key={`${work.source}:${work.sourceId}`} className="group flex min-h-28 overflow-hidden rounded-2xl border bg-background"><div className="flex h-auto w-28 shrink-0 items-center justify-center overflow-hidden bg-muted">{work.thumbnail ? <img src={work.thumbnail} alt="" className="h-full w-full object-cover transition group-hover:scale-105" /> : <ImageIcon className="h-6 w-6 text-muted-foreground" />}</div><div className="min-w-0 flex-1 p-4"><div className="flex items-center gap-2"><Badge variant="outline" className="text-[10px]">{work.type.replace("_", " ")}</Badge>{work.platform && <span className="text-[10px] capitalize text-muted-foreground">{work.platform}</span>}</div><h4 className="mt-2 line-clamp-2 text-sm font-semibold">{work.title}</h4><div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground"><span>{formatDate(work.createdAt)}</span><span className="capitalize">{work.status}</span></div></div></article>)}</div> : <div className="rounded-2xl bg-muted/40 p-10 text-center text-sm text-muted-foreground">No work was recorded inside this period.</div>}
-          </section>
+          <div className='grid gap-5 xl:grid-cols-[1.45fr_.85fr]'>
+            <ChartCard title='Brand health trend' description='Score, consistency, and audience response across report periods.'>
+              <div className='h-72'>
+                <ResponsiveContainer width='100%' height='100%'>
+                  <AreaChart data={trendData} margin={{ left: -18, right: 8 }}>
+                    <defs>
+                      <linearGradient id='scoreFill' x1='0' y1='0' x2='0' y2='1'><stop offset='5%' stopColor='#6366f1' stopOpacity={0.28} /><stop offset='95%' stopColor='#6366f1' stopOpacity={0} /></linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray='3 3' vertical={false} stroke='currentColor' opacity={0.08} />
+                    <XAxis dataKey='name' axisLine={false} tickLine={false} tick={{ fontSize: 11 }} />
+                    <YAxis domain={[0, 100]} axisLine={false} tickLine={false} tick={{ fontSize: 11 }} />
+                    <Tooltip contentStyle={{ borderRadius: 12, borderColor: "rgba(0,0,0,.08)", fontSize: 12 }} />
+                    <Legend wrapperStyle={{ fontSize: 11 }} />
+                    <Area type='monotone' dataKey='score' name='Brand score' stroke='#6366f1' strokeWidth={2.5} fill='url(#scoreFill)' />
+                    <Area type='monotone' dataKey='consistency' name='Consistency' stroke='#10b981' strokeWidth={2} fill='transparent' />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </ChartCard>
+
+            <ChartCard title='Content mix' description='The formats contributing to this reporting period.'>
+              <div className='h-72'>
+                {contentMix.length ? (
+                  <ResponsiveContainer width='100%' height='100%'>
+                    <PieChart>
+                      <Pie data={contentMix} dataKey='value' nameKey='name' innerRadius={62} outerRadius={96} paddingAngle={3}>
+                        {contentMix.map((item, index) => <Cell key={item.name} fill={COLORS[index % COLORS.length]} />)}
+                      </Pie>
+                      <Tooltip contentStyle={{ borderRadius: 12, borderColor: "rgba(0,0,0,.08)", fontSize: 12 }} />
+                      <Legend wrapperStyle={{ fontSize: 11 }} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : <div className='flex h-full items-center justify-center text-sm text-muted-foreground'>No content data</div>}
+              </div>
+            </ChartCard>
+          </div>
+
+          <div className='grid gap-5 xl:grid-cols-2'>
+            <ChartCard title='Audience performance' description='Reach and engagement actions recorded across connected channels.'>
+              <div className='h-72'>
+                <ResponsiveContainer width='100%' height='100%'>
+                  <BarChart data={audienceData} margin={{ left: -18, right: 8 }}>
+                    <CartesianGrid strokeDasharray='3 3' vertical={false} stroke='currentColor' opacity={0.08} />
+                    <XAxis dataKey='name' axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11 }} tickFormatter={compact} />
+                    <Tooltip formatter={(value) => Number(value).toLocaleString()} contentStyle={{ borderRadius: 12, borderColor: "rgba(0,0,0,.08)", fontSize: 12 }} />
+                    <Bar dataKey='value' name='Total' radius={[6, 6, 0, 0]} fill='#6366f1' />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </ChartCard>
+
+            <ChartCard title='Channel performance' description='Reach and engagement contribution by platform.'>
+              <div className='h-72'>
+                {channelData.length ? (
+                  <ResponsiveContainer width='100%' height='100%'>
+                    <BarChart data={channelData} layout='vertical' margin={{ left: 8, right: 8 }}>
+                      <CartesianGrid strokeDasharray='3 3' horizontal={false} stroke='currentColor' opacity={0.08} />
+                      <XAxis type='number' axisLine={false} tickLine={false} tick={{ fontSize: 11 }} tickFormatter={compact} />
+                      <YAxis type='category' dataKey='channel' axisLine={false} tickLine={false} width={76} tick={{ fontSize: 11 }} />
+                      <Tooltip formatter={(value) => Number(value).toLocaleString()} contentStyle={{ borderRadius: 12, borderColor: "rgba(0,0,0,.08)", fontSize: 12 }} />
+                      <Legend wrapperStyle={{ fontSize: 11 }} />
+                      <Bar dataKey='reach' name='Reach' fill='#6366f1' radius={[0, 5, 5, 0]} />
+                      <Bar dataKey='engagement' name='Engagement' fill='#10b981' radius={[0, 5, 5, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : <div className='flex h-full items-center justify-center text-sm text-muted-foreground'>Connect and publish to a channel to compare performance.</div>}
+              </div>
+            </ChartCard>
+          </div>
         </>
       )}
 
-      <Dialog open={createOpen} onOpenChange={setCreateOpen}><DialogContent><DialogHeader><DialogTitle>Create brand report</DialogTitle><DialogDescription>Create a fixed snapshot of all work and its meaning for your brand.</DialogDescription></DialogHeader><div className="space-y-4"><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Report title (optional)" /><div className="grid grid-cols-2 gap-3"><label className="text-xs text-muted-foreground">From<Input className="mt-1" type="date" value={form.periodStart} onChange={(e) => setForm({ ...form, periodStart: e.target.value })} /></label><label className="text-xs text-muted-foreground">To<Input className="mt-1" type="date" value={form.periodEnd} onChange={(e) => setForm({ ...form, periodEnd: e.target.value })} /></label></div><Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Internal notes (optional)" /></div><DialogFooter><Button variant="outline" onClick={() => setCreateOpen(false)}>Cancel</Button><Button disabled={busy} onClick={createReport}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Create snapshot</Button></DialogFooter></DialogContent></Dialog>
-      <Dialog open={editOpen} onOpenChange={setEditOpen}><DialogContent><DialogHeader><DialogTitle>Edit report</DialogTitle><DialogDescription>Rename the snapshot or keep context for your team.</DialogDescription></DialogHeader><div className="space-y-4"><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Report title" /><Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Internal notes" /></div><DialogFooter><Button variant="outline" onClick={() => setEditOpen(false)}>Cancel</Button><Button disabled={busy || !form.title.trim()} onClick={saveReport}>Save changes</Button></DialogFooter></DialogContent></Dialog>
+      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+        <DialogContent className='sm:max-w-md'>
+          <DialogHeader>
+            <DialogTitle>New reporting period</DialogTitle>
+            <DialogDescription>Choose the date range used to calculate brand and channel metrics.</DialogDescription>
+          </DialogHeader>
+          <div className='grid grid-cols-2 gap-3'>
+            <label className='text-xs text-muted-foreground'>From<Input className='mt-1' type='date' value={period.periodStart} onChange={(event) => setPeriod({ ...period, periodStart: event.target.value })} /></label>
+            <label className='text-xs text-muted-foreground'>To<Input className='mt-1' type='date' value={period.periodEnd} onChange={(event) => setPeriod({ ...period, periodEnd: event.target.value })} /></label>
+          </div>
+          <DialogFooter>
+            <Button variant='outline' onClick={() => setCreateOpen(false)}>Cancel</Button>
+            <Button disabled={busy || !period.periodStart || !period.periodEnd} onClick={createReport}>{busy && <Loader2 className='h-4 w-4 animate-spin' />}Generate metrics</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

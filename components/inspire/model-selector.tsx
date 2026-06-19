@@ -1,13 +1,28 @@
 "use client";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Model, ModelType } from "@/types/inspire";
 import { modelApi } from "@/utils/inspire-api";
-import { Crown, FileText, Image as ImageIcon, Loader2, Music, Share2, Sparkles, Type as TypeIcon, Video } from "lucide-react";
+import {
+  Crown,
+  FileText,
+  Image as ImageIcon,
+  Loader2,
+  Music,
+  Share2,
+  Sparkles,
+  Type as TypeIcon,
+  Video,
+} from "lucide-react";
 import { useEffect, useState } from "react";
-
 
 interface ModelSelectorProps {
   type: ModelType;
@@ -157,9 +172,7 @@ export function ModelSelector({
         {/* <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
           Model
         </label> */}
-        <span className='py-2 text-center text-sm text-neutral-500 dark:text-neutral-400'>
-         
-        </span>
+        <span className='py-2 text-center text-sm text-neutral-500 dark:text-neutral-400'></span>
       </div>
     );
   }

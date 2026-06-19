@@ -1,4 +1,4 @@
-declare module '@event-calendar/core' {
+declare module "@event-calendar/core" {
   export interface Calendar {
     getOption(name: string): any;
     setOption(name: string, value: any): void;
@@ -32,17 +32,17 @@ declare module '@event-calendar/core' {
   export const Interaction: any;
 }
 
-declare module '@event-calendar/time-grid' {
+declare module "@event-calendar/time-grid" {
   const plugin: any;
   export default plugin;
 }
 
-declare module '@event-calendar/day-grid' {
+declare module "@event-calendar/day-grid" {
   const plugin: any;
   export default plugin;
 }
 
-declare module '@event-calendar/interaction' {
+declare module "@event-calendar/interaction" {
   const plugin: any;
   export default plugin;
 }

@@ -28,8 +28,8 @@ export const VerificationEmail = ({
           <Heading style={h1}>Verify your email address</Heading>
           <Text style={text}>Hi {userFirstname},</Text>
           <Text style={text}>
-            Thanks for signing up for genit! Please verify your email address
-            by clicking the button below:
+            Thanks for signing up for genit! Please verify your email address by
+            clicking the button below:
           </Text>
           <Link href={verificationUrl} style={button}>
             Verify Email Address

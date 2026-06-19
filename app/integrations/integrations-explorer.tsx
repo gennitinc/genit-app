@@ -10,8 +10,8 @@ import {
   GoogleDriveBrand,
   InstagramBrand,
   LinkedinBrand,
-  MicrosoftOutlookBrand,
   MessengerBrand,
+  MicrosoftOutlookBrand,
   PinterestBrand,
   SnapchatBrand,
   TelegramBrand,
@@ -349,7 +349,7 @@ function ConnectButton({
         onClick={onManage}
         className='inline-flex items-center gap-1 rounded-md bg-linear-to-r from-emerald-500 to-teal-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-emerald-300 focus:outline-none dark:focus:ring-emerald-800'
       >
-  <Cog className="size-4" />
+        <Cog className='size-4' />
         Manage
       </button>
     );
@@ -362,7 +362,7 @@ function ConnectButton({
         onClick={onManage}
         className='inline-flex items-center gap-1 rounded-md bg-linear-to-r from-amber-500 to-orange-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-amber-300 focus:outline-none dark:focus:ring-amber-800'
       >
-              <Cog className="size-4" />
+        <Cog className='size-4' />
         Manage
       </button>
     );
@@ -378,7 +378,7 @@ function ConnectButton({
       className={
         isSoon
           ? "border-border bg-card/40 text-muted-foreground inline-flex cursor-not-allowed items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-medium opacity-60 dark:border-white/5 dark:bg-white/[0.02] dark:text-zinc-500"
-          : "inline-flex items-center gap-1 rounded-md bg-linear-to-r from-cyan-500 to-blue-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40"
+          : "focus:ring-primary/30 dark:focus:ring-primary/40 inline-flex items-center gap-1 rounded-md bg-linear-to-r from-cyan-500 to-blue-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:outline-none"
       }
     >
       Connect
@@ -396,7 +396,7 @@ function StatusBadge({
 }) {
   if (status === "connected") {
     return (
-      <span className='inline-flex items-center gap-1.5 rounded-md bg-background px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300 '>
+      <span className='bg-background inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300'>
         <CheckCircle2 className='h-3 w-3' />
         {count && count > 1 ? `Connected · ${count}` : "Connected"}
       </span>
@@ -404,7 +404,7 @@ function StatusBadge({
   }
   if (status === "partial") {
     return (
-      <span className='inline-flex items-center gap-1.5 rounded-md bg-background px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
+      <span className='bg-background inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
         <AlertTriangle className='h-3 w-3' />
         Needs setup
       </span>
@@ -412,13 +412,13 @@ function StatusBadge({
   }
   if (status === "soon") {
     return (
-      <span className='inline-flex items-center gap-1.5 rounded-md bg-background px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
+      <span className='bg-background inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
         Coming soon
       </span>
     );
   }
   return (
-    <span className='inline-flex items-center gap-1.5 rounded-md bg-background px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
+    <span className='bg-background inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
       Available
     </span>
   );

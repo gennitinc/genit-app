@@ -30,7 +30,7 @@ export default function IntegrationsPage() {
 
         <div
           id='main-content'
-          className="flex-1 rounded-t-2xl lg:border-2 lg:border-b-0 ml-0 mr-2 md:mr-4"
+          className='mr-2 ml-0 flex-1 rounded-t-2xl md:mr-4 lg:border-2 lg:border-b-0'
         >
           <div className='mx-auto w-full max-w-6xl space-y-8 px-6 pb-16'>
             <section className='relative z-10'>
@@ -41,7 +41,7 @@ export default function IntegrationsPage() {
                     Tool kit connect
                   </div>
                   <h2 className='text-foreground text-3xl font-semibold tracking-tight sm:text-4xl'>
-                    Integrations your favorite tools 
+                    Integrations your favorite tools
                   </h2>
                   <p className='text-muted-foreground mt-3 text-base'>
                     Connect to the tools your brands already use every day

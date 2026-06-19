@@ -9,7 +9,7 @@ const LandingCreator = () => {
     <div>
       <div className='mt-24 mb-12 space-y-4 text-center md:mb-16'>
         <h2 className='text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl'>
-         Refer and earn
+          Refer and earn
         </h2>
         <p className='text-muted-foreground mx-auto w-[90%] max-w-2xl text-base md:w-full md:text-base'>
           Join the creators program and start earning money by referring others.

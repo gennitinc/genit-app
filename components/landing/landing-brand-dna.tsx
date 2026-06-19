@@ -9,8 +9,8 @@ import {
   Search,
   Wand2,
 } from "lucide-react";
-import React from "react";
 import Image from "next/image";
+import React from "react";
 
 export const LandingBrandDNA = () => {
   return (
@@ -46,7 +46,7 @@ export const LandingBrandDNA = () => {
               https://your-brand.com
             </span>
 
-            <div className='flex items-center gap-1.5 rounded-full bg-gray-800 px-2 py-0.5 text-[10px] text-gray-200 ring-1 ring-gray-400 '>
+            <div className='flex items-center gap-1.5 rounded-full bg-gray-800 px-2 py-0.5 text-[10px] text-gray-200 ring-1 ring-gray-400'>
               <Search className='h-3 w-3 animate-pulse' /> Scanning
             </div>
           </div>
@@ -135,7 +135,6 @@ export const LandingBrandDNA = () => {
 
           {/* Right Column: Voice & Profile */}
           <div className='col-span-1 flex flex-col gap-4 md:col-span-7 lg:flex-row'>
-            
             {/* Brand Logo & Verification Card */}
             <div className='flex w-full flex-col items-center justify-center rounded-2xl bg-black/[0.02] p-6 ring-1 ring-black/5 lg:w-[35%] dark:bg-white/[0.02] dark:ring-white/10'>
               <div className='relative mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-black/5 dark:bg-neutral-900 dark:ring-white/10'>
@@ -149,7 +148,7 @@ export const LandingBrandDNA = () => {
               </div>
               <div className='flex flex-col items-center gap-1.5'>
                 <div className='flex items-center gap-1.5'>
-                  <span className='text-foreground text-xl font-semibold leading-tight antialiased dark:text-white'>
+                  <span className='text-foreground text-xl leading-tight font-semibold antialiased dark:text-white'>
                     Your Brand
                   </span>
                   <Image
@@ -184,7 +183,7 @@ export const LandingBrandDNA = () => {
                       Voice Traits
                     </p>
                     <div className='flex flex-wrap gap-2'>
-                      <span className='inline-flex rounded-md px-2.5 py-1 text-xs  ring-3 ring-amber-200 dark:ring-amber-500/20'>
+                      <span className='inline-flex rounded-md px-2.5 py-1 text-xs ring-3 ring-amber-200 dark:ring-amber-500/20'>
                         Authoritative
                       </span>
                       <span className='text-foreground inline-flex rounded-md bg-black/5 px-2.5 py-1 text-xs ring-1 ring-black/5 dark:bg-white/5 dark:text-white/70 dark:ring-white/10'>

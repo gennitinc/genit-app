@@ -50,17 +50,28 @@ export function TextChatContent() {
 
   // We filter out regular messages that exactly match AgentRun prompts or final texts.
   // This cleans up historical database records from before we stopped duplicating AgentRuns as plain messages.
-  const agentPrompts = new Set(agentRuns.map(r => r.prompt?.trim()).filter(Boolean));
-  const agentTexts = new Set(agentRuns.map(r => r.text?.trim()).filter(Boolean));
+  const agentPrompts = new Set(
+    agentRuns.map((r) => r.prompt?.trim()).filter(Boolean)
+  );
+  const agentTexts = new Set(
+    agentRuns.map((r) => r.text?.trim()).filter(Boolean)
+  );
 
   // Merge regular messages and agent runs into a single chronologically-sorted list.
-  const allItems: { type: "message" | "agent"; createdAt: number; data: any }[] = [
+  const allItems: {
+    type: "message" | "agent";
+    createdAt: number;
+    data: any;
+  }[] = [
     ...(messages || [])
       .filter((m: any) => {
         if (m.isHidden) return false;
-        const text = m.parts?.find((p: any) => p.type === "text")?.text?.trim() || m.text?.trim() || "";
+        const text =
+          m.parts?.find((p: any) => p.type === "text")?.text?.trim() ||
+          m.text?.trim() ||
+          "";
         if (!text) return true;
-        
+
         // Hide image/video version notification messages (both new and historical)
         if (
           text.startsWith("Here is the generated design") ||
@@ -82,17 +93,20 @@ export function TextChatContent() {
         createdAt: m.createdAt ? new Date(m.createdAt).getTime() : 0,
         data: m,
       })),
-    ...agentRuns
-      .map((r) => ({
-        type: "agent" as const,
-        createdAt: r.createdAt,
-        data: r,
-      })),
+    ...agentRuns.map((r) => ({
+      type: "agent" as const,
+      createdAt: r.createdAt,
+      data: r,
+    })),
   ].sort((a, b) => a.createdAt - b.createdAt);
 
   // Don't show empty state while the project is still loading or draft is processing — it causes a
   // 'Start a conversation' flash on redirect to a chat URL.
-  const isEmpty = allItems.length === 0 && !isTyping && !isLoadingProject && !isProcessingDraft;
+  const isEmpty =
+    allItems.length === 0 &&
+    !isTyping &&
+    !isLoadingProject &&
+    !isProcessingDraft;
 
   const skeletonRef = useRef<HTMLDivElement | null>(null);
   const scrollElRef = useRef<HTMLElement | null>(null);
@@ -524,15 +538,16 @@ export function TextChatContent() {
             )}
 
             {/* Loading skeleton / spinner while project is fetching on first redirect or draft is processing */}
-            {(isLoadingProject || isProcessingDraft) && allItems.length === 0 && (
-              <div className='flex min-h-[40vh] flex-1 flex-col items-center justify-center gap-4'>
-                <Loader size={32} className="text-primary animate-spin" />
-                <div className='flex flex-col items-center gap-3 w-full max-w-sm px-6'>
-                  <div className='h-3 w-2/3 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
-                  <div className='h-3 w-1/2 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
+            {(isLoadingProject || isProcessingDraft) &&
+              allItems.length === 0 && (
+                <div className='flex min-h-[40vh] flex-1 flex-col items-center justify-center gap-4'>
+                  <Loader size={32} className='text-primary animate-spin' />
+                  <div className='flex w-full max-w-sm flex-col items-center gap-3 px-6'>
+                    <div className='h-3 w-2/3 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
+                    <div className='h-3 w-1/2 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </ConversationContent>
         </Conversation>
       </div>

@@ -110,7 +110,7 @@ const AppCard = ({
               e.stopPropagation();
               handleAction();
             }}
-            className='inline-flex items-center justify-center gap-1 rounded-md bg-linear-to-r from-cyan-500 to-blue-500 px-2.5 py-1.5 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
+            className='focus:ring-primary/30 dark:focus:ring-primary/40 inline-flex items-center justify-center gap-1 rounded-md bg-linear-to-r from-cyan-500 to-blue-500 px-2.5 py-1.5 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:outline-none'
           >
             Try now
             <ArrowRight className='h-3 w-3' />
@@ -162,7 +162,7 @@ const Apps = () => {
         <TopNavWithAurora />
         <div
           id='main-content'
-          className="flex-1 rounded-t-2xl lg:border-2 lg:border-b-0 ml-0 mr-2 md:mr-4"
+          className='mr-2 ml-0 flex-1 rounded-t-2xl md:mr-4 lg:border-2 lg:border-b-0'
           style={{
             transform: "translateZ(0)",
             willChange: "transform",

@@ -120,7 +120,7 @@ export function LandingFooter() {
                 onClick={scrollToTop}
                 size='icon'
                 variant='secondary'
-                className='hover:bg-indigo-600 hover:bg-indigo-700 hover:text-primary-foreground rounded-full shadow-lg transition-all duration-300 hover:shadow-xl'
+                className='hover:text-primary-foreground rounded-full shadow-lg transition-all duration-300 hover:bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl'
               >
                 <ArrowUp className='h-5 w-5' />
                 <span className='sr-only'>Back to top</span>
@@ -257,7 +257,7 @@ export function LandingFooter() {
                     <TooltipTrigger asChild>
                       <Link
                         href='#'
-                        className='text-muted-foreground hover:text-primary hover:bg-indigo-600 hover:bg-indigo-700/10 hover:border-primary/20 rounded-full border border-transparent p-2.5 transition-colors duration-200'
+                        className='text-muted-foreground hover:text-primary hover:border-primary/20 rounded-full border border-transparent p-2.5 transition-colors duration-200 hover:bg-indigo-600 hover:bg-indigo-700/10'
                       >
                         <span className='sr-only'>{social.label}</span>
                         <social.icon className='h-5 w-5' />

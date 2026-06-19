@@ -43,7 +43,7 @@ export const CodeNode = memo(
           }`}
         >
           <div className='flex items-center'>
-            <div className='bg-indigo-600 hover:bg-indigo-700/10 text-primary flex h-8 w-8 items-center justify-center rounded-full'>
+            <div className='text-primary flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700/10'>
               <Code className='h-4 w-4' />
             </div>
             <div className='ml-2'>
@@ -79,13 +79,13 @@ export const CodeNode = memo(
             type='target'
             position={Position.Top}
             isConnectable={isConnectable}
-            className='bg-indigo-600 hover:bg-indigo-700 h-3 w-3'
+            className='h-3 w-3 bg-indigo-600 hover:bg-indigo-700'
           />
           <Handle
             type='source'
             position={Position.Bottom}
             isConnectable={isConnectable}
-            className='bg-indigo-600 hover:bg-indigo-700 h-3 w-3'
+            className='h-3 w-3 bg-indigo-600 hover:bg-indigo-700'
           />
         </div>
       </div>

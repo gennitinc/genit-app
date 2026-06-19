@@ -44,7 +44,6 @@ export function BrowserViewer({
 
         // Add a timestamp parameter to bypass caching
         processedUrl = `${processedUrl}?t=${Date.now()}`;
-
       }
 
       return processedUrl;
@@ -136,7 +135,7 @@ export function BrowserViewer({
               href={finalUrl}
               target='_blank'
               rel='noopener noreferrer'
-              className='bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-600 hover:bg-indigo-700-600 rounded-md px-4 py-2 text-white transition-colors'
+              className='hover:bg-indigo-700-600 rounded-md bg-indigo-600 px-4 py-2 text-white transition-colors hover:bg-indigo-600 hover:bg-indigo-700'
             >
               Open in new tab
             </a>

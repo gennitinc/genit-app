@@ -1,14 +1,16 @@
 "use client";
 
-import { CheckCircle2, Circle, ListTodo, Loader2, XCircle } from "lucide-react";
-import type { AgentTask } from "@/lib/agents-api";
 import { AgentCard } from "./agent-card";
+import type { AgentTask } from "@/lib/agents-api";
+import { CheckCircle2, Circle, ListTodo, Loader2, XCircle } from "lucide-react";
 
 function Icon({ status }: { status: AgentTask["status"] }) {
   if (status === "running")
     return <Loader2 className='text-foreground h-3.5 w-3.5 animate-spin' />;
   if (status === "done")
-    return <CheckCircle2 className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />;
+    return (
+      <CheckCircle2 className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />
+    );
   if (status === "failed")
     return <XCircle className='h-3.5 w-3.5 text-rose-600 dark:text-rose-400' />;
   return <Circle className='text-muted-foreground/40 h-3.5 w-3.5' />;
@@ -33,7 +35,7 @@ export function AgentPlan({ tasks }: { tasks: AgentTask[] }) {
               <span
                 className={
                   t.status === "done"
-                    ? "text-muted-foreground line-through decoration-muted-foreground/40"
+                    ? "text-muted-foreground decoration-muted-foreground/40 line-through"
                     : t.status === "failed"
                       ? "text-rose-700 dark:text-rose-300"
                       : t.status === "running"

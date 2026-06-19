@@ -10,19 +10,19 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import {
   Activity,
+  Cpu,
   CreditCard,
   ExternalLink,
+  FileText,
   Layout,
   LayoutDashboard,
+  Library,
+  Mic,
   Palette,
   Settings,
   Sparkles,
-  Users,
-  FileText,
-  Cpu,
-  Mic,
   UserSquare,
-  Library,
+  Users,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -124,7 +124,7 @@ export function AdminNavMain() {
                 className={cn(
                   "transition-colors duration-300",
                   isRouteActive(item.href)
-                    ? "bg-indigo-600 hover:bg-indigo-700/10 text-primary font-semibold"
+                    ? "text-primary bg-indigo-600 font-semibold hover:bg-indigo-700/10"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
                 onClick={handleLinkClick}
@@ -159,7 +159,7 @@ export function AdminNavMain() {
                 className={cn(
                   "transition-colors duration-300",
                   isRouteActive(item.href)
-                    ? "bg-indigo-600 hover:bg-indigo-700/10 text-primary font-semibold"
+                    ? "text-primary bg-indigo-600 font-semibold hover:bg-indigo-700/10"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
                 onClick={handleLinkClick}

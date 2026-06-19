@@ -1,38 +1,38 @@
 "use client";
 
-import React from "react";
-import { Handle, type NodeProps, Position } from "reactflow";
+import { ACTION_SUBTYPES, type ActionSubtype } from "./automation-types";
 import {
-  Activity,
-  Trash2,
-  Mail,
-  MessageCircle,
-  FileText,
-  Share2,
-  Instagram,
-  Linkedin,
-  Twitter,
-  Music2,
-  ImagePlus,
-  Video,
-  Mic,
-  Upload,
-  AtSign,
-  Image,
-} from "lucide-react";
-import {
-  WhatsAppBrand,
   FacebookBrand,
-  InstagramBrand,
-  LinkedinBrand,
-  XBrand,
-  TikTokBrand,
   GoogleCalendarBrand,
   GoogleDriveBrand,
+  InstagramBrand,
+  LinkedinBrand,
   MessengerBrand,
+  TikTokBrand,
+  WhatsAppBrand,
+  XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { cn } from "@/lib/utils";
-import { ACTION_SUBTYPES, type ActionSubtype } from "./automation-types";
+import {
+  Activity,
+  AtSign,
+  FileText,
+  Image,
+  ImagePlus,
+  Instagram,
+  Linkedin,
+  Mail,
+  MessageCircle,
+  Mic,
+  Music2,
+  Share2,
+  Trash2,
+  Twitter,
+  Upload,
+  Video,
+} from "lucide-react";
+import { Handle, type NodeProps, Position } from "reactflow";
+import React from "react";
 
 const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
   send_gmail: Mail,
@@ -117,7 +117,8 @@ const inputCls =
 const selectCls =
   "w-full bg-zinc-50 dark:bg-neutral-950 border border-zinc-200 dark:border-neutral-800 rounded px-2.5 py-1.5 text-xs text-zinc-800 dark:text-neutral-200 outline-none focus:border-blue-500/50 transition-colors cursor-pointer";
 
-const labelCls = "block mb-1 text-[9px] font-medium text-zinc-500 dark:text-neutral-400 uppercase tracking-wider";
+const labelCls =
+  "block mb-1 text-[9px] font-medium text-zinc-500 dark:text-neutral-400 uppercase tracking-wider";
 
 export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
   const isEdit = data.isEditMode;
@@ -127,48 +128,50 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
   return (
     <div
       className={cn(
-        "w-[240px] overflow-hidden bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-neutral-800 rounded-2xl relative shadow-xl text-zinc-800 dark:text-neutral-200 transition-all duration-200",
-        isEdit ? "ring-2 ring-blue-500/40 border-zinc-300 dark:border-neutral-700" : ""
+        "relative w-[240px] overflow-hidden rounded-2xl border border-zinc-200 bg-white text-zinc-800 shadow-xl transition-all duration-200 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200",
+        isEdit
+          ? "border-zinc-300 ring-2 ring-blue-500/40 dark:border-neutral-700"
+          : ""
       )}
     >
       <Handle
-        type="target"
+        type='target'
         position={Position.Top}
-        className="!w-2 !h-2 !bg-blue-500 !border-2 !border-white dark:!border-neutral-900"
+        className='!h-2 !w-2 !border-2 !border-white !bg-blue-500 dark:!border-neutral-900'
       />
 
       {/* Header */}
-      <div className="px-4 py-3 flex items-center justify-between border-b border-zinc-200 dark:border-neutral-800/70 bg-zinc-50/50 dark:bg-neutral-950/40">
-        <div className="flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400">
-          <Activity className="h-4 w-4" />
-          <span className="text-[10px] font-semibold uppercase tracking-wider font-sans">
+      <div className='flex items-center justify-between border-b border-zinc-200 bg-zinc-50/50 px-4 py-3 dark:border-neutral-800/70 dark:bg-neutral-950/40'>
+        <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
+          <Activity className='h-4 w-4' />
+          <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
             Action
           </span>
         </div>
         {isEdit && (
           <button
             onClick={() => data.onRemoveNode(id)}
-            className="text-zinc-500 dark:text-neutral-400 hover:text-red-500 dark:hover:text-red-400 transition-colors p-1 rounded"
+            className='rounded p-1 text-zinc-500 transition-colors hover:text-red-500 dark:text-neutral-400 dark:hover:text-red-400'
           >
-            <Trash2 className="h-3.5 w-3.5" />
+            <Trash2 className='h-3.5 w-3.5' />
           </button>
         )}
       </div>
 
       {/* Body */}
-      <div className="p-4 space-y-4">
+      <div className='space-y-4 p-4'>
         {isEdit ? (
           <>
             <div>
               <label className={labelCls}>Title</label>
               <input
-                type="text"
+                type='text'
                 value={data.title}
                 onChange={(e) =>
                   data.onNodeDataChange(id, { title: e.target.value })
                 }
                 className={inputCls}
-                placeholder="Action Name"
+                placeholder='Action Name'
               />
             </div>
 
@@ -181,16 +184,22 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                 }
                 className={selectCls}
               >
-                 <optgroup label="Messaging" className="bg-white dark:bg-neutral-900 text-zinc-800 dark:text-neutral-200">
-                  {ACTION_SUBTYPES.filter((a) => a.category === "messaging").map(
-                    (a) => (
-                      <option key={a.id} value={a.id}>
-                        {a.label}
-                      </option>
-                    )
-                  )}
+                <optgroup
+                  label='Messaging'
+                  className='bg-white text-zinc-800 dark:bg-neutral-900 dark:text-neutral-200'
+                >
+                  {ACTION_SUBTYPES.filter(
+                    (a) => a.category === "messaging"
+                  ).map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.label}
+                    </option>
+                  ))}
                 </optgroup>
-                <optgroup label="Social" className="bg-white dark:bg-neutral-900 text-zinc-800 dark:text-neutral-200">
+                <optgroup
+                  label='Social'
+                  className='bg-white text-zinc-800 dark:bg-neutral-900 dark:text-neutral-200'
+                >
                   {ACTION_SUBTYPES.filter((a) => a.category === "social").map(
                     (a) => (
                       <option key={a.id} value={a.id}>
@@ -199,7 +208,10 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                     )
                   )}
                 </optgroup>
-                <optgroup label="AI Generation" className="bg-white dark:bg-neutral-900 text-zinc-800 dark:text-neutral-200">
+                <optgroup
+                  label='AI Generation'
+                  className='bg-white text-zinc-800 dark:bg-neutral-900 dark:text-neutral-200'
+                >
                   {ACTION_SUBTYPES.filter((a) => a.category === "ai").map(
                     (a) => (
                       <option key={a.id} value={a.id}>
@@ -208,7 +220,10 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                     )
                   )}
                 </optgroup>
-                <optgroup label="Productivity" className="bg-white dark:bg-neutral-900 text-zinc-800 dark:text-neutral-200">
+                <optgroup
+                  label='Productivity'
+                  className='bg-white text-zinc-800 dark:bg-neutral-900 dark:text-neutral-200'
+                >
                   {ACTION_SUBTYPES.filter(
                     (a) => a.category === "productivity"
                   ).map((a) => (
@@ -221,12 +236,14 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
             </div>
 
             {/* ── Send Email config ─────────────────────────── */}
-            {(data.actionType === "send_gmail" || data.actionType === "send_brevo_email" || data.actionType === "send_outlook_email") && (
+            {(data.actionType === "send_gmail" ||
+              data.actionType === "send_brevo_email" ||
+              data.actionType === "send_outlook_email") && (
               <>
                 <div>
                   <label className={labelCls}>To</label>
                   <input
-                    type="text"
+                    type='text'
                     value={data.recipientEmail || ""}
                     onChange={(e) =>
                       data.onNodeDataChange(id, {
@@ -234,19 +251,19 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                       })
                     }
                     className={inputCls}
-                    placeholder="recipient@email.com or {{ trigger.email }}"
+                    placeholder='recipient@email.com or {{ trigger.email }}'
                   />
                 </div>
                 <div>
                   <label className={labelCls}>Subject</label>
                   <input
-                    type="text"
+                    type='text'
                     value={data.subject || ""}
                     onChange={(e) =>
                       data.onNodeDataChange(id, { subject: e.target.value })
                     }
                     className={inputCls}
-                    placeholder="Email subject"
+                    placeholder='Email subject'
                   />
                 </div>
                 <div>
@@ -257,25 +274,29 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                       data.onNodeDataChange(id, { messageBody: e.target.value })
                     }
                     className={cn(inputCls, "min-h-[40px] resize-none")}
-                    placeholder="Email body content"
+                    placeholder='Email body content'
                   />
                 </div>
               </>
             )}
 
             {/* ── WhatsApp/Messenger reply ─────────────────────────────── */}
-            {(data.actionType === "whatsapp_reply" || data.actionType === "messenger_reply") && (
+            {(data.actionType === "whatsapp_reply" ||
+              data.actionType === "messenger_reply") && (
               <>
                 <div>
                   <label className={labelCls}>Recipient ID / To</label>
                   <input
-                    type="text"
+                    type='text'
                     value={data.recipientId || data.to || ""}
                     onChange={(e) =>
-                      data.onNodeDataChange(id, { recipientId: e.target.value, to: e.target.value })
+                      data.onNodeDataChange(id, {
+                        recipientId: e.target.value,
+                        to: e.target.value,
+                      })
                     }
                     className={inputCls}
-                    placeholder="Recipient phone or ID"
+                    placeholder='Recipient phone or ID'
                   />
                 </div>
                 <div>
@@ -286,7 +307,7 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                       data.onNodeDataChange(id, { messageBody: e.target.value })
                     }
                     className={cn(inputCls, "min-h-[40px] resize-none")}
-                    placeholder="Reply text or {{ ai_generate.output }}"
+                    placeholder='Reply text or {{ ai_generate.output }}'
                   />
                 </div>
               </>
@@ -298,25 +319,28 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                 <div>
                   <label className={labelCls}>Recipient ID / To</label>
                   <input
-                    type="text"
+                    type='text'
                     value={data.to || ""}
                     onChange={(e) =>
                       data.onNodeDataChange(id, { to: e.target.value })
                     }
                     className={inputCls}
-                    placeholder="Recipient phone number"
+                    placeholder='Recipient phone number'
                   />
                 </div>
                 <div>
                   <label className={labelCls}>Template Name/ID</label>
                   <input
-                    type="text"
+                    type='text'
                     value={data.templateId || data.templateName || ""}
                     onChange={(e) =>
-                      data.onNodeDataChange(id, { templateId: e.target.value, templateName: e.target.value })
+                      data.onNodeDataChange(id, {
+                        templateId: e.target.value,
+                        templateName: e.target.value,
+                      })
                     }
                     className={inputCls}
-                    placeholder="Template name or ID"
+                    placeholder='Template name or ID'
                   />
                 </div>
               </>
@@ -333,13 +357,13 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                   <div>
                     <label className={labelCls}>Title</label>
                     <input
-                      type="text"
+                      type='text'
                       value={data.postTitle || ""}
                       onChange={(e) =>
                         data.onNodeDataChange(id, { postTitle: e.target.value })
                       }
                       className={inputCls}
-                      placeholder="Video Title"
+                      placeholder='Video Title'
                     />
                   </div>
                 )}
@@ -351,19 +375,22 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                       data.onNodeDataChange(id, { contentText: e.target.value })
                     }
                     className={cn(inputCls, "min-h-[40px] resize-none")}
-                    placeholder="Post content or {{ previous_step.output }}"
+                    placeholder='Post content or {{ previous_step.output }}'
                   />
                 </div>
                 <div>
                   <label className={labelCls}>Media URL (optional)</label>
                   <input
-                    type="text"
+                    type='text'
                     value={data.imageUrl || data.videoUrl || ""}
                     onChange={(e) =>
-                      data.onNodeDataChange(id, { imageUrl: e.target.value, videoUrl: e.target.value })
+                      data.onNodeDataChange(id, {
+                        imageUrl: e.target.value,
+                        videoUrl: e.target.value,
+                      })
                     }
                     className={inputCls}
-                    placeholder="https:// or {{ ai_generate.url }}"
+                    placeholder='https:// or {{ ai_generate.url }}'
                   />
                 </div>
                 {data.actionType === "post_tiktok" && (
@@ -376,9 +403,9 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                       }
                       className={selectCls}
                     >
-                      <option value="PUBLIC">Public</option>
-                      <option value="MUTUAL">Mutual</option>
-                      <option value="SELF_ONLY">Private (Self Only)</option>
+                      <option value='PUBLIC'>Public</option>
+                      <option value='MUTUAL'>Mutual</option>
+                      <option value='SELF_ONLY'>Private (Self Only)</option>
                     </select>
                   </div>
                 )}
@@ -400,55 +427,126 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
               data.actionType === "delete_threads_post" ||
               data.actionType === "reply_instagram_comment") && (
               <>
-                {(data.actionType === "update_facebook_post" || data.actionType === "delete_facebook_post") && (
+                {(data.actionType === "update_facebook_post" ||
+                  data.actionType === "delete_facebook_post") && (
                   <div>
                     <label className={labelCls}>Post ID</label>
-                    <input type="text" value={data.postId || ""} onChange={(e) => data.onNodeDataChange(id, { postId: e.target.value })} className={inputCls} placeholder="Post ID" />
+                    <input
+                      type='text'
+                      value={data.postId || ""}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, { postId: e.target.value })
+                      }
+                      className={inputCls}
+                      placeholder='Post ID'
+                    />
                   </div>
                 )}
-                {(data.actionType === "reply_facebook_comment" || data.actionType === "reply_youtube_comment" || data.actionType === "reply_instagram_comment") && (
+                {(data.actionType === "reply_facebook_comment" ||
+                  data.actionType === "reply_youtube_comment" ||
+                  data.actionType === "reply_instagram_comment") && (
                   <div>
                     <label className={labelCls}>Comment ID</label>
-                    <input type="text" value={data.commentId || ""} onChange={(e) => data.onNodeDataChange(id, { commentId: e.target.value })} className={inputCls} placeholder="Comment ID" />
+                    <input
+                      type='text'
+                      value={data.commentId || ""}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, { commentId: e.target.value })
+                      }
+                      className={inputCls}
+                      placeholder='Comment ID'
+                    />
                   </div>
                 )}
                 {data.actionType === "delete_linkedin_post" && (
                   <div>
                     <label className={labelCls}>Share ID</label>
-                    <input type="text" value={data.shareId || ""} onChange={(e) => data.onNodeDataChange(id, { shareId: e.target.value })} className={inputCls} placeholder="Share ID" />
+                    <input
+                      type='text'
+                      value={data.shareId || ""}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, { shareId: e.target.value })
+                      }
+                      className={inputCls}
+                      placeholder='Share ID'
+                    />
                   </div>
                 )}
                 {data.actionType === "reply_linkedin_comment" && (
                   <div>
                     <label className={labelCls}>Comment URN</label>
-                    <input type="text" value={data.commentUrn || ""} onChange={(e) => data.onNodeDataChange(id, { commentUrn: e.target.value })} className={inputCls} placeholder="Comment URN" />
+                    <input
+                      type='text'
+                      value={data.commentUrn || ""}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, {
+                          commentUrn: e.target.value,
+                        })
+                      }
+                      className={inputCls}
+                      placeholder='Comment URN'
+                    />
                   </div>
                 )}
-                {(data.actionType === "update_pinterest_pin" || data.actionType === "delete_pinterest_pin") && (
+                {(data.actionType === "update_pinterest_pin" ||
+                  data.actionType === "delete_pinterest_pin") && (
                   <div>
                     <label className={labelCls}>Pin ID</label>
-                    <input type="text" value={data.pinId || ""} onChange={(e) => data.onNodeDataChange(id, { pinId: e.target.value })} className={inputCls} placeholder="Pin ID" />
+                    <input
+                      type='text'
+                      value={data.pinId || ""}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, { pinId: e.target.value })
+                      }
+                      className={inputCls}
+                      placeholder='Pin ID'
+                    />
                   </div>
                 )}
-                {(data.actionType === "update_youtube_video" || data.actionType === "delete_youtube_video") && (
+                {(data.actionType === "update_youtube_video" ||
+                  data.actionType === "delete_youtube_video") && (
                   <div>
                     <label className={labelCls}>Video ID</label>
-                    <input type="text" value={data.videoId || ""} onChange={(e) => data.onNodeDataChange(id, { videoId: e.target.value })} className={inputCls} placeholder="Video ID" />
+                    <input
+                      type='text'
+                      value={data.videoId || ""}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, { videoId: e.target.value })
+                      }
+                      className={inputCls}
+                      placeholder='Video ID'
+                    />
                   </div>
                 )}
                 {data.actionType === "delete_tweet" && (
                   <div>
                     <label className={labelCls}>Tweet ID</label>
-                    <input type="text" value={data.tweetId || ""} onChange={(e) => data.onNodeDataChange(id, { tweetId: e.target.value })} className={inputCls} placeholder="Tweet ID" />
+                    <input
+                      type='text'
+                      value={data.tweetId || ""}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, { tweetId: e.target.value })
+                      }
+                      className={inputCls}
+                      placeholder='Tweet ID'
+                    />
                   </div>
                 )}
                 {data.actionType === "delete_threads_post" && (
                   <div>
                     <label className={labelCls}>Media ID</label>
-                    <input type="text" value={data.mediaId || ""} onChange={(e) => data.onNodeDataChange(id, { mediaId: e.target.value })} className={inputCls} placeholder="Media ID" />
+                    <input
+                      type='text'
+                      value={data.mediaId || ""}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, { mediaId: e.target.value })
+                      }
+                      className={inputCls}
+                      placeholder='Media ID'
+                    />
                   </div>
                 )}
-                
+
                 {/* Content text for updates/replies */}
                 {(data.actionType === "update_facebook_post" ||
                   data.actionType === "reply_facebook_comment" ||
@@ -459,7 +557,16 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                   data.actionType === "update_youtube_video") && (
                   <div>
                     <label className={labelCls}>Message/Content</label>
-                    <textarea value={data.contentText || ""} onChange={(e) => data.onNodeDataChange(id, { contentText: e.target.value })} className={cn(inputCls, "min-h-[40px] resize-none")} placeholder="Message text" />
+                    <textarea
+                      value={data.contentText || ""}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, {
+                          contentText: e.target.value,
+                        })
+                      }
+                      className={cn(inputCls, "min-h-[40px] resize-none")}
+                      placeholder='Message text'
+                    />
                   </div>
                 )}
 
@@ -468,11 +575,29 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                   <>
                     <div>
                       <label className={labelCls}>Title</label>
-                      <input type="text" value={data.postTitle || ""} onChange={(e) => data.onNodeDataChange(id, { postTitle: e.target.value })} className={inputCls} placeholder="New Title" />
+                      <input
+                        type='text'
+                        value={data.postTitle || ""}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, {
+                            postTitle: e.target.value,
+                          })
+                        }
+                        className={inputCls}
+                        placeholder='New Title'
+                      />
                     </div>
                     <div>
                       <label className={labelCls}>Board ID</label>
-                      <input type="text" value={data.boardId || ""} onChange={(e) => data.onNodeDataChange(id, { boardId: e.target.value })} className={inputCls} placeholder="Board ID" />
+                      <input
+                        type='text'
+                        value={data.boardId || ""}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, { boardId: e.target.value })
+                        }
+                        className={inputCls}
+                        placeholder='Board ID'
+                      />
                     </div>
                   </>
                 )}
@@ -482,22 +607,58 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                   <>
                     <div>
                       <label className={labelCls}>Title</label>
-                      <input type="text" value={data.postTitle || ""} onChange={(e) => data.onNodeDataChange(id, { postTitle: e.target.value })} className={inputCls} placeholder="New Title" />
+                      <input
+                        type='text'
+                        value={data.postTitle || ""}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, {
+                            postTitle: e.target.value,
+                          })
+                        }
+                        className={inputCls}
+                        placeholder='New Title'
+                      />
                     </div>
                     <div>
                       <label className={labelCls}>Category ID</label>
-                      <input type="text" value={data.categoryId || ""} onChange={(e) => data.onNodeDataChange(id, { categoryId: e.target.value })} className={inputCls} placeholder="Category ID" />
+                      <input
+                        type='text'
+                        value={data.categoryId || ""}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, {
+                            categoryId: e.target.value,
+                          })
+                        }
+                        className={inputCls}
+                        placeholder='Category ID'
+                      />
                     </div>
                     <div>
                       <label className={labelCls}>Tags</label>
-                      <input type="text" value={data.tags || ""} onChange={(e) => data.onNodeDataChange(id, { tags: e.target.value })} className={inputCls} placeholder="tag1, tag2" />
+                      <input
+                        type='text'
+                        value={data.tags || ""}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, { tags: e.target.value })
+                        }
+                        className={inputCls}
+                        placeholder='tag1, tag2'
+                      />
                     </div>
                     <div>
                       <label className={labelCls}>Privacy Status</label>
-                      <select value={data.privacyStatus || "private"} onChange={(e) => data.onNodeDataChange(id, { privacyStatus: e.target.value })} className={selectCls}>
-                        <option value="public">Public</option>
-                        <option value="private">Private</option>
-                        <option value="unlisted">Unlisted</option>
+                      <select
+                        value={data.privacyStatus || "private"}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, {
+                            privacyStatus: e.target.value,
+                          })
+                        }
+                        className={selectCls}
+                      >
+                        <option value='public'>Public</option>
+                        <option value='private'>Private</option>
+                        <option value='unlisted'>Unlisted</option>
                       </select>
                     </div>
                   </>
@@ -518,7 +679,7 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                     data.onNodeDataChange(id, { instruction: e.target.value })
                   }
                   className={cn(inputCls, "min-h-[50px] resize-none")}
-                  placeholder="Describe what to generate..."
+                  placeholder='Describe what to generate...'
                 />
               </div>
             )}
@@ -529,7 +690,7 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                 <div>
                   <label className={labelCls}>Event Title</label>
                   <input
-                    type="text"
+                    type='text'
                     value={data.calendarSummary || ""}
                     onChange={(e) =>
                       data.onNodeDataChange(id, {
@@ -537,13 +698,13 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                       })
                     }
                     className={inputCls}
-                    placeholder="Meeting title"
+                    placeholder='Meeting title'
                   />
                 </div>
                 <div>
                   <label className={labelCls}>Date/Time</label>
                   <input
-                    type="text"
+                    type='text'
                     value={data.calendarDate || ""}
                     onChange={(e) =>
                       data.onNodeDataChange(id, {
@@ -551,7 +712,7 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                       })
                     }
                     className={inputCls}
-                    placeholder="2024-01-15T10:00 or {{ trigger.date }}"
+                    placeholder='2024-01-15T10:00 or {{ trigger.date }}'
                   />
                 </div>
               </>
@@ -562,7 +723,7 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
               <div>
                 <label className={labelCls}>Folder Path</label>
                 <input
-                  type="text"
+                  type='text'
                   value={data.driveFolderPath || ""}
                   onChange={(e) =>
                     data.onNodeDataChange(id, {
@@ -570,36 +731,38 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                     })
                   }
                   className={inputCls}
-                  placeholder="/Automations/Output"
+                  placeholder='/Automations/Output'
                 />
               </div>
             )}
           </>
         ) : (
-          <div className="space-y-1.5">
-            <h4 className="text-xs font-medium text-zinc-900 dark:text-neutral-100 truncate">
+          <div className='space-y-1.5'>
+            <h4 className='truncate text-xs font-medium text-zinc-900 dark:text-neutral-100'>
               {data.title}
             </h4>
-            <div className="text-[10px] text-zinc-600 dark:text-neutral-400 bg-zinc-50 dark:bg-neutral-950 border border-zinc-200 dark:border-neutral-800/50 px-3 py-2 rounded-xl space-y-1">
-              <span className="font-medium text-zinc-800 dark:text-neutral-200 flex items-center gap-1.5">
-                {Icon && <Icon className="h-3.5 w-3.5 text-zinc-500 dark:text-neutral-400 shrink-0" />}
+            <div className='space-y-1 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-[10px] text-zinc-600 dark:border-neutral-800/50 dark:bg-neutral-950 dark:text-neutral-400'>
+              <span className='flex items-center gap-1.5 font-medium text-zinc-800 dark:text-neutral-200'>
+                {Icon && (
+                  <Icon className='h-3.5 w-3.5 shrink-0 text-zinc-500 dark:text-neutral-400' />
+                )}
                 <span>{subtypeConfig?.label || data.actionType}</span>
               </span>
-              <span className="block mt-0.5 text-[9px] text-zinc-500 dark:text-neutral-400">
+              <span className='mt-0.5 block text-[9px] text-zinc-500 dark:text-neutral-400'>
                 {subtypeConfig?.integration}
               </span>
               {data.recipientEmail && (
-                <span className="block mt-0.5 truncate text-[10px]">
+                <span className='mt-0.5 block truncate text-[10px]'>
                   To: {data.recipientEmail}
                 </span>
               )}
               {data.contentText && (
-                <span className="block mt-0.5 truncate text-[10px] text-zinc-700 dark:text-neutral-300">
+                <span className='mt-0.5 block truncate text-[10px] text-zinc-700 dark:text-neutral-300'>
                   {data.contentText}
                 </span>
               )}
               {data.instruction && (
-                <span className="block mt-0.5 truncate text-[10px] text-zinc-700 dark:text-neutral-300">
+                <span className='mt-0.5 block truncate text-[10px] text-zinc-700 dark:text-neutral-300'>
                   {data.instruction}
                 </span>
               )}
@@ -609,9 +772,9 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
       </div>
 
       <Handle
-        type="source"
+        type='source'
         position={Position.Bottom}
-        className="!w-2 !h-2 !bg-blue-500 !border-2 !border-white dark:!border-neutral-900"
+        className='!h-2 !w-2 !border-2 !border-white !bg-blue-500 dark:!border-neutral-900'
       />
     </div>
   );

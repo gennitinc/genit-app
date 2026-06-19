@@ -1,8 +1,16 @@
 "use client";
 import { Navbar } from "./navbar";
 import { Button } from "./ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
 import { Input } from "./ui/input";
+import { useProjectDesign } from "@/context/DesignProject";
 import { FloatingSidebar } from "@/floating-sidebar";
 import { trackEvent, trackFeatureUsed } from "@/lib/mixpanelClient";
 import { createNode as createNodeUtil } from "@/lib/workflow-utils";
@@ -34,58 +42,38 @@ import { YouTubeNode } from "@/nodes/youtube-node";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
-import { FolderOpen, History as HistoryIcon, Loader2, Maximize2, Minus, Plus, PlusCircle, Redo2, Undo2 } from "lucide-react";
+import {
+  FolderOpen,
+  History as HistoryIcon,
+  Loader2,
+  Maximize2,
+  Minus,
+  Plus,
+  PlusCircle,
+  Redo2,
+  Undo2,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
-import ReactFlow, { Background, type Connection, Controls, type Edge, type EdgeChange, type EdgeTypes, Node, type NodeChange, type NodeMouseHandler, NodeTypes, applyEdgeChanges, applyNodeChanges, useEdgesState, useNodesState } from "reactflow";
+import ReactFlow, {
+  Background,
+  type Connection,
+  Controls,
+  type Edge,
+  type EdgeChange,
+  type EdgeTypes,
+  Node,
+  type NodeChange,
+  type NodeMouseHandler,
+  NodeTypes,
+  applyEdgeChanges,
+  applyNodeChanges,
+  useEdgesState,
+  useNodesState,
+} from "reactflow";
 import "reactflow/dist/style.css";
 import { io } from "socket.io-client";
 import { toast } from "sonner";
 import React, { useCallback, useEffect, useState } from "react";
-import { useProjectDesign } from "@/context/DesignProject";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Import edge types
 const nodeTypes: NodeTypes = {
@@ -140,7 +128,13 @@ const getDocumentType = (url: string, fileName?: string) => {
   }
 };
 
-const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?: boolean }) => {
+const GenittWorkflow = ({
+  slug,
+  embedMode = false,
+}: {
+  slug?: string;
+  embedMode?: boolean;
+}) => {
   const { focusedGenerationId, messages } = useProjectDesign();
   const router = useRouter();
   const [projectId, setProjectId] = useState<string | null>(null);
@@ -330,7 +324,6 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
   // Node creation function - single source of truth
   const createNode = useCallback(
     async (type: string, data: any) => {
-
       // Place node at the center of the current viewport so it's always visible
       let position = data.position;
       if (!position) {
@@ -866,8 +859,7 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
   }, []);
 
   // Handle node drag events
-  const onNodeDragStart = useCallback((event: any, node: Node) => {
-  }, []);
+  const onNodeDragStart = useCallback((event: any, node: Node) => {}, []);
 
   const onNodeDrag = useCallback((event: any, node: Node) => {
     // No-op: React Flow handles position updates via onNodesChange
@@ -936,7 +928,6 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
 
   const onEdgesDelete = useCallback(
     (deletedEdges: Edge[]) => {
-
       setNodes((prevNodes) => {
         const updatedNodes = prevNodes.map((node) => {
           // Find if this node was a target of any deleted edges
@@ -1177,7 +1168,11 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
             const item = group.items?.find(
               (it: any) => it.id === focusedGenerationId
             );
-            if (item && item.type === "application/json+workflow" && item.data) {
+            if (
+              item &&
+              item.type === "application/json+workflow" &&
+              item.data
+            ) {
               foundSnapshot = item.data;
               break;
             }
@@ -1202,59 +1197,57 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
 
   if (isLoading) {
     return (
-      <div className='flex flex-col items-center justify-center h-screen bg-background'>
+      <div className='bg-background flex h-screen flex-col items-center justify-center'>
         <LoadingFileLoader />
-        <p className='text-muted-foreground animate-pulse'>
-          Loading your workflow...
-        </p>
+       
       </div>
     );
   }
 
   if (embedMode) {
     return (
-      <div className='relative w-full h-full bg-background flex flex-col'>
-        <div className='bg-background relative h-full w-full flex-1 min-h-0'>
-          <div className='absolute z-10 flex items-center space-x-2 -translate-x-1/2 top-4 left-1/2'>
-            <div className='flex items-center p-2 space-x-1 border rounded-sm shadow-lg bg-muted/50 border-border backdrop-blur-sm'>
+      <div className='bg-background relative flex h-full w-full flex-col'>
+        <div className='bg-background relative h-full min-h-0 w-full flex-1'>
+          <div className='absolute top-4 left-1/2 z-10 flex -translate-x-1/2 items-center space-x-2'>
+            <div className='bg-muted/50 border-border flex items-center space-x-1 rounded-sm border p-2 shadow-lg backdrop-blur-sm'>
               <Button
                 variant='ghost'
                 size='sm'
                 onClick={memoizedHandleUndo}
                 disabled={historyIndex <= 0}
-                className='w-8 h-8 p-0 rounded-sm hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50'
+                className='hover:bg-accent h-8 w-8 rounded-sm p-0 disabled:cursor-not-allowed disabled:opacity-50'
                 title='Undo (Ctrl+Z)'
               >
-                <Undo2 className='w-4 h-4' />
+                <Undo2 className='h-4 w-4' />
               </Button>
               <Button
                 variant='ghost'
                 size='sm'
                 onClick={memoizedHandleRedo}
                 disabled={historyIndex >= history.length - 1}
-                className='w-8 h-8 p-0 rounded-sm hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50'
+                className='hover:bg-accent h-8 w-8 rounded-sm p-0 disabled:cursor-not-allowed disabled:opacity-50'
                 title='Redo (Ctrl+Y)'
               >
-                <Redo2 className='w-4 h-4' />
+                <Redo2 className='h-4 w-4' />
               </Button>
-              <div className='w-px h-6 mx-1 bg-border'></div>
+              <div className='bg-border mx-1 h-6 w-px'></div>
               <Button
                 variant='ghost'
                 size='sm'
                 onClick={() => reactFlowInstance?.zoomIn({ duration: 200 })}
-                className='w-8 h-8 p-0 rounded-sm hover:bg-accent'
+                className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                 title='Zoom In'
               >
-                <Plus className='w-4 h-4' />
+                <Plus className='h-4 w-4' />
               </Button>
               <Button
                 variant='ghost'
                 size='sm'
                 onClick={() => reactFlowInstance?.zoomOut({ duration: 200 })}
-                className='w-8 h-8 p-0 rounded-sm hover:bg-accent'
+                className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                 title='Zoom Out'
               >
-                <Minus className='w-4 h-4' />
+                <Minus className='h-4 w-4' />
               </Button>
               <Button
                 variant='ghost'
@@ -1262,10 +1255,10 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
                 onClick={() =>
                   reactFlowInstance?.fitView({ padding: 0.1, duration: 200 })
                 }
-                className='w-8 h-8 p-0 rounded-sm hover:bg-accent'
+                className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                 title='Fit View'
               >
-                <Maximize2 className='w-4 h-4' />
+                <Maximize2 className='h-4 w-4' />
               </Button>
             </div>
           </div>
@@ -1292,9 +1285,9 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
                       ...node,
                       data: {
                         ...node.data,
-                        connectedItems: (
-                          node.data.connectedItems || []
-                        ).filter((id: string) => id !== edge.source),
+                        connectedItems: (node.data.connectedItems || []).filter(
+                          (id: string) => id !== edge.source
+                        ),
                       },
                     };
                   }
@@ -1333,7 +1326,7 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
   }
 
   return (
-    <div className='flex flex-col h-screen from-background via-background to-muted/10 bg-gradient-to-br'>
+    <div className='from-background via-background to-muted/10 flex h-screen flex-col bg-gradient-to-br'>
       <Navbar title={projectName} />
 
       <div className='relative flex flex-1'>
@@ -1345,49 +1338,49 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
           slug={slug}
         />
 
-        <div className='flex flex-col flex-1'>
+        <div className='flex flex-1 flex-col'>
           {/* React Flow Canvas - All functionality moved here */}
           <div className='bg-background relative h-full min-h-[600px] w-full flex-1'>
-            <div className='absolute z-10 flex items-center space-x-2 -translate-x-1/2 top-4 left-1/2'>
-              <div className='flex items-center p-2 space-x-1 border rounded-sm shadow-lg bg-muted/50 border-border backdrop-blur-sm'>
+            <div className='absolute top-4 left-1/2 z-10 flex -translate-x-1/2 items-center space-x-2'>
+              <div className='bg-muted/50 border-border flex items-center space-x-1 rounded-sm border p-2 shadow-lg backdrop-blur-sm'>
                 <Button
                   variant='ghost'
                   size='sm'
                   onClick={memoizedHandleUndo}
                   disabled={historyIndex <= 0}
-                  className='w-8 h-8 p-0 rounded-sm hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50'
+                  className='hover:bg-accent h-8 w-8 rounded-sm p-0 disabled:cursor-not-allowed disabled:opacity-50'
                   title='Undo (Ctrl+Z)'
                 >
-                  <Undo2 className='w-4 h-4' />
+                  <Undo2 className='h-4 w-4' />
                 </Button>
                 <Button
                   variant='ghost'
                   size='sm'
                   onClick={memoizedHandleRedo}
                   disabled={historyIndex >= history.length - 1}
-                  className='w-8 h-8 p-0 rounded-sm hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50'
+                  className='hover:bg-accent h-8 w-8 rounded-sm p-0 disabled:cursor-not-allowed disabled:opacity-50'
                   title='Redo (Ctrl+Y)'
                 >
-                  <Redo2 className='w-4 h-4' />
+                  <Redo2 className='h-4 w-4' />
                 </Button>
-                <div className='w-px h-6 mx-1 bg-border'></div>
+                <div className='bg-border mx-1 h-6 w-px'></div>
                 <Button
                   variant='ghost'
                   size='sm'
                   onClick={() => reactFlowInstance?.zoomIn({ duration: 200 })}
-                  className='w-8 h-8 p-0 rounded-sm hover:bg-accent'
+                  className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                   title='Zoom In'
                 >
-                  <Plus className='w-4 h-4' />
+                  <Plus className='h-4 w-4' />
                 </Button>
                 <Button
                   variant='ghost'
                   size='sm'
                   onClick={() => reactFlowInstance?.zoomOut({ duration: 200 })}
-                  className='w-8 h-8 p-0 rounded-sm hover:bg-accent'
+                  className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                   title='Zoom Out'
                 >
-                  <Minus className='w-4 h-4' />
+                  <Minus className='h-4 w-4' />
                 </Button>
                 <Button
                   variant='ghost'
@@ -1395,10 +1388,10 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
                   onClick={() =>
                     reactFlowInstance?.fitView({ padding: 0.1, duration: 200 })
                   }
-                  className='w-8 h-8 p-0 rounded-sm hover:bg-accent'
+                  className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                   title='Fit View'
                 >
-                  <Maximize2 className='w-4 h-4' />
+                  <Maximize2 className='h-4 w-4' />
                 </Button>
               </div>
             </div>
@@ -1493,7 +1486,7 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
         >
           <DialogHeader>
             <DialogTitle className='flex items-center gap-2 text-2xl font-bold'>
-              <PlusCircle className='w-6 h-6 text-primary' />
+              <PlusCircle className='text-primary h-6 w-6' />
               Workflow Engine
             </DialogTitle>
             <DialogDescription>
@@ -1501,12 +1494,12 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
             </DialogDescription>
           </DialogHeader>
 
-          <div className='relative px-4 py-4 space-y-6'>
-            <div className='absolute inset-0 overflow-hidden pointer-events-none'>
+          <div className='relative space-y-6 px-4 py-4'>
+            <div className='pointer-events-none absolute inset-0 overflow-hidden'>
               <GradientFrame />
             </div>
             <div className='space-y-2'>
-              <label className='px-1 text-sm font-medium text-muted-foreground'>
+              <label className='text-muted-foreground px-1 text-sm font-medium'>
                 New Project Name
               </label>
               <div className='flex space-x-2'>
@@ -1519,10 +1512,10 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
                 <Button
                   onClick={handleCreateWorkflow}
                   disabled={!projectName.trim() || isCreating}
-                  className='bg-indigo-600 hover:bg-indigo-700 text-primary-foreground hover:bg-indigo-600 hover:bg-indigo-700/90'
+                  className='text-primary-foreground bg-indigo-600 hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90'
                 >
                   {isCreating ? (
-                    <Loader2 className='w-4 h-4 animate-spin' />
+                    <Loader2 className='h-4 w-4 animate-spin' />
                   ) : (
                     "Create"
                   )}
@@ -1532,24 +1525,24 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
 
             <div className='relative'>
               <div className='absolute inset-0 flex items-center'>
-                <span className='w-full border-t border-border' />
+                <span className='border-border w-full border-t' />
               </div>
               <div className='relative flex justify-center text-xs'>
-                <span className='px-2 rounded-sm bg-background text-muted-foreground'>
+                <span className='bg-background text-muted-foreground rounded-sm px-2'>
                   Or open existing
                 </span>
               </div>
             </div>
 
             <div className='space-y-2'>
-              <label className='flex items-center gap-2 px-1 text-sm font-medium text-muted-foreground'>
-                <HistoryIcon className='w-4 h-4' />
+              <label className='text-muted-foreground flex items-center gap-2 px-1 text-sm font-medium'>
+                <HistoryIcon className='h-4 w-4' />
                 Project History
               </label>
-              <div className='custom-scrollbar max-h-[200px] space-y-2 overflow-y-auto pr-1 mb-6'>
+              <div className='custom-scrollbar mb-6 max-h-[200px] space-y-2 overflow-y-auto pr-1'>
                 {isHistoryLoading ? (
                   <div className='flex justify-center p-4'>
-                    <Loader2 className='w-6 h-6 text-muted-foreground animate-spin' />
+                    <Loader2 className='text-muted-foreground h-6 w-6 animate-spin' />
                   </div>
                 ) : historyProjects.length > 0 ? (
                   historyProjects.map((project) => (
@@ -1558,14 +1551,14 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
                       onClick={() =>
                         router.push(`/apps/workflow/${project.slug}`)
                       }
-                      className='flex items-center justify-between p-3 transition-all border rounded-sm cursor-pointer group border-border bg-muted/30 hover:bg-muted/50 hover:border-primary/30'
+                      className='group border-border bg-muted/30 hover:bg-muted/50 hover:border-primary/30 flex cursor-pointer items-center justify-between rounded-sm border p-3 transition-all'
                     >
                       <div className='flex items-center gap-3'>
-                        <div className='flex items-center justify-center w-8 h-8 rounded-sm bg-indigo-600 hover:bg-indigo-700/10'>
-                          <HistoryIcon className='w-4 h-4 text-primary' />
+                        <div className='flex h-8 w-8 items-center justify-center rounded-sm bg-indigo-600 hover:bg-indigo-700/10'>
+                          <HistoryIcon className='text-primary h-4 w-4' />
                         </div>
                         <div>
-                          <p className='text-sm font-medium transition-colors text-foreground group-hover:text-primary'>
+                          <p className='text-foreground group-hover:text-primary text-sm font-medium transition-colors'>
                             {project.name}
                           </p>
                           <p className='text-muted-foreground text-[10px]'>
@@ -1574,11 +1567,11 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
                           </p>
                         </div>
                       </div>
-                      <FolderOpen className='w-4 h-4 transition-colors text-muted-foreground group-hover:text-primary' />
+                      <FolderOpen className='text-muted-foreground group-hover:text-primary h-4 w-4 transition-colors' />
                     </div>
                   ))
                 ) : (
-                  <div className='py-8 text-sm text-center border border-dashed rounded-sm text-muted-foreground border-border'>
+                  <div className='text-muted-foreground border-border rounded-sm border border-dashed py-8 text-center text-sm'>
                     No existing workflows found.
                   </div>
                 )}

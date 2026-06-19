@@ -32,9 +32,9 @@ import {
   GitBranch,
   Loader2,
 } from "lucide-react";
+import Link from "next/link";
 import Markdown from "react-markdown";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 /** Strip raw JSON / API error dumps from AI text and replace with a friendly message. */
 function sanitizeTextContent(text: string): string {
@@ -47,7 +47,11 @@ function sanitizeTextContent(text: string): string {
       if (parsed.error) {
         const code = parsed.error?.code || parsed.code;
         const status = parsed.error?.status;
-        if (code === 429 || status === "RESOURCE_EXHAUSTED" || status === "Too Many Requests") {
+        if (
+          code === 429 ||
+          status === "RESOURCE_EXHAUSTED" ||
+          status === "Too Many Requests"
+        ) {
           return "We're experiencing high demand right now. Please try again in a moment.";
         }
         if (code === 401 || code === 403) {
@@ -63,7 +67,10 @@ function sanitizeTextContent(text: string): string {
   const jsonErrorMatch = trimmed.match(/\{"error":\{[\s\S]*\}\}/);
   if (jsonErrorMatch && jsonErrorMatch[0].length > text.length * 0.5) {
     const cleaned = text.replace(jsonErrorMatch[0], "").trim();
-    return cleaned || "Something went wrong while processing your request. Please try again.";
+    return (
+      cleaned ||
+      "Something went wrong while processing your request. Please try again."
+    );
   }
   return text;
 }
@@ -156,7 +163,10 @@ export function AIMessage({
                   // Remove markdown images: ![alt](url)
                   textContent = textContent.replace(/!\[.*?\]\(.*?\)/g, "");
                   // Remove markdown links to generated files: [text](https://...)
-                  textContent = textContent.replace(/\[.*?\]\(https?:\/\/.*?\)/g, "");
+                  textContent = textContent.replace(
+                    /\[.*?\]\(https?:\/\/.*?\)/g,
+                    ""
+                  );
                   // Remove raw URLs on their own lines
                   textContent = textContent.replace(/^https?:\/\/\S+$/gm, "");
                   // Clean up excessive whitespace
@@ -167,61 +177,125 @@ export function AIMessage({
                 if (!textContent) return null;
 
                 const lowerText = textContent.toLowerCase();
-                const needsAdBalanceTopUp = lowerText.includes("ad balance") || lowerText.includes("top up");
-                const isMetaAdTopUp = needsAdBalanceTopUp && (lowerText.includes("meta") || lowerText.includes("facebook"));
-                const isGoogleAdTopUp = needsAdBalanceTopUp && (lowerText.includes("google"));
+                const needsAdBalanceTopUp =
+                  lowerText.includes("ad balance") ||
+                  lowerText.includes("top up");
+                const isMetaAdTopUp =
+                  needsAdBalanceTopUp &&
+                  (lowerText.includes("meta") ||
+                    lowerText.includes("facebook"));
+                const isGoogleAdTopUp =
+                  needsAdBalanceTopUp && lowerText.includes("google");
 
                 const integrationNames = [
-                  "Meta Ads", "Google Ads", "Facebook", "Instagram", "X Ads", "Twitter", "X", 
-                  "Pinterest", "TikTok", "LinkedIn", "Shopify", "Mailchimp", "Brevo"
+                  "Meta Ads",
+                  "Google Ads",
+                  "Facebook",
+                  "Instagram",
+                  "X Ads",
+                  "Twitter",
+                  "X",
+                  "Pinterest",
+                  "TikTok",
+                  "LinkedIn",
+                  "Shopify",
+                  "Mailchimp",
+                  "Brevo",
                 ];
                 let integrationToConnect: string | null = null;
                 let isReconnect = false;
-                
+
                 for (const name of integrationNames) {
                   const n = name.toLowerCase();
                   if (
-                    lowerText.includes(`connect ${n}`) || 
+                    lowerText.includes(`connect ${n}`) ||
                     lowerText.includes(`connect your ${n}`) ||
                     lowerText.includes(`no ${n} connection`) ||
                     lowerText.includes(`${n} needs reconnection`) ||
                     lowerText.includes(`reconnect ${n}`) ||
                     lowerText.includes(`reconnect your ${n}`) ||
-                    (lowerText.includes(n) && (lowerText.includes("token expired") || lowerText.includes("needs reconnection") || lowerText.includes("reconnect")))
+                    (lowerText.includes(n) &&
+                      (lowerText.includes("token expired") ||
+                        lowerText.includes("needs reconnection") ||
+                        lowerText.includes("reconnect")))
                   ) {
                     integrationToConnect = name;
-                    isReconnect = lowerText.includes("reconnect") || lowerText.includes("expired") || lowerText.includes("needs reconnection");
+                    isReconnect =
+                      lowerText.includes("reconnect") ||
+                      lowerText.includes("expired") ||
+                      lowerText.includes("needs reconnection");
                     break;
                   }
                 }
 
                 if (!integrationToConnect) {
-                  const match = textContent.match(/(?:reconnect|connect) (?:your )?([A-Z][A-Za-z0-9\s]+?)(?: account| integration| in the integrations page)/i) || 
-                                textContent.match(/([A-Z][A-Za-z0-9\s]+?) needs reconnection/i);
+                  const match =
+                    textContent.match(
+                      /(?:reconnect|connect) (?:your )?([A-Z][A-Za-z0-9\s]+?)(?: account| integration| in the integrations page)/i
+                    ) ||
+                    textContent.match(
+                      /([A-Z][A-Za-z0-9\s]+?) needs reconnection/i
+                    );
                   if (match && match[1].length < 20) {
                     integrationToConnect = match[1].trim();
-                    isReconnect = lowerText.includes("reconnect") || lowerText.includes("expired") || lowerText.includes("needs reconnection");
+                    isReconnect =
+                      lowerText.includes("reconnect") ||
+                      lowerText.includes("expired") ||
+                      lowerText.includes("needs reconnection");
                   }
                 }
 
                 return (
-                  <div key={`${message.id}-${i}`} className="flex flex-col gap-2">
+                  <div
+                    key={`${message.id}-${i}`}
+                    className='flex flex-col gap-2'
+                  >
                     <Response>{textContent}</Response>
                     {(integrationToConnect || needsAdBalanceTopUp) && (
-                      <div className="flex flex-wrap gap-2 mt-2">
+                      <div className='mt-2 flex flex-wrap gap-2'>
                         {integrationToConnect && (
-                          <Button asChild size="sm" variant="default" className="w-fit">
-                            <Link href="/integrations">{isReconnect ? "Reconnect / Manage" : "Connect"} {integrationToConnect}</Link>
+                          <Button
+                            asChild
+                            size='sm'
+                            variant='default'
+                            className='w-fit'
+                          >
+                            <Link href='/integrations'>
+                              {isReconnect ? "Reconnect / Manage" : "Connect"}{" "}
+                              {integrationToConnect}
+                            </Link>
                           </Button>
                         )}
                         {isMetaAdTopUp && (
-                          <Button asChild size="sm" variant="secondary" className="w-fit">
-                            <a href="https://business.facebook.com/ads/manager/billing_history/summary/" target="_blank" rel="noopener noreferrer">Top Up Meta Ads Balance</a>
+                          <Button
+                            asChild
+                            size='sm'
+                            variant='secondary'
+                            className='w-fit'
+                          >
+                            <a
+                              href='https://business.facebook.com/ads/manager/billing_history/summary/'
+                              target='_blank'
+                              rel='noopener noreferrer'
+                            >
+                              Top Up Meta Ads Balance
+                            </a>
                           </Button>
                         )}
                         {isGoogleAdTopUp && (
-                          <Button asChild size="sm" variant="secondary" className="w-fit">
-                            <a href="https://ads.google.com/aw/billing/summary" target="_blank" rel="noopener noreferrer">Top Up Google Ads Balance</a>
+                          <Button
+                            asChild
+                            size='sm'
+                            variant='secondary'
+                            className='w-fit'
+                          >
+                            <a
+                              href='https://ads.google.com/aw/billing/summary'
+                              target='_blank'
+                              rel='noopener noreferrer'
+                            >
+                              Top Up Google Ads Balance
+                            </a>
                           </Button>
                         )}
                       </div>
@@ -278,12 +352,12 @@ export function AIMessage({
                                 className={cn(
                                   "border-border/50 bg-background/50 flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-all duration-200",
                                   "hover:bg-muted/50 hover:border-primary/30",
-                                  "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-indigo-600 hover:bg-indigo-700/5 peer-data-[state=checked]:ring-primary peer-data-[state=checked]:ring-1",
+                                  "peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-primary peer-data-[state=checked]:bg-indigo-600 peer-data-[state=checked]:ring-1 hover:bg-indigo-700/5",
                                   "group-hover:translate-x-1"
                                 )}
                               >
                                 <div className='border-primary/20 peer-data-[state=checked]:border-primary flex h-4 w-4 items-center justify-center rounded-full border transition-colors'>
-                                  <div className='bg-indigo-600 hover:bg-indigo-700 h-2 w-2 rounded-full opacity-0 transition-opacity peer-data-[state=checked]:opacity-100' />
+                                  <div className='h-2 w-2 rounded-full bg-indigo-600 opacity-0 transition-opacity peer-data-[state=checked]:opacity-100 hover:bg-indigo-700' />
                                 </div>
                                 <span className='text-foreground/80 group-hover:text-foreground text-xs font-semibold'>
                                   {option}
@@ -307,7 +381,7 @@ export function AIMessage({
                         key={idx}
                         variant='secondary'
                         size='sm'
-                        className='bg-indigo-600 hover:bg-indigo-700/5 hover:bg-indigo-600 hover:bg-indigo-700/10 border-primary/20 rounded-full text-xs'
+                        className='border-primary/20 rounded-full bg-indigo-600 text-xs hover:bg-indigo-600 hover:bg-indigo-700/5 hover:bg-indigo-700/10'
                         onClick={() => onOptionClick?.(option)}
                       >
                         {option}

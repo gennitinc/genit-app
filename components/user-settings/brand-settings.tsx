@@ -8,6 +8,7 @@ import {
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -18,25 +19,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { useToast } from "@/hooks/use-toast";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
-import {
-  ImageIcon,
-  Loader2,
-  Lock,
-  Palette,
-  Plus,
-  Save,
-  X,
-} from "lucide-react";
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { ImageIcon, Loader2, Lock, Palette, Plus, Save, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type SocialPlatform =
   | "facebook"
@@ -105,7 +92,10 @@ const SOCIAL_META: Record<
   SocialPlatform,
   {
     label: string;
-    icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+    icon: React.ComponentType<{
+      className?: string;
+      style?: React.CSSProperties;
+    }>;
     placeholder: string;
   }
 > = {
@@ -347,263 +337,262 @@ export default function BrandSettings() {
         </div>
       )}
       <fieldset disabled={isReadOnly} className='contents'>
-      <Card>
-        <CardHeader>
-          <CardTitle className='flex items-center gap-2'>
-            <Palette className='h-5 w-5' />
-            Brand identity
-          </CardTitle>
-          <CardDescription>
-            Update the logo, name, and one-line description we picked up during
-            onboarding.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className='space-y-6'>
-          <div className='flex flex-col gap-6 md:flex-row md:items-start'>
-            <button
-              type='button'
-              onClick={() => logoRef.current?.click()}
-              className='border-border bg-muted/40 hover:border-cyan-400/50 relative flex size-28 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-colors md:size-32'
-            >
-              {form.brandLogo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={form.brandLogo}
-                  alt='logo'
-                  className='max-h-full max-w-full rounded-md bg-white object-contain p-2'
-                />
-              ) : (
-                <div className='text-muted-foreground flex flex-col items-center gap-1'>
-                  <ImageIcon className='size-6' />
-                  <span className='text-xs'>Upload logo</span>
-                </div>
-              )}
-              {isUploadingLogo && (
-                <div className='bg-background/60 absolute inset-0 flex items-center justify-center backdrop-blur-sm'>
-                  <Loader2 className='size-6 animate-spin' />
-                </div>
-              )}
-            </button>
-            <input
-              ref={logoRef}
-              type='file'
-              accept='image/png,image/jpeg,image/svg+xml,image/webp'
-              className='hidden'
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) handleLogoSelect(f);
-              }}
-            />
-            <div className='grid w-full grid-cols-1 gap-4 md:grid-cols-2'>
-              <div className='space-y-2'>
-                <Label htmlFor='businessName'>Business name</Label>
-                <Input
-                  id='businessName'
-                  value={form.businessName}
-                  onChange={(e) => update("businessName", e.target.value)}
-                />
-              </div>
-              <div className='space-y-2'>
-                <Label htmlFor='companyWebsite'>Website</Label>
-                <Input
-                  id='companyWebsite'
-                  value={form.companyWebsite}
-                  onChange={(e) => update("companyWebsite", e.target.value)}
-                  placeholder='https://yoursite.com'
-                />
-              </div>
-              <div className='space-y-2 md:col-span-2'>
-                <Label htmlFor='businessBio'>One-line description</Label>
-                <Textarea
-                  id='businessBio'
-                  value={form.businessBio}
-                  onChange={(e) => update("businessBio", e.target.value)}
-                  rows={2}
-                />
-              </div>
-              <div className='space-y-2 md:col-span-2'>
-                <Label htmlFor='industry'>Industry</Label>
-                <Input
-                  id='industry'
-                  value={form.industry}
-                  onChange={(e) => update("industry", e.target.value)}
-                  placeholder='e.g. SaaS, Apparel, Agency'
-                />
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Visual style</CardTitle>
-          <CardDescription>
-            Brand colors and font preferences. Used to generate on-brand assets.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className='space-y-6'>
-          <div className='space-y-3'>
-            <Label>Colors</Label>
-            <div className='flex flex-wrap items-center gap-3'>
-              {colors.map((c, i) => (
-                <ColorSwatch
-                  key={i}
-                  value={c}
-                  onChange={(v) => setColorAt(i, v)}
-                  onRemove={() => removeColor(i)}
-                />
-              ))}
-              {colors.length < 6 && (
-                <button
-                  type='button'
-                  onClick={addColor}
-                  className='border-border text-muted-foreground hover:border-cyan-400/50 hover:text-cyan-600 dark:hover:text-cyan-300 size-12 rounded-full border-2 border-dashed transition-colors flex items-center justify-center'
-                >
-                  <Plus className='size-4' />
-                </button>
-              )}
-            </div>
-          </div>
-          <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-            <FontSelect
-              label='Headline font'
-              value={form.fontHeadline}
-              onChange={(v) => update("fontHeadline", v)}
-            />
-            <FontSelect
-              label='Body font'
-              value={form.fontBody}
-              onChange={(v) => update("fontBody", v)}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Brand DNA</CardTitle>
-          <CardDescription>
-            The narrative the AI uses when writing in your voice.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className='space-y-4'>
-          <div className='space-y-2'>
-            <Label htmlFor='aboutUs'>About us</Label>
-            <Textarea
-              id='aboutUs'
-              rows={4}
-              value={form.aboutUs}
-              onChange={(e) => update("aboutUs", e.target.value)}
-            />
-          </div>
-          <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-            <div className='space-y-2'>
-              <Label htmlFor='mission'>Mission</Label>
-              <Textarea
-                id='mission'
-                rows={3}
-                value={form.mission}
-                onChange={(e) => update("mission", e.target.value)}
+        <Card>
+          <CardHeader>
+            <CardTitle className='flex items-center gap-2'>
+              <Palette className='h-5 w-5' />
+              Brand identity
+            </CardTitle>
+            <CardDescription>
+              Update the logo, name, and one-line description we picked up
+              during onboarding.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className='space-y-6'>
+            <div className='flex flex-col gap-6 md:flex-row md:items-start'>
+              <button
+                type='button'
+                onClick={() => logoRef.current?.click()}
+                className='border-border bg-muted/40 relative flex size-28 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-colors hover:border-cyan-400/50 md:size-32'
+              >
+                {form.brandLogo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={form.brandLogo}
+                    alt='logo'
+                    className='max-h-full max-w-full rounded-md bg-white object-contain p-2'
+                  />
+                ) : (
+                  <div className='text-muted-foreground flex flex-col items-center gap-1'>
+                    <ImageIcon className='size-6' />
+                    <span className='text-xs'>Upload logo</span>
+                  </div>
+                )}
+                {isUploadingLogo && (
+                  <div className='bg-background/60 absolute inset-0 flex items-center justify-center backdrop-blur-sm'>
+                    <Loader2 className='size-6 animate-spin' />
+                  </div>
+                )}
+              </button>
+              <input
+                ref={logoRef}
+                type='file'
+                accept='image/png,image/jpeg,image/svg+xml,image/webp'
+                className='hidden'
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleLogoSelect(f);
+                }}
               />
-            </div>
-            <div className='space-y-2'>
-              <Label htmlFor='vision'>Vision</Label>
-              <Textarea
-                id='vision'
-                rows={3}
-                value={form.vision}
-                onChange={(e) => update("vision", e.target.value)}
-              />
-            </div>
-          </div>
-          <div className='space-y-2'>
-            <Label htmlFor='slogan'>Slogan</Label>
-            <Input
-              id='slogan'
-              value={form.slogan}
-              onChange={(e) => update("slogan", e.target.value)}
-              placeholder='Your tagline'
-            />
-          </div>
-          <div className='space-y-2'>
-            <Label>Values</Label>
-            <ChipEditor
-              values={form.values}
-              onChange={(v) => update("values", v)}
-              placeholder='Add a value'
-            />
-          </div>
-          <div className='space-y-2'>
-            <Label>Voice tone</Label>
-            <NumberedList
-              values={form.voiceTone}
-              onChange={(v) => update("voiceTone", v)}
-              placeholder='Add a tone word'
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Social profiles</CardTitle>
-          <CardDescription>
-            Where can people find you online?
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
-            {(Object.keys(SOCIAL_META) as SocialPlatform[]).map((key) => {
-              const meta = SOCIAL_META[key];
-              const Icon = meta.icon;
-              return (
-                <div key={key}>
-                  <Label className='mb-1.5 flex items-center gap-1.5 text-xs'>
-                    <Icon className='h-4 w-4' />
-                    {meta.label}
-                  </Label>
+              <div className='grid w-full grid-cols-1 gap-4 md:grid-cols-2'>
+                <div className='space-y-2'>
+                  <Label htmlFor='businessName'>Business name</Label>
                   <Input
-                    value={form.socials[key] || ""}
-                    onChange={(e) =>
-                      update("socials", {
-                        ...form.socials,
-                        [key]: e.target.value,
-                      })
-                    }
-                    placeholder={meta.placeholder}
+                    id='businessName'
+                    value={form.businessName}
+                    onChange={(e) => update("businessName", e.target.value)}
                   />
                 </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
+                <div className='space-y-2'>
+                  <Label htmlFor='companyWebsite'>Website</Label>
+                  <Input
+                    id='companyWebsite'
+                    value={form.companyWebsite}
+                    onChange={(e) => update("companyWebsite", e.target.value)}
+                    placeholder='https://yoursite.com'
+                  />
+                </div>
+                <div className='space-y-2 md:col-span-2'>
+                  <Label htmlFor='businessBio'>One-line description</Label>
+                  <Textarea
+                    id='businessBio'
+                    value={form.businessBio}
+                    onChange={(e) => update("businessBio", e.target.value)}
+                    rows={2}
+                  />
+                </div>
+                <div className='space-y-2 md:col-span-2'>
+                  <Label htmlFor='industry'>Industry</Label>
+                  <Input
+                    id='industry'
+                    value={form.industry}
+                    onChange={(e) => update("industry", e.target.value)}
+                    placeholder='e.g. SaaS, Apparel, Agency'
+                  />
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-      {!isReadOnly && (
-        <div className='bg-background/80 sticky bottom-0 -mx-1 flex items-center justify-end gap-2 border-t py-3 backdrop-blur'>
-          <Button
-            variant='ghost'
-            onClick={handleReset}
-            disabled={!dirty || isSaving}
-          >
-            Reset
-          </Button>
-          <Button onClick={handleSave} disabled={!dirty || isSaving}>
-            {isSaving ? (
-              <>
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className='mr-2 h-4 w-4' />
-                Save changes
-              </>
-            )}
-          </Button>
-        </div>
-      )}
+        <Card>
+          <CardHeader>
+            <CardTitle>Visual style</CardTitle>
+            <CardDescription>
+              Brand colors and font preferences. Used to generate on-brand
+              assets.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className='space-y-6'>
+            <div className='space-y-3'>
+              <Label>Colors</Label>
+              <div className='flex flex-wrap items-center gap-3'>
+                {colors.map((c, i) => (
+                  <ColorSwatch
+                    key={i}
+                    value={c}
+                    onChange={(v) => setColorAt(i, v)}
+                    onRemove={() => removeColor(i)}
+                  />
+                ))}
+                {colors.length < 6 && (
+                  <button
+                    type='button'
+                    onClick={addColor}
+                    className='border-border text-muted-foreground flex size-12 items-center justify-center rounded-full border-2 border-dashed transition-colors hover:border-cyan-400/50 hover:text-cyan-600 dark:hover:text-cyan-300'
+                  >
+                    <Plus className='size-4' />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              <FontSelect
+                label='Headline font'
+                value={form.fontHeadline}
+                onChange={(v) => update("fontHeadline", v)}
+              />
+              <FontSelect
+                label='Body font'
+                value={form.fontBody}
+                onChange={(v) => update("fontBody", v)}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Brand DNA</CardTitle>
+            <CardDescription>
+              The narrative the AI uses when writing in your voice.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className='space-y-4'>
+            <div className='space-y-2'>
+              <Label htmlFor='aboutUs'>About us</Label>
+              <Textarea
+                id='aboutUs'
+                rows={4}
+                value={form.aboutUs}
+                onChange={(e) => update("aboutUs", e.target.value)}
+              />
+            </div>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              <div className='space-y-2'>
+                <Label htmlFor='mission'>Mission</Label>
+                <Textarea
+                  id='mission'
+                  rows={3}
+                  value={form.mission}
+                  onChange={(e) => update("mission", e.target.value)}
+                />
+              </div>
+              <div className='space-y-2'>
+                <Label htmlFor='vision'>Vision</Label>
+                <Textarea
+                  id='vision'
+                  rows={3}
+                  value={form.vision}
+                  onChange={(e) => update("vision", e.target.value)}
+                />
+              </div>
+            </div>
+            <div className='space-y-2'>
+              <Label htmlFor='slogan'>Slogan</Label>
+              <Input
+                id='slogan'
+                value={form.slogan}
+                onChange={(e) => update("slogan", e.target.value)}
+                placeholder='Your tagline'
+              />
+            </div>
+            <div className='space-y-2'>
+              <Label>Values</Label>
+              <ChipEditor
+                values={form.values}
+                onChange={(v) => update("values", v)}
+                placeholder='Add a value'
+              />
+            </div>
+            <div className='space-y-2'>
+              <Label>Voice tone</Label>
+              <NumberedList
+                values={form.voiceTone}
+                onChange={(v) => update("voiceTone", v)}
+                placeholder='Add a tone word'
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Social profiles</CardTitle>
+            <CardDescription>Where can people find you online?</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
+              {(Object.keys(SOCIAL_META) as SocialPlatform[]).map((key) => {
+                const meta = SOCIAL_META[key];
+                const Icon = meta.icon;
+                return (
+                  <div key={key}>
+                    <Label className='mb-1.5 flex items-center gap-1.5 text-xs'>
+                      <Icon className='h-4 w-4' />
+                      {meta.label}
+                    </Label>
+                    <Input
+                      value={form.socials[key] || ""}
+                      onChange={(e) =>
+                        update("socials", {
+                          ...form.socials,
+                          [key]: e.target.value,
+                        })
+                      }
+                      placeholder={meta.placeholder}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {!isReadOnly && (
+          <div className='bg-background/80 sticky bottom-0 -mx-1 flex items-center justify-end gap-2 border-t py-3 backdrop-blur'>
+            <Button
+              variant='ghost'
+              onClick={handleReset}
+              disabled={!dirty || isSaving}
+            >
+              Reset
+            </Button>
+            <Button onClick={handleSave} disabled={!dirty || isSaving}>
+              {isSaving ? (
+                <>
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className='mr-2 h-4 w-4' />
+                  Save changes
+                </>
+              )}
+            </Button>
+          </div>
+        )}
       </fieldset>
     </div>
   );
@@ -628,7 +617,7 @@ function FontSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className='border-input bg-background h-10 w-full rounded-md border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/40'
+        className='border-input bg-background h-10 w-full rounded-md border px-3 text-sm focus:ring-2 focus:ring-cyan-400/40 focus:outline-none'
         style={{ fontFamily: value || "inherit" }}
       >
         <option value=''>Select font</option>

@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  FacebookBrand,
+  InstagramBrand,
+  LinkedinBrand,
+  XBrand,
+  YoutubeBrand,
+} from "./social-icons";
 import { BrandData, SocialPlatform, SocialUrls } from "./types";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
@@ -22,13 +29,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCallback, useMemo, useRef, useState } from "react";
-import {
-  FacebookBrand,
-  InstagramBrand,
-  LinkedinBrand,
-  XBrand,
-  YoutubeBrand,
-} from "./social-icons";
 
 interface StepImportProps {
   onComplete: (brand: BrandData) => void;
@@ -64,7 +64,11 @@ function Karaoke({ text }: { text: string }) {
   );
 }
 
-export function StepImport({ onComplete, onSkip, isSkipping }: StepImportProps) {
+export function StepImport({
+  onComplete,
+  onSkip,
+  isSkipping,
+}: StepImportProps) {
   const [mode, setMode] = useState<"import" | "manual">("import");
   const [url, setUrl] = useState("");
   const [isImporting, setIsImporting] = useState(false);
@@ -123,11 +127,10 @@ export function StepImport({ onComplete, onSkip, isSkipping }: StepImportProps) 
     <div className='mx-auto w-full max-w-5xl px-4 pt-10 pb-16 sm:px-6 lg:px-8'>
       {/* Hero */}
       <div className='text-center'>
-      
-        <h1 className='onb-animate-in onb-stagger-1 mt-4 text-4xl font-semibold tracking-tight text-neutral-900 dark:text-white sm:text-4xl lg:mt-14'>
+        <h1 className='onb-animate-in onb-stagger-1 mt-4 text-4xl font-semibold tracking-tight text-neutral-900 sm:text-4xl lg:mt-14 dark:text-white'>
           <Karaoke text="Let's import your brand" />
         </h1>
-        <p className='onb-animate-in onb-stagger-2 text-neutral-600 dark:text-neutral-300 mx-auto mt-3 max-w-2xl text-sm sm:text-base'>
+        <p className='onb-animate-in onb-stagger-2 mx-auto mt-3 max-w-2xl text-sm text-neutral-600 sm:text-base dark:text-neutral-300'>
           <Karaoke text="Paste a website or a social profile. We'll screenshot, sample colors, and draft your brand DNA in seconds." />
         </p>
       </div>
@@ -135,11 +138,30 @@ export function StepImport({ onComplete, onSkip, isSkipping }: StepImportProps) 
       {/* Source icons row */}
       <div className='onb-animate-in onb-stagger-3 mt-10 flex flex-wrap items-center justify-center gap-4 sm:gap-6'>
         <SourceIcon icon={<Globe className='h-5 w-5' />} label='Website' />
-        <SourceIcon icon={<FacebookBrand className='h-7 w-7' />} label='Facebook' branded />
-        <SourceIcon icon={<InstagramBrand className='h-7 w-7' />} label='Instagram' branded />
-        <SourceIcon icon={<LinkedinBrand className='h-7 w-7' />} label='LinkedIn' branded />
-        <SourceIcon icon={<YoutubeBrand className='h-7 w-7' />} label='YouTube' branded />
-        <SourceIcon icon={<XBrand className='h-5 w-5 text-neutral-900 dark:text-white' />} label='X' />
+        <SourceIcon
+          icon={<FacebookBrand className='h-7 w-7' />}
+          label='Facebook'
+          branded
+        />
+        <SourceIcon
+          icon={<InstagramBrand className='h-7 w-7' />}
+          label='Instagram'
+          branded
+        />
+        <SourceIcon
+          icon={<LinkedinBrand className='h-7 w-7' />}
+          label='LinkedIn'
+          branded
+        />
+        <SourceIcon
+          icon={<YoutubeBrand className='h-7 w-7' />}
+          label='YouTube'
+          branded
+        />
+        <SourceIcon
+          icon={<XBrand className='h-5 w-5 text-neutral-900 dark:text-white' />}
+          label='X'
+        />
       </div>
 
       {/* Connection visual */}
@@ -148,12 +170,12 @@ export function StepImport({ onComplete, onSkip, isSkipping }: StepImportProps) 
       {/* URL input */}
       <div className='onb-animate-in onb-stagger-4 mx-auto mt-6 max-w-xl'>
         <div className='relative'>
-          <Link2 className='text-neutral-500 dark:text-neutral-400 absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2' />
+          <Link2 className='absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-neutral-500 dark:text-neutral-400' />
           <Input
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder='yoursite.com  ·  instagram.com/yourbrand  ·  linkedin.com/in/you'
-            className='placeholder:text-neutral-400 dark:placeholder:text-neutral-500 dark:text-neutral-400 h-14 rounded-lg border-neutral-200 dark:border-white/10 bg-white dark:bg-white/[0.04] pr-32 pl-12 text-base text-neutral-900 dark:text-white focus-visible:border-neutral focus-visible:ring-transparent'
+            className='focus-visible:border-neutral h-14 rounded-lg border-neutral-200 bg-white pr-32 pl-12 text-base text-neutral-900 placeholder:text-neutral-400 focus-visible:ring-transparent dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-400 dark:text-white dark:placeholder:text-neutral-500'
             onKeyDown={(e) => {
               if (e.key === "Enter") handleImport();
             }}
@@ -161,7 +183,7 @@ export function StepImport({ onComplete, onSkip, isSkipping }: StepImportProps) 
           <Button
             onClick={handleImport}
             disabled={!url.trim()}
-            className='disabled:text-neutral-500 dark:text-neutral-400 absolute top-1/2 right-2 h-10 -translate-y-1/2 rounded-xl bg-indigo-600 hover:bg-indigo-700 font-medium text-neutral-900 dark:text-white hover:bg-indigo-600 hover:bg-indigo-700/90 disabled:bg-neutral-200 dark:disabled:bg-white/10'
+            className='absolute top-1/2 right-2 h-10 -translate-y-1/2 rounded-xl bg-indigo-600 font-medium text-neutral-900 hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 disabled:bg-neutral-200 disabled:text-neutral-500 dark:text-neutral-400 dark:text-white dark:disabled:bg-white/10'
           >
             Import
             <ArrowRight className='ml-1 h-4 w-4' />
@@ -170,7 +192,7 @@ export function StepImport({ onComplete, onSkip, isSkipping }: StepImportProps) 
 
         <div className='my-7 flex items-center gap-4'>
           <div className='h-px flex-1 bg-neutral-200 dark:bg-white/10' />
-          <span className='text-neutral-500 dark:text-neutral-400 text-xs tracking-widest uppercase'>
+          <span className='text-xs tracking-widest text-neutral-500 uppercase dark:text-neutral-400'>
             Or
           </span>
           <div className='h-px flex-1 bg-neutral-200 dark:bg-white/10' />
@@ -179,7 +201,7 @@ export function StepImport({ onComplete, onSkip, isSkipping }: StepImportProps) 
         <div className='flex w-full flex-col items-center gap-3'>
           <button
             onClick={() => setMode("manual")}
-            className='mx-auto inline-flex h-14 w-fit items-center justify-center gap-2 rounded-2xl border border-dashed border-cyan-300/30 px-4 text-base text-neutral-500 dark:text-neutral-400 transition-colors hover:bg-cyan-400/10'
+            className='mx-auto inline-flex h-14 w-fit items-center justify-center gap-2 rounded-2xl border border-dashed border-cyan-300/30 px-4 text-base text-neutral-500 transition-colors hover:bg-cyan-400/10 dark:text-neutral-400'
           >
             <Plus className='h-5 w-5' />
             Add brand manually
@@ -188,7 +210,7 @@ export function StepImport({ onComplete, onSkip, isSkipping }: StepImportProps) 
             <button
               onClick={onSkip}
               disabled={isSkipping}
-              className='inline-flex items-center justify-center gap-1.5 text-sm text-neutral-500 dark:text-neutral-400 underline-offset-4 transition-colors hover:text-neutral-900 dark:text-white hover:underline disabled:opacity-50'
+              className='inline-flex items-center justify-center gap-1.5 text-sm text-neutral-500 underline-offset-4 transition-colors hover:text-neutral-900 hover:underline disabled:opacity-50 dark:text-neutral-400 dark:text-white'
             >
               {isSkipping ? (
                 <>
@@ -247,12 +269,12 @@ function SourceIcon({
           "inline-flex h-10 w-10 items-center justify-center overflow-hidden text-neutral-900 dark:text-white",
           branded
             ? "rounded-lg ring-1 ring-white/10"
-            : "rounded-lg bg-neutral-100 dark:bg-white/5 ring-1 ring-white/10"
+            : "rounded-lg bg-neutral-100 ring-1 ring-white/10 dark:bg-white/5"
         )}
       >
         {icon}
       </span>
-      <span className='text-[10px] tracking-wider text-neutral-500 dark:text-neutral-400 uppercase'>
+      <span className='text-[10px] tracking-wider text-neutral-500 uppercase dark:text-neutral-400'>
         {label}
       </span>
     </div>
@@ -263,7 +285,9 @@ function Feature({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
     <div className='inline-flex items-center gap-2'>
       {icon}
-      <span className='text-neutral-600 dark:text-neutral-300 font-medium'>{label}</span>
+      <span className='font-medium text-neutral-600 dark:text-neutral-300'>
+        {label}
+      </span>
     </div>
   );
 }
@@ -352,10 +376,10 @@ function ImportingState({ message }: { message: string }) {
   return (
     <div className='mx-auto w-full max-w-3xl px-4 pt-16 pb-24'>
       <div className='text-center'>
-        <h2 className='mt-4 text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white sm:text-4xl lg:mt-16'>
+        <h2 className='mt-4 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl lg:mt-16 dark:text-white'>
           Reading your brand
         </h2>
-        <p className='text-neutral-600 dark:text-neutral-300 mt-3 min-h-[1.5rem] transition-all'>
+        <p className='mt-3 min-h-[1.5rem] text-neutral-600 transition-all dark:text-neutral-300'>
           {message}
         </p>
       </div>
@@ -459,11 +483,10 @@ function ManualSetup({
   return (
     <div className='mx-auto w-full max-w-2xl px-4 pt-10 pb-16'>
       <div className='mb-8 text-center'>
-       
-        <h1 className='onb-animate-in onb-stagger-1 mt-4 text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white md:text-4xl lg:mt-16'>
+        <h1 className='onb-animate-in onb-stagger-1 mt-4 text-3xl font-semibold tracking-tight text-neutral-900 md:text-4xl lg:mt-16 dark:text-white'>
           <Karaoke text='Tell us about your brand' />
         </h1>
-        <p className='onb-animate-in onb-stagger-2 text-neutral-600 dark:text-neutral-300 mt-3 text-sm sm:text-base'>
+        <p className='onb-animate-in onb-stagger-2 mt-3 text-sm text-neutral-600 sm:text-base dark:text-neutral-300'>
           No website yet? No problem — just add your socials.
         </p>
       </div>
@@ -471,13 +494,13 @@ function ManualSetup({
       <div className='onb-animate-in onb-stagger-3 space-y-6'>
         {/* Logo */}
         <div>
-          <Label className='text-neutral-600 dark:text-neutral-300 mb-2 block'>
+          <Label className='mb-2 block text-neutral-600 dark:text-neutral-300'>
             Your Logo
           </Label>
           <button
             type='button'
             onClick={() => fileRef.current?.click()}
-            className='relative flex aspect-[3/1] w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-neutral-200 dark:border-white/15 transition-colors hover:border-cyan-300/60 hover:bg-cyan-400/5'
+            className='relative flex aspect-[3/1] w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-neutral-200 transition-colors hover:border-cyan-300/60 hover:bg-cyan-400/5 dark:border-white/15'
           >
             {logoPreview ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -491,14 +514,16 @@ function ManualSetup({
                 <div className='flex size-12 items-center justify-center rounded-xl bg-cyan-400/10 ring-1 ring-cyan-300/20'>
                   <Upload className='size-5 text-neutral-500 dark:text-neutral-400' />
                 </div>
-                <p className='font-medium text-neutral-900 dark:text-white'>Upload your logo</p>
-                <p className='text-neutral-500 dark:text-neutral-400 text-xs'>
+                <p className='font-medium text-neutral-900 dark:text-white'>
+                  Upload your logo
+                </p>
+                <p className='text-xs text-neutral-500 dark:text-neutral-400'>
                   PNG, SVG, JPG &middot; max 5MB
                 </p>
               </>
             )}
             {isUploading && (
-              <div className='absolute inset-0 flex items-center justify-center rounded-2xl bg-white dark:bg-neutral-950/60 backdrop-blur-sm'>
+              <div className='absolute inset-0 flex items-center justify-center rounded-2xl bg-white backdrop-blur-sm dark:bg-neutral-950/60'>
                 <Loader2 className='size-6 animate-spin text-neutral-500 dark:text-neutral-400' />
               </div>
             )}
@@ -527,7 +552,9 @@ function ManualSetup({
             value={website}
             onChange={setWebsite}
             placeholder='https://'
-            icon={<Globe className='text-neutral-500 dark:text-neutral-400 h-4 w-4' />}
+            icon={
+              <Globe className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />
+            }
           />
         </div>
 
@@ -600,14 +627,14 @@ function ManualSetup({
           <Button
             variant='ghost'
             onClick={onBack}
-            className='text-neutral-600 dark:text-neutral-300 flex-1 hover:bg-neutral-100 dark:hover:bg-white/5 hover:text-neutral-900 dark:text-white'
+            className='flex-1 text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:text-white dark:hover:bg-white/5'
           >
             ← Back
           </Button>
           <Button
             onClick={handleContinue}
             disabled={isUploading}
-            className='disabled:text-neutral-500 dark:text-neutral-400 flex-1 bg-indigo-600 hover:bg-indigo-700 font-medium text-neutral-900 dark:text-white hover:bg-indigo-600 hover:bg-indigo-700/90 disabled:bg-neutral-200 dark:disabled:bg-white/10'
+            className='flex-1 bg-indigo-600 font-medium text-neutral-900 hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 disabled:bg-neutral-200 disabled:text-neutral-500 dark:text-neutral-400 dark:text-white dark:disabled:bg-white/10'
           >
             Continue
             <ArrowRight className='ml-1 h-4 w-4' />
@@ -633,7 +660,9 @@ function DarkField({
 }) {
   return (
     <div>
-      <Label className='text-neutral-600 dark:text-neutral-300 mb-2 block'>{label}</Label>
+      <Label className='mb-2 block text-neutral-600 dark:text-neutral-300'>
+        {label}
+      </Label>
       <div className='relative'>
         {icon && (
           <span className='absolute top-1/2 left-3 -translate-y-1/2'>
@@ -645,7 +674,7 @@ function DarkField({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           className={cn(
-            "placeholder:text-neutral-400 dark:placeholder:text-neutral-500 dark:text-neutral-400 h-12 border-neutral-200 dark:border-white/10 bg-white dark:bg-white/[0.04] text-neutral-900 dark:text-white focus-visible:border-cyan-400/40 focus-visible:ring-cyan-400/40",
+            "h-12 border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus-visible:border-cyan-400/40 focus-visible:ring-cyan-400/40 dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-400 dark:text-white dark:placeholder:text-neutral-500",
             icon ? "pl-9" : ""
           )}
         />
@@ -671,7 +700,7 @@ function SocialField({
 }) {
   return (
     <div>
-      <Label className='text-neutral-500 dark:text-neutral-400 mb-1.5 flex items-center gap-1.5 text-xs'>
+      <Label className='mb-1.5 flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400'>
         <span style={{ color }}>{icon}</span>
         {label}
       </Label>
@@ -679,7 +708,7 @@ function SocialField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className='placeholder:text-neutral-400 dark:placeholder:text-neutral-500 dark:text-neutral-500 h-11 border-neutral-200 dark:border-white/10 bg-white dark:bg-white/[0.04] text-neutral-900 dark:text-white focus-visible:border-cyan-400/40 focus-visible:ring-cyan-400/40'
+        className='h-11 border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 focus-visible:border-cyan-400/40 focus-visible:ring-cyan-400/40 dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-500 dark:text-white dark:placeholder:text-neutral-500'
       />
     </div>
   );

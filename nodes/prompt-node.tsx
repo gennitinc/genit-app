@@ -222,7 +222,7 @@ export function PromptNode({
               className={cn(
                 "my-1 w-full flex-1 rounded-md px-2 py-1 text-[10px] font-semibold transition-all",
                 contentType === t.id
-                  ? "bg-indigo-600 hover:bg-indigo-700 text-primary-foreground shadow-sm"
+                  ? "text-primary-foreground bg-indigo-600 shadow-sm hover:bg-indigo-700"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >

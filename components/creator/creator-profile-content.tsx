@@ -543,7 +543,8 @@ export function CreatorProfileContent({
           const aspectRatios = ["1/1", "3/4", "4/5", "9/16", "16/9"];
           let aspectRatio = item.aspectRatio?.replace(":", "/");
           if (!aspectRatio || aspectRatio === "auto") {
-            aspectRatio = aspectRatios[contentState.indexOf(item) % aspectRatios.length];
+            aspectRatio =
+              aspectRatios[contentState.indexOf(item) % aspectRatios.length];
           }
 
           return (

@@ -823,8 +823,7 @@ function VideoCreatePage() {
 
       socketRef.current = socket;
 
-      socket.on("connect", () => {
-      });
+      socket.on("connect", () => {});
 
       socket.on(
         "generatingvideo",
@@ -842,8 +841,7 @@ function VideoCreatePage() {
         }
       );
 
-      socket.on("disconnect", () => {
-      });
+      socket.on("disconnect", () => {});
     }
 
     // Cleanup on unmount
@@ -2262,7 +2260,7 @@ function VideoCreatePage() {
                       }}
                       disabled={isGenerating}
                       tabIndex={0}
-                      className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
+                      className='focus:ring-primary/30 dark:focus:ring-primary/40 flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus:ring-4 focus:outline-none'
                       data-rac=''
                       id='react-aria3512376871-_r_1f_'
                       style={{ touchAction: "pan-x pan-y pinch-zoom" }}

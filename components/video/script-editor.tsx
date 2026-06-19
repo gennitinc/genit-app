@@ -89,7 +89,7 @@ export function ScriptEditor({
       {/* AI Script Generation Prompt */}
       {!script && (
         <div className='relative'>
-          <div className='bg-indigo-600 hover:bg-indigo-700/5 border-primary/20 flex items-center gap-2 rounded-lg border px-3 py-2'>
+          <div className='border-primary/20 flex items-center gap-2 rounded-lg border bg-indigo-600 px-3 py-2 hover:bg-indigo-700/5'>
             <Sparkles className='text-primary h-4 w-4' />
             <input
               type='text'

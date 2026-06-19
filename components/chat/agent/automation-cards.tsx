@@ -1,5 +1,6 @@
 "use client";
 
+import { AgentCard } from "./agent-card";
 import {
   ArrowRight,
   Bell,
@@ -24,7 +25,6 @@ import {
   Webhook,
   Zap,
 } from "lucide-react";
-import { AgentCard } from "./agent-card";
 import type { ReactNode } from "react";
 
 // ─── Helpers ───
@@ -223,13 +223,14 @@ export function AutomationNodeCreatedCard({ data }: { data: any }) {
   } else if (nodeType === "http_request" && data?.method) {
     subtypeInfo = {
       icon: <Globe className='h-3 w-3' />,
-      label: `${data.method} ${data.url ? new URL(data.url).hostname : ""}`.trim(),
+      label:
+        `${data.method} ${data.url ? new URL(data.url).hostname : ""}`.trim(),
     };
   }
 
   return (
     <AgentCard
-      icon={<span className="text-foreground">{config.icon}</span>}
+      icon={<span className='text-foreground'>{config.icon}</span>}
       title={
         <span className='flex items-center gap-1.5'>
           <span>Node added</span>
@@ -238,7 +239,7 @@ export function AutomationNodeCreatedCard({ data }: { data: any }) {
         </span>
       }
       meta={
-        <span className='font-mono text-[10px] text-muted-foreground/70'>
+        <span className='text-muted-foreground/70 font-mono text-[10px]'>
           {data?.nodeId?.slice(0, 16)}
         </span>
       }
@@ -246,14 +247,14 @@ export function AutomationNodeCreatedCard({ data }: { data: any }) {
     >
       <div className='space-y-2'>
         {/* Node title */}
-        <div className='text-foreground text-[13.5px] font-medium leading-snug'>
+        <div className='text-foreground text-[13.5px] leading-snug font-medium'>
           {data?.title || "Untitled node"}
         </div>
 
         {/* Subtype badge */}
         {subtypeInfo && (
           <div className='flex items-center gap-1.5'>
-            <span className='inline-flex items-center gap-1 rounded-full bg-foreground/[0.06] px-2 py-0.5 text-[10.5px] font-medium text-muted-foreground dark:bg-white/[0.06]'>
+            <span className='bg-foreground/[0.06] text-muted-foreground inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-medium dark:bg-white/[0.06]'>
               {subtypeInfo.icon}
               {subtypeInfo.label}
             </span>
@@ -276,16 +277,18 @@ export function AutomationNodesConnectedCard({ data }: { data: any }) {
 
   return (
     <AgentCard
-      icon={<Link2 className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />}
+      icon={
+        <Link2 className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />
+      }
       title='Nodes connected'
       tone='success'
     >
       <div className='flex items-center gap-2 text-[12.5px]'>
-        <span className='inline-flex items-center gap-1 rounded-md bg-foreground/[0.05] px-2 py-1 font-medium text-foreground dark:bg-white/[0.06]'>
+        <span className='bg-foreground/[0.05] text-foreground inline-flex items-center gap-1 rounded-md px-2 py-1 font-medium dark:bg-white/[0.06]'>
           {sourceLabel}
         </span>
-        <ArrowRight className='h-3.5 w-3.5 text-muted-foreground shrink-0' />
-        <span className='inline-flex items-center gap-1 rounded-md bg-foreground/[0.05] px-2 py-1 font-medium text-foreground dark:bg-white/[0.06]'>
+        <ArrowRight className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
+        <span className='bg-foreground/[0.05] text-foreground inline-flex items-center gap-1 rounded-md px-2 py-1 font-medium dark:bg-white/[0.06]'>
           {targetLabel}
         </span>
         {data?.sourceHandle && (

@@ -170,7 +170,7 @@ export function AIChatNode({
                     <div
                       className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm ${
                         msg.role === "user"
-                          ? "bg-indigo-600 hover:bg-indigo-700 text-primary-foreground rounded-tr-none"
+                          ? "text-primary-foreground rounded-tr-none bg-indigo-600 hover:bg-indigo-700"
                           : "bg-muted text-foreground border-border/50 rounded-tl-none border"
                       }`}
                     >

@@ -125,11 +125,11 @@ const SettingsHome = () => {
   ];
 
   return (
-    <div className='max-w-6xl min-h-screen mx-auto'>
-      <div className='container max-w-6xl px-4 py-8 mx-auto'>
+    <div className='mx-auto min-h-screen max-w-6xl'>
+      <div className='container mx-auto max-w-6xl px-4 py-8'>
         {/* Header */}
         <div className='mb-8'>
-          <h1 className='mb-2 text-3xl font-bold text-foreground'>Settings</h1>
+          <h1 className='text-foreground mb-2 text-3xl font-bold'>Settings</h1>
           <p className='text-muted-foreground'>
             Manage your account settings and preferences
           </p>
@@ -138,13 +138,13 @@ const SettingsHome = () => {
         <div className='grid grid-cols-1 gap-8 lg:grid-cols-4'>
           {/* Sidebar Navigation */}
           <div className='lg:col-span-1'>
-            <Card className='sticky overflow-hidden top-12'>
+            <Card className='sticky top-12 overflow-hidden'>
               <GradientFrame />
               <CardContent className='p-0'>
-                <div className='p-4 border-b border-border'>
+                <div className='border-border border-b p-4'>
                   <div className='flex items-center justify-between'>
                     <div>
-                      <p className='text-sm text-muted-foreground'>Credits</p>
+                      <p className='text-muted-foreground text-sm'>Credits</p>
                       <p className='font-semibold'>
                         {user?.creditsRemaining ?? 0}
                       </p>
@@ -161,7 +161,7 @@ const SettingsHome = () => {
                     </div>
                   </div>
                 </div>
-                <nav className='p-4 space-y-1'>
+                <nav className='space-y-1 p-4'>
                   {settingsTabs.map((tab) => {
                     const Icon = tab.icon;
                     return (
@@ -174,12 +174,15 @@ const SettingsHome = () => {
                             : "text-muted-foreground hover:text-foreground hover:bg-muted"
                         }`}
                       >
-                        <Icon className={`size-4 ${activeTab === tab.id
-                          ? "text-indigo-600 hover:text-indigo-700"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                          }`} />  
+                        <Icon
+                          className={`size-4 ${
+                            activeTab === tab.id
+                              ? "text-indigo-600 hover:text-indigo-700"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                          }`}
+                        />
                         {tab.label}
-                        <ChevronRight className='w-4 h-4 ml-auto' />
+                        <ChevronRight className='ml-auto h-4 w-4' />
                       </button>
                     );
                   })}
@@ -197,7 +200,7 @@ const SettingsHome = () => {
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
-                      <UserIcon className='w-5 h-5' />
+                      <UserIcon className='h-5 w-5' />
                       Account Information
                     </CardTitle>
                     <CardDescription>
@@ -229,7 +232,7 @@ const SettingsHome = () => {
                             className='flex-1'
                           />
                           <Button variant='outline' size='sm'>
-                            <Edit3 className='w-4 h-4 mr-2' />
+                            <Edit3 className='mr-2 h-4 w-4' />
                             Change
                           </Button>
                         </div>
@@ -246,15 +249,15 @@ const SettingsHome = () => {
                     <div className='flex items-center justify-between'>
                       <div>
                         <h4 className='font-medium'>Account Status</h4>
-                        <p className='text-sm text-muted-foreground'>
+                        <p className='text-muted-foreground text-sm'>
                           Your account is active and verified
                         </p>
                       </div>
                       <Badge
                         variant='secondary'
-                        className='text-green-800 bg-green-100 dark:bg-green-900 dark:text-green-200'
+                        className='bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                       >
-                        <Check className='w-3 h-3 mr-1' />
+                        <Check className='mr-1 h-3 w-3' />
                         Verified
                       </Badge>
                     </div>
@@ -298,7 +301,7 @@ const SettingsHome = () => {
                     </div>
                     <div className='flex flex-col gap-2 space-y-2 lg:flex-row'>
                       <Button>
-                        <Save className='w-4 h-4 mr-2' />
+                        <Save className='mr-2 h-4 w-4' />
                         Update Password
                       </Button>
                       <Button variant='outline'>Forgot Password?</Button>
@@ -318,7 +321,7 @@ const SettingsHome = () => {
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
-                      <CreditCard className='w-5 h-5' />
+                      <CreditCard className='h-5 w-5' />
                       Billing Information
                     </CardTitle>
                     <CardDescription>
@@ -329,12 +332,12 @@ const SettingsHome = () => {
                     <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                       <div className='space-y-2'>
                         <Label>Current Plan</Label>
-                        <div className='flex items-center justify-between p-4 border rounded-lg'>
+                        <div className='flex items-center justify-between rounded-lg border p-4'>
                           <div>
                             <h4 className='font-semibold'>
                               {user?.userPlan || "Free Plan"}
                             </h4>
-                            <p className='text-sm text-muted-foreground'>
+                            <p className='text-muted-foreground text-sm'>
                               {user?.userPlan === Plan.BASIC
                                 ? "Free"
                                 : currentOrg?.businessPlan || "No plan"}
@@ -396,14 +399,14 @@ const SettingsHome = () => {
                   <CardContent>
                     <div className='space-y-3'>
                       {billingHistory.length === 0 ? (
-                        <p className='text-sm text-muted-foreground'>
+                        <p className='text-muted-foreground text-sm'>
                           No billing history yet.
                         </p>
                       ) : (
                         billingHistory.map((rec: any) => (
                           <div
                             key={rec._id || rec.invoiceId || rec.providerId}
-                            className='flex items-center justify-between p-4 border rounded-lg'
+                            className='flex items-center justify-between rounded-lg border p-4'
                           >
                             <div>
                               <p className='font-medium'>
@@ -411,7 +414,7 @@ const SettingsHome = () => {
                                   ? `Invoice #${rec.invoiceNumber}`
                                   : rec.description || rec.type}
                               </p>
-                              <p className='text-sm text-muted-foreground'>
+                              <p className='text-muted-foreground text-sm'>
                                 {rec.billingPeriodStart
                                   ? new Date(
                                       rec.billingPeriodStart
@@ -459,7 +462,7 @@ const SettingsHome = () => {
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
-                      <Shield className='w-5 h-5' />
+                      <Shield className='h-5 w-5' />
                       Security Settings
                     </CardTitle>
                     <CardDescription>
@@ -473,7 +476,7 @@ const SettingsHome = () => {
                           <h4 className='font-medium'>
                             Two-Factor Authentication
                           </h4>
-                          <p className='text-sm text-muted-foreground'>
+                          <p className='text-muted-foreground text-sm'>
                             Add an extra layer of security to your account
                           </p>
                         </div>
@@ -487,7 +490,7 @@ const SettingsHome = () => {
                       <div className='flex items-center justify-between'>
                         <div>
                           <h4 className='font-medium'>Login Notifications</h4>
-                          <p className='text-sm text-muted-foreground'>
+                          <p className='text-muted-foreground text-sm'>
                             Get notified when someone logs into your account
                           </p>
                         </div>
@@ -506,7 +509,7 @@ const SettingsHome = () => {
                       <div className='flex items-center justify-between'>
                         <div>
                           <h4 className='font-medium'>Session Management</h4>
-                          <p className='text-sm text-muted-foreground'>
+                          <p className='text-muted-foreground text-sm'>
                             Control active sessions across devices
                           </p>
                         </div>
@@ -527,7 +530,7 @@ const SettingsHome = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className='flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
-                    <p className='text-sm text-muted-foreground'>
+                    <p className='text-muted-foreground text-sm'>
                       Signing out will require you to log back in to continue
                       using genit.
                     </p>
@@ -538,7 +541,7 @@ const SettingsHome = () => {
                     >
                       {isSigningOut ? (
                         <>
-                          <Loader2 className='w-4 h-4 mr-2 animate-spin' />
+                          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                           Signing out...
                         </>
                       ) : (
@@ -558,11 +561,11 @@ const SettingsHome = () => {
                   </CardHeader>
                   <CardContent>
                     <div className='space-y-4'>
-                      <div className='p-4 border border-dashed rounded-lg'>
-                        <h4 className='font-medium text-destructive'>
+                      <div className='rounded-lg border border-dashed p-4'>
+                        <h4 className='text-destructive font-medium'>
                           Delete Account
                         </h4>
-                        <p className='mb-4 text-xs text-muted-foreground'>
+                        <p className='text-muted-foreground mb-4 text-xs'>
                           Once you delete your account, there is no going back.
                           Please be certain.
                         </p>
@@ -574,7 +577,7 @@ const SettingsHome = () => {
                         >
                           {isDeletingAccount ? (
                             <>
-                              <Loader2 className='w-4 h-4 mr-2 animate-spin' />
+                              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                               Deleting...
                             </>
                           ) : (
@@ -595,7 +598,7 @@ const SettingsHome = () => {
                   <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
-                      <Palette className='w-5 h-5' />
+                      <Palette className='h-5 w-5' />
                       Appearance & Preferences
                     </CardTitle>
                     <CardDescription>
@@ -607,7 +610,7 @@ const SettingsHome = () => {
                       <div className='flex items-center justify-between'>
                         <div>
                           <h4 className='font-medium'>Theme</h4>
-                          <p className='text-sm text-muted-foreground'>
+                          <p className='text-muted-foreground text-sm'>
                             Choose your preferred theme
                           </p>
                         </div>
@@ -638,7 +641,7 @@ const SettingsHome = () => {
                       <div className='flex items-center justify-between'>
                         <div>
                           <h4 className='font-medium'>Email Notifications</h4>
-                          <p className='text-sm text-muted-foreground'>
+                          <p className='text-muted-foreground text-sm'>
                             Receive email updates about your account
                           </p>
                         </div>
@@ -657,7 +660,7 @@ const SettingsHome = () => {
                       <div className='flex items-center justify-between'>
                         <div>
                           <h4 className='font-medium'>Marketing Emails</h4>
-                          <p className='text-sm text-muted-foreground'>
+                          <p className='text-muted-foreground text-sm'>
                             Receive promotional content and updates
                           </p>
                         </div>

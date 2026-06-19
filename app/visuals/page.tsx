@@ -1,5 +1,7 @@
 "use client";
 
+import { HomeCommandCenter } from "./_components/home-command-center";
+import { POST_PLATFORMS } from "./_components/post-editor-dialog";
 import {
   FacebookBrand,
   InstagramBrand,
@@ -23,7 +25,9 @@ import {
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { useIntegrations } from "@/hooks/use-integrations";
 import { isMetaSurface } from "@/lib/integrations-api";
+import { listSocialPosts } from "@/lib/social-posts-api";
 import { GradientFrame } from "@/utils/gradient-frame";
+import { useQuery } from "@tanstack/react-query";
 import {
   Activity,
   ArrowRight,
@@ -37,6 +41,7 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import {
   CartesianGrid,
   Line,
@@ -47,11 +52,6 @@ import {
   YAxis,
 } from "recharts";
 import React, { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-import { HomeCommandCenter } from "./_components/home-command-center";
-import { POST_PLATFORMS } from "./_components/post-editor-dialog";
-import { listSocialPosts } from "@/lib/social-posts-api";
-import { useQuery } from "@tanstack/react-query";
 
 const chartData = [
   { name: "Week 1", Traffic: 15, Engagement: 10 },
@@ -60,17 +60,18 @@ const chartData = [
   { name: "Week 4", Traffic: 45, Engagement: 25 },
 ];
 
-
-
 export default function VisualsHomePage() {
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
   const [postComposerRequest, setPostComposerRequest] = useState(0);
   const { byPlatform, identityBySurface, integrations } = useIntegrations();
-  const postsQuery = useQuery({ queryKey: ["social-posts"], queryFn: listSocialPosts });
+  const postsQuery = useQuery({
+    queryKey: ["social-posts"],
+    queryFn: listSocialPosts,
+  });
 
   const { user } = useUserContext();
-  const router = useRouter()
+  const router = useRouter();
 
   const organizations = useMemo<Organization[]>(() => {
     const list = user?.allOrganizations || [];
@@ -117,9 +118,18 @@ export default function VisualsHomePage() {
     (item) => item.status === "active" && POST_PLATFORMS.includes(item.platform)
   ).length;
   const homeStats = [
-    { label: "Drafts", value: homePosts.filter((post) => post.status === "draft").length },
-    { label: "Scheduled", value: homePosts.filter((post) => post.status === "scheduled").length },
-    { label: "Published", value: homePosts.filter((post) => post.status === "published").length },
+    {
+      label: "Drafts",
+      value: homePosts.filter((post) => post.status === "draft").length,
+    },
+    {
+      label: "Scheduled",
+      value: homePosts.filter((post) => post.status === "scheduled").length,
+    },
+    {
+      label: "Published",
+      value: homePosts.filter((post) => post.status === "published").length,
+    },
   ];
 
   const image = "./visual-flow.jpg";
@@ -130,14 +140,14 @@ export default function VisualsHomePage() {
         {/* Background image */}
         <img
           alt=''
-          src="https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg"
+          src='https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg'
           // src='/flow-bg.jpg'
           className='absolute inset-0 h-full w-full object-cover object-center opacity-60'
         />
 
         {/* Content */}
         <div className='relative z-10 grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] lg:items-center'>
-          <div className='flex min-w-0 flex-col items-start justify-center py-1'>
+          <div className='flex min-w-0 flex-col items-start justify-center py-1 lg:pl-6'>
             <div>
               <h3 className='font-instrument-serif text-2xl font-bold tracking-tight text-white'>
                 Hello, {`${current?.businessName || "Organization"}`} 👋
@@ -157,33 +167,46 @@ export default function VisualsHomePage() {
           <div className='rounded-2xl bg-white/95 p-4 shadow-sm ring-1 ring-black/5 dark:bg-zinc-950/95 dark:shadow-none dark:ring-white/10'>
             <div className='flex items-center justify-between gap-3 border-b border-black/5 pb-3 dark:border-white/10'>
               <div className='flex min-w-0 items-center gap-3'>
-              <div className="h-10 w-10 shrink-0 overflow-hidden rounded-sm bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
-  {current?.businessLogo ? (
-    <img
-      src={current.businessLogo}
-      alt={`${current.businessName || "Brand"} logo`}
-      className="block h-full w-full object-contain bg-white"
-    />
-  ) : (
-    <div className="flex h-full w-full items-center justify-center">
-      <span className="text-sm font-bold text-foreground dark:text-white">
-        {(current?.businessName || "B").slice(0, 1).toUpperCase()}
-      </span>
-    </div>
-  )}
-</div>
+                <div className='h-10 w-10 shrink-0 overflow-hidden rounded-sm bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10'>
+                  {current?.businessLogo ? (
+                    <img
+                      src={current.businessLogo}
+                      alt={`${current.businessName || "Brand"} logo`}
+                      className='block h-full w-full bg-white object-contain'
+                    />
+                  ) : (
+                    <div className='flex h-full w-full items-center justify-center'>
+                      <span className='text-foreground text-sm font-bold dark:text-white'>
+                        {(current?.businessName || "B")
+                          .slice(0, 1)
+                          .toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                </div>
                 <div className='min-w-0'>
-                  <p className='truncate text-sm font-semibold text-foreground dark:text-white'>{current?.businessName || "Brand overview"}</p>
-                  <p className='truncate text-xs text-muted-foreground dark:text-white/50'>{connectedChannels} connected channel{connectedChannels === 1 ? "" : "s"}</p>
+                  <p className='text-foreground truncate text-sm font-semibold dark:text-white'>
+                    {current?.businessName || "Brand overview"}
+                  </p>
+                  <p className='text-muted-foreground truncate text-xs dark:text-white/50'>
+                    {connectedChannels} connected channel
+                    {connectedChannels === 1 ? "" : "s"}
+                  </p>
                 </div>
               </div>
-           
             </div>
             <div className='mt-3 grid grid-cols-3 gap-2'>
               {homeStats.map((stat) => (
-                <div key={stat.label} className='rounded-sm bg-black/[0.025] px-3 py-2.5 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
-                  <p className='truncate text-[11px] text-muted-foreground dark:text-white/50'>{stat.label}</p>
-                  <p className='mt-0.5 text-lg font-semibold text-foreground dark:text-white'>{stat.value}</p>
+                <div
+                  key={stat.label}
+                  className='rounded-sm bg-black/[0.025] px-3 py-2.5 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'
+                >
+                  <p className='text-muted-foreground truncate text-[11px] dark:text-white/50'>
+                    {stat.label}
+                  </p>
+                  <p className='text-foreground mt-0.5 text-lg font-semibold dark:text-white'>
+                    {stat.value}
+                  </p>
                 </div>
               ))}
             </div>
@@ -192,7 +215,7 @@ export default function VisualsHomePage() {
       </div>
 
       {/* Integrations Carousel */}
-      <div className='mt-2 flex flex-col p-2 md:p-4 lg:p-6 shadow-sm'>
+      <div className='mt-2 flex flex-col p-2 shadow-sm md:p-4 lg:p-6'>
         <div className='mb-6 flex items-start justify-between'>
           <div>
             <h3 className='text-foreground text-base font-bold dark:text-white'>
@@ -207,7 +230,7 @@ export default function VisualsHomePage() {
             size='sm'
             className='h-8 rounded-full border-zinc-200 text-xs dark:border-zinc-800'
             onClick={() => {
-              router.push("/integrations")
+              router.push("/integrations");
             }}
           >
             View more
@@ -319,8 +342,6 @@ export default function VisualsHomePage() {
       </div>
 
       <HomeCommandCenter createRequest={postComposerRequest} />
-
-      
 
       <ConnectDialog
         open={Boolean(connectFor)}

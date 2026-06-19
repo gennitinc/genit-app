@@ -1,11 +1,17 @@
 "use client";
 
-import { requestConnectUrl } from "@/lib/integrations-api";
-import type { AgentIntegrationRequired } from "@/lib/agents-api";
-import { ArrowRight, CheckCircle2, Loader2, Plug, ShieldCheck } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
 import { AgentButton, AgentCard } from "./agent-card";
+import type { AgentIntegrationRequired } from "@/lib/agents-api";
+import { requestConnectUrl } from "@/lib/integrations-api";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Loader2,
+  Plug,
+  ShieldCheck,
+} from "lucide-react";
+import { toast } from "sonner";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // Inline "Connect this integration to continue" card shown inside an
 // in-progress agent message. After successful OAuth, the server's callback
@@ -17,9 +23,9 @@ export function ConnectIntegrationInline({
   required: AgentIntegrationRequired;
   onConnected?: () => void;
 }) {
-  const [phase, setPhase] = useState<"idle" | "connecting" | "connected" | "error">(
-    "idle"
-  );
+  const [phase, setPhase] = useState<
+    "idle" | "connecting" | "connected" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const popupRef = useRef<Window | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -123,7 +129,7 @@ export function ConnectIntegrationInline({
           </div>
 
           {errorMessage && phase === "error" && (
-            <p className='text-rose-600 mt-2 text-[12px] dark:text-rose-400'>
+            <p className='mt-2 text-[12px] text-rose-600 dark:text-rose-400'>
               {errorMessage}
             </p>
           )}

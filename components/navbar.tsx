@@ -311,7 +311,7 @@ export function Navbar({ title }: NavbarProps) {
               <Button
                 variant='default'
                 size='sm'
-                className='bg-indigo-600 hover:bg-indigo-700 text-primary-foreground hover:bg-indigo-600 hover:bg-indigo-700/90 shadow-primary/20 flex h-9 items-center gap-2 rounded-md px-4 text-xs font-semibold shadow-lg transition-all hover:scale-105 active:scale-95'
+                className='text-primary-foreground shadow-primary/20 flex h-9 items-center gap-2 rounded-md bg-indigo-600 px-4 text-xs font-semibold shadow-lg transition-all hover:scale-105 hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 active:scale-95'
               >
                 <Share2 className='h-4 w-4' />
                 Share

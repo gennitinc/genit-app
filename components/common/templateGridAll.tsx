@@ -42,8 +42,8 @@ import {
   Loader2,
   MessageSquare,
   Mic,
-  PaperclipIcon,
   Palette,
+  PaperclipIcon,
   Pencil,
   Plus,
   Sparkles,
@@ -901,7 +901,7 @@ export default function TemplateGridAll() {
                                   : "Tell your AI Designer what to create...✦"
                             }
                             disabled={isGenerating || isSubmitting}
-                            className='placeholder:text-muted-foreground/60 scrollbar-none flex max-h-[300px] w-full flex-1 resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
+                            className='placeholder:text-muted-foreground/60 flex max-h-[300px] w-full flex-1 resize-none scrollbar-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                             style={{
                               minHeight: "60px",
                             }}
@@ -940,10 +940,12 @@ export default function TemplateGridAll() {
                             className={cn(
                               "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out",
                               isBrandSettingsOpen
-                                ? "bg-indigo-600 hover:bg-indigo-700/10 text-primary dark:bg-white/10"
+                                ? "text-primary bg-indigo-600 hover:bg-indigo-700/10 dark:bg-white/10"
                                 : "text-muted-foreground hover:text-foreground hover:bg-indigo-600 hover:bg-indigo-700/5 dark:hover:bg-white/5"
                             )}
-                            onClick={() => setIsBrandSettingsOpen(!isBrandSettingsOpen)}
+                            onClick={() =>
+                              setIsBrandSettingsOpen(!isBrandSettingsOpen)
+                            }
                             title='Brand settings'
                           >
                             <Palette className='size-4 shrink-0' />
@@ -968,7 +970,7 @@ export default function TemplateGridAll() {
                           </button>
                           <button
                             type='submit'
-                            className='bg-indigo-600 hover:bg-indigo-700 text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
+                            className='text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full bg-indigo-600 !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out hover:bg-indigo-700'
                             disabled={isSubmitDisabled}
                           >
                             <BorderBeam
@@ -1005,7 +1007,7 @@ export default function TemplateGridAll() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className='border-border absolute bottom-[90px] right-4 left-4 z-[9999] mx-auto max-h-[500px] w-[calc(100%-32px)] max-w-md overflow-hidden rounded-xl border bg-white shadow-2xl dark:bg-zinc-950 md:right-8 md:left-auto md:mx-0'
+                  className='border-border absolute right-4 bottom-[90px] left-4 z-[9999] mx-auto max-h-[500px] w-[calc(100%-32px)] max-w-md overflow-hidden rounded-xl border bg-white shadow-2xl md:right-8 md:left-auto md:mx-0 dark:bg-zinc-950'
                 >
                   <div className='flex flex-col p-4'>
                     <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
@@ -1231,7 +1233,7 @@ export default function TemplateGridAll() {
                                   : "Tell your AI Designer what to create...✦"
                             }
                             disabled={isGenerating || isSubmitting}
-                            className='placeholder:text-muted-foreground/60 scrollbar-none flex max-h-[300px] w-full flex-1 resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
+                            className='placeholder:text-muted-foreground/60 flex max-h-[300px] w-full flex-1 resize-none scrollbar-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                             style={{
                               minHeight: "60px",
                             }}
@@ -1267,10 +1269,12 @@ export default function TemplateGridAll() {
                             className={cn(
                               "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out",
                               isBrandSettingsOpen
-                                ? "bg-indigo-600 hover:bg-indigo-700/10 text-primary dark:bg-white/10"
+                                ? "text-primary bg-indigo-600 hover:bg-indigo-700/10 dark:bg-white/10"
                                 : "text-muted-foreground hover:text-foreground hover:bg-indigo-600 hover:bg-indigo-700/5 dark:hover:bg-white/5"
                             )}
-                            onClick={() => setIsBrandSettingsOpen(!isBrandSettingsOpen)}
+                            onClick={() =>
+                              setIsBrandSettingsOpen(!isBrandSettingsOpen)
+                            }
                             title='Brand settings'
                           >
                             <Palette className='size-4 shrink-0' />
@@ -1295,7 +1299,7 @@ export default function TemplateGridAll() {
                           </button>
                           <button
                             type='submit'
-                            className='bg-indigo-600 hover:bg-indigo-700 text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out'
+                            className='text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full bg-indigo-600 !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out hover:bg-indigo-700'
                             disabled={isSubmitDisabled}
                           >
                             <BorderBeam
@@ -1332,7 +1336,7 @@ export default function TemplateGridAll() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className='border-border absolute bottom-[90px] right-4 left-4 z-[9999] mx-auto max-h-[500px] w-[calc(100%-32px)] max-w-md overflow-hidden rounded-xl border bg-white shadow-2xl dark:bg-zinc-950'
+                  className='border-border absolute right-4 bottom-[90px] left-4 z-[9999] mx-auto max-h-[500px] w-[calc(100%-32px)] max-w-md overflow-hidden rounded-xl border bg-white shadow-2xl dark:bg-zinc-950'
                 >
                   <div className='flex flex-col p-4'>
                     <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>

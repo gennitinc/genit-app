@@ -111,7 +111,7 @@ export function DesignInspirationResults({
               return (
                 <CarouselItem
                   key={pin.id || `g-${i}`}
-                  className='shrink-0 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 pl-3'
+                  className='shrink-0 basis-1/2 pl-3 sm:basis-1/3 md:basis-1/4 lg:basis-1/5'
                 >
                   <div
                     className={cn(
@@ -148,7 +148,7 @@ export function DesignInspirationResults({
                       </div>
                       {/* Selected badge */}
                       {selected && (
-                        <div className='bg-indigo-600 hover:bg-indigo-700 absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full shadow-lg'>
+                        <div className='absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 shadow-lg hover:bg-indigo-700'>
                           <Check className='h-3 w-3 text-white' />
                         </div>
                       )}

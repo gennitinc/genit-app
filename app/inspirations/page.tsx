@@ -53,7 +53,7 @@ export default function TemplatePage() {
       <LandingPageBanner />
       <LandingNavbar />
       <div className='hidden'>
-        <div className='bg-indigo-600 hover:bg-indigo-700-surface text-primary banner-launch-week-02-2026-03-10 relative z-10 flex items-center rounded-none p-3 py-4 pr-8'>
+        <div className='hover:bg-indigo-700-surface text-primary banner-launch-week-02-2026-03-10 relative z-10 flex items-center rounded-none bg-indigo-600 p-3 py-4 pr-8'>
           <div className='flex w-full flex-col items-center space-y-2 md:flex-row md:justify-center md:space-y-0 md:space-x-1'>
             <div className='flex items-center space-x-2'>
               <p className='hidden text-center text-sm font-medium md:block'>

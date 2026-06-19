@@ -7,14 +7,6 @@ import { Toaster } from "@/components/ui/sonner";
 import withAuth from "@/helper/hoc/withAuth";
 import { useEffect, useRef } from "react";
 
-
-
-
-
-
-
-
-
 function ReferralPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 

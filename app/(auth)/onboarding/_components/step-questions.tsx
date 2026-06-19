@@ -67,29 +67,29 @@ export function StepQuestions({
   const canSubmit = !!role && !!hear;
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-12">
+    <div className='mx-auto w-full max-w-3xl px-6 py-12'>
       {/* Header */}
-      <div className="max-w-md mx-auto text-center mb-16">
-        <h1 className="text-3xl md:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white">
+      <div className='mx-auto mb-16 max-w-md text-center'>
+        <h1 className='text-3xl font-semibold tracking-tight text-neutral-900 md:text-3xl dark:text-white'>
           Tell us a little about yourself
         </h1>
 
-        <p className="mt-3 text-sm md:text-base text-neutral-500 dark:text-neutral-400">
+        <p className='mt-3 text-sm text-neutral-500 md:text-base dark:text-neutral-400'>
           This helps us tailor your experience.
         </p>
       </div>
 
       {/* Questions */}
-      <div className="space-y-12">
+      <div className='space-y-12'>
         <Section
-          title="What best describes you?"
+          title='What best describes you?'
           options={ROLES}
           value={role}
           onChange={setRole}
         />
 
         <Section
-          title="How did you find us?"
+          title='How did you find us?'
           options={HEAR_OPTIONS}
           value={hear}
           onChange={setHear}
@@ -97,23 +97,23 @@ export function StepQuestions({
       </div>
 
       {/* Actions */}
-      <div className="mt-16 flex items-center justify-between">
+      <div className='mt-16 flex items-center justify-between'>
         <Button
-          variant="ghost"
+          variant='ghost'
           onClick={onBack}
           disabled={isSubmitting}
-          className="text-neutral-600 dark:text-neutral-400"
+          className='text-neutral-600 dark:text-neutral-400'
         >
           Back
         </Button>
 
         <Button
-  onClick={() => onSubmit({ role, hearAboutUs: hear })}
-  disabled={!canSubmit || isSubmitting}
-  className="px-6 bg-cyan-600 hover:bg-cyan-700 text-white"
->
-  {isSubmitting ? "Saving..." : "Continue"}
-</Button>
+          onClick={() => onSubmit({ role, hearAboutUs: hear })}
+          disabled={!canSubmit || isSubmitting}
+          className='bg-cyan-600 px-6 text-white hover:bg-cyan-700'
+        >
+          {isSubmitting ? "Saving..." : "Continue"}
+        </Button>
       </div>
     </div>
   );
@@ -138,11 +138,11 @@ function Section({
 }) {
   return (
     <section>
-      <h2 className="mb-4 text-sm font-medium text-neutral-900 dark:text-white">
+      <h2 className='mb-4 text-sm font-medium text-neutral-900 dark:text-white'>
         {title}
       </h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className='grid grid-cols-2 gap-3 md:grid-cols-3'>
         {options.map((opt) => {
           const Icon = opt.icon;
           const active = value === opt.id;
@@ -150,28 +150,18 @@ function Section({
           return (
             <button
               key={opt.id}
-              type="button"
+              type='button'
               onClick={() => onChange(opt.id)}
               className={cn(
                 "flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all duration-200",
                 active
                   ? "border-cyan-500 ring-2 ring-cyan-500/15"
-                  : "border-neutral-200 dark:border-white/10 hover:border-neutral-400 dark:hover:border-white/20"
+                  : "border-neutral-200 hover:border-neutral-400 dark:border-white/10 dark:hover:border-white/20"
               )}
             >
-              <Icon
-                className={cn(
-                  "size-4 shrink-0 text-neutral-500"
-                )}
-              />
+              <Icon className={cn("size-4 shrink-0 text-neutral-500")} />
 
-              <span
-                className={cn(
-                  "text-sm font-medium"
-                )}
-              >
-                {opt.label}
-              </span>
+              <span className={cn("text-sm font-medium")}>{opt.label}</span>
             </button>
           );
         })}

@@ -91,6 +91,7 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 const INBOX_PLATFORMS = new Set<IntegrationPlatform>([
   "facebook",
@@ -378,7 +379,7 @@ export default function InboxPage() {
   return (
     <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100vh-8rem)] w-full flex-col gap-5 duration-500'>
       <header className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
-        <div>
+        <div className="lg:pl-6">
           {/* <div className="mb-2 flex items-center gap-2 text-xs font-medium text-indigo-700 dark:text-indigo-400">
             <span className="h-2 w-2 rounded-full bg-indigo-500" />
             {accounts.length} connected {accounts.length === 1 ? "account" : "accounts"}
@@ -386,9 +387,9 @@ export default function InboxPage() {
           <h1 className='text-foreground text-2xl font-bold tracking-tight'>
             Unified Inbox
           </h1>
-          <p className='text-muted-foreground mt-1 text-sm'>
+          {/* <p className='text-muted-foreground mt-1 text-sm'>
             Read and respond across every connected brand channel.
-          </p>
+          </p> */}
         </div>
         <div className='flex flex-wrap gap-2'>
           <Button
@@ -630,19 +631,17 @@ export default function InboxPage() {
               </DropdownMenu>
 
               {isFetching && (
-                <Loader2
-                  className='text-muted-foreground h-3.5 w-3.5 shrink-0 animate-spin'
-                  aria-label='Syncing inbox'
-                />
+                <div className="">
+                  <LoadingFileLoader size={16} />
+                </div>
               )}
             </div>
           </div>
 
           <div className='flex-1 overflow-y-auto p-2'>
             {isLoading ? (
-              <div className='text-muted-foreground flex h-40 items-center justify-center text-sm'>
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                Loading inbox
+              <div className='text-muted-foreground flex h-40 items-center justify-center text-sm mt-40'>
+                <LoadingFileLoader size={16} />
               </div>
             ) : conversations.length === 0 ? (
               <div className='flex h-full min-h-72 flex-col items-center justify-center px-8 text-center'>

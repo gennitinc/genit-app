@@ -2,16 +2,24 @@
 
 import { IdeaSection } from "../layout/idea-section";
 import { MainContent } from "../layout/main-content";
+import { BorderBeam } from "../ui/border-beam";
 import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
+import {
+  BrevoBrand,
+  FacebookBrand,
+  InstagramBrand,
+  LinkedinBrand,
+  TikTokBrand,
+  XBrand,
+  YoutubeBrand,
+} from "@/app/(auth)/onboarding/_components/social-icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Loading from "@/utils/Loading";
 import { SendIcon } from "lucide-react";
-import { BorderBeam } from "../ui/border-beam";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import { InstagramBrand, FacebookBrand, XBrand, LinkedinBrand, BrevoBrand, TikTokBrand, YoutubeBrand } from "@/app/(auth)/onboarding/_components/social-icons";
-import Loading from "@/utils/Loading";
 
 // Video data for Reels carousel
 const reelsVideos = [
@@ -90,7 +98,7 @@ const messages = [
   },
   {
     type: "ai",
-    text: "Here you go!\n\nX: \"We're thrilled to announce our latest launch! 🚀 Discover innovation like never before.\"\n\nLinkedIn: \"We are excited to unveil our newest product line, designed to bring unparalleled value to our customers.\"",
+    text: 'Here you go!\n\nX: "We\'re thrilled to announce our latest launch! 🚀 Discover innovation like never before."\n\nLinkedIn: "We are excited to unveil our newest product line, designed to bring unparalleled value to our customers."',
   },
   {
     type: "user",
@@ -109,7 +117,7 @@ const messages = [
     type: "ai",
     text: "I've drafted a stunning newsletter template in Brevo featuring the new visual. The campaign is queued and ready to send to your mailing list!",
     icons: ["brevo"],
-  }
+  },
 ];
 
 export function InputLandingMediaChat() {
@@ -121,8 +129,7 @@ export function InputLandingMediaChat() {
     "Create product images with different backgrounds",
   ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
@@ -202,18 +209,15 @@ const ReelsCarousel = () => {
 
   return (
     <div className='flex h-full flex-col items-center justify-center bg-neutral-50 p-4 dark:bg-neutral-900'>
-
-      
-        <h3 className='mb-6 font-sans text-sm font-medium tracking-tight text-neutral-700 dark:text-neutral-100'>
+      <h3 className='mb-6 font-sans text-sm font-medium tracking-tight text-neutral-700 dark:text-neutral-100'>
         Run targeted ads to Meta, Google, and TikTok via chat
       </h3>
       <div className='w-full max-w-md overflow-hidden rounded-sm border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'>
         {/* Header */}
 
-
         <div className='flex items-center border-b border-neutral-200 px-4 py-3 dark:border-neutral-700'>
           <Image
-            className='h-8 w-8 rounded-full object-cover bg-black dark:bg-white'
+            className='h-8 w-8 rounded-full bg-black object-cover dark:bg-white'
             src={reelsVideos[currentIndex].profilePic}
             alt={reelsVideos[currentIndex].username}
             width={32}
@@ -239,9 +243,15 @@ const ReelsCarousel = () => {
             </span>
           </div>
           <div className='ml-auto flex items-center justify-center'>
-            {reelsVideos[currentIndex].platform === "instagram" && <InstagramBrand className="h-6 w-6" />}
-            {reelsVideos[currentIndex].platform === "tiktok" && <TikTokBrand className="h-6 w-6" />}
-            {reelsVideos[currentIndex].platform === "facebook" && <FacebookBrand className="h-6 w-6" />}
+            {reelsVideos[currentIndex].platform === "instagram" && (
+              <InstagramBrand className='h-6 w-6' />
+            )}
+            {reelsVideos[currentIndex].platform === "tiktok" && (
+              <TikTokBrand className='h-6 w-6' />
+            )}
+            {reelsVideos[currentIndex].platform === "facebook" && (
+              <FacebookBrand className='h-6 w-6' />
+            )}
           </div>
         </div>
 
@@ -468,11 +478,8 @@ const LandingHero = () => {
   return (
     <section className='relative w-full overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
       <div className='relative flex w-full flex-col items-center justify-center'>
-     
         <IdeaSection />
       </div>
-
-
 
       <div className='relative z-10 mt-10 mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-8'>
         <div className='group border-primary/10 relative isolate flex flex-col overflow-hidden rounded-none border bg-white shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04),0_0_0_1px_hsl(var(--primary)/10%)] md:row-span-2 xl:row-span-2 dark:bg-neutral-900'>
@@ -792,10 +799,10 @@ const LandingHero = () => {
             {/* Chat Messages Container */}
             <div
               ref={chatContainerRef}
-              className='flex-1 space-y-4 overflow-y-auto bg-neutral-50/50 p-4 [-ms-overflow-style:none] [scrollbar-width:none] lg:p-10 dark:bg-neutral-950/50 [&::-webkit-scrollbar]:hidden'
+              className='flex-1 [scrollbar-width:none] space-y-4 overflow-y-auto bg-neutral-50/50 p-4 [-ms-overflow-style:none] lg:p-10 dark:bg-neutral-950/50 [&::-webkit-scrollbar]:hidden'
             >
               {visibleMessages === 0 && (
-                <div className="flex h-full items-center justify-center text-neutral-400">
+                <div className='flex h-full items-center justify-center text-neutral-400'>
                   <Loading size={32} />
                 </div>
               )}
@@ -841,14 +848,27 @@ const LandingHero = () => {
                             )}
                           </p>
                           {!isStreaming && message.icons && (
-                            <div className='mt-3 flex gap-2 animate-in fade-in zoom-in duration-500'>
+                            <div className='animate-in fade-in zoom-in mt-3 flex gap-2 duration-500'>
                               {message.icons.map((icon) => (
-                                <div key={icon} className='flex h-7 w-7 items-center justify-center rounded-md bg-neutral-100 dark:bg-neutral-900'>
-                                  {icon === "instagram" && <InstagramBrand className="h-4 w-4" />}
-                                  {icon === "facebook" && <FacebookBrand className="h-4 w-4" />}
-                                  {icon === "x" && <XBrand className="h-4 w-4" />}
-                                  {icon === "linkedin" && <LinkedinBrand className="h-4 w-4" />}
-                                  {icon === "brevo" && <BrevoBrand className="h-4 w-4" />}
+                                <div
+                                  key={icon}
+                                  className='flex h-7 w-7 items-center justify-center rounded-md bg-neutral-100 dark:bg-neutral-900'
+                                >
+                                  {icon === "instagram" && (
+                                    <InstagramBrand className='h-4 w-4' />
+                                  )}
+                                  {icon === "facebook" && (
+                                    <FacebookBrand className='h-4 w-4' />
+                                  )}
+                                  {icon === "x" && (
+                                    <XBrand className='h-4 w-4' />
+                                  )}
+                                  {icon === "linkedin" && (
+                                    <LinkedinBrand className='h-4 w-4' />
+                                  )}
+                                  {icon === "brevo" && (
+                                    <BrevoBrand className='h-4 w-4' />
+                                  )}
                                 </div>
                               ))}
                             </div>
@@ -903,50 +923,35 @@ const LandingHero = () => {
                     disabled
                   />
                 </div>
-               <button
-  className="
-    relative
-    cursor-pointer
-    rounded-[10px]
-    bg-[linear-gradient(to_top,#292929,#555555,#292929)]
-    p-[2px]
-    shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)]
-    transition-all
-    duration-150
-    active:scale-95
-    disabled:opacity-50
-    disabled:cursor-not-allowed
-  "
->
-  {/* Border effects behind content */}
-  <div className="absolute inset-0 overflow-hidden rounded-[10px]">
-    <BorderBeam
-      duration={6}
-      size={40}
-      className="from-transparent via-red-500 to-transparent"
-    />
-    <BorderBeam
-      duration={6}
-      delay={10}
-      size={40}
-      borderWidth={2}
-      className="from-transparent via-blue-500 to-transparent"
-    />
-  </div>
+                <button className='relative cursor-pointer rounded-[10px] bg-[linear-gradient(to_top,#292929,#555555,#292929)] p-[2px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)] transition-all duration-150 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50'>
+                  {/* Border effects behind content */}
+                  <div className='absolute inset-0 overflow-hidden rounded-[10px]'>
+                    <BorderBeam
+                      duration={6}
+                      size={40}
+                      className='from-transparent via-red-500 to-transparent'
+                    />
+                    <BorderBeam
+                      duration={6}
+                      delay={10}
+                      size={40}
+                      borderWidth={2}
+                      className='from-transparent via-blue-500 to-transparent'
+                    />
+                  </div>
 
-  {/* Button content */}
-  <div className="relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]">
-   
-      <svg
-        className="h-4 w-4 text-white"
-        viewBox="0 0 512 512"
-        fill="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05" />
-      </svg>
-  </div>
-</button>
+                  {/* Button content */}
+                  <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
+                    <svg
+                      className='h-4 w-4 text-white'
+                      viewBox='0 0 512 512'
+                      fill='currentColor'
+                      xmlns='http://www.w3.org/2000/svg'
+                    >
+                      <path d='M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05' />
+                    </svg>
+                  </div>
+                </button>
               </div>
             </div>
           </div>

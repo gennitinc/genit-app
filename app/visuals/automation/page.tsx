@@ -342,7 +342,7 @@ export default function AutomationPage() {
         </div>
       ) : visibleAutomations.length === 0 ? (
         <div className='bg-muted/20 flex min-h-72 flex-col items-center justify-center rounded-xl border border-dashed px-6 text-center'>
-          <div className='bg-indigo-600 hover:bg-indigo-700/10 text-primary mb-4 rounded-full p-3'>
+          <div className='text-primary mb-4 rounded-full bg-indigo-600 p-3 hover:bg-indigo-700/10'>
             <Workflow className='h-6 w-6' />
           </div>
           <h2 className='font-semibold'>
@@ -379,7 +379,7 @@ export default function AutomationPage() {
                 className='group bg-card hover:border-primary/25 rounded-xl border p-5 shadow-sm transition hover:shadow-md'
               >
                 <div className='flex items-start gap-4'>
-                  <div className='bg-indigo-600 hover:bg-indigo-700/10 text-primary rounded-xl p-2.5'>
+                  <div className='text-primary rounded-xl bg-indigo-600 p-2.5 hover:bg-indigo-700/10'>
                     <Zap className='h-5 w-5' />
                   </div>
                   <div className='min-w-0 flex-1'>

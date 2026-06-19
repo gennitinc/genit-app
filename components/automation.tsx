@@ -2,7 +2,10 @@
 
 import { ActionNode } from "./automation/action-node";
 import { AIGenerateNode } from "./automation/ai-generate-node";
-import { ADD_NODE_MENU, type AutomationNodeType } from "./automation/automation-types";
+import {
+  ADD_NODE_MENU,
+  type AutomationNodeType,
+} from "./automation/automation-types";
 import { ConditionNode } from "./automation/condition-node";
 import { DelayNode } from "./automation/delay-node";
 import { HttpRequestNode } from "./automation/http-request-node";
@@ -11,65 +14,81 @@ import { TransformNode } from "./automation/transform-node";
 import { TriggerNode } from "./automation/trigger-node";
 import { UploadNode } from "./automation/upload-node";
 import { Button } from "./ui/button";
+import {
+  BrevoBrand,
+  EyeIcon as Eye,
+  FacebookBrand,
+  GoogleCalendarBrand,
+  GoogleDriveBrand,
+  InstagramBrand,
+  LinkedinBrand,
+  TikTokBrand,
+  WhatsAppBrand,
+  XBrand,
+} from "@/app/(auth)/onboarding/_components/social-icons";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import {
+  ArrowLeftRight,
+  AtSign,
+  CalendarDays,
+  CalendarPlus,
   Check,
   ChevronDown,
-  Edit2,
-  Loader2,
-  Maximize2,
-  Minus,
-  Plus,
-  Redo2,
-  Undo2,
-  Settings,
-  Clock,
-  Webhook,
-  Play,
-  MessageCircle,
-  Mail,
-  UserPlus,
-  MessageSquare,
-  Send,
-  Image,
-  Inbox,
-  CalendarDays,
   ClipboardList,
-  AtSign,
+  Clock,
+  Edit2,
   FileText,
-  Share2,
+  GitBranch,
+  GitBranchIcon,
+  Globe,
+  Image,
+  ImagePlus,
+  Inbox,
   Instagram,
   Linkedin,
-  Twitter,
-  Music2,
-  ImagePlus,
-  Video,
+  Loader2,
+  Mail,
+  Maximize2,
+  MessageCircle,
+  MessageSquare,
   Mic,
-  CalendarPlus,
-  Upload,
-  GitBranch,
-  Sparkles,
-  ArrowLeftRight,
-  Globe,
-  View,
-  GitBranchIcon,
+  Minus,
+  Music2,
+  Play,
+  Plus,
+  Redo2,
   SaveAll,
+  Send,
+  Settings,
+  Share2,
+  Sparkles,
+  Twitter,
+  Undo2,
+  Upload,
+  UserPlus,
+  Video,
+  View,
+  Webhook,
 } from "lucide-react";
-import {
-  EyeIcon as Eye,
-  WhatsAppBrand,
-  BrevoBrand,
-  FacebookBrand,
-  InstagramBrand,
-  GoogleCalendarBrand,
-  XBrand,
-  TikTokBrand,
-  LinkedinBrand,
-  GoogleDriveBrand,
-} from "@/app/(auth)/onboarding/_components/social-icons";
+import ReactFlow, {
+  Background,
+  type Connection,
+  type Edge,
+  type Node,
+  type NodeTypes,
+  Position,
+  applyEdgeChanges,
+  applyNodeChanges,
+  useEdgesState,
+  useNodesState,
+} from "reactflow";
+import "reactflow/dist/style.css";
+import { io } from "socket.io-client";
+import { toast } from "sonner";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const MENU_ICONS: Record<string, React.ComponentType<any>> = {
   Clock,
@@ -108,22 +127,6 @@ const MENU_ICONS: Record<string, React.ComponentType<any>> = {
   Linkedin: LinkedinBrand,
   GoogleDrive: GoogleDriveBrand,
 };
-import ReactFlow, {
-  Background,
-  type Connection,
-  type Edge,
-  type Node,
-  type NodeTypes,
-  Position,
-  applyEdgeChanges,
-  applyNodeChanges,
-  useEdgesState,
-  useNodesState,
-} from "reactflow";
-import "reactflow/dist/style.css";
-import { io } from "socket.io-client";
-import { toast } from "sonner";
-import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const nodeTypes: NodeTypes = {
   trigger: TriggerNode,
@@ -394,11 +397,12 @@ export default function AutomationWorkflow({
         console.error(err);
         const data = err.response?.data;
         const errorMessage = data?.message || "Failed to trigger test run";
-        const errorDetails = data?.errors?.length > 0 ? data.errors.join("\n") : undefined;
+        const errorDetails =
+          data?.errors?.length > 0 ? data.errors.join("\n") : undefined;
 
-        toast.error(errorMessage, { 
+        toast.error(errorMessage, {
           id: `test-run-${nodeId}`,
-          description: errorDetails
+          description: errorDetails,
         });
       } finally {
         onNodeDataChange(nodeId, { isTesting: false });
@@ -617,7 +621,14 @@ export default function AutomationWorkflow({
         }
       }
     }
-  }, [focusedGenerationId, messages, injectNodeCallbacks, setNodes, setEdges, reactFlowInstance]);
+  }, [
+    focusedGenerationId,
+    messages,
+    injectNodeCallbacks,
+    setNodes,
+    setEdges,
+    reactFlowInstance,
+  ]);
 
   // ── Final fit-view when AI agent run completes ──────────────────────────
 
@@ -688,10 +699,7 @@ export default function AutomationWorkflow({
 
   // ── Add Component ───────────────────────────────────────────────────────
 
-  const addComponent = (
-    type: AutomationNodeType,
-    subtype?: string
-  ) => {
+  const addComponent = (type: AutomationNodeType, subtype?: string) => {
     const nodeId = `${type}-${Date.now()}`;
 
     let position = {
@@ -814,9 +822,7 @@ export default function AutomationWorkflow({
     return (
       <div className='bg-background flex h-full min-h-[300px] flex-col items-center justify-center'>
         <LoadingFileLoader />
-        <p className='text-muted-foreground mt-2 text-sm'>
-          Loading automation...
-        </p>
+        
       </div>
     );
   }
@@ -824,19 +830,19 @@ export default function AutomationWorkflow({
   return (
     <div className='bg-background relative flex h-full w-full flex-col'>
       {/* ── Header with Title & Toolbar (side-by-side) ──────────────── */}
-      <div className='flex items-center justify-between px-4 py-1 border-b border-border/80 bg-background/50 backdrop-blur-sm shrink-0 z-10'>
-        <div className='flex items-center gap-2 text-foreground'>
-          <div className="w-full h-fit flex justify-start items-center space-x-1.5 px-2">
-            <span className="w-2 h-2 rounded-full bg-red-400" />
-            <span className="w-2 h-2 rounded-full bg-yellow-400" />
-            <span className="w-2 h-2 rounded-full bg-green-400" />
+      <div className='border-border/80 bg-background/50 z-10 flex shrink-0 items-center justify-between border-b px-4 py-1 backdrop-blur-sm'>
+        <div className='text-foreground flex items-center gap-2'>
+          <div className='flex h-fit w-full items-center justify-start space-x-1.5 px-2'>
+            <span className='h-2 w-2 rounded-full bg-red-400' />
+            <span className='h-2 w-2 rounded-full bg-yellow-400' />
+            <span className='h-2 w-2 rounded-full bg-green-400' />
           </div>
 
           <span className='text-sm font-semibold'>Automation</span>
         </div>
 
         {/* Toolbar items at the far right */}
-        <div className='flex items-center p-1 space-x-1 border rounded-md bg-background/80 border-border backdrop-blur-sm shadow-sm'>
+        <div className='bg-background/80 border-border flex items-center space-x-1 rounded-md border p-1 shadow-sm backdrop-blur-sm'>
           {/* Fullscreen Toggle */}
           {onToggleFullscreen && (
             <>
@@ -845,14 +851,14 @@ export default function AutomationWorkflow({
                 size='sm'
                 onClick={onToggleFullscreen}
                 className={cn(
-                  'h-7 gap-1.5 rounded px-2 text-xs font-medium transition-colors text-muted-foreground hover:text-foreground',
-                  isFullscreen && 'bg-muted text-foreground'
+                  "text-muted-foreground hover:text-foreground h-7 gap-1.5 rounded px-2 text-xs font-medium transition-colors",
+                  isFullscreen && "bg-muted text-foreground"
                 )}
-                title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+                title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
               >
                 <Maximize2 className='h-3.5 w-3.5' />
               </Button>
-              <div className='w-px h-5 bg-border' />
+              <div className='bg-border h-5 w-px' />
             </>
           )}
 
@@ -862,10 +868,10 @@ export default function AutomationWorkflow({
             size='sm'
             onClick={() => setIsEditMode(!isEditMode)}
             className={cn(
-              'h-7 gap-1.5 rounded px-2 text-xs font-medium transition-colors',
+              "h-7 gap-1.5 rounded px-2 text-xs font-medium transition-colors",
               isEditMode
-                ? 'bg-muted text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
+                ? "bg-muted text-foreground"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
             {isEditMode ? (
@@ -881,7 +887,7 @@ export default function AutomationWorkflow({
             )}
           </Button>
 
-          <div className='w-px h-5 bg-border' />
+          <div className='bg-border h-5 w-px' />
 
           {/* Undo */}
           <Button
@@ -889,10 +895,10 @@ export default function AutomationWorkflow({
             size='sm'
             onClick={undo}
             disabled={historyIndex <= 0}
-            className='w-7 h-7 p-0 rounded hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40'
+            className='hover:bg-accent h-7 w-7 rounded p-0 disabled:cursor-not-allowed disabled:opacity-40'
             title='Undo (Ctrl+Z)'
           >
-            <Undo2 className='w-3.5 h-3.5' />
+            <Undo2 className='h-3.5 w-3.5' />
           </Button>
 
           {/* Redo */}
@@ -901,23 +907,23 @@ export default function AutomationWorkflow({
             size='sm'
             onClick={redo}
             disabled={historyIndex >= history.length - 1}
-            className='w-7 h-7 p-0 rounded hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40'
+            className='hover:bg-accent h-7 w-7 rounded p-0 disabled:cursor-not-allowed disabled:opacity-40'
             title='Redo (Ctrl+Y)'
           >
-            <Redo2 className='w-3.5 h-3.5' />
+            <Redo2 className='h-3.5 w-3.5' />
           </Button>
 
-          <div className='w-px h-5 bg-border' />
+          <div className='bg-border h-5 w-px' />
 
           {/* Zoom In */}
           <Button
             variant='ghost'
             size='sm'
             onClick={() => reactFlowInstance?.zoomIn({ duration: 200 })}
-            className='w-7 h-7 p-0 rounded hover:bg-accent'
+            className='hover:bg-accent h-7 w-7 rounded p-0'
             title='Zoom In'
           >
-            <Plus className='w-3.5 h-3.5' />
+            <Plus className='h-3.5 w-3.5' />
           </Button>
 
           {/* Zoom Out */}
@@ -925,10 +931,10 @@ export default function AutomationWorkflow({
             variant='ghost'
             size='sm'
             onClick={() => reactFlowInstance?.zoomOut({ duration: 200 })}
-            className='w-7 h-7 p-0 rounded hover:bg-accent'
+            className='hover:bg-accent h-7 w-7 rounded p-0'
             title='Zoom Out'
           >
-            <Minus className='w-3.5 h-3.5' />
+            <Minus className='h-3.5 w-3.5' />
           </Button>
 
           {/* Fit View */}
@@ -938,22 +944,22 @@ export default function AutomationWorkflow({
             onClick={() =>
               reactFlowInstance?.fitView({ padding: 0.2, duration: 200 })
             }
-            className='w-7 h-7 p-0 rounded hover:bg-accent'
+            className='hover:bg-accent h-7 w-7 rounded p-0'
             title='Fit View'
           >
-            <View className='w-3.5 h-3.5' />
+            <View className='h-3.5 w-3.5' />
           </Button>
 
           {/* Add Node (edit mode only) */}
           {isEditMode && (
             <>
-              <div className='w-px h-5 bg-border' />
+              <div className='bg-border h-5 w-px' />
               <div className='relative' ref={dropdownRef}>
                 <Button
                   variant='ghost'
                   size='sm'
                   onClick={() => setShowAddComponent(!showAddComponent)}
-                  className='h-7 gap-1 rounded px-2 text-xs font-medium text-muted-foreground hover:text-foreground'
+                  className='text-muted-foreground hover:text-foreground h-7 gap-1 rounded px-2 text-xs font-medium'
                 >
                   <Plus className='h-3.5 w-3.5' />
                   Add
@@ -961,24 +967,29 @@ export default function AutomationWorkflow({
                 </Button>
 
                 {showAddComponent && (
-                  <div className='absolute right-0 z-50 mt-1.5 w-52 max-h-[400px] overflow-y-auto rounded-lg border border-border bg-popover text-popover-foreground py-1 text-xs shadow-lg'>
+                  <div className='border-border bg-popover text-popover-foreground absolute right-0 z-50 mt-1.5 max-h-[400px] w-52 overflow-y-auto rounded-lg border py-1 text-xs shadow-lg'>
                     {ADD_NODE_MENU.map((category, catIdx) => (
                       <div key={category.label}>
-                        <div className={cn(
-                          'text-muted-foreground px-3 py-1.5 text-[10px] font-semibold tracking-wider uppercase',
-                          catIdx > 0 ? 'border-t border-border/50' : ''
-                        )}>
+                        <div
+                          className={cn(
+                            "text-muted-foreground px-3 py-1.5 text-[10px] font-semibold tracking-wider uppercase",
+                            catIdx > 0 ? "border-border/50 border-t" : ""
+                          )}
+                        >
                           {category.label}
                         </div>
                         {category.items.map((item) => {
-                          const IconComponent = MENU_ICONS[item.iconName] || Sparkles;
+                          const IconComponent =
+                            MENU_ICONS[item.iconName] || Sparkles;
                           return (
                             <button
                               key={`${item.type}-${item.subtype || item.label}`}
-                              onClick={() => addComponent(item.type, item.subtype)}
-                              className='hover:bg-muted flex w-full items-center gap-2.5 px-3 py-1.5 text-left transition-colors text-foreground'
+                              onClick={() =>
+                                addComponent(item.type, item.subtype)
+                              }
+                              className='hover:bg-muted text-foreground flex w-full items-center gap-2.5 px-3 py-1.5 text-left transition-colors'
                             >
-                              <IconComponent className='h-3.5 w-3.5 text-muted-foreground' />
+                              <IconComponent className='text-muted-foreground h-3.5 w-3.5' />
                               <span>{item.label}</span>
                             </button>
                           );
@@ -992,8 +1003,8 @@ export default function AutomationWorkflow({
           )}
 
           {/* Auto-save indicator */}
-          <div className='w-px h-5 bg-border' />
-          <div className='flex items-center gap-1 px-1.5 text-[10px] text-muted-foreground'>
+          <div className='bg-border h-5 w-px' />
+          <div className='text-muted-foreground flex items-center gap-1 px-1.5 text-[10px]'>
             {saveStatus === "saving" && (
               <>
                 <Loader2 className='h-3 w-3 animate-spin' />
@@ -1007,9 +1018,9 @@ export default function AutomationWorkflow({
               </>
             )}
             {saveStatus === "idle" && (
-                <>
-                <SaveAll className='h-3 w-3 ' />
-                 </>
+              <>
+                <SaveAll className='h-3 w-3' />
+              </>
             )}
           </div>
         </div>

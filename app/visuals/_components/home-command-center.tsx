@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   EMPTY_POST_FORM,
   POST_PLATFORMS,
   POST_PLATFORM_LABELS,
   PostEditorDialog,
 } from "./post-editor-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -18,13 +18,14 @@ import {
 import { useIntegrations } from "@/hooks/use-integrations";
 import { useToast } from "@/hooks/use-toast";
 import {
+  type SocialPost,
   createSocialPosts,
   deleteSocialPost,
   listSocialPosts,
-  type SocialPost,
   updateSocialPost,
 } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowRight,
@@ -39,7 +40,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 function formatDate(value?: string) {
   if (!value) return "Not scheduled";
@@ -60,7 +60,11 @@ function errorMessage(error: any) {
   );
 }
 
-export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: number }) {
+export function HomeCommandCenter({
+  createRequest = 0,
+}: {
+  createRequest?: number;
+}) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { integrations } = useIntegrations();
@@ -77,7 +81,8 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
   const connected = useMemo(
     () =>
       integrations.filter(
-        (item) => item.status === "active" && POST_PLATFORMS.includes(item.platform)
+        (item) =>
+          item.status === "active" && POST_PLATFORMS.includes(item.platform)
       ),
     [integrations]
   );
@@ -107,11 +112,13 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
       };
       if (editing) {
         const platform = form.platforms[0];
-        return [await updateSocialPost(editing._id, {
-          ...shared,
-          platform,
-          integrationId: form.integrationIds[platform] || undefined,
-        })];
+        return [
+          await updateSocialPost(editing._id, {
+            ...shared,
+            platform,
+            integrationId: form.integrationIds[platform] || undefined,
+          }),
+        ];
       }
       return createSocialPosts({
         ...shared,
@@ -122,10 +129,15 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
       });
     },
     onSuccess: (saved) => {
-      queryClient.setQueryData<SocialPost[]>(["social-posts"], (current = []) => [
-        ...saved,
-        ...current.filter((post) => !saved.some((item) => item._id === post._id)),
-      ]);
+      queryClient.setQueryData<SocialPost[]>(
+        ["social-posts"],
+        (current = []) => [
+          ...saved,
+          ...current.filter(
+            (post) => !saved.some((item) => item._id === post._id)
+          ),
+        ]
+      );
       setEditorOpen(false);
       setEditing(null);
       toast({
@@ -189,7 +201,9 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
       content: post.content,
       mediaUrl: post.mediaUrl || "",
       platforms: [post.platform],
-      integrationIds: post.integration ? { [post.platform]: post.integration } : {},
+      integrationIds: post.integration
+        ? { [post.platform]: post.integration }
+        : {},
       status: post.status,
       scheduledFor: post.scheduledFor?.slice(0, 16) || "",
     });
@@ -204,115 +218,208 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
   }, [createRequest]);
 
   return (
-    <div id='brand-activity' className='flex flex-col gap-6 pb-14 pt-4 border-none '>
-      
-<div className='h-fit'>
-  {postsQuery.isLoading ? (
-    <div className='flex h-[20px] items-center justify-center'>
-      <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-        <LoadingFileLoader size={20} />
-      </div>
-    </div>
-  ) : postsQuery.isError ? (
-    <div className='flex h-[20px] items-center justify-center'>
-      <div className='max-w-md p-5 text-center '>
-        <p className='text-sm text-rose-700 dark:text-rose-300'>
-          Could not load the content pipeline.
-        </p>
-        <p className='mt-1 text-xs text-rose-600/80 dark:text-rose-400/80'>
-          {errorMessage(postsQuery.error)}
-        </p>
-
-        <button
-          type='button'
-          onClick={() => postsQuery.refetch()}
-          className='mt-4 rounded-sm bg-rose-500 px-4 py-2 text-xs font-semibold text-white transition hover:bg-rose-600'
-        >
-          Retry
-        </button>
-      </div>
-    </div>
-  ) : (
-   <section className='grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(300px,.75fr)]'>
-        <div className='overflow-hidden rounded-lg bg-black/[0.015] shadow-sm ring-1 ring-black/5 dark:bg-white/[0.03] dark:ring-white/10 border-none'>
-          <div className='flex items-center justify-between gap-3 border-black/5 p-2 py-1 dark:border-white/10'>
-            <div>
-              <h3 className='font-bold tracking-tight'>Content pipeline</h3>
-              <p className='mt-1 text-xs text-muted-foreground'>Create, revise, schedule, and remove work from one place.</p>
-            </div>
-            <div className='flex shrink-0 items-center gap-1.5'>
-              <Button variant='outline' size='sm' onClick={openCreate} className='rounded-full'>
-                <Plus className='mr-1 h-3.5 w-3.5' /> New post
-              </Button>
-              <Button asChild variant='ghost' size='sm' className='rounded-full'>
-                <Link href='/visuals/posts'>View all <ArrowRight className='ml-1.5 h-3.5 w-3.5' /></Link>
-              </Button>
+    <div
+      id='brand-activity'
+      className='flex flex-col gap-6 border-none pt-4 pb-14'
+    >
+      <div className='h-fit'>
+        {postsQuery.isLoading ? (
+          <div className='flex h-[20px] items-center justify-center'>
+            <div className='text-muted-foreground flex items-center gap-2 text-sm'>
+              <LoadingFileLoader size={20} />
             </div>
           </div>
-          {recent.length ? (
-            <div className='divide-y divide-black/5 dark:divide-white/10'>
-              {recent.map((post) => (
-                <article key={post._id} className='group flex items-center gap-3 p-4 transition hover:bg-black/[0.02] dark:hover:bg-white/[0.025]'>
-                  <div className='flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-indigo-500/15 to-violet-500/5 ring-1 ring-black/5 dark:ring-white/10'>
-                    {post.mediaUrl ? <img src={post.mediaUrl} alt='' className='h-full w-full object-cover' /> : <Sparkles className='h-4 w-4 text-indigo-500' />}
-                  </div>
-                  <div className='min-w-0 flex-1'>
-                    <div className='flex items-center gap-2'>
-                      <h4 className='truncate text-sm font-semibold'>{post.title || post.content}</h4>
-                      <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[9px] font-semibold capitalize", post.status === "published" ? "bg-emerald-500/10 text-emerald-600" : post.status === "scheduled" ? "bg-sky-500/10 text-sky-600" : post.status === "failed" ? "bg-rose-500/10 text-rose-600" : "bg-amber-500/10 text-amber-600")}>{post.status}</span>
-                    </div>
-                    <p className='mt-1 truncate text-xs text-muted-foreground'>
-                      {POST_PLATFORM_LABELS[post.platform] || post.platform} · {post.status === "scheduled" ? formatDate(post.scheduledFor) : `Updated ${formatDate(post.updatedAt)}`}
-                    </p>
-                  </div>
-                  <button onClick={() => openEdit(post)} className='flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition hover:bg-black/5 hover:text-foreground dark:hover:bg-white/10' aria-label={`Edit ${post.title || "post"}`}><Edit3 className='h-3.5 w-3.5' /></button>
-                  <button onClick={() => setDeleteTarget(post)} className='flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition hover:bg-rose-500/10 hover:text-rose-600' aria-label={`Delete ${post.title || "post"}`}><Trash2 className='h-3.5 w-3.5' /></button>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className='flex min-h-64 flex-col items-center justify-center px-6 text-center'>
-              <FileText className='h-7 w-7 text-muted-foreground/60' />
-              <h4 className='mt-3 font-semibold'>Your pipeline is ready</h4>
-              <p className='mt-1 max-w-sm text-sm text-muted-foreground'>Start a draft, schedule it, and track it through publishing.</p>
-              <Button onClick={openCreate} variant='outline' className='mt-4 rounded-full'><Plus className='mr-1.5 h-4 w-4' />New post</Button>
-            </div>
-          )}
-        </div>
+        ) : postsQuery.isError ? (
+          <div className='flex h-[20px] items-center justify-center'>
+            <div className='max-w-md p-5 text-center'>
+              <p className='text-sm text-rose-700 dark:text-rose-300'>
+                Could not load the content pipeline.
+              </p>
+              <p className='mt-1 text-xs text-rose-600/80 dark:text-rose-400/80'>
+                {errorMessage(postsQuery.error)}
+              </p>
 
-        <div className='rounded-lg bg-neutral-800 p-5 text-white shadow-sm ring-1 ring-white/10 h-fit'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <h3 className='font-bold tracking-tight'>Coming up</h3>
-              <p className='mt-1 text-xs text-white/50'>Your next scheduled releases</p>
-            </div>
-            <Clock3 className='h-4 w-4 text-indigo-300' />
-          </div>
-          <div className='mt-5 space-y-3'>
-            {scheduled.slice(0, 4).map((post, index) => (
-              <button key={post._id} onClick={() => openEdit(post)} className='flex w-full items-start gap-3 rounded-2xl bg-white/[0.06] p-3 text-left ring-1 ring-white/10 transition hover:bg-white/[0.1]'>
-                <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-500/20 text-xs font-bold text-indigo-200'>{index + 1}</div>
-                <div className='min-w-0'>
-                  <p className='truncate text-sm font-semibold'>{post.title || post.content}</p>
-                  <p className='mt-1 text-[11px] text-white/55'>{formatDate(post.scheduledFor)} · {POST_PLATFORM_LABELS[post.platform]}</p>
-                </div>
+              <button
+                type='button'
+                onClick={() => postsQuery.refetch()}
+                className='mt-4 rounded-sm bg-rose-500 px-4 py-2 text-xs font-semibold text-white transition hover:bg-rose-600'
+              >
+                Retry
               </button>
-            ))}
-            {!scheduled.length && (
-              <div className='rounded-2xl border border-dashed border-white/15 p-6 text-center'>
-                <CalendarClock className='mx-auto h-6 w-6 text-white/35' />
-                <p className='mt-3 text-sm font-medium'>No posts scheduled</p>
-                <button onClick={openCreate} className='mt-2 text-xs font-semibold text-indigo-300 hover:text-indigo-200'>Plan one now</button>
-              </div>
-            )}
+            </div>
           </div>
-          <Button asChild variant='ghost' className='mt-4 w-full rounded-xl text-white/70 hover:bg-white/10 hover:text-white'>
-            <Link href='/visuals/calendar'>Open calendar <ArrowRight className='ml-1.5 h-4 w-4' /></Link>
-          </Button>
-        </div>
-      </section>
-  )}
-</div>
+        ) : (
+          <section className='grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(300px,.75fr)]'>
+            <div className='overflow-hidden rounded-lg border-none bg-black/[0.015] shadow-sm ring-1 ring-black/5 dark:bg-white/[0.03] dark:ring-white/10'>
+              <div className='flex items-center justify-between gap-3 border-black/5 p-2 py-1 dark:border-white/10'>
+                <div>
+                  <h3 className='font-bold tracking-tight'>Content pipeline</h3>
+                  <p className='text-muted-foreground mt-1 text-xs'>
+                    Create, revise, schedule, and remove work from one place.
+                  </p>
+                </div>
+                <div className='flex shrink-0 items-center gap-1.5'>
+                  <Button
+                    variant='outline'
+                    size='sm'
+                    onClick={openCreate}
+                    className='rounded-full'
+                  >
+                    <Plus className='mr-1 h-3.5 w-3.5' /> New post
+                  </Button>
+                  <Button
+                    asChild
+                    variant='ghost'
+                    size='sm'
+                    className='rounded-full'
+                  >
+                    <Link href='/visuals/posts'>
+                      View all <ArrowRight className='ml-1.5 h-3.5 w-3.5' />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+              {recent.length ? (
+                <div className='divide-y divide-black/5 dark:divide-white/10'>
+                  {recent.map((post) => (
+                    <article
+                      key={post._id}
+                      className='group flex items-center gap-3 p-4 transition hover:bg-black/[0.02] dark:hover:bg-white/[0.025]'
+                    >
+                      <div className='flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-indigo-500/15 to-violet-500/5 ring-1 ring-black/5 dark:ring-white/10'>
+                        {post.mediaUrl ? (
+                          <img
+                            src={post.mediaUrl}
+                            alt=''
+                            className='h-full w-full object-cover'
+                          />
+                        ) : (
+                          <Sparkles className='h-4 w-4 text-indigo-500' />
+                        )}
+                      </div>
+                      <div className='min-w-0 flex-1'>
+                        <div className='flex items-center gap-2'>
+                          <h4 className='truncate text-sm font-semibold'>
+                            {post.title || post.content}
+                          </h4>
+                          <span
+                            className={cn(
+                              "shrink-0 rounded-full px-2 py-0.5 text-[9px] font-semibold capitalize",
+                              post.status === "published"
+                                ? "bg-emerald-500/10 text-emerald-600"
+                                : post.status === "scheduled"
+                                  ? "bg-sky-500/10 text-sky-600"
+                                  : post.status === "failed"
+                                    ? "bg-rose-500/10 text-rose-600"
+                                    : "bg-amber-500/10 text-amber-600"
+                            )}
+                          >
+                            {post.status}
+                          </span>
+                        </div>
+                        <p className='text-muted-foreground mt-1 truncate text-xs'>
+                          {POST_PLATFORM_LABELS[post.platform] || post.platform}{" "}
+                          ·{" "}
+                          {post.status === "scheduled"
+                            ? formatDate(post.scheduledFor)
+                            : `Updated ${formatDate(post.updatedAt)}`}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => openEdit(post)}
+                        className='text-muted-foreground hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-black/5 dark:hover:bg-white/10'
+                        aria-label={`Edit ${post.title || "post"}`}
+                      >
+                        <Edit3 className='h-3.5 w-3.5' />
+                      </button>
+                      <button
+                        onClick={() => setDeleteTarget(post)}
+                        className='text-muted-foreground flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-rose-500/10 hover:text-rose-600'
+                        aria-label={`Delete ${post.title || "post"}`}
+                      >
+                        <Trash2 className='h-3.5 w-3.5' />
+                      </button>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className='flex min-h-64 flex-col items-center justify-center px-6 text-center'>
+                  <FileText className='text-muted-foreground/60 h-7 w-7' />
+                  <h4 className='mt-3 font-semibold'>Your pipeline is ready</h4>
+                  <p className='text-muted-foreground mt-1 max-w-sm text-sm'>
+                    Start a draft, schedule it, and track it through publishing.
+                  </p>
+                  <Button
+                    onClick={openCreate}
+                    variant='outline'
+                    className='mt-4 rounded-full'
+                  >
+                    <Plus className='mr-1.5 h-4 w-4' />
+                    New post
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            <div className='h-fit rounded-lg bg-neutral-800 p-5 text-white shadow-sm ring-1 ring-white/10'>
+              <div className='flex items-center justify-between'>
+                <div>
+                  <h3 className='font-bold tracking-tight'>Coming up</h3>
+                  <p className='mt-1 text-xs text-white/50'>
+                    Your next scheduled releases
+                  </p>
+                </div>
+                <Clock3 className='h-4 w-4 text-indigo-300' />
+              </div>
+              <div className='mt-5 space-y-3'>
+                {scheduled.slice(0, 4).map((post, index) => (
+                  <button
+                    key={post._id}
+                    onClick={() => openEdit(post)}
+                    className='flex w-full items-start gap-3 rounded-2xl bg-white/[0.06] p-3 text-left ring-1 ring-white/10 transition hover:bg-white/[0.1]'
+                  >
+                    <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-500/20 text-xs font-bold text-indigo-200'>
+                      {index + 1}
+                    </div>
+                    <div className='min-w-0'>
+                      <p className='truncate text-sm font-semibold'>
+                        {post.title || post.content}
+                      </p>
+                      <p className='mt-1 text-[11px] text-white/55'>
+                        {formatDate(post.scheduledFor)} ·{" "}
+                        {POST_PLATFORM_LABELS[post.platform]}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+                {!scheduled.length && (
+                  <div className='rounded-2xl border border-dashed border-white/15 p-6 text-center'>
+                    <CalendarClock className='mx-auto h-6 w-6 text-white/35' />
+                    <p className='mt-3 text-sm font-medium'>
+                      No posts scheduled
+                    </p>
+                    <button
+                      onClick={openCreate}
+                      className='mt-2 text-xs font-semibold text-indigo-300 hover:text-indigo-200'
+                    >
+                      Plan one now
+                    </button>
+                  </div>
+                )}
+              </div>
+              <Button
+                asChild
+                variant='ghost'
+                className='mt-4 w-full rounded-xl text-white/70 hover:bg-white/10 hover:text-white'
+              >
+                <Link href='/visuals/calendar'>
+                  Open calendar <ArrowRight className='ml-1.5 h-4 w-4' />
+                </Link>
+              </Button>
+            </div>
+          </section>
+        )}
+      </div>
       <PostEditorDialog
         open={editorOpen}
         onOpenChange={setEditorOpen}
@@ -324,16 +431,31 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
         onSave={() => saveMutation.mutate()}
       />
 
-      <Dialog open={Boolean(deleteTarget)} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+      <Dialog
+        open={Boolean(deleteTarget)}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
         <DialogContent className='sm:max-w-md'>
           <DialogHeader>
             <DialogTitle>Delete this post?</DialogTitle>
-            <DialogDescription>This removes it from the content workspace and cannot be undone.</DialogDescription>
+            <DialogDescription>
+              This removes it from the content workspace and cannot be undone.
+            </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant='outline' onClick={() => setDeleteTarget(null)}>Cancel</Button>
-            <Button variant='destructive' disabled={deleteMutation.isPending} onClick={() => deleteTarget && deleteMutation.mutate(deleteTarget._id)}>
-              {deleteMutation.isPending && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+            <Button variant='outline' onClick={() => setDeleteTarget(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant='destructive'
+              disabled={deleteMutation.isPending}
+              onClick={() =>
+                deleteTarget && deleteMutation.mutate(deleteTarget._id)
+              }
+            >
+              {deleteMutation.isPending && (
+                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              )}
               Delete post
             </Button>
           </DialogFooter>

@@ -81,7 +81,7 @@ export default function RevenuePage() {
           </p>
         </div>
         <div className='flex gap-3'>
-          <Button className='bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-600 hover:bg-indigo-700/90 shadow-primary/20 h-auto gap-2 rounded-2xl px-6 py-6 shadow-lg'>
+          <Button className='shadow-primary/20 h-auto gap-2 rounded-2xl bg-indigo-600 px-6 py-6 shadow-lg hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90'>
             <TrendingUp className='h-5 w-5' /> Detailed Report
           </Button>
         </div>
@@ -147,7 +147,7 @@ export default function RevenuePage() {
       <div className='grid grid-cols-1 gap-10'>
         <div className='bg-card border-border/50 relative overflow-hidden rounded-[2.5rem] border p-8 shadow-xl'>
           {/* Background design */}
-          <div className='bg-indigo-600 hover:bg-indigo-700/5 absolute top-0 right-0 -mt-48 -mr-48 h-96 w-96 rounded-full blur-[100px]' />
+          <div className='absolute top-0 right-0 -mt-48 -mr-48 h-96 w-96 rounded-full bg-indigo-600 blur-[100px] hover:bg-indigo-700/5' />
 
           <div className='relative z-10'>
             <div className='mb-8 flex items-center justify-between'>
@@ -194,7 +194,7 @@ export default function RevenuePage() {
                     </div>
                     <div className='bg-muted h-2 w-full overflow-hidden rounded-full'>
                       <div
-                        className='bg-indigo-600 hover:bg-indigo-700 h-full rounded-full transition-all duration-500'
+                        className='h-full rounded-full bg-indigo-600 transition-all duration-500 hover:bg-indigo-700'
                         style={{
                           width: `${(count / data.overview.users.total) * 100}%`,
                         }}
@@ -207,7 +207,7 @@ export default function RevenuePage() {
           </div>
 
           <div className='from-primary/10 to-background border-primary/20 group relative flex flex-col justify-center overflow-hidden rounded-[2rem] border bg-gradient-to-br p-8 text-center'>
-            <div className='bg-indigo-600 hover:bg-indigo-700/5 absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100' />
+            <div className='absolute inset-0 bg-indigo-600 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-indigo-700/5' />
             <h3 className='mb-4 text-2xl font-bold tracking-tight'>
               Financial Health: Excellent
             </h3>

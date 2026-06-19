@@ -9,7 +9,7 @@ export function appendClientTimeContext(prompt: string): string {
   if (!prompt || typeof prompt !== "string") return prompt;
   // If the prompt already has a time context, don't append another one
   if (prompt.includes("[SystemTimeContext:")) return prompt;
-  
+
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const now = new Date();
   return `${prompt}\n\n[SystemTimeContext: ${now.toLocaleString()} | TZ: ${tz} | TS: ${now.getTime()}]`;

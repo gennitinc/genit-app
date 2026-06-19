@@ -6,7 +6,6 @@ import { Toaster } from "@/components/ui/sonner";
 import withAuth from "@/helper/hoc/withAuth";
 import { useRef } from "react";
 
-
 function ChatPageForAuthenticatedUsers() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -25,7 +24,7 @@ function ChatPageForAuthenticatedUsers() {
         />
         <div
           id='main-content'
-          className="flex-1 rounded-t-2xl lg:border-2 lg:border-b-0 ml-0 mr-2 md:mr-4"
+          className='mr-2 ml-0 flex-1 rounded-t-2xl md:mr-4 lg:border-2 lg:border-b-0'
           style={{
             transform: "translateZ(0)",
             willChange: "transform",

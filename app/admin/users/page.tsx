@@ -145,7 +145,7 @@ export default function UsersPage() {
                   >
                     <TableCell>
                       <div className='flex items-center gap-3'>
-                        <div className='bg-indigo-600 hover:bg-indigo-700/10 text-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold uppercase'>
+                        <div className='text-primary flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-xs font-bold uppercase hover:bg-indigo-700/10'>
                           {user.username[0]}
                         </div>
                         <div className='flex flex-col'>

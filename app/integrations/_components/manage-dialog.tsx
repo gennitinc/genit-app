@@ -28,8 +28,13 @@ import {
   Unplug,
   X,
 } from "lucide-react";
-import { type ComponentType, type CSSProperties, useMemo, useState } from "react";
 import { toast } from "sonner";
+import {
+  type CSSProperties,
+  type ComponentType,
+  useMemo,
+  useState,
+} from "react";
 
 interface ManageDialogProps {
   open: boolean;
@@ -122,7 +127,7 @@ export function ManageDialog({
   // now. Pull the one for THIS dialog's platform — revoking it should only
   // affect this surface, never the others.
   const surface = platform && isMetaSurface(platform) ? platform : null;
-  const identity = surface ? identityBySurface.get(surface) ?? null : null;
+  const identity = surface ? (identityBySurface.get(surface) ?? null) : null;
   const showIdentitySection = surface !== null && identity;
 
   const sortedConnections = useMemo(() => {
@@ -160,9 +165,7 @@ export function ManageDialog({
       toast.success("Primary target updated");
     } catch (err: any) {
       const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Failed to set primary";
+        err?.response?.data?.message || err?.message || "Failed to set primary";
       toast.error("Update failed", { description: msg });
     }
   }
@@ -194,9 +197,9 @@ export function ManageDialog({
         className='max-h-[96dvh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto border-0 bg-transparent p-0 shadow-none'
         hideDialogClose
       >
-        <div className="group relative mx-auto w-full overflow-hidden rounded-3xl bg-black/[0.02] p-2 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10">
+        <div className='group relative mx-auto w-full overflow-hidden rounded-3xl bg-black/[0.02] p-2 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
           <GradientFrame />
-          <div className="relative z-10 flex flex-col overflow-hidden rounded-[1.3rem] bg-white shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10">
+          <div className='relative z-10 flex flex-col overflow-hidden rounded-[1.3rem] bg-white shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
             <div className='relative max-h-[calc(85dvh-4rem)] overflow-x-hidden overflow-y-auto px-4 pt-7 pb-6 sm:px-6'>
               <button
                 type='button'
@@ -208,197 +211,268 @@ export function ManageDialog({
               </button>
 
               <div className='relative z-10 flex min-w-0 items-center gap-3 pr-6'>
-            <div className='border-border flex h-12 w-12 items-center justify-center rounded-xl border bg-white/80 backdrop-blur dark:border-white/10 dark:bg-white/5'>
-              <Icon className='h-7 w-7' />
-            </div>
-            <div className='min-w-0'>
-              <DialogHeader className='space-y-0 text-left'>
-                <DialogTitle className='text-lg font-semibold tracking-tight'>
-                  {platformName} connections
-                </DialogTitle>
-                <DialogDescription className='text-xs'>
-                  {sortedConnections.length === 0
-                    ? `No ${label.toLowerCase()}s provisioned yet.`
-                    : hasMultiple
-                      ? `${sortedConnections.length} ${label.toLowerCase()}s connected for this organization.`
-                      : `Manage the connected ${label.toLowerCase()} or revoke access.`}
-                </DialogDescription>
-              </DialogHeader>
-            </div>
-          </div>
-
-          {showIdentitySection && (
-            <div className='relative z-10 mt-5 rounded-md border border-violet-500/20 bg-violet-500/4 p-3 dark:border-violet-300/20 dark:bg-violet-300/4'>
-              <p className='text-foreground text-xs font-medium'>
-                Signed in to Meta as{" "}
-                <span className='font-semibold'>{identity?.metaUserName}</span>
-              </p>
-              <p className='text-muted-foreground mt-0.5 text-[11px]'>
-                This identity is scoped to {platformName} only. Your other
-                Meta connections (Facebook, Instagram, Meta Ads, WhatsApp)
-                each have their own independent login.
-              </p>
-            </div>
-          )}
-
-          <div className='relative z-10 mt-5 space-y-2'>
-            <GradientFrame />
-            {sortedConnections.length === 0 && (
-              <div className='border-border bg-card/60 rounded-md border px-3 py-4 text-center dark:border-white/10 dark:bg-white/5'>
-                <p className='text-foreground text-sm'>
-                  No {label.toLowerCase()}s provisioned for {platformName}.
-                </p>
-                {showIdentitySection ? (
-                  <p className='text-muted-foreground mt-1 text-[11px]'>
-                    Your Meta login is authorized, but no usable{" "}
-                    {label.toLowerCase()}s were found on this account. Fix it
-                    on the Meta side and click Connect again, or revoke Meta
-                    access below to start clean.
-                  </p>
-                ) : (
-                  <p className='text-muted-foreground mt-1 text-[11px]'>
-                    Click Connect from the integrations page to set up{" "}
-                    {platformName}.
-                  </p>
-                )}
+                <div className='border-border flex h-12 w-12 items-center justify-center rounded-xl border bg-white/80 backdrop-blur dark:border-white/10 dark:bg-white/5'>
+                  <Icon className='h-7 w-7' />
+                </div>
+                <div className='min-w-0'>
+                  <DialogHeader className='space-y-0 text-left'>
+                    <DialogTitle className='text-lg font-semibold tracking-tight'>
+                      {platformName} connections
+                    </DialogTitle>
+                    <DialogDescription className='text-xs'>
+                      {sortedConnections.length === 0
+                        ? `No ${label.toLowerCase()}s provisioned yet.`
+                        : hasMultiple
+                          ? `${sortedConnections.length} ${label.toLowerCase()}s connected for this organization.`
+                          : `Manage the connected ${label.toLowerCase()} or revoke access.`}
+                    </DialogDescription>
+                  </DialogHeader>
+                </div>
               </div>
-            )}
-            {sortedConnections.map((conn) => {
-              const expiresAt = formatDate(conn.expiresAt);
-              const connectedAt = formatDate(conn.createdAt);
-              const isConfirming = confirmDisconnectId === conn._id;
 
-              return (
-                <div
-                  key={conn._id}
-                  className='border-border bg-card/60 rounded-md border px-3 py-3 dark:border-white/10 dark:bg-white/5'
-                >
-                  <div className='flex min-w-0 flex-wrap items-center gap-3 sm:flex-nowrap'>
-                    {conn.accountAvatar ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={conn.accountAvatar}
-                        alt={conn.accountName}
-                        className='h-9 w-9 rounded-full'
-                      />
+              {showIdentitySection && (
+                <div className='relative z-10 mt-5 rounded-md border border-violet-500/20 bg-violet-500/4 p-3 dark:border-violet-300/20 dark:bg-violet-300/4'>
+                  <p className='text-foreground text-xs font-medium'>
+                    Signed in to Meta as{" "}
+                    <span className='font-semibold'>
+                      {identity?.metaUserName}
+                    </span>
+                  </p>
+                  <p className='text-muted-foreground mt-0.5 text-[11px]'>
+                    This identity is scoped to {platformName} only. Your other
+                    Meta connections (Facebook, Instagram, Meta Ads, WhatsApp)
+                    each have their own independent login.
+                  </p>
+                </div>
+              )}
+
+              <div className='relative z-10 mt-5 space-y-2'>
+                <GradientFrame />
+                {sortedConnections.length === 0 && (
+                  <div className='border-border bg-card/60 rounded-md border px-3 py-4 text-center dark:border-white/10 dark:bg-white/5'>
+                    <p className='text-foreground text-sm'>
+                      No {label.toLowerCase()}s provisioned for {platformName}.
+                    </p>
+                    {showIdentitySection ? (
+                      <p className='text-muted-foreground mt-1 text-[11px]'>
+                        Your Meta login is authorized, but no usable{" "}
+                        {label.toLowerCase()}s were found on this account. Fix
+                        it on the Meta side and click Connect again, or revoke
+                        Meta access below to start clean.
+                      </p>
                     ) : (
-                      <div className='bg-muted h-9 w-9 rounded-full' />
+                      <p className='text-muted-foreground mt-1 text-[11px]'>
+                        Click Connect from the integrations page to set up{" "}
+                        {platformName}.
+                      </p>
                     )}
-                    <div className='min-w-0 flex-1'>
-                      <div className='flex items-center gap-1.5'>
-                        <p className='text-foreground truncate text-sm font-medium'>
-                          {conn.accountName}
-                        </p>
-                        {conn.isPrimary && (
-                          <span className='inline-flex items-center gap-0.5 rounded bg-violet-500/10 px-1.5 py-0.5 text-[10px] font-medium text-violet-700 ring-1 ring-violet-500/30 dark:text-violet-300'>
-                            <Star className='h-2.5 w-2.5' />
-                            Primary
-                          </span>
+                  </div>
+                )}
+                {sortedConnections.map((conn) => {
+                  const expiresAt = formatDate(conn.expiresAt);
+                  const connectedAt = formatDate(conn.createdAt);
+                  const isConfirming = confirmDisconnectId === conn._id;
+
+                  return (
+                    <div
+                      key={conn._id}
+                      className='border-border bg-card/60 rounded-md border px-3 py-3 dark:border-white/10 dark:bg-white/5'
+                    >
+                      <div className='flex min-w-0 flex-wrap items-center gap-3 sm:flex-nowrap'>
+                        {conn.accountAvatar ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={conn.accountAvatar}
+                            alt={conn.accountName}
+                            className='h-9 w-9 rounded-full'
+                          />
+                        ) : (
+                          <div className='bg-muted h-9 w-9 rounded-full' />
+                        )}
+                        <div className='min-w-0 flex-1'>
+                          <div className='flex items-center gap-1.5'>
+                            <p className='text-foreground truncate text-sm font-medium'>
+                              {conn.accountName}
+                            </p>
+                            {conn.isPrimary && (
+                              <span className='inline-flex items-center gap-0.5 rounded bg-violet-500/10 px-1.5 py-0.5 text-[10px] font-medium text-violet-700 ring-1 ring-violet-500/30 dark:text-violet-300'>
+                                <Star className='h-2.5 w-2.5' />
+                                Primary
+                              </span>
+                            )}
+                          </div>
+                          <p className='text-muted-foreground truncate text-[11px]'>
+                            {label} ID: {conn.accountId}
+                          </p>
+                        </div>
+                        <span
+                          className={
+                            conn.status === "active"
+                              ? "ml-auto inline-flex shrink-0 items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300"
+                              : "ml-auto inline-flex shrink-0 items-center gap-1 rounded-md bg-amber-500/10 px-2 py-1 text-xs text-amber-700 ring-1 ring-amber-500/30 dark:text-amber-300"
+                          }
+                        >
+                          <span
+                            className={
+                              conn.status === "active"
+                                ? "h-1.5 w-1.5 rounded-full bg-emerald-500"
+                                : "h-1.5 w-1.5 rounded-full bg-amber-500"
+                            }
+                          />
+                          {conn.status === "active" ? "Active" : conn.status}
+                        </span>
+                      </div>
+
+                      <dl className='mt-3 grid grid-cols-2 gap-2 text-[11px]'>
+                        {connectedAt && (
+                          <div>
+                            <dt className='text-muted-foreground'>Connected</dt>
+                            <dd className='text-foreground mt-0.5'>
+                              {connectedAt}
+                            </dd>
+                          </div>
+                        )}
+                        {expiresAt && (
+                          <div>
+                            <dt className='text-muted-foreground'>
+                              Token expires
+                            </dt>
+                            <dd className='text-foreground mt-0.5'>
+                              {expiresAt}
+                            </dd>
+                          </div>
+                        )}
+                      </dl>
+
+                      {conn.scopes.length > 0 && (
+                        <div className='mt-2.5'>
+                          <p className='text-muted-foreground text-[10px] tracking-wide uppercase'>
+                            Scopes
+                          </p>
+                          <div className='mt-1 flex flex-wrap gap-1'>
+                            {conn.scopes.map((s) => (
+                              <span
+                                key={s}
+                                className='border-border bg-card/80 inline-flex max-w-full items-center rounded px-1.5 py-0.5 text-[10px] font-medium break-all dark:border-white/10 dark:bg-white/5'
+                              >
+                                {s}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {isConfirming && (
+                        <div className='mt-3 rounded-md border border-red-500/30 bg-red-500/5 px-3 py-2'>
+                          <div className='flex items-start gap-2'>
+                            <AlertTriangle className='mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500' />
+                            <p className='text-foreground text-[11px]'>
+                              Scheduled posts targeting this{" "}
+                              {label.toLowerCase()} will stop until you
+                              reconnect.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className='mt-3 flex items-center justify-end gap-2'>
+                        {hasMultiple && !conn.isPrimary && (
+                          <Button
+                            type='button'
+                            size='sm'
+                            variant='ghost'
+                            onClick={() => handleSetPrimary(conn._id)}
+                            disabled={setPrimary.isPending}
+                            className='h-7 px-2 text-[11px]'
+                          >
+                            <Star className='mr-1 h-3 w-3' />
+                            Make primary
+                          </Button>
+                        )}
+                        {!isConfirming ? (
+                          <Button
+                            type='button'
+                            size='sm'
+                            variant='outline'
+                            onClick={() => setConfirmDisconnectId(conn._id)}
+                            className='h-7 border-red-500/40 px-2 text-[11px] text-red-600 hover:bg-red-500/10 hover:text-red-700 dark:border-red-400/40 dark:text-red-300'
+                          >
+                            <Unplug className='mr-1 h-3 w-3' />
+                            Disconnect
+                          </Button>
+                        ) : (
+                          <>
+                            <Button
+                              type='button'
+                              size='sm'
+                              variant='ghost'
+                              onClick={() => {
+                                setConfirmDisconnectId(null);
+                                handleClose(false);
+                              }}
+                              disabled={disconnectOne.isPending}
+                              className='h-7 px-2 text-[11px]'
+                            >
+                              Cancel
+                            </Button>
+                            <Button
+                              type='button'
+                              size='sm'
+                              onClick={() => handleDisconnectOne(conn._id)}
+                              disabled={disconnectOne.isPending}
+                              className='h-7 bg-red-500 px-2 text-[11px] text-white hover:bg-red-600'
+                            >
+                              {disconnectOne.isPending
+                                ? "Disconnecting…"
+                                : "Confirm"}
+                            </Button>
+                          </>
                         )}
                       </div>
-                      <p className='text-muted-foreground truncate text-[11px]'>
-                        {label} ID: {conn.accountId}
-                      </p>
                     </div>
-                    <span
-                      className={
-                        conn.status === "active"
-                          ? "ml-auto inline-flex shrink-0 items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300"
-                          : "ml-auto inline-flex shrink-0 items-center gap-1 rounded-md bg-amber-500/10 px-2 py-1 text-xs text-amber-700 ring-1 ring-amber-500/30 dark:text-amber-300"
-                      }
-                    >
-                      <span
-                        className={
-                          conn.status === "active"
-                            ? "h-1.5 w-1.5 rounded-full bg-emerald-500"
-                            : "h-1.5 w-1.5 rounded-full bg-amber-500"
-                        }
-                      />
-                      {conn.status === "active" ? "Active" : conn.status}
-                    </span>
-                  </div>
+                  );
+                })}
+              </div>
 
-                  <dl className='mt-3 grid grid-cols-2 gap-2 text-[11px]'>
-                    {connectedAt && (
+              {showIdentitySection && (
+                <div className='relative z-10 mt-5 rounded-md border border-amber-500/30 bg-amber-500/4 p-3'>
+                  {!confirmIdentityWipe ? (
+                    <div className='flex items-start justify-between gap-3'>
                       <div>
-                        <dt className='text-muted-foreground'>Connected</dt>
-                        <dd className='text-foreground mt-0.5'>{connectedAt}</dd>
-                      </div>
-                    )}
-                    {expiresAt && (
-                      <div>
-                        <dt className='text-muted-foreground'>Token expires</dt>
-                        <dd className='text-foreground mt-0.5'>{expiresAt}</dd>
-                      </div>
-                    )}
-                  </dl>
-
-                  {conn.scopes.length > 0 && (
-                    <div className='mt-2.5'>
-                      <p className='text-muted-foreground text-[10px] uppercase tracking-wide'>
-                        Scopes
-                      </p>
-                      <div className='mt-1 flex flex-wrap gap-1'>
-                        {conn.scopes.map((s) => (
-                          <span
-                            key={s}
-                            className='border-border bg-card/80 inline-flex max-w-full items-center break-all rounded px-1.5 py-0.5 text-[10px] font-medium dark:border-white/10 dark:bg-white/5'
-                          >
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {isConfirming && (
-                    <div className='mt-3 rounded-md border border-red-500/30 bg-red-500/5 px-3 py-2'>
-                      <div className='flex items-start gap-2'>
-                        <AlertTriangle className='mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500' />
-                        <p className='text-foreground text-[11px]'>
-                          Scheduled posts targeting this {label.toLowerCase()}{" "}
-                          will stop until you reconnect.
+                        <p className='text-foreground text-xs font-medium'>
+                          Revoke {platformName} access
+                        </p>
+                        <p className='text-muted-foreground mt-1 text-[11px]'>
+                          Removes the Meta login tied to {platformName} and
+                          every {label.toLowerCase()} provisioned under it. Your
+                          other Meta surfaces stay connected.
                         </p>
                       </div>
-                    </div>
-                  )}
-
-                  <div className='mt-3 flex items-center justify-end gap-2'>
-                    {hasMultiple && !conn.isPrimary && (
-                      <Button
-                        type='button'
-                        size='sm'
-                        variant='ghost'
-                        onClick={() => handleSetPrimary(conn._id)}
-                        disabled={setPrimary.isPending}
-                        className='h-7 px-2 text-[11px]'
-                      >
-                        <Star className='mr-1 h-3 w-3' />
-                        Make primary
-                      </Button>
-                    )}
-                    {!isConfirming ? (
                       <Button
                         type='button'
                         size='sm'
                         variant='outline'
-                        onClick={() => setConfirmDisconnectId(conn._id)}
-                        className='h-7 px-2 text-[11px] border-red-500/40 text-red-600 hover:bg-red-500/10 hover:text-red-700 dark:border-red-400/40 dark:text-red-300'
+                        onClick={() => setConfirmIdentityWipe(true)}
+                        className='h-7 shrink-0 border-red-500/40 px-2 text-[11px] text-red-600 hover:bg-red-500/10 dark:border-red-400/40 dark:text-red-300'
                       >
-                        <Unplug className='mr-1 h-3 w-3' />
-                        Disconnect
+                        Revoke
                       </Button>
-                    ) : (
-                      <>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className='text-foreground text-xs font-medium'>
+                        Revoke all {platformName} access on this Meta login?
+                      </p>
+                      <div className='mt-2 flex justify-end gap-2'>
                         <Button
                           type='button'
                           size='sm'
                           variant='ghost'
                           onClick={() => {
-                            setConfirmDisconnectId(null);
+                            setConfirmIdentityWipe(false);
                             handleClose(false);
                           }}
-                          disabled={disconnectOne.isPending}
+                          disabled={disconnectIdentity.isPending}
                           className='h-7 px-2 text-[11px]'
                         >
                           Cancel
@@ -406,105 +480,43 @@ export function ManageDialog({
                         <Button
                           type='button'
                           size='sm'
-                          onClick={() => handleDisconnectOne(conn._id)}
-                          disabled={disconnectOne.isPending}
-                          className='h-7 px-2 text-[11px] bg-red-500 text-white hover:bg-red-600'
+                          onClick={handleDisconnectIdentity}
+                          disabled={disconnectIdentity.isPending}
+                          className='h-7 bg-red-500 px-2 text-[11px] text-white hover:bg-red-600'
                         >
-                          {disconnectOne.isPending
-                            ? "Disconnecting…"
-                            : "Confirm"}
+                          {disconnectIdentity.isPending
+                            ? "Revoking…"
+                            : `Yes, revoke ${platformName}`}
                         </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {showIdentitySection && (
-            <div className='relative z-10 mt-5 rounded-md border border-amber-500/30 bg-amber-500/4 p-3'>
-              {!confirmIdentityWipe ? (
-                <div className='flex items-start justify-between gap-3'>
-                  <div>
-                    <p className='text-foreground text-xs font-medium'>
-                      Revoke {platformName} access
-                    </p>
-                    <p className='text-muted-foreground mt-1 text-[11px]'>
-                      Removes the Meta login tied to {platformName} and every{" "}
-                      {label.toLowerCase()} provisioned under it. Your other
-                      Meta surfaces stay connected.
-                    </p>
-                  </div>
-                  <Button
-                    type='button'
-                    size='sm'
-                    variant='outline'
-                    onClick={() => setConfirmIdentityWipe(true)}
-                    className='h-7 shrink-0 border-red-500/40 px-2 text-[11px] text-red-600 hover:bg-red-500/10 dark:border-red-400/40 dark:text-red-300'
-                  >
-                    Revoke
-                  </Button>
-                </div>
-              ) : (
-                <div>
-                  <p className='text-foreground text-xs font-medium'>
-                    Revoke all {platformName} access on this Meta login?
-                  </p>
-                  <div className='mt-2 flex justify-end gap-2'>
-                    <Button
-                      type='button'
-                      size='sm'
-                      variant='ghost'
-                      onClick={() => {
-                        setConfirmIdentityWipe(false);
-                        handleClose(false);
-                      }}
-                      disabled={disconnectIdentity.isPending}
-                      className='h-7 px-2 text-[11px]'
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      type='button'
-                      size='sm'
-                      onClick={handleDisconnectIdentity}
-                      disabled={disconnectIdentity.isPending}
-                      className='h-7 px-2 text-[11px] bg-red-500 text-white hover:bg-red-600'
-                    >
-                      {disconnectIdentity.isPending
-                        ? "Revoking…"
-                        : `Yes, revoke ${platformName}`}
-                    </Button>
-                  </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          )}
-        </div>
 
-        <div className='flex flex-col items-start justify-between gap-2 border-t border-black/5 px-4 py-3 sm:flex-row sm:items-center sm:px-6 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.02]'>
-          {platformSettingsUrl(platform) ? (
-            <a
-              href={platformSettingsUrl(platform) as string}
-              target='_blank'
-              rel='noreferrer'
-              className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-[11px]'
-            >
-              {platformName} settings
-              <ExternalLink className='h-3 w-3' />
-            </a>
-          ) : (
-            <span />
-          )}
-          <span className='text-muted-foreground inline-flex items-center gap-1 text-[11px]'>
-            <CheckCircle2 className='h-3 w-3' />
-            All tokens encrypted at rest
-          </span>
+            <div className='flex flex-col items-start justify-between gap-2 border-t border-black/5 bg-black/[0.02] px-4 py-3 sm:flex-row sm:items-center sm:px-6 dark:border-white/10 dark:bg-white/[0.02]'>
+              {platformSettingsUrl(platform) ? (
+                <a
+                  href={platformSettingsUrl(platform) as string}
+                  target='_blank'
+                  rel='noreferrer'
+                  className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-[11px]'
+                >
+                  {platformName} settings
+                  <ExternalLink className='h-3 w-3' />
+                </a>
+              ) : (
+                <span />
+              )}
+              <span className='text-muted-foreground inline-flex items-center gap-1 text-[11px]'>
+                <CheckCircle2 className='h-3 w-3' />
+                All tokens encrypted at rest
+              </span>
+            </div>
+          </div>
         </div>
-        </div>
-      </div>
-    </DialogContent>
-  </Dialog>
+      </DialogContent>
+    </Dialog>
   );
 }

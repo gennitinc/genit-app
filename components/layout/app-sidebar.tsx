@@ -49,7 +49,14 @@ export function AppSidebar({
         setOpen(false);
       }
     }
-  }, [pathname, isVisualsPage, isChatIdPage, isMobile, isLargeDesktop, setOpen]);
+  }, [
+    pathname,
+    isVisualsPage,
+    isChatIdPage,
+    isMobile,
+    isLargeDesktop,
+    setOpen,
+  ]);
 
   // Calculate credit stats from user data
   const creditsRemaining = user?.creditsRemaining || 0;

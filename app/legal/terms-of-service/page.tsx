@@ -106,8 +106,9 @@ export default function About2() {
               <strong className='text-slate-12 font-semibold'>
                 Klip Technologies, Inc. ("Company", "We", "Our", "Us")
               </strong>{" "}
-              , the operator of genit, an AI agent platform that helps businesses manage and grow their brand from a single workspace, and
-              you (
+              , the operator of genit, an AI agent platform that helps
+              businesses manage and grow their brand from a single workspace,
+              and you (
               <strong className='text-slate-12 font-semibold'>"You"</strong> or
               the{" "}
               <strong className='text-slate-12 font-semibold'>"User"</strong>).
@@ -482,17 +483,17 @@ export default function About2() {
               </a>
             </h2>
             <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-              Our AI agent platform allows you to create, post,
-              link, store, share and otherwise make available certain
-              information, text, graphics, videos, animations, interactive
-              designs, or other digital marketing and brand assets ("Content"). You are
+              Our AI agent platform allows you to create, post, link, store,
+              share and otherwise make available certain information, text,
+              graphics, videos, animations, interactive designs, or other
+              digital marketing and brand assets ("Content"). You are
               responsible for Content that you create, post, or upload on or
               through our Service, including its legality, reliability, and
               appropriateness.
             </p>
             <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-              By creating, posting, or uploading Content on or through our
-              AI agent platform, You represent and warrant that: (i) Content is
+              By creating, posting, or uploading Content on or through our AI
+              agent platform, You represent and warrant that: (i) Content is
               yours (you own it) and/or you have the right to use it and the
               right to grant us the rights and license as provided in these
               Terms, and (ii) that the creation, posting, or uploading of your
@@ -508,10 +509,10 @@ export default function About2() {
               responsibility and assume no liability for Content you or any
               third party creates, posts, or uploads on or through Service.
               However, by creating or posting Content using our AI agent
-              platform you grant us the right and license to use such Content for
-              purposes of making Service available for other users. This license
-              does not include the right for us to make your Content available
-              to other users of Service without your approval.
+              platform you grant us the right and license to use such Content
+              for purposes of making Service available for other users. This
+              license does not include the right for us to make your Content
+              available to other users of Service without your approval.
             </p>
             <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
               Klip Technologies, Inc. has the right but not the obligation to
@@ -545,9 +546,8 @@ export default function About2() {
               </a>
             </h2>
             <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-              You may use our AI agent platform only for lawful
-              purposes and in accordance with Terms. You agree not to use
-              Service for:
+              You may use our AI agent platform only for lawful purposes and in
+              accordance with Terms. You agree not to use Service for:
             </p>
             <ol className='text-slate-11 my-5 flex list-decimal flex-col gap-3 pl-5 text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
               <li>
@@ -579,8 +579,9 @@ export default function About2() {
                 <strong className='text-slate-12 font-semibold'>
                   Illegal Activities
                 </strong>
-                : You are prohibited from using our AI agent platform to engage in any illegal activities or create content
-                that violates applicable laws.
+                : You are prohibited from using our AI agent platform to engage
+                in any illegal activities or create content that violates
+                applicable laws.
               </li>
             </ol>
             <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>

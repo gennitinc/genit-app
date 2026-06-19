@@ -255,7 +255,7 @@ export function LandingNavbar() {
                     Sign in
                   </Link>
                   <Link
-                    className='hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl bg-indigo-600 hover:bg-indigo-700 px-4 text-sm font-semibold text-white shadow-sm shadow-primary/10 outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                    className='hover:shadow-button shadow-primary/10 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-700 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                     href='/signup'
                   >
                     <span>Start for $0</span>
@@ -277,7 +277,7 @@ export function LandingNavbar() {
             >
               <Search className='h-4 w-4' />
             </Button>
-            
+
             <Button
               variant='ghost'
               size='sm'
@@ -307,7 +307,7 @@ export function LandingNavbar() {
                   Sign in
                 </Link>
                 <Link
-                  className='text-primary-foreground border-primary/20 bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-600 hover:bg-indigo-700/90 hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                  className='text-primary-foreground border-primary/20 hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] bg-indigo-600 px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                   href='/signup'
                 >
                   <span>Start for $0</span>
@@ -315,7 +315,7 @@ export function LandingNavbar() {
                 </Link>
               </div>
             )}
-            
+
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant='ghost' size='icon' className='z-50'>
@@ -341,11 +341,18 @@ export function LandingNavbar() {
                       className='flex items-center gap-2 rounded-lg p-2 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800'
                     >
                       <Avatar className='h-10 w-10'>
-                        <AvatarImage src={currentUser?.userdp} alt={currentUser?.username} />
-                        <AvatarFallback>{currentUser?.username[0]}</AvatarFallback>
+                        <AvatarImage
+                          src={currentUser?.userdp}
+                          alt={currentUser?.username}
+                        />
+                        <AvatarFallback>
+                          {currentUser?.username[0]}
+                        </AvatarFallback>
                       </Avatar>
                       <div className='flex flex-col'>
-                        <span className='font-medium'>{currentUser?.username}</span>
+                        <span className='font-medium'>
+                          {currentUser?.username}
+                        </span>
                         <span className='text-xs text-zinc-400'>
                           {currentUser?.email}
                         </span>

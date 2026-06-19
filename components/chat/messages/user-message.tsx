@@ -12,9 +12,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { HoverActions } from "@/components/ui/hover-actions";
+import { stripClientTimeContext } from "@/lib/utils";
 import { Download, Eye, File, FileText, ImageIcon } from "lucide-react";
 import Image from "next/image";
-import { stripClientTimeContext } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import { useEffect, useState } from "react";
 
@@ -64,7 +64,6 @@ export function UserMessage({
       if (Math.random() < 0.1) {
         throw new Error("Network error: Failed to save message");
       }
-
 
       if (onEdit) {
         await onEdit(newContent, files);
@@ -181,7 +180,10 @@ export function UserMessage({
         >
           <MessageContent variant='user'>
             <ReactMarkdown>
-              {stripClientTimeContext(message.parts?.find((part: any) => part.type === "text")?.text || "")}
+              {stripClientTimeContext(
+                message.parts?.find((part: any) => part.type === "text")
+                  ?.text || ""
+              )}
             </ReactMarkdown>
           </MessageContent>
 

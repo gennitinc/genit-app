@@ -139,7 +139,6 @@ function Page() {
       formData.append("ticketType", supportTicketType);
       formData.append("status", "pending");
 
-
       if (supportFile) {
         formData.append("support-file", supportFile);
       }
@@ -242,7 +241,6 @@ function Page() {
         description: suggestionDescription,
         status: "pending",
       };
-
 
       const response = await apiResponseFileUpload.post(
         "customer/suggest",
@@ -400,13 +398,13 @@ function Page() {
                 <TabsList className='bg-card bg-BackgroundDark dark:bg-BackgroundDark sm:w-start mt-1 flex w-fit justify-start gap-2 overflow-x-auto overflow-y-hidden rounded-md border border-neutral-900 p-1 sm:max-w-screen-lg lg:overscroll-none dark:border-neutral-900'>
                   <TabsTrigger
                     value='support'
-                    className='data-[state=active]:bg-indigo-600 hover:bg-indigo-700 data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 dark:data-[state=active]:bg-indigo-600 hover:bg-indigo-700 text-TextDark1 dark:text-TextDark1 w-fit px-4 py-2'
+                    className='data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 text-TextDark1 dark:text-TextDark1 w-fit px-4 py-2 hover:bg-indigo-700 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-600'
                   >
                     Support
                   </TabsTrigger>
                   <TabsTrigger
                     value='suggestion'
-                    className='data-[state=active]:bg-indigo-600 hover:bg-indigo-700 data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 dark:data-[state=active]:bg-indigo-600 hover:bg-indigo-700 text-TextDark1 dark:text-TextDark1 w-fit px-4 py-2'
+                    className='data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 text-TextDark1 dark:text-TextDark1 w-fit px-4 py-2 hover:bg-indigo-700 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-600'
                   >
                     Suggestion
                   </TabsTrigger>

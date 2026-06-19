@@ -35,7 +35,6 @@ async function getCreatorProfile(
 
     const url = `${finalBaseURL.endsWith("/") ? finalBaseURL : finalBaseURL + "/"}inspire/creator/${encodeURIComponent(username)}`;
 
-
     const response = await fetch(url, {
       method: "GET",
       headers: {

@@ -1,13 +1,13 @@
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { LandingNavbar } from "@/components/landing/landing-navbar";
-import { LandingFooter } from "@/components/landing/landing-footer";
-import { ShareButtons } from "@/components/blog/share-buttons";
-import { BlogSocial } from "@/components/blog/blog-social";
 import { BlogComments } from "@/components/blog/blog-comments";
+import { BlogSocial } from "@/components/blog/blog-social";
+import { ShareButtons } from "@/components/blog/share-buttons";
+import { LandingFooter } from "@/components/landing/landing-footer";
+import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { apiResponse, clientUrl } from "@/utils/apiResponse";
 import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 interface Author {
   name: string;
@@ -37,12 +37,14 @@ const staticFallbackPosts: Record<string, BlogPost> = {
     _id: "1",
     title: "How Sentry uses Genit to build what can't be bought",
     slug: "how-sentry-uses-genit",
-    excerpt: "Sentry, founded in 2012, is one of the most successful companies in dev tools. Like many companies that started with a product-led growth motion, Sentry has since added a sales motion.",
+    excerpt:
+      "Sentry, founded in 2012, is one of the most successful companies in dev tools. Like many companies that started with a product-led growth motion, Sentry has since added a sales motion.",
     coverImage: "/blog/sentry-cover.png",
     category: "Stories",
     author: {
       name: "Genit Team",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
+      avatar:
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
       title: "Product Team",
     },
     publishedAt: "2025-11-18T00:00:00.000Z",
@@ -69,12 +71,14 @@ const staticFallbackPosts: Record<string, BlogPost> = {
     _id: "2",
     title: "How AppDirect turned non-technical teams into builders with Genit",
     slug: "how-appdirect-turned-non-technical-teams-into-builders-with-genit",
-    excerpt: "AppDirect is a leading subscription commerce platform that serves millions of businesses globally. Learn how AppDirect leveraged AI design to empower non-technical teams.",
+    excerpt:
+      "AppDirect is a leading subscription commerce platform that serves millions of businesses globally. Learn how AppDirect leveraged AI design to empower non-technical teams.",
     coverImage: "/blog/appdirect-cover.png",
     category: "Stories",
     author: {
       name: "Genit Team",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop",
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop",
       title: "Content Director",
     },
     publishedAt: "2025-11-18T00:00:00.000Z",
@@ -96,12 +100,14 @@ const staticFallbackPosts: Record<string, BlogPost> = {
     _id: "3",
     title: "How Thinkific uses Genit to prototype the future",
     slug: "how-thinkific-uses-genit-to-prototype",
-    excerpt: "Thinkific is a leading platform that enables creators to build, market, and sell online courses. Discover how their team prototypes new UI concepts in record time.",
+    excerpt:
+      "Thinkific is a leading platform that enables creators to build, market, and sell online courses. Discover how their team prototypes new UI concepts in record time.",
     coverImage: "/blog/thinkific-cover.png",
     category: "Stories",
     author: {
       name: "Genit Team",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=256&auto=format&fit=crop",
+      avatar:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=256&auto=format&fit=crop",
       title: "Design Lead",
     },
     publishedAt: "2025-11-18T00:00:00.000Z",
@@ -123,12 +129,14 @@ const staticFallbackPosts: Record<string, BlogPost> = {
     _id: "4",
     title: "Build apps from a link with Genit Build with URL",
     slug: "build-apps-from-a-link-with-genit",
-    excerpt: "We are thrilled to launch Build with URL. You can now import any existing web page link and start modifying its design, components, and layout using natural conversation.",
+    excerpt:
+      "We are thrilled to launch Build with URL. You can now import any existing web page link and start modifying its design, components, and layout using natural conversation.",
     coverImage: "/blog/build-with-url.png",
     category: "Announcements",
     author: {
       name: "Genit Team",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop",
+      avatar:
+        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop",
       title: "Product Marketing",
     },
     publishedAt: "2025-11-18T00:00:00.000Z",
@@ -208,22 +216,31 @@ export async function generateMetadata(props: {
 
 // Parses H2 tags from content to build the Table of Contents dynamically
 // and injects id attributes into the HTML for smooth scrolling navigation.
-function processContentWithHeadings(htmlContent: string = ""): { modifiedHtml: string; headings: { text: string; id: string }[] } {
+function processContentWithHeadings(htmlContent: string = ""): {
+  modifiedHtml: string;
+  headings: { text: string; id: string }[];
+} {
   // Strip out script tags to prevent React warnings and execution
-  const safeHtmlContent = htmlContent.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+  const safeHtmlContent = htmlContent.replace(
+    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+    ""
+  );
 
   const headings: { text: string; id: string }[] = [];
-  const modifiedHtml = safeHtmlContent.replace(/<h2>(.*?)<\/h2>/g, (match, p1) => {
-    const text = p1.replace(/<[^>]*>/g, "");
-    const id = text
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-");
-    headings.push({ text, id });
-    return `<h2 id="${id}" style="scroll-margin-top: 100px;">${p1}</h2>`;
-  });
+  const modifiedHtml = safeHtmlContent.replace(
+    /<h2>(.*?)<\/h2>/g,
+    (match, p1) => {
+      const text = p1.replace(/<[^>]*>/g, "");
+      const id = text
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+      headings.push({ text, id });
+      return `<h2 id="${id}" style="scroll-margin-top: 100px;">${p1}</h2>`;
+    }
+  );
   return { modifiedHtml, headings };
 }
 
@@ -243,18 +260,25 @@ export default async function BlogPostPage(props: {
       post = staticFallbackPosts[slug] || null;
     }
   } catch (error) {
-    console.warn("Failed to fetch post details from server, using fallback:", error);
+    console.warn(
+      "Failed to fetch post details from server, using fallback:",
+      error
+    );
     post = staticFallbackPosts[slug] || null;
   }
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col justify-between">
+      <div className='flex min-h-screen flex-col justify-between bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100'>
         <LandingNavbar />
-        <div className="text-center py-40">
-          <h1 className="text-3xl font-bold text-black dark:text-white mb-4">Post Not Found</h1>
-          <p className="text-zinc-600 dark:text-zinc-400 mb-8">The blog article you are looking for does not exist.</p>
-          <Link href="/blog" className="text-cyan-500 hover:underline">
+        <div className='py-40 text-center'>
+          <h1 className='mb-4 text-3xl font-bold text-black dark:text-white'>
+            Post Not Found
+          </h1>
+          <p className='mb-8 text-zinc-600 dark:text-zinc-400'>
+            The blog article you are looking for does not exist.
+          </p>
+          <Link href='/blog' className='text-cyan-500 hover:underline'>
             Back to all posts
           </Link>
         </div>
@@ -268,7 +292,9 @@ export default async function BlogPostPage(props: {
   try {
     const listRes = await apiResponse.get(`/blog?category=${post.category}`);
     if (listRes.data && listRes.data.posts) {
-      relatedPosts = listRes.data.posts.filter((p: BlogPost) => p._id !== post?._id);
+      relatedPosts = listRes.data.posts.filter(
+        (p: BlogPost) => p._id !== post?._id
+      );
     }
   } catch (error) {
     console.warn("Failed to fetch related posts:", error);
@@ -281,10 +307,14 @@ export default async function BlogPostPage(props: {
     try {
       const listRes = await apiResponse.get("/blog");
       if (listRes.data && listRes.data.posts) {
-        relatedPosts = listRes.data.posts.filter((p: BlogPost) => p._id !== post?._id);
+        relatedPosts = listRes.data.posts.filter(
+          (p: BlogPost) => p._id !== post?._id
+        );
       }
     } catch {
-      relatedPosts = Object.values(staticFallbackPosts).filter((p) => p.slug !== slug);
+      relatedPosts = Object.values(staticFallbackPosts).filter(
+        (p) => p.slug !== slug
+      );
     }
   }
 
@@ -300,55 +330,65 @@ export default async function BlogPostPage(props: {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans">
+    <div className='flex min-h-screen flex-col bg-white font-sans text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100'>
       <LandingNavbar />
 
-      <main className="flex-grow max-w-7xl mx-auto w-full px-4 md:px-12 lg:px-20 py-12">
+      <main className='mx-auto w-full max-w-7xl flex-grow px-4 py-12 md:px-12 lg:px-20'>
         {/* Back Link */}
         <Link
-          href="/blog"
-          className="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white text-sm font-medium transition-colors mb-10 group"
+          href='/blog'
+          className='group mb-10 inline-flex items-center gap-2 text-sm font-medium text-zinc-600 transition-colors hover:text-black dark:text-zinc-400 dark:hover:text-white'
         >
-          <span className="transform transition-transform group-hover:-translate-x-1">&larr;</span> All posts
+          <span className='transform transition-transform group-hover:-translate-x-1'>
+            &larr;
+          </span>{" "}
+          All posts
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className='grid grid-cols-1 gap-12 lg:grid-cols-12'>
           {/* Main Article Content (Left/Center) */}
-          <div className="lg:col-span-8 flex flex-col">
-            <span className="text-zinc-600 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-4">
-              Published {formatDate(post.publishedAt)} in <span className="text-cyan-500">{post.category}</span>
+          <div className='flex flex-col lg:col-span-8'>
+            <span className='mb-4 text-xs font-semibold tracking-wider text-zinc-600 uppercase dark:text-zinc-400'>
+              Published {formatDate(post.publishedAt)} in{" "}
+              <span className='text-cyan-500'>{post.category}</span>
             </span>
 
-            <h1 className="text-3xl md:text-3xl font-semibold tracking-tight text-black dark:text-white leading-tight mb-8">
+            <h1 className='mb-8 text-3xl leading-tight font-semibold tracking-tight text-black md:text-3xl dark:text-white'>
               {post.title}
             </h1>
 
             {/* Author Info */}
-            <div className="flex items-center gap-3 mb-10 pb-6 border-b border-zinc-200 dark:border-zinc-800/60">
+            <div className='mb-10 flex items-center gap-3 border-b border-zinc-200 pb-6 dark:border-zinc-800/60'>
               <Image
                 src={decodeURI(post.author.avatar)}
                 alt={post.author.name}
                 width={40}
                 height={40}
-                className="rounded-full object-cover size-8"
+                className='size-8 rounded-full object-cover'
               />
               <div>
-                <div className="text-black dark:text-white text-sm font-medium">{post.author.name}</div>
-                {post.author.title && <div className="text-zinc-600 dark:text-zinc-400 text-xs">{post.author.title}</div>}
+                <div className='text-sm font-medium text-black dark:text-white'>
+                  {post.author.name}
+                </div>
+                {post.author.title && (
+                  <div className='text-xs text-zinc-600 dark:text-zinc-400'>
+                    {post.author.title}
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Cover Image */}
-            <div className="relative aspect-video w-full rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800/80">
+            <div className='relative aspect-video w-full overflow-hidden rounded-3xl border border-zinc-200 dark:border-zinc-800/80'>
               <Image
                 src={decodeURI(post.coverImage)}
                 alt={post.title}
                 fill
                 priority
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 60vw"
+                className='object-cover'
+                sizes='(max-width: 1024px) 100vw, 60vw'
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/10 dark:from-zinc-950/20 to-transparent" />
+              <div className='absolute inset-0 bg-gradient-to-t from-black/10 to-transparent dark:from-zinc-950/20' />
             </div>
 
             <BlogSocial
@@ -362,16 +402,7 @@ export default async function BlogPostPage(props: {
 
             {/* Post Content Body */}
             <div
-              className="prose dark:prose-invert max-w-none text-zinc-800 dark:text-zinc-300 leading-relaxed space-y-6 
-              prose-h2:text-black dark:prose-h2:text-white prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-4
-              prose-p:mb-6 prose-p:text-zinc-800 dark:prose-p:text-zinc-300 prose-p:text-base md:prose-p:text-lg prose-strong:text-black dark:prose-strong:text-white 
-              prose-blockquote:border-l-4 prose-blockquote:border-cyan-500 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-zinc-700 dark:prose-blockquote:text-zinc-200 prose-blockquote:my-8 prose-blockquote:text-lg
-              prose-ul:list-disc prose-ul:pl-6 prose-li:mb-2
-              [&_a]:text-cyan-600 dark:[&_a]:text-cyan-400 [&_a]:underline hover:[&_a]:text-cyan-500 dark:hover:[&_a]:text-cyan-300
-              [&_pre]:bg-zinc-100 dark:[&_pre]:bg-zinc-950 [&_pre]:p-5 [&_pre]:rounded-2xl [&_pre]:border [&_pre]:border-zinc-200 dark:[&_pre]:border-zinc-800 [&_pre]:overflow-x-auto [&_pre]:my-8 [&_pre]:scrollbar-hide
-              [&_code]:font-mono [&_code]:text-sm [&_code]:text-zinc-800 dark:[&_code]:text-zinc-300
-              [&_img]:rounded-2xl [&_img]:border [&_img]:border-zinc-200 dark:[&_img]:border-zinc-800/80 [&_img]:my-6
-              [&_.video-container]:my-8 [&_.video-container]:rounded-2xl [&_.video-container]:overflow-hidden [&_.video-container]:border [&_.video-container]:border-zinc-200 dark:[&_.video-container]:border-zinc-800"
+              className='prose dark:prose-invert prose-h2:text-black dark:prose-h2:text-white prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-4 prose-p:mb-6 prose-p:text-zinc-800 dark:prose-p:text-zinc-300 prose-p:text-base md:prose-p:text-lg prose-strong:text-black dark:prose-strong:text-white prose-blockquote:border-l-4 prose-blockquote:border-cyan-500 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-zinc-700 dark:prose-blockquote:text-zinc-200 prose-blockquote:my-8 prose-blockquote:text-lg prose-ul:list-disc prose-ul:pl-6 prose-li:mb-2 [&_pre]:scrollbar-hide max-w-none space-y-6 leading-relaxed text-zinc-800 dark:text-zinc-300 [&_.video-container]:my-8 [&_.video-container]:overflow-hidden [&_.video-container]:rounded-2xl [&_.video-container]:border [&_.video-container]:border-zinc-200 dark:[&_.video-container]:border-zinc-800 [&_a]:text-cyan-600 [&_a]:underline hover:[&_a]:text-cyan-500 dark:[&_a]:text-cyan-400 dark:hover:[&_a]:text-cyan-300 [&_code]:font-mono [&_code]:text-sm [&_code]:text-zinc-800 dark:[&_code]:text-zinc-300 [&_img]:my-6 [&_img]:rounded-2xl [&_img]:border [&_img]:border-zinc-200 dark:[&_img]:border-zinc-800/80 [&_pre]:my-8 [&_pre]:overflow-x-auto [&_pre]:rounded-2xl [&_pre]:border [&_pre]:border-zinc-200 [&_pre]:bg-zinc-100 [&_pre]:p-5 dark:[&_pre]:border-zinc-800 dark:[&_pre]:bg-zinc-950'
               dangerouslySetInnerHTML={{ __html: modifiedHtml }}
             />
 
@@ -382,45 +413,47 @@ export default async function BlogPostPage(props: {
               initialComments={post.commentsCount || 0}
               initialHasLiked={hasLiked}
             />
-            
-            <div id="blog-comments-desktop" className="hidden lg:flex justify-center w-full">
-               <BlogComments postId={post._id} />
-            </div>
 
+            <div
+              id='blog-comments-desktop'
+              className='hidden w-full justify-center lg:flex'
+            >
+              <BlogComments postId={post._id} />
+            </div>
           </div>
 
           {/* Sidebar Info (Right) */}
-          <div className="lg:col-span-4 flex flex-col gap-10 lg:sticky lg:top-24 h-fit lg:pl-6 border-t lg:border-t-0 lg:border-l border-zinc-200 dark:border-zinc-800/60 pt-10 lg:pt-0">
+          <div className='flex h-fit flex-col gap-10 border-t border-zinc-200 pt-10 lg:sticky lg:top-24 lg:col-span-4 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-6 dark:border-zinc-800/60'>
             {/* Reading Time */}
             <div>
-              <span className="text-black dark:text-white text-sm font-semibold tracking-wide block uppercase mb-1">
+              <span className='mb-1 block text-sm font-semibold tracking-wide text-black uppercase dark:text-white'>
                 Reading time
               </span>
-              <span className="text-zinc-600 dark:text-zinc-400 text-sm">{post.readTime}</span>
+              <span className='text-sm text-zinc-600 dark:text-zinc-400'>
+                {post.readTime}
+              </span>
             </div>
 
             {/* Outline / Table of Contents */}
             {headings.length > 0 && (
               <div>
-                <span className="text-black dark:text-white text-sm font-semibold tracking-wide block uppercase mb-4">
+                <span className='mb-4 block text-sm font-semibold tracking-wide text-black uppercase dark:text-white'>
                   Outline
                 </span>
-                <ul className="space-y-3">
+                <ul className='space-y-3'>
                   {headings.map((h, idx) => (
-                 <li key={idx}>
-  <a
-    href={`#${h.id}`}
-    className="text-zinc-600 dark:text-zinc-400 text-sm hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors flex"
-  >
-    <span className="text-zinc-400 dark:text-zinc-600 mr-2 flex-shrink-0">
-      {(idx + 1).toString().padStart(2, "0")}
-    </span>
+                    <li key={idx}>
+                      <a
+                        href={`#${h.id}`}
+                        className='flex text-sm text-zinc-600 transition-colors hover:text-cyan-600 dark:text-zinc-400 dark:hover:text-cyan-400'
+                      >
+                        <span className='mr-2 flex-shrink-0 text-zinc-400 dark:text-zinc-600'>
+                          {(idx + 1).toString().padStart(2, "0")}
+                        </span>
 
-    <span className="line-clamp-2">
-      {h.text}
-    </span>
-  </a>
-</li>
+                        <span className='line-clamp-2'>{h.text}</span>
+                      </a>
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -428,7 +461,7 @@ export default async function BlogPostPage(props: {
 
             {/* Social Share Buttons */}
             <div>
-              <span className="text-black dark:text-white text-sm font-semibold tracking-wide block uppercase mb-4">
+              <span className='mb-4 block text-sm font-semibold tracking-wide text-black uppercase dark:text-white'>
                 Share this
               </span>
               <ShareButtons title={post.title} slug={slug} />
@@ -438,34 +471,37 @@ export default async function BlogPostPage(props: {
 
         {/* Related Articles row */}
         {relatedPosts.length > 0 && (
-          <div className="mt-16 pt-12 border-t border-zinc-200 dark:border-zinc-800/60 w-full">
-            <h3 className="text-2xl font-bold text-black dark:text-white mb-8">Related articles</h3>
-            <div className="flex overflow-x-auto gap-6 pb-6 scrollbar-hide -mx-4 px-4 md:-mx-0 md:px-0 scroll-smooth">
+          <div className='mt-16 w-full border-t border-zinc-200 pt-12 dark:border-zinc-800/60'>
+            <h3 className='mb-8 text-2xl font-bold text-black dark:text-white'>
+              Related articles
+            </h3>
+            <div className='scrollbar-hide -mx-4 flex gap-6 overflow-x-auto scroll-smooth px-4 pb-6 md:-mx-0 md:px-0'>
               {relatedPosts.slice(0, 3).map((item) => (
                 <div
                   key={item._id}
-                  className="min-w-[285px] md:min-w-[340px] w-[285px] md:w-[340px] shrink-0 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/60 rounded-3xl overflow-hidden hover:border-zinc-300 dark:hover:border-zinc-700/80 transition-all duration-300 group flex flex-col"
+                  className='group flex w-[285px] min-w-[285px] shrink-0 flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-50 transition-all duration-300 hover:border-zinc-300 md:w-[340px] md:min-w-[340px] dark:border-zinc-800/60 dark:bg-zinc-900/40 dark:hover:border-zinc-700/80'
                 >
-                  <Link href={`/blog/${item.slug}`} className="block relative aspect-video overflow-hidden">
+                  <Link
+                    href={`/blog/${item.slug}`}
+                    className='relative block aspect-video overflow-hidden'
+                  >
                     <Image
                       src={decodeURI(item.coverImage)}
                       alt={item.title}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 30vw"
+                      className='object-cover transition-transform duration-500 group-hover:scale-105'
+                      sizes='(max-width: 768px) 100vw, 30vw'
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-zinc-950/20 to-transparent" />
+                    <div className='absolute inset-0 bg-gradient-to-t from-white to-transparent dark:from-zinc-950/20' />
                   </Link>
-                  <div className="p-5 flex flex-col flex-grow">
-                    <span className="text-[10px] font-semibold text-cyan-500 uppercase tracking-wider block mb-2">
+                  <div className='flex flex-grow flex-col p-5'>
+                    <span className='mb-2 block text-[10px] font-semibold tracking-wider text-cyan-500 uppercase'>
                       {item.category}
                     </span>
-                    <h4 className="font-semibold text-black dark:text-white transition-colors line-clamp-2 text-base leading-snug">
-                      <Link href={`/blog/${item.slug}`}>
-                        {item.title}
-                      </Link>
+                    <h4 className='line-clamp-2 text-base leading-snug font-semibold text-black transition-colors dark:text-white'>
+                      <Link href={`/blog/${item.slug}`}>{item.title}</Link>
                     </h4>
-                    <span className="text-[11px] text-zinc-500 dark:text-zinc-400 block mt-4">
+                    <span className='mt-4 block text-[11px] text-zinc-500 dark:text-zinc-400'>
                       {new Date(item.publishedAt).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "long",

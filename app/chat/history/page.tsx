@@ -4,7 +4,13 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import { Toaster } from "@/components/ui/sonner";
 import AccountActionModal from "@/components/user/account-action-modal";
 import { ProjectActionModal } from "@/components/user/project-action-moda";
@@ -12,33 +18,24 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import withAuth from "@/helper/hoc/withAuth";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
-import { Archive, ChevronRight, Clock, Image as ImageIcon, Loader, MessageSquare, MoreHorizontal, Presentation, Trash2, Video, Search, X } from "lucide-react";
+import {
+  Archive,
+  ChevronRight,
+  Clock,
+  Image as ImageIcon,
+  Loader,
+  MessageSquare,
+  MoreHorizontal,
+  Presentation,
+  Search,
+  Trash2,
+  Video,
+  X,
+} from "lucide-react";
 import { RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useCallback, useEffect, useState, useRef } from "react";
-import { Input } from "@/components/ui/input";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Project {
   _id: string;
@@ -89,7 +86,11 @@ function ChatHistoryPage() {
       : user?.business);
 
   const fetchAllProjects = useCallback(
-    async (pageNumber: number = 1, append: boolean = false, searchVal: string = searchQuery) => {
+    async (
+      pageNumber: number = 1,
+      append: boolean = false,
+      searchVal: string = searchQuery
+    ) => {
       const fetchId = ++latestFetchRef.current;
 
       try {
@@ -158,13 +159,19 @@ function ChatHistoryPage() {
   useEffect(() => {
     const cachedOrgId = sessionStorage.getItem("genit_history_orgId_v2");
     const activeOrgIdStr = activeOrgId ? String(activeOrgId) : null;
-    
+
     if (activeOrgIdStr && cachedOrgId === activeOrgIdStr) {
-      const cachedProjects = sessionStorage.getItem("genit_history_projects_v2");
+      const cachedProjects = sessionStorage.getItem(
+        "genit_history_projects_v2"
+      );
       const cachedPage = sessionStorage.getItem("genit_history_page_v2");
       const cachedHasMore = sessionStorage.getItem("genit_history_hasMore_v2");
-      const cachedSearchQuery = sessionStorage.getItem("genit_history_searchQuery_v2");
-      const cachedScrollTop = sessionStorage.getItem("genit_history_scrollTop_v2");
+      const cachedSearchQuery = sessionStorage.getItem(
+        "genit_history_searchQuery_v2"
+      );
+      const cachedScrollTop = sessionStorage.getItem(
+        "genit_history_scrollTop_v2"
+      );
 
       if (cachedProjects) {
         try {
@@ -175,14 +182,17 @@ function ChatHistoryPage() {
             setSearchQuery(cachedSearchQuery);
             setSearchInputVal(cachedSearchQuery);
           }
-          
+
           setLoading(false);
           setIsRestored(true);
 
           // Wait for the next tick to ensure DOM is rendered, then scroll
           setTimeout(() => {
             if (scrollContainerRef.current && cachedScrollTop) {
-              scrollContainerRef.current.scrollTop = parseInt(cachedScrollTop, 10);
+              scrollContainerRef.current.scrollTop = parseInt(
+                cachedScrollTop,
+                10
+              );
             }
           }, 100);
           return;
@@ -208,7 +218,7 @@ function ChatHistoryPage() {
     if (!activeOrgId || !isRestored) return;
 
     const orgIdStr = String(activeOrgId);
-    
+
     // Ignore initial mount setting
     if (lastOrgIdRef.current === null) {
       lastOrgIdRef.current = orgIdStr;
@@ -233,7 +243,7 @@ function ChatHistoryPage() {
       setHasMore(true);
       setSearchQuery("");
       setSearchInputVal("");
-      
+
       // Fetch fresh
       fetchAllProjects(1, false, "");
     }
@@ -243,7 +253,10 @@ function ChatHistoryPage() {
   useEffect(() => {
     if (isRestored && activeOrgId) {
       sessionStorage.setItem("genit_history_orgId_v2", String(activeOrgId));
-      sessionStorage.setItem("genit_history_projects_v2", JSON.stringify(projects));
+      sessionStorage.setItem(
+        "genit_history_projects_v2",
+        JSON.stringify(projects)
+      );
       sessionStorage.setItem("genit_history_page_v2", page.toString());
       sessionStorage.setItem("genit_history_hasMore_v2", String(hasMore));
       sessionStorage.setItem("genit_history_searchQuery_v2", searchQuery);
@@ -253,8 +266,10 @@ function ChatHistoryPage() {
   // Fetch projects when searchQuery changes (unless on initial mount restoration)
   useEffect(() => {
     if (isRestored && user?._id) {
-      const cachedSearchQuery = sessionStorage.getItem("genit_history_searchQuery_v2") || "";
-      const isInitialRestore = projects.length > 0 && searchQuery === cachedSearchQuery;
+      const cachedSearchQuery =
+        sessionStorage.getItem("genit_history_searchQuery_v2") || "";
+      const isInitialRestore =
+        projects.length > 0 && searchQuery === cachedSearchQuery;
       if (!isInitialRestore) {
         setPage(1);
         setProjects([]);
@@ -278,9 +293,12 @@ function ChatHistoryPage() {
 
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = container;
-      
+
       // Save scroll top to sessionStorage
-      sessionStorage.setItem("genit_history_scrollTop_v2", scrollTop.toString());
+      sessionStorage.setItem(
+        "genit_history_scrollTop_v2",
+        scrollTop.toString()
+      );
 
       // Load more when user is 200px from bottom
       if (
@@ -317,7 +335,6 @@ function ChatHistoryPage() {
       setSearchQuery(val);
     }, 400);
   };
-
 
   // Format timestamp to relative time
   const formatTimestamp = (dateString: string) => {
@@ -435,8 +452,6 @@ function ChatHistoryPage() {
     }
   };
 
-
-
   return (
     <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>
       <Toaster />
@@ -476,7 +491,9 @@ function ChatHistoryPage() {
                   disabled={loading}
                   className='gap-2'
                 >
-                  <RefreshCw className={`h-3 w-3 ${loading ? 'animate-spin' : ''}`} />
+                  <RefreshCw
+                    className={`h-3 w-3 ${loading ? "animate-spin" : ""}`}
+                  />
                   Refresh
                 </Button>
               </div>
@@ -489,7 +506,7 @@ function ChatHistoryPage() {
                   value={searchInputVal}
                   onChange={handleSearchChange}
                   placeholder='Search projects by title or prompt...'
-                  className='pl-9 pr-9 h-10 w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800'
+                  className='h-10 w-full border border-zinc-200 bg-zinc-50 pr-9 pl-9 dark:border-zinc-800 dark:bg-zinc-950'
                 />
                 {searchInputVal && (
                   <button
@@ -538,7 +555,9 @@ function ChatHistoryPage() {
                 <div className='py-16 text-center'>
                   <MessageSquare className='text-muted-foreground mx-auto mb-3 h-8 w-8' />
                   <h3 className='text-foreground mb-1 text-sm font-medium'>
-                    {searchQuery ? "No results found" : "No projects or conversations yet"}
+                    {searchQuery
+                      ? "No results found"
+                      : "No projects or conversations yet"}
                   </h3>
                   <p className='text-muted-foreground text-xs'>
                     {searchQuery
@@ -568,15 +587,17 @@ function ChatHistoryPage() {
                             <div className='text-muted-foreground flex flex-wrap items-center gap-3 text-xs'>
                               <div className='flex items-center gap-1'>
                                 <Clock className='h-3 w-3' />
-                                {formatTimestamp(project.updatedAt || project.createdAt)}
+                                {formatTimestamp(
+                                  project.updatedAt || project.createdAt
+                                )}
                               </div>
                               <div className='flex items-center gap-1'>
                                 <MessageSquare className='h-3 w-3' />
-                                {(project.messages?.length || 0) + ((project as any).agentRunCount || 0)}
+                                {(project.messages?.length || 0) +
+                                  ((project as any).agentRunCount || 0)}
                               </div>
                             </div>
                           </div>
-
 
                           <div className='ml-3 flex items-center gap-1'>
                             <DropdownMenu>

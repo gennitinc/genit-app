@@ -1,20 +1,5 @@
 "use client";
 
-import {
-  BarChart3,
-  CheckCircle2,
-  ExternalLink,
-  File as FileIcon,
-  FileText,
-  Folder,
-  LayoutGrid,
-  Mail,
-  MessageSquare,
-  Send,
-  TrendingUp,
-  Users,
-  Download,
-} from "lucide-react";
 import { AgentCard } from "./agent-card";
 import {
   AutomationNodeCreatedCard,
@@ -30,8 +15,23 @@ import {
 } from "@/components/ui/carousel";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useProjectDesign } from "@/context/DesignProject";
-import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { toast } from "@/hooks/use-toast";
+import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
+import {
+  BarChart3,
+  CheckCircle2,
+  Download,
+  ExternalLink,
+  File as FileIcon,
+  FileText,
+  Folder,
+  LayoutGrid,
+  Mail,
+  MessageSquare,
+  Send,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 import { useState } from "react";
 
 const getFullUrl = (url: string) => {
@@ -39,7 +39,9 @@ const getFullUrl = (url: string) => {
   if (url.startsWith("http://") || url.startsWith("https://")) {
     return url;
   }
-  const baseUrl = serverUrlSocket ? serverUrlSocket.replace(/\/$/, "") : "http://localhost:8000";
+  const baseUrl = serverUrlSocket
+    ? serverUrlSocket.replace(/\/$/, "")
+    : "http://localhost:8000";
   return `${baseUrl}${url.startsWith("/") ? "" : "/"}${url}`;
 };
 
@@ -104,7 +106,12 @@ export function SocialPostPublishedCard({ data }: { data: any }) {
 // ─── Post list (recent posts from a connected social) ───
 export function PostListCard({ data }: { data: any }) {
   const items: any[] =
-    data?.posts || data?.media || data?.tweets || data?.videos || data?.pins || [];
+    data?.posts ||
+    data?.media ||
+    data?.tweets ||
+    data?.videos ||
+    data?.pins ||
+    [];
   return (
     <AgentCard
       icon={<FileText className='h-3.5 w-3.5' />}
@@ -270,9 +277,7 @@ export function EmailListCard({ data }: { data: any }) {
                 {m.subject || "(no subject)"}
               </div>
               <div className='text-muted-foreground mt-0.5 line-clamp-1 text-[11.5px]'>
-                <span className='text-foreground/80'>
-                  {m.from || m.sender}
-                </span>
+                <span className='text-foreground/80'>{m.from || m.sender}</span>
                 {(m.from || m.sender) && m.snippet ? " · " : ""}
                 {m.snippet || ""}
               </div>
@@ -427,7 +432,10 @@ export function GeneratedDesignCard({ data }: { data: any }) {
   const { project, setFocusedGenerationId } = useProjectDesign();
   const projectId = project?._id;
 
-  const handleSetAsActive = async (itemId: string, generationGroupId: string) => {
+  const handleSetAsActive = async (
+    itemId: string,
+    generationGroupId: string
+  ) => {
     if (!projectId) return;
     try {
       const response = await apiResponse.post(
@@ -460,21 +468,27 @@ export function GeneratedDesignCard({ data }: { data: any }) {
 
   return (
     <AgentCard
-      icon={isVideo ? <TrendingUp className="h-3.5 w-3.5" /> : <FileIcon className='h-3.5 w-3.5' />}
-      title={isVideo ? 'Generated Video' : 'Generated Design'}
+      icon={
+        isVideo ? (
+          <TrendingUp className='h-3.5 w-3.5' />
+        ) : (
+          <FileIcon className='h-3.5 w-3.5' />
+        )
+      }
+      title={isVideo ? "Generated Video" : "Generated Design"}
       tone='success'
       meta={
         downloadUrl ? (
           <a
             href={downloadUrl}
             download
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-foreground text-muted-foreground transition-colors"
-            title="Download"
+            target='_blank'
+            rel='noreferrer'
+            className='hover:text-foreground text-muted-foreground transition-colors'
+            title='Download'
             onClick={(e) => e.stopPropagation()}
           >
-            <Download className="h-3.5 w-3.5" />
+            <Download className='h-3.5 w-3.5' />
           </a>
         ) : null
       }
@@ -483,13 +497,17 @@ export function GeneratedDesignCard({ data }: { data: any }) {
         {data.name || "Design generated"}
       </div>
       {isVideo ? (
-         <video src={getFullUrl(data.url)} controls className='border-border/70 mt-3 max-h-48 w-auto rounded-md border object-cover dark:border-white/10' />
+        <video
+          src={getFullUrl(data.url)}
+          controls
+          className='border-border/70 mt-3 max-h-48 w-auto rounded-md border object-cover dark:border-white/10'
+        />
       ) : (
-         <img
-           src={getFullUrl(data.url)}
-           alt={data.name || 'Design'}
-           className='border-border/70 mt-3 max-h-48 w-auto rounded-md border object-cover dark:border-white/10'
-         />
+        <img
+          src={getFullUrl(data.url)}
+          alt={data.name || "Design"}
+          className='border-border/70 mt-3 max-h-48 w-auto rounded-md border object-cover dark:border-white/10'
+        />
       )}
       {data.url && (
         <div className='mt-3 flex items-center gap-3'>
@@ -510,13 +528,15 @@ export function GeneratedDesignCard({ data }: { data: any }) {
                   }, 10);
                 }
               }}
-              className='border-primary/30 text-primary hover:bg-indigo-600 hover:bg-indigo-700/5 h-7 w-fit gap-1.5 px-2 text-xs flex'
+              className='border-primary/30 text-primary flex h-7 w-fit gap-1.5 px-2 text-xs hover:bg-indigo-600 hover:bg-indigo-700/5'
             >
               <LayoutGrid className='h-3 w-3' />
               View
             </Button>
           )}
-          <ExternalLinkInline href={getFullUrl(data.url)}>Open {isVideo ? "Video" : "Image"}</ExternalLinkInline>
+          <ExternalLinkInline href={getFullUrl(data.url)}>
+            Open {isVideo ? "Video" : "Image"}
+          </ExternalLinkInline>
         </div>
       )}
     </AgentCard>
@@ -525,7 +545,9 @@ export function GeneratedDesignCard({ data }: { data: any }) {
 
 // ─── Design Inspiration List ───
 export function DesignInspirationCard({ data }: { data: any }) {
-  const items: any[] = Array.isArray(data) ? data : (data?.pins || data?.inspirations || []);
+  const items: any[] = Array.isArray(data)
+    ? data
+    : data?.pins || data?.inspirations || [];
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewIndex, setPreviewIndex] = useState(0);
 
@@ -535,7 +557,9 @@ export function DesignInspirationCard({ data }: { data: any }) {
       title={`${items.length} internet search ${items.length === 1 ? "inspiration" : "inspirations"}`}
     >
       {items.length === 0 ? (
-        <div className='text-muted-foreground text-[12.5px]'>No inspirations found.</div>
+        <div className='text-muted-foreground text-[12.5px]'>
+          No inspirations found.
+        </div>
       ) : (
         <div className='mt-2'>
           <Carousel
@@ -544,13 +568,16 @@ export function DesignInspirationCard({ data }: { data: any }) {
           >
             <CarouselContent className='-ml-2'>
               {items.map((item, i) => (
-                <CarouselItem key={item.id || i} className='basis-1/2 sm:basis-1/3 pl-2'>
+                <CarouselItem
+                  key={item.id || i}
+                  className='basis-1/2 pl-2 sm:basis-1/3'
+                >
                   <div
                     onClick={() => {
                       setPreviewIndex(i);
                       setIsPreviewOpen(true);
                     }}
-                    className='group relative block aspect-square cursor-pointer overflow-hidden rounded-md border border-border/50 dark:border-white/10'
+                    className='group border-border/50 relative block aspect-square cursor-pointer overflow-hidden rounded-md border dark:border-white/10'
                   >
                     <img
                       src={item.image}
@@ -563,8 +590,8 @@ export function DesignInspirationCard({ data }: { data: any }) {
             </CarouselContent>
             {items.length > 2 && (
               <div className='mt-2 flex justify-end gap-1.5 opacity-0 transition-opacity duration-200 group-hover/carousel:opacity-100'>
-                <CarouselPrevious className='static h-6 w-6 translate-y-0 rounded-full border-border/50 bg-background/50 hover:bg-background/80' />
-                <CarouselNext className='static h-6 w-6 translate-y-0 rounded-full border-border/50 bg-background/50 hover:bg-background/80' />
+                <CarouselPrevious className='border-border/50 bg-background/50 hover:bg-background/80 static h-6 w-6 translate-y-0 rounded-full' />
+                <CarouselNext className='border-border/50 bg-background/50 hover:bg-background/80 static h-6 w-6 translate-y-0 rounded-full' />
               </div>
             )}
           </Carousel>

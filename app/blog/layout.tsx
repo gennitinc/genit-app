@@ -1,12 +1,14 @@
-import React from "react";
 import { Metadata } from "next";
+import React from "react";
 
 export const metadata: Metadata = {
   title: "Blog – AI-Powered Marketing, SaaS Insights & Growth Hacks",
-  description: "Stay ahead with the latest from the Genit team. Discover how AI image and video generation, design automation, and content workflow scaling are reshaping startup marketing.",
+  description:
+    "Stay ahead with the latest from the Genit team. Discover how AI image and video generation, design automation, and content workflow scaling are reshaping startup marketing.",
   openGraph: {
     title: "Blog – AI-Powered Marketing, SaaS Insights & Growth Hacks",
-    description: "Stay ahead with the latest from the Genit team. Discover how AI image and video generation, design automation, and content workflow scaling are reshaping startup marketing.",
+    description:
+      "Stay ahead with the latest from the Genit team. Discover how AI image and video generation, design automation, and content workflow scaling are reshaping startup marketing.",
     url: "https://www.trygenit.com/blog",
     siteName: "Genit AI",
     images: [
@@ -23,7 +25,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Genit AI Blog – AI-Powered Marketing, SaaS Insights & Growth Hacks",
-    description: "Stay ahead with the latest from the Genit team. Discover how AI image and video generation, design automation, and content workflow scaling are reshaping startup marketing.",
+    description:
+      "Stay ahead with the latest from the Genit team. Discover how AI image and video generation, design automation, and content workflow scaling are reshaping startup marketing.",
     images: ["https://www.trygenit.com/opengraph-image.png"],
   },
 };

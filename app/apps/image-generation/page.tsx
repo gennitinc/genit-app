@@ -318,7 +318,7 @@ function ImageGenerationPage() {
         />
         <div
           id='main-content'
-          className="flex-1 rounded-t-2xl lg:border-2 lg:border-b-0 ml-0 mr-2 md:mr-4"
+          className='mr-2 ml-0 flex-1 rounded-t-2xl md:mr-4 lg:border-2 lg:border-b-0'
           // style={{
           //   transform: "translateZ(0)",
           //   willChange: "transform",
@@ -365,7 +365,7 @@ function ImageGenerationPage() {
                           className={cn(
                             "flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium whitespace-nowrap transition-colors",
                             activeContentTab === t.id
-                              ? "bg-indigo-600 hover:bg-indigo-700 text-primary-foreground border-primary"
+                              ? "text-primary-foreground border-primary bg-indigo-600 hover:bg-indigo-700"
                               : "border-neutral-200 bg-neutral-50 text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900"
                           )}
                         >
@@ -686,7 +686,7 @@ function ImageGenerationPage() {
                   <button
                     onClick={handleGenerate}
                     disabled={isGenerating}
-                    className='flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-transform active:scale-95'
+                    className='flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-transform hover:bg-indigo-700 active:scale-95'
                   >
                     {isGenerating ? (
                       <Loader2 className='animate-spin' size={16} />

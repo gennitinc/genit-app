@@ -1,5 +1,5 @@
-import { apiResponse } from "@/utils/apiResponse";
 import type { IntegrationPlatform } from "./integrations-api";
+import { apiResponse } from "@/utils/apiResponse";
 
 export type AgentTaskStatus = "pending" | "running" | "done" | "failed";
 export type AgentRunStatus =
@@ -78,11 +78,16 @@ export async function listAgentRuns(projectId: string): Promise<any[]> {
 
 export async function classifyPrompt(prompt: string): Promise<boolean> {
   try {
-    const { data } = await apiResponse.post<{ success: boolean; isAgentic: boolean }>(
-      "/agents/classify",
-      { prompt }
+    const { data } = await apiResponse.post<{
+      success: boolean;
+      isAgentic: boolean;
+    }>("/agents/classify", { prompt });
+    console.debug(
+      "[classify] prompt:",
+      prompt.slice(0, 60),
+      "→ isAgentic:",
+      data.isAgentic
     );
-    console.debug("[classify] prompt:", prompt.slice(0, 60), "→ isAgentic:", data.isAgentic);
     return !!data.isAgentic;
   } catch (err: any) {
     // Log full error details so we can diagnose in the browser console
@@ -95,5 +100,3 @@ export async function classifyPrompt(prompt: string): Promise<boolean> {
     return true;
   }
 }
-
-

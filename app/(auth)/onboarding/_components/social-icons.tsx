@@ -1,7 +1,6 @@
 import * as React from "react";
 import type { SVGProps } from "react";
 
-
 type IconProps = {
   className?: string;
   style?: React.CSSProperties;
@@ -98,32 +97,30 @@ export function InstagramBrand({ className, style }: IconProps) {
   );
 }
 
-
-
 export const MessengerBrand = (props: SVGProps<SVGSVGElement>) => (
-  <svg {...props} viewBox="0 0 256 256" preserveAspectRatio="xMidYMid">
+  <svg {...props} viewBox='0 0 256 256' preserveAspectRatio='xMidYMid'>
     <defs>
       <radialGradient
-        id="messenger__a"
-        cx="19.247%"
-        cy="99.465%"
-        r="108.96%"
-        fx="19.247%"
-        fy="99.465%"
+        id='messenger__a'
+        cx='19.247%'
+        cy='99.465%'
+        r='108.96%'
+        fx='19.247%'
+        fy='99.465%'
       >
-        <stop offset="0%" stopColor="#09F" />
-        <stop offset="60.975%" stopColor="#A033FF" />
-        <stop offset="93.482%" stopColor="#FF5280" />
-        <stop offset="100%" stopColor="#FF7061" />
+        <stop offset='0%' stopColor='#09F' />
+        <stop offset='60.975%' stopColor='#A033FF' />
+        <stop offset='93.482%' stopColor='#FF5280' />
+        <stop offset='100%' stopColor='#FF7061' />
       </radialGradient>
     </defs>
     <path
-      fill="url(#messenger__a)"
-      d="M128 0C55.894 0 0 52.818 0 124.16c0 37.317 15.293 69.562 40.2 91.835 2.09 1.871 3.352 4.493 3.438 7.298l.697 22.77c.223 7.262 7.724 11.988 14.37 9.054L84.111 243.9a10.218 10.218 0 0 1 6.837-.501c11.675 3.21 24.1 4.92 37.052 4.92 72.106 0 128-52.818 128-124.16S200.106 0 128 0Z"
+      fill='url(#messenger__a)'
+      d='M128 0C55.894 0 0 52.818 0 124.16c0 37.317 15.293 69.562 40.2 91.835 2.09 1.871 3.352 4.493 3.438 7.298l.697 22.77c.223 7.262 7.724 11.988 14.37 9.054L84.111 243.9a10.218 10.218 0 0 1 6.837-.501c11.675 3.21 24.1 4.92 37.052 4.92 72.106 0 128-52.818 128-124.16S200.106 0 128 0Z'
     />
     <path
-      fill="#FFF"
-      d="m51.137 160.47 37.6-59.653c5.98-9.49 18.788-11.853 27.762-5.123l29.905 22.43a7.68 7.68 0 0 0 9.252-.027l40.388-30.652c5.39-4.091 12.428 2.36 8.82 8.085l-37.6 59.654c-5.981 9.489-18.79 11.852-27.763 5.122l-29.906-22.43a7.68 7.68 0 0 0-9.25.027l-40.39 30.652c-5.39 4.09-12.427-2.36-8.818-8.085Z"
+      fill='#FFF'
+      d='m51.137 160.47 37.6-59.653c5.98-9.49 18.788-11.853 27.762-5.123l29.905 22.43a7.68 7.68 0 0 0 9.252-.027l40.388-30.652c5.39-4.091 12.428 2.36 8.82 8.085l-37.6 59.654c-5.981 9.489-18.79 11.852-27.763 5.122l-29.906-22.43a7.68 7.68 0 0 0-9.25.027l-40.39 30.652c-5.39 4.09-12.427-2.36-8.818-8.085Z'
     />
   </svg>
 );
@@ -326,13 +323,21 @@ export const TelegramBrand = (props: SVGProps<SVGSVGElement>) => (
 );
 
 export const BrevoBrand = (props: SVGProps<SVGSVGElement>) => (
-  <svg {...props} role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="Brevo--Streamline-Simple-Icons">
-  <desc>
-    Brevo Streamline Icon: https://streamlinehq.com
-  </desc>
-  <title>Brevo</title>
-  <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12 -12A12 12 0 0 0 12 0zM7.2 4.8h5.747c2.34 0 3.895 1.406 3.895 3.516 0 1.022 -0.348 1.862 -1.09 2.588C17.189 11.812 18 13.22 18 14.785c0 2.86 -2.64 5.016 -6.164 5.016H7.199v-15zm2.085 1.952v5.537h0.07c0.233 -0.432 0.858 -0.796 2.249 -1.226 2.039 -0.659 3.037 -1.52 3.037 -2.655 0 -0.998 -0.766 -1.656 -1.924 -1.656H9.285zm4.87 5.266c-0.766 0.385 -1.67 0.748 -2.76 1.11 -1.229 0.387 -2.11 1.386 -2.11 2.407v2.315h2.365c2.387 0 4.149 -1.34 4.149 -3.155 0 -1.067 -0.625 -2.087 -1.645 -2.677z" fill="#0B996E" strokeWidth="1"></path>
-</svg>
+  <svg
+    {...props}
+    role='img'
+    viewBox='0 0 24 24'
+    xmlns='http://www.w3.org/2000/svg'
+    id='Brevo--Streamline-Simple-Icons'
+  >
+    <desc>Brevo Streamline Icon: https://streamlinehq.com</desc>
+    <title>Brevo</title>
+    <path
+      d='M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12 -12A12 12 0 0 0 12 0zM7.2 4.8h5.747c2.34 0 3.895 1.406 3.895 3.516 0 1.022 -0.348 1.862 -1.09 2.588C17.189 11.812 18 13.22 18 14.785c0 2.86 -2.64 5.016 -6.164 5.016H7.199v-15zm2.085 1.952v5.537h0.07c0.233 -0.432 0.858 -0.796 2.249 -1.226 2.039 -0.659 3.037 -1.52 3.037 -2.655 0 -0.998 -0.766 -1.656 -1.924 -1.656H9.285zm4.87 5.266c-0.766 0.385 -1.67 0.748 -2.76 1.11 -1.229 0.387 -2.11 1.386 -2.11 2.407v2.315h2.365c2.387 0 4.149 -1.34 4.149 -3.155 0 -1.067 -0.625 -2.087 -1.645 -2.677z'
+      fill='#0B996E'
+      strokeWidth='1'
+    ></path>
+  </svg>
 );
 
 export const GmailBrand = (props: SVGProps<SVGSVGElement>) => (
@@ -786,19 +791,19 @@ export const GoogleDriveBrand = (props: SVGProps<SVGSVGElement>) => (
 export function EyeIcon({ className, style }: IconProps) {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth='2'
+      strokeLinecap='round'
+      strokeLinejoin='round'
       className={className}
       style={style}
       aria-hidden
     >
-      <path d="M2 12c0 0 4.4-8 10-8s10 8 10 8-4.4 8-10 8-10-8-10-8Z" />
-      <circle cx="12" cy="12" r="3" />
+      <path d='M2 12c0 0 4.4-8 10-8s10 8 10 8-4.4 8-10 8-10-8-10-8Z' />
+      <circle cx='12' cy='12' r='3' />
     </svg>
   );
 }

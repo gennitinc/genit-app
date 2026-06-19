@@ -28,7 +28,6 @@ export function ServiceWorkerRegister() {
         scope: "/",
       })
       .then((registration) => {
-
         // Check for updates on page load
         registration.update();
 
@@ -56,8 +55,7 @@ export function ServiceWorkerRegister() {
     });
 
     // Listen for service worker messages
-    navigator.serviceWorker.addEventListener("message", (event) => {
-    });
+    navigator.serviceWorker.addEventListener("message", (event) => {});
   }, []);
 
   return null;

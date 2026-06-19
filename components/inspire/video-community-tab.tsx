@@ -115,8 +115,7 @@ export function VideoCommunityTab({
 
     socketRef.current = socket;
 
-    socket.on("connect", () => {
-    });
+    socket.on("connect", () => {});
 
     socket.on(
       "community:like-updated",

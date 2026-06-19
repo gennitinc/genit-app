@@ -9,8 +9,8 @@ import type {
 } from "@/lib/agents-api";
 import { listAgentRuns } from "@/lib/agents-api";
 import { serverUrlSocket } from "@/utils/apiResponse";
+import { Socket, io as ioClient } from "socket.io-client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { io as ioClient, Socket } from "socket.io-client";
 
 export interface AgentRunView {
   runId: string;
@@ -59,21 +59,25 @@ export function useAgentRuns(projectId: string | undefined) {
           const runMap = new Map<string, AgentRunView>();
           for (const r of historyRuns) runMap.set(r.runId, r as AgentRunView);
           for (const r of prev) runMap.set(r.runId, r);
-          
+
           return Array.from(runMap.values()).sort(
             (a, b) => a.createdAt - b.createdAt
           );
         });
       })
       .catch((err) => console.error("Failed to load agent history:", err));
-      
+
     return () => {
       mounted = false;
     };
   }, [projectId]);
 
   const upsert = useCallback(
-    (runId: string, prompt: string | undefined, mut: (r: AgentRunView) => AgentRunView) => {
+    (
+      runId: string,
+      prompt: string | undefined,
+      mut: (r: AgentRunView) => AgentRunView
+    ) => {
       setRuns((prev) => {
         const idx = prev.findIndex((r) => r.runId === runId);
         if (idx === -1) {
@@ -111,7 +115,11 @@ export function useAgentRuns(projectId: string | undefined) {
 
     const onRunStart = (p: AnyEvent) => {
       if (!matchProject(p)) return;
-      upsert(p.runId, p.prompt, (r) => ({ ...r, prompt: p.prompt, status: "running" }));
+      upsert(p.runId, p.prompt, (r) => ({
+        ...r,
+        prompt: p.prompt,
+        status: "running",
+      }));
     };
     const onPlan = (p: AnyEvent) => {
       if (!matchProject(p)) return;
@@ -122,7 +130,9 @@ export function useAgentRuns(projectId: string | undefined) {
       upsert(p.runId, undefined, (r) => ({
         ...r,
         plan: r.plan.map((t) =>
-          t.id === p.taskId ? { ...t, status: p.status, detail: p.detail ?? t.detail } : t
+          t.id === p.taskId
+            ? { ...t, status: p.status, detail: p.detail ?? t.detail }
+            : t
         ),
       }));
     };
@@ -185,7 +195,10 @@ export function useAgentRuns(projectId: string | undefined) {
     };
     const onTextDelta = (p: AnyEvent) => {
       if (!matchProject(p)) return;
-      upsert(p.runId, undefined, (r) => ({ ...r, text: r.text + (p.delta || "") }));
+      upsert(p.runId, undefined, (r) => ({
+        ...r,
+        text: r.text + (p.delta || ""),
+      }));
     };
     const onRunResume = (p: AnyEvent) => {
       if (!matchProject(p)) return;
@@ -247,8 +260,17 @@ export function useAgentRuns(projectId: string | undefined) {
 
   // Insert a placeholder so the UI can render immediately after the POST.
   const registerNewRun = useCallback(
-    (runId: string, prompt: string, attachedFiles?: { name: string; type: string; url: string }[]) => {
-      upsert(runId, prompt, (r) => ({ ...r, prompt, attachedFiles, status: "running" }));
+    (
+      runId: string,
+      prompt: string,
+      attachedFiles?: { name: string; type: string; url: string }[]
+    ) => {
+      upsert(runId, prompt, (r) => ({
+        ...r,
+        prompt,
+        attachedFiles,
+        status: "running",
+      }));
     },
     [upsert]
   );

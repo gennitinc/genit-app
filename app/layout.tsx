@@ -1,7 +1,7 @@
 "use client";
 
-import "./globals.css";
 import "./event-calendar.css";
+import "./globals.css";
 import Wrapper from "@/components/layout/wrapper";
 import { PWAInstaller } from "@/components/pwa/pwa-installer";
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
@@ -25,8 +25,7 @@ import { Suspense } from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 const metadata: Metadata = {
-  title:
-    "Genit AI – Marketing without Humans",
+  title: "Genit AI – Marketing without Humans",
   description:
     "Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.",
   icons: {
@@ -75,8 +74,7 @@ const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title:
-      "Genit AI – Marketing without Humans",
+    title: "Genit AI – Marketing without Humans",
     description:
       "Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.",
     creator: "@genitAI",
@@ -86,8 +84,7 @@ const metadata: Metadata = {
     },
   },
   openGraph: {
-    title:
-      "Genit AI – Marketing without Humans",
+    title: "Genit AI – Marketing without Humans",
     description:
       "Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.",
     url: "https://www.trygenit.com",
@@ -177,7 +174,7 @@ export default function RootLayout({
             `,
           }}
         />
-        
+
         {/* PWA Meta Tags */}
         <link rel='manifest' href='/manifest.json' />
         <meta name='theme-color' content='#000000' />
@@ -190,8 +187,6 @@ export default function RootLayout({
         <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
         <meta name='mobile-web-app-capable' content='yes' />
 
-
-
         {/* Slack */}
         <meta name='slack-app-id' content='' />
 
@@ -200,13 +195,8 @@ export default function RootLayout({
         <meta name='msapplication-TileImage' content='/icon-192x192.png' />
         <meta name='msapplication-config' content='/browserconfig.xml' />
 
-
-
         {/* Schema.org for rich snippets */}
-        <meta
-          itemProp='name'
-          content='Genit AI – AI Image & Video Generator'
-        />
+        <meta itemProp='name' content='Genit AI – AI Image & Video Generator' />
         <meta
           itemProp='description'
           content='Marketing without Humans. Autonomous agents that run your entire marketing operation across every channel.'
@@ -530,11 +520,11 @@ export default function RootLayout({
               >
                 <ProjectProvider>
                   <Suspense
-                    // fallback={
-                    //   <div className='flex h-screen flex-col items-center justify-center bg-white dark:bg-black'>
-                    //     <Loading />
-                    //   </div>
-                    // }
+                  // fallback={
+                  //   <div className='flex h-screen flex-col items-center justify-center bg-white dark:bg-black'>
+                  //     <Loading />
+                  //   </div>
+                  // }
                   >
                     <Wrapper>
                       <MixpanelProvider>{children}</MixpanelProvider>

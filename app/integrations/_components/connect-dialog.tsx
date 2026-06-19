@@ -22,8 +22,8 @@ import {
   isCredentialPlatform,
   isMetaSurface,
   isPlatformSupported,
-  provisionInstagramSelected,
   provisionFacebookSelected,
+  provisionInstagramSelected,
   requestConnectUrl,
 } from "@/lib/integrations-api";
 import { GradientFrame } from "@/utils/gradient-frame";
@@ -587,7 +587,8 @@ export function ConnectDialog({
             setPhase((current) => {
               if (current !== "connecting") return current;
               setErrorMessage(
-                (prev) => prev ?? "Window closed before the connection completed"
+                (prev) =>
+                  prev ?? "Window closed before the connection completed"
               );
               return "error";
             });
@@ -707,9 +708,9 @@ export function ConnectDialog({
         className='max-h-[96dvh] w-[calc(100%-1.5rem)] max-w-md overflow-y-auto border-0 bg-transparent p-0 shadow-none'
         hideDialogClose
       >
-        <div className="group relative mx-auto w-full overflow-hidden rounded-3xl bg-black/[0.02] p-2 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10">
+        <div className='group relative mx-auto w-full overflow-hidden rounded-3xl bg-black/[0.02] p-2 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
           <GradientFrame />
-          <div className="relative z-10 flex flex-col overflow-hidden rounded-[1.3rem] bg-white shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10">
+          <div className='relative z-10 flex flex-col overflow-hidden rounded-[1.3rem] bg-white shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
             <div className='relative max-h-[calc(85dvh-4rem)] overflow-x-hidden overflow-y-auto px-4 pt-7 pb-6 sm:px-6'>
               <button
                 type='button'
@@ -721,335 +722,372 @@ export function ConnectDialog({
               </button>
 
               <div className='relative z-10 flex min-w-0 items-center gap-3 pr-6'>
-            <div className='border-border flex h-10 w-15 shrink-0 items-center justify-center rounded-sm border bg-white/80 backdrop-blur dark:border-white/10 dark:bg-white/5'>
-              <Icon className='h-7 w-7 rounded-none' />
-            </div>
-            <div className='min-w-0'>
-              <DialogHeader className='space-y-0 text-left'>
-                <DialogTitle className='text-lg font-semibold tracking-tight'>
-                  Connect {platformName}
-                </DialogTitle>
-                <DialogDescription className='text-xs'>
-                  {platformDescription}
-                </DialogDescription>
-              </DialogHeader>
-            </div>
-          </div>
-
-          {phase === "idle" && (
-            <div className='relative z-10 mt-5'>
-              {!isSupported ? (
-                <div className='border-border bg-card/60 text-muted-foreground rounded-md border px-3 py-3 text-xs dark:border-white/10 dark:bg-white/5'>
-                  We're still building the {platformName} connection. We'll
-                  enable it for your organization as soon as it's ready.
+                <div className='border-border flex h-10 w-15 shrink-0 items-center justify-center rounded-sm border bg-white/80 backdrop-blur dark:border-white/10 dark:bg-white/5'>
+                  <Icon className='h-7 w-7 rounded-none' />
                 </div>
-              ) : (
-                <>
-                  <div className='relative bg-neutral-50 px-3 py-3 dark:bg-neutral-800'>
-                    <GradientFrame />
-                    <p className='text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase'>
-                      genit will be able to
-                    </p>
-                    <ul className='space-y-2'>
-                      {scopes.map((scope) => (
-                        <li
-                          key={scope}
-                          className='text-foreground flex items-start gap-2 text-sm'
-                        >
-                          <CheckCircle2 className='mt-0.5 h-4 w-4 shrink-0 text-emerald-500' />
-                          <span className='min-w-0 [overflow-wrap:anywhere]'>{scope}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                <div className='min-w-0'>
+                  <DialogHeader className='space-y-0 text-left'>
+                    <DialogTitle className='text-lg font-semibold tracking-tight'>
+                      Connect {platformName}
+                    </DialogTitle>
+                    <DialogDescription className='text-xs'>
+                      {platformDescription}
+                    </DialogDescription>
+                  </DialogHeader>
+                </div>
+              </div>
 
-                  {requirements.length > 0 && (
-                    <div className='relative mt-4 bg-neutral-50 px-3 py-3 dark:bg-neutral-800'>
-                      <GradientFrame />
-                      <p className='text-foreground mb-1 text-xs font-medium'>
-                        Before you continue
-                      </p>
-                      <ul className='text-muted-foreground space-y-1 text-xs [overflow-wrap:anywhere]'>
-                        {requirements.map((r) => (
-                          <li key={r}>
-                            {"• "}
-                            {renderRequirement(r)}
-                          </li>
-                        ))}
-                      </ul>
+              {phase === "idle" && (
+                <div className='relative z-10 mt-5'>
+                  {!isSupported ? (
+                    <div className='border-border bg-card/60 text-muted-foreground rounded-md border px-3 py-3 text-xs dark:border-white/10 dark:bg-white/5'>
+                      We're still building the {platformName} connection. We'll
+                      enable it for your organization as soon as it's ready.
                     </div>
-                  )}
-
-                  {isSmartConnectEligible && platform && isMetaSurface(platform) && (
-                    <div className='mt-4 flex items-start gap-2 rounded-md border border-violet-500/30 bg-violet-500/4 px-3 py-2.5 dark:border-violet-300/30'>
-                      <Sparkles className='mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-500 dark:text-violet-300' />
-                      <p className='text-foreground text-xs'>
-                        You&apos;re already signed in to Meta for{" "}
-                        {platformName} as{" "}
-                        <span className='font-medium'>
-                          {identityBySurface.get(platform)?.metaUserName}
-                        </span>
-                        . We&apos;ll reuse that login when possible — you may
-                        not see a popup.
-                      </p>
-                    </div>
-                  )}
-
-                  {isCredentialMode && credentialConfig && (
-                    <div className='mt-4'>
-                      <label
-                        htmlFor='credential-input'
-                        className='text-muted-foreground mb-1.5 block text-xs font-medium tracking-wide uppercase'
-                      >
-                        {credentialConfig.label}
-                      </label>
-                      <div className='relative'>
-                        <KeyRound className='text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2' />
-                        <input
-                          id='credential-input'
-                          type='password'
-                          autoComplete={credentialConfig.autoComplete ?? "off"}
-                          spellCheck={false}
-                          value={credentialValue}
-                          onChange={(e) => setCredentialValue(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              e.preventDefault();
-                              handleCredentialSubmit();
-                            }
-                          }}
-                          placeholder={credentialConfig.placeholder}
-                          className='border-border bg-card/60 text-foreground placeholder:text-muted-foreground w-full rounded-md border py-2 pr-3 pl-9 font-mono text-xs backdrop-blur transition focus:ring-1 focus:ring-cyan-500/40 focus:outline-none dark:border-white/10 dark:bg-white/5'
-                        />
+                  ) : (
+                    <>
+                      <div className='relative bg-neutral-50 px-3 py-3 dark:bg-neutral-800'>
+                        <GradientFrame />
+                        <p className='text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase'>
+                          genit will be able to
+                        </p>
+                        <ul className='space-y-2'>
+                          {scopes.map((scope) => (
+                            <li
+                              key={scope}
+                              className='text-foreground flex items-start gap-2 text-sm'
+                            >
+                              <CheckCircle2 className='mt-0.5 h-4 w-4 shrink-0 text-emerald-500' />
+                              <span className='min-w-0 [overflow-wrap:anywhere]'>
+                                {scope}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-                      <p className='text-muted-foreground mt-1.5 text-[11px]'>
-                        Paste the key from{" "}
-                        {credentialConfig.helpUrl ? (
-                          <a
-                            href={credentialConfig.helpUrl}
-                            target='_blank'
-                            rel='noreferrer'
-                            className='text-foreground underline-offset-2 hover:underline'
-                          >
-                            {credentialConfig.helpUrlLabel ?? "the provider"}
-                          </a>
-                        ) : (
-                          credentialConfig.helpUrlLabel ?? "the provider"
+
+                      {requirements.length > 0 && (
+                        <div className='relative mt-4 bg-neutral-50 px-3 py-3 dark:bg-neutral-800'>
+                          <GradientFrame />
+                          <p className='text-foreground mb-1 text-xs font-medium'>
+                            Before you continue
+                          </p>
+                          <ul className='text-muted-foreground space-y-1 text-xs [overflow-wrap:anywhere]'>
+                            {requirements.map((r) => (
+                              <li key={r}>
+                                {"• "}
+                                {renderRequirement(r)}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {isSmartConnectEligible &&
+                        platform &&
+                        isMetaSurface(platform) && (
+                          <div className='mt-4 flex items-start gap-2 rounded-md border border-violet-500/30 bg-violet-500/4 px-3 py-2.5 dark:border-violet-300/30'>
+                            <Sparkles className='mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-500 dark:text-violet-300' />
+                            <p className='text-foreground text-xs'>
+                              You&apos;re already signed in to Meta for{" "}
+                              {platformName} as{" "}
+                              <span className='font-medium'>
+                                {identityBySurface.get(platform)?.metaUserName}
+                              </span>
+                              . We&apos;ll reuse that login when possible — you
+                              may not see a popup.
+                            </p>
+                          </div>
                         )}
-                        {credentialConfig.helpSuffix ??
-                          ". We'll encrypt it before storing."}
-                      </p>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          )}
 
-          {phase === "select" && (
-            <div className='relative z-10 mt-5'>
-              <div className='relative bg-neutral-50 px-3 py-3 text-sm dark:bg-neutral-800'>
-                <GradientFrame />
-                <p className='text-foreground font-medium'>Select accounts to connect</p>
-                <p className='text-muted-foreground mt-1 text-xs'>
-                  Choose which accounts you want to manage with genit.
-                </p>
-              </div>
-              <div className="mt-4 space-y-2">
-                {igCandidates.map((c) => (
-                  <div key={c.igAccountId} className="flex items-center space-x-3 p-3 border rounded-md border-border bg-card/60 dark:border-white/10 dark:bg-white/5 cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => {
-                    const newSet = new Set(selectedIgIds);
-                    if (newSet.has(c.igAccountId)) newSet.delete(c.igAccountId);
-                    else newSet.add(c.igAccountId);
-                    setSelectedIgIds(newSet);
-                  }}>
-                    <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500 bg-transparent" checked={selectedIgIds.has(c.igAccountId)} readOnly />
-                    {c.profilePictureUrl ? (
-                      <img src={c.profilePictureUrl} alt={c.username} className="h-8 w-8 rounded-full bg-muted" />
-                    ) : (
-                      <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center font-bold text-xs text-muted-foreground">
-                        {c.username.charAt(0).toUpperCase()}
+                      {isCredentialMode && credentialConfig && (
+                        <div className='mt-4'>
+                          <label
+                            htmlFor='credential-input'
+                            className='text-muted-foreground mb-1.5 block text-xs font-medium tracking-wide uppercase'
+                          >
+                            {credentialConfig.label}
+                          </label>
+                          <div className='relative'>
+                            <KeyRound className='text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2' />
+                            <input
+                              id='credential-input'
+                              type='password'
+                              autoComplete={
+                                credentialConfig.autoComplete ?? "off"
+                              }
+                              spellCheck={false}
+                              value={credentialValue}
+                              onChange={(e) =>
+                                setCredentialValue(e.target.value)
+                              }
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault();
+                                  handleCredentialSubmit();
+                                }
+                              }}
+                              placeholder={credentialConfig.placeholder}
+                              className='border-border bg-card/60 text-foreground placeholder:text-muted-foreground w-full rounded-md border py-2 pr-3 pl-9 font-mono text-xs backdrop-blur transition focus:ring-1 focus:ring-cyan-500/40 focus:outline-none dark:border-white/10 dark:bg-white/5'
+                            />
+                          </div>
+                          <p className='text-muted-foreground mt-1.5 text-[11px]'>
+                            Paste the key from{" "}
+                            {credentialConfig.helpUrl ? (
+                              <a
+                                href={credentialConfig.helpUrl}
+                                target='_blank'
+                                rel='noreferrer'
+                                className='text-foreground underline-offset-2 hover:underline'
+                              >
+                                {credentialConfig.helpUrlLabel ??
+                                  "the provider"}
+                              </a>
+                            ) : (
+                              (credentialConfig.helpUrlLabel ?? "the provider")
+                            )}
+                            {credentialConfig.helpSuffix ??
+                              ". We'll encrypt it before storing."}
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
+
+              {phase === "select" && (
+                <div className='relative z-10 mt-5'>
+                  <div className='relative bg-neutral-50 px-3 py-3 text-sm dark:bg-neutral-800'>
+                    <GradientFrame />
+                    <p className='text-foreground font-medium'>
+                      Select accounts to connect
+                    </p>
+                    <p className='text-muted-foreground mt-1 text-xs'>
+                      Choose which accounts you want to manage with genit.
+                    </p>
+                  </div>
+                  <div className='mt-4 space-y-2'>
+                    {igCandidates.map((c) => (
+                      <div
+                        key={c.igAccountId}
+                        className='border-border bg-card/60 hover:bg-muted/50 flex cursor-pointer items-center space-x-3 rounded-md border p-3 transition-colors dark:border-white/10 dark:bg-white/5'
+                        onClick={() => {
+                          const newSet = new Set(selectedIgIds);
+                          if (newSet.has(c.igAccountId))
+                            newSet.delete(c.igAccountId);
+                          else newSet.add(c.igAccountId);
+                          setSelectedIgIds(newSet);
+                        }}
+                      >
+                        <input
+                          type='checkbox'
+                          className='h-4 w-4 rounded border-gray-300 bg-transparent text-cyan-600 focus:ring-cyan-500'
+                          checked={selectedIgIds.has(c.igAccountId)}
+                          readOnly
+                        />
+                        {c.profilePictureUrl ? (
+                          <img
+                            src={c.profilePictureUrl}
+                            alt={c.username}
+                            className='bg-muted h-8 w-8 rounded-full'
+                          />
+                        ) : (
+                          <div className='bg-muted text-muted-foreground flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold'>
+                            {c.username.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                        <div className='flex min-w-0 flex-1 flex-col'>
+                          <span className='text-foreground truncate text-sm font-medium'>
+                            {c.username}
+                          </span>
+                          {c.parentPageName && (
+                            <span className='text-muted-foreground truncate text-[11px]'>
+                              {c.parentPageName}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    )}
-                    <div className="flex flex-col flex-1 min-w-0">
-                      <span className="text-sm font-medium text-foreground truncate">{c.username}</span>
-                      {c.parentPageName && <span className="text-[11px] text-muted-foreground truncate">{c.parentPageName}</span>}
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {phase === "connecting" && (
+                <div className='relative z-10 mt-6 flex flex-col items-center justify-center py-6'>
+                  <div className='relative h-14 w-14'>
+                    <div
+                      className='absolute inset-0 animate-ping rounded-full'
+                      // style={{ background: glow, opacity: 0.5 }}
+                    />
+                    <div className='border-border bg-card relative flex h-14 w-14 items-center justify-center rounded-full border dark:border-white/10'>
+                      <Loader2 className='h-6 w-6 animate-spin' />
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {phase === "connecting" && (
-            <div className='relative z-10 mt-6 flex flex-col items-center justify-center py-6'>
-              <div className='relative h-14 w-14'>
-                <div
-                  className='absolute inset-0 animate-ping rounded-full'
-                  // style={{ background: glow, opacity: 0.5 }}
-                />
-                <div className='border-border bg-card relative flex h-14 w-14 items-center justify-center rounded-full border dark:border-white/10'>
-                  <Loader2 className='h-6 w-6 animate-spin' />
+                  <p className='text-foreground mt-4 text-sm font-medium'>
+                    {isCredentialMode
+                      ? `Validating with ${platformName}…`
+                      : `Waiting for ${platformName}…`}
+                  </p>
+                  <p className='text-muted-foreground mt-1 text-center text-xs'>
+                    {isCredentialMode
+                      ? "Checking the token with the platform. This usually takes a second."
+                      : "Complete sign-in in the popup window. This dialog will update automatically."}
+                  </p>
                 </div>
-              </div>
-              <p className='text-foreground mt-4 text-sm font-medium'>
-                {isCredentialMode
-                  ? `Validating with ${platformName}…`
-                  : `Waiting for ${platformName}…`}
-              </p>
-              <p className='text-muted-foreground mt-1 text-center text-xs'>
-                {isCredentialMode
-                  ? "Checking the token with the platform. This usually takes a second."
-                  : "Complete sign-in in the popup window. This dialog will update automatically."}
-              </p>
-            </div>
-          )}
+              )}
 
-          {phase === "success" && (
-            <div className='relative z-10 mt-6 flex flex-col items-center justify-center py-6'>
-              <div className='flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/40'>
-                <CheckCircle2 className='h-7 w-7 text-emerald-500' />
-              </div>
-              <p className='text-foreground mt-4 text-sm font-medium'>
-                {platformName} connected
-              </p>
-              {connectedAccount && (
-                <p className='text-muted-foreground mt-1 text-xs'>
-                  {connectedAccount}
-                </p>
+              {phase === "success" && (
+                <div className='relative z-10 mt-6 flex flex-col items-center justify-center py-6'>
+                  <div className='flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/40'>
+                    <CheckCircle2 className='h-7 w-7 text-emerald-500' />
+                  </div>
+                  <p className='text-foreground mt-4 text-sm font-medium'>
+                    {platformName} connected
+                  </p>
+                  {connectedAccount && (
+                    <p className='text-muted-foreground mt-1 text-xs'>
+                      {connectedAccount}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {phase === "error" && (
+                <div className='relative z-10 mt-6'>
+                  <div className='relative bg-neutral-50 px-3 py-3 text-sm dark:bg-neutral-800'>
+                    <GradientFrame />
+                    <p className='text-foreground font-medium'>
+                      Connection failed
+                    </p>
+                    <p className='text-muted-foreground mt-1 text-xs'>
+                      {errorMessage}
+                    </p>
+                  </div>
+                </div>
               )}
             </div>
-          )}
 
-          {phase === "error" && (
-            <div className='relative z-10 mt-6'>
-              <div className='relative bg-neutral-50 px-3 py-3 text-sm dark:bg-neutral-800'>
-                <GradientFrame />
-                <p className='text-foreground font-medium'>Connection failed</p>
-                <p className='text-muted-foreground mt-1 text-xs'>
-                  {errorMessage}
-                </p>
+            <div className='flex flex-col items-stretch justify-between gap-3 border-t border-black/5 bg-black/[0.02] px-4 py-3 sm:flex-row sm:items-center sm:px-6 dark:border-white/10 dark:bg-white/[0.02]'>
+              <div className='text-muted-foreground flex min-w-0 items-center gap-1.5 text-[11px]'>
+                <ShieldCheck className='h-3.5 w-3.5' />
+                <span className='min-w-0'>
+                  All tokens are securely encrypted
+                </span>
               </div>
-            </div>
-          )}
-        </div>
 
-        <div className='flex flex-col items-stretch justify-between gap-3 border-t border-black/5 px-4 py-3 sm:flex-row sm:items-center sm:px-6 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.02]'>
-          <div className='text-muted-foreground flex min-w-0 items-center gap-1.5 text-[11px]'>
-            <ShieldCheck className='h-3.5 w-3.5' />
-            <span className='min-w-0'>All tokens are securely encrypted</span>
+              {phase === "idle" && (
+                <Button
+                  type='button'
+                  size='sm'
+                  onClick={
+                    isCredentialMode ? handleCredentialSubmit : handleConnect
+                  }
+                  disabled={
+                    !isSupported ||
+                    (isCredentialMode && !credentialValue.trim())
+                  }
+                  className='w-full bg-indigo-600 text-white transition-all hover:bg-linear-to-bl sm:w-auto'
+                >
+                  {isSupported ? (
+                    <>
+                      {isCredentialMode ? "Save key" : "Continue"}
+                      <ArrowRight className='ml-1 h-3.5 w-3.5' />
+                    </>
+                  ) : (
+                    <>
+                      <Lock className='mr-1 h-3.5 w-3.5' />
+                      Coming soon
+                    </>
+                  )}
+                </Button>
+              )}
+
+              {phase === "connecting" && (
+                <Button
+                  type='button'
+                  size='sm'
+                  variant='ghost'
+                  onClick={() => {
+                    closePopup();
+                    setPhase("idle");
+                    onOpenChange(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+              )}
+
+              {phase === "select" && (
+                <div className='flex gap-2'>
+                  <Button
+                    type='button'
+                    size='sm'
+                    variant='ghost'
+                    onClick={() => onOpenChange(false)}
+                    disabled={provisionLoading}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type='button'
+                    size='sm'
+                    onClick={handleProvisionSelected}
+                    disabled={provisionLoading || selectedIgIds.size === 0}
+                    className='bg-linear-to-r from-fuchsia-500 to-pink-500 text-white'
+                  >
+                    {provisionLoading ? (
+                      <>
+                        <Loader2 className='mr-1 h-3 w-3 animate-spin' />
+                        Connecting…
+                      </>
+                    ) : (
+                      `Connect ${selectedIgIds.size || ""} ${
+                        selectedIgIds.size === 1 ? "account" : "accounts"
+                      }`.trim()
+                    )}
+                  </Button>
+                </div>
+              )}
+
+              {phase === "success" && (
+                <Button
+                  type='button'
+                  size='sm'
+                  onClick={handleDone}
+                  className='bg-linear-to-r from-emerald-500 to-teal-500 text-white'
+                >
+                  Done
+                </Button>
+              )}
+
+              {phase === "error" && (
+                <div className='flex gap-2'>
+                  <Button
+                    type='button'
+                    size='sm'
+                    variant='ghost'
+                    onClick={() => onOpenChange(false)}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    type='button'
+                    size='sm'
+                    onClick={() => {
+                      setPhase("idle");
+                      if (!isCredentialMode) handleConnect();
+                    }}
+                    className='bg-linear-to-r from-cyan-500 to-blue-500 text-white'
+                  >
+                    Try again
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
-
-          {phase === "idle" && (
-            <Button
-              type='button'
-              size='sm'
-              onClick={isCredentialMode ? handleCredentialSubmit : handleConnect}
-              disabled={
-                !isSupported ||
-                (isCredentialMode && !credentialValue.trim())
-              }
-              className='w-full bg-indigo-600 text-white transition-all hover:bg-linear-to-bl sm:w-auto'
-            >
-              {isSupported ? (
-                <>
-                  {isCredentialMode ? "Save key" : "Continue"}
-                  <ArrowRight className='ml-1 h-3.5 w-3.5' />
-                </>
-              ) : (
-                <>
-                  <Lock className='mr-1 h-3.5 w-3.5' />
-                  Coming soon
-                </>
-              )}
-            </Button>
-          )}
-
-          {phase === "connecting" && (
-            <Button
-              type='button'
-              size='sm'
-              variant='ghost'
-              onClick={() => {
-                closePopup();
-                setPhase("idle");
-                onOpenChange(false);
-              }}
-            >
-              Cancel
-            </Button>
-          )}
-
-          {phase === "select" && (
-            <div className='flex gap-2'>
-              <Button
-                type='button'
-                size='sm'
-                variant='ghost'
-                onClick={() => onOpenChange(false)}
-                disabled={provisionLoading}
-              >
-                Cancel
-              </Button>
-              <Button
-                type='button'
-                size='sm'
-                onClick={handleProvisionSelected}
-                disabled={provisionLoading || selectedIgIds.size === 0}
-                className='bg-linear-to-r from-fuchsia-500 to-pink-500 text-white'
-              >
-                {provisionLoading ? (
-                  <>
-                    <Loader2 className='mr-1 h-3 w-3 animate-spin' />
-                    Connecting…
-                  </>
-                ) : (
-                  `Connect ${selectedIgIds.size || ""} ${
-                    selectedIgIds.size === 1 ? "account" : "accounts"
-                  }`.trim()
-                )}
-              </Button>
-            </div>
-          )}
-
-          {phase === "success" && (
-            <Button
-              type='button'
-              size='sm'
-              onClick={handleDone}
-              className='bg-linear-to-r from-emerald-500 to-teal-500 text-white'
-            >
-              Done
-            </Button>
-          )}
-
-          {phase === "error" && (
-            <div className='flex gap-2'>
-              <Button
-                type='button'
-                size='sm'
-                variant='ghost'
-                onClick={() => onOpenChange(false)}
-              >
-                Close
-              </Button>
-              <Button
-                type='button'
-                size='sm'
-                onClick={() => {
-                  setPhase("idle");
-                  if (!isCredentialMode) handleConnect();
-                }}
-                className='bg-linear-to-r from-cyan-500 to-blue-500 text-white'
-              >
-                Try again
-              </Button>
-            </div>
-          )}
         </div>
-        </div>
-      </div>
-    </DialogContent>
-  </Dialog>
+      </DialogContent>
+    </Dialog>
   );
 }

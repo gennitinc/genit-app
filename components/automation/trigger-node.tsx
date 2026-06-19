@@ -1,7 +1,16 @@
 "use client";
 
-import React from "react";
-import { Handle, type NodeProps, Position } from "reactflow";
+import { TRIGGER_SUBTYPES, type TriggerSubtype } from "./automation-types";
+import {
+  BrevoBrand,
+  FacebookBrand,
+  GoogleCalendarBrand,
+  InstagramBrand,
+  MessengerBrand,
+  WhatsAppBrand,
+  XBrand,
+} from "@/app/(auth)/onboarding/_components/social-icons";
+import { cn } from "@/lib/utils";
 import {
   AtSign,
   CalendarDays,
@@ -21,34 +30,25 @@ import {
   Webhook,
   Zap,
 } from "lucide-react";
-import {
-  WhatsAppBrand,
-  BrevoBrand,
-  FacebookBrand,
-  InstagramBrand,
-  GoogleCalendarBrand,
-  XBrand,
-  MessengerBrand,
-} from "@/app/(auth)/onboarding/_components/social-icons";
-import { cn } from "@/lib/utils";
-import { TRIGGER_SUBTYPES, type TriggerSubtype } from "./automation-types";
+import { Handle, type NodeProps, Position } from "reactflow";
+import React from "react";
 
 const TRIGGER_ICONS: Record<TriggerSubtype, any> = {
-  schedule:            Clock,
-  webhook:             Webhook,
-  manual:              Play,
-  whatsapp_message:    WhatsAppBrand,
-  gmail_received:      Mail,
+  schedule: Clock,
+  webhook: Webhook,
+  manual: Play,
+  whatsapp_message: WhatsAppBrand,
+  gmail_received: Mail,
   outlook_email_received: Mail,
   brevo_contact_added: BrevoBrand,
-  facebook_comment:    FacebookBrand,
-  facebook_message:    FacebookBrand,
-  instagram_comment:   InstagramBrand,
-  instagram_dm:        InstagramBrand,
-  calendar_event:      GoogleCalendarBrand,
-  form_submission:     ClipboardList,
-  x_mention:           XBrand,
-  messenger_message:   MessengerBrand,
+  facebook_comment: FacebookBrand,
+  facebook_message: FacebookBrand,
+  instagram_comment: InstagramBrand,
+  instagram_dm: InstagramBrand,
+  calendar_event: GoogleCalendarBrand,
+  form_submission: ClipboardList,
+  x_mention: XBrand,
+  messenger_message: MessengerBrand,
 };
 
 interface TriggerNodeData {
@@ -75,7 +75,8 @@ const inputCls =
 const selectCls =
   "w-full bg-zinc-50 dark:bg-neutral-950 border border-zinc-200 dark:border-neutral-800 rounded px-2.5 py-1.5 text-xs text-zinc-800 dark:text-neutral-200 outline-none focus:border-amber-500/50 transition-colors cursor-pointer";
 
-const labelCls = "block mb-1 text-[9px] font-medium text-zinc-500 dark:text-neutral-400 uppercase tracking-wider";
+const labelCls =
+  "block mb-1 text-[9px] font-medium text-zinc-500 dark:text-neutral-400 uppercase tracking-wider";
 
 export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
   const isEdit = data.isEditMode;
@@ -85,29 +86,31 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
   return (
     <div
       className={cn(
-        "w-[240px] overflow-hidden bg-white dark:bg-neutral-900 border border-zinc-200 dark:border-neutral-800 rounded-2xl relative shadow-xl text-zinc-800 dark:text-neutral-200 transition-all duration-200",
-        isEdit ? "ring-2 ring-amber-500/40 border-zinc-300 dark:border-neutral-700" : ""
+        "relative w-[240px] overflow-hidden rounded-2xl border border-zinc-200 bg-white text-zinc-800 shadow-xl transition-all duration-200 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200",
+        isEdit
+          ? "border-zinc-300 ring-2 ring-amber-500/40 dark:border-neutral-700"
+          : ""
       )}
     >
       {/* Header */}
-      <div className="px-4 py-3 flex items-center justify-between border-b border-zinc-200 dark:border-neutral-800/70 bg-zinc-50/50 dark:bg-neutral-950/40">
-        <div className="flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400">
-          <Zap className="h-4 w-4" />
-          <span className="text-[10px] font-semibold uppercase tracking-wider font-sans">
+      <div className='flex items-center justify-between border-b border-zinc-200 bg-zinc-50/50 px-4 py-3 dark:border-neutral-800/70 dark:bg-neutral-950/40'>
+        <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
+          <Zap className='h-4 w-4' />
+          <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
             Trigger
           </span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className='flex items-center gap-1'>
           {isEdit && (
             <button
               onClick={() => data.onRemoveNode(id)}
-              className="text-zinc-500 dark:text-neutral-400 hover:text-red-500 dark:hover:text-red-400 transition-colors p-1 rounded"
+              className='rounded p-1 text-zinc-500 transition-colors hover:text-red-500 dark:text-neutral-400 dark:hover:text-red-400'
             >
-              <Trash2 className="h-3.5 w-3.5" />
+              <Trash2 className='h-3.5 w-3.5' />
             </button>
           )}
           {!isEdit && data.isActive === false && (
-            <span className="text-[9px] font-semibold uppercase tracking-wider text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded">
+            <span className='rounded bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-amber-500 uppercase'>
               Paused
             </span>
           )}
@@ -115,17 +118,19 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
       </div>
 
       {/* Body */}
-      <div className="p-4 space-y-4">
+      <div className='space-y-4 p-4'>
         {isEdit ? (
           <>
             <div>
               <label className={labelCls}>Name</label>
               <input
-                type="text"
+                type='text'
                 value={data.title}
-                onChange={(e) => data.onNodeDataChange(id, { title: e.target.value })}
+                onChange={(e) =>
+                  data.onNodeDataChange(id, { title: e.target.value })
+                }
                 className={inputCls}
-                placeholder="Node name"
+                placeholder='Node name'
               />
             </div>
 
@@ -133,11 +138,15 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
               <label className={labelCls}>Trigger</label>
               <select
                 value={data.triggerType}
-                onChange={(e) => data.onNodeDataChange(id, { triggerType: e.target.value })}
+                onChange={(e) =>
+                  data.onNodeDataChange(id, { triggerType: e.target.value })
+                }
                 className={selectCls}
               >
                 {TRIGGER_SUBTYPES.map((t) => (
-                  <option key={t.id} value={t.id}>{t.label}</option>
+                  <option key={t.id} value={t.id}>
+                    {t.label}
+                  </option>
                 ))}
               </select>
             </div>
@@ -147,27 +156,51 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                 <label className={labelCls}>Frequency</label>
                 <select
                   value={data.scheduleFrequency || "Once"}
-                  onChange={(e) => data.onNodeDataChange(id, { scheduleFrequency: e.target.value })}
+                  onChange={(e) =>
+                    data.onNodeDataChange(id, {
+                      scheduleFrequency: e.target.value,
+                    })
+                  }
                   className={selectCls}
                 >
-                  {["Once", "Every 5 minutes","Hourly","Daily","Every Monday","Weekly","Monthly","Custom"].map((v) => (
-                    <option key={v} value={v}>{v}</option>
+                  {[
+                    "Once",
+                    "Every 5 minutes",
+                    "Hourly",
+                    "Daily",
+                    "Every Monday",
+                    "Weekly",
+                    "Monthly",
+                    "Custom",
+                  ].map((v) => (
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
                   ))}
                 </select>
                 {data.scheduleFrequency === "Custom" && (
                   <input
-                    type="text"
+                    type='text'
                     value={data.cronExpression || ""}
-                    onChange={(e) => data.onNodeDataChange(id, { cronExpression: e.target.value })}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, {
+                        cronExpression: e.target.value,
+                      })
+                    }
                     className={cn(inputCls, "mt-1.5 font-mono")}
-                    placeholder="*/5 * * * *"
+                    placeholder='*/5 * * * *'
                   />
                 )}
-                {(!data.scheduleFrequency || data.scheduleFrequency === "Once") && (
+                {(!data.scheduleFrequency ||
+                  data.scheduleFrequency === "Once") && (
                   <input
-                    type="datetime-local"
+                    type='datetime-local'
                     value={data.scheduleTime || ""}
-                    onChange={(e) => data.onNodeDataChange(id, { scheduleTime: e.target.value })}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, {
+                        scheduleTime: e.target.value,
+                      })
+                    }
                     className={cn(inputCls, "mt-1.5")}
                   />
                 )}
@@ -177,7 +210,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
             {data.triggerType === "webhook" && (
               <div>
                 <label className={labelCls}>Webhook URL</label>
-                <div className="rounded-xl border border-zinc-200 dark:border-neutral-850 bg-zinc-50 dark:bg-neutral-950 px-2.5 py-1.5 text-[10px] font-mono text-zinc-500 dark:text-neutral-400 break-all">
+                <div className='dark:border-neutral-850 rounded-xl border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 font-mono text-[10px] break-all text-zinc-500 dark:bg-neutral-950 dark:text-neutral-400'>
                   {data.webhookUrl || "Generated on save"}
                 </div>
               </div>
@@ -193,26 +226,43 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
               <div>
                 <label className={labelCls}>Keyword filter</label>
                 <input
-                  type="text"
+                  type='text'
                   value={data.filterValue || ""}
-                  onChange={(e) => data.onNodeDataChange(id, { filterValue: e.target.value })}
+                  onChange={(e) =>
+                    data.onNodeDataChange(id, { filterValue: e.target.value })
+                  }
                   className={inputCls}
-                  placeholder="Leave empty to match all"
+                  placeholder='Leave empty to match all'
                 />
               </div>
             )}
 
-
-
-            {(data.triggerType === "gmail_received" || data.triggerType === "outlook_email_received") && (
+            {(data.triggerType === "gmail_received" ||
+              data.triggerType === "outlook_email_received") && (
               <>
                 <div>
                   <label className={labelCls}>From</label>
-                  <input type="text" value={data.filterField || ""} onChange={(e) => data.onNodeDataChange(id, { filterField: e.target.value })} className={inputCls} placeholder="sender@example.com" />
+                  <input
+                    type='text'
+                    value={data.filterField || ""}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, { filterField: e.target.value })
+                    }
+                    className={inputCls}
+                    placeholder='sender@example.com'
+                  />
                 </div>
                 <div>
                   <label className={labelCls}>Subject contains</label>
-                  <input type="text" value={data.filterValue || ""} onChange={(e) => data.onNodeDataChange(id, { filterValue: e.target.value })} className={inputCls} placeholder="e.g. invoice" />
+                  <input
+                    type='text'
+                    value={data.filterValue || ""}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, { filterValue: e.target.value })
+                    }
+                    className={inputCls}
+                    placeholder='e.g. invoice'
+                  />
                 </div>
               </>
             )}
@@ -220,53 +270,79 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
             {data.triggerType === "brevo_contact_added" && (
               <div>
                 <label className={labelCls}>List</label>
-                <input type="text" value={data.filterValue || ""} onChange={(e) => data.onNodeDataChange(id, { filterValue: e.target.value })} className={inputCls} placeholder="List name" />
+                <input
+                  type='text'
+                  value={data.filterValue || ""}
+                  onChange={(e) =>
+                    data.onNodeDataChange(id, { filterValue: e.target.value })
+                  }
+                  className={inputCls}
+                  placeholder='List name'
+                />
               </div>
             )}
 
             {data.triggerType === "calendar_event" && (
               <div>
                 <label className={labelCls}>Event type</label>
-                <select value={data.filterValue || "created"} onChange={(e) => data.onNodeDataChange(id, { filterValue: e.target.value })} className={selectCls}>
-                  <option value="created">Created</option>
-                  <option value="starting">Starting</option>
-                  <option value="updated">Updated</option>
-                  <option value="cancelled">Cancelled</option>
+                <select
+                  value={data.filterValue || "created"}
+                  onChange={(e) =>
+                    data.onNodeDataChange(id, { filterValue: e.target.value })
+                  }
+                  className={selectCls}
+                >
+                  <option value='created'>Created</option>
+                  <option value='starting'>Starting</option>
+                  <option value='updated'>Updated</option>
+                  <option value='cancelled'>Cancelled</option>
                 </select>
               </div>
             )}
             {isEdit && data.onTestRun && (
-              <div className="pt-2 flex items-center gap-2">
+              <div className='flex items-center gap-2 pt-2'>
                 <button
-                  onClick={() => data.onNodeDataChange(id, { isActive: data.isActive === false ? true : false })}
+                  onClick={() =>
+                    data.onNodeDataChange(id, {
+                      isActive: data.isActive === false ? true : false,
+                    })
+                  }
                   disabled={data.isTesting}
                   className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 border rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+                    "flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors",
                     data.isActive === false
-                      ? "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800/50 hover:bg-amber-100 dark:hover:bg-amber-900/40"
-                      : "bg-zinc-50 dark:bg-zinc-900/20 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800/50 hover:bg-zinc-100 dark:hover:bg-zinc-900/40",
-                    data.isTesting && "opacity-50 cursor-not-allowed"
+                      ? "border-amber-200 bg-amber-50 text-amber-600 hover:bg-amber-100 dark:border-amber-800/50 dark:bg-amber-900/20 dark:text-amber-400 dark:hover:bg-amber-900/40"
+                      : "border-zinc-200 bg-zinc-50 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-800/50 dark:bg-zinc-900/20 dark:text-zinc-400 dark:hover:bg-zinc-900/40",
+                    data.isTesting && "cursor-not-allowed opacity-50"
                   )}
-                  title={data.isActive === false ? "Resume Automation" : "Pause Automation"}
+                  title={
+                    data.isActive === false
+                      ? "Resume Automation"
+                      : "Pause Automation"
+                  }
                 >
-                  {data.isActive === false ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
+                  {data.isActive === false ? (
+                    <Play className='h-3.5 w-3.5' />
+                  ) : (
+                    <Pause className='h-3.5 w-3.5' />
+                  )}
                   {data.isActive === false ? "Paused" : "Active"}
                 </button>
                 <button
                   onClick={() => data.onTestRun!(id)}
                   disabled={data.isActive === false || data.isTesting}
                   className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 border rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+                    "flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors",
                     data.isActive === false
-                      ? "bg-zinc-100 dark:bg-zinc-800/50 text-zinc-400 dark:text-zinc-500 border-transparent cursor-not-allowed"
-                      : "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800/50 hover:bg-blue-100 dark:hover:bg-blue-900/40",
-                    data.isTesting && "opacity-50 cursor-not-allowed"
+                      ? "cursor-not-allowed border-transparent bg-zinc-100 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
+                      : "border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100 dark:border-blue-800/50 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40",
+                    data.isTesting && "cursor-not-allowed opacity-50"
                   )}
                 >
                   {data.isTesting ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <Loader2 className='h-3.5 w-3.5 animate-spin' />
                   ) : (
-                    <Play className="h-3.5 w-3.5" />
+                    <Play className='h-3.5 w-3.5' />
                   )}
                   {data.isTesting ? "Testing..." : "Test Run"}
                 </button>
@@ -274,19 +350,19 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
             )}
           </>
         ) : (
-          <div className="space-y-1.5">
-            <h4 className="text-xs font-medium text-zinc-900 dark:text-neutral-100 truncate">
+          <div className='space-y-1.5'>
+            <h4 className='truncate text-xs font-medium text-zinc-900 dark:text-neutral-100'>
               {data.title}
             </h4>
-            <div className="text-[10px] text-zinc-600 dark:text-neutral-400 bg-zinc-50 dark:bg-neutral-950 border border-zinc-200 dark:border-neutral-800/50 px-3 py-2 rounded-xl space-y-1">
-              <div className="flex items-center gap-1.5">
-                <Icon className="h-3.5 w-3.5 text-zinc-500 dark:text-neutral-400 shrink-0" />
-                <span className="font-medium text-zinc-850 dark:text-neutral-200">
+            <div className='space-y-1 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-[10px] text-zinc-600 dark:border-neutral-800/50 dark:bg-neutral-950 dark:text-neutral-400'>
+              <div className='flex items-center gap-1.5'>
+                <Icon className='h-3.5 w-3.5 shrink-0 text-zinc-500 dark:text-neutral-400' />
+                <span className='text-zinc-850 font-medium dark:text-neutral-200'>
                   {subtype?.label || data.triggerType}
                 </span>
               </div>
               {(data.scheduleFrequency || data.filterValue) && (
-                <p className="text-zinc-500 dark:text-neutral-400 pl-5 truncate">
+                <p className='truncate pl-5 text-zinc-500 dark:text-neutral-400'>
                   {data.scheduleFrequency || data.filterValue}
                 </p>
               )}
@@ -296,9 +372,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
       </div>
 
       <Handle
-        type="source"
+        type='source'
         position={Position.Bottom}
-        className="!w-2 !h-2 !bg-amber-500 !border-2 !border-white dark:!border-neutral-900"
+        className='!h-2 !w-2 !border-2 !border-white !bg-amber-500 dark:!border-neutral-900'
       />
     </div>
   );

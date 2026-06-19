@@ -9,7 +9,13 @@ import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { Button } from "@/components/ui/button";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { PremiumInput } from "@/components/ui/premium-input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Toaster } from "@/components/ui/sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import withAuth from "@/helper/hoc/withAuth";
@@ -17,31 +23,22 @@ import { cn } from "@/lib/utils";
 import { Model } from "@/types/inspire";
 import { apiResponse } from "@/utils/apiResponse";
 import { imageGenApi, presenterApi } from "@/utils/inspire-api";
-import { Check, Download, HistoryIcon, Loader2, Plus, SaveIcon, Sparkles, Trash2, Upload, User, Wand2, X } from "lucide-react";
+import {
+  Check,
+  Download,
+  HistoryIcon,
+  Loader2,
+  Plus,
+  SaveIcon,
+  Sparkles,
+  Trash2,
+  Upload,
+  User,
+  Wand2,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 import React, { useCallback, useEffect, useState } from "react";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -211,7 +208,7 @@ const PresenterPage = () => {
         <TopNavWithAurora />
         <div
           id='main-content'
-          className="flex-1 rounded-t-2xl lg:border-2 lg:border-b-0 ml-0 mr-2 md:mr-4"
+          className='mr-2 ml-0 flex-1 rounded-t-2xl md:mr-4 lg:border-2 lg:border-b-0'
         >
           <main className='flex-grow pt-12'>
             <div className='animate-fadeInUp mb-10 px-2 text-center md:px-4'>

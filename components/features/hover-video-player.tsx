@@ -385,8 +385,7 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
           playVideo();
         }
       },
-      canplay: () => {
-      },
+      canplay: () => {},
       playing: () => {
         setState((prev) => ({
           ...prev,
@@ -443,7 +442,6 @@ const HoverVideoPlayer: React.FC<HoverVideoPlayerProps> = ({
 
   // Playback control effect
   useEffect(() => {
-
     if (!state.isInView) {
       return;
     }

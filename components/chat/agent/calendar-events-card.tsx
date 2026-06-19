@@ -1,7 +1,7 @@
 "use client";
 
-import { Calendar, ExternalLink, MapPin, Users } from "lucide-react";
 import { AgentCard } from "./agent-card";
+import { Calendar, ExternalLink, MapPin, Users } from "lucide-react";
 
 type GcalEvent = {
   id?: string;
@@ -96,7 +96,7 @@ export function CalendarEventsCard({
             return (
               <li
                 key={e.id || i}
-                className='hover:bg-muted/30 dark:hover:bg-white/[0.02] px-3.5 py-3 transition-colors'
+                className='hover:bg-muted/30 px-3.5 py-3 transition-colors dark:hover:bg-white/[0.02]'
               >
                 <div className='flex items-start gap-3'>
                   <div className='flex w-12 shrink-0 flex-col items-start'>

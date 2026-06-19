@@ -180,7 +180,7 @@ const DesignerV2 = () => {
   ];
 
   return (
-    <div className='selection:bg-indigo-600 hover:bg-indigo-700/30 flex h-screen w-full flex-col overflow-hidden bg-[#0a0a0a] font-sans text-white'>
+    <div className='flex h-screen w-full flex-col overflow-hidden bg-[#0a0a0a] font-sans text-white selection:bg-indigo-600 hover:bg-indigo-700/30'>
       {/* 3D Workspace */}
       <div className='absolute inset-0 z-0'>
         <Canvas shadows dpr={[1, 2]}>

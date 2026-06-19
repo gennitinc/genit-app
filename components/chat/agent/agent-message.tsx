@@ -1,10 +1,17 @@
 "use client";
 
+import { AgentCard } from "./agent-card";
+import { AgentPlan } from "./agent-plan";
+import { AgentThinkingStream } from "./agent-thinking-stream";
+import { CalendarEventsCard } from "./calendar-events-card";
+import { ConnectIntegrationInline } from "./connect-integration-inline";
+import { ElicitationCard } from "./elicitation-card";
+import { renderToolResult } from "./result-cards";
+import { Response } from "@/components/ai-elements/response";
 import { MessageContainer } from "@/components/chat/messages/message-container";
 import { MessageContent } from "@/components/chat/messages/message-content";
-import { AvatarDisplay } from "@/components/ui/avatar-display";
-import { Response } from "@/components/ai-elements/response";
 import { UserMessage } from "@/components/chat/messages/user-message";
+import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { resumeAgentRunUserInput } from "@/lib/agents-api";
 import type {
   AgentElicitation,
@@ -13,14 +20,14 @@ import type {
   AgentTask,
   AgentToolCall,
 } from "@/lib/agents-api";
-import { AlertTriangle, CalendarCheck2, Loader2, CheckCircle2, XCircle, Clock } from "lucide-react";
-import { AgentCard } from "./agent-card";
-import { AgentPlan } from "./agent-plan";
-import { AgentThinkingStream } from "./agent-thinking-stream";
-import { CalendarEventsCard } from "./calendar-events-card";
-import { ConnectIntegrationInline } from "./connect-integration-inline";
-import { ElicitationCard } from "./elicitation-card";
-import { renderToolResult } from "./result-cards";
+import {
+  AlertTriangle,
+  CalendarCheck2,
+  CheckCircle2,
+  Clock,
+  Loader2,
+  XCircle,
+} from "lucide-react";
 
 export interface AgentRunView {
   runId: string;
@@ -50,36 +57,44 @@ function formatErrorMessage(error: string | undefined): string {
   if (!error) return "";
   try {
     let parsed = JSON.parse(error);
-    
+
     // Sometimes the message itself is a stringified JSON from nested API errors
     if (parsed.error && typeof parsed.error.message === "string") {
-       try {
-          let innerParsed = JSON.parse(parsed.error.message);
-          parsed = innerParsed;
-       } catch (e) {
-          // ignore
-       }
+      try {
+        let innerParsed = JSON.parse(parsed.error.message);
+        parsed = innerParsed;
+      } catch (e) {
+        // ignore
+      }
     }
 
     if (parsed.error) {
-       let msg = parsed.error.message || parsed.error.code;
-       if (parsed.error.status === "RESOURCE_EXHAUSTED" || parsed.error.code === 429) {
-          return "We're currently experiencing high demand and have reached our API limits. Please try again in a few moments.";
-       }
-       return typeof msg === "string" ? msg : JSON.stringify(msg);
+      let msg = parsed.error.message || parsed.error.code;
+      if (
+        parsed.error.status === "RESOURCE_EXHAUSTED" ||
+        parsed.error.code === 429
+      ) {
+        return "We're currently experiencing high demand and have reached our API limits. Please try again in a few moments.";
+      }
+      return typeof msg === "string" ? msg : JSON.stringify(msg);
     }
-    
+
     if (parsed.message) {
       return parsed.message;
     }
   } catch (e) {
     // If it's not JSON, or parsing fails, check if it contains common quota/rate limit text
     const lowerError = error.toLowerCase();
-    if (lowerError.includes("429") || lowerError.includes("resource_exhausted") || lowerError.includes("quota") || lowerError.includes("rate limit")) {
-       return "We're currently experiencing high demand and have reached our API limits. Please try again in a few moments.";
+    if (
+      lowerError.includes("429") ||
+      lowerError.includes("resource_exhausted") ||
+      lowerError.includes("quota") ||
+      lowerError.includes("rate limit")
+    ) {
+      return "We're currently experiencing high demand and have reached our API limits. Please try again in a few moments.";
     }
   }
-  
+
   return error;
 }
 
@@ -108,9 +123,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
     return (
       <div className='border-border/70 bg-card text-muted-foreground my-3 flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-[12.5px] shadow-[0_1px_0_rgba(0,0,0,0.02)] dark:border-white/10 dark:bg-white/[0.02] dark:shadow-none'>
         <Loader2 className='text-foreground h-3.5 w-3.5 animate-spin' />
-        <span className='text-foreground font-medium'>
-          {pendingLabel}
-        </span>
+        <span className='text-foreground font-medium'>{pendingLabel}</span>
         <span className='text-muted-foreground'>running…</span>
       </div>
     );
@@ -188,7 +201,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
 function StatusBadge({ status }: { status: AgentRunStatus }) {
   if (status === "running") {
     return (
-      <span className='inline-flex items-center gap-1 rounded-full bg-foreground/[0.06] px-2 py-0.5 text-[10.5px] font-medium text-muted-foreground dark:bg-white/[0.06]'>
+      <span className='bg-foreground/[0.06] text-muted-foreground inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-medium dark:bg-white/[0.06]'>
         <Loader2 className='h-2.5 w-2.5 animate-spin' />
         Working
       </span>
@@ -246,13 +259,14 @@ export function AgentMessage({
           message={{
             type: "user",
             parts: [{ type: "text", text: run.prompt || "" }],
-            attachedFiles: run.attachedFiles?.map((f, i) => ({
-              id: `file-${Date.now()}-${i}`,
-              name: f.name,
-              type: f.type,
-              filePath: f.url,
-              status: "uploaded"
-            })) || []
+            attachedFiles:
+              run.attachedFiles?.map((f, i) => ({
+                id: `file-${Date.now()}-${i}`,
+                name: f.name,
+                type: f.type,
+                filePath: f.url,
+                status: "uploaded",
+              })) || [],
           }}
           userAvatar={userAvatar}
           userName={userName}
@@ -295,9 +309,10 @@ export function AgentMessage({
             ))}
 
             {/* Integration connect prompt */}
-            {run.integrationRequired && run.status === "awaiting_integration" && (
-              <ConnectIntegrationInline required={run.integrationRequired} />
-            )}
+            {run.integrationRequired &&
+              run.status === "awaiting_integration" && (
+                <ConnectIntegrationInline required={run.integrationRequired} />
+              )}
 
             {/* Elicitation — user clarification needed */}
             {run.elicitation && run.status === "awaiting_input" && (

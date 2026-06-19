@@ -198,7 +198,7 @@ const LogoAnimationPage = () => {
                   <div className='space-y-2'>
                     <label
                       htmlFor='logo-upload'
-                      className='group border-muted-foreground/25 hover:border-primary/50 hover:bg-indigo-600 hover:bg-indigo-700/5 relative flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed transition-all'
+                      className='group border-muted-foreground/25 hover:border-primary/50 relative flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed transition-all hover:bg-indigo-600 hover:bg-indigo-700/5'
                     >
                       {previewUrl ? (
                         <div className='relative size-full p-2'>
@@ -213,7 +213,7 @@ const LogoAnimationPage = () => {
                         </div>
                       ) : (
                         <div className='flex flex-col items-center justify-center pt-5 pb-6'>
-                          <div className='bg-indigo-600 hover:bg-indigo-700/10 mb-2 rounded-full p-2 transition-transform group-hover:scale-110'>
+                          <div className='mb-2 rounded-full bg-indigo-600 p-2 transition-transform group-hover:scale-110 hover:bg-indigo-700/10'>
                             <Upload className='text-primary size-5' />
                           </div>
                           <p className='text-sm font-medium'>Click to upload</p>
@@ -277,7 +277,7 @@ const LogoAnimationPage = () => {
                 )}
 
                 <Button
-                  className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
+                  className='focus:ring-primary/30 dark:focus:ring-primary/40 flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus:ring-4 focus:outline-none'
                   disabled={!file || isGenerating}
                   onClick={handleGenerate}
                 >

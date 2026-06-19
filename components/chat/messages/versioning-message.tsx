@@ -49,7 +49,9 @@ const getFullUrl = (url: string) => {
   if (url.startsWith("http://") || url.startsWith("https://")) {
     return url;
   }
-  const baseUrl = serverUrlSocket ? serverUrlSocket.replace(/\/$/, "") : "http://localhost:8000";
+  const baseUrl = serverUrlSocket
+    ? serverUrlSocket.replace(/\/$/, "")
+    : "http://localhost:8000";
   return `${baseUrl}${url.startsWith("/") ? "" : "/"}${url}`;
 };
 
@@ -1052,7 +1054,7 @@ export function VersioningMessage({
                           if (setFocusedGenerationId)
                             setFocusedGenerationId(item.id);
                         }}
-                        className='border-primary/30 text-primary hover:bg-indigo-600 hover:bg-indigo-700/5 hidden h-7.5 w-fit gap-1.5 px-2 text-xs lg:flex'
+                        className='border-primary/30 text-primary hidden h-7.5 w-fit gap-1.5 px-2 text-xs hover:bg-indigo-600 hover:bg-indigo-700/5 lg:flex'
                       >
                         <LayoutGrid className='h-3 w-3' />
                         View
@@ -1114,7 +1116,7 @@ export function VersioningMessage({
                 </div>
               </div>
             ) : mediaType === "video" && mediaUrl ? (
-              <div className='flex flex-col items-start gap-2 w-full'>
+              <div className='flex w-full flex-col items-start gap-2'>
                 <div className='border-border bg-muted relative aspect-video w-full flex-shrink-0 overflow-hidden rounded-md border'>
                   <video
                     src={getFullUrl(mediaUrl)}
@@ -1188,8 +1190,8 @@ export function VersioningMessage({
                     <p className='text-foreground truncate text-xs font-semibold sm:text-sm'>
                       {item.name || "Workflow Canvas"}
                     </p>
-                    <div className='mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground'>
-                      <span className='inline-flex items-center gap-1 font-medium text-violet-500 bg-violet-500/10 px-1.5 py-0.5 rounded'>
+                    <div className='text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs'>
+                      <span className='inline-flex items-center gap-1 rounded bg-violet-500/10 px-1.5 py-0.5 font-medium text-violet-500'>
                         Workflow
                       </span>
                       <span>•</span>
@@ -1200,7 +1202,7 @@ export function VersioningMessage({
                   </div>
                 </div>
 
-                <div className='flex items-center gap-2 mt-1 w-full'>
+                <div className='mt-1 flex w-full items-center gap-2'>
                   <Button
                     variant='outline'
                     size='sm'
@@ -1216,12 +1218,15 @@ export function VersioningMessage({
                       }
                     }}
                     className={cn(
-                      "h-8 w-full gap-1.5 px-3 text-xs font-medium sm:w-auto rounded-lg transition-colors border-violet-500/30 text-violet-600 hover:text-violet-700 hover:bg-violet-500/10",
-                      focusedGenerationId === item.id && "bg-violet-500 text-white hover:bg-violet-600 hover:text-white border-violet-500"
+                      "h-8 w-full gap-1.5 rounded-lg border-violet-500/30 px-3 text-xs font-medium text-violet-600 transition-colors hover:bg-violet-500/10 hover:text-violet-700 sm:w-auto",
+                      focusedGenerationId === item.id &&
+                        "border-violet-500 bg-violet-500 text-white hover:bg-violet-600 hover:text-white"
                     )}
                   >
                     <LayoutGrid className='h-3.5 w-3.5' />
-                    {focusedGenerationId === item.id ? "Viewing Canvas" : "View Canvas"}
+                    {focusedGenerationId === item.id
+                      ? "Viewing Canvas"
+                      : "View Canvas"}
                   </Button>
                 </div>
               </div>
@@ -1229,14 +1234,14 @@ export function VersioningMessage({
               <div className='flex w-full flex-col items-start gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-3.5 transition-all duration-200 hover:border-amber-500/30 hover:bg-amber-500/10'>
                 <div className='flex w-full items-start gap-3'>
                   <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-500 sm:h-12 sm:w-12'>
-                    <Zap className='h-5 w-5 sm:h-6 sm:w-6 fill-amber-500/10' />
+                    <Zap className='h-5 w-5 fill-amber-500/10 sm:h-6 sm:w-6' />
                   </div>
                   <div className='min-w-0 flex-1'>
                     <p className='text-foreground truncate text-xs font-semibold sm:text-sm'>
                       {item.name || "Automation Canvas"}
                     </p>
-                    <div className='mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground'>
-                      <span className='inline-flex items-center gap-1 font-medium text-amber-600 bg-amber-500/10 px-1.5 py-0.5 rounded'>
+                    <div className='text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs'>
+                      <span className='inline-flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-0.5 font-medium text-amber-600'>
                         Automation
                       </span>
                       <span>•</span>
@@ -1247,7 +1252,7 @@ export function VersioningMessage({
                   </div>
                 </div>
 
-                <div className='flex items-center gap-2 mt-1 w-full'>
+                <div className='mt-1 flex w-full items-center gap-2'>
                   <Button
                     variant='outline'
                     size='sm'
@@ -1263,12 +1268,15 @@ export function VersioningMessage({
                       }
                     }}
                     className={cn(
-                      "h-8 w-full gap-1.5 px-3 text-xs font-medium sm:w-auto rounded-lg transition-colors border-amber-500/30 text-amber-600 hover:text-amber-700 hover:bg-amber-500/10",
-                      focusedGenerationId === item.id && "bg-amber-500 text-white hover:bg-amber-600 hover:text-white border-amber-500"
+                      "h-8 w-full gap-1.5 rounded-lg border-amber-500/30 px-3 text-xs font-medium text-amber-600 transition-colors hover:bg-amber-500/10 hover:text-amber-700 sm:w-auto",
+                      focusedGenerationId === item.id &&
+                        "border-amber-500 bg-amber-500 text-white hover:bg-amber-600 hover:text-white"
                     )}
                   >
                     <LayoutGrid className='h-3.5 w-3.5' />
-                    {focusedGenerationId === item.id ? "Viewing Canvas" : "View Canvas"}
+                    {focusedGenerationId === item.id
+                      ? "Viewing Canvas"
+                      : "View Canvas"}
                   </Button>
                 </div>
               </div>

@@ -1,56 +1,56 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef } from "react";
+import { apiResponse } from "@/utils/apiResponse";
+import { Color } from "@tiptap/extension-color";
+import { TextStyle } from "@tiptap/extension-text-style";
 import {
-  EditorRoot,
-  EditorContent,
-  useEditor,
+  Bold,
+  CheckSquare,
+  Code,
+  Heading1,
+  Heading2,
+  Heading3,
+  Image as ImageIcon,
+  Italic,
+  Link2,
+  List,
+  ListOrdered,
+  MessageSquarePlus,
+  Palette,
+  Quote,
+  Text,
+  TextQuote,
+  Underline as UnderlineIcon,
+  X,
+} from "lucide-react";
+import {
+  Command,
   EditorBubble,
   EditorBubbleItem,
   EditorCommand,
   EditorCommandEmpty,
   EditorCommandItem,
   EditorCommandList,
-  StarterKit,
-  TiptapUnderline,
-  TiptapLink,
+  EditorContent,
+  EditorRoot,
   Placeholder,
-  Command,
-  renderItems,
-  createSuggestionItems,
+  StarterKit,
+  TaskItem,
+  TaskList,
   TiptapImage,
+  TiptapLink,
+  TiptapUnderline,
   UploadImagesPlugin,
   createImageUpload,
-  handleImagePaste,
-  handleImageDrop,
-  TaskList,
-  TaskItem,
+  createSuggestionItems,
   handleCommandNavigation,
+  handleImageDrop,
+  handleImagePaste,
+  renderItems,
+  useEditor,
 } from "novel";
-import {
-  Bold,
-  Italic,
-  Underline as UnderlineIcon,
-  Heading1,
-  Heading2,
-  Heading3,
-  List,
-  ListOrdered,
-  Quote,
-  Code,
-  Link2,
-  Text,
-  Image as ImageIcon,
-  CheckSquare,
-  MessageSquarePlus,
-  TextQuote,
-  Palette,
-  X,
-} from "lucide-react";
-import { Color } from "@tiptap/extension-color";
-import { TextStyle } from "@tiptap/extension-text-style";
-import { apiResponse } from "@/utils/apiResponse";
 import { toast } from "sonner";
+import React, { useCallback, useEffect, useRef } from "react";
 
 interface NotionEditorProps {
   value: string;
@@ -69,7 +69,8 @@ const tiptapImage = TiptapImage.extend({
 }).configure({
   allowBase64: true,
   HTMLAttributes: {
-    class: "rounded-xl border border-zinc-850 max-w-full my-6 mx-auto block shadow-xl",
+    class:
+      "rounded-xl border border-zinc-850 max-w-full my-6 mx-auto block shadow-xl",
   },
 });
 
@@ -110,7 +111,7 @@ const suggestionItems = createSuggestionItems([
     title: "Send Feedback",
     description: "Let us know how we can improve.",
     searchTerms: ["feedback", "bug", "support", "help"],
-    icon: <MessageSquarePlus className="h-4 w-4" />,
+    icon: <MessageSquarePlus className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
       window.open("/feedback", "_blank");
@@ -120,16 +121,21 @@ const suggestionItems = createSuggestionItems([
     title: "Text",
     description: "Start typing with plain text.",
     searchTerms: ["p", "paragraph", "text"],
-    icon: <Text className="h-4 w-4" />,
+    icon: <Text className='h-4 w-4' />,
     command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).toggleNode("paragraph", "paragraph").run();
+      editor
+        .chain()
+        .focus()
+        .deleteRange(range)
+        .toggleNode("paragraph", "paragraph")
+        .run();
     },
   },
   {
     title: "To-do List",
     description: "Track tasks with a to-do list.",
     searchTerms: ["todo", "task", "list", "check", "checkbox"],
-    icon: <CheckSquare className="h-4 w-4" />,
+    icon: <CheckSquare className='h-4 w-4' />,
     command: ({ editor, range }) => {
       (editor.chain().focus() as any).deleteRange(range).toggleTaskList().run();
     },
@@ -138,34 +144,49 @@ const suggestionItems = createSuggestionItems([
     title: "Heading 1",
     description: "Big section heading.",
     searchTerms: ["title", "big", "large", "h1"],
-    icon: <Heading1 className="h-4 w-4" />,
+    icon: <Heading1 className='h-4 w-4' />,
     command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).toggleHeading({ level: 1 }).run();
+      editor
+        .chain()
+        .focus()
+        .deleteRange(range)
+        .toggleHeading({ level: 1 })
+        .run();
     },
   },
   {
     title: "Heading 2",
     description: "Medium section heading.",
     searchTerms: ["subtitle", "medium", "h2"],
-    icon: <Heading2 className="h-4 w-4" />,
+    icon: <Heading2 className='h-4 w-4' />,
     command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).toggleHeading({ level: 2 }).run();
+      editor
+        .chain()
+        .focus()
+        .deleteRange(range)
+        .toggleHeading({ level: 2 })
+        .run();
     },
   },
   {
     title: "Heading 3",
     description: "Small section heading.",
     searchTerms: ["subtitle", "small", "h3"],
-    icon: <Heading3 className="h-4 w-4" />,
+    icon: <Heading3 className='h-4 w-4' />,
     command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).toggleHeading({ level: 3 }).run();
+      editor
+        .chain()
+        .focus()
+        .deleteRange(range)
+        .toggleHeading({ level: 3 })
+        .run();
     },
   },
   {
     title: "Bullet List",
     description: "Create a simple bullet list.",
     searchTerms: ["unordered", "point", "bullet", "list"],
-    icon: <List className="h-4 w-4" />,
+    icon: <List className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run();
     },
@@ -174,7 +195,7 @@ const suggestionItems = createSuggestionItems([
     title: "Numbered List",
     description: "Create a list with numbering.",
     searchTerms: ["ordered", "list", "number"],
-    icon: <ListOrdered className="h-4 w-4" />,
+    icon: <ListOrdered className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run();
     },
@@ -183,7 +204,7 @@ const suggestionItems = createSuggestionItems([
     title: "Quote",
     description: "Capture a quote block.",
     searchTerms: ["blockquote", "quote"],
-    icon: <TextQuote className="h-4 w-4" />,
+    icon: <TextQuote className='h-4 w-4' />,
     command: ({ editor, range }) =>
       editor
         .chain()
@@ -197,7 +218,7 @@ const suggestionItems = createSuggestionItems([
     title: "Code",
     description: "Capture a code snippet.",
     searchTerms: ["code", "codeblock", "pre"],
-    icon: <Code className="h-4 w-4" />,
+    icon: <Code className='h-4 w-4' />,
     command: ({ editor, range }) =>
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
   },
@@ -205,7 +226,7 @@ const suggestionItems = createSuggestionItems([
     title: "Image",
     description: "Upload an image from your computer.",
     searchTerms: ["photo", "picture", "media", "image", "upload"],
-    icon: <ImageIcon className="h-4 w-4" />,
+    icon: <ImageIcon className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
       const input = document.createElement("input");
@@ -257,94 +278,109 @@ function EditorInner({ value, onChange }: NotionEditorProps) {
       return;
     }
 
-    editor
-      .chain()
-      .focus()
-      .extendMarkRange("link")
-      .setLink({ href: url })
-      .run();
+    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
   }, [editor]);
 
   if (!editor) return null;
 
   return (
-    <div className="relative w-full">
+    <div className='relative w-full'>
       {/* Floating selection bubble menu */}
       <EditorBubble
-        pluginKey="bubbleMenu"
-        className="flex items-center gap-0.5 bg-zinc-900 border border-zinc-800 px-1.5 py-1 rounded-xl shadow-2xl animate-in fade-in zoom-in duration-100"
+        pluginKey='bubbleMenu'
+        className='animate-in fade-in zoom-in flex items-center gap-0.5 rounded-xl border border-zinc-800 bg-zinc-900 px-1.5 py-1 shadow-2xl duration-100'
       >
         <EditorBubbleItem
           onSelect={(editor) => editor.chain().focus().toggleBold().run()}
         >
           <button
-            type="button"
-            className={`p-1.5 rounded-lg cursor-pointer hover:bg-zinc-850 transition ${
+            type='button'
+            className={`hover:bg-zinc-850 cursor-pointer rounded-lg p-1.5 transition ${
               editor.isActive("bold") ? "text-cyan-400" : "text-zinc-400"
             }`}
           >
-            <Bold className="h-3.5 w-3.5" />
+            <Bold className='h-3.5 w-3.5' />
           </button>
         </EditorBubbleItem>
         <EditorBubbleItem
           onSelect={(editor) => editor.chain().focus().toggleItalic().run()}
         >
           <button
-            type="button"
-            className={`p-1.5 rounded-lg cursor-pointer hover:bg-zinc-855 transition ${
+            type='button'
+            className={`hover:bg-zinc-855 cursor-pointer rounded-lg p-1.5 transition ${
               editor.isActive("italic") ? "text-cyan-400" : "text-zinc-400"
             }`}
           >
-            <Italic className="h-3.5 w-3.5" />
+            <Italic className='h-3.5 w-3.5' />
           </button>
         </EditorBubbleItem>
         <EditorBubbleItem
           onSelect={(editor) => editor.chain().focus().toggleUnderline().run()}
         >
           <button
-            type="button"
-            className={`p-1.5 rounded-lg cursor-pointer hover:bg-zinc-855 transition ${
+            type='button'
+            className={`hover:bg-zinc-855 cursor-pointer rounded-lg p-1.5 transition ${
               editor.isActive("underline") ? "text-cyan-400" : "text-zinc-400"
             }`}
           >
-            <UnderlineIcon className="h-3.5 w-3.5" />
+            <UnderlineIcon className='h-3.5 w-3.5' />
           </button>
         </EditorBubbleItem>
-        <EditorBubbleItem
-          onSelect={setLink}
-        >
+        <EditorBubbleItem onSelect={setLink}>
           <button
-            type="button"
-            className={`p-1.5 rounded-lg cursor-pointer hover:bg-zinc-855 transition ${
+            type='button'
+            className={`hover:bg-zinc-855 cursor-pointer rounded-lg p-1.5 transition ${
               editor.isActive("link") ? "text-cyan-400" : "text-zinc-400"
             }`}
-            title="Add Link"
+            title='Add Link'
           >
-            <Link2 className="h-3.5 w-3.5" />
+            <Link2 className='h-3.5 w-3.5' />
           </button>
         </EditorBubbleItem>
         {/* Color Options */}
-        <div className="w-px h-4 bg-zinc-800 mx-1" />
-        <EditorBubbleItem onSelect={(editor) => editor.chain().focus().setColor("#06b6d4").run()}>
-          <button type="button" className="p-1.5 rounded-lg cursor-pointer hover:bg-zinc-855 transition" title="Cyan">
-            <div className="w-3 h-3 rounded-full bg-cyan-500" />
+        <div className='mx-1 h-4 w-px bg-zinc-800' />
+        <EditorBubbleItem
+          onSelect={(editor) =>
+            editor.chain().focus().setColor("#06b6d4").run()
+          }
+        >
+          <button
+            type='button'
+            className='hover:bg-zinc-855 cursor-pointer rounded-lg p-1.5 transition'
+            title='Cyan'
+          >
+            <div className='h-3 w-3 rounded-full bg-cyan-500' />
           </button>
         </EditorBubbleItem>
-        <EditorBubbleItem onSelect={(editor) => editor.chain().focus().setColor("#a855f7").run()}>
-          <button type="button" className="p-1.5 rounded-lg cursor-pointer hover:bg-zinc-855 transition" title="Purple">
-            <div className="w-3 h-3 rounded-full bg-purple-500" />
+        <EditorBubbleItem
+          onSelect={(editor) =>
+            editor.chain().focus().setColor("#a855f7").run()
+          }
+        >
+          <button
+            type='button'
+            className='hover:bg-zinc-855 cursor-pointer rounded-lg p-1.5 transition'
+            title='Purple'
+          >
+            <div className='h-3 w-3 rounded-full bg-purple-500' />
           </button>
         </EditorBubbleItem>
-        <EditorBubbleItem onSelect={(editor) => editor.chain().focus().unsetColor().run()}>
-          <button type="button" className="p-1.5 rounded-lg cursor-pointer hover:bg-zinc-855 transition text-zinc-400 hover:text-white" title="Clear Color">
-            <X className="h-3.5 w-3.5" />
+        <EditorBubbleItem
+          onSelect={(editor) => editor.chain().focus().unsetColor().run()}
+        >
+          <button
+            type='button'
+            className='hover:bg-zinc-855 cursor-pointer rounded-lg p-1.5 text-zinc-400 transition hover:text-white'
+            title='Clear Color'
+          >
+            <X className='h-3.5 w-3.5' />
           </button>
         </EditorBubbleItem>
       </EditorBubble>
 
       {/* Slash commands menu */}
-      <EditorCommand className="z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-xl border border-zinc-800 bg-zinc-950 px-1 py-1 shadow-2xl transition-all">
-        <EditorCommandEmpty className="px-3 py-2 text-xs text-zinc-500">
+      <EditorCommand className='z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-xl border border-zinc-800 bg-zinc-950 px-1 py-1 shadow-2xl transition-all'>
+        <EditorCommandEmpty className='px-3 py-2 text-xs text-zinc-500'>
           No results found
         </EditorCommandEmpty>
         <EditorCommandList>
@@ -352,15 +388,19 @@ function EditorInner({ value, onChange }: NotionEditorProps) {
             <EditorCommandItem
               value={item.title}
               onCommand={(val) => item.command?.(val)}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-zinc-300 hover:bg-zinc-900 aria-selected:bg-zinc-900 cursor-pointer transition"
+              className='flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-zinc-300 transition hover:bg-zinc-900 aria-selected:bg-zinc-900'
               key={item.title}
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-850 bg-zinc-900 text-zinc-400">
+              <div className='border-zinc-850 flex h-8 w-8 items-center justify-center rounded-lg border bg-zinc-900 text-zinc-400'>
                 {item.icon}
               </div>
               <div>
-                <p className="font-semibold text-xs text-zinc-200">{item.title}</p>
-                <p className="text-[10px] text-zinc-500 mt-0.5">{item.description}</p>
+                <p className='text-xs font-semibold text-zinc-200'>
+                  {item.title}
+                </p>
+                <p className='mt-0.5 text-[10px] text-zinc-500'>
+                  {item.description}
+                </p>
               </div>
             </EditorCommandItem>
           ))}
@@ -385,7 +425,8 @@ export function NotionEditor({ value, onChange }: NotionEditorProps) {
       },
     }),
     Placeholder.configure({
-      placeholder: "Press '/' for commands, drag and drop images, or highlight text for formatting...",
+      placeholder:
+        "Press '/' for commands, drag and drop images, or highlight text for formatting...",
     }),
     Command.configure({
       suggestion: {
@@ -410,14 +451,15 @@ export function NotionEditor({ value, onChange }: NotionEditorProps) {
       class:
         "prose prose-invert max-w-none min-h-[380px] outline-none text-zinc-300 leading-relaxed p-6 focus:outline-none",
     },
-    handlePaste: (view: any, event: any) => handleImagePaste(view, event, uploadFn),
+    handlePaste: (view: any, event: any) =>
+      handleImagePaste(view, event, uploadFn),
     handleDrop: (view: any, event: any, _slice: any, moved: any) =>
       handleImageDrop(view, event, moved, uploadFn),
     handleKeyDown: (view: any, event: any) => handleCommandNavigation(event),
   };
 
   return (
-    <div className="relative overflow-hidden flex flex-col group transition">
+    <div className='group relative flex flex-col overflow-hidden transition'>
       <EditorRoot>
         <EditorContent
           extensions={extensions as any}

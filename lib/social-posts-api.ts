@@ -40,7 +40,10 @@ export type SocialPostTarget = {
   integrationId?: string;
 };
 
-export type MultiSocialPostInput = Omit<SocialPostInput, "platform" | "integrationId"> & {
+export type MultiSocialPostInput = Omit<
+  SocialPostInput,
+  "platform" | "integrationId"
+> & {
   targets: SocialPostTarget[];
 };
 

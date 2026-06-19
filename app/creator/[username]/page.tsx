@@ -43,9 +43,9 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { CommunityContent } from "@/types/inspire";
+import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { creatorApi } from "@/utils/inspire-api";
-import Loading from "@/utils/Loading";
 import {
   ArrowLeft,
   Camera,
@@ -490,7 +490,7 @@ export default function CreatorProfilePage() {
         <LandingNavbar />
 
         <div className='flex h-74 items-center justify-center'>
-          <Loading/>
+          <Loading />
         </div>
 
         {/* Profile Header Card - Desktop */}

@@ -38,10 +38,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Dialog,
-  DialogContent,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerContent,
@@ -51,8 +48,8 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
-import { useIsMobile } from "@/components/ui/use-mobile";
 import { PointerHighlight } from "@/components/ui/pointer-highlight";
+import { useIsMobile } from "@/components/ui/use-mobile";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
@@ -103,7 +100,15 @@ import {
   Youtube,
   Zap,
 } from "lucide-react";
-import { Activity, Calendar, Layers, Megaphone, GripVertical, Plus, Trash2 } from "lucide-react";
+import {
+  Activity,
+  Calendar,
+  GripVertical,
+  Layers,
+  Megaphone,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -405,27 +410,33 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
   );
 };
 
-const EnterpriseAutoDialog = ({ isOpen, onOpenChange }: { isOpen: boolean, onOpenChange: (open: boolean) => void }) => {
+const EnterpriseAutoDialog = ({
+  isOpen,
+  onOpenChange,
+}: {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+}) => {
   const isMobile = useIsMobile();
   const router = useRouter();
 
   const content = (
-    <div className='flex flex-col md:flex-row group relative overflow-hidden bg-black/[0.02] dark:bg-white/[0.04] ring-1 ring-black/5 dark:ring-white/10 rounded-xs w-full'>
+    <div className='group relative flex w-full flex-col overflow-hidden rounded-xs bg-black/[0.02] ring-1 ring-black/5 md:flex-row dark:bg-white/[0.04] dark:ring-white/10'>
       <GradientFrame />
-      
+
       {/* Image Container */}
-      <div className='w-full md:w-1/2 relative min-h-[220px] md:min-h-full flex-shrink-0'>
-        <img 
-          src="/genit-auto.png" 
-          alt="Enterprise AI Auto Mode" 
-    className="absolute inset-0 w-full h-full object-cover object-[center_12%] lg:object-cover  lg:object-[center_80%]"
+      <div className='relative min-h-[220px] w-full flex-shrink-0 md:min-h-full md:w-1/2'>
+        <img
+          src='/genit-auto.png'
+          alt='Enterprise AI Auto Mode'
+          className='absolute inset-0 h-full w-full object-cover object-[center_12%] lg:object-cover lg:object-[center_80%]'
         />
-        <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-l from-white/30 to-transparent dark:from-black/30 z-0"></div>
+        <div className='absolute inset-0 z-0 bg-gradient-to-t from-white/30 to-transparent md:bg-gradient-to-l dark:from-black/30'></div>
       </div>
 
       {/* Content Container */}
-      <div className='w-full md:w-1/2 p-5 md:p-8 relative z-10 flex flex-col justify-center bg-white/70 dark:bg-black/70 backdrop-blur-md md:bg-transparent md:dark:bg-transparent md:backdrop-blur-none'>
-        <div className='rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-none dark:ring-white/10 relative z-10'>
+      <div className='relative z-10 flex w-full flex-col justify-center bg-white/70 p-5 backdrop-blur-md md:w-1/2 md:bg-transparent md:p-8 md:backdrop-blur-none dark:bg-black/70 md:dark:bg-transparent'>
+        <div className='relative z-10 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-none dark:ring-white/10'>
           <div className='flex items-center justify-between'>
             <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
               <Workflow className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
@@ -434,21 +445,29 @@ const EnterpriseAutoDialog = ({ isOpen, onOpenChange }: { isOpen: boolean, onOpe
           </div>
 
           <div className='mt-3 grid grid-cols-4 gap-2 md:gap-3'>
-            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 md:p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 ring-1 ring-black/5 md:p-3 dark:bg-white/[0.04] dark:ring-white/10'>
               <MessageSquare className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
-              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>Tickets</span>
+              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>
+                Tickets
+              </span>
             </div>
-            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 md:p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 ring-1 ring-black/5 md:p-3 dark:bg-white/[0.04] dark:ring-white/10'>
               <Megaphone className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
-              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>Ads</span>
+              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>
+                Ads
+              </span>
             </div>
-            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 md:p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 ring-1 ring-black/5 md:p-3 dark:bg-white/[0.04] dark:ring-white/10'>
               <Layers className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
-              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>Publish</span>
+              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>
+                Publish
+              </span>
             </div>
-            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 md:p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 ring-1 ring-black/5 md:p-3 dark:bg-white/[0.04] dark:ring-white/10'>
               <Calendar className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
-              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>Schedule</span>
+              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>
+                Schedule
+              </span>
             </div>
           </div>
 
@@ -458,16 +477,29 @@ const EnterpriseAutoDialog = ({ isOpen, onOpenChange }: { isOpen: boolean, onOpe
           </div>
         </div>
 
-        <h3 className='text-foreground mt-6 text-xl font-semibold tracking-tight md:text-2xl dark:text-white relative z-10'>
+        <h3 className='text-foreground relative z-10 mt-6 text-xl font-semibold tracking-tight md:text-2xl dark:text-white'>
           Upgrade to Enterprise
         </h3>
-        <p className='text-muted-foreground mt-2 text-sm dark:text-white/70 relative z-10 font-normal'>
-          Auto mode is exclusive to the Enterprise plan. Let our AI handle content creation, scheduling, ad sponsoring, and ticket resolution entirely on its own.
+        <p className='text-muted-foreground relative z-10 mt-2 text-sm font-normal dark:text-white/70'>
+          Auto mode is exclusive to the Enterprise plan. Let our AI handle
+          content creation, scheduling, ad sponsoring, and ticket resolution
+          entirely on its own.
         </p>
 
-        <div className="mt-8 flex justify-end gap-3 relative z-10">
-          <Button variant="outline" className="border-none bg-transparent text-sm" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button className="rounded-sm bg-indigo-600 text-white hover:bg-indigo-700 text-sm" onClick={() => router.push('/pricing')}>Upgrade Now</Button>
+        <div className='relative z-10 mt-8 flex justify-end gap-3'>
+          <Button
+            variant='outline'
+            className='border-none bg-transparent text-sm'
+            onClick={() => onOpenChange(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            className='rounded-sm bg-indigo-600 text-sm text-white hover:bg-indigo-700'
+            onClick={() => router.push("/pricing")}
+          >
+            Upgrade Now
+          </Button>
         </div>
       </div>
     </div>
@@ -476,7 +508,7 @@ const EnterpriseAutoDialog = ({ isOpen, onOpenChange }: { isOpen: boolean, onOpe
   if (isMobile) {
     return (
       <Drawer open={isOpen} onOpenChange={onOpenChange}>
-        <DrawerContent className="p-0 border-none bg-transparent shadow-none">
+        <DrawerContent className='border-none bg-transparent p-0 shadow-none'>
           {content}
         </DrawerContent>
       </Drawer>
@@ -485,7 +517,7 @@ const EnterpriseAutoDialog = ({ isOpen, onOpenChange }: { isOpen: boolean, onOpe
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="p-0 border-none bg-transparent shadow-none sm:max-w-3xl md:max-w-4xl [&>button]:hidden">
+      <DialogContent className='border-none bg-transparent p-0 shadow-none sm:max-w-3xl md:max-w-4xl [&>button]:hidden'>
         {content}
       </DialogContent>
     </Dialog>
@@ -1172,7 +1204,7 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-            Marketing without
+              Marketing without
               <PointerHighlight
                 rectangleClassName='
       bg-blue-100 dark:bg-blue-900
@@ -1186,7 +1218,6 @@ export function IdeaSection() {
               >
                 <span className='relative z-10 px-1 sm:px-2'>Humans</span>
               </PointerHighlight>
-
               {/* <span>Humans</span> */}
             </motion.h1>
 
@@ -1352,45 +1383,61 @@ export function IdeaSection() {
                         </div>
 
                         <div className='flex items-center gap-3'>
-                          <div className="flex bg-zinc-100 dark:bg-zinc-800 rounded-full p-0.5">
+                          <div className='flex rounded-full bg-zinc-100 p-0.5 dark:bg-zinc-800'>
                             <button
-                              type="button"
+                              type='button'
                               onClick={async () => {
-                                setMode('chat');
+                                setMode("chat");
                                 if (user?.currentOrganization?._id) {
                                   try {
-                                    await updateOrganization(user.currentOrganization._id, { autoModeEnabled: false });
+                                    await updateOrganization(
+                                      user.currentOrganization._id,
+                                      { autoModeEnabled: false }
+                                    );
                                   } catch (err) {
-                                    console.error("Failed to disable auto mode", err);
+                                    console.error(
+                                      "Failed to disable auto mode",
+                                      err
+                                    );
                                   }
                                 }
                               }}
                               className={cn(
-                                "px-2.5 py-0.5 text-[10px] font-medium rounded-full transition-colors",
-                                mode === 'chat' ? "bg-white dark:bg-zinc-600 text-black dark:text-white shadow-sm" : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                                "rounded-full px-2.5 py-0.5 text-[10px] font-medium transition-colors",
+                                mode === "chat"
+                                  ? "bg-white text-black shadow-sm dark:bg-zinc-600 dark:text-white"
+                                  : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                               )}
                             >
                               Chat
                             </button>
                             <button
-                              type="button"
+                              type='button'
                               onClick={async () => {
                                 if (String(user?.userPlan) !== "Enterprise") {
                                   setIsEnterpriseDialogOpen(true);
                                   return;
                                 }
-                                setMode('auto');
+                                setMode("auto");
                                 if (user?.currentOrganization?._id) {
                                   try {
-                                    await updateOrganization(user.currentOrganization._id, { autoModeEnabled: true });
+                                    await updateOrganization(
+                                      user.currentOrganization._id,
+                                      { autoModeEnabled: true }
+                                    );
                                   } catch (err) {
-                                    console.error("Failed to enable auto mode", err);
+                                    console.error(
+                                      "Failed to enable auto mode",
+                                      err
+                                    );
                                   }
                                 }
                               }}
                               className={cn(
-                                "px-2.5 py-0.5 text-[10px] font-medium rounded-full transition-colors",
-                                mode === 'auto' ? "bg-white dark:bg-zinc-600 text-black dark:text-white shadow-sm" : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                                "rounded-full px-2.5 py-0.5 text-[10px] font-medium transition-colors",
+                                mode === "auto"
+                                  ? "bg-white text-black shadow-sm dark:bg-zinc-600 dark:text-white"
+                                  : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                               )}
                             >
                               Auto
@@ -1467,7 +1514,7 @@ export function IdeaSection() {
                           value={isGenerating ? "" : inputValue}
                           onChange={handleInputChange}
                           onKeyDown={handleKeyPress}
-                          className='placeholder:text-muted-foreground/60 scrollbar-none flex max-h-[300px] min-h-[95px] w-full flex-1 resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
+                          className='placeholder:text-muted-foreground/60 flex max-h-[300px] min-h-[95px] w-full flex-1 resize-none scrollbar-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                           placeholder={
                             isGenerating
                               ? ""
@@ -1550,7 +1597,7 @@ export function IdeaSection() {
                         </div>
 
                         <button
-                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground hover:bg-indigo-600 hover:bg-indigo-700/5 relative box-border hidden h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5'
+                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground relative box-border hidden h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out hover:bg-indigo-600 hover:bg-indigo-700/5 focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5'
                           type='button'
                           aria-label='Settings'
                           onClick={() => {
@@ -1565,7 +1612,7 @@ export function IdeaSection() {
                         </button>
                         <button
                           className={cn(
-                            "focus-visible:ring-ring relative box-border inline-flex h-h-fit p-2 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent p-0.5 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+                            "focus-visible:ring-ring h-h-fit relative box-border inline-flex min-w-fit items-center justify-center gap-2 rounded-full bg-transparent p-0.5 p-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
                             isBrandSettingsOpen
                               ? "text-primary bg-indigo-600 hover:bg-indigo-700/10"
                               : "text-muted-foreground hover:text-foreground hover:bg-indigo-600 hover:bg-indigo-700/5 dark:hover:bg-white/5"
@@ -1599,55 +1646,43 @@ export function IdeaSection() {
                         >
                           <Mic className='size-4 shrink-0' />
                         </button>
-                       <button
-  type="submit"
-  disabled={isSubmitDisabled}
-  className="
-    relative
-    cursor-pointer
-    rounded-[10px]
-    bg-[linear-gradient(to_top,#292929,#555555,#292929)]
-    p-[2px]
-    shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)]
-    transition-all
-    duration-150
-    active:scale-95
-    disabled:opacity-50
-    disabled:cursor-not-allowed
-  "
->
-  {/* Border effects behind content */}
-  <div className="absolute inset-0 overflow-hidden rounded-[10px]">
-    <BorderBeam
-      duration={6}
-      size={40}
-      className="from-transparent via-red-500 to-transparent"
-    />
-    <BorderBeam
-      duration={6}
-      delay={10}
-      size={40}
-      borderWidth={2}
-      className="from-transparent via-blue-500 to-transparent"
-    />
-  </div>
+                        <button
+                          type='submit'
+                          disabled={isSubmitDisabled}
+                          className='relative cursor-pointer rounded-[10px] bg-[linear-gradient(to_top,#292929,#555555,#292929)] p-[2px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)] transition-all duration-150 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50'
+                        >
+                          {/* Border effects behind content */}
+                          <div className='absolute inset-0 overflow-hidden rounded-[10px]'>
+                            <BorderBeam
+                              duration={6}
+                              size={40}
+                              className='from-transparent via-red-500 to-transparent'
+                            />
+                            <BorderBeam
+                              duration={6}
+                              delay={10}
+                              size={40}
+                              borderWidth={2}
+                              className='from-transparent via-blue-500 to-transparent'
+                            />
+                          </div>
 
-  {/* Button content */}
-  <div className="relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]">
-    {isGenerating || isSubmitting ? (
-      <Loader2 className="h-4 w-4 animate-spin text-white" />
-    ) : (
-      <svg
-        className="h-4 w-4 text-white"
-        viewBox="0 0 512 512"
-        fill="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05" />
-      </svg>
-    )}
-  </div>
-</button>
+                          {/* Button content */}
+                          <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
+                            {isGenerating || isSubmitting ? (
+                              <Loader2 className='h-4 w-4 animate-spin text-white' />
+                            ) : (
+                              <svg
+                                className='h-4 w-4 text-white'
+                                viewBox='0 0 512 512'
+                                fill='currentColor'
+                                xmlns='http://www.w3.org/2000/svg'
+                              >
+                                <path d='M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05' />
+                              </svg>
+                            )}
+                          </div>
+                        </button>
                       </div>
                     </div>
                     {!user && (
@@ -2006,15 +2041,13 @@ export function IdeaSection() {
           <div className="absolute top-0 bottom-0 right-0 z-20 w-20 pointer-events-none bg-gradient-to-l from-background to-transparent rounded-r-3xl" />
         </div> */}
 
-       
-
         <section className='relative mt-5 space-y-4 pt-6 pb-10 lg:mt-6'>
           <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
             with over 25+ marketing{" "}
             <Link
               href='/integrations'
               target='_blank'
-              className='text-foreground text-sm font-medium md:text-base underline'
+              className='text-foreground text-sm font-medium underline md:text-base'
             >
               Integrations
             </Link>
@@ -2043,7 +2076,7 @@ export function IdeaSection() {
           </div>
         </section>
 
-         {/* <div className='w-full max-w-4xl min-w-0 px-4 mx-auto mt-8'>
+        {/* <div className='w-full max-w-4xl min-w-0 px-4 mx-auto mt-8'>
           <div className='flex items-center justify-between mb-2'>
             <h2 className='text-sm font-bold text-black lg:ml-4 lg:text-lg dark:text-white'>
               Feature Apps
@@ -2568,7 +2601,10 @@ export function IdeaSection() {
         </DrawerContent>
       </Drawer>
 
-      <EnterpriseAutoDialog isOpen={isEnterpriseDialogOpen} onOpenChange={setIsEnterpriseDialogOpen} />
+      <EnterpriseAutoDialog
+        isOpen={isEnterpriseDialogOpen}
+        onOpenChange={setIsEnterpriseDialogOpen}
+      />
     </div>
   );
 }

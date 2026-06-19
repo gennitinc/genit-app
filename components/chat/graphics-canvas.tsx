@@ -2,6 +2,7 @@
 
 import { Button } from "../ui/button";
 import { useProjectDesign } from "@/context/DesignProject";
+import { cn } from "@/lib/utils";
 import { DesignNode } from "@/nodes/design-node";
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
@@ -13,7 +14,6 @@ import {
   Plus,
   View,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import ReactFlow, {
   Background,
   Controls,
@@ -26,7 +26,6 @@ import ReactFlow, {
   useNodesState,
   useReactFlow,
 } from "reactflow";
-
 import "reactflow/dist/style.css";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -40,15 +39,24 @@ interface GraphicsCanvasProps {
   onToggleFullscreen?: () => void;
 }
 
-export const GraphicsCanvas = ({ isFullscreen, onToggleFullscreen }: GraphicsCanvasProps) => {
+export const GraphicsCanvas = ({
+  isFullscreen,
+  onToggleFullscreen,
+}: GraphicsCanvasProps) => {
   return (
     <ReactFlowProvider>
-      <GraphicsCanvasContent isFullscreen={isFullscreen} onToggleFullscreen={onToggleFullscreen} />
+      <GraphicsCanvasContent
+        isFullscreen={isFullscreen}
+        onToggleFullscreen={onToggleFullscreen}
+      />
     </ReactFlowProvider>
   );
 };
 
-const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCanvasProps) => {
+const GraphicsCanvasContent = ({
+  isFullscreen,
+  onToggleFullscreen,
+}: GraphicsCanvasProps) => {
   const {
     project,
     messages,
@@ -149,7 +157,11 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
             },
             data: {
               url: live.filePath,
-              type: live.name?.toLowerCase().includes("video") || live.filePath?.toLowerCase().endsWith(".mp4") ? "video/mp4" : "image/png",
+              type:
+                live.name?.toLowerCase().includes("video") ||
+                live.filePath?.toLowerCase().endsWith(".mp4")
+                  ? "video/mp4"
+                  : "image/png",
               title: `Live - ${live.name.replace(/^(genit-design-|image|variant)-/i, "")}`,
               instruction: live.prompt || "Generating...",
               status: "public",
@@ -179,18 +191,21 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
     if (focusedGenerationId && nodes.length > 0) {
       const nodeId = `node-${focusedGenerationId}`;
       let targetNode = nodes.find((n) => n.id === nodeId);
-      
+
       // Fallback: search by matching the file URL or matching the ID directly
       if (!targetNode) {
         targetNode = nodes.find(
           (n) =>
-            n.data?.url === focusedGenerationId ||
-            n.id === focusedGenerationId
+            n.data?.url === focusedGenerationId || n.id === focusedGenerationId
         );
       }
 
       if (targetNode) {
-        fitView({ nodes: [{ id: targetNode.id }], duration: 800, padding: 0.5 });
+        fitView({
+          nodes: [{ id: targetNode.id }],
+          duration: 800,
+          padding: 0.5,
+        });
       }
     }
   }, [focusedGenerationId, nodes, fitView]);
@@ -210,19 +225,19 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
   return (
     <div className='bg-background relative flex h-full w-full flex-col overflow-hidden'>
       {/* ── Header with Title & Toolbar (side-by-side) ──────────────── */}
-      <div className='flex items-center justify-between px-4 py-1 border-b border-border/80 bg-background/50 backdrop-blur-sm shrink-0 z-10'>
-       <div className="flex items-center gap-2 text-foreground">
-  <div className="flex items-center space-x-1.5 px-2">
-    <span className="w-2 h-2 rounded-full bg-red-400" />
-    <span className="w-2 h-2 rounded-full bg-yellow-400" />
-    <span className="w-2 h-2 rounded-full bg-green-400" />
-  </div>
+      <div className='border-border/80 bg-background/50 z-10 flex shrink-0 items-center justify-between border-b px-4 py-1 backdrop-blur-sm'>
+        <div className='text-foreground flex items-center gap-2'>
+          <div className='flex items-center space-x-1.5 px-2'>
+            <span className='h-2 w-2 rounded-full bg-red-400' />
+            <span className='h-2 w-2 rounded-full bg-yellow-400' />
+            <span className='h-2 w-2 rounded-full bg-green-400' />
+          </div>
 
-  <span className="text-sm font-semibold">Design Studio</span>
-</div>
+          <span className='text-sm font-semibold'>Design Studio</span>
+        </div>
 
         {/* Toolbar items at the far right */}
-        <div className='flex items-center p-1 space-x-1 border rounded-md bg-background/80 border-border backdrop-blur-sm shadow-sm'>
+        <div className='bg-background/80 border-border flex items-center space-x-1 rounded-md border p-1 shadow-sm backdrop-blur-sm'>
           {/* Fullscreen Toggle */}
           {onToggleFullscreen && (
             <>
@@ -231,14 +246,18 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
                 size='sm'
                 onClick={onToggleFullscreen}
                 className={cn(
-                  'h-7 w-7 p-0 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-muted-foreground hover:text-foreground',
-                  isFullscreen && 'bg-muted text-foreground'
+                  "text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800",
+                  isFullscreen && "bg-muted text-foreground"
                 )}
-                title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+                title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
               >
-                {isFullscreen ? <Minimize2 className='h-3.5 w-3.5' /> : <Maximize2 className='h-3.5 w-3.5' />}
+                {isFullscreen ? (
+                  <Minimize2 className='h-3.5 w-3.5' />
+                ) : (
+                  <Maximize2 className='h-3.5 w-3.5' />
+                )}
               </Button>
-              <div className='w-px h-5 bg-border mx-1' />
+              <div className='bg-border mx-1 h-5 w-px' />
             </>
           )}
 
@@ -246,8 +265,10 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
           <Button
             variant='ghost'
             size='sm'
-            onClick={() => reactFlowInstance?.fitView({ duration: 400, padding: 0.2 })}
-            className='h-7 w-7 p-0 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-muted-foreground hover:text-foreground'
+            onClick={() =>
+              reactFlowInstance?.fitView({ duration: 400, padding: 0.2 })
+            }
+            className='text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             title='Fit View'
           >
             <View className='h-3.5 w-3.5' />
@@ -258,7 +279,7 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
             variant='ghost'
             size='sm'
             onClick={() => reactFlowInstance?.zoomIn({ duration: 200 })}
-            className='h-7 w-7 p-0 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-muted-foreground hover:text-foreground'
+            className='text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             title='Zoom In'
           >
             <Plus className='h-3.5 w-3.5' />
@@ -269,15 +290,15 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
             variant='ghost'
             size='sm'
             onClick={() => reactFlowInstance?.zoomOut({ duration: 200 })}
-            className='h-7 w-7 p-0 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-muted-foreground hover:text-foreground'
+            className='text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             title='Zoom Out'
           >
             <Minus className='h-3.5 w-3.5' />
           </Button>
         </div>
       </div>
-     
-      <div className='relative flex-1 min-h-0 w-full'>
+
+      <div className='relative min-h-0 w-full flex-1'>
         <ReactFlow
           proOptions={{ hideAttribution: true }}
           nodes={nodes}
@@ -292,50 +313,50 @@ const GraphicsCanvasContent = ({ isFullscreen, onToggleFullscreen }: GraphicsCan
           minZoom={0.1}
           className='h-full w-full bg-transparent'
         >
-        <Background
-          gap={25}
-          size={1}
-          // className='opacity-[0.4] dark:opacity-[0.15]'
-          color='currentColor'
-        />
+          <Background
+            gap={25}
+            size={1}
+            // className='opacity-[0.4] dark:opacity-[0.15]'
+            color='currentColor'
+          />
 
-        {nodes.length === 0 &&  (
-          <div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
-            <div className='text-foreground space-y-2 text-center opacity-20 select-none'>
-              <LayoutGrid className='mx-auto h-12 w-12 text-neutral-200 dark:text-neutral-900' />
-              <p className='text-sm font-medium tracking-[0.2em] text-neutral-200 uppercase dark:text-neutral-900'>
-                genit Workspace
-              </p>
-              <p className='text-xs text-neutral-200 dark:text-neutral-900'>
-                Project files will appear here if any
-              </p>
-            </div>
-          </div>
-        )}
-        {/* Loading State Overlay */}
-      </ReactFlow>
-      {(isGenerating || isGeneratingImage) && (
-        <div className='absolute inset-0 z-50 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl dark:bg-black/10'>
-          {/* subtle light gradient for glass depth */}
-          <div className='pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-white/10 to-transparent' />
-
-          <div className='flex h-full w-full items-center justify-center'>
-            <div className='flex flex-col items-center gap-4'>
-              <LoadingFileLoader />
-
-              <div className='flex flex-col items-center gap-1.5 px-2'>
-                <p className='text-[11px] font-bold tracking-[0.2em] text-black dark:text-white/80 uppercase '>
-                  Agent Thinking
+          {nodes.length === 0 && (
+            <div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
+              <div className='text-foreground space-y-2 text-center opacity-20 select-none'>
+                <LayoutGrid className='mx-auto h-12 w-12 text-neutral-200 dark:text-neutral-900' />
+                <p className='text-sm font-medium tracking-[0.2em] text-neutral-200 uppercase dark:text-neutral-900'>
+                  genit Workspace
                 </p>
-
-                <p className='text-center text-[9px] leading-relaxed text-black dark:text-white/60 italic'>
-                  {aiStatus || "Crafting unique design concepts..."}
+                <p className='text-xs text-neutral-200 dark:text-neutral-900'>
+                  Project files will appear here if any
                 </p>
               </div>
             </div>
+          )}
+          {/* Loading State Overlay */}
+        </ReactFlow>
+        {(isGenerating || isGeneratingImage) && (
+          <div className='absolute inset-0 z-50 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl dark:bg-black/10'>
+            {/* subtle light gradient for glass depth */}
+            <div className='pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-white/10 to-transparent' />
+
+            <div className='flex h-full w-full items-center justify-center'>
+              <div className='flex flex-col items-center gap-4'>
+                <LoadingFileLoader />
+
+                <div className='flex flex-col items-center gap-1.5 px-2'>
+                  <p className='text-[11px] font-bold tracking-[0.2em] text-black uppercase dark:text-white/80'>
+                    Agent Thinking
+                  </p>
+
+                  <p className='text-center text-[9px] leading-relaxed text-black italic dark:text-white/60'>
+                    {aiStatus || "Crafting unique design concepts..."}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
       </div>
     </div>
   );

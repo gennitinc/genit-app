@@ -1,19 +1,19 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { 
-  fetchConversations, 
-  fetchMessages, 
-  sendMessage, 
-  markConversationAsRead, 
-  markAllConversationsAsRead,
-  updateConversationStatus,
-  deleteConversation,
-  retryInboxMessage,
+import {
   type InboxAttachment,
-  type InboxFilters,
   type InboxConversation,
+  type InboxFilters,
+  deleteConversation,
+  fetchConversations,
+  fetchMessages,
+  markAllConversationsAsRead,
+  markConversationAsRead,
+  retryInboxMessage,
+  sendMessage,
+  updateConversationStatus,
 } from "@/lib/inbox-api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function inboxConversationsQueryKey(filters: InboxFilters = {}) {
   return ["inbox_conversations", filters] as const;
@@ -44,16 +44,27 @@ export function useInboxMessages(conversationId?: string) {
 
 export function useSendMessage() {
   const qc = useQueryClient();
-  
+
   return useMutation({
-    mutationFn: ({ conversationId, content, attachments = [] }: { conversationId: string, content: string, attachments?: InboxAttachment[] }) =>
-      sendMessage(conversationId, content, attachments),
+    mutationFn: ({
+      conversationId,
+      content,
+      attachments = [],
+    }: {
+      conversationId: string;
+      content: string;
+      attachments?: InboxAttachment[];
+    }) => sendMessage(conversationId, content, attachments),
     onSuccess: (data, variables) => {
-      qc.invalidateQueries({ queryKey: inboxMessagesQueryKey(variables.conversationId) });
+      qc.invalidateQueries({
+        queryKey: inboxMessagesQueryKey(variables.conversationId),
+      });
       qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
     },
     onSettled: (_data, _error, variables) => {
-      qc.invalidateQueries({ queryKey: inboxMessagesQueryKey(variables.conversationId) });
+      qc.invalidateQueries({
+        queryKey: inboxMessagesQueryKey(variables.conversationId),
+      });
       qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
     },
   });
@@ -62,9 +73,16 @@ export function useSendMessage() {
 export function useRetryInboxMessage() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ messageId }: { messageId: string; conversationId: string }) => retryInboxMessage(messageId),
+    mutationFn: ({
+      messageId,
+    }: {
+      messageId: string;
+      conversationId: string;
+    }) => retryInboxMessage(messageId),
     onSettled: (_data, _error, variables) => {
-      qc.invalidateQueries({ queryKey: inboxMessagesQueryKey(variables.conversationId) });
+      qc.invalidateQueries({
+        queryKey: inboxMessagesQueryKey(variables.conversationId),
+      });
       qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
     },
   });
@@ -74,11 +92,12 @@ export function useMarkConversationAsRead() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: (conversationId: string) => markConversationAsRead(conversationId),
+    mutationFn: (conversationId: string) =>
+      markConversationAsRead(conversationId),
     onSuccess: (_, conversationId) => {
       qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
       qc.invalidateQueries({ queryKey: inboxMessagesQueryKey(conversationId) });
-    }
+    },
   });
 }
 
@@ -89,16 +108,22 @@ export function useMarkAllConversationsAsRead() {
     mutationFn: markAllConversationsAsRead,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
-    }
+    },
   });
 }
 
 export function useUpdateConversationStatus() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ conversationId, status }: { conversationId: string; status: InboxConversation["status"] }) =>
-      updateConversationStatus(conversationId, status),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["inbox_conversations"] }),
+    mutationFn: ({
+      conversationId,
+      status,
+    }: {
+      conversationId: string;
+      status: InboxConversation["status"];
+    }) => updateConversationStatus(conversationId, status),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] }),
   });
 }
 

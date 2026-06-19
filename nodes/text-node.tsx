@@ -145,7 +145,7 @@ export const TextNode = memo(
                     }
                   }}
                   disabled={isAnalyzing}
-                  className='borber-primary/20 bg-indigo-600 hover:bg-indigo-700/5 text-primary h-7 gap-1 px-2 text-[10px]'
+                  className='borber-primary/20 text-primary h-7 gap-1 bg-indigo-600 px-2 text-[10px] hover:bg-indigo-700/5'
                 >
                   {isAnalyzing ? (
                     <Loader2 className='h-3 w-3 animate-spin' />
@@ -185,7 +185,9 @@ export const TextNode = memo(
                             }))
                           }
                           className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                            editData.hasLabel ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
+                            editData.hasLabel
+                              ? "bg-indigo-600 hover:bg-indigo-700"
+                              : "bg-muted"
                           }`}
                         >
                           <span

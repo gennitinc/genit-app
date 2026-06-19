@@ -6,14 +6,29 @@ import {
   WebPreviewNavigation,
   WebPreviewUrl,
 } from "../ai-elements/web-preview";
-import { GraphicsCanvas } from "./graphics-canvas";
-import genittWorkflow from "../workflow";
 import AutomationWorkflow from "../automation";
+import genittWorkflow from "../workflow";
+import { GraphicsCanvas } from "./graphics-canvas";
 import { useProjectDesign } from "@/context/DesignProject";
-import { Globe, Image as ImageIcon, Layout, Loader2, Workflow, Settings, Maximize2, Minimize2 } from "lucide-react";
+import {
+  Globe,
+  Image as ImageIcon,
+  Layout,
+  Loader2,
+  Maximize2,
+  Minimize2,
+  Settings,
+  Workflow,
+} from "lucide-react";
 import React from "react";
 
-export const PreviewPanel = ({ isFullscreen, onToggleFullscreen }: { isFullscreen?: boolean; onToggleFullscreen?: () => void }) => {
+export const PreviewPanel = ({
+  isFullscreen,
+  onToggleFullscreen,
+}: {
+  isFullscreen?: boolean;
+  onToggleFullscreen?: () => void;
+}) => {
   const { project } = useProjectDesign();
   const isAutomation = project?.category === "automation";
   const isGraphics =
@@ -32,21 +47,34 @@ export const PreviewPanel = ({ isFullscreen, onToggleFullscreen }: { isFullscree
 
   return (
     <>
-      <PreviewPanelContent isFullscreen={isFullscreen} onToggleFullscreen={onToggleFullscreen} />
+      <PreviewPanelContent
+        isFullscreen={isFullscreen}
+        onToggleFullscreen={onToggleFullscreen}
+      />
       {onToggleFullscreen && !isAutomation && !isGraphics && (
         <button
           onClick={onToggleFullscreen}
-          className="absolute top-4 right-4 z-50 flex h-8 w-8 items-center justify-center rounded-md border border-border/50 bg-background/80 text-foreground shadow-sm backdrop-blur hover:bg-accent"
+          className='border-border/50 bg-background/80 text-foreground hover:bg-accent absolute top-4 right-4 z-50 flex h-8 w-8 items-center justify-center rounded-md border shadow-sm backdrop-blur'
           title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
         >
-          {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+          {isFullscreen ? (
+            <Minimize2 className='h-4 w-4' />
+          ) : (
+            <Maximize2 className='h-4 w-4' />
+          )}
         </button>
       )}
     </>
   );
 };
 
-const PreviewPanelContent = ({ isFullscreen, onToggleFullscreen }: { isFullscreen?: boolean; onToggleFullscreen?: () => void }) => {
+const PreviewPanelContent = ({
+  isFullscreen,
+  onToggleFullscreen,
+}: {
+  isFullscreen?: boolean;
+  onToggleFullscreen?: () => void;
+}) => {
   const { project, isLoadingProject } = useProjectDesign();
 
   React.useEffect(() => {
@@ -98,12 +126,16 @@ const PreviewPanelContent = ({ isFullscreen, onToggleFullscreen }: { isFullscree
 
   const isAutomation = project.category === "automation";
 
-
   if (isAutomation) {
     return (
-      <div className='bg-muted/5 flex h-full flex-col border p-0 border-zinc-200 dark:border-zinc-800/50 overflow-hidden rounded-3xl'>
-        <div className='flex-1 min-h-0 relative'>
-          <AutomationWorkflow slug={project._id} embedMode={true} isFullscreen={isFullscreen} onToggleFullscreen={onToggleFullscreen} />
+      <div className='bg-muted/5 flex h-full flex-col overflow-hidden rounded-3xl border border-zinc-200 p-0 dark:border-zinc-800/50'>
+        <div className='relative min-h-0 flex-1'>
+          <AutomationWorkflow
+            slug={project._id}
+            embedMode={true}
+            isFullscreen={isFullscreen}
+            onToggleFullscreen={onToggleFullscreen}
+          />
         </div>
       </div>
     );
@@ -128,9 +160,12 @@ const PreviewPanelContent = ({ isFullscreen, onToggleFullscreen }: { isFullscree
 
   if (isGraphics) {
     return (
-      <div className='bg-muted/5 flex h-full w-full flex-col border p-0 border-zinc-200 dark:border-zinc-800/50 overflow-hidden rounded-3xl'>
-        <div className='flex-1 min-h-0 relative w-full h-full'>
-          <GraphicsCanvas isFullscreen={isFullscreen} onToggleFullscreen={onToggleFullscreen} />
+      <div className='bg-muted/5 flex h-full w-full flex-col overflow-hidden rounded-3xl border border-zinc-200 p-0 dark:border-zinc-800/50'>
+        <div className='relative h-full min-h-0 w-full flex-1'>
+          <GraphicsCanvas
+            isFullscreen={isFullscreen}
+            onToggleFullscreen={onToggleFullscreen}
+          />
         </div>
       </div>
     );
@@ -140,7 +175,7 @@ const PreviewPanelContent = ({ isFullscreen, onToggleFullscreen }: { isFullscree
   return (
     <div className='bg-muted/5 flex h-full flex-col items-center justify-center rounded-3xl border border-zinc-200 py-4 shadow-2xl dark:border-zinc-800/50'>
       <div className='max-w-md space-y-4 text-center'>
-        <div className='bg-indigo-600 hover:bg-indigo-700/10 mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full'>
+        <div className='mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700/10'>
           <ImageIcon className='text-primary h-8 w-8' />
         </div>
         <h3 className='text-xl font-bold'>Interactive Preview Coming Soon</h3>

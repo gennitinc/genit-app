@@ -64,7 +64,10 @@ export const EventCalendar = forwardRef<
   }, [options.events]);
 
   return (
-    <div ref={containerRef} className={`ec-custom-theme ${className || "rounded-2xl"}`} />
+    <div
+      ref={containerRef}
+      className={`ec-custom-theme ${className || "rounded-2xl"}`}
+    />
   );
 });
 

@@ -39,7 +39,12 @@ export function AgentCard({
     >
       <div className='border-border/70 flex items-center gap-2 border-b px-3.5 py-2.5 dark:border-white/10'>
         {icon && (
-          <span className={cn("flex h-4 w-4 items-center justify-center", toneIconClass[tone])}>
+          <span
+            className={cn(
+              "flex h-4 w-4 items-center justify-center",
+              toneIconClass[tone]
+            )}
+          >
             {icon}
           </span>
         )}
@@ -75,8 +80,7 @@ export function AgentButton({
   const base =
     "inline-flex items-center justify-center gap-1.5 rounded-md h-7 px-2.5 text-xs font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40";
   const styles: Record<string, string> = {
-    primary:
-      "bg-foreground text-background hover:bg-foreground/90",
+    primary: "bg-foreground text-background hover:bg-foreground/90",
     secondary:
       "border border-border/70 bg-background text-foreground hover:bg-accent dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]",
     ghost:
@@ -98,7 +102,7 @@ export function AgentInput({
   return (
     <input
       className={cn(
-        "border-border/70 bg-background text-foreground placeholder:text-muted-foreground/70 h-8 w-full rounded-md border px-2.5 text-xs leading-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:outline-none dark:border-white/10 dark:bg-white/[0.03]",
+        "border-border/70 bg-background text-foreground placeholder:text-muted-foreground/70 focus-visible:ring-ring/40 h-8 w-full rounded-md border px-2.5 text-xs leading-none transition-shadow focus-visible:ring-2 focus-visible:outline-none dark:border-white/10 dark:bg-white/[0.03]",
         className
       )}
       {...rest}

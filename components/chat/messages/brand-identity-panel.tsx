@@ -2,15 +2,12 @@
 
 import { BrandOnboardingDialog } from "./brand-onboarding-dialog";
 import { Switch } from "@/components/ui/switch";
-import {
-  Organization,
-  useUserContext,
-} from "@/context/AuthenticatedContext";
+import { Organization, useUserContext } from "@/context/AuthenticatedContext";
+import { ProjectDesignContext } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { Download, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState, useContext } from "react";
-import { ProjectDesignContext } from "@/context/DesignProject";
+import { useContext, useEffect, useMemo, useState } from "react";
 
 const STORAGE_KEY = "genit:brandIdentityEnabled";
 
@@ -43,7 +40,9 @@ export function useBrandIdentityEnabled() {
   const update = (next: boolean) => {
     setEnabled(next);
     localStorage.setItem(STORAGE_KEY, String(next));
-    window.dispatchEvent(new CustomEvent(STORAGE_KEY, { detail: String(next) }));
+    window.dispatchEvent(
+      new CustomEvent(STORAGE_KEY, { detail: String(next) })
+    );
   };
 
   return [enabled, update] as const;
@@ -68,8 +67,12 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
   const projectContext = useContext(ProjectDesignContext);
   const [localEnabled, setLocalEnabled] = useBrandIdentityEnabled();
 
-  const enabled = projectContext ? projectContext.brandIdentityEnabled : localEnabled;
-  const setEnabled = projectContext ? projectContext.setBrandIdentityEnabled : setLocalEnabled;
+  const enabled = projectContext
+    ? projectContext.brandIdentityEnabled
+    : localEnabled;
+  const setEnabled = projectContext
+    ? projectContext.setBrandIdentityEnabled
+    : setLocalEnabled;
 
   const [isImportOpen, setIsImportOpen] = useState(false);
 
@@ -153,7 +156,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
           <button
             type='button'
             onClick={() => setIsImportOpen(true)}
-            className='bg-indigo-600 hover:bg-indigo-700 text-primary-foreground mt-3 inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-opacity hover:opacity-90'
+            className='text-primary-foreground mt-3 inline-flex items-center justify-center gap-1.5 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium transition-opacity hover:bg-indigo-700 hover:opacity-90'
           >
             <Download className='h-3 w-3' />
             Import Brand

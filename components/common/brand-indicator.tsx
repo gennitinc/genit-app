@@ -1,15 +1,15 @@
 "use client";
 
-import { useProjectDesign } from "@/context/DesignProject";
-import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useProjectDesign } from "@/context/DesignProject";
+import { cn } from "@/lib/utils";
 import { Info, Palette, Type } from "lucide-react";
+import { useState } from "react";
 
 export function BrandIndicator({
   className,
@@ -30,18 +30,18 @@ export function BrandIndicator({
       )}
       onClick={onClick}
     >
-      <div className="flex -space-x-2">
+      <div className='flex -space-x-2'>
         {selectedColorScales.map((scale, i) => (
           <div
             key={i}
-            className="h-4 w-4 rounded-full border border-white/20 shadow-sm"
+            className='h-4 w-4 rounded-full border border-white/20 shadow-sm'
             style={{ backgroundColor: scale.base }}
             title={i === 0 ? "Primary Color" : "Secondary Color"}
           />
         ))}
       </div>
       {primaryFont && (
-        <span className="text-[10px] font-medium text-zinc-400 hidden md:inline-block">
+        <span className='hidden text-[10px] font-medium text-zinc-400 md:inline-block'>
           {primaryFont}
         </span>
       )}

@@ -99,9 +99,11 @@ export function useSpeechToText({
     startListening,
     stopListening,
     error,
-    isSupported: typeof window !== "undefined" && !!(
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition
-    ),
+    isSupported:
+      typeof window !== "undefined" &&
+      !!(
+        (window as any).SpeechRecognition ||
+        (window as any).webkitSpeechRecognition
+      ),
   };
 }

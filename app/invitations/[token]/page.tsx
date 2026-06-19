@@ -7,8 +7,8 @@ import { apiResponse } from "@/utils/apiResponse";
 import cookie from "js-cookie";
 import { Building2, Loader2, MailWarning, Users } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useCallback, useEffect, useState } from "react";
 
 type InvitationStatus =
   | "pending"
@@ -56,7 +56,9 @@ export default function AcceptInvitationPage() {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await apiResponse.get(`/orgs/invitations/lookup/${token}`);
+      const { data } = await apiResponse.get(
+        `/orgs/invitations/lookup/${token}`
+      );
       setInvitation(data.invitation);
     } catch (err: any) {
       setError(err?.response?.data?.message || "Invitation not found");
@@ -167,7 +169,11 @@ export default function AcceptInvitationPage() {
             <span className='text-foreground font-medium'>
               {invitation.team.name}
             </span>{" "}
-            team as <span className='text-foreground font-medium'>{invitation.role}</span>.
+            team as{" "}
+            <span className='text-foreground font-medium'>
+              {invitation.role}
+            </span>
+            .
           </p>
 
           <div className='border-border mt-6 grid w-full grid-cols-2 gap-3 rounded-lg border p-3 text-left'>
@@ -208,9 +214,7 @@ export default function AcceptInvitationPage() {
           <div className='mt-6 flex w-full flex-col gap-2'>
             <Button
               onClick={handleAccept}
-              disabled={
-                !!badStatus || accepting || (isAuthed && !emailMatch)
-              }
+              disabled={!!badStatus || accepting || (isAuthed && !emailMatch)}
               className='w-full'
             >
               {accepting ? (

@@ -4,7 +4,7 @@ export function FeatureHeroText() {
   return (
     <div>
       <div className='mb-4 text-sm font-bold tracking-wider text-orange-600 uppercase'></div>
-      <div className='bg-indigo-600 hover:bg-indigo-700/10 text-primary mt-16 inline-block w-max rounded-full px-4 py-1.5 text-sm font-medium md:mt-5 lg:mt-0'>
+      <div className='text-primary mt-16 inline-block w-max rounded-full bg-indigo-600 px-4 py-1.5 text-sm font-medium hover:bg-indigo-700/10 md:mt-5 lg:mt-0'>
         Build at scale, join now
       </div>
       <h1 className='text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl'>

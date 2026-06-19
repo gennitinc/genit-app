@@ -442,7 +442,7 @@ export function WorkflowPremiumInput({
             }
             disabled={isGenerating || disabled}
             className={cn(
-              "placeholder:text-muted-foreground/60 scrollbar-none flex w-full resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base",
+              "placeholder:text-muted-foreground/60 flex w-full resize-none scrollbar-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base",
               isGenerating && "placeholder:opacity-0"
             )}
             style={{ minHeight }}
@@ -482,7 +482,7 @@ export function WorkflowPremiumInput({
                       className={cn(
                         "flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-xs transition-colors",
                         selectedModel === model.id
-                          ? "bg-indigo-600 hover:bg-indigo-700/10 text-primary font-medium"
+                          ? "text-primary bg-indigo-600 font-medium hover:bg-indigo-700/10"
                           : "hover:bg-muted"
                       )}
                     >
@@ -524,7 +524,7 @@ export function WorkflowPremiumInput({
                       className={cn(
                         "flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-xs transition-colors",
                         aspectRatio === ratio.value
-                          ? "bg-indigo-600 hover:bg-indigo-700/10 text-primary font-medium"
+                          ? "text-primary bg-indigo-600 font-medium hover:bg-indigo-700/10"
                           : "hover:bg-muted"
                       )}
                     >
@@ -661,7 +661,7 @@ export function WorkflowPremiumInput({
               type='button'
               onClick={handleSubmit}
               disabled={isGenerating || !value.trim() || disabled}
-              className='bg-indigo-600 hover:bg-indigo-700 text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out disabled:opacity-50'
+              className='text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full bg-indigo-600 !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out hover:bg-indigo-700 disabled:opacity-50'
             >
               {isGenerating ? (
                 <Loader2 className='h-4 w-4 animate-spin' />

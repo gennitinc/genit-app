@@ -74,34 +74,31 @@ export default function RemovalInstructionsPage() {
               </span>
             </h1>
             <p className='text-gray-9 mt-2 text-start text-sm leading-[1.6] font-normal text-neutral-600 dark:text-neutral-400'>
-              Last update:{" "}
-              <time dateTime='2026-05-17'>May 17th, 2026</time>
+              Last update: <time dateTime='2026-05-17'>May 17th, 2026</time>
             </p>
           </div>
 
           <SectionHeading id='1-overview' label='1. Overview' />
           <p className={P_CLASS}>
             genit lets you connect third-party accounts — Facebook Pages,
-            Instagram Business profiles, Meta Ads accounts, Threads profiles
-            and others — so our agents can publish content, read engagement and
-            pull insights on your behalf. You stay in control: every connection
-            can be disconnected at any time, and you can request a full
-            deletion of the data we have stored on your behalf.
+            Instagram Business profiles, Meta Ads accounts, Threads profiles and
+            others — so our agents can publish content, read engagement and pull
+            insights on your behalf. You stay in control: every connection can
+            be disconnected at any time, and you can request a full deletion of
+            the data we have stored on your behalf.
           </p>
           <p className={P_CLASS}>
             This page tells you exactly how to do that. It covers three things:
           </p>
           <ul className={LIST_CLASS}>
-            <li>
-              How to disconnect a single integration from inside genit.
-            </li>
+            <li>How to disconnect a single integration from inside genit.</li>
             <li>
               How to revoke genit&apos;s access directly from the third-party
               platform (Facebook, Instagram, Meta Business, Threads, etc.).
             </li>
             <li>
-              How to request a permanent deletion of any data we may still
-              hold (e.g. cached account metadata, scheduled posts).
+              How to request a permanent deletion of any data we may still hold
+              (e.g. cached account metadata, scheduled posts).
             </li>
           </ul>
 
@@ -144,8 +141,8 @@ export default function RemovalInstructionsPage() {
               <strong className={STRONG_CLASS}>Page</strong>,{" "}
               <strong className={STRONG_CLASS}>Instagram account</strong>,{" "}
               <strong className={STRONG_CLASS}>Ad account</strong> or{" "}
-              <strong className={STRONG_CLASS}>Threads profile</strong> you
-              want to unlink and click{" "}
+              <strong className={STRONG_CLASS}>Threads profile</strong> you want
+              to unlink and click{" "}
               <strong className={STRONG_CLASS}>Disconnect</strong>, then{" "}
               <strong className={STRONG_CLASS}>Confirm</strong>.
             </li>
@@ -162,8 +159,8 @@ export default function RemovalInstructionsPage() {
           />
           <p className={P_CLASS}>
             When you sign in with Meta, that single Meta login powers Facebook
-            Pages, Instagram Business accounts and Meta Ads inside genit. If
-            you want to wipe every Meta connection at once:
+            Pages, Instagram Business accounts and Meta Ads inside genit. If you
+            want to wipe every Meta connection at once:
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
@@ -174,18 +171,20 @@ export default function RemovalInstructionsPage() {
               in genit.
             </li>
             <li>
-              Click <strong className={STRONG_CLASS}>Manage</strong> on any
-              Meta surface card (Facebook, Instagram, or Meta Ads).
+              Click <strong className={STRONG_CLASS}>Manage</strong> on any Meta
+              surface card (Facebook, Instagram, or Meta Ads).
             </li>
             <li>
               At the bottom of the dialog, click{" "}
-              <strong className={STRONG_CLASS}>Revoke Meta access entirely</strong>
+              <strong className={STRONG_CLASS}>
+                Revoke Meta access entirely
+              </strong>
               , then confirm.
             </li>
           </ol>
           <p className={P_CLASS}>
-            This removes every Facebook, Instagram and Meta Ads integration
-            tied to your Meta identity for this organization, and deletes the
+            This removes every Facebook, Instagram and Meta Ads integration tied
+            to your Meta identity for this organization, and deletes the
             encrypted token genit stored.
           </p>
 
@@ -211,17 +210,21 @@ export default function RemovalInstructionsPage() {
               .
             </li>
             <li>
-              Find{" "}
-              <strong className={STRONG_CLASS}>genit</strong> in the list of
-              connected apps.
+              Find <strong className={STRONG_CLASS}>genit</strong> in the list
+              of connected apps.
             </li>
             <li>
               Click <strong className={STRONG_CLASS}>Remove</strong>, then tick{" "}
-              <em>&quot;Delete all posts, videos or events genit posted on
-              your timeline.&quot;</em> if you also want to remove the content
-              created via genit.
+              <em>
+                &quot;Delete all posts, videos or events genit posted on your
+                timeline.&quot;
+              </em>{" "}
+              if you also want to remove the content created via genit.
             </li>
-            <li>Confirm by clicking <strong className={STRONG_CLASS}>Remove</strong>.</li>
+            <li>
+              Confirm by clicking{" "}
+              <strong className={STRONG_CLASS}>Remove</strong>.
+            </li>
           </ol>
           <p className={P_CLASS}>
             Facebook will instantly invalidate the access token. genit detects
@@ -234,14 +237,16 @@ export default function RemovalInstructionsPage() {
             label='5. Revoke from Instagram directly'
           />
           <p className={P_CLASS}>
-            Instagram Business integrations live under the linked Facebook
-            Page. To revoke them from Instagram&apos;s side:
+            Instagram Business integrations live under the linked Facebook Page.
+            To revoke them from Instagram&apos;s side:
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
               Open the Instagram mobile app, go to your profile, tap{" "}
-              <strong className={STRONG_CLASS}>Settings → Account → Apps
-              and websites</strong>.
+              <strong className={STRONG_CLASS}>
+                Settings → Account → Apps and websites
+              </strong>
+              .
             </li>
             <li>
               Open the <strong className={STRONG_CLASS}>Active</strong> tab.
@@ -252,9 +257,9 @@ export default function RemovalInstructionsPage() {
             </li>
           </ol>
           <p className={P_CLASS}>
-            Alternatively, revoking the parent Facebook Page connection (Step
-            4) automatically revokes Instagram access since the two share an
-            access token.
+            Alternatively, revoking the parent Facebook Page connection (Step 4)
+            automatically revokes Instagram access since the two share an access
+            token.
           </p>
 
           <SectionHeading
@@ -296,22 +301,24 @@ export default function RemovalInstructionsPage() {
             label='7. Revoke Threads access'
           />
           <p className={P_CLASS}>
-            Threads uses a separate OAuth flow from the rest of Meta, so it
-            must be revoked independently.
+            Threads uses a separate OAuth flow from the rest of Meta, so it must
+            be revoked independently.
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
               Open the Threads app, go to your profile, tap the menu, then{" "}
-              <strong className={STRONG_CLASS}>Settings → Account →
-              Websites and apps</strong>.
+              <strong className={STRONG_CLASS}>
+                Settings → Account → Websites and apps
+              </strong>
+              .
             </li>
             <li>
               Find <strong className={STRONG_CLASS}>genit</strong> in the list
               of connected apps.
             </li>
             <li>
-              Tap <strong className={STRONG_CLASS}>Remove</strong> to revoke
-              the token.
+              Tap <strong className={STRONG_CLASS}>Remove</strong> to revoke the
+              token.
             </li>
           </ol>
           <p className={P_CLASS}>
@@ -326,10 +333,9 @@ export default function RemovalInstructionsPage() {
           <p className={P_CLASS}>
             Disconnecting an integration immediately deletes the encrypted
             access token we held for it. However, depending on what you used
-            genit for, we may also have stored: cached account metadata
-            (profile name, account id), the content of scheduled or published
-            posts you composed, and aggregate engagement metrics fetched on
-            your behalf.
+            genit for, we may also have stored: cached account metadata (profile
+            name, account id), the content of scheduled or published posts you
+            composed, and aggregate engagement metrics fetched on your behalf.
           </p>
           <p className={P_CLASS}>
             To request a permanent deletion of all data genit holds for you:
@@ -347,12 +353,14 @@ export default function RemovalInstructionsPage() {
             </li>
             <li>
               In the subject line, write{" "}
-              <strong className={STRONG_CLASS}>&quot;Data deletion
-              request&quot;</strong>.
+              <strong className={STRONG_CLASS}>
+                &quot;Data deletion request&quot;
+              </strong>
+              .
             </li>
             <li>
-              In the body, tell us which connection(s) you want deleted, or
-              say &quot;all data&quot; to delete everything.
+              In the body, tell us which connection(s) you want deleted, or say
+              &quot;all data&quot; to delete everything.
             </li>
           </ol>
           <p className={P_CLASS}>

@@ -5,12 +5,20 @@ import { TextChatContent } from "../chat/text-chat-content";
 import { AppSidebar } from "./app-sidebar";
 import TopNavWithAurora from "./top-nav-with-aurora";
 import { useSidebar } from "@/components/ui/sidebar";
-import { AgentRunsProvider, useAgentRunsContext } from "@/context/AgentRunsContext";
+import {
+  AgentRunsProvider,
+  useAgentRunsContext,
+} from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { PanelRightClose, PanelRightOpen, Maximize2, Minimize2 } from "lucide-react";
+import {
+  Maximize2,
+  Minimize2,
+  PanelRightClose,
+  PanelRightOpen,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
 
@@ -27,7 +35,8 @@ function ChatLayoutInner() {
   const isMobile = useMediaQuery("(max-width: 767px)");
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
-  const { isGeneratingImage, liveNodes, messages, project, isGenerating } = useProjectDesign();
+  const { isGeneratingImage, liveNodes, messages, project, isGenerating } =
+    useProjectDesign();
   const { runs: agentRuns } = useAgentRunsContext();
   const { setOpen: setSidebarOpen } = useSidebar();
 
@@ -44,7 +53,8 @@ function ChatLayoutInner() {
   const hasAnyPreview =
     isGenerationActive ||
     // Design projects: open when there are generated images
-    (messages?.some((m: any) => (m.generationGroups?.length ?? 0) > 0) ?? false) ||
+    (messages?.some((m: any) => (m.generationGroups?.length ?? 0) > 0) ??
+      false) ||
     // Automation projects: always show the canvas if the project exists
     isAutomationProject;
 
@@ -106,8 +116,8 @@ function ChatLayoutInner() {
                 mass: 0.8,
               }}
               className={cn(
-                'relative flex h-full min-w-0 flex-col overflow-hidden',
-                isFullscreen ? 'hidden' : 'flex-1'
+                "relative flex h-full min-w-0 flex-col overflow-hidden",
+                isFullscreen ? "hidden" : "flex-1"
               )}
             >
               <div
@@ -152,7 +162,10 @@ function ChatLayoutInner() {
                 <motion.div
                   key='preview-pane'
                   initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: isFullscreen ? "100%" : "62.5%", opacity: 1 }}
+                  animate={{
+                    width: isFullscreen ? "100%" : "62.5%",
+                    opacity: 1,
+                  }}
                   exit={{ width: 0, opacity: 0 }}
                   transition={{
                     type: "spring",
@@ -161,8 +174,8 @@ function ChatLayoutInner() {
                     mass: 0.8,
                   }}
                   className={cn(
-                    'relative h-full shrink-0 overflow-hidden',
-                    isFullscreen ? 'p-0' : 'p-2'
+                    "relative h-full shrink-0 overflow-hidden",
+                    isFullscreen ? "p-0" : "p-2"
                   )}
                 >
                   <motion.div
@@ -172,7 +185,10 @@ function ChatLayoutInner() {
                     transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
                     className='relative h-full w-full'
                   >
-                    <PreviewPanel isFullscreen={isFullscreen} onToggleFullscreen={() => setIsFullscreen(!isFullscreen)} />
+                    <PreviewPanel
+                      isFullscreen={isFullscreen}
+                      onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
+                    />
                   </motion.div>
                 </motion.div>
               )}

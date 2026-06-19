@@ -1,8 +1,9 @@
 import { demoMessages } from "../components/chat/dummyMessage";
+import { useBrandIdentityEnabled } from "../components/chat/messages/brand-identity-panel";
 import { useUserContext } from "./AuthenticatedContext";
 import { toast } from "@/hooks/use-toast";
-import { startAgentRun, classifyPrompt } from "@/lib/agents-api";
-import { useBrandIdentityEnabled } from "../components/chat/messages/brand-identity-panel";
+import { classifyPrompt, startAgentRun } from "@/lib/agents-api";
+import { stripClientTimeContext } from "@/lib/utils";
 import {
   IDesignProject,
   IProjectDesignContext,
@@ -10,7 +11,6 @@ import {
 } from "@/types/ProjectTypes";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
-import { stripClientTimeContext } from "@/lib/utils";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useRouter } from "next/navigation";
@@ -24,9 +24,9 @@ import React, {
   useState,
 } from "react";
 
-export const ProjectDesignContext = createContext<IProjectDesignContext | undefined>(
-  undefined
-);
+export const ProjectDesignContext = createContext<
+  IProjectDesignContext | undefined
+>(undefined);
 
 export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -55,9 +55,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isMobile, setIsMobile] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [generations, setGenerations] = useState<any[]>([]);
-  const currentOrg = user?.currentOrganization && typeof user.currentOrganization === "object"
-    ? (user.currentOrganization as any)
-    : ((user?.allOrganizations || [])[0] || user?.business || null);
+  const currentOrg =
+    user?.currentOrganization && typeof user.currentOrganization === "object"
+      ? (user.currentOrganization as any)
+      : (user?.allOrganizations || [])[0] || user?.business || null;
   const orgLogo = currentOrg?.businessLogo || null;
 
   const userAvatar =
@@ -118,7 +119,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     Array<{ id: string; filePath: string; name: string; prompt: string }>
   >([]);
 
-  const [brandIdentityEnabled, setBrandIdentityEnabled] = useBrandIdentityEnabled();
+  const [brandIdentityEnabled, setBrandIdentityEnabled] =
+    useBrandIdentityEnabled();
 
   const addLiveNode = useCallback(
     (node: { id: string; filePath: string; name: string; prompt: string }) => {
@@ -157,13 +159,15 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             parts: msg.parts,
             ...(msg.type === "user" &&
               (msg.fileAttachments || msg.attachedFiles) && {
-                attachedFiles: (msg.fileAttachments || msg.attachedFiles).map((file: any) => ({
-                  id: file.id || `file-${Date.now()}`,
-                  name: file.name || "Untitled",
-                  type: file.type || "unknown",
-                  filePath: file.url || file.filePath || "",
-                  status: "uploaded" as const,
-                })),
+                attachedFiles: (msg.fileAttachments || msg.attachedFiles).map(
+                  (file: any) => ({
+                    id: file.id || `file-${Date.now()}`,
+                    name: file.name || "Untitled",
+                    type: file.type || "unknown",
+                    filePath: file.url || file.filePath || "",
+                    status: "uploaded" as const,
+                  })
+                ),
               }),
           };
         }
@@ -191,13 +195,15 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                 ],
           ...(msg.type === "user" &&
             (msg.fileAttachments || msg.attachedFiles) && {
-              attachedFiles: (msg.fileAttachments || msg.attachedFiles).map((file: any) => ({
-                id: file.id || `file-${Date.now()}`,
-                name: file.name || "Untitled",
-                type: file.type || "unknown",
-                filePath: file.url || file.filePath || "",
-                status: "uploaded" as const,
-              })),
+              attachedFiles: (msg.fileAttachments || msg.attachedFiles).map(
+                (file: any) => ({
+                  id: file.id || `file-${Date.now()}`,
+                  name: file.name || "Untitled",
+                  type: file.type || "unknown",
+                  filePath: file.url || file.filePath || "",
+                  status: "uploaded" as const,
+                })
+              ),
             }),
         };
       })
@@ -246,15 +252,18 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       // Hydrate brand identity from project metadata if available
       if (project?.metadata?.finalizedSelections) {
         const selections = project.metadata.finalizedSelections;
-        
-        if (selections.selectedColorScales && selections.selectedColorScales.length > 0) {
+
+        if (
+          selections.selectedColorScales &&
+          selections.selectedColorScales.length > 0
+        ) {
           setSelectedColorScales(selections.selectedColorScales);
         }
-        
+
         if (selections.primaryFont) {
           setPrimaryFont(selections.primaryFont);
         }
-        
+
         if (selections.useBrandIdentity !== undefined) {
           isHydratingRef.current = true;
           setBrandIdentityEnabled(selections.useBrandIdentity);
@@ -264,10 +273,17 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         }
       }
     }
-  }, [project?._id, project?.imageModel, project?.metadata?.finalizedSelections, setSelectedColorScales, setPrimaryFont, setBrandIdentityEnabled]);
+  }, [
+    project?._id,
+    project?.imageModel,
+    project?.metadata?.finalizedSelections,
+    setSelectedColorScales,
+    setPrimaryFont,
+    setBrandIdentityEnabled,
+  ]);
 
   const isGeneratingImageRef = useRef(isGeneratingImage);
-  
+
   useEffect(() => {
     isGeneratingImageRef.current = isGeneratingImage;
   }, [isGeneratingImage]);
@@ -287,11 +303,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     const socket = io(`${serverUrlSocket}`);
     socketRef.current = socket;
 
-    const handleConnect = () => {
-    };
+    const handleConnect = () => {};
 
     const handleNewMessage = (projectData: any) => {
-
       // Ignore messages from other projects
       const incomingProjectId = projectData?._id || projectData?.id;
       const currentProjectId = projectIdRef.current;
@@ -320,7 +334,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsTyping(false);
         setIsGenerating(false);
         setIsGeneratingImage(false); // Force clear image loading too
-        
+
         // Only clear status if we aren't generating an image in the background
         if (!isGeneratingImageRef.current) {
           setAiStatus(null);
@@ -515,7 +529,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         socketRef.current.off("textDelta", handleTextDelta);
         socketRef.current.off("textCompleted", handleTextCompleted);
         socketRef.current.off("generatingimage", handleGeneratingImage);
-        socketRef.current.off("generatingimage:stop", handleGeneratingImageStop);
+        socketRef.current.off(
+          "generatingimage:stop",
+          handleGeneratingImageStop
+        );
         socketRef.current.off("workflow:node:new");
         socketRef.current.off("workflow:ai:status");
         socketRef.current.off("brand-identity-updated", handleBrandUpdate);
@@ -527,16 +544,15 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Auto-save brand identity when it changes (Debounced)
   useEffect(() => {
-    if (
-      project?._id &&
-      socketRef.current &&
-      !isHydratingRef.current
-    ) {
+    if (project?._id && socketRef.current && !isHydratingRef.current) {
       // Check if selections are actually changed before saving
       const selections = project.metadata?.finalizedSelections;
-      const isColorsChanged = selections?.selectedColorScales?.map((s: any) => s.base).join(',') !== selectedColorScales.map(s => s.base).join(',');
+      const isColorsChanged =
+        selections?.selectedColorScales?.map((s: any) => s.base).join(",") !==
+        selectedColorScales.map((s) => s.base).join(",");
       const isFontChanged = selections?.primaryFont !== primaryFont;
-      const isEnabledChanged = selections?.useBrandIdentity !== brandIdentityEnabled;
+      const isEnabledChanged =
+        selections?.useBrandIdentity !== brandIdentityEnabled;
 
       if (!isColorsChanged && !isFontChanged && !isEnabledChanged) {
         return;
@@ -565,15 +581,21 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                 selectedColorScales,
                 primaryFont,
                 useBrandIdentity: brandIdentityEnabled,
-              }
-            }
+              },
+            },
           };
         });
       }, 800); // 800ms debounce
 
       return () => clearTimeout(timer);
     }
-  }, [selectedColorScales, primaryFont, brandIdentityEnabled, project?._id, project?.metadata?.finalizedSelections]);
+  }, [
+    selectedColorScales,
+    primaryFont,
+    brandIdentityEnabled,
+    project?._id,
+    project?.metadata?.finalizedSelections,
+  ]);
 
   const generateMessage = useCallback(
     async (
@@ -588,7 +610,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsTyping(true);
         setAiStatus(null);
         setStreamingContent("");
-
 
         const now = Date.now();
         const generateId = () =>
@@ -738,7 +759,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             // Remove manual Content-Type header - let axios set it automatically with boundary
           }
         );
-
       } catch (error) {
         console.error("❌ Error sending message:", error);
         setError(
@@ -830,7 +850,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           }
         }
 
-
         // Set restored files to attachedFiles state so they show in the UI
         if (restoredFiles.length > 0) {
           setAttachedFiles(restoredFiles);
@@ -842,7 +861,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         if (isAgenticPrompt) {
           try {
             let agentFiles: any[] = [];
-            
+
             if (restoredFiles.length > 0) {
               const formData = new FormData();
               let hasUploads = false;
@@ -852,15 +871,18 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                   hasUploads = true;
                 }
               }
-              
+
               if (hasUploads) {
-                const res = await apiResponseFileUpload.post("/agents/upload", formData);
+                const res = await apiResponseFileUpload.post(
+                  "/agents/upload",
+                  formData
+                );
                 agentFiles = res.data.files || [];
               } else {
                 agentFiles = restoredFiles.map((f: any) => ({
                   name: f.name || "file",
                   type: f.type || "application/octet-stream",
-                  url: f.filePath || f.url
+                  url: f.filePath || f.url,
                 }));
               }
             }
@@ -869,7 +891,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
               const selectedAgentFiles = selectedFiles.map((url: string) => ({
                 name: url.split("/").pop() || "selected-file",
                 type: url.endsWith(".png") ? "image/png" : "image/jpeg",
-                url: url
+                url: url,
               }));
               agentFiles = [...agentFiles, ...selectedAgentFiles];
             }
@@ -970,7 +992,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setProject(data.project);
 
         const projectId = data.project._id.toString();
-
 
         const filesArray = Array.isArray(attachedFiles)
           ? attachedFiles
@@ -1162,7 +1183,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             handleLocalStorageDraft(projectData);
           }
 
-
           return { success: true };
         } else {
           return { success: false, error: "server_error" };
@@ -1202,8 +1222,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
-  const retryLoading = (id: string) => {
-  };
+  const retryLoading = (id: string) => {};
 
   const editMessage = async (
     messageId: string,
@@ -1319,7 +1338,6 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
-
       // Update local state optimistically
       setMessages((prev: any[]) =>
         prev.map((msg: any) => {
@@ -1396,8 +1414,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const handleGenerationItemClick = (generationId: string) => {
-  };
+  const handleGenerationItemClick = (generationId: string) => {};
 
   const handleInput = (event?: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (!event) return;

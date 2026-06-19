@@ -32,7 +32,6 @@ export interface GenerationState {
 }
 
 export function useChatGeneration() {
-
   const [state, setState] = useState<GenerationState>({
     isGenerating: false,
     isConnected: false,
@@ -105,7 +104,6 @@ export function useChatGeneration() {
           progress: 5,
         });
 
-
         // Use your custom axios instance for file upload
         const response = await apiResponseFileUpload.post(
           "/chat/generate",
@@ -125,7 +123,6 @@ export function useChatGeneration() {
             },
           }
         );
-
 
         if (response.status !== 200) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -164,7 +161,6 @@ export function useChatGeneration() {
         };
 
         eventSourceRef.current.onmessage = (event) => {
-
           try {
             const data = JSON.parse(event.data);
 
@@ -467,7 +463,6 @@ export function useChatGeneration() {
   );
 
   const cancelGeneration = useCallback(() => {
-
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -516,7 +511,6 @@ export function useChatGeneration() {
   // Auto-cleanup on component unmount
   const cleanupRef = useRef(cleanup);
   cleanupRef.current = cleanup;
-
 
   return {
     ...state,

@@ -117,7 +117,7 @@ export function HistoryPanel({ id, versionTree = [] }: HistoryPanelProps) {
 
   return (
     <div className='flex h-full flex-col bg-zinc-900'>
-      <div className=' p-4'>
+      <div className='p-4'>
         <h2 className='mb-2 text-lg font-semibold text-zinc-100'>
           Version History
         </h2>

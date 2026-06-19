@@ -1,5 +1,5 @@
-import type { MetadataRoute } from "next";
 import { apiResponse } from "@/utils/apiResponse";
+import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.trygenit.com";
@@ -60,7 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       "how-sentry-uses-genit",
       "how-appdirect-turned-non-technical-teams-into-builders-with-genit",
       "how-thinkific-uses-genit-to-prototype",
-      "build-apps-from-a-link-with-genit"
+      "build-apps-from-a-link-with-genit",
     ];
     fallbackSlugs.forEach((slug) => {
       sitemapEntries.push({

@@ -591,9 +591,7 @@ export const modelApi = {
   /**
    * Get all models
    */
-  getAll: async (params?: {
-    type?: ModelType;
-  }): Promise<ModelResponse> => {
+  getAll: async (params?: { type?: ModelType }): Promise<ModelResponse> => {
     const response = await apiResponse.get(`/inspire/models`, { params });
     return response.data;
   },
@@ -609,9 +607,7 @@ export const modelApi = {
   /**
    * Get default model for type
    */
-  getDefault: async (
-    type: ModelType
-  ): Promise<ApiResponse<Model>> => {
+  getDefault: async (type: ModelType): Promise<ApiResponse<Model>> => {
     const response = await apiResponse.get(`/inspire/models/default/${type}`);
     return response.data;
   },

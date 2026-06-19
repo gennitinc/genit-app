@@ -1,5 +1,7 @@
 "use client";
 
+import { BrandData } from "@/app/(auth)/onboarding/_components/types";
+import { BrandOnboardingDialog } from "@/components/chat/messages/brand-onboarding-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,8 +40,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import AccountActionModal from "@/components/user/account-action-modal";
-import { BrandOnboardingDialog } from "@/components/chat/messages/brand-onboarding-dialog";
-import { BrandData } from "@/app/(auth)/onboarding/_components/types";
 import {
   Organization,
   Team,
@@ -67,12 +67,14 @@ import {
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { useCallback, useMemo, useState } from "react";
 
 type CreateMode = "team" | null;
 
-export function OrgSwitcher({ forceExpanded }: { forceExpanded?: boolean } = {}) {
+export function OrgSwitcher({
+  forceExpanded,
+}: { forceExpanded?: boolean } = {}) {
   const { isMobile, state } = useSidebar();
   const {
     user,
@@ -111,7 +113,9 @@ export function OrgSwitcher({ forceExpanded }: { forceExpanded?: boolean } = {})
   );
   const [inviting, setInviting] = useState(false);
 
-  const isCollapsed = forceExpanded ? false : !isMobile && state === "collapsed";
+  const isCollapsed = forceExpanded
+    ? false
+    : !isMobile && state === "collapsed";
 
   const isOwnerOf = useCallback(
     (org: Organization) => !!user?._id && org.owner === user._id,
@@ -329,7 +333,7 @@ export function OrgSwitcher({ forceExpanded }: { forceExpanded?: boolean } = {})
                 className={cn(
                   "data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
                   isCollapsed ? "justify-center !px-2" : "w-full",
-                  forceExpanded && "!w-full !h-12 !px-2 !justify-start"
+                  forceExpanded && "!h-12 !w-full !justify-start !px-2"
                 )}
               >
                 <Avatar
@@ -342,7 +346,7 @@ export function OrgSwitcher({ forceExpanded }: { forceExpanded?: boolean } = {})
                     <AvatarImage
                       src={current.businessLogo}
                       alt={current?.businessName || "Organization"}
-                      className='object-contain bg-white'
+                      className='bg-white object-contain'
                     />
                   ) : null}
                   <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-xs font-semibold text-white'>
@@ -423,7 +427,7 @@ export function OrgSwitcher({ forceExpanded }: { forceExpanded?: boolean } = {})
                           <AvatarImage
                             src={org.businessLogo}
                             alt={org.businessName}
-                            className='object-contain bg-white'
+                            className='bg-white object-contain'
                           />
                         ) : null}
                         <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-[10px] font-semibold text-white'>
@@ -703,7 +707,9 @@ export function OrgSwitcher({ forceExpanded }: { forceExpanded?: boolean } = {})
       >
         <DialogContent className='sm:max-w-md'>
           <DialogHeader>
-            <DialogTitle>Invite to {inviteContext?.teamName || "team"}</DialogTitle>
+            <DialogTitle>
+              Invite to {inviteContext?.teamName || "team"}
+            </DialogTitle>
             <DialogDescription>
               They'll receive an email invitation. If they don't have a genit
               account yet, they can create one with this address.
@@ -733,7 +739,9 @@ export function OrgSwitcher({ forceExpanded }: { forceExpanded?: boolean } = {})
                   <SelectValue placeholder='Select a role' />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value='Lead'>Lead — can manage the team</SelectItem>
+                  <SelectItem value='Lead'>
+                    Lead — can manage the team
+                  </SelectItem>
                   <SelectItem value='Member'>
                     Member — can collaborate
                   </SelectItem>

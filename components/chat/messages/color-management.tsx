@@ -7,7 +7,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Check, Lock, Plus, RefreshCw, Search, Unlock, X } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-
 type Tab = "brand" | "neutral" | "status" | "fonts";
 
 interface ColorScale {
@@ -264,9 +263,11 @@ export function ColorManagement({
         return;
       }
 
-      const currentContextHexes = selectedColorScales.map((s) => s.base).join(",");
+      const currentContextHexes = selectedColorScales
+        .map((s) => s.base)
+        .join(",");
       const currentLocalHexes = brandScales.map((s) => s.base).join(",");
-      
+
       if (currentContextHexes !== currentLocalHexes) {
         hasSyncedFromContext.current = true;
         setBrandScales(
@@ -286,11 +287,14 @@ export function ColorManagement({
     if (!isLocked) {
       // Prevent overwriting context with defaults on initial mount if context was empty
       if (!hasSyncedFromContext.current && selectedColorScales.length === 0) {
-        const isDefault = brandScales.length === 1 && brandScales[0].base === "#6366f1";
+        const isDefault =
+          brandScales.length === 1 && brandScales[0].base === "#6366f1";
         if (isDefault) return;
       }
 
-      const currentContextHexes = selectedColorScales.map((s) => s.base).join(",");
+      const currentContextHexes = selectedColorScales
+        .map((s) => s.base)
+        .join(",");
       const currentLocalHexes = brandScales.map((s) => s.base).join(",");
 
       if (currentContextHexes !== currentLocalHexes) {
@@ -445,7 +449,7 @@ export function ColorManagement({
                   "relative flex-1 rounded-lg px-4 py-1.5 transition-all duration-200",
                   "focus:outline-none",
                   active
-                    ? "bg-indigo-600 hover:bg-indigo-700 text-primary-foreground shadow-sm"
+                    ? "text-primary-foreground bg-indigo-600 shadow-sm hover:bg-indigo-700"
                     : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 )}
               >
@@ -471,7 +475,7 @@ export function ColorManagement({
               {activeTab === tab.id && (
                 <motion.span
                   layoutId='color-tab-indicator'
-                  className='bg-indigo-600 hover:bg-indigo-700 absolute inset-x-0 -bottom-0.5 h-px'
+                  className='absolute inset-x-0 -bottom-0.5 h-px bg-indigo-600 hover:bg-indigo-700'
                 />
               )}
             </button>

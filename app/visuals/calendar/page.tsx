@@ -1,5 +1,12 @@
 "use client";
 
+import { CalendarEventPanel } from "./_components/calendar-event-panel";
+import { GoogleCalendarBrand } from "@/app/(auth)/onboarding/_components/social-icons";
+import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
+import {
+  INTEGRATIONS,
+  type Integration,
+} from "@/app/integrations/integrations-explorer";
 import { Button } from "@/components/ui/button";
 import {
   EventCalendar,
@@ -7,6 +14,7 @@ import {
 } from "@/components/ui/event-calendar";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useIntegrations } from "@/hooks/use-integrations";
+import { useToast } from "@/hooks/use-toast";
 import {
   type CreateGoogleCalendarEventInput,
   type GoogleCalendarEvent,
@@ -16,12 +24,8 @@ import {
   listGoogleCalendars,
   updateGoogleCalendarEvent,
 } from "@/lib/integrations-api";
-import { useToast } from "@/hooks/use-toast";
-import { GradientFrame } from "@/utils/gradient-frame";
-import { CalendarEventPanel } from "./_components/calendar-event-panel";
-import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
-import { INTEGRATIONS, type Integration } from "@/app/integrations/integrations-explorer";
 import Loading, { LoadingFileLoader } from "@/utils/Loading";
+import { GradientFrame } from "@/utils/gradient-frame";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CalendarDays,
@@ -42,7 +46,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { GoogleCalendarBrand } from "@/app/(auth)/onboarding/_components/social-icons";
 
 type CalendarView = "dayGridMonth" | "timeGridWeek" | "timeGridDay";
 
@@ -106,7 +109,9 @@ export default function CalendarPage() {
 
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const handleConnectCalendar = () => {
-    const gcalIntegration = INTEGRATIONS.find((i) => i.platform === "google_calendar");
+    const gcalIntegration = INTEGRATIONS.find(
+      (i) => i.platform === "google_calendar"
+    );
     if (gcalIntegration) {
       setConnectFor(gcalIntegration);
     }
@@ -123,7 +128,8 @@ export default function CalendarPage() {
   const [selectedCalendarId, setSelectedCalendarId] = useState("primary");
   const [search, setSearch] = useState("");
   const [eventPanelOpen, setEventPanelOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<GoogleCalendarEvent | null>(null);
+  const [selectedEvent, setSelectedEvent] =
+    useState<GoogleCalendarEvent | null>(null);
   const deferredSearch = useDeferredValue(search.trim());
   const calendarRef = useRef<EventCalendarHandle>(null);
 
@@ -239,11 +245,17 @@ export default function CalendarPage() {
     if (!activeConnection) return;
     try {
       if (selectedEvent) {
-        await updateGoogleCalendarEvent(activeConnection._id, selectedEvent.id, input);
+        await updateGoogleCalendarEvent(
+          activeConnection._id,
+          selectedEvent.id,
+          input
+        );
       } else {
         await createGoogleCalendarEvent(activeConnection._id, input);
       }
-      await queryClient.invalidateQueries({ queryKey: ["google-calendar-events"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["google-calendar-events"],
+      });
       setEventPanelOpen(false);
       toast({ title: selectedEvent ? "Event updated" : "Event created" });
     } catch (error: any) {
@@ -259,8 +271,14 @@ export default function CalendarPage() {
   const removeEvent = async () => {
     if (!activeConnection || !selectedEvent) return;
     try {
-      await deleteGoogleCalendarEvent(activeConnection._id, selectedEvent.id, selectedCalendarId);
-      await queryClient.invalidateQueries({ queryKey: ["google-calendar-events"] });
+      await deleteGoogleCalendarEvent(
+        activeConnection._id,
+        selectedEvent.id,
+        selectedCalendarId
+      );
+      await queryClient.invalidateQueries({
+        queryKey: ["google-calendar-events"],
+      });
       setEventPanelOpen(false);
       toast({ title: "Event deleted" });
     } catch (error: any) {
@@ -286,55 +304,52 @@ export default function CalendarPage() {
 
   return (
     <div className='animate-in fade-in flex w-full flex-col gap-5 duration-500'>
-      <section className='relative overflow-hidden rounded-3xl bg-black/[0.025] p-4 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
-          <img
+      <section className='relative overflow-hidden rounded-3xl bg-black/[0.025] p-4 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10 lg:pl-10'>
+        <img
           src='https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg'
           alt=''
           className='absolute inset-0 h-full w-full object-cover object-center opacity-100'
         />
         <div className='pointer-events-none absolute -top-24 -left-20 h-64 w-64 rounded-md bg-indigo-500/10 blur-3xl' />
 
-        <div className='relative grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-stretch'>
-          
-          <div className='flex min-w-0 flex-col justify-between py-1'>
-             
-<div className=""></div>
-<div className="">
-  <div>  
-    <div className="flex flex-col gap-2">
-      <div className="hidden items-center gap-4 sm:flex">
-  {/* Team Avatars */}
+        <div className='relative grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-stretch '>
+          <div className='flex min-w-0 flex-col justify-between py-1 '>
+            <div className=''></div>
+            <div className=''>
+              <div className="">
+                <div className='flex flex-col gap-2'>
+                  <div className='hidden items-center gap-4 sm:flex'>
+                    {/* Team Avatars */}
 
+                    {/* Title */}
+                    <div>
+                      <h3 className='font-instrument-serif text-2xl font-semibold tracking-tight text-white md:text-3xl'>
+                        Brand Events
+                      </h3>
 
-  {/* Title */}
-  <div>
-    <h3 className="font-instrument-serif text-2xl font-semibold tracking-tight text-white md:text-3xl">
-      Brand Events
-    </h3>
-
-    {/* <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-white/50">
+                      {/* <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-white/50">
       Collaboration • Planning • Execution
     </p> */}
-  </div>
-</div>
-    </div>
-             <p className='text-muted-foreground mt-1 text-sm'>
-            Plan your work and keep every Google Calendar event in sync.
-          </p>
-          </div>
+                    </div>
+                  </div>
+                </div>
+                <p className='text-muted-foreground mt-1 text-sm'>
+                  Plan your work and keep every Google Calendar event in sync.
+                </p>
+              </div>
 
-            <div className='flex flex-wrap items-center gap-2 mt-4'>
-          <div className='relative min-w-56 flex-1 sm:flex-none'>
-            <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
-            <input
-              type='search'
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder='Search events'
-              className='border-border/70 bg-background h-10 w-full rounded-sm border pr-3 pl-9 text-sm shadow-sm transition outline-none focus:border-indigo-400 focus:ring-3 focus:ring-indigo-500/10 sm:w-64'
-            />
-          </div>
-            {/* <div className="flex items-center">
+              <div className='mt-4 flex flex-wrap items-center gap-2'>
+                <div className='relative min-w-56 flex-1 sm:flex-none'>
+                  <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+                  <input
+                    type='search'
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                    placeholder='Search events'
+                    className='border-border/70 bg-background h-10 w-full rounded-sm border pr-3 pl-9 text-sm shadow-sm transition outline-none focus:border-indigo-400 focus:ring-3 focus:ring-indigo-500/10 sm:w-64'
+                  />
+                </div>
+                {/* <div className="flex items-center">
     {members.slice(0, 4).map((member, index) => {
       const memberUser =
         typeof member.user === "object" ? member.user : null;
@@ -357,22 +372,25 @@ export default function CalendarPage() {
       ) : null;
     })}
   </div> */}
-          {activeConnection ? (
-            <Button
-              className='rounded-sm bg-indigo-600 px-4 my-2 text-white hover:bg-indigo-700'
-              onClick={openCreateEvent}
-            >
-              New event
-              <Plus className='h-4 w-4' /> 
-            </Button>
-          ) : (
-            <Button className='h-10 rounded-sm' onClick={handleConnectCalendar}>
-                <GoogleCalendarBrand />
-              Connect calendar
-            </Button>
-          )}
-        </div>
-</div>
+                {activeConnection ? (
+                  <Button
+                    className='my-2 rounded-sm bg-indigo-600 px-4 text-white hover:bg-indigo-700'
+                    onClick={openCreateEvent}
+                  >
+                    New event
+                    <Plus className='h-4 w-4' />
+                  </Button>
+                ) : (
+                  <Button
+                    className='h-10 rounded-sm'
+                    onClick={handleConnectCalendar}
+                  >
+                    <GoogleCalendarBrand />
+                    Connect calendar
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className='hidden rounded-2xl bg-white/95 p-4 shadow-sm ring-1 ring-black/5 sm:block sm:p-5 dark:bg-zinc-950/95 dark:shadow-none dark:ring-white/10'>
@@ -431,8 +449,6 @@ export default function CalendarPage() {
           </div>
         </div>
       </section>
-
-   
 
       <section className='calendar-shell overflow-hidden rounded-xl border border-black/5 bg-white shadow-[0_16px_50px_-30px_rgba(15,23,42,0.25)] dark:border-white/10 dark:bg-zinc-950'>
         <div className='grid gap-3 border-b border-zinc-200/80 p-3 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-4 dark:border-white/10'>
@@ -520,11 +536,11 @@ export default function CalendarPage() {
               aria-label='Refresh events'
             >
               {eventsQuery.isFetching ? (
-                <div className="mt-3">
-                  <LoadingFileLoader size={18}/>
+                <div className=''>
+                  <LoadingFileLoader size={18} />
                 </div>
               ) : (
-                <RefreshCw className="h-4 text-gray-400" />
+                <RefreshCw className='h-4 text-gray-400' />
               )}
             </button>
           </div>
@@ -567,11 +583,19 @@ export default function CalendarPage() {
             <div className='absolute inset-0 z-20 flex items-center justify-center bg-white/55 p-5 text-center backdrop-blur-[2px] dark:bg-zinc-950/55'>
               <div className='relative w-full max-w-sm overflow-hidden rounded-3xl bg-white/95 p-6 shadow-sm ring-1 ring-black/5 dark:bg-zinc-950/95 dark:ring-white/10'>
                 {/* <div className='relative mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600 ring-1 ring-indigo-500/15 dark:text-indigo-300'><CalendarDays className='h-5 w-5' /></div> */}
-                <h3 className='relative text-lg font-semibold'>Bring your schedule into Genit</h3>
-                <p className='text-muted-foreground relative mt-1 mb-5 text-sm'>Connect Google Calendar to create, edit, and manage events.</p>
-                <Button className='relative rounded-sm bg-black text-white hover:bg-black/80 dark:bg-white dark:text-black' onClick={handleConnectCalendar}>
-                <GoogleCalendarBrand />
-                Connect Google Calendar</Button>
+                <h3 className='relative text-lg font-semibold'>
+                  Bring your schedule into Genit
+                </h3>
+                <p className='text-muted-foreground relative mt-1 mb-5 text-sm'>
+                  Connect Google Calendar to create, edit, and manage events.
+                </p>
+                <Button
+                  className='relative rounded-sm bg-black text-white hover:bg-black/80 dark:bg-white dark:text-black'
+                  onClick={handleConnectCalendar}
+                >
+                  <GoogleCalendarBrand />
+                  Connect Google Calendar
+                </Button>
               </div>
             </div>
           )}

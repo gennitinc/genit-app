@@ -164,10 +164,10 @@ export default function LandingContact() {
               </h1>
 
               <div className='text-muted-foreground max-w-2xl text-sm lg:leading-relaxed'>
-                genit is your AI-powered media designer. Create stunning
-                flyers, logos, posters, and social media graphics in seconds —
-                no design skills required. Just describe what you want and let
-                AI do the work.
+                genit is your AI-powered media designer. Create stunning flyers,
+                logos, posters, and social media graphics in seconds — no design
+                skills required. Just describe what you want and let AI do the
+                work.
               </div>
             </div>
 
@@ -189,7 +189,7 @@ export default function LandingContact() {
                             />
                           </div>
                         ))}
-                        <div className='border-background bg-indigo-600 hover:bg-indigo-700 text-primary-foreground flex size-10 items-center justify-center rounded-full border-2 text-[10px] font-bold'>
+                        <div className='border-background text-primary-foreground flex size-10 items-center justify-center rounded-full border-2 bg-indigo-600 text-[10px] font-bold hover:bg-indigo-700'>
                           50k+
                         </div>
                       </div>
@@ -230,7 +230,7 @@ export default function LandingContact() {
                             key={idx}
                             className='group flex items-start space-x-4'
                           >
-                            <div className='bg-indigo-600 hover:bg-indigo-700/10 group-hover:bg-indigo-600 hover:bg-indigo-700/20 flex size-7 shrink-0 items-center justify-center rounded-xl transition-colors'>
+                            <div className='flex size-7 shrink-0 items-center justify-center rounded-xl bg-indigo-600 transition-colors group-hover:bg-indigo-600 hover:bg-indigo-700/10 hover:bg-indigo-700/20'>
                               <Check className='text-primary size-4' />
                             </div>
                             <p className='text-muted-foreground group-hover:text-foreground text-sm font-medium transition-colors'>
@@ -442,7 +442,7 @@ export default function LandingContact() {
                                   className={cn(
                                     "group/upload relative flex h-32 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-500",
                                     selectedFile
-                                      ? "border-primary bg-indigo-600 hover:bg-indigo-700/5 shadow-[0_0_20px_rgba(var(--primary),0.1)]"
+                                      ? "border-primary bg-indigo-600 shadow-[0_0_20px_rgba(var(--primary),0.1)] hover:bg-indigo-700/5"
                                       : "border-muted-foreground/20 hover:border-primary/50 hover:bg-indigo-600 hover:bg-indigo-700/5"
                                   )}
                                   onClick={() =>
@@ -468,7 +468,7 @@ export default function LandingContact() {
                                   <div className='relative z-10 flex flex-col items-center gap-3'>
                                     {selectedFile ? (
                                       <div className='animate-in zoom-in flex flex-col items-center duration-300'>
-                                        <div className='bg-indigo-600 hover:bg-indigo-700/10 mb-2 rounded-full p-3'>
+                                        <div className='mb-2 rounded-full bg-indigo-600 p-3 hover:bg-indigo-700/10'>
                                           <FileText className='text-primary size-8' />
                                         </div>
                                         <span className='text-primary max-w-[240px] truncate px-4 text-sm font-semibold'>
@@ -484,7 +484,7 @@ export default function LandingContact() {
                                       </div>
                                     ) : (
                                       <div className='flex flex-col items-center transition-transform duration-500 group-hover/upload:scale-110'>
-                                        <div className='bg-muted group-hover/upload:bg-indigo-600 hover:bg-indigo-700/10 mb-2 rounded-full p-3 transition-colors'>
+                                        <div className='bg-muted mb-2 rounded-full p-3 transition-colors group-hover/upload:bg-indigo-600 hover:bg-indigo-700/10'>
                                           <Paperclip className='text-muted-foreground group-hover/upload:text-primary size-8 transition-colors' />
                                         </div>
                                         <span className='text-foreground/70 group-hover/upload:text-primary text-sm font-medium'>
@@ -534,7 +534,7 @@ export default function LandingContact() {
                       <Button
                         type='submit'
                         disabled={loading}
-                        className='w-full rounded-lg bg-indigo-600 hover:bg-indigo-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
+                        className='focus:ring-primary/30 dark:focus:ring-primary/40 w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus:ring-4 focus:outline-none'
                       >
                         {loading ? (
                           <div className='flex items-center justify-center text-sm'>

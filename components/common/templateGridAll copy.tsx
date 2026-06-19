@@ -869,7 +869,7 @@ export default function TemplateGridAll() {
                               fontFamily: "inherit",
                               minHeight: "60px",
                             }}
-                            className='scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] w-full resize-none overflow-y-auto rounded-2xl border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 md:p-4 dark:text-white dark:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636]'
+                            className='scrollbar-thumb-rounded w-full resize-none scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent overflow-y-auto rounded-2xl border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 hover:scrollbar-thumb-gray-400 focus:placeholder:text-gray-400 md:p-4 dark:scrollbar-thumb-[#888] dark:text-white dark:placeholder:text-gray-400 dark:hover:scrollbar-thumb-[#555] dark:focus:placeholder:text-[#363636]'
                             aria-label='Enter your prompt'
                             aria-describedby={
                               inputError ? "input-error" : undefined
@@ -1141,7 +1141,7 @@ export default function TemplateGridAll() {
                               fontFamily: "inherit",
                               minHeight: "60px",
                             }}
-                            className='scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-[#888] scrollbar-thumb-rounded hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-[#555] w-full resize-none overflow-y-auto rounded-2xl border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 focus:placeholder:text-gray-400 md:p-4 dark:text-white dark:placeholder:text-gray-400 dark:focus:placeholder:text-[#363636]'
+                            className='scrollbar-thumb-rounded w-full resize-none scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent overflow-y-auto rounded-2xl border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 hover:scrollbar-thumb-gray-400 focus:placeholder:text-gray-400 md:p-4 dark:scrollbar-thumb-[#888] dark:text-white dark:placeholder:text-gray-400 dark:hover:scrollbar-thumb-[#555] dark:focus:placeholder:text-[#363636]'
                             aria-label='Enter your prompt'
                             aria-describedby={
                               inputError ? "input-error" : undefined

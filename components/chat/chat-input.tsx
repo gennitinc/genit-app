@@ -1,10 +1,9 @@
 "use client";
 
 import { ModelSelector } from "../inspire/model-selector";
+import { BorderBeam } from "../ui/border-beam";
 import ShinyText from "../ui/shiny-text";
-import {
-  BrandIdentityPanel,
-} from "./messages/brand-identity-panel";
+import { BrandIdentityPanel } from "./messages/brand-identity-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAgentRunsContext } from "@/context/AgentRunsContext";
@@ -42,7 +41,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { BorderBeam } from "../ui/border-beam";
 
 interface ChatInputProps {
   children?: React.ReactNode;
@@ -116,7 +114,9 @@ export function ChatInput({
       : user?.business && typeof user.business === "object"
         ? user.business
         : null;
-  const orgBrandColors = (activeOrg?.brandColors ?? []).filter(Boolean).slice(0, 3);
+  const orgBrandColors = (activeOrg?.brandColors ?? [])
+    .filter(Boolean)
+    .slice(0, 3);
   const hasOrgBrand = orgBrandColors.length > 0;
   const showAppliedSwatches = hasOrgBrand && brandIdentityEnabled;
   const validateInput = useCallback((value: string, files: File[]) => {
@@ -228,7 +228,9 @@ export function ChatInput({
 
       if (isAgentic) {
         // Build uploaded file list for the agent
-        let uploadedFiles: { name: string; type: string; url: string }[] | undefined;
+        let uploadedFiles:
+          | { name: string; type: string; url: string }[]
+          | undefined;
 
         if (attachedFiles.length > 0) {
           const formData = new FormData();
@@ -248,7 +250,10 @@ export function ChatInput({
           if (formData.has("files")) {
             toast.loading("Uploading files...", { id: "agent-upload" });
             try {
-              const res = await apiResponseFileUpload.post("/agents/upload", formData);
+              const res = await apiResponseFileUpload.post(
+                "/agents/upload",
+                formData
+              );
               if (!uploadedFiles) uploadedFiles = [];
               uploadedFiles.push(...res.data.files);
               toast.dismiss("agent-upload");
@@ -260,10 +265,21 @@ export function ChatInput({
           }
         }
 
-        await startAgent(formattedInput, uploadedFiles, undefined, brandIdentityEnabled);
+        await startAgent(
+          formattedInput,
+          uploadedFiles,
+          undefined,
+          brandIdentityEnabled
+        );
       } else {
         // Design/image/text generation flow
-        await generateMessage(formattedInput, attachedFiles, project._id, undefined, { useBrandIdentity: brandIdentityEnabled });
+        await generateMessage(
+          formattedInput,
+          attachedFiles,
+          project._id,
+          undefined,
+          { useBrandIdentity: brandIdentityEnabled }
+        );
       }
 
       trackEvent("generation_request_submitted", {
@@ -459,7 +475,7 @@ export function ChatInput({
                         : placeholder
                   }
                   disabled={isGenerating || isProcessingDraft}
-                  className='placeholder:text-muted-foreground/60 scrollbar-none max-h-[300px] w-full resize-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
+                  className='placeholder:text-muted-foreground/60 max-h-[300px] w-full resize-none scrollbar-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                   style={{ height: "60px", minHeight: "60px" }}
                 />
               </div>
@@ -519,7 +535,7 @@ export function ChatInput({
                     showAppliedSwatches
                       ? "ring-primary/40 ring-1"
                       : isBrandSettingsOpen
-                        ? "bg-indigo-600 hover:bg-indigo-700/10 text-primary"
+                        ? "text-primary bg-indigo-600 hover:bg-indigo-700/10"
                         : "text-muted-foreground hover:text-foreground hover:bg-indigo-600 hover:bg-indigo-700/5 dark:hover:bg-white/5",
                     !showAppliedSwatches && "p-0.5"
                   )}
@@ -561,11 +577,18 @@ export function ChatInput({
                       : "text-muted-foreground hover:text-foreground hover:bg-indigo-600 hover:bg-indigo-700/5 dark:hover:bg-white/5"
                   }`}
                   onClick={handleMicClick}
-                  disabled={!isSupported || isGenerating || isAgentRunning || isAgentAwaitingInput || isClassifying || isProcessingDraft}
+                  disabled={
+                    !isSupported ||
+                    isGenerating ||
+                    isAgentRunning ||
+                    isAgentAwaitingInput ||
+                    isClassifying ||
+                    isProcessingDraft
+                  }
                 >
                   <Mic className='size-4 shrink-0' />
                 </button>
-               
+
                 <button
                   type='submit'
                   disabled={
@@ -576,48 +599,36 @@ export function ChatInput({
                     isProcessingDraft ||
                     (inputValue.trim().length < 2 && attachedFiles.length === 0)
                   }
-                  className="
-                    relative
-                    cursor-pointer
-                    rounded-[10px]
-                    bg-[linear-gradient(to_top,#292929,#555555,#292929)]
-                    p-[2px]
-                    shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)]
-                    transition-all
-                    duration-150
-                    active:scale-95
-                    disabled:opacity-50
-                    disabled:cursor-not-allowed
-                  "
+                  className='relative cursor-pointer rounded-[10px] bg-[linear-gradient(to_top,#292929,#555555,#292929)] p-[2px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)] transition-all duration-150 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50'
                 >
                   {/* Border effects behind content */}
-                  <div className="absolute inset-0 overflow-hidden rounded-[10px]">
+                  <div className='absolute inset-0 overflow-hidden rounded-[10px]'>
                     <BorderBeam
                       duration={6}
                       size={40}
-                      className="from-transparent via-red-500 to-transparent"
+                      className='from-transparent via-red-500 to-transparent'
                     />
                     <BorderBeam
                       duration={6}
                       delay={10}
                       size={40}
                       borderWidth={2}
-                      className="from-transparent via-blue-500 to-transparent"
+                      className='from-transparent via-blue-500 to-transparent'
                     />
                   </div>
-                
+
                   {/* Button content */}
-                  <div className="relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]">
+                  <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
                     {isGenerating ? (
-                      <Loader2 className="h-4 w-4 animate-spin text-white" />
+                      <Loader2 className='h-4 w-4 animate-spin text-white' />
                     ) : (
                       <svg
-                        className="h-4 w-4 text-white"
-                        viewBox="0 0 512 512"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
+                        className='h-4 w-4 text-white'
+                        viewBox='0 0 512 512'
+                        fill='currentColor'
+                        xmlns='http://www.w3.org/2000/svg'
                       >
-                        <path d="M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05" />
+                        <path d='M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05' />
                       </svg>
                     )}
                   </div>
@@ -657,7 +668,9 @@ export function ChatInput({
 
                   {/* Brand Settings Content */}
                   <div className='custom-scrollbar max-h-[400px] overflow-y-auto pr-1'>
-                    <BrandIdentityPanel disabled={isGenerating || isAgentRunning} />
+                    <BrandIdentityPanel
+                      disabled={isGenerating || isAgentRunning}
+                    />
                   </div>
                 </div>
               </motion.div>

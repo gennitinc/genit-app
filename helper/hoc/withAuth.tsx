@@ -28,7 +28,10 @@ function withAuth(
               // Not verified - stay on auth page
               setIsCheckingAuth(false);
               return;
-            } else if (!user.onboarding?.onboardingCompleted && !user.onboarding?.onboardingSkipped) {
+            } else if (
+              !user.onboarding?.onboardingCompleted &&
+              !user.onboarding?.onboardingSkipped
+            ) {
               // Verified but not onboarded - redirect to onboarding
               router.push("/onboarding");
               return;
@@ -57,7 +60,11 @@ function withAuth(
             return;
           }
 
-          if (!skipOnboardingCheck && !user.onboarding?.onboardingCompleted && !user.onboarding?.onboardingSkipped) {
+          if (
+            !skipOnboardingCheck &&
+            !user.onboarding?.onboardingCompleted &&
+            !user.onboarding?.onboardingSkipped
+          ) {
             // Verified but not onboarded - redirect to onboarding
             // Exception: if already on onboarding page, allow access
             if (pathname !== "/onboarding") {
