@@ -565,7 +565,7 @@ export default function CalendarPage() {
 
           {!integrationsLoading && !activeConnection && (
             <div className='absolute inset-0 z-20 flex items-center justify-center bg-white/55 p-5 text-center backdrop-blur-[2px] dark:bg-zinc-950/55'>
-              <div className='relative w-full max-w-sm overflow-hidden rounded-sm bg-white/95 p-6 shadow-sm ring-1 ring-black/5 dark:bg-zinc-950/95 dark:ring-white/10'>
+              <div className='relative w-full max-w-sm overflow-hidden rounded-3xl bg-white/95 p-6 shadow-sm ring-1 ring-black/5 dark:bg-zinc-950/95 dark:ring-white/10'>
                 {/* <div className='relative mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600 ring-1 ring-indigo-500/15 dark:text-indigo-300'><CalendarDays className='h-5 w-5' /></div> */}
                 <h3 className='relative text-lg font-semibold'>Bring your schedule into Genit</h3>
                 <p className='text-muted-foreground relative mt-1 mb-5 text-sm'>Connect Google Calendar to create, edit, and manage events.</p>

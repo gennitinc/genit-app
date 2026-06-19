@@ -28,6 +28,7 @@ export function useInboxConversations(filters: InboxFilters = {}) {
     queryKey: inboxConversationsQueryKey(filters),
     queryFn: () => fetchConversations(filters),
     staleTime: 10_000,
+    refetchInterval: 15_000,
   });
 }
 
@@ -37,6 +38,7 @@ export function useInboxMessages(conversationId?: string) {
     queryFn: () => fetchMessages(conversationId!),
     enabled: Boolean(conversationId),
     staleTime: 5_000,
+    refetchInterval: conversationId ? 8_000 : false,
   });
 }
 

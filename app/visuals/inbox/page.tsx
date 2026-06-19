@@ -224,6 +224,12 @@ export default function InboxPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    setReply("");
+    setAttachments([]);
+    setShowEmoji(false);
+  }, [activeId]);
+
   const sendReply = () => {
     const content = reply.trim();
     if ((!content && attachments.length === 0) || !activeId) return;
