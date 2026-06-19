@@ -412,7 +412,7 @@ export default function InboxPage() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button className='rounded-md bg-indigo-600 text-white hover:bg-indigo-700'>
-                Connect channel <ChevronDown className='h-4 w-4' />
+                Channel <ChevronDown className='h-4 w-4' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-64'>
