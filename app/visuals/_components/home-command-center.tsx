@@ -210,12 +210,12 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
   {postsQuery.isLoading ? (
     <div className='flex h-[20px] items-center justify-center'>
       <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-        <LoadingFileLoader className='h-4 w-4 animate-spin text-indigo-500' />
+        <LoadingFileLoader size={20} />
       </div>
     </div>
   ) : postsQuery.isError ? (
     <div className='flex h-[20px] items-center justify-center'>
-      <div className='max-w-md rounded-2xl bg-rose-500/10 p-5 text-center ring-1 ring-rose-500/15'>
+      <div className='max-w-md p-5 text-center '>
         <p className='text-sm text-rose-700 dark:text-rose-300'>
           Could not load the content pipeline.
         </p>
@@ -226,7 +226,7 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
         <button
           type='button'
           onClick={() => postsQuery.refetch()}
-          className='mt-4 rounded-full bg-rose-500 px-4 py-2 text-xs font-semibold text-white transition hover:bg-rose-600'
+          className='mt-4 rounded-sm bg-rose-500 px-4 py-2 text-xs font-semibold text-white transition hover:bg-rose-600'
         >
           Retry
         </button>

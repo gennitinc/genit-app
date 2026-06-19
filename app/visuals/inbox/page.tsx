@@ -10,6 +10,13 @@ import {
   WhatsAppBrand,
   XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
+import { ManageDialog } from "@/app/integrations/_components/manage-dialog";
+import {
+  INTEGRATIONS,
+  type Integration,
+  resolveStatus,
+} from "@/app/integrations/integrations-explorer";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,12 +50,17 @@ import {
 } from "@/hooks/use-inbox";
 import { useIntegrations } from "@/hooks/use-integrations";
 import type { InboxConversation, InboxFilters } from "@/lib/inbox-api";
-import type { IntegrationConnection, IntegrationPlatform } from "@/lib/integrations-api";
+import {
+  isMetaSurface,
+  type IntegrationConnection,
+  type IntegrationPlatform,
+} from "@/lib/integrations-api";
 import {
   Archive,
   ArrowUpDown,
   Check,
   CheckCheck,
+  ChevronDown,
   ChevronLeft,
   Circle,
   Clock3,
@@ -60,6 +72,7 @@ import {
   Plus,
   Search,
   Send,
+  Settings,
   Shapes,
   Trash2,
 } from "lucide-react";
@@ -131,6 +144,8 @@ function AccountAvatar({ account }: { account: IntegrationConnection }) {
 }
 
 export default function InboxPage() {
+  const [connectFor, setConnectFor] = useState<Integration | null>(null);
+  const [manageFor, setManageFor] = useState<Integration | null>(null);
   const [selectedAccountId, setSelectedAccountId] = useState("all");
   const [status, setStatus] = useState<InboxFilters["status"]>("all");
   const [sort, setSort] = useState<NonNullable<InboxFilters["sort"]>>("newest");
@@ -141,7 +156,19 @@ export default function InboxPage() {
   const deferredSearch = useDeferredValue(search.trim());
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { integrations, isLoading: integrationsLoading } = useIntegrations();
+  const {
+    integrations,
+    byPlatform,
+    identityBySurface,
+    isLoading: integrationsLoading,
+  } = useIntegrations();
+  const inboxIntegrations = useMemo(
+    () => INTEGRATIONS.filter((integration) => INBOX_PLATFORMS.has(integration.platform)),
+    []
+  );
+  const manageConnections = manageFor
+    ? (byPlatform.get(manageFor.platform) ?? [])
+    : [];
   const accounts = useMemo(
     () => integrations.filter((item) => INBOX_PLATFORMS.has(item.platform) && item.status === "active"),
     [integrations]
@@ -210,8 +237,8 @@ export default function InboxPage() {
     <div className="flex min-h-[calc(100vh-8rem)] w-full animate-in flex-col gap-5 fade-in slide-in-from-bottom-4 duration-500">
       <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          {/* <div className="mb-2 flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-400">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+          {/* <div className="mb-2 flex items-center gap-2 text-xs font-medium text-indigo-700 dark:text-indigo-400">
+            <span className="h-2 w-2 rounded-full bg-indigo-500" />
             {accounts.length} connected {accounts.length === 1 ? "account" : "accounts"}
           </div> */}
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Unified Inbox</h1>
@@ -220,7 +247,7 @@ export default function InboxPage() {
         <div className="flex flex-wrap gap-2">
           <Button
             variant="outline"
-            className="rounded-full"
+            className="rounded-md"
             disabled={!unreadTotal || markAllMutation.isPending}
             onClick={() => markAllMutation.mutate(undefined, {
               onSuccess: () => toast.success("Everything is marked as read"),
@@ -230,13 +257,58 @@ export default function InboxPage() {
             {markAllMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCheck className="mr-2 h-4 w-4" />}
             Mark all read
           </Button>
-          <Button asChild className="rounded-full bg-emerald-600 text-white hover:bg-emerald-700">
-            <Link href="/integrations"><Plus className="mr-2 h-4 w-4" />Connect channel</Link>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="rounded-md bg-indigo-600 text-white hover:bg-indigo-700">
+                Connect channel <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-64">
+              <DropdownMenuLabel>Inbox channels</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {inboxIntegrations.map((integration) => {
+                const hasIdentityForSurface = isMetaSurface(integration.platform)
+                  ? identityBySurface.has(integration.platform)
+                  : false;
+                const integrationStatus = resolveStatus(
+                  integration,
+                  byPlatform.get(integration.platform),
+                  hasIdentityForSurface
+                );
+                const isConnected =
+                  integrationStatus === "connected" || integrationStatus === "partial";
+                const Icon = integration.icon;
+
+                return (
+                  <DropdownMenuItem
+                    key={integration.platform}
+                    className="flex cursor-pointer items-center gap-1 py-1"
+                    onSelect={() =>
+                      isConnected
+                        ? setManageFor(integration)
+                        : setConnectFor(integration)
+                    }
+                  >
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0 flex-1 truncate font-medium">
+                      {integration.name}
+                    </span>
+                    {isConnected ? (
+                      <Settings className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    ) : (
+                      <Plus className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    )}
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
-      <div className="grid min-h-[650px] flex-1 overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm dark:border-white/10 dark:bg-zinc-950 lg:grid-cols-[380px_minmax(0,1fr)]">
+      <div className="grid min-h-[700px] flex-1 overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm dark:border-white/10 dark:bg-zinc-950 lg:grid-cols-[380px_minmax(0,1fr)]">
         <aside className={`${activeId ? "hidden lg:flex" : "flex"} min-h-0 flex-col border-r border-black/5 dark:border-white/10`}>
           <div className="border-b border-black/5 p-4 dark:border-white/10">
             <div className="flex items-center gap-2">
@@ -249,7 +321,7 @@ export default function InboxPage() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="icon" className="relative h-10 w-10 shrink-0 rounded-xl" aria-label="Select connected brand" title="Connected brand">
                     {selectedAccount ? <PlatformIcon platform={selectedAccount.platform} className="h-4 w-4" /> : <Shapes className="h-4 w-4" />}
-                    {selectedAccountId !== "all" && <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />}
+                    {selectedAccountId !== "all" && <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-indigo-500" />}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-64">
@@ -281,7 +353,7 @@ export default function InboxPage() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="icon" className="relative h-10 w-10 shrink-0 rounded-xl" aria-label="Filter conversations" title="Conversation filter">
                     <ListFilter className="h-4 w-4" />
-                    {status !== "all" && <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />}
+                    {status !== "all" && <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-indigo-500" />}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-52">
@@ -340,13 +412,13 @@ export default function InboxPage() {
                 <span className="min-w-0 flex-1">
                   <span className="flex items-center justify-between gap-2">
                     <span className={`truncate text-sm ${conversation.unreadCount ? "font-bold" : "font-medium"}`}>{conversation.customerName}</span>
-                    <span className={`text-[10px] ${conversation.unreadCount ? "font-semibold text-emerald-600" : "text-muted-foreground"}`}>{relativeTime(conversation.lastMessageAt)}</span>
+                    <span className={`text-[10px] ${conversation.unreadCount ? "font-semibold text-indigo-600" : "text-muted-foreground"}`}>{relativeTime(conversation.lastMessageAt)}</span>
                   </span>
                   <span className="mt-0.5 flex items-center gap-2">
                     <span className={`min-w-0 flex-1 truncate text-xs ${conversation.unreadCount ? "font-medium text-foreground" : "text-muted-foreground"}`}>{conversation.lastMessage}</span>
-                    {conversation.unreadCount > 0 && <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-600 px-1 text-[10px] font-bold text-white">{conversation.unreadCount}</span>}
+                    {conversation.unreadCount > 0 && <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-indigo-600 px-1 text-[10px] font-bold text-white">{conversation.unreadCount}</span>}
                   </span>
-                  <span className="mt-1.5 flex items-center gap-1 text-[10px] capitalize text-muted-foreground"><Circle className={`h-1.5 w-1.5 fill-current ${conversation.status === "open" ? "text-emerald-500" : conversation.status === "snoozed" ? "text-amber-500" : "text-zinc-400"}`} />{conversation.status}</span>
+                  <span className="mt-1.5 flex items-center gap-1 text-[10px] capitalize text-muted-foreground"><Circle className={`h-1.5 w-1.5 fill-current ${conversation.status === "open" ? "text-indigo-500" : conversation.status === "snoozed" ? "text-amber-500" : "text-zinc-400"}`} />{conversation.status}</span>
                 </span>
               </button>
             ))}
@@ -386,7 +458,7 @@ export default function InboxPage() {
                   <div className="mx-auto max-w-3xl space-y-5">
                     {messages.map((message) => {
                       const inbound = message.senderType === "customer";
-                      return <div key={message._id} className={`flex flex-col ${inbound ? "items-start" : "items-end"}`}><div className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm ${inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : "rounded-tr-md bg-emerald-600 text-white"}`}>{message.content}</div><span className="mt-1.5 flex items-center gap-1 px-1 text-[10px] text-muted-foreground">{relativeTime(message.createdAt)}{!inbound && <CheckCheck className="h-3 w-3" />}</span></div>;
+                      return <div key={message._id} className={`flex flex-col ${inbound ? "items-start" : "items-end"}`}><div className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm ${inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : "rounded-tr-md bg-indigo-600 text-white"}`}>{message.content}</div><span className="mt-1.5 flex items-center gap-1 px-1 text-[10px] text-muted-foreground">{relativeTime(message.createdAt)}{!inbound && <CheckCheck className="h-3 w-3" />}</span></div>;
                     })}
                     <div ref={messagesEndRef} />
                   </div>
@@ -395,17 +467,17 @@ export default function InboxPage() {
 
               <div className="border-t border-black/5 bg-white p-4 dark:border-white/10 dark:bg-zinc-950">
                 {activeConversation.status === "resolved" ? (
-                  <div className="flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm text-muted-foreground dark:bg-zinc-900"><Check className="h-4 w-4" />This conversation is resolved. <button className="font-semibold text-emerald-700 hover:underline dark:text-emerald-400" onClick={() => changeStatus("open")}>Reopen to reply</button></div>
+                  <div className="flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm text-muted-foreground dark:bg-zinc-900"><Check className="h-4 w-4" />This conversation is resolved. <button className="font-semibold text-indigo-700 hover:underline dark:text-indigo-400" onClick={() => changeStatus("open")}>Reopen to reply</button></div>
                 ) : (
                   <div className="relative mx-auto max-w-3xl">
-                    <textarea value={reply} onChange={(event) => setReply(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); sendReply(); } }} placeholder={`Reply to ${activeConversation.customerName}…`} className="min-h-24 w-full resize-none rounded-2xl border border-black/10 bg-zinc-50 px-4 py-3 pr-14 text-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-white/10 dark:bg-zinc-900" />
-                    <Button size="icon" onClick={sendReply} disabled={!reply.trim() || sendMutation.isPending} className="absolute bottom-3 right-3 rounded-full bg-emerald-600 text-white hover:bg-emerald-700">{sendMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}</Button>
+                    <textarea value={reply} onChange={(event) => setReply(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); sendReply(); } }} placeholder={`Reply to ${activeConversation.customerName}…`} className="min-h-24 w-full resize-none rounded-2xl border border-black/10 bg-zinc-50 px-4 py-3 pr-14 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 dark:border-white/10 dark:bg-zinc-900" />
+                    <Button size="icon" onClick={sendReply} disabled={!reply.trim() || sendMutation.isPending} className="absolute bottom-3 right-3 rounded-full bg-indigo-600 text-white hover:bg-indigo-700">{sendMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}</Button>
                   </div>
                 )}
               </div>
             </>
           ) : (
-            <div className="flex h-full flex-col items-center justify-center p-8 text-center"><span className="mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-white shadow-sm ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10"><Inbox className="h-8 w-8 text-emerald-600" /></span><h2 className="text-lg font-semibold">Your conversations, in one place</h2><p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">Choose a conversation to read, reply, snooze, resolve, or delete it.</p></div>
+            <div className="flex h-full flex-col items-center justify-center p-8 text-center"><span className="mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-white shadow-sm ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10"><Inbox className="h-8 w-8 text-indigo-600" /></span><h2 className="text-lg font-semibold">Your conversations, in one place</h2><p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">Choose a conversation to read, reply, snooze, resolve, or delete it.</p></div>
           )}
         </main>
       </div>
@@ -416,6 +488,26 @@ export default function InboxPage() {
           <AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction onClick={confirmDelete} className="bg-red-600 text-white hover:bg-red-700">{deleteMutation.isPending ? "Deleting…" : "Delete conversation"}</AlertDialogAction></AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <ConnectDialog
+        open={Boolean(connectFor)}
+        onOpenChange={(open) => !open && setConnectFor(null)}
+        platform={connectFor?.platform ?? null}
+        platformName={connectFor?.name ?? ""}
+        platformDescription={connectFor?.description ?? ""}
+        Icon={connectFor?.icon ?? (() => null)}
+        glow={connectFor?.glow ?? "rgba(113,113,122,0.4)"}
+      />
+
+      <ManageDialog
+        open={Boolean(manageFor)}
+        onOpenChange={(open) => !open && setManageFor(null)}
+        connections={manageConnections}
+        platform={manageFor?.platform ?? null}
+        platformName={manageFor?.name ?? ""}
+        Icon={manageFor?.icon ?? (() => null)}
+        glow={manageFor?.glow ?? "rgba(113,113,122,0.4)"}
+      />
     </div>
   );
 }

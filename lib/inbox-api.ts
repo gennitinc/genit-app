@@ -7,8 +7,11 @@ export interface InboxConversation {
   platform: "instagram" | "facebook" | "x" | "twitter" | "linkedin" | "gmail" | "email" | "outlook" | "whatsapp" | "messenger" | "telegram";
   platformConversationId: string;
   customerName: string;
+  customerId?: string;
   customerAvatar?: string;
   customerHandle?: string;
+  subject?: string;
+  metadata?: Record<string, unknown>;
   lastMessage: string;
   lastMessageAt: string;
   unreadCount: number;
@@ -24,9 +27,23 @@ export interface InboxMessage {
   platformMessageId?: string;
   senderType: "customer" | "agent" | "bot";
   content: string;
+  attachments: InboxAttachment[];
+  status: "queued" | "sending" | "sent" | "delivered" | "read" | "failed";
+  error?: string;
+  sentAt?: string;
+  deliveredAt?: string;
+  readAt?: string;
   read: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface InboxAttachment {
+  url: string;
+  name: string;
+  mimeType: string;
+  size: number;
+  kind: "image" | "video" | "audio" | "file";
 }
 
 export interface InboxFilters {
@@ -47,8 +64,27 @@ export async function fetchMessages(conversationId: string): Promise<InboxMessag
   return res.data.messages;
 }
 
-export async function sendMessage(conversationId: string, content: string): Promise<InboxMessage> {
-  const res = await apiResponse.post(`/api/v1/inbox/conversations/${conversationId}/messages`, { content });
+export async function sendMessage(conversationId: string, content: string, attachments: InboxAttachment[] = []): Promise<InboxMessage> {
+  const res = await apiResponse.post(`/api/v1/inbox/conversations/${conversationId}/messages`, { content, attachments });
+  return res.data.message;
+}
+
+export async function uploadInboxAttachment(file: File): Promise<InboxAttachment> {
+  const body = new FormData();
+  body.append("file", file);
+  const res = await apiResponse.post(`/api/v1/inbox/attachments`, body, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data.attachment;
+}
+
+export async function generateInboxDraft(conversationId: string, instruction?: string): Promise<string> {
+  const res = await apiResponse.post(`/api/v1/inbox/conversations/${conversationId}/ai-draft`, { instruction });
+  return res.data.draft;
+}
+
+export async function retryInboxMessage(messageId: string): Promise<InboxMessage> {
+  const res = await apiResponse.post(`/api/v1/inbox/messages/${messageId}/retry`);
   return res.data.message;
 }
 

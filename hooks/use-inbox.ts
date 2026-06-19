@@ -9,6 +9,8 @@ import {
   markAllConversationsAsRead,
   updateConversationStatus,
   deleteConversation,
+  retryInboxMessage,
+  type InboxAttachment,
   type InboxFilters,
   type InboxConversation,
 } from "@/lib/inbox-api";
@@ -42,12 +44,27 @@ export function useSendMessage() {
   const qc = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ conversationId, content }: { conversationId: string, content: string }) => 
-      sendMessage(conversationId, content),
+    mutationFn: ({ conversationId, content, attachments = [] }: { conversationId: string, content: string, attachments?: InboxAttachment[] }) =>
+      sendMessage(conversationId, content, attachments),
     onSuccess: (data, variables) => {
       qc.invalidateQueries({ queryKey: inboxMessagesQueryKey(variables.conversationId) });
       qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
-    }
+    },
+    onSettled: (_data, _error, variables) => {
+      qc.invalidateQueries({ queryKey: inboxMessagesQueryKey(variables.conversationId) });
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
+    },
+  });
+}
+
+export function useRetryInboxMessage() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ messageId }: { messageId: string; conversationId: string }) => retryInboxMessage(messageId),
+    onSettled: (_data, _error, variables) => {
+      qc.invalidateQueries({ queryKey: inboxMessagesQueryKey(variables.conversationId) });
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
+    },
   });
 }
 
