@@ -46,10 +46,17 @@ import {
   useMarkAllConversationsAsRead,
   useMarkConversationAsRead,
   useSendMessage,
+  useRetryInboxMessage,
   useUpdateConversationStatus,
 } from "@/hooks/use-inbox";
 import { useIntegrations } from "@/hooks/use-integrations";
-import type { InboxConversation, InboxFilters } from "@/lib/inbox-api";
+import {
+  generateInboxDraft,
+  uploadInboxAttachment,
+  type InboxAttachment,
+  type InboxConversation,
+  type InboxFilters,
+} from "@/lib/inbox-api";
 import {
   isMetaSurface,
   type IntegrationConnection,
@@ -69,12 +76,17 @@ import {
   ListFilter,
   MessageSquare,
   MoreHorizontal,
+  Paperclip,
   Plus,
+  RefreshCw,
   Search,
   Send,
   Settings,
   Shapes,
+  Smile,
+  Sparkles,
   Trash2,
+  XCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
@@ -98,6 +110,8 @@ const PLATFORM_LABELS: Record<string, string> = {
   messenger: "Messenger",
   telegram: "Telegram",
 };
+
+const QUICK_EMOJIS = ["😀", "😊", "🙏", "❤️", "👍", "🎉", "✨", "😂", "🤝", "✅", "🔥", "💡"];
 
 function PlatformIcon({ platform, className = "h-4 w-4" }: { platform: string; className?: string }) {
   switch (platform) {
@@ -152,9 +166,14 @@ export default function InboxPage() {
   const [search, setSearch] = useState("");
   const [activeId, setActiveId] = useState<string | null>(null);
   const [reply, setReply] = useState("");
+  const [attachments, setAttachments] = useState<InboxAttachment[]>([]);
+  const [showEmoji, setShowEmoji] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isWriting, setIsWriting] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<InboxConversation | null>(null);
   const deferredSearch = useDeferredValue(search.trim());
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     integrations,
@@ -185,6 +204,7 @@ export default function InboxPage() {
   const { data: conversations = [], isLoading, isFetching } = useInboxConversations(filters);
   const { data: messages = [], isLoading: messagesLoading } = useInboxMessages(activeId || undefined);
   const sendMutation = useSendMessage();
+  const retryMutation = useRetryInboxMessage();
   const markReadMutation = useMarkConversationAsRead();
   const markAllMutation = useMarkAllConversationsAsRead();
   const statusMutation = useUpdateConversationStatus();
@@ -206,11 +226,42 @@ export default function InboxPage() {
 
   const sendReply = () => {
     const content = reply.trim();
-    if (!content || !activeId) return;
-    sendMutation.mutate({ conversationId: activeId, content }, {
-      onSuccess: () => setReply(""),
-      onError: () => toast.error("Your reply could not be sent"),
+    if ((!content && attachments.length === 0) || !activeId) return;
+    sendMutation.mutate({ conversationId: activeId, content, attachments }, {
+      onSuccess: () => {
+        setReply("");
+        setAttachments([]);
+      },
+      onError: (error: any) => toast.error(error?.response?.data?.message || "Your reply could not be sent"),
     });
+  };
+
+  const uploadFiles = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setIsUploading(true);
+    try {
+      const room = Math.max(0, 4 - attachments.length);
+      const uploaded = await Promise.all(Array.from(files).slice(0, room).map(uploadInboxAttachment));
+      setAttachments((current) => [...current, ...uploaded]);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "The attachment could not be uploaded");
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const writeWithAi = async () => {
+    if (!activeId) return;
+    setIsWriting(true);
+    try {
+      const draft = await generateInboxDraft(activeId, reply || undefined);
+      setReply(draft);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "AI could not write a reply");
+    } finally {
+      setIsWriting(false);
+    }
   };
 
   const changeStatus = (nextStatus: InboxConversation["status"]) => {
@@ -458,7 +509,23 @@ export default function InboxPage() {
                   <div className="mx-auto max-w-3xl space-y-5">
                     {messages.map((message) => {
                       const inbound = message.senderType === "customer";
-                      return <div key={message._id} className={`flex flex-col ${inbound ? "items-start" : "items-end"}`}><div className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm ${inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : "rounded-tr-md bg-indigo-600 text-white"}`}>{message.content}</div><span className="mt-1.5 flex items-center gap-1 px-1 text-[10px] text-muted-foreground">{relativeTime(message.createdAt)}{!inbound && <CheckCheck className="h-3 w-3" />}</span></div>;
+                      return (
+                        <div key={message._id} className={`flex flex-col ${inbound ? "items-start" : "items-end"}`}>
+                          <div className={`max-w-[82%] overflow-hidden rounded-2xl text-sm leading-6 shadow-sm ${inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-600 text-white" : "rounded-tr-md bg-indigo-600 text-white"}`}>
+                            {message.attachments?.map((attachment) => (
+                              <div key={attachment.url} className="border-b border-black/10 last:border-b-0">
+                                {attachment.kind === "image" ? <img src={attachment.url} alt={attachment.name} className="max-h-72 w-full object-cover" /> : attachment.kind === "video" ? <video src={attachment.url} controls className="max-h-72 w-full" /> : attachment.kind === "audio" ? <audio src={attachment.url} controls className="m-3 max-w-[260px]" /> : <a href={attachment.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-3 font-medium underline underline-offset-2"><Paperclip className="h-4 w-4" />{attachment.name}</a>}
+                              </div>
+                            ))}
+                            {message.content && <div className="px-4 py-3">{message.content}</div>}
+                          </div>
+                          <span className="mt-1.5 flex items-center gap-1 px-1 text-[10px] text-muted-foreground">
+                            {relativeTime(message.createdAt)}
+                            {!inbound && (message.status === "sending" ? <Loader2 className="h-3 w-3 animate-spin" /> : message.status === "failed" ? <button className="flex items-center gap-1 text-red-600 hover:underline" onClick={() => retryMutation.mutate({ messageId: message._id, conversationId: activeConversation._id })}><RefreshCw className="h-3 w-3" />Retry</button> : <><CheckCheck className="h-3 w-3" />{message.status}</>)}
+                          </span>
+                          {message.status === "failed" && message.error && <span className="max-w-xs px-1 text-right text-[10px] text-red-600">{message.error}</span>}
+                        </div>
+                      );
                     })}
                     <div ref={messagesEndRef} />
                   </div>
@@ -469,9 +536,19 @@ export default function InboxPage() {
                 {activeConversation.status === "resolved" ? (
                   <div className="flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm text-muted-foreground dark:bg-zinc-900"><Check className="h-4 w-4" />This conversation is resolved. <button className="font-semibold text-indigo-700 hover:underline dark:text-indigo-400" onClick={() => changeStatus("open")}>Reopen to reply</button></div>
                 ) : (
-                  <div className="relative mx-auto max-w-3xl">
-                    <textarea value={reply} onChange={(event) => setReply(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); sendReply(); } }} placeholder={`Reply to ${activeConversation.customerName}…`} className="min-h-24 w-full resize-none rounded-2xl border border-black/10 bg-zinc-50 px-4 py-3 pr-14 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 dark:border-white/10 dark:bg-zinc-900" />
-                    <Button size="icon" onClick={sendReply} disabled={!reply.trim() || sendMutation.isPending} className="absolute bottom-3 right-3 rounded-full bg-indigo-600 text-white hover:bg-indigo-700">{sendMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}</Button>
+                  <div className="relative mx-auto max-w-3xl rounded-2xl border border-black/10 bg-zinc-50 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/10 dark:border-white/10 dark:bg-zinc-900">
+                    {attachments.length > 0 && <div className="flex gap-2 overflow-x-auto border-b border-black/5 p-3 dark:border-white/10">{attachments.map((attachment) => <div key={attachment.url} className="relative flex h-14 min-w-36 items-center gap-2 rounded-xl bg-white p-2 pr-8 text-xs shadow-sm dark:bg-zinc-800">{attachment.kind === "image" ? <img src={attachment.url} alt="" className="h-10 w-10 rounded-lg object-cover" /> : <Paperclip className="h-5 w-5 shrink-0" />}<span className="truncate">{attachment.name}</span><button onClick={() => setAttachments((current) => current.filter((item) => item.url !== attachment.url))} className="absolute right-1.5 top-1.5 text-muted-foreground hover:text-foreground" aria-label={`Remove ${attachment.name}`}><XCircle className="h-4 w-4" /></button></div>)}</div>}
+                    <textarea value={reply} onChange={(event) => setReply(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); sendReply(); } }} placeholder={`Reply to ${activeConversation.customerName}…`} className="min-h-20 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none" />
+                    <div className="flex items-center justify-between gap-2 px-3 pb-3">
+                      <div className="relative flex items-center gap-1">
+                        <input ref={fileInputRef} type="file" multiple className="hidden" accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip" onChange={(event) => uploadFiles(event.target.files)} />
+                        <Button type="button" variant="ghost" size="icon" className="h-8 w-8 rounded-full" disabled={isUploading || attachments.length >= 4} onClick={() => fileInputRef.current?.click()} aria-label="Attach files">{isUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Paperclip className="h-4 w-4" />}</Button>
+                        <Button type="button" variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={() => setShowEmoji((open) => !open)} aria-label="Add emoji"><Smile className="h-4 w-4" /></Button>
+                        {showEmoji && <div className="absolute bottom-11 left-0 z-20 grid w-48 grid-cols-6 gap-1 rounded-xl border bg-popover p-2 text-popover-foreground shadow-lg">{QUICK_EMOJIS.map((emoji) => <button key={emoji} type="button" className="rounded-md p-1 text-lg hover:bg-muted" onClick={() => { setReply((current) => current + emoji); setShowEmoji(false); }}>{emoji}</button>)}</div>}
+                        <Button type="button" variant="ghost" size="sm" className="h-8 rounded-full text-xs" disabled={isWriting} onClick={writeWithAi}>{isWriting ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <Sparkles className="mr-1.5 h-3.5 w-3.5" />}AI Write</Button>
+                      </div>
+                      <Button size="icon" onClick={sendReply} disabled={(!reply.trim() && attachments.length === 0) || sendMutation.isPending || isUploading} className="h-9 w-9 rounded-full bg-indigo-600 text-white hover:bg-indigo-700">{sendMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}</Button>
+                    </div>
                   </div>
                 )}
               </div>
