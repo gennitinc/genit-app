@@ -143,7 +143,7 @@ function PricingCard({
           className={cn(
             "mb-6 w-full transition-all duration-300",
             tier.popular
-              ? "bg-primary text-white hover:bg-primary/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40"
+              ? "bg-indigo-600 hover:bg-indigo-700 text-white hover:bg-indigo-600 hover:bg-indigo-700/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40"
               : "bg-zinc-800 text-white hover:bg-zinc-700"
           )}
         >

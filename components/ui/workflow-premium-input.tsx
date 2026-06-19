@@ -482,7 +482,7 @@ export function WorkflowPremiumInput({
                       className={cn(
                         "flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-xs transition-colors",
                         selectedModel === model.id
-                          ? "bg-primary/10 text-primary font-medium"
+                          ? "bg-indigo-600 hover:bg-indigo-700/10 text-primary font-medium"
                           : "hover:bg-muted"
                       )}
                     >
@@ -524,7 +524,7 @@ export function WorkflowPremiumInput({
                       className={cn(
                         "flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-xs transition-colors",
                         aspectRatio === ratio.value
-                          ? "bg-primary/10 text-primary font-medium"
+                          ? "bg-indigo-600 hover:bg-indigo-700/10 text-primary font-medium"
                           : "hover:bg-muted"
                       )}
                     >
@@ -648,7 +648,7 @@ export function WorkflowPremiumInput({
                 "relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out",
                 isListening
                   ? "animate-pulse bg-red-500/10 text-red-500"
-                  : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
+                  : "text-muted-foreground hover:text-foreground hover:bg-indigo-600 hover:bg-indigo-700/5 dark:hover:bg-white/5"
               )}
               onClick={handleMicClick}
               disabled={!isSupported || isGenerating || disabled}
@@ -661,7 +661,7 @@ export function WorkflowPremiumInput({
               type='button'
               onClick={handleSubmit}
               disabled={isGenerating || !value.trim() || disabled}
-              className='bg-primary text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out disabled:opacity-50'
+              className='bg-indigo-600 hover:bg-indigo-700 text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out disabled:opacity-50'
             >
               {isGenerating ? (
                 <Loader2 className='h-4 w-4 animate-spin' />

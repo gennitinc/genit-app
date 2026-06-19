@@ -79,10 +79,19 @@ function ChatHistoryPage() {
   const [isRestored, setIsRestored] = useState(false);
 
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const activeOrgId = user?.currentOrganization?._id || (user?.business && typeof user.business === "object" ? user.business._id : user?.business);
+  const latestFetchRef = useRef(0);
+  const activeOrgId =
+    (user?.currentOrganization && typeof user.currentOrganization === "object"
+      ? (user.currentOrganization as any)._id
+      : user?.currentOrganization) ||
+    (user?.business && typeof user.business === "object"
+      ? (user.business as any)._id
+      : user?.business);
 
   const fetchAllProjects = useCallback(
     async (pageNumber: number = 1, append: boolean = false, searchVal: string = searchQuery) => {
+      const fetchId = ++latestFetchRef.current;
+
       try {
         if (append) {
           setLoadingMore(true);
@@ -99,10 +108,15 @@ function ChatHistoryPage() {
         }
         params.append("page", pageNumber.toString());
         params.append("limit", "10");
+        if (activeOrgId) {
+          params.append("orgId", String(activeOrgId));
+        }
 
         const response = await apiResponse.get(
           `/project/myprojects?${params.toString()}`
         );
+
+        if (fetchId !== latestFetchRef.current) return;
 
         if (response.status == 200) {
           const newProjects = response.data.projects || [];
@@ -120,14 +134,17 @@ function ChatHistoryPage() {
           setError("Failed to fetch projects");
         }
       } catch (error: any) {
+        if (fetchId !== latestFetchRef.current) return;
         console.error("Error fetching projects:", error);
         setError(error.response?.data?.message || "Failed to fetch projects");
       } finally {
-        setLoading(false);
-        setLoadingMore(false);
+        if (fetchId === latestFetchRef.current) {
+          setLoading(false);
+          setLoadingMore(false);
+        }
       }
     },
-    [searchQuery]
+    [activeOrgId, searchQuery]
   );
 
   // Load more projects when scrolling
@@ -139,15 +156,15 @@ function ChatHistoryPage() {
 
   // Load state from sessionStorage on mount (if organization matches)
   useEffect(() => {
-    const cachedOrgId = sessionStorage.getItem("genit_history_orgId");
+    const cachedOrgId = sessionStorage.getItem("genit_history_orgId_v2");
     const activeOrgIdStr = activeOrgId ? String(activeOrgId) : null;
     
     if (activeOrgIdStr && cachedOrgId === activeOrgIdStr) {
-      const cachedProjects = sessionStorage.getItem("genit_history_projects");
-      const cachedPage = sessionStorage.getItem("genit_history_page");
-      const cachedHasMore = sessionStorage.getItem("genit_history_hasMore");
-      const cachedSearchQuery = sessionStorage.getItem("genit_history_searchQuery");
-      const cachedScrollTop = sessionStorage.getItem("genit_history_scrollTop");
+      const cachedProjects = sessionStorage.getItem("genit_history_projects_v2");
+      const cachedPage = sessionStorage.getItem("genit_history_page_v2");
+      const cachedHasMore = sessionStorage.getItem("genit_history_hasMore_v2");
+      const cachedSearchQuery = sessionStorage.getItem("genit_history_searchQuery_v2");
+      const cachedScrollTop = sessionStorage.getItem("genit_history_scrollTop_v2");
 
       if (cachedProjects) {
         try {
@@ -203,12 +220,12 @@ function ChatHistoryPage() {
       lastOrgIdRef.current = orgIdStr;
 
       // Clear cache
-      sessionStorage.removeItem("genit_history_orgId");
-      sessionStorage.removeItem("genit_history_projects");
-      sessionStorage.removeItem("genit_history_page");
-      sessionStorage.removeItem("genit_history_hasMore");
-      sessionStorage.removeItem("genit_history_searchQuery");
-      sessionStorage.removeItem("genit_history_scrollTop");
+      sessionStorage.removeItem("genit_history_orgId_v2");
+      sessionStorage.removeItem("genit_history_projects_v2");
+      sessionStorage.removeItem("genit_history_page_v2");
+      sessionStorage.removeItem("genit_history_hasMore_v2");
+      sessionStorage.removeItem("genit_history_searchQuery_v2");
+      sessionStorage.removeItem("genit_history_scrollTop_v2");
 
       // Reset state
       setProjects([]);
@@ -225,18 +242,18 @@ function ChatHistoryPage() {
   // Sync state to sessionStorage when state updates (but only after restoring on mount)
   useEffect(() => {
     if (isRestored && activeOrgId) {
-      sessionStorage.setItem("genit_history_orgId", String(activeOrgId));
-      sessionStorage.setItem("genit_history_projects", JSON.stringify(projects));
-      sessionStorage.setItem("genit_history_page", page.toString());
-      sessionStorage.setItem("genit_history_hasMore", String(hasMore));
-      sessionStorage.setItem("genit_history_searchQuery", searchQuery);
+      sessionStorage.setItem("genit_history_orgId_v2", String(activeOrgId));
+      sessionStorage.setItem("genit_history_projects_v2", JSON.stringify(projects));
+      sessionStorage.setItem("genit_history_page_v2", page.toString());
+      sessionStorage.setItem("genit_history_hasMore_v2", String(hasMore));
+      sessionStorage.setItem("genit_history_searchQuery_v2", searchQuery);
     }
-  }, [projects, page, hasMore, searchQuery, isRestored]);
+  }, [projects, page, hasMore, searchQuery, isRestored, activeOrgId]);
 
   // Fetch projects when searchQuery changes (unless on initial mount restoration)
   useEffect(() => {
     if (isRestored && user?._id) {
-      const cachedSearchQuery = sessionStorage.getItem("genit_history_searchQuery") || "";
+      const cachedSearchQuery = sessionStorage.getItem("genit_history_searchQuery_v2") || "";
       const isInitialRestore = projects.length > 0 && searchQuery === cachedSearchQuery;
       if (!isInitialRestore) {
         setPage(1);
@@ -245,7 +262,7 @@ function ChatHistoryPage() {
         fetchAllProjects(1, false, searchQuery);
       }
     }
-  }, [searchQuery, isRestored, user?._id]);
+  }, [searchQuery, isRestored, user?._id, activeOrgId, fetchAllProjects]);
 
   // Initial fetch if nothing was restored from sessionStorage
   useEffect(() => {
@@ -263,7 +280,7 @@ function ChatHistoryPage() {
       const { scrollTop, scrollHeight, clientHeight } = container;
       
       // Save scroll top to sessionStorage
-      sessionStorage.setItem("genit_history_scrollTop", scrollTop.toString());
+      sessionStorage.setItem("genit_history_scrollTop_v2", scrollTop.toString());
 
       // Load more when user is 200px from bottom
       if (

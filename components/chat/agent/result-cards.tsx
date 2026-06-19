@@ -510,7 +510,7 @@ export function GeneratedDesignCard({ data }: { data: any }) {
                   }, 10);
                 }
               }}
-              className='border-primary/30 text-primary hover:bg-primary/5 h-7 w-fit gap-1.5 px-2 text-xs flex'
+              className='border-primary/30 text-primary hover:bg-indigo-600 hover:bg-indigo-700/5 h-7 w-fit gap-1.5 px-2 text-xs flex'
             >
               <LayoutGrid className='h-3 w-3' />
               View

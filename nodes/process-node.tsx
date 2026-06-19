@@ -25,7 +25,7 @@ export const ProcessNode = memo(
           </button>
         )}
         <div className='flex items-center'>
-          <div className='bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-full'>
+          <div className='bg-indigo-600 hover:bg-indigo-700/10 text-primary flex h-8 w-8 items-center justify-center rounded-full'>
             <Settings className='h-4 w-4' />
           </div>
           <div className='ml-2'>

@@ -1052,7 +1052,7 @@ export function VersioningMessage({
                           if (setFocusedGenerationId)
                             setFocusedGenerationId(item.id);
                         }}
-                        className='border-primary/30 text-primary hover:bg-primary/5 hidden h-7.5 w-fit gap-1.5 px-2 text-xs lg:flex'
+                        className='border-primary/30 text-primary hover:bg-indigo-600 hover:bg-indigo-700/5 hidden h-7.5 w-fit gap-1.5 px-2 text-xs lg:flex'
                       >
                         <LayoutGrid className='h-3 w-3' />
                         View

@@ -161,7 +161,7 @@ export function StepImport({ onComplete, onSkip, isSkipping }: StepImportProps) 
           <Button
             onClick={handleImport}
             disabled={!url.trim()}
-            className='disabled:text-neutral-500 dark:text-neutral-400 absolute top-1/2 right-2 h-10 -translate-y-1/2 rounded-xl bg-primary font-medium text-neutral-900 dark:text-white hover:bg-primary/90 disabled:bg-neutral-200 dark:disabled:bg-white/10'
+            className='disabled:text-neutral-500 dark:text-neutral-400 absolute top-1/2 right-2 h-10 -translate-y-1/2 rounded-xl bg-indigo-600 hover:bg-indigo-700 font-medium text-neutral-900 dark:text-white hover:bg-indigo-600 hover:bg-indigo-700/90 disabled:bg-neutral-200 dark:disabled:bg-white/10'
           >
             Import
             <ArrowRight className='ml-1 h-4 w-4' />
@@ -607,7 +607,7 @@ function ManualSetup({
           <Button
             onClick={handleContinue}
             disabled={isUploading}
-            className='disabled:text-neutral-500 dark:text-neutral-400 flex-1 bg-primary font-medium text-neutral-900 dark:text-white hover:bg-primary/90 disabled:bg-neutral-200 dark:disabled:bg-white/10'
+            className='disabled:text-neutral-500 dark:text-neutral-400 flex-1 bg-indigo-600 hover:bg-indigo-700 font-medium text-neutral-900 dark:text-white hover:bg-indigo-600 hover:bg-indigo-700/90 disabled:bg-neutral-200 dark:disabled:bg-white/10'
           >
             Continue
             <ArrowRight className='ml-1 h-4 w-4' />

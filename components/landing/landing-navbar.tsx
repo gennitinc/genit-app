@@ -255,7 +255,7 @@ export function LandingNavbar() {
                     Sign in
                   </Link>
                   <Link
-                    className='hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] border-primary/20 bg-primary px-4 text-sm font-semibold text-white shadow-sm shadow-primary/10 outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-primary/90 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                    className='hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl bg-indigo-600 hover:bg-indigo-700 px-4 text-sm font-semibold text-white shadow-sm shadow-primary/10 outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                     href='/signup'
                   >
                     <span>Start for $0</span>
@@ -307,7 +307,7 @@ export function LandingNavbar() {
                   Sign in
                 </Link>
                 <Link
-                  className='text-primary-foreground border-primary/20 bg-primary hover:bg-primary/90 hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                  className='text-primary-foreground border-primary/20 bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-600 hover:bg-indigo-700/90 hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                   href='/signup'
                 >
                   <span>Start for $0</span>

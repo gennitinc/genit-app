@@ -248,7 +248,7 @@ export default function PartnerLogos() {
 
             <div className='flex items-center px-6 py-12 md:px-8 lg:p-16'>
               <div className='w-full max-w-lg'>
-                <Badge className='bg-primary/10 text-primary mb-6 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium'>
+                <Badge className='bg-indigo-600 hover:bg-indigo-700/10 text-primary mb-6 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium'>
                   <Globe className='h-4 w-4' />
                   Strategic Partnerships
                 </Badge>
@@ -263,7 +263,7 @@ export default function PartnerLogos() {
                 </p>
                 <div className='flex flex-col gap-4 sm:flex-row'>
                   <Button
-                    className='group flex cursor-pointer items-center rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-300 hover:bg-primary/90 hover:pr-4 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
+                    className='group flex cursor-pointer items-center rounded-lg bg-indigo-600 hover:bg-indigo-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-300 hover:bg-indigo-600 hover:bg-indigo-700/90 hover:pr-4 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
                     onClick={() => {
                       router.push("/contact");
                     }}

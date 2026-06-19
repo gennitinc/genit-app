@@ -140,7 +140,7 @@ const PreviewPanelContent = ({ isFullscreen, onToggleFullscreen }: { isFullscree
   return (
     <div className='bg-muted/5 flex h-full flex-col items-center justify-center rounded-3xl border border-zinc-200 py-4 shadow-2xl dark:border-zinc-800/50'>
       <div className='max-w-md space-y-4 text-center'>
-        <div className='bg-primary/10 mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full'>
+        <div className='bg-indigo-600 hover:bg-indigo-700/10 mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full'>
           <ImageIcon className='text-primary h-8 w-8' />
         </div>
         <h3 className='text-xl font-bold'>Interactive Preview Coming Soon</h3>

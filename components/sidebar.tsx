@@ -99,7 +99,7 @@ export function Sidebar({ selectedItems, onItemSelect }: SidebarProps) {
               key={item.id}
               className={`cursor-pointer rounded-lg border p-3 transition-all ${
                 selectedItems.includes(item.id)
-                  ? "border-primary bg-primary/5"
+                  ? "border-primary bg-indigo-600 hover:bg-indigo-700/5"
                   : "border-border hover:border-border/60"
               }`}
               onClick={() => toggleItem(item.id)}

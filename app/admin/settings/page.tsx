@@ -52,7 +52,7 @@ export default function SettingsPage() {
         {/* General Settings */}
         <div className='bg-card border-border/50 rounded-3xl border p-8 shadow-sm'>
           <div className='mb-8 flex items-center gap-3'>
-            <div className='bg-primary/10 text-primary rounded-xl p-2.5'>
+            <div className='bg-indigo-600 hover:bg-indigo-700/10 text-primary rounded-xl p-2.5'>
               <Globe className='h-5 w-5' />
             </div>
             <h2 className='text-xl font-bold'>General Configuration</h2>

@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Loader2, Image as ImageIcon, Upload, X, Sparkles, ImageOff } from "lucide-react";
+import { ArrowLeft, Save, Loader2, Image as ImageIcon, X, Sparkles, ImageOff } from "lucide-react";
 import { NotionEditor } from "@/components/admin/NotionEditor";
+import { MediaPicker } from "@/components/admin/MediaPicker";
 import { apiResponse } from "@/utils/apiResponse";
 import { toast } from "sonner";
-import Image from "next/image";
 import { useUserContext } from "@/context/AuthenticatedContext";
 
 const CATEGORY_OPTIONS = [
@@ -77,7 +77,7 @@ export default function NewBlogPostPage() {
   const router = useRouter();
   const { user, fetchCurrentUser } = useUserContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
+  const [, setIsUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSlugEdited, setIsSlugEdited] = useState(false);
 
@@ -108,32 +108,6 @@ export default function NewBlogPostPage() {
   useEffect(() => {
     setReadTime(calculateReadTime(content));
   }, [content]);
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setIsUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const res = await apiResponse.post("/blog/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (res.data && res.data.url) {
-        setCoverImage(res.data.url);
-        toast.success("Cover image uploaded successfully");
-      }
-    } catch (err: any) {
-      console.error(err);
-      toast.error(err.response?.data?.message || "Failed to upload cover image");
-    } finally {
-      setIsUploading(false);
-    }
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -243,7 +217,7 @@ export default function NewBlogPostPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Navigation / Header */}
-      <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+      <div className="flex items-center justify-between  pb-4">
         <div className="flex items-center gap-3">
           <Link
             href="/admin/blog"
@@ -270,7 +244,7 @@ export default function NewBlogPostPage() {
           <button
             type="button"
             onClick={handleSubmit}
-            className="inline-flex items-center justify-center gap-2 bg-primary text-white text-xs font-bold px-5 py-2 rounded-xl hover:shadow-lg hover:shadow-primary/20 transition duration-200 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-5 py-2 rounded-xl hover:shadow-lg hover:shadow-primary/20 transition duration-200 cursor-pointer"
           >
             Publish Article <Save className="h-3.5 w-3.5" />
           </button>
@@ -368,7 +342,7 @@ export default function NewBlogPostPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-zinc-950 border border-zinc-800 w-full max-w-xl rounded-2xl p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+            <div className="flex items-center justify-between  pb-3">
               <div>
                 <h3 className="text-lg font-bold text-white">Finalize Blog Post</h3>
                 <p className="text-xs text-zinc-400 mt-0.5 font-medium">Configure publication metadata before publishing</p>
@@ -390,58 +364,7 @@ export default function NewBlogPostPage() {
                   Cover Photo *
                 </label>
                 
-                <div className="relative group border border-zinc-850 rounded-xl overflow-hidden bg-zinc-900/20 aspect-video flex flex-col items-center justify-center transition hover:border-zinc-700">
-                  {coverImage ? (
-                    <>
-                      <Image
-                        src={coverImage}
-                        alt="Cover Preview"
-                        fill
-                        className="object-cover group-hover:scale-102 transition duration-300"
-                      />
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition duration-200">
-                        <label className="cursor-pointer bg-zinc-900 border border-zinc-800 hover:border-zinc-750 px-3.5 py-1.5 rounded-xl text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-lg">
-                          <Upload className="h-3.5 w-3.5 text-cyan-400" />
-                          Replace Photo
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            className="hidden"
-                            disabled={isUploading}
-                          />
-                        </label>
-                      </div>
-                    </>
-                  ) : (
-                    <label className="cursor-pointer flex flex-col items-center justify-center p-6 text-center h-full w-full">
-                      {isUploading ? (
-                        <>
-                          <Loader2 className="h-6 w-6 animate-spin text-cyan-400 mb-2" />
-                          <span className="text-zinc-400 text-xs font-medium">Uploading cover...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="h-6 w-6 text-zinc-500 group-hover:text-cyan-400 transition mb-2" />
-                          <span className="text-white text-xs font-semibold">Upload cover photo</span>
-                          <span className="text-zinc-500 text-[10px] mt-1">PNG, JPG, WEBP up to 5MB</span>
-                        </>
-                      )}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                        disabled={isUploading}
-                      />
-                    </label>
-                  )}
-                  {isUploading && coverImage && (
-                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                      <Loader2 className="h-6 w-6 animate-spin text-cyan-400" />
-                    </div>
-                  )}
-                </div>
+                <MediaPicker value={coverImage} onChange={setCoverImage} onUploadingChange={setIsUploading} />
               </div>
 
               {/* Excerpt */}
@@ -579,7 +502,7 @@ export default function NewBlogPostPage() {
                 type="button"
                 onClick={handleFinalSubmit}
                 disabled={isSubmitting}
-                className="flex-1 inline-flex items-center justify-center gap-2 bg-primary text-white text-xs font-bold py-2.5 rounded-xl hover:shadow-lg hover:shadow-primary/20 transition duration-200 cursor-pointer disabled:opacity-50"
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 rounded-xl hover:shadow-lg hover:shadow-primary/20 transition duration-200 cursor-pointer disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <>
@@ -601,7 +524,7 @@ export default function NewBlogPostPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-zinc-950 border border-zinc-800 w-full max-w-xl rounded-2xl p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+            <div className="flex items-center justify-between  pb-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-purple-400" />
                 <div>

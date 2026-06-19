@@ -6,6 +6,7 @@ import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SendIcon } from "lucide-react";
+import { BorderBeam } from "../ui/border-beam";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
@@ -827,7 +828,7 @@ const LandingHero = () => {
                     className={`flex ${isUser ? "justify-end" : "justify-start"} animate-in fade-in duration-300`}
                   >
                     {isUser ? (
-                      <div className='bg-primary text-primary-foreground max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-sm'>
+                      <div className='bg-foreground/80 text-primary-foreground max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-sm'>
                         <p className='text-sm'>{message.text}</p>
                       </div>
                     ) : (
@@ -902,25 +903,50 @@ const LandingHero = () => {
                     disabled
                   />
                 </div>
-                <button
-                  className='bg-primary text-primary-foreground flex h-10 w-10 items-center justify-center rounded-lg transition-opacity hover:opacity-90'
-                  disabled
-                >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width={20}
-                    height={20}
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeWidth={2}
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                  >
-                    <path d='m22 2-7 20-4-9-9-4Z' />
-                    <path d='M22 2 11 13' />
-                  </svg>
-                </button>
+               <button
+  className="
+    relative
+    cursor-pointer
+    rounded-[10px]
+    bg-[linear-gradient(to_top,#292929,#555555,#292929)]
+    p-[2px]
+    shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)]
+    transition-all
+    duration-150
+    active:scale-95
+    disabled:opacity-50
+    disabled:cursor-not-allowed
+  "
+>
+  {/* Border effects behind content */}
+  <div className="absolute inset-0 overflow-hidden rounded-[10px]">
+    <BorderBeam
+      duration={6}
+      size={40}
+      className="from-transparent via-red-500 to-transparent"
+    />
+    <BorderBeam
+      duration={6}
+      delay={10}
+      size={40}
+      borderWidth={2}
+      className="from-transparent via-blue-500 to-transparent"
+    />
+  </div>
+
+  {/* Button content */}
+  <div className="relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]">
+   
+      <svg
+        className="h-4 w-4 text-white"
+        viewBox="0 0 512 512"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05" />
+      </svg>
+  </div>
+</button>
               </div>
             </div>
           </div>

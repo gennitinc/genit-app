@@ -1397,7 +1397,7 @@ export function FloatingSidebar({
                           key={file.id}
                           className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === file.id
-                              ? "bg-primary/10 border-primary/50"
+                              ? "bg-indigo-600 hover:bg-indigo-700/10 border-primary/50"
                               : "hover:bg-muted/50"
                           }`}
                           onClick={() => {
@@ -1420,7 +1420,7 @@ export function FloatingSidebar({
                               </div>
                             </div>
                             {selectedItem?.id === file.id && (
-                              <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                              <div className='bg-indigo-600 hover:bg-indigo-700 flex h-6 w-6 items-center justify-center rounded-full'>
                                 <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
@@ -1440,7 +1440,7 @@ export function FloatingSidebar({
                           key={item.id}
                           className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === item.id
-                              ? "bg-primary/10 border-primary/50"
+                              ? "bg-indigo-600 hover:bg-indigo-700/10 border-primary/50"
                               : "hover:bg-muted/50"
                           }`}
                           onClick={() => setSelectedItem(item)}
@@ -1456,7 +1456,7 @@ export function FloatingSidebar({
                               <div className='text-muted-foreground flex items-center gap-2 text-xs'>
                                 <Badge
                                   variant='outline'
-                                  className='bg-primary/5 text-primary h-4 px-1 py-0 text-[10px]'
+                                  className='bg-indigo-600 hover:bg-indigo-700/5 text-primary h-4 px-1 py-0 text-[10px]'
                                 >
                                   Generated
                                 </Badge>
@@ -1469,7 +1469,7 @@ export function FloatingSidebar({
                               </div>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                              <div className='bg-indigo-600 hover:bg-indigo-700 flex h-6 w-6 items-center justify-center rounded-full'>
                                 <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
@@ -1524,7 +1524,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.hasInstruction ? "bg-primary" : "bg-muted"
+                    inputData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -1566,7 +1566,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.status === "private" ? "bg-primary" : "bg-muted"
+                    inputData.status === "private" ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -1634,7 +1634,7 @@ export function FloatingSidebar({
                         }))
                       }
                       className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                        inputData.hasInstruction ? "bg-primary" : "bg-muted"
+                        inputData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                       }`}
                     >
                       <span
@@ -1679,7 +1679,7 @@ export function FloatingSidebar({
                       }
                       className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
                         inputData.status === "private"
-                          ? "bg-primary"
+                          ? "bg-indigo-600 hover:bg-indigo-700"
                           : "bg-muted"
                       }`}
                     >
@@ -1745,7 +1745,7 @@ export function FloatingSidebar({
                         }))
                       }
                       className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                        inputData.hasInstruction ? "bg-primary" : "bg-muted"
+                        inputData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                       }`}
                     >
                       <span
@@ -1791,7 +1791,7 @@ export function FloatingSidebar({
                       }
                       className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
                         inputData.status === "private"
-                          ? "bg-primary"
+                          ? "bg-indigo-600 hover:bg-indigo-700"
                           : "bg-muted"
                       }`}
                     >
@@ -1812,7 +1812,7 @@ export function FloatingSidebar({
                 <div
                   className={`border-border hover:border-primary/50 rounded-md border-2 border-dashed p-6 text-center transition-colors ${
                     isUploading
-                      ? "bg-primary/5 border-primary/30 pointer-events-none"
+                      ? "bg-indigo-600 hover:bg-indigo-700/5 border-primary/30 pointer-events-none"
                       : ""
                   }`}
                   onDrop={(e) => handleDrop(e, "audio")}
@@ -1928,7 +1928,7 @@ export function FloatingSidebar({
                             />
                             {selectedItem?.id === file.id &&
                               selectedItem?.type === "image" && (
-                                <div className='bg-primary absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                                <div className='bg-indigo-600 hover:bg-indigo-700 absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
                                   <CheckCircle className='text-primary-foreground h-3 w-3' />
                                 </div>
                               )}
@@ -1963,12 +1963,12 @@ export function FloatingSidebar({
                               className='h-full w-full object-cover'
                             />
                             <div className='absolute top-1 left-1'>
-                              <Badge className='bg-primary/80 hover:bg-primary h-3 border-none px-1 py-0 text-[8px] leading-none'>
+                              <Badge className='bg-indigo-600 hover:bg-indigo-700/80 hover:bg-indigo-600 hover:bg-indigo-700 h-3 border-none px-1 py-0 text-[8px] leading-none'>
                                 AI
                               </Badge>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className='bg-primary absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                              <div className='bg-indigo-600 hover:bg-indigo-700 absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
                                 <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
@@ -2016,7 +2016,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.hasInstruction ? "bg-primary" : "bg-muted"
+                    inputData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -2057,7 +2057,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.status === "private" ? "bg-primary" : "bg-muted"
+                    inputData.status === "private" ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -2118,7 +2118,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.hasInstruction ? "bg-primary" : "bg-muted"
+                    inputData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -2160,7 +2160,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.status === "private" ? "bg-primary" : "bg-muted"
+                    inputData.status === "private" ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -2178,7 +2178,7 @@ export function FloatingSidebar({
             <div
               className={`border-border hover:border-primary/50 rounded-md border-2 border-dashed p-6 text-center transition-colors ${
                 isUploading
-                  ? "bg-primary/5 border-primary/30 pointer-events-none"
+                  ? "bg-indigo-600 hover:bg-indigo-700/5 border-primary/30 pointer-events-none"
                   : ""
               }`}
               onDrop={(e) => handleDrop(e, "image")}
@@ -2310,7 +2310,7 @@ export function FloatingSidebar({
                             </div>
                             {selectedItem?.id === file.id &&
                               selectedItem?.type === "video" && (
-                                <div className='bg-primary absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                                <div className='bg-indigo-600 hover:bg-indigo-700 absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
                                   <CheckCircle className='text-primary-foreground h-3 w-3' />
                                 </div>
                               )}
@@ -2363,12 +2363,12 @@ export function FloatingSidebar({
                               <Play className='h-4 w-4 fill-white text-white' />
                             </div>
                             <div className='absolute top-1 left-1'>
-                              <Badge className='bg-primary/80 hover:bg-primary h-3 border-none px-1 py-0 text-[8px] leading-none'>
+                              <Badge className='bg-indigo-600 hover:bg-indigo-700/80 hover:bg-indigo-600 hover:bg-indigo-700 h-3 border-none px-1 py-0 text-[8px] leading-none'>
                                 AI
                               </Badge>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className='bg-primary absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                              <div className='bg-indigo-600 hover:bg-indigo-700 absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full'>
                                 <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
@@ -2416,7 +2416,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.hasInstruction ? "bg-primary" : "bg-muted"
+                    inputData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -2457,7 +2457,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.status === "private" ? "bg-primary" : "bg-muted"
+                    inputData.status === "private" ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -2518,7 +2518,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.hasInstruction ? "bg-primary" : "bg-muted"
+                    inputData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -2560,7 +2560,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.status === "private" ? "bg-primary" : "bg-muted"
+                    inputData.status === "private" ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -2578,7 +2578,7 @@ export function FloatingSidebar({
             <div
               className={`border-border hover:border-primary/50 rounded-md border-2 border-dashed p-6 text-center transition-colors ${
                 isUploading
-                  ? "bg-primary/5 border-primary/30 pointer-events-none"
+                  ? "bg-indigo-600 hover:bg-indigo-700/5 border-primary/30 pointer-events-none"
                   : ""
               }`}
               onDrop={(e) => handleDrop(e, "video")}
@@ -2671,7 +2671,7 @@ export function FloatingSidebar({
                           key={item.id}
                           className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === item.id
-                              ? "bg-primary/10 border-primary/50"
+                              ? "bg-indigo-600 hover:bg-indigo-700/10 border-primary/50"
                               : "hover:bg-muted/50"
                           }`}
                           onClick={() => setSelectedItem(item)}
@@ -2690,7 +2690,7 @@ export function FloatingSidebar({
                               <div className='text-muted-foreground mt-1 flex items-center gap-2 text-[10px]'>
                                 <Badge
                                   variant='outline'
-                                  className='bg-primary/5 text-primary h-3.5 px-1 py-0'
+                                  className='bg-indigo-600 hover:bg-indigo-700/5 text-primary h-3.5 px-1 py-0'
                                 >
                                   {item.type === "social"
                                     ? "Social"
@@ -2707,7 +2707,7 @@ export function FloatingSidebar({
                               </div>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className='bg-primary mt-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                              <div className='bg-indigo-600 hover:bg-indigo-700 mt-1 flex h-5 w-5 items-center justify-center rounded-full'>
                                 <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
@@ -2749,7 +2749,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.hasInstruction ? "bg-primary" : "bg-muted"
+                    inputData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -2790,7 +2790,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.status === "private" ? "bg-primary" : "bg-muted"
+                    inputData.status === "private" ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -2875,7 +2875,7 @@ export function FloatingSidebar({
                           key={item.id}
                           className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === item.id
-                              ? "bg-primary/10 border-primary/50"
+                              ? "bg-indigo-600 hover:bg-indigo-700/10 border-primary/50"
                               : "hover:bg-muted/50"
                           }`}
                           onClick={() => setSelectedItem(item)}
@@ -2894,7 +2894,7 @@ export function FloatingSidebar({
                               <div className='text-muted-foreground mt-1 flex items-center gap-2 text-[10px]'>
                                 <Badge
                                   variant='outline'
-                                  className='bg-primary/5 text-primary h-3.5 px-1 py-0'
+                                  className='bg-indigo-600 hover:bg-indigo-700/5 text-primary h-3.5 px-1 py-0'
                                 >
                                   Social
                                 </Badge>
@@ -2907,7 +2907,7 @@ export function FloatingSidebar({
                               </div>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className='bg-primary mt-1 flex h-5 w-5 items-center justify-center rounded-full'>
+                              <div className='bg-indigo-600 hover:bg-indigo-700 mt-1 flex h-5 w-5 items-center justify-center rounded-full'>
                                 <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
@@ -2968,7 +2968,7 @@ export function FloatingSidebar({
                               key={platform.id}
                               className={`border-border/50 cursor-pointer p-3 transition-colors ${
                                 selectedSocialPlatform === platform.id
-                                  ? "bg-primary/10 border-primary/50"
+                                  ? "bg-indigo-600 hover:bg-indigo-700/10 border-primary/50"
                                   : "hover:bg-muted/50"
                               }`}
                               onClick={() =>
@@ -3007,7 +3007,7 @@ export function FloatingSidebar({
                               className={`border-border/50 cursor-pointer p-3 transition-colors ${
                                 selectedItem?.id === file.id &&
                                 selectedItem?.type === "image"
-                                  ? "bg-primary/10 border-primary/50"
+                                  ? "bg-indigo-600 hover:bg-indigo-700/10 border-primary/50"
                                   : "hover:bg-muted/50"
                               }`}
                               onClick={() => {
@@ -3057,7 +3057,7 @@ export function FloatingSidebar({
                                 <div className='flex items-center gap-1'>
                                   {selectedItem?.id === file.id &&
                                     selectedItem?.type === "image" && (
-                                      <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                                      <div className='bg-indigo-600 hover:bg-indigo-700 flex h-6 w-6 items-center justify-center rounded-full'>
                                         <CheckCircle className='text-primary-foreground h-3 w-3' />
                                       </div>
                                     )}
@@ -3091,7 +3091,7 @@ export function FloatingSidebar({
                               className={`border-border/50 cursor-pointer p-3 transition-colors ${
                                 selectedItem?.id === file.id &&
                                 selectedItem?.type === "video"
-                                  ? "bg-primary/10 border-primary/50"
+                                  ? "bg-indigo-600 hover:bg-indigo-700/10 border-primary/50"
                                   : "hover:bg-muted/50"
                               }`}
                               onClick={() => {
@@ -3151,7 +3151,7 @@ export function FloatingSidebar({
                                 <div className='flex items-center gap-1'>
                                   {selectedItem?.id === file.id &&
                                     selectedItem?.type === "video" && (
-                                      <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                                      <div className='bg-indigo-600 hover:bg-indigo-700 flex h-6 w-6 items-center justify-center rounded-full'>
                                         <CheckCircle className='text-primary-foreground h-3 w-3' />
                                       </div>
                                     )}
@@ -3185,7 +3185,7 @@ export function FloatingSidebar({
                               className={`border-border/50 cursor-pointer p-3 transition-colors ${
                                 selectedItem?.id === file.id &&
                                 selectedItem?.type === "audio"
-                                  ? "bg-primary/10 border-primary/50"
+                                  ? "bg-indigo-600 hover:bg-indigo-700/10 border-primary/50"
                                   : "hover:bg-muted/50"
                               }`}
                               onClick={() => {
@@ -3222,7 +3222,7 @@ export function FloatingSidebar({
                                 <div className='flex items-center gap-1'>
                                   {selectedItem?.id === file.id &&
                                     selectedItem?.type === "audio" && (
-                                      <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                                      <div className='bg-indigo-600 hover:bg-indigo-700 flex h-6 w-6 items-center justify-center rounded-full'>
                                         <CheckCircle className='text-primary-foreground h-3 w-3' />
                                       </div>
                                     )}
@@ -3319,7 +3319,7 @@ export function FloatingSidebar({
                         }))
                       }
                       className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                        inputData.hasInstruction ? "bg-primary" : "bg-muted"
+                        inputData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                       }`}
                     >
                       <span
@@ -3364,7 +3364,7 @@ export function FloatingSidebar({
                       }
                       className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
                         inputData.status === "private"
-                          ? "bg-primary"
+                          ? "bg-indigo-600 hover:bg-indigo-700"
                           : "bg-muted"
                       }`}
                     >
@@ -3505,7 +3505,7 @@ export function FloatingSidebar({
                           className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === file.id &&
                             selectedItem?.type === "document"
-                              ? "bg-primary/10 border-primary/50"
+                              ? "bg-indigo-600 hover:bg-indigo-700/10 border-primary/50"
                               : "hover:bg-muted/50"
                           }`}
                           onClick={() =>
@@ -3527,7 +3527,7 @@ export function FloatingSidebar({
                               </div>
                             </div>
                             {selectedItem?.id === file.id && (
-                              <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                              <div className='bg-indigo-600 hover:bg-indigo-700 flex h-6 w-6 items-center justify-center rounded-full'>
                                 <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
@@ -3547,7 +3547,7 @@ export function FloatingSidebar({
                           key={item.id}
                           className={`border-border/50 cursor-pointer p-3 transition-colors ${
                             selectedItem?.id === item.id
-                              ? "bg-primary/10 border-primary/50"
+                              ? "bg-indigo-600 hover:bg-indigo-700/10 border-primary/50"
                               : "hover:bg-muted/50"
                           }`}
                           onClick={() => setSelectedItem(item)}
@@ -3563,7 +3563,7 @@ export function FloatingSidebar({
                               <div className='text-muted-foreground flex items-center gap-2 text-xs'>
                                 <Badge
                                   variant='outline'
-                                  className='bg-primary/5 text-primary h-4 px-1 py-0 text-[10px]'
+                                  className='bg-indigo-600 hover:bg-indigo-700/5 text-primary h-4 px-1 py-0 text-[10px]'
                                 >
                                   Generated
                                 </Badge>
@@ -3576,7 +3576,7 @@ export function FloatingSidebar({
                               </div>
                             </div>
                             {selectedItem?.id === item.id && (
-                              <div className='bg-primary flex h-6 w-6 items-center justify-center rounded-full'>
+                              <div className='bg-indigo-600 hover:bg-indigo-700 flex h-6 w-6 items-center justify-center rounded-full'>
                                 <CheckCircle className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
@@ -3619,7 +3619,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.hasInstruction ? "bg-primary" : "bg-muted"
+                    inputData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -3661,7 +3661,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.status === "private" ? "bg-primary" : "bg-muted"
+                    inputData.status === "private" ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -3717,7 +3717,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.hasInstruction ? "bg-primary" : "bg-muted"
+                    inputData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -3758,7 +3758,7 @@ export function FloatingSidebar({
                     }))
                   }
                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
-                    inputData.status === "private" ? "bg-primary" : "bg-muted"
+                    inputData.status === "private" ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                   }`}
                 >
                   <span
@@ -3818,8 +3818,8 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "mic"
-                ? "bg-primary text-white"
-                : "bg-accent hover:bg-primary/20"
+                ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                : "bg-accent hover:bg-indigo-600 hover:bg-indigo-700/20"
             }`}
             title='Audio & Voice'
             onClick={() => handleIconClick("mic")}
@@ -3835,8 +3835,8 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "image"
-                ? "bg-primary text-white"
-                : "bg-accent hover:bg-primary/20"
+                ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                : "bg-accent hover:bg-indigo-600 hover:bg-indigo-700/20"
             }`}
             title='Images'
             onClick={() => handleIconClick("image")}
@@ -3852,8 +3852,8 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "video"
-                ? "bg-primary text-white"
-                : "bg-accent hover:bg-primary/20"
+                ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                : "bg-accent hover:bg-indigo-600 hover:bg-indigo-700/20"
             }`}
             title='Video'
             onClick={() => handleIconClick("video")}
@@ -3869,8 +3869,8 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "text"
-                ? "bg-primary text-white"
-                : "bg-accent hover:bg-primary/20"
+                ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                : "bg-accent hover:bg-indigo-600 hover:bg-indigo-700/20"
             }`}
             title='Text'
             onClick={() => handleIconClick("text")}
@@ -3887,8 +3887,8 @@ export function FloatingSidebar({
               size="sm"
               className={`w-8 h-8 p-0 rounded-md transition-all duration-200 ${
                 selectedIntegrationType === "database"
-                  ? "bg-primary text-white"
-                  : "bg-accent hover:bg-primary/20"
+                  ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                  : "bg-accent hover:bg-indigo-600 hover:bg-indigo-700/20"
               }`}
               title="Database (Coming Soon)"
               onClick={() => handleIconClick("database")}
@@ -3910,8 +3910,8 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "globe"
-                ? "bg-primary text-white"
-                : "bg-accent hover:bg-primary/20"
+                ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                : "bg-accent hover:bg-indigo-600 hover:bg-indigo-700/20"
             }`}
             title='Social Media'
             onClick={() => handleIconClick("globe")}
@@ -3925,7 +3925,7 @@ export function FloatingSidebar({
           <Button
             variant='ghost'
             size='sm'
-            className={`bg-accent hover:bg-primary/20 h-8 w-8 rounded-md p-0 transition-all duration-200`}
+            className={`bg-accent hover:bg-indigo-600 hover:bg-indigo-700/20 h-8 w-8 rounded-md p-0 transition-all duration-200`}
             title='Add Prompt'
             onClick={() => onAddIntegration("prompt", {})}
           >
@@ -3940,8 +3940,8 @@ export function FloatingSidebar({
             size='sm'
             className={`h-8 w-8 rounded-md p-0 transition-all duration-200 ${
               selectedIntegrationType === "file"
-                ? "bg-primary text-white"
-                : "bg-accent hover:bg-primary/20"
+                ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                : "bg-accent hover:bg-indigo-600 hover:bg-indigo-700/20"
             }`}
             title='Documents'
             onClick={() => handleIconClick("file")}
@@ -4098,7 +4098,7 @@ export function FloatingSidebar({
                         activeTab !== "all")
                   }
                   size='sm'
-                  className='bg-primary hover:bg-primary/90 text-primary-foreground h-8 flex-1 text-xs'
+                  className='bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-600 hover:bg-indigo-700/90 text-primary-foreground h-8 flex-1 text-xs'
                 >
                   {isUploading ? (
                     <>

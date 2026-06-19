@@ -21,7 +21,7 @@ export const CodeNode = memo(
           isVisible={selected}
           minWidth={150}
           minHeight={80}
-          handleClassName='w-3 h-3 bg-primary border-2 border-white rounded shadow-lg'
+          handleClassName='w-3 h-3 bg-indigo-600 hover:bg-indigo-700 border-2 border-white rounded shadow-lg'
         />
 
         {/* Remove Button */}
@@ -43,7 +43,7 @@ export const CodeNode = memo(
           }`}
         >
           <div className='flex items-center'>
-            <div className='bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-full'>
+            <div className='bg-indigo-600 hover:bg-indigo-700/10 text-primary flex h-8 w-8 items-center justify-center rounded-full'>
               <Code className='h-4 w-4' />
             </div>
             <div className='ml-2'>
@@ -79,13 +79,13 @@ export const CodeNode = memo(
             type='target'
             position={Position.Top}
             isConnectable={isConnectable}
-            className='bg-primary h-3 w-3'
+            className='bg-indigo-600 hover:bg-indigo-700 h-3 w-3'
           />
           <Handle
             type='source'
             position={Position.Bottom}
             isConnectable={isConnectable}
-            className='bg-primary h-3 w-3'
+            className='bg-indigo-600 hover:bg-indigo-700 h-3 w-3'
           />
         </div>
       </div>

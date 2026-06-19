@@ -3,7 +3,8 @@ import { apiResponse } from "@/utils/apiResponse";
 export interface InboxConversation {
   _id: string;
   organization: string;
-  platform: "instagram" | "facebook" | "twitter" | "linkedin" | "email";
+  integration?: string;
+  platform: "instagram" | "facebook" | "x" | "twitter" | "linkedin" | "gmail" | "email" | "outlook" | "whatsapp" | "messenger" | "telegram";
   platformConversationId: string;
   customerName: string;
   customerAvatar?: string;
@@ -28,12 +29,16 @@ export interface InboxMessage {
   updatedAt: string;
 }
 
-export async function fetchConversations(platform?: string): Promise<InboxConversation[]> {
-  const url = platform 
-    ? `/api/v1/inbox/conversations?platform=${platform}`
-    : `/api/v1/inbox/conversations`;
-    
-  const res = await apiResponse.get(url);
+export interface InboxFilters {
+  platform?: string;
+  integrationId?: string;
+  status?: "all" | "open" | "resolved" | "snoozed";
+  search?: string;
+  sort?: "newest" | "oldest" | "unread";
+}
+
+export async function fetchConversations(filters: InboxFilters = {}): Promise<InboxConversation[]> {
+  const res = await apiResponse.get(`/api/v1/inbox/conversations`, { params: filters });
   return res.data.conversations;
 }
 
@@ -51,6 +56,18 @@ export async function markConversationAsRead(conversationId: string): Promise<vo
   await apiResponse.patch(`/api/v1/inbox/conversations/${conversationId}/read`);
 }
 
-export async function seedMockInboxData(): Promise<void> {
-  await apiResponse.post(`/api/v1/inbox/seed`);
+export async function markAllConversationsAsRead(): Promise<void> {
+  await apiResponse.patch(`/api/v1/inbox/conversations/read-all`);
+}
+
+export async function updateConversationStatus(
+  conversationId: string,
+  status: InboxConversation["status"]
+): Promise<InboxConversation> {
+  const res = await apiResponse.patch(`/api/v1/inbox/conversations/${conversationId}`, { status });
+  return res.data.conversation;
+}
+
+export async function deleteConversation(conversationId: string): Promise<void> {
+  await apiResponse.delete(`/api/v1/inbox/conversations/${conversationId}`);
 }

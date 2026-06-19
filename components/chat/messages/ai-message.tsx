@@ -278,12 +278,12 @@ export function AIMessage({
                                 className={cn(
                                   "border-border/50 bg-background/50 flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-all duration-200",
                                   "hover:bg-muted/50 hover:border-primary/30",
-                                  "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 peer-data-[state=checked]:ring-primary peer-data-[state=checked]:ring-1",
+                                  "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-indigo-600 hover:bg-indigo-700/5 peer-data-[state=checked]:ring-primary peer-data-[state=checked]:ring-1",
                                   "group-hover:translate-x-1"
                                 )}
                               >
                                 <div className='border-primary/20 peer-data-[state=checked]:border-primary flex h-4 w-4 items-center justify-center rounded-full border transition-colors'>
-                                  <div className='bg-primary h-2 w-2 rounded-full opacity-0 transition-opacity peer-data-[state=checked]:opacity-100' />
+                                  <div className='bg-indigo-600 hover:bg-indigo-700 h-2 w-2 rounded-full opacity-0 transition-opacity peer-data-[state=checked]:opacity-100' />
                                 </div>
                                 <span className='text-foreground/80 group-hover:text-foreground text-xs font-semibold'>
                                   {option}
@@ -307,7 +307,7 @@ export function AIMessage({
                         key={idx}
                         variant='secondary'
                         size='sm'
-                        className='bg-primary/5 hover:bg-primary/10 border-primary/20 rounded-full text-xs'
+                        className='bg-indigo-600 hover:bg-indigo-700/5 hover:bg-indigo-600 hover:bg-indigo-700/10 border-primary/20 rounded-full text-xs'
                         onClick={() => onOptionClick?.(option)}
                       >
                         {option}

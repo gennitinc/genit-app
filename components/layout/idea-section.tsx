@@ -30,7 +30,6 @@ import {
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-// import { BorderBeam } from "@/registry/magicui/border-beam"
 import {
   Carousel,
   CarouselContent,
@@ -411,7 +410,7 @@ const EnterpriseAutoDialog = ({ isOpen, onOpenChange }: { isOpen: boolean, onOpe
   const router = useRouter();
 
   const content = (
-    <div className='flex flex-col md:flex-row group relative overflow-hidden bg-black/[0.02] dark:bg-white/[0.04] ring-1 ring-black/5 dark:ring-white/10 rounded-3xl w-full'>
+    <div className='flex flex-col md:flex-row group relative overflow-hidden bg-black/[0.02] dark:bg-white/[0.04] ring-1 ring-black/5 dark:ring-white/10 rounded-xs w-full'>
       <GradientFrame />
       
       {/* Image Container */}
@@ -467,8 +466,8 @@ const EnterpriseAutoDialog = ({ isOpen, onOpenChange }: { isOpen: boolean, onOpe
         </p>
 
         <div className="mt-8 flex justify-end gap-3 relative z-10">
-          <Button variant="outline" className="rounded-full" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button className="rounded-full bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => router.push('/pricing')}>Upgrade Now</Button>
+          <Button variant="outline" className="border-none bg-transparent text-sm" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button className="rounded-sm bg-indigo-600 text-white hover:bg-indigo-700 text-sm" onClick={() => router.push('/pricing')}>Upgrade Now</Button>
         </div>
       </div>
     </div>
@@ -1551,7 +1550,7 @@ export function IdeaSection() {
                         </div>
 
                         <button
-                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground hover:bg-primary/5 relative box-border hidden h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5'
+                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground hover:bg-indigo-600 hover:bg-indigo-700/5 relative box-border hidden h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5'
                           type='button'
                           aria-label='Settings'
                           onClick={() => {
@@ -1566,10 +1565,10 @@ export function IdeaSection() {
                         </button>
                         <button
                           className={cn(
-                            "focus-visible:ring-ring relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+                            "focus-visible:ring-ring relative box-border inline-flex h-h-fit p-2 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent p-0.5 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
                             isBrandSettingsOpen
-                              ? "text-primary bg-primary/10"
-                              : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
+                              ? "text-primary bg-indigo-600 hover:bg-indigo-700/10"
+                              : "text-muted-foreground hover:text-foreground hover:bg-indigo-600 hover:bg-indigo-700/5 dark:hover:bg-white/5"
                           )}
                           type='button'
                           aria-label='Brand settings'
@@ -1587,7 +1586,7 @@ export function IdeaSection() {
                           className={`focus-visible:ring-ring relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
                             isListening
                               ? "animate-pulse bg-red-500/10 text-red-500"
-                              : "text-muted-foreground hover:text-foreground hover:bg-primary/5 dark:hover:bg-white/5"
+                              : "text-muted-foreground hover:text-foreground hover:bg-indigo-600 hover:bg-indigo-700/5 dark:hover:bg-white/5"
                           }`}
                           type='button'
                           aria-label={
@@ -1600,42 +1599,55 @@ export function IdeaSection() {
                         >
                           <Mic className='size-4 shrink-0' />
                         </button>
-                        <button
-                          className='focus-visible:ring-ring bg-primary text-primary-foreground relative ml-1 box-border inline-flex h-8 w-8 min-w-fit shrink-0 items-center justify-center gap-2 rounded-full !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(0,0,0,0.2),0_1px_2px_0_rgba(0,0,0,0.05)] brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none active:brightness-[0.65] disabled:cursor-not-allowed disabled:opacity-50 disabled:brightness-100 dark:shadow-[inset_0_0.5px_0_0_rgba(255,255,255,0.2),inset_0_0_0_0.5px_rgba(255,255,255,0.1),0_1px_2px_0_rgba(0,0,0,0.05)]'
-                          type='submit'
-                          disabled={isSubmitDisabled}
-                        >
-                          <BorderBeam
-                            duration={6}
-                            size={40}
-                            className='from-transparent via-red-500 to-transparent'
-                          />
-                          <BorderBeam
-                            duration={6}
-                            delay={10}
-                            size={40}
-                            borderWidth={2}
-                            className='from-transparent via-blue-500 to-transparent'
-                          />
-                          {isGenerating || isSubmitting ? (
-                            <Loader2 className='h-4 w-4 animate-spin' />
-                          ) : (
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              fill='currentColor'
-                              viewBox='0 0 24 24'
-                              width='100%'
-                              height='100%'
-                              className='size-5 shrink-0'
-                              aria-hidden='true'
-                            >
-                              <path
-                                fill='currentColor'
-                                d='M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0'
-                              />
-                            </svg>
-                          )}
-                        </button>
+                       <button
+  type="submit"
+  disabled={isSubmitDisabled}
+  className="
+    relative
+    cursor-pointer
+    rounded-[10px]
+    bg-[linear-gradient(to_top,#292929,#555555,#292929)]
+    p-[2px]
+    shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)]
+    transition-all
+    duration-150
+    active:scale-95
+    disabled:opacity-50
+    disabled:cursor-not-allowed
+  "
+>
+  {/* Border effects behind content */}
+  <div className="absolute inset-0 overflow-hidden rounded-[10px]">
+    <BorderBeam
+      duration={6}
+      size={40}
+      className="from-transparent via-red-500 to-transparent"
+    />
+    <BorderBeam
+      duration={6}
+      delay={10}
+      size={40}
+      borderWidth={2}
+      className="from-transparent via-blue-500 to-transparent"
+    />
+  </div>
+
+  {/* Button content */}
+  <div className="relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]">
+    {isGenerating || isSubmitting ? (
+      <Loader2 className="h-4 w-4 animate-spin text-white" />
+    ) : (
+      <svg
+        className="h-4 w-4 text-white"
+        viewBox="0 0 512 512"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05" />
+      </svg>
+    )}
+  </div>
+</button>
                       </div>
                     </div>
                     {!user && (

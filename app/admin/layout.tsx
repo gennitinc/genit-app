@@ -30,7 +30,7 @@ export default function AdminLayout({
     return (
       <div className='bg-background flex min-h-screen items-center justify-center'>
         <div className='flex animate-pulse flex-col items-center gap-4'>
-          <div className='bg-primary/20 h-12 w-12 rounded-full' />
+          <div className='bg-indigo-600 hover:bg-indigo-700/20 h-12 w-12 rounded-full' />
           <p className='text-muted-foreground text-sm'>
             Verifying admin access...
           </p>

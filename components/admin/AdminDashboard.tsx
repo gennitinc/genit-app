@@ -130,7 +130,7 @@ export const AdminDashboard = () => {
         </div>
 
         {/* Decorative elements */}
-        <div className='bg-primary/20 group-hover:bg-primary/30 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-[100px] transition-colors duration-500' />
+        <div className='bg-indigo-600 hover:bg-indigo-700/20 group-hover:bg-indigo-600 hover:bg-indigo-700/30 absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full blur-[100px] transition-colors duration-500' />
       </div>
     </div>
   );

@@ -704,26 +704,27 @@ export function ConnectDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className='border-border bg-card overflow-hidden p-0 sm:max-w-md'
+        className='max-h-[96dvh] w-[calc(100%-1.5rem)] max-w-md overflow-y-auto border-0 bg-transparent p-0 shadow-none'
         hideDialogClose
       >
-        <div
-          className='relative px-6 pt-7 pb-6 overflow-y-auto max-h-[calc(85vh-4rem)]'
-        >
-          <button
-            type='button'
-            onClick={() => onOpenChange(false)}
-            className='text-muted-foreground hover:text-foreground absolute top-4 right-4 z-20 rounded-full p-1 transition'
-            aria-label='Close'
-          >
-            <X className='h-4 w-4' />
-          </button>
+        <div className="group relative mx-auto w-full overflow-hidden rounded-3xl bg-black/[0.02] p-2 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10">
+          <GradientFrame />
+          <div className="relative z-10 flex flex-col overflow-hidden rounded-[1.3rem] bg-white shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10">
+            <div className='relative max-h-[calc(85dvh-4rem)] overflow-x-hidden overflow-y-auto px-4 pt-7 pb-6 sm:px-6'>
+              <button
+                type='button'
+                onClick={() => onOpenChange(false)}
+                className='text-muted-foreground hover:text-foreground absolute top-4 right-4 z-20 rounded-full p-1 transition'
+                aria-label='Close'
+              >
+                <X className='h-4 w-4' />
+              </button>
 
-          <div className='relative z-10 flex items-center gap-3'>
-            <div className='border-border flex h-10 w-15 items-center justify-center rounded-sm border bg-white/80 backdrop-blur dark:border-white/10 dark:bg-white/5'>
+              <div className='relative z-10 flex min-w-0 items-center gap-3 pr-6'>
+            <div className='border-border flex h-10 w-15 shrink-0 items-center justify-center rounded-sm border bg-white/80 backdrop-blur dark:border-white/10 dark:bg-white/5'>
               <Icon className='h-7 w-7 rounded-none' />
             </div>
-            <div>
+            <div className='min-w-0'>
               <DialogHeader className='space-y-0 text-left'>
                 <DialogTitle className='text-lg font-semibold tracking-tight'>
                   Connect {platformName}
@@ -756,7 +757,7 @@ export function ConnectDialog({
                           className='text-foreground flex items-start gap-2 text-sm'
                         >
                           <CheckCircle2 className='mt-0.5 h-4 w-4 shrink-0 text-emerald-500' />
-                          <span>{scope}</span>
+                          <span className='min-w-0 [overflow-wrap:anywhere]'>{scope}</span>
                         </li>
                       ))}
                     </ul>
@@ -768,7 +769,7 @@ export function ConnectDialog({
                       <p className='text-foreground mb-1 text-xs font-medium'>
                         Before you continue
                       </p>
-                      <ul className='text-muted-foreground space-y-1 text-xs'>
+                      <ul className='text-muted-foreground space-y-1 text-xs [overflow-wrap:anywhere]'>
                         {requirements.map((r) => (
                           <li key={r}>
                             {"• "}
@@ -933,10 +934,10 @@ export function ConnectDialog({
           )}
         </div>
 
-        <div className='border-border bg-muted/30 flex items-center justify-between gap-3 border-t px-6 py-3 dark:border-white/10 dark:bg-white/2'>
-          <div className='text-muted-foreground flex items-center gap-1.5 text-[11px]'>
+        <div className='flex flex-col items-stretch justify-between gap-3 border-t border-black/5 px-4 py-3 sm:flex-row sm:items-center sm:px-6 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.02]'>
+          <div className='text-muted-foreground flex min-w-0 items-center gap-1.5 text-[11px]'>
             <ShieldCheck className='h-3.5 w-3.5' />
-            <span>All tokens are securely encrypted</span>
+            <span className='min-w-0'>All tokens are securely encrypted</span>
           </div>
 
           {phase === "idle" && (
@@ -948,7 +949,7 @@ export function ConnectDialog({
                 !isSupported ||
                 (isCredentialMode && !credentialValue.trim())
               }
-              className='bg-linear-to-r from-cyan-500 to-blue-500 text-white transition-all hover:bg-linear-to-bl'
+              className='w-full bg-indigo-600 text-white transition-all hover:bg-linear-to-bl sm:w-auto'
             >
               {isSupported ? (
                 <>
@@ -1046,7 +1047,9 @@ export function ConnectDialog({
             </div>
           )}
         </div>
-      </DialogContent>
-    </Dialog>
+        </div>
+      </div>
+    </DialogContent>
+  </Dialog>
   );
 }

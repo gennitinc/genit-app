@@ -4,18 +4,26 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
-  Inbox, CalendarDays, Zap, BarChart, FileText, Sparkles, Home 
+  Inbox, CalendarDays, Zap, BarChart, FileText, Sparkles, Home, Library,
+  FolderSync,
+  Turntable,
+  CalendarFold,
+  Layers,
+  MessageSquare,
+  MessagesSquare,
+  SunMoon
 } from "lucide-react";
 import { OrgSwitcher } from "@/components/layout/org-switcher";
 
 const CATEGORIES = [
   { id: "home", label: "Home", icon: Home, href: "/visuals" },
-  { id: "calendar", label: "Calendar", icon: CalendarDays, href: "/visuals/calendar" },
+  { id: "calendar", label: "Calendar", icon: CalendarFold, href: "/visuals/calendar" },
+  { id: "library", label: "Media Library", icon: Library, href: "/visuals/library" },
+  { id: "posts", label: "Post & Analytics", icon: Layers, href: "/visuals/posts" },
   { id: "inbox", label: "Unified Inbox", icon: Inbox, href: "/visuals/inbox" },
-  { id: "automation", label: "Automation", icon: Zap, href: "/visuals/automation" },
-  { id: "posts", label: "Post & Analytics", icon: BarChart, href: "/visuals/posts" },
+  { id: "automation", label: "Automation", icon: FolderSync, href: "/visuals/automation" },
   { id: "summary", label: "Summary & Report", icon: FileText, href: "/visuals/summary" },
-  { id: "ai", label: "AI Recommendations", icon: Sparkles, href: "/visuals/ai" },
+  { id: "ai", label: "AI Recommendations", icon: SunMoon, href: "/visuals/ai" },
 ];
 
 export function VisualsSidebar() {
@@ -39,7 +47,7 @@ export function VisualsSidebar() {
               key={cat.id}
               className={`flex items-center gap-3 px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer ${
                 isActive
-                  ? "bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm ring-1 ring-black/5 dark:ring-white/10"
+                  ? "bg-white dark:bg-zinc-900 text-foreground dark:text-foreground shadow-sm ring-1 ring-black/5 dark:ring-white/10"
                   : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-white/50 dark:hover:bg-white/5"
               }`}
             >

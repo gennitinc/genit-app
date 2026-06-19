@@ -567,7 +567,7 @@ function TextToSpeechPage() {
                           <div className='bg-muted h-1 w-full overflow-hidden rounded-full'>
                             {isGenerating && (
                               <div
-                                className='bg-primary h-full animate-pulse rounded-full'
+                                className='bg-indigo-600 hover:bg-indigo-700 h-full animate-pulse rounded-full'
                                 style={{ width: "60%" }}
                               />
                             )}
@@ -612,7 +612,7 @@ function TextToSpeechPage() {
                     }
                     className={cn(
                       "flex h-9 flex-shrink-0 items-center justify-center gap-2 rounded-[10px] px-5 text-sm font-semibold transition-all duration-200",
-                      "bg-primary text-white hover:bg-primary/90 hover:opacity-90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40",
+                      "bg-indigo-600 hover:bg-indigo-700 text-white hover:bg-indigo-600 hover:bg-indigo-700/90 hover:opacity-90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40",
                       "disabled:cursor-not-allowed disabled:opacity-30",
                       "active:scale-[0.97]"
                     )}

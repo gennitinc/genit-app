@@ -191,26 +191,27 @@ export function ManageDialog({
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
-        className='border-border bg-card overflow-hidden p-0 sm:max-w-lg'
+        className='max-h-[96dvh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto border-0 bg-transparent p-0 shadow-none'
         hideDialogClose
       >
-        <div
-          className='relative px-6 pt-7 pb-6 overflow-y-auto max-h-[calc(85vh-4rem)]'
-        >
-          <button
-            type='button'
-            onClick={() => handleClose(false)}
-            className='text-muted-foreground hover:text-foreground absolute top-4 right-4 z-20 rounded-full p-1 transition'
-            aria-label='Close'
-          >
-            <X className='h-4 w-4' />
-          </button>
+        <div className="group relative mx-auto w-full overflow-hidden rounded-3xl bg-black/[0.02] p-2 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10">
+          <GradientFrame />
+          <div className="relative z-10 flex flex-col overflow-hidden rounded-[1.3rem] bg-white shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10">
+            <div className='relative max-h-[calc(85dvh-4rem)] overflow-x-hidden overflow-y-auto px-4 pt-7 pb-6 sm:px-6'>
+              <button
+                type='button'
+                onClick={() => handleClose(false)}
+                className='text-muted-foreground hover:text-foreground absolute top-4 right-4 z-20 rounded-full p-1 transition'
+                aria-label='Close'
+              >
+                <X className='h-4 w-4' />
+              </button>
 
-          <div className='relative z-10 flex items-center gap-3'>
+              <div className='relative z-10 flex min-w-0 items-center gap-3 pr-6'>
             <div className='border-border flex h-12 w-12 items-center justify-center rounded-xl border bg-white/80 backdrop-blur dark:border-white/10 dark:bg-white/5'>
               <Icon className='h-7 w-7' />
             </div>
-            <div>
+            <div className='min-w-0'>
               <DialogHeader className='space-y-0 text-left'>
                 <DialogTitle className='text-lg font-semibold tracking-tight'>
                   {platformName} connections
@@ -272,7 +273,7 @@ export function ManageDialog({
                   key={conn._id}
                   className='border-border bg-card/60 rounded-md border px-3 py-3 dark:border-white/10 dark:bg-white/5'
                 >
-                  <div className='flex items-center gap-3'>
+                  <div className='flex min-w-0 flex-wrap items-center gap-3 sm:flex-nowrap'>
                     {conn.accountAvatar ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -302,8 +303,8 @@ export function ManageDialog({
                     <span
                       className={
                         conn.status === "active"
-                          ? "inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300"
-                          : "inline-flex items-center gap-1 rounded-md bg-amber-500/10 px-2 py-1 text-xs text-amber-700 ring-1 ring-amber-500/30 dark:text-amber-300"
+                          ? "ml-auto inline-flex shrink-0 items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300"
+                          : "ml-auto inline-flex shrink-0 items-center gap-1 rounded-md bg-amber-500/10 px-2 py-1 text-xs text-amber-700 ring-1 ring-amber-500/30 dark:text-amber-300"
                       }
                     >
                       <span
@@ -341,7 +342,7 @@ export function ManageDialog({
                         {conn.scopes.map((s) => (
                           <span
                             key={s}
-                            className='border-border bg-card/80 inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium dark:border-white/10 dark:bg-white/5'
+                            className='border-border bg-card/80 inline-flex max-w-full items-center break-all rounded px-1.5 py-0.5 text-[10px] font-medium dark:border-white/10 dark:bg-white/5'
                           >
                             {s}
                           </span>
@@ -482,7 +483,7 @@ export function ManageDialog({
           )}
         </div>
 
-        <div className='border-border bg-muted/30 flex items-center justify-between gap-3 border-t px-6 py-3 dark:border-white/10 dark:bg-white/[0.02]'>
+        <div className='flex flex-col items-start justify-between gap-2 border-t border-black/5 px-4 py-3 sm:flex-row sm:items-center sm:px-6 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.02]'>
           {platformSettingsUrl(platform) ? (
             <a
               href={platformSettingsUrl(platform) as string}
@@ -501,7 +502,9 @@ export function ManageDialog({
             All tokens encrypted at rest
           </span>
         </div>
-      </DialogContent>
-    </Dialog>
+        </div>
+      </div>
+    </DialogContent>
+  </Dialog>
   );
 }

@@ -445,7 +445,7 @@ export function ColorManagement({
                   "relative flex-1 rounded-lg px-4 py-1.5 transition-all duration-200",
                   "focus:outline-none",
                   active
-                    ? "bg-primary text-primary-foreground shadow-sm"
+                    ? "bg-indigo-600 hover:bg-indigo-700 text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 )}
               >
@@ -471,7 +471,7 @@ export function ColorManagement({
               {activeTab === tab.id && (
                 <motion.span
                   layoutId='color-tab-indicator'
-                  className='bg-primary absolute inset-x-0 -bottom-0.5 h-px'
+                  className='bg-indigo-600 hover:bg-indigo-700 absolute inset-x-0 -bottom-0.5 h-px'
                 />
               )}
             </button>
@@ -627,7 +627,7 @@ export function ColorManagement({
                           className={cn(
                             "group relative rounded-xl border p-2.5 text-left transition-all duration-200",
                             isSelected
-                              ? "border-primary/50 bg-primary/5"
+                              ? "border-primary/50 bg-indigo-600 hover:bg-indigo-700/5"
                               : "border-white/8 bg-white/[0.02] hover:border-white/20"
                           )}
                         >

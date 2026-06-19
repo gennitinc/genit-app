@@ -149,7 +149,7 @@ export function AppSidebar({
                 <div className='relative'>
                   <div className='h-1.5 w-full rounded-full border border-white/10 bg-white/20 backdrop-blur-sm'>
                     <div
-                      className='relative h-1.5 overflow-hidden rounded-full bg-primary shadow-sm transition-all duration-500'
+                      className='relative h-1.5 overflow-hidden rounded-full bg-white shadow-sm transition-all duration-500'
                       style={{ width: `${creditPercentage}%` }}
                     ></div>
                   </div>

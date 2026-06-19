@@ -104,7 +104,7 @@ export default function AdminBlogPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+      <div className="flex items-center justify-between  pb-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
             <FileText className="h-6 w-6 text-cyan-500" /> Blog Management
@@ -122,7 +122,7 @@ export default function AdminBlogPage() {
           </button>
           <Link
             href="/admin/blog/new"
-            className="inline-flex items-center gap-2 bg-primary text-white text-xs font-semibold px-4 py-2 rounded-xl hover:shadow-lg hover:shadow-primary/20 transition duration-200 cursor-pointer"
+            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-xl hover:shadow-lg hover:shadow-primary/20 transition duration-200 cursor-pointer"
           >
             <Plus className="h-4 w-4" /> Add Article
           </Link>
@@ -145,7 +145,7 @@ export default function AdminBlogPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-sm">
               <thead>
-                <tr className="border-b border-zinc-800 bg-zinc-900/60 text-zinc-400 font-medium">
+                <tr className=" bg-zinc-900/60 text-zinc-400 font-medium">
                   <th className="px-6 py-4">Title</th>
                   <th className="px-6 py-4">Category</th>
                   <th className="px-6 py-4">Read Time</th>

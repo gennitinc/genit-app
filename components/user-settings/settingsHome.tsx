@@ -170,11 +170,14 @@ const SettingsHome = () => {
                         onClick={() => setActiveTab(tab.id)}
                         className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                           activeTab === tab.id
-                            ? "bg-primary text-primary-foreground"
+                            ? "text-foreground"
                             : "text-muted-foreground hover:text-foreground hover:bg-muted"
                         }`}
                       >
-                        <Icon className='w-4 h-4' />
+                        <Icon className={`size-4 ${activeTab === tab.id
+                          ? "text-indigo-600 hover:text-indigo-700"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                          }`} />  
                         {tab.label}
                         <ChevronRight className='w-4 h-4 ml-auto' />
                       </button>

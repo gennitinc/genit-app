@@ -136,7 +136,7 @@ export function BrowserViewer({
               href={finalUrl}
               target='_blank'
               rel='noopener noreferrer'
-              className='bg-primary hover:bg-primary-600 rounded-md px-4 py-2 text-white transition-colors'
+              className='bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-600 hover:bg-indigo-700-600 rounded-md px-4 py-2 text-white transition-colors'
             >
               Open in new tab
             </a>

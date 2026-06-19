@@ -135,7 +135,7 @@ export const DocumentNode = memo(
           isVisible={selected}
           minWidth={200}
           minHeight={120}
-          handleClassName='w-3 h-3 bg-primary border-2 border-white rounded shadow-lg'
+          handleClassName='w-3 h-3 bg-indigo-600 hover:bg-indigo-700 border-2 border-white rounded shadow-lg'
         />
 
         <div
@@ -149,7 +149,7 @@ export const DocumentNode = memo(
           <Handle
             type='target'
             position={Position.Left}
-            className='bg-primary h-3 w-3'
+            className='bg-indigo-600 hover:bg-indigo-700 h-3 w-3'
             isConnectable={isConnectable}
           />
 
@@ -193,7 +193,7 @@ export const DocumentNode = memo(
                         }
                       }}
                       disabled={isAnalyzing}
-                      className='borber-primary/20 bg-primary/5 text-primary h-7 gap-1 px-2 text-[10px]'
+                      className='borber-primary/20 bg-indigo-600 hover:bg-indigo-700/5 text-primary h-7 gap-1 px-2 text-[10px]'
                     >
                       {isAnalyzing ? (
                         <Loader2 className='h-3 w-3 animate-spin' />
@@ -236,7 +236,7 @@ export const DocumentNode = memo(
                               }
                               className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
                                 editData.hasInstruction
-                                  ? "bg-primary"
+                                  ? "bg-indigo-600 hover:bg-indigo-700"
                                   : "bg-muted"
                               }`}
                             >
@@ -283,7 +283,7 @@ export const DocumentNode = memo(
                               }
                               className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
                                 editData.status === "private"
-                                  ? "bg-primary"
+                                  ? "bg-indigo-600 hover:bg-indigo-700"
                                   : "bg-muted"
                               }`}
                             >
@@ -436,7 +436,7 @@ export const DocumentNode = memo(
           <Handle
             type='source'
             position={Position.Right}
-            className='bg-primary h-3 w-3'
+            className='bg-indigo-600 hover:bg-indigo-700 h-3 w-3'
             isConnectable={isConnectable}
           />
         </div>

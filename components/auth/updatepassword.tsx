@@ -298,7 +298,7 @@ export function UpdatePasswordComp() {
 
             {/* Submit Button */}
             <Button
-              className='w-full rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-primary/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
+              className='w-full rounded-lg bg-indigo-600 hover:bg-indigo-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
               type='submit'
               disabled={!allfieldvalid || loading}
             >

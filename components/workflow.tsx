@@ -1519,7 +1519,7 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
                 <Button
                   onClick={handleCreateWorkflow}
                   disabled={!projectName.trim() || isCreating}
-                  className='bg-primary text-primary-foreground hover:bg-primary/90'
+                  className='bg-indigo-600 hover:bg-indigo-700 text-primary-foreground hover:bg-indigo-600 hover:bg-indigo-700/90'
                 >
                   {isCreating ? (
                     <Loader2 className='w-4 h-4 animate-spin' />
@@ -1561,7 +1561,7 @@ const GenittWorkflow = ({ slug, embedMode = false }: { slug?: string; embedMode?
                       className='flex items-center justify-between p-3 transition-all border rounded-sm cursor-pointer group border-border bg-muted/30 hover:bg-muted/50 hover:border-primary/30'
                     >
                       <div className='flex items-center gap-3'>
-                        <div className='flex items-center justify-center w-8 h-8 rounded-sm bg-primary/10'>
+                        <div className='flex items-center justify-center w-8 h-8 rounded-sm bg-indigo-600 hover:bg-indigo-700/10'>
                           <HistoryIcon className='w-4 h-4 text-primary' />
                         </div>
                         <div>

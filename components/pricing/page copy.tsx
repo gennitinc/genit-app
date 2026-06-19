@@ -293,7 +293,7 @@ export default function PricingComponent() {
               }}
             >
               {plan.popular && (
-                <p className='bg-primary-foreground text-primary absolute -top-3.5 left-3.5 rounded-full px-3 py-1 text-sm'>
+                <p className='bg-indigo-600 hover:bg-indigo-700-foreground text-primary absolute -top-3.5 left-3.5 rounded-full px-3 py-1 text-sm'>
                   Most Popular
                 </p>
               )}
@@ -370,10 +370,10 @@ export default function PricingComponent() {
                 disabled={loadingPlan === plan.name}
                 className={`mt-7 flex w-full transform cursor-pointer items-center justify-center rounded py-2 text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:transform-none disabled:cursor-not-allowed disabled:opacity-50 ${
                   plan.popular
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                    ? "bg-indigo-600 hover:bg-indigo-700 text-primary-foreground hover:bg-indigo-600 hover:bg-indigo-700/90"
                     : plan.monthlyPrice === 0
-                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                      : "bg-primary text-primary-foreground hover:bg-primary/90"
+                      ? "bg-indigo-600 hover:bg-indigo-700 text-primary-foreground hover:bg-indigo-600 hover:bg-indigo-700/90"
+                      : "bg-indigo-600 hover:bg-indigo-700 text-primary-foreground hover:bg-indigo-600 hover:bg-indigo-700/90"
                 }`}
               >
                 {loadingPlan === plan.name ? (

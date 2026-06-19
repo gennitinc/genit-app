@@ -25,7 +25,12 @@ export type IntegrationPlatform =
   | "google_calendar"
   | "google_drive";
 
-export type MetaSurface = "facebook" | "instagram" | "meta_ads" | "whatsapp" | "messenger";
+export type MetaSurface =
+  | "facebook"
+  | "instagram"
+  | "meta_ads"
+  | "whatsapp"
+  | "messenger";
 
 export type ConnectionState = "active" | "expired" | "revoked" | "error";
 
@@ -106,7 +111,9 @@ export function isPlatformSupported(platform: IntegrationPlatform): boolean {
   return SUPPORTED_PLATFORMS.has(platform);
 }
 
-export function isMetaSurface(platform: IntegrationPlatform): platform is MetaSurface {
+export function isMetaSurface(
+  platform: IntegrationPlatform
+): platform is MetaSurface {
   return (
     platform === "facebook" ||
     platform === "instagram" ||
@@ -120,9 +127,8 @@ export async function fetchIntegrations(): Promise<{
   integrations: IntegrationConnection[];
   identities: MetaIdentitySummary[];
 }> {
-  const { data } = await apiResponse.get<ListIntegrationsResponse>(
-    "/integrations"
-  );
+  const { data } =
+    await apiResponse.get<ListIntegrationsResponse>("/integrations");
   return {
     integrations: data.integrations,
     identities: data.identities ?? [],
@@ -280,6 +286,69 @@ export async function publishInstagramPost(
   return data.media;
 }
 
+export interface FacebookPostSummary {
+  id: string;
+  message?: string;
+  created_time?: string;
+  permalink_url?: string;
+  full_picture?: string;
+  is_published?: boolean;
+  scheduled_publish_time?: number;
+  reactions?: { summary?: { total_count?: number } };
+  comments?: { summary?: { total_count?: number } };
+  shares?: { count?: number };
+  insights?: {
+    data?: Array<{
+      name?: string;
+      values?: Array<{ value?: number | Record<string, number> }>;
+    }>;
+  };
+  attachments?: {
+    data?: Array<{
+      media_type?: string;
+      media?: { image?: { src?: string }; source?: string };
+      url?: string;
+      subattachments?: {
+        data?: Array<{
+          media_type?: string;
+          media?: { image?: { src?: string }; source?: string };
+          url?: string;
+        }>;
+      };
+    }>;
+  };
+}
+export async function listFacebookPosts(
+  integrationId: string,
+  limit = 25
+): Promise<FacebookPostSummary[]> {
+  const { data } = await apiResponse.get<{ posts: FacebookPostSummary[] }>(
+    `/integrations/facebook/${integrationId}/posts?limit=${limit}`
+  );
+  return data.posts;
+}
+
+export interface InstagramPostSummary {
+  id: string;
+  caption?: string;
+  media_type?: string;
+  media_url?: string;
+  thumbnail_url?: string;
+  permalink?: string;
+  timestamp?: string;
+  comments_count?: number;
+  like_count?: number;
+}
+export async function listInstagramPosts(
+  integrationId: string,
+  limit = 25
+): Promise<InstagramPostSummary[]> {
+  const { data } = await apiResponse.get<{ posts: InstagramPostSummary[] }>(
+    `/integrations/instagram/${integrationId}/posts?limit=${limit}`
+  );
+  return data.posts;
+}
+
 // -----------------------------------------------------------------------------
 // Insights
 // -----------------------------------------------------------------------------
@@ -400,7 +469,11 @@ export interface PublishThreadInput {
   text?: string;
   mediaUrl?: string;
   altText?: string;
-  children?: Array<{ kind: "IMAGE" | "VIDEO"; mediaUrl: string; altText?: string }>;
+  children?: Array<{
+    kind: "IMAGE" | "VIDEO";
+    mediaUrl: string;
+    altText?: string;
+  }>;
   replyToId?: string;
 }
 
@@ -422,6 +495,26 @@ export async function deleteThreadsPost(
   await apiResponse.delete(
     `/integrations/threads/${integrationId}/posts/${mediaId}`
   );
+}
+
+export interface ThreadsPostSummary {
+  id: string;
+  text?: string;
+  media_type?: string;
+  media_url?: string;
+  permalink?: string;
+  timestamp?: string;
+  is_quote_post?: boolean;
+}
+
+export async function listThreadsPosts(
+  integrationId: string,
+  limit = 50
+): Promise<ThreadsPostSummary[]> {
+  const { data } = await apiResponse.get<{ posts: ThreadsPostSummary[] }>(
+    `/integrations/threads/${integrationId}/posts?limit=${limit}`
+  );
+  return data.posts;
 }
 
 export interface ThreadsReply {
@@ -760,6 +853,13 @@ export interface TweetSummary {
   author_id?: string;
   conversation_id?: string;
   in_reply_to_user_id?: string;
+  attachments?: { media_keys?: string[] };
+  media?: Array<{
+    media_key: string;
+    type: "photo" | "video" | "animated_gif";
+    url?: string;
+    preview_image_url?: string;
+  }>;
   public_metrics?: {
     retweet_count: number;
     reply_count: number;
@@ -992,9 +1092,7 @@ export async function listTikTokVideos(
     videos: TikTokVideoSummary[];
     cursor?: number;
     hasMore?: boolean;
-  }>(
-    `/integrations/tiktok/${integrationId}/videos${qs ? `?${qs}` : ""}`
-  );
+  }>(`/integrations/tiktok/${integrationId}/videos${qs ? `?${qs}` : ""}`);
   return {
     videos: data.videos,
     cursor: data.cursor,
@@ -1124,9 +1222,7 @@ export async function listYouTubeVideos(
     success: boolean;
     videos: YouTubeVideoSummary[];
     nextPageToken?: string;
-  }>(
-    `/integrations/youtube/${integrationId}/videos${qs ? `?${qs}` : ""}`
-  );
+  }>(`/integrations/youtube/${integrationId}/videos${qs ? `?${qs}` : ""}`);
   return { videos: data.videos, nextPageToken: data.nextPageToken };
 }
 
@@ -1156,9 +1252,7 @@ export async function listYouTubeVideoComments(
     success: boolean;
     comments: YouTubeComment[];
     nextPageToken?: string;
-  }>(
-    `/integrations/youtube/${integrationId}/videos/${videoId}/comments${qs}`
-  );
+  }>(`/integrations/youtube/${integrationId}/videos/${videoId}/comments${qs}`);
   return { comments: data.comments, nextPageToken: data.nextPageToken };
 }
 
@@ -1294,9 +1388,7 @@ export async function listBrevoContacts(
     success: boolean;
     contacts: BrevoContact[];
     count: number;
-  }>(
-    `/integrations/brevo/${integrationId}/contacts${qs ? `?${qs}` : ""}`
-  );
+  }>(`/integrations/brevo/${integrationId}/contacts${qs ? `?${qs}` : ""}`);
   return { contacts: data.contacts, count: data.count };
 }
 
@@ -1332,13 +1424,7 @@ export interface BrevoEmailCampaign {
 }
 
 export interface ListBrevoCampaignsQuery {
-  status?:
-    | "draft"
-    | "sent"
-    | "archive"
-    | "queued"
-    | "suspended"
-    | "in_process";
+  status?: "draft" | "sent" | "archive" | "queued" | "suspended" | "in_process";
   type?: "classic" | "trigger";
   limit?: number;
   offset?: number;
@@ -1358,9 +1444,7 @@ export async function listBrevoCampaigns(
     success: boolean;
     campaigns: BrevoEmailCampaign[];
     count: number;
-  }>(
-    `/integrations/brevo/${integrationId}/campaigns${qs ? `?${qs}` : ""}`
-  );
+  }>(`/integrations/brevo/${integrationId}/campaigns${qs ? `?${qs}` : ""}`);
   return { campaigns: data.campaigns, count: data.count };
 }
 
@@ -1457,9 +1541,7 @@ export async function listBrevoEmailEvents(
   const { data } = await apiResponse.get<{
     success: boolean;
     events: BrevoEmailEvent[];
-  }>(
-    `/integrations/brevo/${integrationId}/stats/events${qs ? `?${qs}` : ""}`
-  );
+  }>(`/integrations/brevo/${integrationId}/stats/events${qs ? `?${qs}` : ""}`);
   return data.events;
 }
 
@@ -1496,9 +1578,7 @@ export async function listPinterestBoards(
     success: boolean;
     boards: PinterestBoard[];
     bookmark?: string;
-  }>(
-    `/integrations/pinterest/${integrationId}/boards${qs ? `?${qs}` : ""}`
-  );
+  }>(`/integrations/pinterest/${integrationId}/boards${qs ? `?${qs}` : ""}`);
   return { boards: data.boards, bookmark: data.bookmark };
 }
 
@@ -1555,9 +1635,7 @@ export async function listPinterestPins(
     success: boolean;
     pins: PinterestPin[];
     bookmark?: string;
-  }>(
-    `/integrations/pinterest/${integrationId}/pins${qs ? `?${qs}` : ""}`
-  );
+  }>(`/integrations/pinterest/${integrationId}/pins${qs ? `?${qs}` : ""}`);
   return { pins: data.pins, bookmark: data.bookmark };
 }
 
@@ -1932,6 +2010,29 @@ export async function createGoogleCalendarEvent(
   return data.event;
 }
 
+export async function updateGoogleCalendarEvent(
+  integrationId: string,
+  eventId: string,
+  input: CreateGoogleCalendarEventInput
+): Promise<GoogleCalendarEvent> {
+  const { data } = await apiResponse.put<{
+    success: boolean;
+    event: GoogleCalendarEvent;
+  }>(`/integrations/google_calendar/${integrationId}/events/${eventId}`, input);
+  return data.event;
+}
+
+export async function deleteGoogleCalendarEvent(
+  integrationId: string,
+  eventId: string,
+  calendarId = "primary"
+): Promise<void> {
+  await apiResponse.delete(
+    `/integrations/google_calendar/${integrationId}/events/${eventId}`,
+    { params: { calendarId, sendUpdates: "all" } }
+  );
+}
+
 export interface GoogleCalendarSummary {
   id: string;
   summary: string;
@@ -1993,9 +2094,7 @@ export async function listGoogleDriveFiles(
     success: boolean;
     files: GoogleDriveFile[];
     nextPageToken?: string;
-  }>(
-    `/integrations/google_drive/${integrationId}/files${qs ? `?${qs}` : ""}`
-  );
+  }>(`/integrations/google_drive/${integrationId}/files${qs ? `?${qs}` : ""}`);
   return { files: data.files, nextPageToken: data.nextPageToken };
 }
 

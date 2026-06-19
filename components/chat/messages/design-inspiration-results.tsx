@@ -148,7 +148,7 @@ export function DesignInspirationResults({
                       </div>
                       {/* Selected badge */}
                       {selected && (
-                        <div className='bg-primary absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full shadow-lg'>
+                        <div className='bg-indigo-600 hover:bg-indigo-700 absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full shadow-lg'>
                           <Check className='h-3 w-3 text-white' />
                         </div>
                       )}

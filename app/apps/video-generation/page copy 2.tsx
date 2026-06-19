@@ -730,7 +730,7 @@ function VideoGenerationPage() {
                           className={cn(
                             "flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium whitespace-nowrap transition-colors",
                             activeContentTab === t.id
-                              ? "bg-primary text-primary-foreground border-primary"
+                              ? "bg-indigo-600 hover:bg-indigo-700 text-primary-foreground border-primary"
                               : "border-neutral-200 bg-neutral-50 text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900"
                           )}
                         >
@@ -1569,7 +1569,7 @@ function VideoGenerationPage() {
                 <button
                   onClick={handleGenerate}
                   disabled={isGenerating}
-                  className='flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-transform active:scale-95'
+                  className='flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-transform active:scale-95'
                 >
                   {isGenerating ? (
                     <div className='flex items-center gap-2'>

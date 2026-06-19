@@ -109,7 +109,7 @@ export function PDFNode({ data, selected }: NodeProps<PDFNodeData>) {
                       }
                     }}
                     disabled={isAnalyzing}
-                    className='borber-primary/20 bg-primary/5 text-primary h-7 gap-1 px-2 text-[10px]'
+                    className='borber-primary/20 bg-indigo-600 hover:bg-indigo-700/5 text-primary h-7 gap-1 px-2 text-[10px]'
                   >
                     {isAnalyzing ? (
                       <Loader2 className='h-3 w-3 animate-spin' />

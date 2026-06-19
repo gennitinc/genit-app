@@ -171,7 +171,7 @@ export function NodePalette({ onAddNode }: NodePaletteProps) {
                   <Button
                     variant='ghost'
                     size='sm'
-                    className='bg-primary/10 hover:bg-primary/20 h-auto p-1 opacity-0 transition-all duration-200 group-hover:opacity-100'
+                    className='bg-indigo-600 hover:bg-indigo-700/10 hover:bg-indigo-600 hover:bg-indigo-700/20 h-auto p-1 opacity-0 transition-all duration-200 group-hover:opacity-100'
                   >
                     <Plus className='text-primary h-4 w-4' />
                   </Button>

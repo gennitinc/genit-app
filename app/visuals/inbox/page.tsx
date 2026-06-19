@@ -1,284 +1,400 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { Search, MessageSquare, Send, CheckCircle2, Clock, MoreVertical, RefreshCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { GradientFrame } from "@/utils/gradient-frame";
-import { 
-  InstagramBrand, 
-  FacebookBrand, 
-  XBrand, 
-  LinkedinBrand, 
-  GmailBrand 
+import {
+  FacebookBrand,
+  GmailBrand,
+  InstagramBrand,
+  LinkedinBrand,
+  MessengerBrand,
+  TelegramBrand,
+  WhatsAppBrand,
+  XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
-import { 
-  useInboxConversations, 
-  useInboxMessages, 
-  useSendMessage, 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  useDeleteConversation,
+  useInboxConversations,
+  useInboxMessages,
+  useMarkAllConversationsAsRead,
   useMarkConversationAsRead,
-  useSeedMockInbox 
+  useSendMessage,
+  useUpdateConversationStatus,
 } from "@/hooks/use-inbox";
+import { useIntegrations } from "@/hooks/use-integrations";
+import type { InboxConversation, InboxFilters } from "@/lib/inbox-api";
+import type { IntegrationConnection, IntegrationPlatform } from "@/lib/integrations-api";
+import {
+  Archive,
+  Check,
+  CheckCheck,
+  ChevronLeft,
+  Circle,
+  Clock3,
+  Inbox,
+  Loader2,
+  MessageSquare,
+  MoreHorizontal,
+  Plus,
+  Search,
+  Send,
+  Trash2,
+} from "lucide-react";
+import Link from "next/link";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 
-const PlatformIcon = ({ platform, className }: { platform: string, className?: string }) => {
+const INBOX_PLATFORMS = new Set<IntegrationPlatform>([
+  "facebook", "instagram", "linkedin", "x", "gmail", "outlook",
+  "whatsapp", "messenger", "telegram",
+]);
+
+const PLATFORM_LABELS: Record<string, string> = {
+  facebook: "Facebook",
+  instagram: "Instagram",
+  linkedin: "LinkedIn",
+  x: "X",
+  twitter: "X",
+  gmail: "Gmail",
+  email: "Email",
+  outlook: "Outlook",
+  whatsapp: "WhatsApp",
+  messenger: "Messenger",
+  telegram: "Telegram",
+};
+
+function PlatformIcon({ platform, className = "h-4 w-4" }: { platform: string; className?: string }) {
   switch (platform) {
-    case 'instagram': return <InstagramBrand className={className} />;
-    case 'facebook': return <FacebookBrand className={className} />;
-    case 'twitter': return <XBrand className={className} />;
-    case 'linkedin': return <LinkedinBrand className={className} />;
-    case 'email': return <GmailBrand className={className} />;
+    case "instagram": return <InstagramBrand className={className} />;
+    case "facebook": return <FacebookBrand className={className} />;
+    case "x":
+    case "twitter": return <XBrand className={className} />;
+    case "linkedin": return <LinkedinBrand className={className} />;
+    case "gmail":
+    case "email":
+    case "outlook": return <GmailBrand className={className} />;
+    case "whatsapp": return <WhatsAppBrand className={className} />;
+    case "messenger": return <MessengerBrand className={className} />;
+    case "telegram": return <TelegramBrand className={className} />;
     default: return <MessageSquare className={className} />;
   }
-};
+}
 
-const formatTime = (dateString: string) => {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diff = now.getTime() - date.getTime();
-  const minutes = Math.floor(diff / 60000);
-  
-  if (minutes < 1) return 'Just now';
-  if (minutes < 60) return `${minutes}m ago`;
-  if (minutes < 1440) return `${Math.floor(minutes / 60)}h ago`;
-  return `${Math.floor(minutes / 1440)}d ago`;
-};
+function relativeTime(value: string) {
+  const date = new Date(value);
+  const seconds = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
+  if (seconds < 60) return "Now";
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
+  if (seconds < 604800) return `${Math.floor(seconds / 86400)}d`;
+  return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
+function AccountAvatar({ account }: { account: IntegrationConnection }) {
+  return (
+    <div className="relative h-10 w-10 shrink-0">
+      {account.accountAvatar ? (
+        <img src={account.accountAvatar} alt="" className="h-10 w-10 rounded-xl object-cover ring-1 ring-black/10 dark:ring-white/10" />
+      ) : (
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-100 text-sm font-semibold text-zinc-600 ring-1 ring-black/5 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-white/10">
+          {account.accountName?.charAt(0).toUpperCase() || "?"}
+        </div>
+      )}
+      <span className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-white ring-2 ring-white dark:bg-zinc-950 dark:ring-zinc-950">
+        <PlatformIcon platform={account.platform} className="h-3 w-3" />
+      </span>
+    </div>
+  );
+}
 
 export default function InboxPage() {
-  const [activeConvId, setActiveConvId] = useState<string | null>(null);
-  const [replyText, setReplyText] = useState("");
+  const [selectedAccountId, setSelectedAccountId] = useState("all");
+  const [status, setStatus] = useState<InboxFilters["status"]>("all");
+  const [sort, setSort] = useState<NonNullable<InboxFilters["sort"]>>("newest");
+  const [search, setSearch] = useState("");
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [reply, setReply] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState<InboxConversation | null>(null);
+  const deferredSearch = useDeferredValue(search.trim());
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
-  const { data: conversations, isLoading: isLoadingConvs } = useInboxConversations();
-  const { data: messages, isLoading: isLoadingMessages } = useInboxMessages(activeConvId || undefined);
-  
-  const sendMessageMutation = useSendMessage();
-  const markAsReadMutation = useMarkConversationAsRead();
-  const seedMockMutation = useSeedMockInbox();
 
-  const activeConversation = conversations?.find((c: any) => c._id === activeConvId);
+  const { integrations, isLoading: integrationsLoading } = useIntegrations();
+  const accounts = useMemo(
+    () => integrations.filter((item) => INBOX_PLATFORMS.has(item.platform) && item.status === "active"),
+    [integrations]
+  );
+  const selectedAccount = accounts.find((account) => account._id === selectedAccountId);
+  const filters = useMemo<InboxFilters>(() => ({
+    integrationId: selectedAccount?._id,
+    platform: selectedAccount?.platform,
+    status,
+    search: deferredSearch || undefined,
+    sort,
+  }), [deferredSearch, selectedAccount, sort, status]);
+
+  const { data: conversations = [], isLoading, isFetching } = useInboxConversations(filters);
+  const { data: messages = [], isLoading: messagesLoading } = useInboxMessages(activeId || undefined);
+  const sendMutation = useSendMessage();
+  const markReadMutation = useMarkConversationAsRead();
+  const markAllMutation = useMarkAllConversationsAsRead();
+  const statusMutation = useUpdateConversationStatus();
+  const deleteMutation = useDeleteConversation();
+  const activeConversation = conversations.find((conversation) => conversation._id === activeId) || null;
+  const unreadTotal = conversations.reduce((total, conversation) => total + conversation.unreadCount, 0);
 
   useEffect(() => {
-    if (activeConvId) {
-      markAsReadMutation.mutate(activeConvId);
-    }
-  }, [activeConvId]);
+    if (activeId && !activeConversation) setActiveId(null);
+  }, [activeConversation, activeId]);
+
+  useEffect(() => {
+    if (activeConversation?.unreadCount) markReadMutation.mutate(activeConversation._id);
+  }, [activeConversation?._id]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = () => {
-    if (!replyText.trim() || !activeConvId) return;
-    sendMessageMutation.mutate({ conversationId: activeConvId, content: replyText });
-    setReplyText("");
+  const sendReply = () => {
+    const content = reply.trim();
+    if (!content || !activeId) return;
+    sendMutation.mutate({ conversationId: activeId, content }, {
+      onSuccess: () => setReply(""),
+      onError: () => toast.error("Your reply could not be sent"),
+    });
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
+  const changeStatus = (nextStatus: InboxConversation["status"]) => {
+    if (!activeId) return;
+    statusMutation.mutate({ conversationId: activeId, status: nextStatus }, {
+      onSuccess: () => toast.success(nextStatus === "resolved" ? "Conversation resolved" : nextStatus === "snoozed" ? "Conversation snoozed" : "Conversation reopened"),
+      onError: () => toast.error("Conversation could not be updated"),
+    });
+  };
+
+  const confirmDelete = () => {
+    if (!deleteTarget) return;
+    deleteMutation.mutate(deleteTarget._id, {
+      onSuccess: () => {
+        if (activeId === deleteTarget._id) setActiveId(null);
+        setDeleteTarget(null);
+        toast.success("Conversation deleted");
+      },
+      onError: () => toast.error("Conversation could not be deleted"),
+    });
   };
 
   return (
-    <div className="flex flex-col gap-6 w-full h-full min-h-[calc(100vh-8rem)] animate-in fade-in slide-in-from-bottom-4 duration-500">
-      
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="flex min-h-[calc(100vh-8rem)] w-full animate-in flex-col gap-5 fade-in slide-in-from-bottom-4 duration-500">
+      <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-foreground dark:text-white tracking-tight">Unified Inbox</h2>
-          <p className="text-sm text-muted-foreground mt-1">Manage all social interactions and emails in one place.</p>
+          <div className="mb-2 flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            {accounts.length} connected {accounts.length === 1 ? "account" : "accounts"}
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Unified Inbox</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Read and respond across every connected brand channel.</p>
         </div>
-        <div className="flex gap-2">
-          {conversations?.length === 0 && (
-             <Button variant="outline" className="rounded-full gap-2" onClick={() => seedMockMutation.mutate()} disabled={seedMockMutation.isPending}>
-               <RefreshCcw className={`w-4 h-4 ${seedMockMutation.isPending ? 'animate-spin' : ''}`} />
-               Seed Demo Data
-             </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="outline"
+            className="rounded-full"
+            disabled={!unreadTotal || markAllMutation.isPending}
+            onClick={() => markAllMutation.mutate(undefined, {
+              onSuccess: () => toast.success("Everything is marked as read"),
+              onError: () => toast.error("Messages could not be updated"),
+            })}
+          >
+            {markAllMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCheck className="mr-2 h-4 w-4" />}
+            Mark all read
+          </Button>
+          <Button asChild className="rounded-full bg-emerald-600 text-white hover:bg-emerald-700">
+            <Link href="/integrations"><Plus className="mr-2 h-4 w-4" />Connect channel</Link>
+          </Button>
+        </div>
+      </header>
+
+      <section>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-sm font-semibold">Connected brand accounts</h2>
+          {isFetching && <span className="flex items-center gap-1.5 text-xs text-muted-foreground"><Loader2 className="h-3 w-3 animate-spin" />Syncing</span>}
+        </div>
+        <div className="flex gap-3 overflow-x-auto pb-2">
+          <button
+            onClick={() => setSelectedAccountId("all")}
+            className={`flex min-w-44 items-center gap-3 rounded-2xl border p-3 text-left transition ${selectedAccountId === "all" ? "border-emerald-500 bg-emerald-50/70 ring-2 ring-emerald-500/10 dark:bg-emerald-500/10" : "border-black/5 bg-white hover:border-black/15 dark:border-white/10 dark:bg-zinc-950"}`}
+          >
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950 text-white dark:bg-white dark:text-black"><Inbox className="h-5 w-5" /></span>
+            <span><span className="block text-sm font-semibold">All accounts</span><span className="text-xs text-muted-foreground">Every channel</span></span>
+          </button>
+          {accounts.map((account) => (
+            <button
+              key={account._id}
+              onClick={() => setSelectedAccountId(account._id)}
+              className={`flex min-w-52 items-center gap-3 rounded-2xl border p-3 text-left transition ${selectedAccountId === account._id ? "border-emerald-500 bg-emerald-50/70 ring-2 ring-emerald-500/10 dark:bg-emerald-500/10" : "border-black/5 bg-white hover:border-black/15 dark:border-white/10 dark:bg-zinc-950"}`}
+            >
+              <AccountAvatar account={account} />
+              <span className="min-w-0"><span className="block truncate text-sm font-semibold">{account.accountName}</span><span className="block truncate text-xs text-muted-foreground">{PLATFORM_LABELS[account.platform]}{account.isPrimary ? " · Primary" : ""}</span></span>
+            </button>
+          ))}
+          {!integrationsLoading && accounts.length === 0 && (
+            <Link href="/integrations" className="flex min-w-64 items-center gap-3 rounded-2xl border border-dashed border-zinc-300 p-3 text-sm text-muted-foreground hover:border-emerald-500 hover:text-emerald-700 dark:border-zinc-700">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-900"><Plus className="h-5 w-5" /></span>
+              Connect your first inbox channel
+            </Link>
           )}
-          <Button className="rounded-full">Mark all as read</Button>
         </div>
-      </div>
+      </section>
 
-      {/* Main Container with Gradient Frame */}
-      <div className='group relative overflow-hidden bg-black/[0.02] p-4 ring-1 ring-black/5 md:p-5 dark:bg-white/[0.04] dark:ring-white/10 flex-grow rounded-3xl flex flex-col'>
-        <GradientFrame />
-        <div className='relative z-10 flex h-full rounded-2xl bg-white shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10 overflow-hidden flex-col md:flex-row'>
-          
-          {/* Left Sidebar: Conversations List */}
-          <div className="w-full md:w-[350px] border-r border-black/5 dark:border-white/10 flex flex-col bg-white dark:bg-[#0a0a0a] z-10 h-full">
-            {/* Search */}
-            <div className="p-4 border-b border-black/5 dark:border-white/10">
-              <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <input 
-                  type="text" 
-                  placeholder="Search messages..." 
-                  className="w-full h-10 pl-9 pr-4 rounded-xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/5 dark:border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:text-white transition-all"
-                />
-              </div>
+      <div className="grid min-h-[650px] flex-1 overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm dark:border-white/10 dark:bg-zinc-950 lg:grid-cols-[380px_minmax(0,1fr)]">
+        <aside className={`${activeId ? "hidden lg:flex" : "flex"} min-h-0 flex-col border-r border-black/5 dark:border-white/10`}>
+          <div className="space-y-3 border-b border-black/5 p-4 dark:border-white/10">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search people or messages" className="h-10 rounded-xl border-black/10 bg-zinc-50 pl-9 dark:border-white/10 dark:bg-zinc-900" />
             </div>
-
-            {/* List */}
-            <div className="flex-grow overflow-y-auto p-2 scrollbar-hide space-y-1">
-              {isLoadingConvs ? (
-                <div className="p-8 text-center text-sm text-muted-foreground">Loading conversations...</div>
-              ) : conversations?.length === 0 ? (
-                <div className="p-8 text-center text-sm text-muted-foreground">No messages found.</div>
-              ) : (
-                conversations?.map((conv: any) => {
-                  const isActive = activeConvId === conv._id;
-                  const isUnread = conv.unreadCount > 0;
-                  
-                  return (
-                    <div 
-                      key={conv._id} 
-                      onClick={() => setActiveConvId(conv._id)}
-                      className={`p-3 rounded-xl cursor-pointer transition-all duration-200 relative ${
-                        isActive 
-                          ? 'bg-black/5 dark:bg-white/10 shadow-sm' 
-                          : 'hover:bg-black/[0.02] dark:hover:bg-white/[0.02]'
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        {/* Avatar with Platform Badge */}
-                        <div className="relative flex-shrink-0">
-                          <div className={`w-10 h-10 rounded-full overflow-hidden ring-2 ${isUnread ? 'ring-emerald-500' : 'ring-black/5 dark:ring-white/10'}`}>
-                            {conv.customerAvatar ? (
-                              <img src={conv.customerAvatar} alt={conv.customerName} className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="w-full h-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center font-bold text-zinc-500">
-                                {conv.customerName.charAt(0)}
-                              </div>
-                            )}
-                          </div>
-                          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-white dark:bg-[#0a0a0a] rounded-full flex items-center justify-center ring-2 ring-white dark:ring-[#0a0a0a]">
-                            <PlatformIcon platform={conv.platform} className="w-3.5 h-3.5" />
-                          </div>
-                        </div>
-
-                        {/* Details */}
-                        <div className="flex-grow min-w-0">
-                          <div className="flex items-center justify-between mb-0.5">
-                            <span className={`text-sm truncate pr-2 ${isUnread ? 'font-bold text-foreground dark:text-white' : 'font-medium text-foreground dark:text-white/90'}`}>
-                              {conv.customerName}
-                            </span>
-                            <span className={`text-[10px] whitespace-nowrap ${isUnread ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-muted-foreground'}`}>
-                              {formatTime(conv.lastMessageAt)}
-                            </span>
-                          </div>
-                          <p className={`text-xs line-clamp-1 ${isUnread ? 'text-foreground dark:text-white font-medium' : 'text-muted-foreground'}`}>
-                            {conv.lastMessage}
-                          </p>
-                        </div>
-                        
-                        {isUnread && (
-                          <div className="absolute top-1/2 right-3 -translate-y-1/2 w-2 h-2 bg-emerald-500 rounded-full"></div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })
-              )}
+            <div className="grid grid-cols-2 gap-2">
+              <Select value={status} onValueChange={(value) => setStatus(value as InboxFilters["status"])}>
+                <SelectTrigger className="h-9 rounded-xl"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All conversations</SelectItem>
+                  <SelectItem value="open">Open</SelectItem>
+                  <SelectItem value="resolved">Resolved</SelectItem>
+                  <SelectItem value="snoozed">Snoozed</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={sort} onValueChange={(value) => setSort(value as NonNullable<InboxFilters["sort"]>)}>
+                <SelectTrigger className="h-9 rounded-xl"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest">Newest first</SelectItem>
+                  <SelectItem value="oldest">Oldest first</SelectItem>
+                  <SelectItem value="unread">Unread first</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
-          {/* Right Panel: Message Thread */}
-          <div className="flex-grow flex flex-col h-full bg-black/[0.01] dark:bg-white/[0.01]">
-            {activeConvId && activeConversation ? (
-              <>
-                {/* Thread Header */}
-                <div className="h-16 border-b border-black/5 dark:border-white/10 flex items-center justify-between px-6 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-md sticky top-0 z-10">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full overflow-hidden ring-1 ring-black/10 dark:ring-white/10">
-                       <img src={activeConversation.customerAvatar} alt="" className="w-full h-full object-cover" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-bold text-foreground dark:text-white leading-tight">
-                        {activeConversation.customerName}
-                      </h3>
-                      <p className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
-                        <PlatformIcon platform={activeConversation.platform} className="w-3 h-3 grayscale opacity-70" />
-                        Via {activeConversation.platform.charAt(0).toUpperCase() + activeConversation.platform.slice(1)}
-                        {activeConversation.customerHandle && ` • ${activeConversation.customerHandle}`}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full">
-                      <MoreVertical className="w-4 h-4 text-muted-foreground" />
-                    </Button>
-                  </div>
+          <div className="flex-1 overflow-y-auto p-2">
+            {isLoading ? (
+              <div className="flex h-40 items-center justify-center text-sm text-muted-foreground"><Loader2 className="mr-2 h-4 w-4 animate-spin" />Loading inbox</div>
+            ) : conversations.length === 0 ? (
+              <div className="flex h-full min-h-72 flex-col items-center justify-center px-8 text-center">
+                <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-900"><Inbox className="h-6 w-6 text-muted-foreground" /></span>
+                <h3 className="text-sm font-semibold">No conversations here</h3>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">Try another account or filter. New incoming messages will appear automatically.</p>
+              </div>
+            ) : conversations.map((conversation) => (
+              <button
+                key={conversation._id}
+                onClick={() => setActiveId(conversation._id)}
+                className={`mb-1 flex w-full gap-3 rounded-2xl p-3 text-left transition ${activeId === conversation._id ? "bg-zinc-100 dark:bg-zinc-900" : "hover:bg-zinc-50 dark:hover:bg-white/[0.03]"}`}
+              >
+                <div className="relative shrink-0">
+                  {conversation.customerAvatar ? <img src={conversation.customerAvatar} alt="" className="h-11 w-11 rounded-full object-cover" /> : <span className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800">{conversation.customerName.charAt(0).toUpperCase()}</span>}
+                  <span className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-white ring-2 ring-white dark:bg-zinc-950 dark:ring-zinc-950"><PlatformIcon platform={conversation.platform} className="h-3 w-3" /></span>
                 </div>
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center justify-between gap-2">
+                    <span className={`truncate text-sm ${conversation.unreadCount ? "font-bold" : "font-medium"}`}>{conversation.customerName}</span>
+                    <span className={`text-[10px] ${conversation.unreadCount ? "font-semibold text-emerald-600" : "text-muted-foreground"}`}>{relativeTime(conversation.lastMessageAt)}</span>
+                  </span>
+                  <span className="mt-0.5 flex items-center gap-2">
+                    <span className={`min-w-0 flex-1 truncate text-xs ${conversation.unreadCount ? "font-medium text-foreground" : "text-muted-foreground"}`}>{conversation.lastMessage}</span>
+                    {conversation.unreadCount > 0 && <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-600 px-1 text-[10px] font-bold text-white">{conversation.unreadCount}</span>}
+                  </span>
+                  <span className="mt-1.5 flex items-center gap-1 text-[10px] capitalize text-muted-foreground"><Circle className={`h-1.5 w-1.5 fill-current ${conversation.status === "open" ? "text-emerald-500" : conversation.status === "snoozed" ? "text-amber-500" : "text-zinc-400"}`} />{conversation.status}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </aside>
 
-                {/* Messages Area */}
-                <div className="flex-grow overflow-y-auto p-6 space-y-6 scrollbar-hide">
-                  {isLoadingMessages ? (
-                    <div className="text-center text-sm text-muted-foreground mt-10">Loading messages...</div>
+        <main className={`${activeId ? "flex" : "hidden lg:flex"} min-w-0 flex-col bg-zinc-50/40 dark:bg-black/20`}>
+          {activeConversation ? (
+            <>
+              <div className="flex h-16 items-center justify-between gap-3 border-b border-black/5 bg-white/80 px-4 backdrop-blur dark:border-white/10 dark:bg-zinc-950/80 sm:px-6">
+                <div className="flex min-w-0 items-center gap-3">
+                  <Button variant="ghost" size="icon" className="shrink-0 rounded-full lg:hidden" onClick={() => setActiveId(null)}><ChevronLeft className="h-5 w-5" /></Button>
+                  {activeConversation.customerAvatar ? <img src={activeConversation.customerAvatar} alt="" className="h-9 w-9 rounded-full object-cover" /> : <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800">{activeConversation.customerName.charAt(0)}</span>}
+                  <div className="min-w-0"><h2 className="truncate text-sm font-semibold">{activeConversation.customerName}</h2><p className="flex items-center gap-1.5 truncate text-xs text-muted-foreground"><PlatformIcon platform={activeConversation.platform} className="h-3 w-3" />{PLATFORM_LABELS[activeConversation.platform]}{activeConversation.customerHandle ? ` · ${activeConversation.customerHandle}` : ""}</p></div>
+                </div>
+                <div className="flex items-center gap-1">
+                  {activeConversation.status === "resolved" ? (
+                    <Button variant="outline" size="sm" className="hidden rounded-full sm:flex" disabled={statusMutation.isPending} onClick={() => changeStatus("open")}><Archive className="mr-2 h-4 w-4" />Reopen</Button>
                   ) : (
-                    messages?.map((msg: any, index: number) => {
-                      const isCustomer = msg.senderType === 'customer';
-                      
-                      return (
-                        <div key={msg._id} className={`flex flex-col ${isCustomer ? 'items-start' : 'items-end'} animate-in fade-in slide-in-from-bottom-2`}>
-                          <div className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm shadow-sm ${
-                            isCustomer 
-                              ? 'bg-white dark:bg-zinc-900 text-foreground dark:text-white ring-1 ring-black/5 dark:ring-white/10 rounded-tl-sm' 
-                              : 'bg-emerald-600 text-white rounded-tr-sm'
-                          }`}>
-                            {msg.content}
-                          </div>
-                          <span className="text-[10px] text-muted-foreground mt-1.5 px-1 flex items-center gap-1">
-                            {formatTime(msg.createdAt)}
-                            {!isCustomer && <CheckCircle2 className="w-3 h-3 text-emerald-500 opacity-70" />}
-                          </span>
-                        </div>
-                      );
-                    })
+                    <Button variant="outline" size="sm" className="hidden rounded-full sm:flex" disabled={statusMutation.isPending} onClick={() => changeStatus("resolved")}><Check className="mr-2 h-4 w-4" />Resolve</Button>
                   )}
-                  <div ref={messagesEndRef} />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="rounded-full"><MoreHorizontal className="h-5 w-5" /></Button></DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => changeStatus("open")}><Inbox className="mr-2 h-4 w-4" />Mark open</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => changeStatus("snoozed")}><Clock3 className="mr-2 h-4 w-4" />Snooze</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => changeStatus("resolved")}><Check className="mr-2 h-4 w-4" />Resolve</DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="text-red-600 focus:text-red-600" onClick={() => setDeleteTarget(activeConversation)}><Trash2 className="mr-2 h-4 w-4" />Delete conversation</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
-
-                {/* Message Input Area */}
-                <div className="p-4 bg-white dark:bg-[#0a0a0a] border-t border-black/5 dark:border-white/10 mt-auto">
-                  <div className="relative">
-                    {/* Fake AI Suggestion Tag */}
-                    <div className="absolute -top-7 right-2 flex items-center gap-1 px-2 py-0.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-full text-[10px] font-semibold border border-indigo-100 dark:border-indigo-500/20 cursor-pointer hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors">
-                      <MessageSquare className="w-3 h-3" /> AI Draft Available
-                    </div>
-                    
-                    <textarea 
-                      value={replyText}
-                      onChange={(e) => setReplyText(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      placeholder={`Reply to ${activeConversation.customerName}...`}
-                      className="w-full h-20 pt-3 pb-3 pl-4 pr-14 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/10 dark:border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:text-white resize-none"
-                    />
-                    <Button 
-                      onClick={handleSend}
-                      disabled={sendMessageMutation.isPending || !replyText.trim()}
-                      className="absolute bottom-3 right-3 w-8 h-8 rounded-full p-0 flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white shadow-md transition-transform active:scale-95"
-                    >
-                      <Send className="w-4 h-4 ml-0.5" />
-                    </Button>
-                  </div>
-                  <p className="text-[10px] text-muted-foreground mt-2 text-center">Press Enter to send, Shift + Enter for new line</p>
-                </div>
-              </>
-            ) : (
-              <div className="flex-grow flex flex-col items-center justify-center text-center p-8">
-                <div className="w-24 h-24 bg-black/5 dark:bg-white/5 rounded-full flex items-center justify-center mb-6 ring-8 ring-black/[0.02] dark:ring-white/[0.02]">
-                  <MessageSquare className="w-10 h-10 text-muted-foreground/50" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground dark:text-white mb-2">Select a conversation</h3>
-                <p className="text-sm text-muted-foreground max-w-sm">
-                  Choose a message from the list to view the conversation history and start replying.
-                </p>
               </div>
-            )}
-          </div>
-          
-        </div>
+
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+                {messagesLoading ? <div className="flex h-40 items-center justify-center text-sm text-muted-foreground"><Loader2 className="mr-2 h-4 w-4 animate-spin" />Loading messages</div> : (
+                  <div className="mx-auto max-w-3xl space-y-5">
+                    {messages.map((message) => {
+                      const inbound = message.senderType === "customer";
+                      return <div key={message._id} className={`flex flex-col ${inbound ? "items-start" : "items-end"}`}><div className={`max-w-[82%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm ${inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : "rounded-tr-md bg-emerald-600 text-white"}`}>{message.content}</div><span className="mt-1.5 flex items-center gap-1 px-1 text-[10px] text-muted-foreground">{relativeTime(message.createdAt)}{!inbound && <CheckCheck className="h-3 w-3" />}</span></div>;
+                    })}
+                    <div ref={messagesEndRef} />
+                  </div>
+                )}
+              </div>
+
+              <div className="border-t border-black/5 bg-white p-4 dark:border-white/10 dark:bg-zinc-950">
+                {activeConversation.status === "resolved" ? (
+                  <div className="flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm text-muted-foreground dark:bg-zinc-900"><Check className="h-4 w-4" />This conversation is resolved. <button className="font-semibold text-emerald-700 hover:underline dark:text-emerald-400" onClick={() => changeStatus("open")}>Reopen to reply</button></div>
+                ) : (
+                  <div className="relative mx-auto max-w-3xl">
+                    <textarea value={reply} onChange={(event) => setReply(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); sendReply(); } }} placeholder={`Reply to ${activeConversation.customerName}…`} className="min-h-24 w-full resize-none rounded-2xl border border-black/10 bg-zinc-50 px-4 py-3 pr-14 text-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 dark:border-white/10 dark:bg-zinc-900" />
+                    <Button size="icon" onClick={sendReply} disabled={!reply.trim() || sendMutation.isPending} className="absolute bottom-3 right-3 rounded-full bg-emerald-600 text-white hover:bg-emerald-700">{sendMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}</Button>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="flex h-full flex-col items-center justify-center p-8 text-center"><span className="mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-white shadow-sm ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10"><Inbox className="h-8 w-8 text-emerald-600" /></span><h2 className="text-lg font-semibold">Your conversations, in one place</h2><p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">Choose a conversation to read, reply, snooze, resolve, or delete it.</p></div>
+          )}
+        </main>
       </div>
+
+      <AlertDialog open={Boolean(deleteTarget)} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader><AlertDialogTitle>Delete this conversation?</AlertDialogTitle><AlertDialogDescription>This permanently removes the conversation with {deleteTarget?.customerName} and its message history. This cannot be undone.</AlertDialogDescription></AlertDialogHeader>
+          <AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction onClick={confirmDelete} className="bg-red-600 text-white hover:bg-red-700">{deleteMutation.isPending ? "Deleting…" : "Delete conversation"}</AlertDialogAction></AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

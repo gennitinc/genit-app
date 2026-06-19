@@ -127,7 +127,7 @@ export const VideoNode = memo(
         <Handle
           type='target'
           position={Position.Left}
-          className='bg-primary h-3 w-3'
+          className='bg-indigo-600 hover:bg-indigo-700 h-3 w-3'
           isConnectable={isConnectable}
         />
 
@@ -170,7 +170,7 @@ export const VideoNode = memo(
                     }
                   }}
                   disabled={isAnalyzing}
-                  className='borber-primary/20 bg-primary/5 text-primary h-7 gap-1 px-2 text-[10px]'
+                  className='borber-primary/20 bg-indigo-600 hover:bg-indigo-700/5 text-primary h-7 gap-1 px-2 text-[10px]'
                 >
                   {isAnalyzing ? (
                     <Loader2 className='h-3 w-3 animate-spin' />
@@ -212,7 +212,7 @@ export const VideoNode = memo(
                             }))
                           }
                           className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors focus:outline-none ${
-                            editData.hasInstruction ? "bg-primary" : "bg-muted"
+                            editData.hasInstruction ? "bg-indigo-600 hover:bg-indigo-700" : "bg-muted"
                           }`}
                         >
                           <span
@@ -256,7 +256,7 @@ export const VideoNode = memo(
                           }
                           className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
                             editData.status === "private"
-                              ? "bg-primary"
+                              ? "bg-indigo-600 hover:bg-indigo-700"
                               : "bg-muted"
                           }`}
                         >
@@ -329,7 +329,7 @@ export const VideoNode = memo(
                 <div
                   className={`border-border mr-2 flex h-7 flex-1 cursor-pointer items-center justify-center rounded-md border text-xs ${
                     isPlaying
-                      ? "bg-primary/10 hover:bg-primary/20"
+                      ? "bg-indigo-600 hover:bg-indigo-700/10 hover:bg-indigo-600 hover:bg-indigo-700/20"
                       : "hover:bg-muted bg-transparent"
                   }`}
                   onClick={handlePlayPause}

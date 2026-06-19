@@ -1214,7 +1214,7 @@ export const SignupComp = () => {
                 <Button
                   type='button'
                   variant='outline'
-                  className='hover:border-primary/50 hover:bg-primary/10 dark:bg-primary/10 relative w-full overflow-hidden py-5 transition-all'
+                  className='hover:border-primary/50 hover:bg-white/70 relative w-full overflow-hidden py-5 transition-all'
                   disabled={loading2}
                 >
                   {loading2 ? (
@@ -1432,7 +1432,7 @@ export const SignupComp = () => {
 
               {/* Submit Button */}
               <Button
-                className='w-full rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-primary/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
+                className='w-full rounded-lg bg-indigo-600 hover:bg-indigo-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700/90 focus:ring-4 focus:ring-primary/30 focus:outline-none dark:focus:ring-primary/40'
                 type='submit'
                 disabled={!allfieldvalid || loading}
               >

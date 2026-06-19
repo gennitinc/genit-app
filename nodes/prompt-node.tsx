@@ -187,7 +187,7 @@ export function PromptNode({
         isVisible={selected}
         minWidth={280}
         minHeight={100}
-        handleClassName='w-3 h-3 bg-primary border-2 border-white rounded shadow-lg'
+        handleClassName='w-3 h-3 bg-indigo-600 hover:bg-indigo-700 border-2 border-white rounded shadow-lg'
       />
 
       {/* Input Context Handle (Target) */}
@@ -222,7 +222,7 @@ export function PromptNode({
               className={cn(
                 "my-1 w-full flex-1 rounded-md px-2 py-1 text-[10px] font-semibold transition-all",
                 contentType === t.id
-                  ? "bg-primary text-primary-foreground shadow-sm"
+                  ? "bg-indigo-600 hover:bg-indigo-700 text-primary-foreground shadow-sm"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >

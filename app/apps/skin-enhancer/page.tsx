@@ -858,7 +858,7 @@ const SkinEnhancerPage = () => {
                               </p>
                             )}
                             <Button
-                              className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-primary/90 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800'
+                              className='flex w-full flex-row items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700/90 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800'
                               disabled={!file || isGenerating}
                               onClick={handleEnhance}
                             >

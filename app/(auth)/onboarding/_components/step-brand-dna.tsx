@@ -177,7 +177,7 @@ export function StepBrandDna({
 
     <Button
       onClick={onContinue}
-      className="md:px-10 bg-primary text-white hover:bg-primary/90 font-medium"
+      className="md:px-10 bg-indigo-600 hover:bg-indigo-700 text-white hover:bg-indigo-600 hover:bg-indigo-700/90 font-medium"
     >
       Save &amp; Continue
       <ArrowRight className="size-4 ml-1" />

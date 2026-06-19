@@ -22,6 +22,7 @@ import {
   Cpu,
   Mic,
   UserSquare,
+  Library,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -67,6 +68,11 @@ export function AdminNavMain() {
       title: "Blog Posts",
       icon: FileText,
       href: "/admin/blog",
+    },
+    {
+      title: "Media Library",
+      icon: Library,
+      href: "/admin/blog/library",
     },
     {
       title: "AI Models",
@@ -118,7 +124,7 @@ export function AdminNavMain() {
                 className={cn(
                   "transition-colors duration-300",
                   isRouteActive(item.href)
-                    ? "bg-primary/10 text-primary font-semibold"
+                    ? "bg-indigo-600 hover:bg-indigo-700/10 text-primary font-semibold"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
                 onClick={handleLinkClick}
@@ -153,7 +159,7 @@ export function AdminNavMain() {
                 className={cn(
                   "transition-colors duration-300",
                   isRouteActive(item.href)
-                    ? "bg-primary/10 text-primary font-semibold"
+                    ? "bg-indigo-600 hover:bg-indigo-700/10 text-primary font-semibold"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
                 onClick={handleLinkClick}

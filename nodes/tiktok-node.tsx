@@ -144,7 +144,7 @@ export const TikTokNode = memo(
                       }
                     }}
                     disabled={isAnalyzing}
-                    className='border-primary/20 hover:border-primary/50 bg-primary/5 hover:bg-primary/10 text-primary h-8 gap-1.5 px-2 text-xs transition-all duration-300'
+                    className='border-primary/20 hover:border-primary/50 bg-indigo-600 hover:bg-indigo-700/5 hover:bg-indigo-600 hover:bg-indigo-700/10 text-primary h-8 gap-1.5 px-2 text-xs transition-all duration-300'
                   >
                     {isAnalyzing ? (
                       <Loader2 className='h-3.5 w-3.5 animate-spin' />
@@ -219,7 +219,7 @@ export const TikTokNode = memo(
                             }
                             className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
                               editData.status === "private"
-                                ? "bg-primary"
+                                ? "bg-indigo-600 hover:bg-indigo-700"
                                 : "bg-muted"
                             }`}
                           >

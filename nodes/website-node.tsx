@@ -85,7 +85,7 @@ export const WebsiteNode = memo(
           isVisible={selected}
           minWidth={150}
           minHeight={80}
-          handleClassName='w-3 h-3 bg-primary border-2 border-white rounded shadow-lg'
+          handleClassName='w-3 h-3 bg-indigo-600 hover:bg-indigo-700 border-2 border-white rounded shadow-lg'
         />
         <div
           className={`bg-card border-border relative min-h-[80px] w-80 min-w-[150px] rounded-lg border p-4 shadow-sm transition-all duration-200 hover:shadow-md ${
@@ -97,7 +97,7 @@ export const WebsiteNode = memo(
           <Handle
             type='target'
             position={Position.Left}
-            className='bg-primary h-3 w-3'
+            className='bg-indigo-600 hover:bg-indigo-700 h-3 w-3'
             isConnectable={isConnectable}
           />
 
@@ -142,7 +142,7 @@ export const WebsiteNode = memo(
                         }
                       }}
                       disabled={isAnalyzing}
-                      className='borber-primary/20 bg-primary/5 text-primary h-7 gap-1 px-2 text-[10px]'
+                      className='borber-primary/20 bg-indigo-600 hover:bg-indigo-700/5 text-primary h-7 gap-1 px-2 text-[10px]'
                     >
                       {isAnalyzing ? (
                         <Loader2 className='h-3 w-3 animate-spin' />
@@ -309,7 +309,7 @@ export const WebsiteNode = memo(
         <Handle
           type='source'
           position={Position.Right}
-          className='bg-primary h-3 w-3'
+          className='bg-indigo-600 hover:bg-indigo-700 h-3 w-3'
           isConnectable={isConnectable}
         />
       </div>

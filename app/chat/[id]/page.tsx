@@ -37,7 +37,7 @@ const ChatIdPage = () => {
         <p className='text-muted-foreground mb-4'>{error}</p>
         <button
           onClick={() => fetchProject(projectId)}
-          className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 transition-colors'
+          className='bg-indigo-600 hover:bg-indigo-700 text-primary-foreground hover:bg-indigo-600 hover:bg-indigo-700/90 rounded-md px-4 py-2 transition-colors'
         >
           Retry
         </button>
