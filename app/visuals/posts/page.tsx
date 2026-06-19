@@ -9,7 +9,7 @@ import {
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
-import { MediaPicker } from "@/components/admin/MediaPicker";
+import { PostEditorDialog } from "@/app/visuals/_components/post-editor-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,7 +20,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -28,7 +27,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { useIntegrations } from "@/hooks/use-integrations";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -73,8 +71,6 @@ import {
 import {
   BarChart3,
   CalendarClock,
-  Check,
-  Clock3,
   Edit3,
   ExternalLink,
   Eye,
@@ -86,12 +82,12 @@ import {
   Plus,
   RefreshCw,
   Search,
-  Send,
   Share2,
   Trash2,
   type LucideIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 const PLATFORMS: IntegrationPlatform[] = [
   "facebook",
@@ -672,22 +668,6 @@ export default function PostsPage() {
     });
     setEditorOpen(true);
   }
-  function togglePlatform(platform: IntegrationPlatform) {
-    setForm((current) => ({
-      ...current,
-      platforms: current.platforms.includes(platform)
-        ? current.platforms.filter((item) => item !== platform)
-        : editing
-          ? [platform]
-          : [...current.platforms, platform],
-      integrationIds: current.platforms.includes(platform)
-        ? current.integrationIds
-        : {
-            ...current.integrationIds,
-            [platform]: connected.find((item) => item.platform === platform)?._id || "",
-          },
-    }));
-  }
   const loading = integrationsLoading || postsQuery.isLoading || (view === "live" && liveQuery.isLoading);
   const analyticsMetrics: Array<{
     label: string;
@@ -708,44 +688,62 @@ export default function PostsPage() {
 
   return (
     <div className='animate-in fade-in flex w-full flex-col gap-6 pb-14 duration-500'>
-      <header className='relative overflow-hidden rounded-xl border bg-black p-5 ring-1 ring-black/5 md:p-7 dark:ring-white/10 h-40'>
+      <header className='relative overflow-hidden rounded-3xl bg-black/[0.025] p-4 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
         <img
-          src='https://i.pinimg.com/736x/3d/bc/57/3dbc57f575fe70c6a691d9665a6b2d3d.jpg'
+          src='https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg'
           alt=''
-          className='absolute inset-0 h-full w-full object-cover object-center opacity-45'
+          className='absolute inset-0 h-full w-full object-cover object-center opacity-100'
         />
-        <div className='absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/20' />
-        <div className='relative flex flex-col gap-5 md:flex-row md:items-end md:justify-between'>
-          <div>
-            <h1 className='font-instrument-serif mt-2 text-3xl font-semibold tracking-tight text-white md:text-4xl'>Content workspace</h1>
-            <p className='mt-2 max-w-2xl text-sm leading-6 text-white/70'>
-              Create, schedule, and publish posts across all your social channels with ease.
-            </p>
+        <div className='relative grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-center'>
+          <div className='flex min-w-0 flex-col items-start justify-center py-1'>
+            <div>
+              <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight text-white'>Content workspace</h1>
+              <p className='mt-1 max-w-2xl text-sm leading-5 text-white/70'>
+                Create, schedule, and publish posts across all your social channels.
+              </p>
+            </div>
+            <Button onClick={openCreate} className='mt-4 flex h-9 w-fit items-center gap-2 rounded-sm bg-indigo-600 px-4 text-sm text-white hover:bg-indigo-500 disabled:opacity-50'>
+              New Post <Plus className='h-4 w-4' />
+            </Button>
           </div>
-          <Button onClick={openCreate} className="flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-500 disabled:opacity-50">
-            <Plus className='mr-2 h-4 w-4' /> New draft
-          </Button>
+
+          <div className='hidden rounded-2xl bg-white/95 p-4 shadow-sm ring-1 ring-black/5 sm:block dark:bg-zinc-950/95 dark:shadow-none dark:ring-white/10'>
+            <div className='flex items-center justify-between gap-3 border-b border-black/5 pb-3 dark:border-white/10'>
+              <div className='flex min-w-0 items-center gap-3'>
+                <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-sm bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10'>
+                  <BarChart3 className='h-4 w-4' />
+                </div>
+                <div className='min-w-0'>
+                  <p className='truncate text-sm font-medium text-foreground dark:text-white'>Content overview</p>
+                  <p className='truncate text-xs text-muted-foreground dark:text-white/50'>
+                    {connected.length} connected channel{connected.length === 1 ? "" : "s"}
+                  </p>
+                </div>
+              </div>
+              <span className={cn("inline-flex shrink-0 items-center gap-1.5 rounded-sm px-2.5 py-1 text-[11px] font-medium ring-1", connected.length ? "bg-emerald-500/10 text-emerald-700 ring-emerald-500/15 dark:text-emerald-400" : "bg-black/5 text-zinc-600 ring-black/5 dark:bg-white/5 dark:text-white/60 dark:ring-white/10")}>
+                <span className={cn("h-1.5 w-1.5 rounded-sm", connected.length ? "bg-emerald-500" : "bg-zinc-400")} />
+                {connected.length ? "Ready" : "Offline"}
+              </span>
+            </div>
+
+            <div className='mt-3 grid grid-cols-3 gap-2'>
+              {[
+                { label: "Drafts", value: drafts.filter((post) => post.status === "draft").length },
+                { label: "Live posts", value: live.length },
+                { label: "Scheduled", value: scheduled.length },
+              ].map((item) => (
+                <div key={item.label} className='rounded-sm bg-black/[0.025] px-3 py-2.5 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+                  <p className='text-[11px] text-muted-foreground dark:text-white/50'>{item.label}</p>
+                  <p className='mt-0.5 text-lg font-semibold text-foreground dark:text-white'>{item.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </header>
 
-      <div className='grid grid-cols-2 gap-3 lg:grid-cols-4'>
-        {[
-          { label: "Drafts", value: drafts.filter((p) => p.status === "draft").length, icon: FileText },
-          { label: "Scheduled", value: scheduled.length, icon: Clock3 },
-          { label: "Live posts", value: live.length, icon: Check },
-          { label: "Channels", value: connected.length, icon: Send },
-        ].map((item) => (
-          <div key={item.label} className='rounded-2xl border border-black/5 bg-black/[0.02] p-4 dark:border-white/10 dark:bg-white/[0.035]'>
-            <div className='text-muted-foreground flex items-center justify-between text-xs'>
-              <span>{item.label}</span><item.icon className='h-4 w-4' />
-            </div>
-            <p className='mt-3 text-2xl font-semibold'>{item.value}</p>
-          </div>
-        ))}
-      </div>
-
       <section className='overflow-hidden rounded-xl border border-black/5 bg-black/[0.015] dark:border-white/10 dark:bg-white/[0.025]'>
-        <div className='flex flex-col gap-4 border-b border-black/5 p-4 md:flex-row md:items-center md:justify-between md:p-5 dark:border-white/10'>
+        <div className='flex flex-col gap-4 border-b border-black/5 p-2 md:flex-row md:items-center md:justify-between md:p-2 dark:border-white/10'>
           <div className='inline-flex w-fit rounded-full bg-black/[0.04] p-1 dark:bg-white/[0.06]'>
             {([
               ["live", "Live posts", live.length],
@@ -780,14 +778,15 @@ export default function PostsPage() {
             </Select>
             {view === "live" && (
               <Button variant='outline' size='icon' className='rounded-full' onClick={() => liveQuery.refetch()} aria-label='Refresh live posts'>
-                <RefreshCw className={cn("h-4 w-4", liveQuery.isFetching && "animate-spin")} />
+                
+                {liveQuery.isFetching? <div className="mt-4"><LoadingFileLoader /> </div> : <><RefreshCw className="size-4 "/> </>}
               </Button>
             )}
           </div>
         </div>
 
         {loading ? (
-          <div className='flex min-h-72 items-center justify-center'><Loader2 className='text-muted-foreground h-6 w-6 animate-spin' /></div>
+          <div className='flex min-h-72 items-center justify-center text-muted-foreground'><LoadingFileLoader size={24} /></div>
         ) : visible.length === 0 ? (
           <div className='flex min-h-72 flex-col items-center justify-center px-6 text-center'>
             <div className='flex h-12 w-12 items-center justify-center rounded-2xl bg-black/[0.04] dark:bg-white/[0.06]'>
@@ -846,115 +845,16 @@ export default function PostsPage() {
         )}
       </section>
 
-      <Dialog open={editorOpen} onOpenChange={setEditorOpen}>
-        <DialogContent className='max-h-[92vh] overflow-y-auto sm:max-w-2xl'>
-          <DialogHeader>
-            <DialogTitle>{editing ? "Edit post" : "Create draft"}</DialogTitle>
-            <DialogDescription>
-              {editing
-                ? "Update this post and its destination."
-                : "Check every platform you want to post to, then compose once."}
-            </DialogDescription>
-          </DialogHeader>
-          <div className='grid gap-4 py-2'>
-            <div className='grid gap-2'>
-              <div className='flex items-center justify-between gap-3'>
-                <Label>Post to</Label>
-                <span className='text-muted-foreground text-xs'>
-                  {form.platforms.length} selected
-                </span>
-              </div>
-              <div className='grid grid-cols-2 gap-2 sm:grid-cols-4'>
-                {PLATFORMS.map((platform) => {
-                  const selected = form.platforms.includes(platform);
-                  const isConnected = connected.some(
-                    (item) => item.platform === platform
-                  );
-                  return (
-                    <button
-                      key={platform}
-                      type='button'
-                      role='checkbox'
-                      aria-checked={selected}
-                      onClick={() => togglePlatform(platform)}
-                      className={cn(
-                        "relative flex min-h-20 flex-col items-center justify-center gap-2 rounded-xl border p-3 text-xs font-medium transition",
-                        selected
-                          ? "border-indigo-500 bg-indigo-500/10 text-indigo-700 ring-2 ring-indigo-500/15 dark:text-indigo-300"
-                          : "border-black/10 bg-black/[0.02] hover:border-black/20 dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-white/20"
-                      )}
-                    >
-                      <PlatformIcon platform={platform} className='h-5 w-5' />
-                      <span>{LABEL[platform]}</span>
-                      {selected && (
-                        <span className='absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-600 text-white'>
-                          <Check className='h-3 w-3' />
-                        </span>
-                      )}
-                      <span className={cn("text-[9px]", isConnected ? "text-emerald-600" : "text-muted-foreground")}>
-                        {isConnected ? "Connected" : "No account"}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-            {form.platforms.length > 0 && (
-              <div className='grid gap-3 rounded-xl border border-black/5 bg-black/[0.02] p-3 sm:grid-cols-2 dark:border-white/10 dark:bg-white/[0.03]'>
-                {form.platforms.map((platform) => {
-                  const accounts = connected.filter(
-                    (item) => item.platform === platform
-                  );
-                  return (
-                    <div key={platform} className='grid gap-1.5'>
-                      <Label className='flex items-center gap-2 text-xs'>
-                        <PlatformIcon platform={platform} className='h-3.5 w-3.5' />
-                        {LABEL[platform]} account
-                      </Label>
-                      <Select
-                        value={form.integrationIds[platform] || "none"}
-                        onValueChange={(value) =>
-                          setForm((current) => ({
-                            ...current,
-                            integrationIds: {
-                              ...current.integrationIds,
-                              [platform]: value === "none" ? "" : value,
-                            },
-                          }))
-                        }
-                      >
-                        <SelectTrigger className='w-full'><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value='none'>No connected account</SelectItem>
-                          {accounts.map((account) => (
-                            <SelectItem key={account._id} value={account._id}>
-                              {account.accountName}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-            <div className='grid gap-2'><Label htmlFor='post-title'>Internal title</Label><Input id='post-title' value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder='Summer launch' /></div>
-            <div className='grid gap-2'><Label htmlFor='post-content'>Caption</Label><Textarea id='post-content' value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={6} placeholder='Write your post…' /></div>
-            <div className='grid gap-2'><Label>Media</Label><MediaPicker accept='media' value={form.mediaUrl} onChange={(mediaUrl) => setForm((current) => ({ ...current, mediaUrl }))} /></div>
-            <div className='grid gap-4 sm:grid-cols-2'>
-              <div className='grid gap-2'>
-                <Label>Status</Label>
-                <Select value={form.status} onValueChange={(value) => setForm({ ...form, status: value as SocialPostStatus })}>
-                  <SelectTrigger className='w-full'><SelectValue /></SelectTrigger>
-                  <SelectContent><SelectItem value='draft'>Draft</SelectItem><SelectItem value='scheduled'>Scheduled</SelectItem><SelectItem value='published'>Mark as published</SelectItem><SelectItem value='failed'>Failed</SelectItem></SelectContent>
-                </Select>
-              </div>
-              {form.status === "scheduled" && <div className='grid gap-2'><Label htmlFor='scheduled-for'>Publish time</Label><Input id='scheduled-for' type='datetime-local' value={form.scheduledFor} onChange={(e) => setForm({ ...form, scheduledFor: e.target.value })} /></div>}
-            </div>
-          </div>
-          <DialogFooter><Button variant='outline' onClick={() => setEditorOpen(false)}>Cancel</Button><Button disabled={!form.platforms.length || !form.content.trim() || (form.status === "scheduled" && !form.scheduledFor) || saveMutation.isPending} onClick={() => saveMutation.mutate()}>{saveMutation.isPending ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : form.status === "scheduled" ? <CalendarClock className='mr-2 h-4 w-4' /> : <FileText className='mr-2 h-4 w-4' />}{saveMutation.isPending ? "Saving…" : editing ? "Save post" : `Create ${form.platforms.length || ""} post${form.platforms.length === 1 ? "" : "s"}`}</Button></DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <PostEditorDialog
+        open={editorOpen}
+        onOpenChange={setEditorOpen}
+        editing={Boolean(editing)}
+        connected={connected}
+        form={form}
+        setForm={setForm}
+        isSaving={saveMutation.isPending}
+        onSave={() => saveMutation.mutate()}
+      />
 
       <Dialog open={Boolean(analyticsPost)} onOpenChange={(open) => !open && setAnalyticsPost(null)}>
         <DialogContent className='sm:max-w-2xl'>

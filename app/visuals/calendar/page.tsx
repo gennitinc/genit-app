@@ -290,7 +290,7 @@ export default function CalendarPage() {
           <img
           src='https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg'
           alt=''
-          className='absolute inset-0 h-full w-full object-cover object-center opacity-60'
+          className='absolute inset-0 h-full w-full object-cover object-center opacity-100'
         />
         <div className='pointer-events-none absolute -top-24 -left-20 h-64 w-64 rounded-md bg-indigo-500/10 blur-3xl' />
 
@@ -334,7 +334,7 @@ export default function CalendarPage() {
               className='border-border/70 bg-background h-10 w-full rounded-sm border pr-3 pl-9 text-sm shadow-sm transition outline-none focus:border-indigo-400 focus:ring-3 focus:ring-indigo-500/10 sm:w-64'
             />
           </div>
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
     {members.slice(0, 4).map((member, index) => {
       const memberUser =
         typeof member.user === "object" ? member.user : null;
@@ -356,13 +356,14 @@ export default function CalendarPage() {
         </div>
       ) : null;
     })}
-  </div>
+  </div> */}
           {activeConnection ? (
             <Button
               className='rounded-sm bg-indigo-600 px-4 my-2 text-white hover:bg-indigo-700'
               onClick={openCreateEvent}
             >
-              <Plus className='h-4 w-4' /> New event
+              New event
+              <Plus className='h-4 w-4' /> 
             </Button>
           ) : (
             <Button className='h-10 rounded-sm' onClick={handleConnectCalendar}>

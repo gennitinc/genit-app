@@ -32,6 +32,7 @@ import {
   Heart,
   MessageSquare,
   MoreHorizontal,
+  Plus,
   Sparkles,
   TrendingUp,
   Users,
@@ -48,6 +49,9 @@ import {
 import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { HomeCommandCenter } from "./_components/home-command-center";
+import { POST_PLATFORMS } from "./_components/post-editor-dialog";
+import { listSocialPosts } from "@/lib/social-posts-api";
+import { useQuery } from "@tanstack/react-query";
 
 const chartData = [
   { name: "Week 1", Traffic: 15, Engagement: 10 },
@@ -61,7 +65,9 @@ const chartData = [
 export default function VisualsHomePage() {
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
-  const { byPlatform, identityBySurface } = useIntegrations();
+  const [postComposerRequest, setPostComposerRequest] = useState(0);
+  const { byPlatform, identityBySurface, integrations } = useIntegrations();
+  const postsQuery = useQuery({ queryKey: ["social-posts"], queryFn: listSocialPosts });
 
   const { user } = useUserContext();
   const router = useRouter()
@@ -106,56 +112,87 @@ export default function VisualsHomePage() {
   const manageConnections = manageFor
     ? (byPlatform.get(manageFor.platform) ?? [])
     : [];
+  const homePosts = postsQuery.data || [];
+  const connectedChannels = integrations.filter(
+    (item) => item.status === "active" && POST_PLATFORMS.includes(item.platform)
+  ).length;
+  const homeStats = [
+    { label: "Drafts", value: homePosts.filter((post) => post.status === "draft").length },
+    { label: "Scheduled", value: homePosts.filter((post) => post.status === "scheduled").length },
+    { label: "Published", value: homePosts.filter((post) => post.status === "published").length },
+  ];
 
   const image = "./visual-flow.jpg";
 
   return (
-    <div className='animate-in fade-in slide-in-from-bottom-4 flex w-full flex-col gap-6 duration-500'>
-      <div className='relative overflow-hidden rounded-3xl bg-slate-950 p-8 md:p-12'>
+    <div className='animate-in fade-in slide-in-from-bottom-4 flex w-full flex-col gap-2 duration-500'>
+      <div className='relative overflow-hidden rounded-3xl bg-slate-950 p-4'>
         {/* Background image */}
         <img
-          src='/flow-bg.jpg'
           alt=''
+          src="https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg"
+          // src='/flow-bg.jpg'
           className='absolute inset-0 h-full w-full object-cover object-center opacity-60'
         />
 
         {/* Content */}
-        <div className='relative z-10 flex flex-col gap-4'>
-          
-
-          {/* Heading */}
-          <div>
-            <h3 className='font-instrument-serif text-2xl tracking-tight text-white font-bold'>
-              Hello, {`${current?.businessName || "Organization"}`} 👋
-            </h3>
-            <p className='mt-2 text-sm text-slate-500 dark:text-slate-200'>
-              Welcome back, we've curated an overview of your brand.
-            </p>
+        <div className='relative z-10 grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] lg:items-center'>
+          <div className='flex min-w-0 flex-col items-start justify-center py-1'>
+            <div>
+              <h3 className='font-instrument-serif text-2xl font-bold tracking-tight text-white'>
+                Hello, {`${current?.businessName || "Organization"}`} 👋
+              </h3>
+              <p className='mt-1 text-sm leading-5 text-white/70'>
+                Welcome back, here is the latest overview of your brand.
+              </p>
+            </div>
+            <Button
+              className='mt-4 h-9 rounded-sm bg-indigo-600 px-4 text-white hover:bg-indigo-700'
+              onClick={() => setPostComposerRequest((request) => request + 1)}
+            >
+              New Post <Plus className='h-4 w-4' />
+            </Button>
           </div>
 
-          {/* Buttons */}
-          <div className='mt-2 flex flex-col gap-3 sm:flex-row'>
-  
-
-            {/* Secondary ghost button */}
-          <button className="group relative inline-flex h-11 items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium text-white/70 transition-all duration-300 hover:-translate-y-0.5 hover:text-white active:scale-95 rounded-full border">
-  
-  {/* hover background only */}
-  <div className="pointer-events-none absolute inset-0 rounded-xl bg-white/5 opacity-10 transition-opacity duration-300 group-hover:opacity-100" />
-
- 
-
-  <span className="relative z-10">Click to view</span>
-
-  <ArrowRight   className="relative z-10 h-4 w-4 text-white/60 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-white" />
-
-</button>
+          <div className='rounded-2xl bg-white/95 p-4 shadow-sm ring-1 ring-black/5 dark:bg-zinc-950/95 dark:shadow-none dark:ring-white/10'>
+            <div className='flex items-center justify-between gap-3 border-b border-black/5 pb-3 dark:border-white/10'>
+              <div className='flex min-w-0 items-center gap-3'>
+              <div className="h-10 w-10 shrink-0 overflow-hidden rounded-sm bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10">
+  {current?.businessLogo ? (
+    <img
+      src={current.businessLogo}
+      alt={`${current.businessName || "Brand"} logo`}
+      className="block h-full w-full object-contain bg-white"
+    />
+  ) : (
+    <div className="flex h-full w-full items-center justify-center">
+      <span className="text-sm font-bold text-foreground dark:text-white">
+        {(current?.businessName || "B").slice(0, 1).toUpperCase()}
+      </span>
+    </div>
+  )}
+</div>
+                <div className='min-w-0'>
+                  <p className='truncate text-sm font-semibold text-foreground dark:text-white'>{current?.businessName || "Brand overview"}</p>
+                  <p className='truncate text-xs text-muted-foreground dark:text-white/50'>{connectedChannels} connected channel{connectedChannels === 1 ? "" : "s"}</p>
+                </div>
+              </div>
+           
+            </div>
+            <div className='mt-3 grid grid-cols-3 gap-2'>
+              {homeStats.map((stat) => (
+                <div key={stat.label} className='rounded-sm bg-black/[0.025] px-3 py-2.5 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+                  <p className='truncate text-[11px] text-muted-foreground dark:text-white/50'>{stat.label}</p>
+                  <p className='mt-0.5 text-lg font-semibold text-foreground dark:text-white'>{stat.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Integrations Carousel */}
-      <div className='mt-2 flex flex-col p-6 shadow-sm'>
+      <div className='mt-2 flex flex-col p-2 md:p-4 lg:p-6 shadow-sm'>
         <div className='mb-6 flex items-start justify-between'>
           <div>
             <h3 className='text-foreground text-base font-bold dark:text-white'>
@@ -281,7 +318,7 @@ export default function VisualsHomePage() {
         </Carousel>
       </div>
 
-      <HomeCommandCenter />
+      <HomeCommandCenter createRequest={postComposerRequest} />
 
       
 

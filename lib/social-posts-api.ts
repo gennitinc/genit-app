@@ -46,7 +46,8 @@ export type MultiSocialPostInput = Omit<SocialPostInput, "platform" | "integrati
 
 export async function listSocialPosts(): Promise<SocialPost[]> {
   const { data } = await apiResponse.get<{ posts: SocialPost[] }>(
-    "/social-posts"
+    "/social-posts",
+    { timeout: 15_000 }
   );
   return data.posts;
 }
@@ -55,7 +56,8 @@ export async function createSocialPost(
 ): Promise<SocialPost> {
   const { data } = await apiResponse.post<{ post: SocialPost }>(
     "/social-posts",
-    input
+    input,
+    { timeout: 20_000 }
   );
   return data.post;
 }
@@ -64,7 +66,8 @@ export async function createSocialPosts(
 ): Promise<SocialPost[]> {
   const { data } = await apiResponse.post<{ posts: SocialPost[] }>(
     "/social-posts",
-    input
+    input,
+    { timeout: 20_000 }
   );
   return data.posts;
 }
@@ -74,10 +77,11 @@ export async function updateSocialPost(
 ): Promise<SocialPost> {
   const { data } = await apiResponse.patch<{ post: SocialPost }>(
     `/social-posts/${id}`,
-    input
+    input,
+    { timeout: 20_000 }
   );
   return data.post;
 }
 export async function deleteSocialPost(id: string): Promise<void> {
-  await apiResponse.delete(`/social-posts/${id}`);
+  await apiResponse.delete(`/social-posts/${id}`, { timeout: 20_000 });
 }

@@ -25,17 +25,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   useDeleteConversation,
   useInboxConversations,
@@ -50,6 +46,7 @@ import type { InboxConversation, InboxFilters } from "@/lib/inbox-api";
 import type { IntegrationConnection, IntegrationPlatform } from "@/lib/integrations-api";
 import {
   Archive,
+  ArrowUpDown,
   Check,
   CheckCheck,
   ChevronLeft,
@@ -57,11 +54,13 @@ import {
   Clock3,
   Inbox,
   Loader2,
+  ListFilter,
   MessageSquare,
   MoreHorizontal,
   Plus,
   Search,
   Send,
+  Shapes,
   Trash2,
 } from "lucide-react";
 import Link from "next/link";
@@ -237,63 +236,85 @@ export default function InboxPage() {
         </div>
       </header>
 
-      <section>
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold">Connected brand accounts</h2>
-          {isFetching && <span className="flex items-center gap-1.5 text-xs text-muted-foreground"><Loader2 className="h-3 w-3 animate-spin" />Syncing</span>}
-        </div>
-        <div className="flex gap-3 overflow-x-auto pb-2">
-          <button
-            onClick={() => setSelectedAccountId("all")}
-            className={`flex min-w-44 items-center gap-3 rounded-2xl border p-3 text-left transition ${selectedAccountId === "all" ? "border-emerald-500 bg-emerald-50/70 ring-2 ring-emerald-500/10 dark:bg-emerald-500/10" : "border-black/5 bg-white hover:border-black/15 dark:border-white/10 dark:bg-zinc-950"}`}
-          >
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950 text-white dark:bg-white dark:text-black"><Inbox className="h-5 w-5" /></span>
-            <span><span className="block text-sm font-semibold">All accounts</span><span className="text-xs text-muted-foreground">Every channel</span></span>
-          </button>
-          {accounts.map((account) => (
-            <button
-              key={account._id}
-              onClick={() => setSelectedAccountId(account._id)}
-              className={`flex min-w-52 items-center gap-3 rounded-2xl border p-3 text-left transition ${selectedAccountId === account._id ? "border-emerald-500 bg-emerald-50/70 ring-2 ring-emerald-500/10 dark:bg-emerald-500/10" : "border-black/5 bg-white hover:border-black/15 dark:border-white/10 dark:bg-zinc-950"}`}
-            >
-              <AccountAvatar account={account} />
-              <span className="min-w-0"><span className="block truncate text-sm font-semibold">{account.accountName}</span><span className="block truncate text-xs text-muted-foreground">{PLATFORM_LABELS[account.platform]}{account.isPrimary ? " · Primary" : ""}</span></span>
-            </button>
-          ))}
-          {!integrationsLoading && accounts.length === 0 && (
-            <Link href="/integrations" className="flex min-w-64 items-center gap-3 rounded-2xl border border-dashed border-zinc-300 p-3 text-sm text-muted-foreground hover:border-emerald-500 hover:text-emerald-700 dark:border-zinc-700">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-900"><Plus className="h-5 w-5" /></span>
-              Connect your first inbox channel
-            </Link>
-          )}
-        </div>
-      </section>
-
       <div className="grid min-h-[650px] flex-1 overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm dark:border-white/10 dark:bg-zinc-950 lg:grid-cols-[380px_minmax(0,1fr)]">
         <aside className={`${activeId ? "hidden lg:flex" : "flex"} min-h-0 flex-col border-r border-black/5 dark:border-white/10`}>
-          <div className="space-y-3 border-b border-black/5 p-4 dark:border-white/10">
-            <div className="relative">
+          <div className="border-b border-black/5 p-4 dark:border-white/10">
+            <div className="flex items-center gap-2">
+              <div className="relative min-w-0 flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search people or messages" className="h-10 rounded-xl border-black/10 bg-zinc-50 pl-9 dark:border-white/10 dark:bg-zinc-900" />
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <Select value={status} onValueChange={(value) => setStatus(value as InboxFilters["status"])}>
-                <SelectTrigger className="h-9 rounded-xl"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All conversations</SelectItem>
-                  <SelectItem value="open">Open</SelectItem>
-                  <SelectItem value="resolved">Resolved</SelectItem>
-                  <SelectItem value="snoozed">Snoozed</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={sort} onValueChange={(value) => setSort(value as NonNullable<InboxFilters["sort"]>)}>
-                <SelectTrigger className="h-9 rounded-xl"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="newest">Newest first</SelectItem>
-                  <SelectItem value="oldest">Oldest first</SelectItem>
-                  <SelectItem value="unread">Unread first</SelectItem>
-                </SelectContent>
-              </Select>
+              </div>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="relative h-10 w-10 shrink-0 rounded-xl" aria-label="Select connected brand" title="Connected brand">
+                    {selectedAccount ? <PlatformIcon platform={selectedAccount.platform} className="h-4 w-4" /> : <Shapes className="h-4 w-4" />}
+                    {selectedAccountId !== "all" && <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-64">
+                  <DropdownMenuLabel>Connected brand</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuRadioGroup value={selectedAccountId} onValueChange={setSelectedAccountId}>
+                    <DropdownMenuRadioItem value="all">
+                      <Inbox className="mr-2 h-4 w-4" />
+                      <span className="flex min-w-0 flex-col"><span>All accounts</span><span className="text-[10px] text-muted-foreground">Every connected channel</span></span>
+                    </DropdownMenuRadioItem>
+                    {accounts.map((account) => (
+                      <DropdownMenuRadioItem key={account._id} value={account._id}>
+                        <PlatformIcon platform={account.platform} className="mr-2 h-4 w-4" />
+                        <span className="min-w-0 flex-1 truncate">{account.accountName || PLATFORM_LABELS[account.platform]}</span>
+                        {account.isPrimary && <span className="text-[9px] text-muted-foreground">Primary</span>}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                  {!integrationsLoading && accounts.length === 0 && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild><Link href="/integrations"><Plus className="mr-2 h-4 w-4" />Connect a channel</Link></DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="relative h-10 w-10 shrink-0 rounded-xl" aria-label="Filter conversations" title="Conversation filter">
+                    <ListFilter className="h-4 w-4" />
+                    {status !== "all" && <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-52">
+                  <DropdownMenuLabel>Conversations</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuRadioGroup value={status || "all"} onValueChange={(value) => setStatus(value as InboxFilters["status"])}>
+                    <DropdownMenuRadioItem value="all">All conversations</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="open">Open</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="resolved">Resolved</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="snoozed">Snoozed</DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="relative h-10 w-10 shrink-0 rounded-xl" aria-label="Sort conversations" title="Sort conversations">
+                    <ArrowUpDown className="h-4 w-4" />
+                    {sort !== "newest" && <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-indigo-500" />}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuRadioGroup value={sort} onValueChange={(value) => setSort(value as NonNullable<InboxFilters["sort"]>)}>
+                    <DropdownMenuRadioItem value="newest">Newest first</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="oldest">Oldest first</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="unread">Unread first</DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {isFetching && <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-muted-foreground" aria-label="Syncing inbox" />}
             </div>
           </div>
 
