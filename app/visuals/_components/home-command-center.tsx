@@ -280,7 +280,7 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
           )}
         </div>
 
-        <div className='rounded-lg bg-neutral-800 p-5 text-white shadow-sm ring-1 ring-white/10'>
+        <div className='rounded-lg bg-neutral-800 p-5 text-white shadow-sm ring-1 ring-white/10 h-fit'>
           <div className='flex items-center justify-between'>
             <div>
               <h3 className='font-bold tracking-tight'>Coming up</h3>
