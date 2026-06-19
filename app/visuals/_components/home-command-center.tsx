@@ -253,9 +253,7 @@ export function HomeCommandCenter() {
       <section>
         <div className='mb-4 flex items-end justify-between gap-4'>
           <div>
-            <p className='text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600 dark:text-indigo-400'>
-              Your operating picture
-            </p>
+          
             <h2 className='mt-1 text-xl font-bold tracking-tight'>Brand activity</h2>
           </div>
           <Button onClick={openCreate} className='rounded-full bg-indigo-600 text-white hover:bg-indigo-700'>
