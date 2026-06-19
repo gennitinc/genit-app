@@ -211,10 +211,10 @@ export default function InboxPage() {
     <div className="flex min-h-[calc(100vh-8rem)] w-full animate-in flex-col gap-5 fade-in slide-in-from-bottom-4 duration-500">
       <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <div className="mb-2 flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+          {/* <div className="mb-2 flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-400">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
             {accounts.length} connected {accounts.length === 1 ? "account" : "accounts"}
-          </div>
+          </div> */}
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Unified Inbox</h1>
           <p className="mt-1 text-sm text-muted-foreground">Read and respond across every connected brand channel.</p>
         </div>
