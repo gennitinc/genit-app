@@ -206,7 +206,7 @@ export function HomeCommandCenter({ createRequest = 0 }: { createRequest?: numbe
   return (
     <div id='brand-activity' className='flex flex-col gap-6 pb-14'>
       
-<div className='h-fit min-h-[520px]'>
+<div className='h-fit'>
   {postsQuery.isLoading ? (
     <div className='flex h-[20px] items-center justify-center'>
       <div className='flex items-center gap-2 text-sm text-muted-foreground'>
