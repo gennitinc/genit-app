@@ -15,6 +15,7 @@ import {
   markConversationAsRead,
   retryInboxMessage,
   sendMessage,
+  syncInbox,
   updateConversation,
   updateConversationStatus,
   updateInboxMessage,
@@ -80,6 +81,15 @@ export function useCreateConversation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: CreateConversationInput) => createConversation(input),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] }),
+  });
+}
+
+export function useSyncInbox() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: syncInbox,
     onSuccess: () =>
       qc.invalidateQueries({ queryKey: ["inbox_conversations"] }),
   });

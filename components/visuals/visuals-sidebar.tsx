@@ -60,7 +60,7 @@ export function VisualsSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className='scrollbar-hide flex w-full shrink-0 flex-col md:sticky md:top-24 md:max-h-[calc(100vh-8rem)] md:w-64 md:self-start'>
+    <div className='scrollbar-hide flex w-full shrink-0 flex-col md:sticky md:top-14 md:max-h-[calc(100vh-8rem)] md:w-64 md:self-start'>
       {/* Org Switcher (Desktop only) */}
       <div className='relative -mx-2 mb-4 hidden w-full border-b border-black/5 px-2 pb-2 md:flex dark:border-white/10'>
         <OrgSwitcher forceExpanded={true} />

@@ -37,6 +37,14 @@ export function NewConversationDialog({
     if (open && !integrationId) setIntegrationId(accounts[0]?._id || "");
   }, [accounts, integrationId, open]);
 
+  useEffect(() => {
+    if (open) return;
+    setIntegrationId("");
+    setName("");
+    setRecipient("");
+    setSubject("");
+  }, [open]);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -76,17 +84,27 @@ export function NewConversationDialog({
               className='mt-2'
               value={recipient}
               onChange={(event) => setRecipient(event.target.value)}
-              placeholder='Email, username, phone, or provider ID'
+              placeholder={
+                account?.platform === "gmail"
+                  ? "name@example.com"
+                  : account?.platform === "telegram"
+                    ? "Telegram chat ID"
+                    : account?.platform === "x"
+                      ? "X user ID"
+                      : "Provider recipient ID"
+              }
             />
           </label>
-          <label className='block text-sm font-medium'>
-            Subject (optional)
-            <Input
-              className='mt-2'
-              value={subject}
-              onChange={(event) => setSubject(event.target.value)}
-            />
-          </label>
+          {account && ["gmail", "email"].includes(account.platform) && (
+            <label className='block text-sm font-medium'>
+              Subject (optional)
+              <Input
+                className='mt-2'
+                value={subject}
+                onChange={(event) => setSubject(event.target.value)}
+              />
+            </label>
+          )}
         </div>
         <DialogFooter>
           <Button variant='outline' onClick={() => onOpenChange(false)}>

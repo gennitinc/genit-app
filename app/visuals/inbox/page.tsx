@@ -52,6 +52,7 @@ import {
   useMarkConversationAsRead,
   useRetryInboxMessage,
   useSendMessage,
+  useSyncInbox,
   useUpdateConversation,
   useUpdateConversationStatus,
   useUpdateInboxMessage,
@@ -61,6 +62,7 @@ import {
   type InboxAttachment,
   type InboxConversation,
   type InboxFilters,
+  downloadInboxAttachment,
   generateInboxDraft,
   uploadInboxAttachment,
 } from "@/lib/inbox-api";
@@ -221,9 +223,57 @@ export default function InboxPage() {
   );
   const [showDetails, setShowDetails] = useState(false);
   const [showNewConversation, setShowNewConversation] = useState(false);
+  const [createdConversation, setCreatedConversation] =
+    useState<InboxConversation | null>(null);
   const deferredSearch = useDeferredValue(search.trim());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  /* Lock parent layout ancestors to viewport height so only the
+     messages column scrolls – uses inline styles because dynamically
+     added Tailwind classes aren't compiled into the CSS bundle. */
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 1024px)");
+
+    const targets = () => ({
+      scrollContainer: document.querySelector(".scroll-container") as HTMLElement | null,
+      mainContent: document.querySelector("#main-content") as HTMLElement | null,
+      mainContentChild: document.querySelector("#main-content > div") as HTMLElement | null,
+      mainContentFlex: document.querySelector("#main-content > div > div") as HTMLElement | null,
+      childrenWrapper: document.querySelector("#main-content > div > div > div:last-child") as HTMLElement | null,
+    });
+
+    const apply = () => {
+      if (!mql.matches) return remove();
+      const t = targets();
+      if (t.scrollContainer) t.scrollContainer.style.overflow = "hidden";
+      if (t.mainContent) {
+        Object.assign(t.mainContent.style, { height: "calc(100vh - 4rem)", display: "flex", flexDirection: "column", overflow: "hidden" });
+      }
+      if (t.mainContentChild) {
+        Object.assign(t.mainContentChild.style, { height: "100%", display: "flex", flexDirection: "column", paddingBottom: "0" });
+      }
+      if (t.mainContentFlex) {
+        Object.assign(t.mainContentFlex.style, { height: "100%", minHeight: "0" });
+      }
+      if (t.childrenWrapper) {
+        Object.assign(t.childrenWrapper.style, { height: "100%", display: "flex", flexDirection: "column", overflow: "hidden", minHeight: "0" });
+      }
+    };
+
+    const remove = () => {
+      const t = targets();
+      if (t.scrollContainer) t.scrollContainer.style.overflow = "";
+      if (t.mainContent) { t.mainContent.style.height = ""; t.mainContent.style.display = ""; t.mainContent.style.flexDirection = ""; t.mainContent.style.overflow = ""; }
+      if (t.mainContentChild) { t.mainContentChild.style.height = ""; t.mainContentChild.style.display = ""; t.mainContentChild.style.flexDirection = ""; t.mainContentChild.style.paddingBottom = ""; }
+      if (t.mainContentFlex) { t.mainContentFlex.style.height = ""; t.mainContentFlex.style.minHeight = ""; }
+      if (t.childrenWrapper) { t.childrenWrapper.style.height = ""; t.childrenWrapper.style.display = ""; t.childrenWrapper.style.flexDirection = ""; t.childrenWrapper.style.overflow = ""; t.childrenWrapper.style.minHeight = ""; }
+    };
+
+    apply();
+    mql.addEventListener("change", apply);
+    return () => { mql.removeEventListener("change", apply); remove(); };
+  }, []);
 
   const {
     integrations,
@@ -250,15 +300,10 @@ export default function InboxPage() {
   );
   const startableAccounts = useMemo(
     () =>
-      accounts.filter((account) =>
-        [
-          "messenger",
-          "instagram",
-          "gmail",
-          "email",
-          "whatsapp",
-          "telegram",
-        ].includes(account.platform)
+      accounts.filter(
+        (account) =>
+          ["gmail", "email", "telegram"].includes(account.platform) ||
+          (account.platform === "x" && account.scopes.includes("dm.write"))
       ),
     [accounts]
   );
@@ -291,19 +336,119 @@ export default function InboxPage() {
   const statusMutation = useUpdateConversationStatus();
   const deleteMutation = useDeleteConversation();
   const createConversationMutation = useCreateConversation();
+  const syncMutation = useSyncInbox();
   const updateConversationMutation = useUpdateConversation();
   const updateMessageMutation = useUpdateInboxMessage();
   const deleteMessageMutation = useDeleteInboxMessage();
   const activeConversation =
-    conversations.find((conversation) => conversation._id === activeId) || null;
+    conversations.find((conversation) => conversation._id === activeId) ||
+    (createdConversation?._id === activeId ? createdConversation : null);
   const unreadTotal = conversations.reduce(
     (total, conversation) => total + conversation.unreadCount,
     0
   );
+  const supportsAttachments = activeConversation
+    ? !["x", "twitter"].includes(activeConversation.platform)
+    : true;
+  const whatsappReplyWindowClosed = Boolean(
+    activeConversation?.platform === "whatsapp" &&
+    (!activeConversation.metadata?.lastInboundAt ||
+      Date.now() -
+        Date.parse(String(activeConversation.metadata.lastInboundAt)) >
+        24 * 60 * 60 * 1000)
+  );
+  const providerReplyUnavailable = Boolean(
+    activeConversation &&
+    ["linkedin", "outlook"].includes(activeConversation.platform)
+  );
+  const syncableAccounts = accounts.filter((account) =>
+    ["gmail", "instagram", "messenger", "whatsapp", "telegram", "x"].includes(
+      account.platform
+    )
+  );
+  const historyAccounts = syncableAccounts.filter((account) =>
+    ["gmail", "instagram", "messenger", "x"].includes(account.platform)
+  );
+
+  const syncChannels = (continueHistory = false) => {
+    const selectedIsSyncable = Boolean(
+      selectedAccount &&
+      syncableAccounts.some((account) => account._id === selectedAccount._id)
+    );
+    const selectedSupportsHistory = Boolean(
+      selectedAccount &&
+      historyAccounts.some((account) => account._id === selectedAccount._id)
+    );
+    const integrationId = continueHistory
+      ? selectedSupportsHistory
+        ? selectedAccount?._id
+        : undefined
+      : selectedIsSyncable
+        ? selectedAccount?._id
+        : undefined;
+    syncMutation.mutate(
+      {
+        integrationId,
+        platform: continueHistory
+          ? selectedSupportsHistory
+            ? selectedAccount?.platform
+            : undefined
+          : selectedIsSyncable
+            ? selectedAccount?.platform
+            : undefined,
+        continueHistory,
+      },
+      {
+        onSuccess: (results) => {
+          const threads = results.reduce(
+            (total, result) => total + result.threadsProcessed,
+            0
+          );
+          const hasMore = results.some((result) => result.nextPageToken);
+          const failures = results.filter((result) => result.error);
+          const warnings = results.filter((result) => result.warning);
+          const failureMessage = failures
+            .map((result) => `${result.accountName}: ${result.error}`)
+            .join(" · ");
+          if (failures.length === results.length) toast.error(failureMessage);
+          else {
+            toast.success(
+              continueHistory
+                ? `${threads} older conversations imported${hasMore ? ". Import again to continue." : ". History is up to date."}`
+                : `Inbox synchronized: ${threads} conversations checked`
+            );
+            if (failures.length) toast.error(failureMessage);
+            if (warnings.length)
+              toast.warning(
+                warnings
+                  .map((result) => `${result.accountName}: ${result.warning}`)
+                  .join(" · ")
+              );
+          }
+        },
+        onError: (error: any) =>
+          toast.error(
+            error?.response?.data?.message ||
+              "Inbox channels could not be synchronized"
+          ),
+      }
+    );
+  };
 
   useEffect(() => {
     if (activeId && !activeConversation) setActiveId(null);
   }, [activeConversation, activeId]);
+
+  useEffect(() => {
+    if (
+      createdConversation &&
+      conversations.some(
+        (conversation) => conversation._id === createdConversation._id
+      )
+    ) {
+      setCreatedConversation(null);
+    }
+  }, [conversations, createdConversation]);
 
   useEffect(() => {
     if (activeConversation?.unreadCount)
@@ -403,8 +548,8 @@ export default function InboxPage() {
   };
 
   return (
-    <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100vh-8rem)] w-full flex-col gap-5 duration-500'>
-      <header className='flex items-end lg:items-end justify-between'>
+    <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100vh-8rem)] w-full flex-col gap-5 duration-500' style={{ height: '100%', minHeight: 0, gap: '1rem', overflow: 'hidden' }}>
+      <header className='flex items-end justify-between lg:items-end'>
         <div>
           <h1 className='text-foreground text-2xl font-bold tracking-tight'>
             Unified Inbox
@@ -483,8 +628,7 @@ export default function InboxPage() {
                   markAllMutation.mutate(undefined, {
                     onSuccess: () =>
                       toast.success("Everything is marked as read"),
-                    onError: () =>
-                      toast.error("Messages could not be updated"),
+                    onError: () => toast.error("Messages could not be updated"),
                   })
                 }
               >
@@ -494,6 +638,24 @@ export default function InboxPage() {
                   <CheckCheck className='mr-2 h-4 w-4' />
                 )}
                 Mark all read
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={!syncableAccounts.length || syncMutation.isPending}
+                onSelect={() => syncChannels(false)}
+              >
+                {syncMutation.isPending ? (
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                ) : (
+                  <RefreshCw className='mr-2 h-4 w-4' />
+                )}
+                Sync connected channels
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={!historyAccounts.length || syncMutation.isPending}
+                onSelect={() => syncChannels(true)}
+              >
+                <Archive className='mr-2 h-4 w-4' />
+                Import older channel history
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href='/integrations'>
@@ -506,7 +668,7 @@ export default function InboxPage() {
         </div>
       </header>
 
-      <div className='grid h-[calc(100dvh-12rem)] min-h-[580px] flex-1 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm lg:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(420px,1fr)_280px] dark:border-white/10 dark:bg-zinc-950'>
+      <div className='grid min-h-0 flex-1 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm lg:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(420px,1fr)_280px] dark:border-white/10 dark:bg-zinc-950'>
         <aside
           className={`${activeId ? "hidden lg:flex" : "flex"} min-h-0 flex-col border-r border-black/5 dark:border-white/10`}
         >
@@ -686,8 +848,9 @@ export default function InboxPage() {
                 </span>
                 <h3 className='text-sm font-semibold'>No conversations here</h3>
                 <p className='text-muted-foreground mt-1 text-xs leading-5'>
-                  Try another account or filter. New incoming messages will
-                  appear automatically.
+                  Try another account or filter. Connected Gmail accounts sync
+                  recent threads automatically; use Inbox settings to import
+                  older mail.
                 </p>
               </div>
             ) : (
@@ -755,11 +918,11 @@ export default function InboxPage() {
         </aside>
 
         <main
-          className={`${activeId ? "flex" : "hidden lg:flex"} min-w-0 flex-col bg-zinc-50/40 dark:bg-black/20`}
+          className={`${activeId ? "flex" : "hidden lg:flex"} min-h-0 min-w-0 flex-col bg-zinc-50/40 dark:bg-black/20`}
         >
           {activeConversation ? (
             <>
-              <div className='flex h-16 items-center justify-between gap-3 border-b border-black/5 bg-white/80 px-4 backdrop-blur sm:px-6 dark:border-white/10 dark:bg-zinc-950/80'>
+              <div className='flex h-16 shrink-0 items-center justify-between gap-3 border-b border-black/5 bg-white/80 px-4 backdrop-blur sm:px-6 dark:border-white/10 dark:bg-zinc-950/80'>
                 <div className='flex min-w-0 items-center gap-3'>
                   <Button
                     variant='ghost'
@@ -794,6 +957,11 @@ export default function InboxPage() {
                         ? ` · ${activeConversation.customerHandle}`
                         : ""}
                     </p>
+                    {activeConversation.subject && (
+                      <p className='text-muted-foreground mt-0.5 truncate text-xs'>
+                        {activeConversation.subject}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className='flex items-center gap-1'>
@@ -867,7 +1035,7 @@ export default function InboxPage() {
                 </div>
               </div>
 
-              <div className='flex-1 overflow-y-auto p-4 sm:p-6'>
+              <div className='min-h-0 flex-1 overflow-y-auto p-4 sm:p-6'>
                 {messagesLoading ? (
                   <div className='text-muted-foreground flex h-40 items-center justify-center text-sm'>
                     <Loader2 className='mr-2 h-4 w-4 animate-spin' />
@@ -886,14 +1054,32 @@ export default function InboxPage() {
                             className={`group/message flex max-w-[90%] items-center gap-1 sm:max-w-[82%] ${inbound ? "flex-row" : "flex-row-reverse"}`}
                           >
                             <div
-                              className={`overflow-hidden rounded-2xl text-sm leading-6 shadow-sm ${inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-600 text-white" : "rounded-tr-md bg-indigo-600 text-white"}`}
+                              className={`rounded-2xl text-sm leading-6 shadow-sm ${inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-600 text-white" : "rounded-tr-md bg-indigo-600 text-white"}`}
                             >
                               {message.attachments?.map((attachment) => (
                                 <div
                                   key={attachment.url}
                                   className='border-b border-black/10 last:border-b-0'
                                 >
-                                  {attachment.kind === "image" ? (
+                                  {attachment.providerAttachmentId ? (
+                                    <button
+                                      type='button'
+                                      onClick={() =>
+                                        downloadInboxAttachment(
+                                          attachment
+                                        ).catch((error: any) =>
+                                          toast.error(
+                                            error?.response?.data?.message ||
+                                              "Attachment could not be downloaded"
+                                          )
+                                        )
+                                      }
+                                      className='flex w-full items-center gap-2 px-4 py-3 text-left font-medium underline underline-offset-2'
+                                    >
+                                      <Paperclip className='h-4 w-4' />
+                                      {attachment.name}
+                                    </button>
+                                  ) : attachment.kind === "image" ? (
                                     <img
                                       src={attachment.url}
                                       alt={attachment.name}
@@ -925,7 +1111,7 @@ export default function InboxPage() {
                                 </div>
                               ))}
                               {message.content && (
-                                <div className='px-4 py-3'>
+                                <div className='px-4 py-3 wrap-anywhere whitespace-pre-wrap'>
                                   {message.content}
                                 </div>
                               )}
@@ -1041,7 +1227,7 @@ export default function InboxPage() {
                 )}
               </div>
 
-              <div className='border-t border-black/5 bg-white p-4 dark:border-white/10 dark:bg-zinc-950'>
+              <div className='border-t border-black/5 bg-white p-4 shrink-0 dark:border-white/10 dark:bg-zinc-950'>
                 {activeConversation.status === "resolved" ? (
                   <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
                     <Check className='h-4 w-4' />
@@ -1052,6 +1238,17 @@ export default function InboxPage() {
                     >
                       Reopen to reply
                     </button>
+                  </div>
+                ) : providerReplyUnavailable ? (
+                  <div className='text-muted-foreground mx-auto max-w-3xl rounded-2xl bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
+                    Replies are not available for this provider connection yet.
+                    You can still review, label, and resolve the conversation.
+                  </div>
+                ) : whatsappReplyWindowClosed ? (
+                  <div className='text-muted-foreground mx-auto max-w-3xl rounded-2xl bg-amber-50 p-4 text-sm text-amber-900 dark:bg-amber-950/40 dark:text-amber-200'>
+                    WhatsApp’s 24-hour reply window has closed. Send an approved
+                    template through your WhatsApp campaign tools; normal
+                    replies will become available after the customer responds.
                   </div>
                 ) : (
                   <div className='relative mx-auto max-w-3xl rounded-2xl border border-black/10 bg-zinc-50 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/10 dark:border-white/10 dark:bg-zinc-900'>
@@ -1099,6 +1296,13 @@ export default function InboxPage() {
                         }
                       }}
                       placeholder={`Reply to ${activeConversation.customerName}…`}
+                      maxLength={
+                        ["x", "twitter"].includes(
+                          activeConversation.platform
+                        ) && activeConversation.metadata?.kind !== "dm"
+                          ? 280
+                          : undefined
+                      }
                       className='min-h-20 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none'
                     />
                     <div className='flex items-center justify-between gap-2 px-3 pb-3'>
@@ -1116,9 +1320,17 @@ export default function InboxPage() {
                           variant='ghost'
                           size='icon'
                           className='h-8 w-8 rounded-full'
-                          disabled={isUploading || attachments.length >= 4}
+                          disabled={
+                            !supportsAttachments ||
+                            isUploading ||
+                            attachments.length >= 4
+                          }
                           onClick={() => fileInputRef.current?.click()}
-                          aria-label='Attach files'
+                          aria-label={
+                            supportsAttachments
+                              ? "Attach files"
+                              : "Attachments are unavailable for X replies"
+                          }
                         >
                           {isUploading ? (
                             <Loader2 className='h-4 w-4 animate-spin' />
@@ -1258,6 +1470,7 @@ export default function InboxPage() {
           createConversationMutation.mutate(input, {
             onSuccess: (conversation) => {
               setShowNewConversation(false);
+              setCreatedConversation(conversation);
               setActiveId(conversation._id);
               toast.success("Conversation created");
             },

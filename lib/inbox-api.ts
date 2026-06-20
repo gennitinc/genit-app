@@ -49,6 +49,20 @@ export interface InboxMessage {
   read: boolean;
   createdAt: string;
   updatedAt: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface InboxSyncResult {
+  integrationId: string;
+  accountName: string;
+  platform: string;
+  threadsProcessed: number;
+  messagesImported: number;
+  nextPageToken?: string;
+  resultSizeEstimate?: number;
+  liveOnly?: boolean;
+  error?: string;
+  warning?: string;
 }
 
 export interface InboxAttachment {
@@ -57,6 +71,8 @@ export interface InboxAttachment {
   mimeType: string;
   size: number;
   kind: "image" | "video" | "audio" | "file";
+  providerMessageId?: string;
+  providerAttachmentId?: string;
 }
 
 export interface InboxFilters {
@@ -93,7 +109,7 @@ export type UpdateConversationInput = Partial<
 export async function fetchConversations(
   filters: InboxFilters = {}
 ): Promise<InboxConversation[]> {
-  const res = await apiResponse.get(`/api/v1/inbox/conversations`, {
+  const res = await apiResponse.get(`/inbox/conversations`, {
     params: filters,
   });
   return res.data.conversations;
@@ -103,7 +119,7 @@ export async function fetchMessages(
   conversationId: string
 ): Promise<InboxMessage[]> {
   const res = await apiResponse.get(
-    `/api/v1/inbox/conversations/${conversationId}/messages`
+    `/inbox/conversations/${conversationId}/messages`
   );
   return res.data.messages;
 }
@@ -111,8 +127,19 @@ export async function fetchMessages(
 export async function createConversation(
   input: CreateConversationInput
 ): Promise<InboxConversation> {
-  const res = await apiResponse.post(`/api/v1/inbox/conversations`, input);
+  const res = await apiResponse.post(`/inbox/conversations`, input);
   return res.data.conversation;
+}
+
+export async function syncInbox(
+  input: {
+    integrationId?: string;
+    platform?: string;
+    continueHistory?: boolean;
+  } = {}
+): Promise<InboxSyncResult[]> {
+  const res = await apiResponse.post(`/inbox/sync`, input);
+  return res.data.results;
 }
 
 export async function sendMessage(
@@ -121,7 +148,7 @@ export async function sendMessage(
   attachments: InboxAttachment[] = []
 ): Promise<InboxMessage> {
   const res = await apiResponse.post(
-    `/api/v1/inbox/conversations/${conversationId}/messages`,
+    `/inbox/conversations/${conversationId}/messages`,
     { content, attachments }
   );
   return res.data.message;
@@ -132,10 +159,29 @@ export async function uploadInboxAttachment(
 ): Promise<InboxAttachment> {
   const body = new FormData();
   body.append("file", file);
-  const res = await apiResponse.post(`/api/v1/inbox/attachments`, body, {
+  const res = await apiResponse.post(`/inbox/attachments`, body, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return res.data.attachment;
+}
+
+export async function downloadInboxAttachment(
+  attachment: InboxAttachment
+): Promise<void> {
+  if (!attachment.providerMessageId || !attachment.providerAttachmentId) {
+    window.open(attachment.url, "_blank", "noopener,noreferrer");
+    return;
+  }
+  const response = await apiResponse.get(
+    `/inbox/gmail-attachments/${encodeURIComponent(attachment.providerMessageId)}/${encodeURIComponent(attachment.providerAttachmentId)}`,
+    { responseType: "blob" }
+  );
+  const objectUrl = URL.createObjectURL(response.data);
+  const link = document.createElement("a");
+  link.href = objectUrl;
+  link.download = attachment.name;
+  link.click();
+  URL.revokeObjectURL(objectUrl);
 }
 
 export async function generateInboxDraft(
@@ -143,7 +189,7 @@ export async function generateInboxDraft(
   instruction?: string
 ): Promise<string> {
   const res = await apiResponse.post(
-    `/api/v1/inbox/conversations/${conversationId}/ai-draft`,
+    `/inbox/conversations/${conversationId}/ai-draft`,
     { instruction }
   );
   return res.data.draft;
@@ -152,20 +198,18 @@ export async function generateInboxDraft(
 export async function retryInboxMessage(
   messageId: string
 ): Promise<InboxMessage> {
-  const res = await apiResponse.post(
-    `/api/v1/inbox/messages/${messageId}/retry`
-  );
+  const res = await apiResponse.post(`/inbox/messages/${messageId}/retry`);
   return res.data.message;
 }
 
 export async function markConversationAsRead(
   conversationId: string
 ): Promise<void> {
-  await apiResponse.patch(`/api/v1/inbox/conversations/${conversationId}/read`);
+  await apiResponse.patch(`/inbox/conversations/${conversationId}/read`);
 }
 
 export async function markAllConversationsAsRead(): Promise<void> {
-  await apiResponse.patch(`/api/v1/inbox/conversations/read-all`);
+  await apiResponse.patch(`/inbox/conversations/read-all`);
 }
 
 export async function updateConversationStatus(
@@ -173,7 +217,7 @@ export async function updateConversationStatus(
   status: InboxConversation["status"]
 ): Promise<InboxConversation> {
   const res = await apiResponse.patch(
-    `/api/v1/inbox/conversations/${conversationId}`,
+    `/inbox/conversations/${conversationId}`,
     { status }
   );
   return res.data.conversation;
@@ -184,7 +228,7 @@ export async function updateConversation(
   input: UpdateConversationInput
 ): Promise<InboxConversation> {
   const res = await apiResponse.patch(
-    `/api/v1/inbox/conversations/${conversationId}`,
+    `/inbox/conversations/${conversationId}`,
     input
   );
   return res.data.conversation;
@@ -194,18 +238,18 @@ export async function updateInboxMessage(
   messageId: string,
   content: string
 ): Promise<InboxMessage> {
-  const res = await apiResponse.patch(`/api/v1/inbox/messages/${messageId}`, {
+  const res = await apiResponse.patch(`/inbox/messages/${messageId}`, {
     content,
   });
   return res.data.message;
 }
 
 export async function deleteInboxMessage(messageId: string): Promise<void> {
-  await apiResponse.delete(`/api/v1/inbox/messages/${messageId}`);
+  await apiResponse.delete(`/inbox/messages/${messageId}`);
 }
 
 export async function deleteConversation(
   conversationId: string
 ): Promise<void> {
-  await apiResponse.delete(`/api/v1/inbox/conversations/${conversationId}`);
+  await apiResponse.delete(`/inbox/conversations/${conversationId}`);
 }
