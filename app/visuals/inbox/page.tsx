@@ -1,5 +1,7 @@
 "use client";
 
+import { ContactDetails } from "./_components/contact-details";
+import { NewConversationDialog } from "./_components/new-conversation-dialog";
 import {
   FacebookBrand,
   GmailBrand,
@@ -39,15 +41,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
+  useCreateConversation,
   useDeleteConversation,
+  useDeleteInboxMessage,
   useInboxConversations,
   useInboxMessages,
   useMarkAllConversationsAsRead,
   useMarkConversationAsRead,
   useRetryInboxMessage,
   useSendMessage,
+  useUpdateConversation,
   useUpdateConversationStatus,
+  useUpdateInboxMessage,
 } from "@/hooks/use-inbox";
 import { useIntegrations } from "@/hooks/use-integrations";
 import {
@@ -77,7 +84,9 @@ import {
   Loader2,
   MessageSquare,
   MoreHorizontal,
+  PanelRight,
   Paperclip,
+  Pencil,
   Plus,
   RefreshCw,
   Search,
@@ -213,6 +222,8 @@ export default function InboxPage() {
   const [deleteTarget, setDeleteTarget] = useState<InboxConversation | null>(
     null
   );
+  const [showDetails, setShowDetails] = useState(false);
+  const [showNewConversation, setShowNewConversation] = useState(false);
   const deferredSearch = useDeferredValue(search.trim());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -239,6 +250,21 @@ export default function InboxPage() {
         (item) => INBOX_PLATFORMS.has(item.platform) && item.status === "active"
       ),
     [integrations]
+  );
+  const startableAccounts = useMemo(
+    () =>
+      accounts.filter((account) =>
+        [
+          "facebook",
+          "messenger",
+          "instagram",
+          "gmail",
+          "email",
+          "whatsapp",
+          "telegram",
+        ].includes(account.platform)
+      ),
+    [accounts]
   );
   const selectedAccount = accounts.find(
     (account) => account._id === selectedAccountId
@@ -268,6 +294,10 @@ export default function InboxPage() {
   const markAllMutation = useMarkAllConversationsAsRead();
   const statusMutation = useUpdateConversationStatus();
   const deleteMutation = useDeleteConversation();
+  const createConversationMutation = useCreateConversation();
+  const updateConversationMutation = useUpdateConversation();
+  const updateMessageMutation = useUpdateInboxMessage();
+  const deleteMessageMutation = useDeleteInboxMessage();
   const activeConversation =
     conversations.find((conversation) => conversation._id === activeId) || null;
   const unreadTotal = conversations.reduce(
@@ -464,7 +494,7 @@ export default function InboxPage() {
         </div>
       </header>
 
-      <div className='grid min-h-[700px] flex-1 overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm lg:grid-cols-[380px_minmax(0,1fr)] dark:border-white/10 dark:bg-zinc-950'>
+      <div className='grid h-[calc(100dvh-12rem)] min-h-[580px] flex-1 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm lg:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(420px,1fr)_280px] dark:border-white/10 dark:bg-zinc-950'>
         <aside
           className={`${activeId ? "hidden lg:flex" : "flex"} min-h-0 flex-col border-r border-black/5 dark:border-white/10`}
         >
@@ -552,6 +582,18 @@ export default function InboxPage() {
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              <Button
+                variant='outline'
+                size='icon'
+                className='h-10 w-10 shrink-0 rounded-xl'
+                onClick={() => setShowNewConversation(true)}
+                disabled={!startableAccounts.length}
+                aria-label='Start a conversation'
+                title='Start a conversation'
+              >
+                <Plus className='h-4 w-4' />
+              </Button>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -761,6 +803,15 @@ export default function InboxPage() {
                   </div>
                 </div>
                 <div className='flex items-center gap-1'>
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='rounded-full 2xl:hidden'
+                    onClick={() => setShowDetails(true)}
+                    aria-label='View contact details'
+                  >
+                    <PanelRight className='h-5 w-5' />
+                  </Button>
                   {activeConversation.status === "resolved" ? (
                     <Button
                       variant='outline'
@@ -838,47 +889,125 @@ export default function InboxPage() {
                           className={`flex flex-col ${inbound ? "items-start" : "items-end"}`}
                         >
                           <div
-                            className={`max-w-[82%] overflow-hidden rounded-2xl text-sm leading-6 shadow-sm ${inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-600 text-white" : "rounded-tr-md bg-indigo-600 text-white"}`}
+                            className={`group/message flex max-w-[90%] items-center gap-1 sm:max-w-[82%] ${inbound ? "flex-row" : "flex-row-reverse"}`}
                           >
-                            {message.attachments?.map((attachment) => (
-                              <div
-                                key={attachment.url}
-                                className='border-b border-black/10 last:border-b-0'
-                              >
-                                {attachment.kind === "image" ? (
-                                  <img
-                                    src={attachment.url}
-                                    alt={attachment.name}
-                                    className='max-h-72 w-full object-cover'
-                                  />
-                                ) : attachment.kind === "video" ? (
-                                  <video
-                                    src={attachment.url}
-                                    controls
-                                    className='max-h-72 w-full'
-                                  />
-                                ) : attachment.kind === "audio" ? (
-                                  <audio
-                                    src={attachment.url}
-                                    controls
-                                    className='m-3 max-w-[260px]'
-                                  />
-                                ) : (
-                                  <a
-                                    href={attachment.url}
-                                    target='_blank'
-                                    rel='noreferrer'
-                                    className='flex items-center gap-2 px-4 py-3 font-medium underline underline-offset-2'
+                            <div
+                              className={`overflow-hidden rounded-2xl text-sm leading-6 shadow-sm ${inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-600 text-white" : "rounded-tr-md bg-indigo-600 text-white"}`}
+                            >
+                              {message.attachments?.map((attachment) => (
+                                <div
+                                  key={attachment.url}
+                                  className='border-b border-black/10 last:border-b-0'
+                                >
+                                  {attachment.kind === "image" ? (
+                                    <img
+                                      src={attachment.url}
+                                      alt={attachment.name}
+                                      className='max-h-72 w-full object-cover'
+                                    />
+                                  ) : attachment.kind === "video" ? (
+                                    <video
+                                      src={attachment.url}
+                                      controls
+                                      className='max-h-72 w-full'
+                                    />
+                                  ) : attachment.kind === "audio" ? (
+                                    <audio
+                                      src={attachment.url}
+                                      controls
+                                      className='m-3 max-w-[260px]'
+                                    />
+                                  ) : (
+                                    <a
+                                      href={attachment.url}
+                                      target='_blank'
+                                      rel='noreferrer'
+                                      className='flex items-center gap-2 px-4 py-3 font-medium underline underline-offset-2'
+                                    >
+                                      <Paperclip className='h-4 w-4' />
+                                      {attachment.name}
+                                    </a>
+                                  )}
+                                </div>
+                              ))}
+                              {message.content && (
+                                <div className='px-4 py-3'>
+                                  {message.content}
+                                </div>
+                              )}
+                            </div>
+                            {!inbound &&
+                              (!message.platformMessageId ||
+                                message.status === "failed") && (
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button
+                                      variant='ghost'
+                                      size='icon'
+                                      className='h-7 w-7 shrink-0 rounded-full opacity-100 sm:opacity-0 sm:group-hover/message:opacity-100'
+                                      aria-label='Message actions'
+                                    >
+                                      <MoreHorizontal className='h-4 w-4' />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent
+                                    align={inbound ? "start" : "end"}
                                   >
-                                    <Paperclip className='h-4 w-4' />
-                                    {attachment.name}
-                                  </a>
-                                )}
-                              </div>
-                            ))}
-                            {message.content && (
-                              <div className='px-4 py-3'>{message.content}</div>
-                            )}
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        const content = window.prompt(
+                                          "Edit message",
+                                          message.content
+                                        );
+                                        if (content !== null && content.trim())
+                                          updateMessageMutation.mutate(
+                                            {
+                                              messageId: message._id,
+                                              conversationId:
+                                                activeConversation._id,
+                                              content: content.trim(),
+                                            },
+                                            {
+                                              onError: (error: any) =>
+                                                toast.error(
+                                                  error?.response?.data
+                                                    ?.message ||
+                                                    "Message could not be edited"
+                                                ),
+                                            }
+                                          );
+                                      }}
+                                    >
+                                      <Pencil className='mr-2 h-4 w-4' /> Edit
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      className='text-red-600 focus:text-red-600'
+                                      onClick={() => {
+                                        if (
+                                          window.confirm("Delete this message?")
+                                        )
+                                          deleteMessageMutation.mutate(
+                                            {
+                                              messageId: message._id,
+                                              conversationId:
+                                                activeConversation._id,
+                                            },
+                                            {
+                                              onError: (error: any) =>
+                                                toast.error(
+                                                  error?.response?.data
+                                                    ?.message ||
+                                                    "Message could not be deleted"
+                                                ),
+                                            }
+                                          );
+                                      }}
+                                    >
+                                      <Trash2 className='mr-2 h-4 w-4' /> Delete
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              )}
                           </div>
                           <span className='text-muted-foreground mt-1.5 flex items-center gap-1 px-1 text-[10px]'>
                             {relativeTime(message.createdAt)}
@@ -1082,7 +1211,70 @@ export default function InboxPage() {
             </div>
           )}
         </main>
+        <aside className='hidden min-h-0 border-l 2xl:block'>
+          {activeConversation && (
+            <ContactDetails
+              conversation={activeConversation}
+              saving={updateConversationMutation.isPending}
+              onSave={(input) =>
+                updateConversationMutation.mutate(
+                  { conversationId: activeConversation._id, input },
+                  {
+                    onSuccess: () => toast.success("Contact details updated"),
+                    onError: () =>
+                      toast.error("Contact details could not be updated"),
+                  }
+                )
+              }
+            />
+          )}
+        </aside>
       </div>
+
+      <Sheet open={showDetails} onOpenChange={setShowDetails}>
+        <SheetContent side='right' className='w-[92vw] p-0 sm:max-w-sm'>
+          {activeConversation && (
+            <ContactDetails
+              conversation={activeConversation}
+              saving={updateConversationMutation.isPending}
+              onSave={(input) =>
+                updateConversationMutation.mutate(
+                  { conversationId: activeConversation._id, input },
+                  {
+                    onSuccess: () => {
+                      toast.success("Contact details updated");
+                      setShowDetails(false);
+                    },
+                    onError: () =>
+                      toast.error("Contact details could not be updated"),
+                  }
+                )
+              }
+            />
+          )}
+        </SheetContent>
+      </Sheet>
+
+      <NewConversationDialog
+        open={showNewConversation}
+        onOpenChange={setShowNewConversation}
+        accounts={startableAccounts}
+        pending={createConversationMutation.isPending}
+        onCreate={(input) =>
+          createConversationMutation.mutate(input, {
+            onSuccess: (conversation) => {
+              setShowNewConversation(false);
+              setActiveId(conversation._id);
+              toast.success("Conversation created");
+            },
+            onError: (error: any) =>
+              toast.error(
+                error?.response?.data?.message ||
+                  "Conversation could not be created"
+              ),
+          })
+        }
+      />
 
       <AlertDialog
         open={Boolean(deleteTarget)}

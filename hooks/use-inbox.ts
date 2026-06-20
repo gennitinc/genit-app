@@ -1,17 +1,23 @@
 "use client";
 
 import {
+  type CreateConversationInput,
   type InboxAttachment,
   type InboxConversation,
   type InboxFilters,
+  type UpdateConversationInput,
+  createConversation,
   deleteConversation,
+  deleteInboxMessage,
   fetchConversations,
   fetchMessages,
   markAllConversationsAsRead,
   markConversationAsRead,
   retryInboxMessage,
   sendMessage,
+  updateConversation,
   updateConversationStatus,
+  updateInboxMessage,
 } from "@/lib/inbox-api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -62,6 +68,68 @@ export function useSendMessage() {
       qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
     },
     onSettled: (_data, _error, variables) => {
+      qc.invalidateQueries({
+        queryKey: inboxMessagesQueryKey(variables.conversationId),
+      });
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
+    },
+  });
+}
+
+export function useCreateConversation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: CreateConversationInput) => createConversation(input),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] }),
+  });
+}
+
+export function useUpdateConversation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      conversationId,
+      input,
+    }: {
+      conversationId: string;
+      input: UpdateConversationInput;
+    }) => updateConversation(conversationId, input),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] }),
+  });
+}
+
+export function useUpdateInboxMessage() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      messageId,
+      content,
+    }: {
+      messageId: string;
+      content: string;
+      conversationId: string;
+    }) => updateInboxMessage(messageId, content),
+    onSuccess: (_data, variables) => {
+      qc.invalidateQueries({
+        queryKey: inboxMessagesQueryKey(variables.conversationId),
+      });
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
+    },
+  });
+}
+
+export function useDeleteInboxMessage() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      messageId,
+    }: {
+      messageId: string;
+      conversationId: string;
+    }) => deleteInboxMessage(messageId),
+    onSuccess: (_data, variables) => {
       qc.invalidateQueries({
         queryKey: inboxMessagesQueryKey(variables.conversationId),
       });

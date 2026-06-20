@@ -22,6 +22,8 @@ export interface InboxConversation {
   customerAvatar?: string;
   customerHandle?: string;
   subject?: string;
+  labels: string[];
+  notes?: string;
   metadata?: Record<string, unknown>;
   lastMessage: string;
   lastMessageAt: string;
@@ -65,6 +67,29 @@ export interface InboxFilters {
   sort?: "newest" | "oldest" | "unread";
 }
 
+export interface CreateConversationInput {
+  integrationId: string;
+  platform: InboxConversation["platform"];
+  customerName: string;
+  customerId?: string;
+  customerHandle?: string;
+  subject?: string;
+}
+
+export type UpdateConversationInput = Partial<
+  Pick<
+    InboxConversation,
+    | "status"
+    | "customerName"
+    | "customerId"
+    | "customerAvatar"
+    | "customerHandle"
+    | "subject"
+    | "labels"
+    | "notes"
+  >
+>;
+
 export async function fetchConversations(
   filters: InboxFilters = {}
 ): Promise<InboxConversation[]> {
@@ -81,6 +106,13 @@ export async function fetchMessages(
     `/api/v1/inbox/conversations/${conversationId}/messages`
   );
   return res.data.messages;
+}
+
+export async function createConversation(
+  input: CreateConversationInput
+): Promise<InboxConversation> {
+  const res = await apiResponse.post(`/api/v1/inbox/conversations`, input);
+  return res.data.conversation;
 }
 
 export async function sendMessage(
@@ -145,6 +177,31 @@ export async function updateConversationStatus(
     { status }
   );
   return res.data.conversation;
+}
+
+export async function updateConversation(
+  conversationId: string,
+  input: UpdateConversationInput
+): Promise<InboxConversation> {
+  const res = await apiResponse.patch(
+    `/api/v1/inbox/conversations/${conversationId}`,
+    input
+  );
+  return res.data.conversation;
+}
+
+export async function updateInboxMessage(
+  messageId: string,
+  content: string
+): Promise<InboxMessage> {
+  const res = await apiResponse.patch(`/api/v1/inbox/messages/${messageId}`, {
+    content,
+  });
+  return res.data.message;
+}
+
+export async function deleteInboxMessage(messageId: string): Promise<void> {
+  await apiResponse.delete(`/api/v1/inbox/messages/${messageId}`);
 }
 
 export async function deleteConversation(
