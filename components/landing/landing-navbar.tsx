@@ -32,7 +32,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
-import { ArrowRight, PanelRight, Search } from "lucide-react";
+import { ArrowRight, PanelRight } from "lucide-react";
 import {
   BadgeCheck,
   Bell,
@@ -88,7 +88,7 @@ export function LandingNavbar() {
 
   return (
     <>
-      <header className='sticky top-0 z-50 w-full bg-transparent backdrop-blur-sm'>
+      <header className='sticky top-0 z-50 w-full border-b border-black/[0.06] bg-white/65 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/55 dark:border-white/10 dark:bg-zinc-950/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.22)] dark:supports-[backdrop-filter]:bg-zinc-950/50'>
         <nav className='z-50 mx-auto flex h-16 items-center justify-between px-2 md:px-12 lg:px-20 xl:px-24'>
           {/* Replace <img> with new <Image> */}
           <Link href='/' className='z-40 flex items-center'>
@@ -268,33 +268,6 @@ export function LandingNavbar() {
 
           {/* Mobile/Tablet Menu Section */}
           <div className='flex items-center gap-2 lg:hidden'>
-            <Button
-              variant='ghost'
-              size='icon'
-              onClick={() => setIsSearchOpen(true)}
-              className='hover:bg-accent h-8 w-8 rounded-lg p-0'
-              aria-label='Search'
-            >
-              <Search className='h-4 w-4' />
-            </Button>
-
-            <Button
-              variant='ghost'
-              size='sm'
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className='hover:bg-accent h-8 w-8 rounded-lg p-0'
-            >
-              {mounted ? (
-                theme === "dark" ? (
-                  <Sun className='h-4 w-4' />
-                ) : (
-                  <Moon className='h-4 w-4' />
-                )
-              ) : (
-                <div className='h-4 w-4' />
-              )}
-            </Button>
-
             {currentUser ? (
               <UserPopOver />
             ) : (
@@ -307,7 +280,7 @@ export function LandingNavbar() {
                   Sign in
                 </Link>
                 <Link
-                  className='text-primary-foreground border-primary/20 hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] bg-indigo-600 px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                  className='hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border border-indigo-400/60 bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-[0_6px_20px_rgba(79,70,229,0.28)] outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-700 focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                   href='/signup'
                 >
                   <span>Start for $0</span>
