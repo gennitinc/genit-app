@@ -21,6 +21,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -33,6 +39,7 @@ import {
   type FacebookPostSummary,
   type IntegrationConnection,
   type IntegrationPlatform,
+  deleteFacebookPost,
   fetchFacebookInsights,
   fetchInstagramInsights,
   fetchPinterestPinAnalytics,
@@ -47,6 +54,7 @@ import {
   listTikTokVideos,
   listUserTweets,
   listYouTubeVideos,
+  updateFacebookPost,
 } from "@/lib/integrations-api";
 import {
   type SocialPost,
@@ -59,6 +67,7 @@ import {
 } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
+import { GradientFrame } from "@/utils/gradient-frame";
 import {
   useMutation,
   useQueries,
@@ -74,6 +83,7 @@ import {
   FileText,
   Heart,
   Loader2,
+  MoreHorizontal,
   type LucideIcon,
   MessageCircle,
   MousePointerClick,
@@ -249,14 +259,7 @@ function MediaPreview({ post }: { post: DisplayPost }) {
     isVideoMedia(post.mediaUrl);
 
   if (!source || failed) {
-    return (
-      <div className='flex aspect-[4/3] w-full items-center justify-center'>
-        <PlatformIcon
-          platform={post.platform}
-          className='h-10 w-10 opacity-60'
-        />
-      </div>
-    );
+    return null;
   }
   if (isVideo && post.mediaUrl) {
     return (
@@ -560,9 +563,16 @@ async function fetchLivePosts(
       return [];
     })
   );
-  return results.flatMap((result) =>
-    result.status === "fulfilled" ? result.value : []
-  );
+  return results.flatMap((result, index) => {
+    if (result.status === "fulfilled") return result.value;
+    // Do not make one unavailable provider hide posts from every other
+    // connected account, but preserve the provider error for diagnostics.
+    console.error(
+      `[Visuals/Posts] Could not fetch ${connections[index]?.platform} posts for ${connections[index]?.accountName}:`,
+      result.reason
+    );
+    return [];
+  });
 }
 
 async function fetchPostAnalytics(post: DisplayPost) {
@@ -619,7 +629,8 @@ export default function PostsPage() {
   const [search, setSearch] = useState("");
   const [platformFilter, setPlatformFilter] = useState("all");
   const [editorOpen, setEditorOpen] = useState(false);
-  const [editing, setEditing] = useState<SocialPost | null>(null);
+  const [editing, setEditing] = useState<DisplayPost | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<DisplayPost | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [analyticsPost, setAnalyticsPost] = useState<DisplayPost | null>(null);
 
@@ -720,6 +731,16 @@ export default function PostsPage() {
           form.status === "scheduled" ? form.scheduledFor : undefined,
       };
       if (editing) {
+        if (editing.remote && editing.platform === "facebook") {
+          if (!editing.integration || !editing.externalId)
+            throw new Error("This Facebook post is missing its account details.");
+          await updateFacebookPost(
+            editing.integration,
+            editing.externalId,
+            form.content
+          );
+          return [editing];
+        }
         const post = await updateSocialPost(editing._id, {
           ...shared,
           platform: form.platforms[0],
@@ -737,6 +758,7 @@ export default function PostsPage() {
     },
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ["social-posts"] });
+      queryClient.invalidateQueries({ queryKey: ["connected-social-posts"] });
       setEditorOpen(false);
       const count = result.length;
       toast({
@@ -756,13 +778,30 @@ export default function PostsPage() {
       }),
   });
   const removeMutation = useMutation({
-    mutationFn: deleteSocialPost,
+    mutationFn: async (post: DisplayPost) => {
+      if (post.remote && post.platform === "facebook") {
+        if (!post.integration || !post.externalId)
+          throw new Error("This Facebook post is missing its account details.");
+        await deleteFacebookPost(post.integration, post.externalId);
+        return;
+      }
+      await deleteSocialPost(post._id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["social-posts"] });
+      queryClient.invalidateQueries({ queryKey: ["connected-social-posts"] });
+      setDeleteTarget(null);
       toast({ title: "Post deleted" });
     },
-    onError: () =>
-      toast({ title: "Could not delete post", variant: "destructive" }),
+    onError: (error: any) =>
+      toast({
+        title: "Could not delete post",
+        description:
+          error?.response?.data?.msg ||
+          error?.response?.data?.message ||
+          error.message,
+        variant: "destructive",
+      }),
   });
 
   function openCreate() {
@@ -774,7 +813,7 @@ export default function PostsPage() {
     });
     setEditorOpen(true);
   }
-  function openEdit(post: SocialPost) {
+  function openEdit(post: DisplayPost) {
     setEditing(post);
     setForm({
       title: post.title || "",
@@ -1039,48 +1078,66 @@ export default function PostsPage() {
             {visible.map((post) => (
               <article
                 key={post._id}
-                className='group bg-background mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-2xl border border-black/5 align-top transition hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10'
+                className='group bg-background relative mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-2xl border border-black/5 align-top transition hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10'
               >
-                <div
-                  className={cn(
-                    "relative w-full overflow-hidden bg-gradient-to-br",
-                    TINT[post.platform]
-                  )}
-                >
-                  <MediaPreview post={post} />
-                  <div className='absolute top-3 left-3 flex items-center gap-2'>
-                    <span className='bg-background/90 rounded-full px-2.5 py-1 text-[10px] font-semibold capitalize shadow-sm backdrop-blur'>
-                      {post.status}
-                    </span>
-                    {post.accountName && (
-                      <span className='max-w-32 truncate rounded-full bg-black/60 px-2.5 py-1 text-[10px] text-white backdrop-blur'>
-                        @{post.accountName}
-                      </span>
-                    )}
-                  </div>
-                  {view !== "live" && !post.remote && (
-                    <div className='absolute top-3 right-3 flex gap-1'>
+                {(!post.remote || post.platform === "facebook") && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
                       <button
-                        onClick={() => openEdit(post)}
-                        className='bg-background/90 flex h-8 w-8 items-center justify-center rounded-full shadow-sm'
-                        aria-label='Edit post'
+                        className='bg-background/90 absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full shadow-sm ring-1 ring-black/5 backdrop-blur dark:ring-white/10'
+                        aria-label='Post actions'
                       >
-                        <Edit3 className='h-3.5 w-3.5' />
+                        <MoreHorizontal className='h-4 w-4' />
                       </button>
-                      <button
-                        onClick={() =>
-                          window.confirm("Delete this post?") &&
-                          removeMutation.mutate(post._id)
-                        }
-                        className='bg-background/90 flex h-8 w-8 items-center justify-center rounded-full text-red-600 shadow-sm'
-                        aria-label='Delete post'
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end' className='min-w-36'>
+                      <DropdownMenuItem onSelect={() => openEdit(post)}>
+                        <Edit3 className='h-3.5 w-3.5' />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => setDeleteTarget(post)}
+                        className='text-red-600 focus:text-red-600'
                       >
                         <Trash2 className='h-3.5 w-3.5' />
-                      </button>
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+                {(post.thumbnailUrl || post.mediaUrl) && (
+                  <div
+                    className={cn(
+                      "relative w-full overflow-hidden bg-gradient-to-br",
+                      TINT[post.platform]
+                    )}
+                  >
+                    <MediaPreview post={post} />
+                    <div className='absolute top-3 left-3 flex items-center gap-2'>
+                      <span className='bg-background/90 rounded-full px-2.5 py-1 text-[10px] font-semibold capitalize shadow-sm backdrop-blur'>
+                        {post.status}
+                      </span>
+                      {post.accountName && (
+                        <span className='max-w-32 truncate rounded-full bg-black/60 px-2.5 py-1 text-[10px] text-white backdrop-blur'>
+                          @{post.accountName}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+                <div className='p-4'>
+                  {!post.thumbnailUrl && !post.mediaUrl && (
+                    <div className='mb-4 flex min-h-8 items-center gap-2 pr-10'>
+                      <span className='bg-muted rounded-full px-2.5 py-1 text-[10px] font-semibold capitalize'>
+                        {post.status}
+                      </span>
+                      {post.accountName && (
+                        <span className='text-muted-foreground max-w-32 truncate text-[10px]'>
+                          @{post.accountName}
+                        </span>
+                      )}
                     </div>
                   )}
-                </div>
-                <div className='p-4'>
                   <div className='flex items-center justify-between gap-3'>
                     <span className='flex items-center gap-2 text-xs font-medium'>
                       <PlatformIcon
@@ -1100,26 +1157,21 @@ export default function PostsPage() {
                     {post.content || "No caption yet"}
                   </p>
                   {view === "live" ? (
-                    <div className='mt-4 flex items-center justify-between border-t border-black/5 pt-3 dark:border-white/10'>
+                    <div className='mt-4 flex items-center justify-between gap-3 border-t border-black/5 pt-3 dark:border-white/10'>
                       <PostMetrics
                         metrics={liveMetricsById.get(post._id) || EMPTY_METRICS}
                         loading={loadingMetricIds.has(post._id)}
                       />
-                      <button
-                        onClick={() => setAnalyticsPost(post)}
-                        className='flex items-center gap-1 text-[11px] font-semibold text-indigo-600 dark:text-indigo-400'
-                      >
-                        Analytics <BarChart3 className='h-3 w-3' />
-                      </button>
+                      <div className='flex items-center gap-3'>
+                        <button
+                          onClick={() => setAnalyticsPost(post)}
+                          className='flex items-center gap-1 text-[11px] font-semibold text-indigo-600 dark:text-indigo-400'
+                        >
+                          Analytics <BarChart3 className='h-3 w-3' />
+                        </button>
+                      </div>
                     </div>
-                  ) : (
-                    <button
-                      onClick={() => openEdit(post)}
-                      className='text-muted-foreground hover:text-foreground mt-4 flex w-full items-center justify-between border-t border-black/5 pt-3 text-[11px] font-medium dark:border-white/10'
-                    >
-                      Manage post <Edit3 className='h-3 w-3' />
-                    </button>
-                  )}
+                  ) : null}
                 </div>
               </article>
             ))}
@@ -1137,6 +1189,56 @@ export default function PostsPage() {
         isSaving={saveMutation.isPending}
         onSave={() => saveMutation.mutate()}
       />
+
+      <Dialog
+        open={Boolean(deleteTarget)}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
+        <DialogContent className='max-w-md overflow-hidden rounded-3xl border-0 bg-black/[0.02] p-5 shadow-none ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+          <GradientFrame />
+          <div className='relative z-10 flex flex-col gap-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
+            <div className='flex items-start gap-4'>
+              <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-neutral-100 dark:bg-neutral-800'>
+                <Trash2 className='h-5 w-5' />
+              </div>
+              <div>
+                <DialogTitle className='text-foreground text-lg font-semibold tracking-tight dark:text-white'>
+                  Delete Post
+                </DialogTitle>
+                <p className='text-muted-foreground mt-2 text-sm dark:text-white/70'>
+                  Are you sure you want to delete this post from{" "}
+                  <span className='text-foreground font-medium dark:text-white'>
+                    {deleteTarget?.accountName || LABEL[deleteTarget?.platform || "facebook"]}
+                  </span>
+                  ? This action cannot be undone.
+                </p>
+              </div>
+            </div>
+            <div className='mt-2 flex justify-end gap-3 border-t border-black/5 pt-4 dark:border-white/10'>
+              <button
+                type='button'
+                disabled={removeMutation.isPending}
+                onClick={() => setDeleteTarget(null)}
+                className='text-foreground px-4 py-2 text-sm font-medium ring-1 ring-black/10 transition'
+              >
+                Cancel
+              </button>
+              <button
+                type='button'
+                disabled={removeMutation.isPending}
+                onClick={() => deleteTarget && removeMutation.mutate(deleteTarget)}
+                className='flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:opacity-50'
+              >
+                {removeMutation.isPending ? (
+                  <Loader2 className='h-4 w-4 animate-spin' />
+                ) : (
+                  "Delete"
+                )}
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Dialog
         open={Boolean(analyticsPost)}

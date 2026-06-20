@@ -328,6 +328,26 @@ export async function listFacebookPosts(
   return data.posts;
 }
 
+export async function updateFacebookPost(
+  integrationId: string,
+  postId: string,
+  message: string
+): Promise<void> {
+  await apiResponse.patch(
+    `/integrations/facebook/${integrationId}/posts/${encodeURIComponent(postId)}`,
+    { message }
+  );
+}
+
+export async function deleteFacebookPost(
+  integrationId: string,
+  postId: string
+): Promise<void> {
+  await apiResponse.delete(
+    `/integrations/facebook/${integrationId}/posts/${encodeURIComponent(postId)}`
+  );
+}
+
 export interface InstagramPostSummary {
   id: string;
   caption?: string;

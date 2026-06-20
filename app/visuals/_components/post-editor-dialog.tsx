@@ -386,12 +386,12 @@ export function PostEditorDialog({
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent
-          className='flex max-h-[88vh] flex-col gap-0 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c0c0e] p-0 text-white shadow-2xl sm:max-w-3xl'
+          className='flex max-h-[80vh] flex-col gap-0 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c0c0e] p-0 text-white shadow-2xl sm:max-w-3xl'
           hideDialogClose
         >
           <DialogHeader className='relative px-5 pt-4 pb-3 text-left border-b border-white/[0.05]'>
             <div className='flex items-center gap-2.5'>
-              <span className='flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600/10 text-indigo-400 ring-1 ring-indigo-500/20'>
+              <span className='flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600/10 ring-1 ring-indigo-500/20'>
                 <Send className='h-4 w-4' />
               </span>
               <div>
