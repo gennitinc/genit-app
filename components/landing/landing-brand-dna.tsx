@@ -38,18 +38,20 @@ export const LandingBrandDNA = () => {
             <div className='h-3 w-3 rounded-full bg-green-500/80' />
           </div>
 
-          <div className='group relative mx-auto flex w-full max-w-md items-center gap-2 overflow-hidden rounded-xl bg-black/5 px-4 py-2 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10'>
-            <div className='pointer-events-none absolute inset-0 h-full w-full -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-orange-500/10 to-transparent dark:via-orange-500/20' />
+         <div className='group relative mx-auto flex w-full max-w-md items-center gap-2 overflow-hidden rounded-xl bg-black/5 px-3 py-2 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10 sm:px-4'>
+  <div className='pointer-events-none absolute inset-0 h-full w-full -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-orange-500/10 to-transparent dark:via-orange-500/20' />
 
-            <Globe className='text-muted-foreground h-4 w-4 dark:text-white/40' />
-            <span className='text-foreground flex-1 font-mono text-sm tracking-tight dark:text-white/80'>
-              https://your-brand.com
-            </span>
+  <Globe className='text-muted-foreground h-4 w-4 shrink-0 dark:text-white/40' />
 
-            <div className='flex items-center gap-1.5 rounded-full bg-gray-800 px-2 py-0.5 text-[10px] text-gray-200 ring-1 ring-gray-400'>
-              <Search className='h-3 w-3 animate-pulse' /> Scanning
-            </div>
-          </div>
+  <span className='text-foreground min-w-0 flex-1 truncate font-mono text-xs tracking-tight dark:text-white/80 sm:text-sm'>
+    https://your-brand.com
+  </span>
+
+  <div className='flex shrink-0 items-center rounded-full bg-gray-800 px-2 py-1 text-[10px] text-gray-200 ring-1 ring-gray-400'>
+    <Search className='h-3 w-3 animate-pulse' />
+    <span className='ml-1.5 hidden sm:inline'>Scanning</span>
+  </div>
+</div>
         </div>
 
         {/* Dashboard Grid inside Window */}
