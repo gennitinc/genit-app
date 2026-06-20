@@ -304,7 +304,7 @@ export default function CalendarPage() {
 
   return (
     <div className='animate-in fade-in flex w-full flex-col gap-5 duration-500'>
-     <section className='relative overflow-hidden rounded-3xl border p-4'>
+      <section className='relative overflow-hidden rounded-3xl border p-4'>
         <img
           src='https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg'
           className='pointer-events-none absolute inset-0 h-full w-full object-cover select-none'

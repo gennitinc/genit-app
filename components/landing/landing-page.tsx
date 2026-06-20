@@ -14,6 +14,7 @@ import LandingCreator from "./landing-creator";
 import { LandingFooter } from "./landing-footer";
 import LandingHero from "./landing-hero";
 import { LandingNavbar } from "./landing-navbar";
+import LandingUnifiedInbox from "./landing-unified-inbox";
 import { LandingVoiceClone } from "./landing-voice-chat";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -27,6 +28,7 @@ export function LandingPage() {
         <LandingHero />
         <LandingBrandDNA />
         <LandinngIntegrations />
+        <LandingUnifiedInbox />
         <LandingVoiceClone />
         <LandingCreator />
         <LandingTestimonials />

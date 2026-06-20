@@ -61,7 +61,7 @@ export function LandingNavbar() {
   const navigation = [
     { name: "Chat", href: "/chat" },
     { name: "Integrations", href: "/integrations" },
-    { name: "Apps", href: "/apps" },
+    { name: "Visual Flow", href: "/visuals" },
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Community", href: "/community" },
     { name: "Blog", href: "/blog" },
@@ -117,9 +117,9 @@ export function LandingNavbar() {
                 </Link>
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                  href='/apps'
+                  href='/visuals'
                 >
-                  Apps
+                  Visual Flow
                 </Link>
                 <Link
                   target='__blank'

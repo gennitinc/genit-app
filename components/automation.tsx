@@ -822,7 +822,6 @@ export default function AutomationWorkflow({
     return (
       <div className='bg-background flex h-full min-h-[300px] flex-col items-center justify-center'>
         <LoadingFileLoader />
-        
       </div>
     );
   }

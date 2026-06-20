@@ -240,7 +240,7 @@ export default function BlogLibraryPage() {
     <div className='mx-auto max-w-6xl space-y-6'>
       <div className='flex items-center justify-between pb-5'>
         <div>
-          <h1 className='text-xl font-bold text-foreground'>Media Library</h1>
+          <h1 className='text-foreground text-xl font-bold'>Media Library</h1>
           <p className='mt-1 text-xs text-zinc-400'>
             {scope === "organization"
               ? "Shared uploads and generated media for the active organization"

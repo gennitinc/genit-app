@@ -249,12 +249,11 @@ export function HomeCommandCenter({
             </div>
           </div>
         ) : (
-          <section className='grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(300px,.75fr)] ml-2'>
+          <section className='ml-2 grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(300px,.75fr)]'>
             <div className='overflow-hidden rounded-lg border-none bg-black/[0.015] shadow-sm ring-1 ring-black/5 dark:bg-white/[0.03] dark:ring-white/10'>
               <div className='flex items-center justify-between gap-3 border-b border-black/5 px-3 py-3 dark:border-white/10'>
                 <div>
                   <h3 className='font-bold tracking-tight'>Content pipeline</h3>
-                
                 </div>
                 <div className='flex shrink-0 items-center gap-1.5'>
                   <Button

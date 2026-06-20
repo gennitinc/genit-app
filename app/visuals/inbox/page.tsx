@@ -62,6 +62,7 @@ import {
   type IntegrationPlatform,
   isMetaSurface,
 } from "@/lib/integrations-api";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   Archive,
   ArrowUpDown,
@@ -91,7 +92,6 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 const INBOX_PLATFORMS = new Set<IntegrationPlatform>([
   "facebook",
@@ -379,7 +379,7 @@ export default function InboxPage() {
   return (
     <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100vh-8rem)] w-full flex-col gap-5 duration-500'>
       <header className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
-        <div className="lg:pl-6">
+        <div className='lg:pl-6'>
           {/* <div className="mb-2 flex items-center gap-2 text-xs font-medium text-indigo-700 dark:text-indigo-400">
             <span className="h-2 w-2 rounded-full bg-indigo-500" />
             {accounts.length} connected {accounts.length === 1 ? "account" : "accounts"}
@@ -631,7 +631,7 @@ export default function InboxPage() {
               </DropdownMenu>
 
               {isFetching && (
-                <div className="">
+                <div className=''>
                   <LoadingFileLoader size={16} />
                 </div>
               )}
@@ -640,7 +640,7 @@ export default function InboxPage() {
 
           <div className='flex-1 overflow-y-auto p-2'>
             {isLoading ? (
-              <div className='text-muted-foreground flex h-40 items-center justify-center text-sm mt-40'>
+              <div className='text-muted-foreground mt-40 flex h-40 items-center justify-center text-sm'>
                 <LoadingFileLoader size={16} />
               </div>
             ) : conversations.length === 0 ? (

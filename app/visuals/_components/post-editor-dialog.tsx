@@ -161,7 +161,7 @@ export function PostEditorDialog({
               </p>
             </div>
             <span className='rounded-full bg-white/[0.06] px-2.5 py-1 text-[10px] font-semibold text-zinc-300 ring-1 ring-white/10'>
-              {form.platforms.length} 
+              {form.platforms.length}
             </span>
           </div>
           <div className='grid grid-cols-2 gap-2'>
@@ -194,7 +194,9 @@ export function PostEditorDialog({
                     <span
                       className={cn(
                         "mt-1 block text-[9px]",
-                        isConnected ? "text-emerald-400 font-medium" : "text-zinc-600"
+                        isConnected
+                          ? "font-medium text-emerald-400"
+                          : "text-zinc-600"
                       )}
                     >
                       {isConnected ? "Connected" : "No account"}
@@ -221,8 +223,11 @@ export function PostEditorDialog({
                   (item) => item.platform === platform
                 );
                 return (
-                  <div key={platform} className='rounded-lg border border-white/[0.05] bg-white/[0.02] p-2.5 space-y-1.5'>
-                    <Label className='flex items-center gap-2 text-xs text-zinc-200 font-medium'>
+                  <div
+                    key={platform}
+                    className='space-y-1.5 rounded-lg border border-white/[0.05] bg-white/[0.02] p-2.5'
+                  >
+                    <Label className='flex items-center gap-2 text-xs font-medium text-zinc-200'>
                       <span className='flex h-5 w-5 items-center justify-center rounded bg-white/5 ring-1 ring-white/10'>
                         <PlatformIcon platform={platform} />
                       </span>
@@ -240,11 +245,13 @@ export function PostEditorDialog({
                         }))
                       }
                     >
-                      <SelectTrigger className='w-full border-zinc-800 bg-zinc-950 text-zinc-200 h-9 rounded-lg'>
+                      <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
-                        <SelectItem value='none'>No connected account</SelectItem>
+                        <SelectItem value='none'>
+                          No connected account
+                        </SelectItem>
                         {accounts.map((account) => (
                           <SelectItem key={account._id} value={account._id}>
                             {account.accountName}
@@ -351,13 +358,13 @@ export function PostEditorDialog({
     <>
       <Button
         variant='outline'
-        className='rounded-md border-none bg-transparent text-foreground transition-all duration-200'
+        className='text-foreground rounded-md border-none bg-transparent transition-all duration-200'
         onClick={() => onOpenChange(false)}
       >
         Cancel
       </Button>
       <Button
-        className='rounded-md bg-indigo-600 px-5 text-white font-medium hover:bg-indigo-500 transition-all duration-200 disabled:opacity-50 disabled:bg-zinc-800 disabled:text-zinc-500'
+        className='rounded-md bg-indigo-600 px-5 font-medium text-white transition-all duration-200 hover:bg-indigo-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:opacity-50'
         disabled={
           !form.platforms.length ||
           !form.content.trim() ||
@@ -389,7 +396,7 @@ export function PostEditorDialog({
           className='flex max-h-[80vh] flex-col gap-0 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c0c0e] p-0 text-white shadow-2xl sm:max-w-3xl'
           hideDialogClose
         >
-          <DialogHeader className='relative px-5 pt-4 pb-3 text-left border-b border-white/[0.05]'>
+          <DialogHeader className='relative border-b border-white/[0.05] px-5 pt-4 pb-3 text-left'>
             <div className='flex items-center gap-2.5'>
               <span className='flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600/10 ring-1 ring-indigo-500/20'>
                 <Send className='h-4 w-4' />

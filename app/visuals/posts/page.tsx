@@ -19,13 +19,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -84,9 +84,9 @@ import {
   FileText,
   Heart,
   Loader2,
-  MoreHorizontal,
   type LucideIcon,
   MessageCircle,
+  MoreHorizontal,
   MousePointerClick,
   Plus,
   RefreshCw,
@@ -206,10 +206,7 @@ function PostMetrics({
         <MessageCircle className='h-3 w-3' />
         {compact(metrics.comments)}
       </span>
-      {loading && (
-        <LoadingFileLoader size={12}
-        />
-      )}
+      {loading && <LoadingFileLoader size={12} />}
     </div>
   );
 }
@@ -732,7 +729,9 @@ export default function PostsPage() {
       if (editing) {
         if (editing.remote && editing.platform === "facebook") {
           if (!editing.integration || !editing.externalId)
-            throw new Error("This Facebook post is missing its account details.");
+            throw new Error(
+              "This Facebook post is missing its account details."
+            );
           await updateFacebookPost(
             editing.integration,
             editing.externalId,
@@ -881,8 +880,8 @@ export default function PostsPage() {
 
   return (
     <div className='animate-in fade-in flex w-full flex-col gap-6 pb-14 duration-500'>
-      <header className='relative overflow-hidden rounded-3xl bg-black/[0.025] p-4 border dark:bg-white/[0.04]'>
-         <img
+      <header className='relative overflow-hidden rounded-3xl border bg-black/[0.025] p-4 dark:bg-white/[0.04]'>
+        <img
           src='https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg'
           className='pointer-events-none absolute inset-0 h-full w-full object-cover select-none'
           alt=''
@@ -1217,7 +1216,8 @@ export default function PostsPage() {
                 <p className='text-muted-foreground mt-2 text-sm dark:text-white/70'>
                   Are you sure you want to delete this post from{" "}
                   <span className='text-foreground font-medium dark:text-white'>
-                    {deleteTarget?.accountName || LABEL[deleteTarget?.platform || "facebook"]}
+                    {deleteTarget?.accountName ||
+                      LABEL[deleteTarget?.platform || "facebook"]}
                   </span>
                   ? This action cannot be undone.
                 </p>
@@ -1235,14 +1235,12 @@ export default function PostsPage() {
               <button
                 type='button'
                 disabled={removeMutation.isPending}
-                onClick={() => deleteTarget && removeMutation.mutate(deleteTarget)}
+                onClick={() =>
+                  deleteTarget && removeMutation.mutate(deleteTarget)
+                }
                 className='flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:opacity-50'
               >
-                {removeMutation.isPending ? (
-                  <LoadingFileLoader />
-                ) : (
-                  "Delete"
-                )}
+                {removeMutation.isPending ? <LoadingFileLoader /> : "Delete"}
               </button>
             </div>
           </div>
@@ -1257,7 +1255,7 @@ export default function PostsPage() {
           className='flex max-h-[88vh] flex-col gap-0 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c0c0e] p-0 text-white shadow-2xl sm:max-w-3xl'
           hideDialogClose
         >
-          <DialogHeader className='relative px-5 pt-4 pb-3 text-left border-b border-white/[0.05]'>
+          <DialogHeader className='relative border-b border-white/[0.05] px-5 pt-4 pb-3 text-left'>
             <div className='flex items-center gap-2.5'>
               <span className='flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600/10 text-indigo-400 ring-1 ring-indigo-500/20'>
                 <BarChart3 className='h-4 w-4' />
@@ -1278,12 +1276,14 @@ export default function PostsPage() {
               {/* Left column: Post Preview Card */}
               <div className='flex flex-col gap-3 lg:border-r lg:border-white/[0.05] lg:pr-4'>
                 <div>
-                  <h3 className='text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-2'>Post Details</h3>
+                  <h3 className='mb-2 text-[10px] font-semibold tracking-wider text-zinc-500 uppercase'>
+                    Post Details
+                  </h3>
                   <div className='group overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02]'>
-                    <div className='relative w-full overflow-hidden bg-zinc-900 aspect-video flex items-center justify-center border-b border-white/[0.05]'>
+                    <div className='relative flex aspect-video w-full items-center justify-center overflow-hidden border-b border-white/[0.05] bg-zinc-900'>
                       {analyticsPost && <MediaPreview post={analyticsPost} />}
                       <div className='absolute top-2 left-2 flex items-center gap-1.5'>
-                        <span className='bg-black/70 rounded-full px-2 py-0.5 text-[9px] font-semibold capitalize backdrop-blur text-white/90'>
+                        <span className='rounded-full bg-black/70 px-2 py-0.5 text-[9px] font-semibold text-white/90 capitalize backdrop-blur'>
                           {analyticsPost?.status}
                         </span>
                         {analyticsPost?.accountName && (
@@ -1304,14 +1304,14 @@ export default function PostsPage() {
                           )}
                           {analyticsPost && LABEL[analyticsPost.platform]}
                         </span>
-                        <span className='text-zinc-500 text-[10px]'>
+                        <span className='text-[10px] text-zinc-500'>
                           {analyticsPost && postDate(analyticsPost)}
                         </span>
                       </div>
                       <h4 className='mt-2 line-clamp-1 text-sm font-semibold text-white'>
                         {analyticsPost?.title || "Untitled Post"}
                       </h4>
-                      <p className='text-zinc-400 mt-1 line-clamp-3 text-xs leading-5'>
+                      <p className='mt-1 line-clamp-3 text-xs leading-5 text-zinc-400'>
                         {analyticsPost?.content || "No caption"}
                       </p>
                     </div>
@@ -1328,14 +1328,16 @@ export default function PostsPage() {
                 ) : (
                   <>
                     {analyticsQuery.isError && (
-                      <div className='rounded-lg p-2.5 text-[11px] text-foreground/30'>
-                        Live analytics could not be refreshed. Showing the latest
-                        metrics supplied by the platform.
+                      <div className='text-foreground/30 rounded-lg p-2.5 text-[11px]'>
+                        Live analytics could not be refreshed. Showing the
+                        latest metrics supplied by the platform.
                       </div>
                     )}
 
                     <div>
-                      <h3 className='text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-2'>Engagement</h3>
+                      <h3 className='mb-2 text-[10px] font-semibold tracking-wider text-zinc-500 uppercase'>
+                        Engagement
+                      </h3>
                       <div className='h-48 w-full rounded-xl border border-white/[0.08] bg-white/[0.02] p-3'>
                         <ResponsiveContainer width='100%' height='100%'>
                           <BarChart
@@ -1392,22 +1394,26 @@ export default function PostsPage() {
                     </div>
 
                     <div>
-                      <h3 className='text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-2'>Breakdown</h3>
+                      <h3 className='mb-2 text-[10px] font-semibold tracking-wider text-zinc-500 uppercase'>
+                        Breakdown
+                      </h3>
                       <div className='grid grid-cols-2 gap-2 sm:grid-cols-3'>
-                        {analyticsMetrics.map(({ label, value, icon: Icon }) => (
-                          <div
-                            key={label}
-                            className='rounded-lg border border-white/[0.08] bg-white/[0.02] p-2.5 hover:bg-white/[0.04] transition-all duration-200'
-                          >
-                            <div className='flex items-center justify-between text-[11px] text-zinc-500'>
-                              <span>{label}</span>
-                              <Icon className='h-3.5 w-3.5' />
+                        {analyticsMetrics.map(
+                          ({ label, value, icon: Icon }) => (
+                            <div
+                              key={label}
+                              className='rounded-lg border border-white/[0.08] bg-white/[0.02] p-2.5 transition-all duration-200 hover:bg-white/[0.04]'
+                            >
+                              <div className='flex items-center justify-between text-[11px] text-zinc-500'>
+                                <span>{label}</span>
+                                <Icon className='h-3.5 w-3.5' />
+                              </div>
+                              <p className='mt-1.5 text-lg font-semibold tracking-tight text-white'>
+                                {compact(value || 0)}
+                              </p>
                             </div>
-                            <p className='mt-1.5 text-lg font-semibold tracking-tight text-white'>
-                              {compact(value || 0)}
-                            </p>
-                          </div>
-                        ))}
+                          )
+                        )}
                       </div>
                     </div>
                   </>
@@ -1416,7 +1422,7 @@ export default function PostsPage() {
             </div>
           </div>
 
-          <DialogFooter className='sm:justify-between gap-2 border-t border-white/[0.05] bg-[#0c0c0e]/95 px-5 py-3'>
+          <DialogFooter className='gap-2 border-t border-white/[0.05] bg-[#0c0c0e]/95 px-5 py-3 sm:justify-between'>
             <Button
               variant='outline'
               onClick={() => analyticsQuery.refetch()}
@@ -1428,7 +1434,7 @@ export default function PostsPage() {
             {analyticsPost?.permalink && (
               <Button
                 asChild
-                className='rounded-md bg-indigo-600 text-white hover:bg-indigo-500 font-medium'
+                className='rounded-md bg-indigo-600 font-medium text-white hover:bg-indigo-500'
               >
                 <a
                   href={analyticsPost.permalink}

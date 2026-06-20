@@ -90,7 +90,9 @@ function ChartCard({
     <section className='rounded-xl border border-black/5 bg-white p-4 dark:border-white/10 dark:bg-zinc-950'>
       <div className='mb-3'>
         <h2 className='text-xs font-semibold'>{title}</h2>
-        <p className='text-muted-foreground mt-0.5 text-[11px]'>{description}</p>
+        <p className='text-muted-foreground mt-0.5 text-[11px]'>
+          {description}
+        </p>
       </div>
       {children}
     </section>
@@ -428,8 +430,8 @@ export default function SummaryPage() {
                 <span
                   className={`flex h-8 w-8 items-center justify-center rounded-lg ${
                     accent
-                      ? 'text-indigo-600 bg-indigo-500/10'
-                      : 'text-zinc-500 bg-black/[0.03] dark:text-zinc-400 dark:bg-white/[0.04]'
+                      ? "bg-indigo-500/10 text-indigo-600"
+                      : "bg-black/[0.03] text-zinc-500 dark:bg-white/[0.04] dark:text-zinc-400"
                   }`}
                 >
                   <Icon className='h-3.5 w-3.5' />
@@ -437,7 +439,9 @@ export default function SummaryPage() {
                 <p className='mt-2.5 text-xl font-bold tracking-tight'>
                   {value}
                 </p>
-                <p className='text-muted-foreground mt-0.5 text-[11px]'>{label}</p>
+                <p className='text-muted-foreground mt-0.5 text-[11px]'>
+                  {label}
+                </p>
               </div>
             ))}
           </div>

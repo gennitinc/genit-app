@@ -138,7 +138,7 @@ export default function VisualsHomePage() {
     <div className='animate-in fade-in slide-in-from-bottom-4 flex w-full flex-col gap-2 duration-500'>
       <div className='relative overflow-hidden rounded-3xl border p-4'>
         {/* Background image */}
-       <img
+        <img
           src='https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg'
           className='pointer-events-none absolute inset-0 h-full w-full object-cover select-none'
           alt=''
