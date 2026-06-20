@@ -8,7 +8,15 @@ import { useRouter } from "next/navigation";
 import type React from "react";
 import { useEffect, useState } from "react";
 
-export default function CategoryAndSearch() {
+interface CategoryAndSearchProps {
+  destination?: string;
+  placeholder?: string;
+}
+
+export default function CategoryAndSearch({
+  destination = "/templates",
+  placeholder = "Search Inspirations, tools, and components...",
+}: CategoryAndSearchProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchLoading, setSearchLoading] = useState(false);
   const { getUrlState, setUrlState } = useUrlState();
@@ -19,9 +27,7 @@ export default function CategoryAndSearch() {
     e?.preventDefault();
     if (searchQuery.trim()) {
       setSearchLoading(true);
-      router.push(
-        `/templates?q=${encodeURIComponent(searchQuery.trim() || "")}`
-      );
+      router.push(`${destination}?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchLoading(false);
     }
   };
@@ -37,12 +43,7 @@ export default function CategoryAndSearch() {
           <div className='relative'>
             <Search className='text-muted-foreground group-focus-within:text-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transition-colors' />
             <Input
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSearch();
-                }
-              }}
-              placeholder='Search Inspirations, tools, and components...'
+              placeholder={placeholder}
               className='bg-background/80 w-full rounded-full border-2 py-6 pr-16 text-base shadow-sm backdrop-blur-sm transition-all duration-200 group-focus-within:shadow-md focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
               onChange={(e) => setSearchQuery(e.target.value)}
               value={searchQuery}
@@ -54,7 +55,7 @@ export default function CategoryAndSearch() {
                 className='text-muted-foreground hover:text-foreground absolute top-1/2 right-14 flex h-8 w-8 -translate-y-1/2 items-center justify-center transition-colors'
                 onClick={() => {
                   setSearchQuery("");
-                  router.push("/templates");
+                  router.push(destination);
                 }}
                 tabIndex={-1}
                 aria-label='Clear search'
@@ -66,7 +67,6 @@ export default function CategoryAndSearch() {
               disabled={!searchQuery.trim() || searchLoading}
               type='submit'
               className='btn-gradient text-primary-foreground absolute top-1/2 right-2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full p-0 shadow-sm transition-all duration-200 disabled:opacity-50'
-              onClick={handleSearch}
             >
               {searchLoading ? (
                 <Loader className='h-4 w-4 animate-spin' />

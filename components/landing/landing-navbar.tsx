@@ -86,23 +86,35 @@ export function LandingNavbar() {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    const handleSearchShortcut = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
+
+    window.addEventListener("keydown", handleSearchShortcut);
+    return () => window.removeEventListener("keydown", handleSearchShortcut);
+  }, []);
+
   return (
     <>
-      <header className='sticky top-0 z-50 w-full overflow-x-clip border-b border-black/[0.06] bg-white/65 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/55 dark:border-white/10 dark:bg-zinc-950/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.22)] dark:supports-[backdrop-filter]:bg-zinc-950/50'>
-        <nav className='z-50 mx-auto flex h-16 w-full max-w-[1600px] items-center justify-between gap-3 px-3 sm:px-6 lg:px-10 xl:px-12 2xl:px-16'>
+      <header className='sticky top-0 z-50 w-full border-b border-black/[0.06] bg-white/65 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/55 dark:border-white/10 dark:bg-zinc-950/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.22)] dark:supports-[backdrop-filter]:bg-zinc-950/50'>
+        <nav className='z-50 mx-auto flex h-16 items-center justify-between px-2 md:px-12 lg:px-20 xl:px-24'>
           {/* Replace <img> with new <Image> */}
-          <Link href='/' className='z-40 flex min-w-0 shrink-0 items-center'>
-            <Logo className='h-10 w-10 flex-shrink-0 sm:h-12 sm:w-12' />
+          <Link href='/' className='z-40 flex items-center'>
+            <Logo className='h-12 w-12 flex-shrink-0' />
             <span
-              className={`text-foreground text-lg font-semibold transition-colors duration-300 sm:text-xl`}
+              className={`text-foreground text-xl font-semibold transition-colors duration-300`}
             >
               Genit
             </span>
           </Link>
 
-          <div className='z-50 hidden min-w-0 items-center xl:flex'>
-            <div className='flex min-w-0 items-center gap-2'>
-              <div className='flex min-w-0 flex-1 items-center justify-end gap-2'>
+          <div className='z-50 hidden items-center gap-4 lg:flex'>
+            <div className='flex items-center gap-2 sm:gap-2'>
+              <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                   href='/chat'
@@ -110,26 +122,26 @@ export function LandingNavbar() {
                   Chat
                 </Link>
                 <Link
-                  className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1100px]:inline-flex'
                   href='/integrations'
                 >
                   Integrations
                 </Link>
                 <Link
-                  className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'
                   href='/visuals'
                 >
                   Visual Flow
                 </Link>
                 <Link
-                  target='_blank'
-                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors 2xl:inline-flex'
+                  target='__blank'
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'
                   href='/community'
                 >
                   Community
                 </Link>
                 <Link
-                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors 2xl:inline-flex'
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1360px]:inline-flex'
                   href='/blog'
                 >
                   Blog
@@ -144,7 +156,7 @@ export function LandingNavbar() {
                 {currentUser && (
                   <Link
                     target=''
-                    className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors 2xl:inline-flex'
+                    className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'
                     href='/chat/history'
                   >
                     History
@@ -197,7 +209,7 @@ export function LandingNavbar() {
 
                 <button
                   onClick={() => setIsSearchOpen(true)}
-                  className='text-muted-foreground bg-muted relative flex w-fit shrink-0 items-center justify-start rounded-xl border border-transparent px-3 py-2 text-sm shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] 2xl:px-4 dark:border-white/[0.2]'
+                  className='text-muted-foreground bg-muted relative flex w-fit items-center justify-start rounded-xl border border-transparent px-4 py-2 text-sm shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] dark:border-white/[0.2]'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -214,13 +226,11 @@ export function LandingNavbar() {
                     <path d='M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0' />
                     <path d='M21 21l-6 -6' />
                   </svg>
-                  <span className='hover:text-foreground/80 text-foreground/60 pl-2 text-xs font-medium transition-colors 2xl:pr-4 2xl:text-sm'>
+                  <span className='hover:text-foreground/80 text-foreground/60 rex pr-4 pl-2 text-xs font-medium transition-colors sm:text-sm'>
                     Search{" "}
-                    <span className='hidden 2xl:inline-block'>
-                      {currentUser ? "Inspirations" : "Templates"}
-                    </span>
+                    <span className='hidden xl:inline-block'>Community</span>
                   </span>
-                  <kbd className='bg-muted pointer-events-none hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none 2xl:flex'>
+                  <kbd className='bg-muted pointer-events-none hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none sm:flex'>
                     <span className='text-xs'>⌘</span>K
                   </kbd>
                 </button>
@@ -248,7 +258,7 @@ export function LandingNavbar() {
               ) : (
                 <div className='flex items-center gap-2'>
                   <Link
-                    className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-2xl border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 2xl:flex'
+                    className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-2xl border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 lg:flex'
                     data-state='closed'
                     href='/signin'
                   >
@@ -267,7 +277,7 @@ export function LandingNavbar() {
           </div>
 
           {/* Mobile/Tablet Menu Section */}
-          <div className='flex min-w-0 items-center gap-1 sm:gap-2 xl:hidden'>
+          <div className='flex items-center gap-2 lg:hidden'>
             {currentUser ? (
               <UserPopOver />
             ) : (
@@ -280,7 +290,7 @@ export function LandingNavbar() {
                   Sign in
                 </Link>
                 <Link
-                  className='hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-9 shrink-0 items-center justify-center gap-0 rounded-2xl border border-indigo-400/60 bg-indigo-600 px-3 text-xs font-semibold !text-white shadow-[0_6px_20px_rgba(79,70,229,0.28)] outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-700 focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30 sm:h-10 sm:px-4 sm:text-sm'
+                  className='hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border border-indigo-400/60 bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-[0_6px_20px_rgba(79,70,229,0.28)] outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-700 focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                   href='/signup'
                 >
                   <span>Start for $0</span>
@@ -360,10 +370,13 @@ export function LandingNavbar() {
         <Drawer open={isSearchOpen} onOpenChange={setIsSearchOpen}>
           <DrawerContent className='h-[85vh]'>
             <DrawerHeader className='border-b px-4 py-2'>
-              <DrawerTitle>Search Inspirations</DrawerTitle>
+              <DrawerTitle>Search Community</DrawerTitle>
             </DrawerHeader>
             <div className='px-4 py-4'>
-              <CategoryAndSearch />
+              <CategoryAndSearch
+                destination='/community'
+                placeholder='Search community creations...'
+              />
             </div>
           </DrawerContent>
         </Drawer>
@@ -371,10 +384,13 @@ export function LandingNavbar() {
         <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
           <DialogContent className='max-w-2xl overflow-hidden p-0'>
             <DialogHeader className='border-b px-4 py-3'>
-              <DialogTitle>Search Inspirations</DialogTitle>
+              <DialogTitle>Search Community</DialogTitle>
             </DialogHeader>
             <div className='px-4 py-4'>
-              <CategoryAndSearch />
+              <CategoryAndSearch
+                destination='/community'
+                placeholder='Search community creations...'
+              />
             </div>
           </DialogContent>
         </Dialog>
