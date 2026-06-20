@@ -45,7 +45,14 @@ import type {
 import type { SocialPostStatus } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
-import { CalendarClock, Check, FileText, Loader2, Send, X } from "lucide-react";
+import {
+  AlertCircle,
+  CalendarClock,
+  Check,
+  FileText,
+  Send,
+  X,
+} from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 
 export const POST_PLATFORMS: IntegrationPlatform[] = [
@@ -76,6 +83,7 @@ export type PostEditorForm = {
   title: string;
   content: string;
   mediaUrl: string;
+  mediaType: string;
   platforms: IntegrationPlatform[];
   integrationIds: Partial<Record<IntegrationPlatform, string>>;
   status: SocialPostStatus;
@@ -86,6 +94,7 @@ export const EMPTY_POST_FORM: PostEditorForm = {
   title: "",
   content: "",
   mediaUrl: "",
+  mediaType: "",
   platforms: [],
   integrationIds: {},
   status: "draft",
@@ -115,6 +124,120 @@ type PostEditorDialogProps = {
   onSave: () => void;
 };
 
+type PlatformRule = {
+  summary: string;
+  contentMax?: number;
+  titleRequired?: boolean;
+  titleMax?: number;
+  media: "optional" | "required" | "image" | "video";
+  content: "optional" | "required" | "content-or-media";
+};
+
+const PLATFORM_RULES: Record<string, PlatformRule> = {
+  facebook: {
+    summary: "Caption, image, or video. At least one is required.",
+    media: "optional",
+    content: "content-or-media",
+  },
+  instagram: {
+    summary:
+      "Requires an image or video; the caption is optional (2,200 characters max).",
+    contentMax: 2200,
+    media: "required",
+    content: "optional",
+  },
+  threads: {
+    summary: "Caption, image, or video. Captions can be up to 500 characters.",
+    contentMax: 500,
+    media: "optional",
+    content: "content-or-media",
+  },
+  linkedin: {
+    summary: "Requires post text (3,000 characters max).",
+    contentMax: 3000,
+    media: "optional",
+    content: "required",
+  },
+  x: {
+    summary: "Requires post text (280 characters max).",
+    contentMax: 280,
+    media: "optional",
+    content: "required",
+  },
+  tiktok: {
+    summary: "Requires a video and a caption (2,200 characters max).",
+    contentMax: 2200,
+    media: "video",
+    content: "required",
+  },
+  youtube: {
+    summary:
+      "Requires a video and a title (100 characters max); the description is optional.",
+    titleRequired: true,
+    titleMax: 100,
+    media: "video",
+    content: "optional",
+  },
+  pinterest: {
+    summary: "Requires an image. Title is optional (100 characters max).",
+    titleMax: 100,
+    contentMax: 800,
+    media: "image",
+    content: "optional",
+  },
+};
+
+function inferMediaKind(mediaType: string, mediaUrl: string) {
+  if (mediaType.startsWith("image/")) return "image";
+  if (mediaType.startsWith("video/")) return "video";
+  const path = mediaUrl.split(/[?#]/)[0].toLowerCase();
+  if (/\.(mp4|mov|webm|m4v)$/.test(path)) return "video";
+  if (/\.(jpe?g|png|webp|gif|heic)$/.test(path)) return "image";
+  return "unknown";
+}
+
+export function getPostValidationErrors(form: PostEditorForm): string[] {
+  if (!form.platforms.length) return ["Choose at least one destination."];
+  const content = form.content.trim();
+  const title = form.title.trim();
+  const hasMedia = Boolean(form.mediaUrl.trim());
+  const mediaKind = inferMediaKind(form.mediaType, form.mediaUrl);
+  const errors = new Set<string>();
+
+  for (const platform of form.platforms) {
+    const label = POST_PLATFORM_LABELS[platform] || platform;
+    const rule = PLATFORM_RULES[platform];
+    if (!rule) continue;
+    if (rule.content === "required" && !content)
+      errors.add(`${label} requires a caption.`);
+    if (rule.content === "content-or-media" && !content && !hasMedia)
+      errors.add(`${label} requires a caption or media.`);
+    if (
+      (rule.media === "required" ||
+        rule.media === "image" ||
+        rule.media === "video") &&
+      !hasMedia
+    )
+      errors.add(
+        `${label} requires ${rule.media === "required" ? "an image or video" : `a ${rule.media}`}.`
+      );
+    if (hasMedia && rule.media === "image" && mediaKind === "video")
+      errors.add(`${label} requires an image, not a video.`);
+    if (hasMedia && rule.media === "video" && mediaKind === "image")
+      errors.add(`${label} requires a video, not an image.`);
+    if (rule.contentMax && content.length > rule.contentMax)
+      errors.add(
+        `${label} captions cannot exceed ${rule.contentMax.toLocaleString()} characters.`
+      );
+    if (rule.titleRequired && !title) errors.add(`${label} requires a title.`);
+    if (rule.titleMax && title.length > rule.titleMax)
+      errors.add(`${label} titles cannot exceed ${rule.titleMax} characters.`);
+  }
+  if (form.status === "scheduled" && !form.scheduledFor)
+    errors.add("Choose a publish time for a scheduled post.");
+  return [...errors];
+}
+
 export function PostEditorDialog({
   open,
   onOpenChange,
@@ -126,6 +249,7 @@ export function PostEditorDialog({
   onSave,
 }: PostEditorDialogProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const validationErrors = getPostValidationErrors(form);
 
   function togglePlatform(platform: IntegrationPlatform) {
     setForm((current) => ({
@@ -273,7 +397,10 @@ export function PostEditorDialog({
             htmlFor='post-title'
             className='text-xs font-medium text-zinc-300'
           >
-            Internal title
+            {form.platforms.includes("youtube") ||
+            form.platforms.includes("pinterest")
+              ? "Post title"
+              : "Internal title"}
           </Label>
           <Input
             id='post-title'
@@ -311,8 +438,36 @@ export function PostEditorDialog({
             onChange={(mediaUrl) =>
               setForm((current) => ({ ...current, mediaUrl }))
             }
+            onMediaTypeChange={(mediaType) =>
+              setForm((current) => ({ ...current, mediaType }))
+            }
           />
         </div>
+        {form.platforms.length > 0 && (
+          <div className='space-y-2 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3'>
+            {form.platforms.map((platform) => (
+              <p
+                key={platform}
+                className='flex gap-2 text-[11px] leading-4 text-zinc-400'
+              >
+                <span className='font-semibold text-zinc-200'>
+                  {POST_PLATFORM_LABELS[platform]}:
+                </span>
+                <span>{PLATFORM_RULES[platform]?.summary}</span>
+              </p>
+            ))}
+            {validationErrors.length > 0 && (
+              <div className='border-t border-white/[0.06] pt-2 text-[11px] text-amber-300'>
+                {validationErrors.map((error) => (
+                  <p key={error} className='flex gap-1.5'>
+                    <AlertCircle className='mt-0.5 h-3 w-3 shrink-0' />
+                    {error}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         <div className='grid gap-4 sm:grid-cols-2'>
           <div className='grid gap-2'>
             <Label className='text-zinc-300'>Status</Label>
@@ -365,12 +520,7 @@ export function PostEditorDialog({
       </Button>
       <Button
         className='rounded-md bg-indigo-600 px-5 font-medium text-white transition-all duration-200 hover:bg-indigo-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:opacity-50'
-        disabled={
-          !form.platforms.length ||
-          !form.content.trim() ||
-          (form.status === "scheduled" && !form.scheduledFor) ||
-          isSaving
-        }
+        disabled={validationErrors.length > 0 || isSaving}
         onClick={onSave}
       >
         {isSaving ? (

@@ -3,11 +3,11 @@
 import { ContactDetails } from "./_components/contact-details";
 import { NewConversationDialog } from "./_components/new-conversation-dialog";
 import {
-  FacebookBrand,
   GmailBrand,
   InstagramBrand,
   LinkedinBrand,
   MessengerBrand,
+  MicrosoftOutlookBrand,
   TelegramBrand,
   WhatsAppBrand,
   XBrand,
@@ -72,7 +72,6 @@ import {
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
   Archive,
-  ArrowUpDown,
   Check,
   CheckCheck,
   ChevronDown,
@@ -103,7 +102,6 @@ import { toast } from "sonner";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
 const INBOX_PLATFORMS = new Set<IntegrationPlatform>([
-  "facebook",
   "instagram",
   "linkedin",
   "x",
@@ -153,8 +151,6 @@ function PlatformIcon({
   switch (platform) {
     case "instagram":
       return <InstagramBrand className={className} />;
-    case "facebook":
-      return <FacebookBrand className={className} />;
     case "x":
     case "twitter":
       return <XBrand className={className} />;
@@ -162,8 +158,9 @@ function PlatformIcon({
       return <LinkedinBrand className={className} />;
     case "gmail":
     case "email":
-    case "outlook":
       return <GmailBrand className={className} />;
+    case "outlook":
+      return <MicrosoftOutlookBrand className={className} />;
     case "whatsapp":
       return <WhatsAppBrand className={className} />;
     case "messenger":
@@ -255,7 +252,6 @@ export default function InboxPage() {
     () =>
       accounts.filter((account) =>
         [
-          "facebook",
           "messenger",
           "instagram",
           "gmail",
@@ -408,38 +404,13 @@ export default function InboxPage() {
 
   return (
     <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100vh-8rem)] w-full flex-col gap-5 duration-500'>
-      <header className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
-        <div className='lg:pl-6'>
-          {/* <div className="mb-2 flex items-center gap-2 text-xs font-medium text-indigo-700 dark:text-indigo-400">
-            <span className="h-2 w-2 rounded-full bg-indigo-500" />
-            {accounts.length} connected {accounts.length === 1 ? "account" : "accounts"}
-          </div> */}
+      <header className='flex items-end lg:items-end justify-between'>
+        <div>
           <h1 className='text-foreground text-2xl font-bold tracking-tight'>
             Unified Inbox
           </h1>
-          {/* <p className='text-muted-foreground mt-1 text-sm'>
-            Read and respond across every connected brand channel.
-          </p> */}
         </div>
         <div className='flex flex-wrap gap-2'>
-          <Button
-            variant='outline'
-            className='rounded-md'
-            disabled={!unreadTotal || markAllMutation.isPending}
-            onClick={() =>
-              markAllMutation.mutate(undefined, {
-                onSuccess: () => toast.success("Everything is marked as read"),
-                onError: () => toast.error("Messages could not be updated"),
-              })
-            }
-          >
-            {markAllMutation.isPending ? (
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-            ) : (
-              <CheckCheck className='mr-2 h-4 w-4' />
-            )}
-            Mark all read
-          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button className='rounded-md bg-indigo-600 text-white hover:bg-indigo-700'>
@@ -489,6 +460,47 @@ export default function InboxPage() {
                   </DropdownMenuItem>
                 );
               })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant='outline'
+                size='icon'
+                className='rounded-md'
+                aria-label='Inbox settings'
+                title='Inbox settings'
+              >
+                <Settings className='h-4 w-4' />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end' className='w-52'>
+              <DropdownMenuLabel>Inbox settings</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                disabled={!unreadTotal || markAllMutation.isPending}
+                onSelect={() =>
+                  markAllMutation.mutate(undefined, {
+                    onSuccess: () =>
+                      toast.success("Everything is marked as read"),
+                    onError: () =>
+                      toast.error("Messages could not be updated"),
+                  })
+                }
+              >
+                {markAllMutation.isPending ? (
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                ) : (
+                  <CheckCheck className='mr-2 h-4 w-4' />
+                )}
+                Mark all read
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href='/integrations'>
+                  <Settings className='mr-2 h-4 w-4' />
+                  Manage integrations
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -601,17 +613,17 @@ export default function InboxPage() {
                     variant='outline'
                     size='icon'
                     className='relative h-10 w-10 shrink-0 rounded-xl'
-                    aria-label='Filter conversations'
-                    title='Conversation filter'
+                    aria-label='Conversation view options'
+                    title='View options'
                   >
                     <ListFilter className='h-4 w-4' />
-                    {status !== "all" && (
+                    {(status !== "all" || sort !== "newest") && (
                       <span className='absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-indigo-500' />
                     )}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='end' className='w-52'>
-                  <DropdownMenuLabel>Conversations</DropdownMenuLabel>
+                  <DropdownMenuLabel>Show conversations</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuRadioGroup
                     value={status || "all"}
@@ -632,25 +644,7 @@ export default function InboxPage() {
                       Snoozed
                     </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant='outline'
-                    size='icon'
-                    className='relative h-10 w-10 shrink-0 rounded-xl'
-                    aria-label='Sort conversations'
-                    title='Sort conversations'
-                  >
-                    <ArrowUpDown className='h-4 w-4' />
-                    {sort !== "newest" && (
-                      <span className='absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-indigo-500' />
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align='end' className='w-48'>
+                  <DropdownMenuSeparator />
                   <DropdownMenuLabel>Sort by</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuRadioGroup

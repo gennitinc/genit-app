@@ -147,6 +147,7 @@ const EMPTY_FORM = {
   title: "",
   content: "",
   mediaUrl: "",
+  mediaType: "",
   platforms: [] as IntegrationPlatform[],
   integrationIds: {} as Partial<Record<IntegrationPlatform, string>>,
   status: "draft" as SocialPostStatus,
@@ -823,6 +824,7 @@ export default function PostsPage() {
       title: post.title || "",
       content: post.content,
       mediaUrl: post.mediaUrl || "",
+      mediaType: post.mediaType || "",
       platforms: [post.platform],
       integrationIds: post.integration
         ? { [post.platform]: post.integration }

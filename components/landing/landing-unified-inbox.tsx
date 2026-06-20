@@ -1,10 +1,10 @@
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
-  FacebookBrand,
   GmailBrand,
   InstagramBrand,
   LinkedinBrand,
   MessengerBrand,
+  MicrosoftOutlookBrand,
   TelegramBrand,
   WhatsAppBrand,
   XBrand,
@@ -13,10 +13,10 @@ import Image from "next/image";
 
 const messagingPlatforms = [
   { name: "Instagram", Icon: InstagramBrand },
-  { name: "Facebook", Icon: FacebookBrand },
   { name: "X", Icon: XBrand },
   { name: "LinkedIn", Icon: LinkedinBrand },
   { name: "Gmail", Icon: GmailBrand },
+  { name: "Outlook", Icon: MicrosoftOutlookBrand },
   { name: "WhatsApp", Icon: WhatsAppBrand },
   { name: "Messenger", Icon: MessengerBrand },
   { name: "Telegram", Icon: TelegramBrand },

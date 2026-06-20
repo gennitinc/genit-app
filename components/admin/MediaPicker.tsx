@@ -25,6 +25,7 @@ export type MediaAsset = {
 type Props = {
   value: string;
   onChange: (url: string) => void;
+  onMediaTypeChange?: (mimeType: string) => void;
   onUploadingChange?: (uploading: boolean) => void;
   accept?: "image" | "media";
 };
@@ -32,6 +33,7 @@ type Props = {
 export function MediaPicker({
   value,
   onChange,
+  onMediaTypeChange,
   onUploadingChange,
   accept = "image",
 }: Props) {
@@ -74,6 +76,7 @@ export function MediaPicker({
         headers: { "Content-Type": "multipart/form-data" },
       });
       setSelectedMimeType(response.data.asset?.mimeType || file.type);
+      onMediaTypeChange?.(response.data.asset?.mimeType || file.type);
       onChange(response.data.url);
       setOpen(false);
       toast.success("Media uploaded to your library");
@@ -134,6 +137,7 @@ export function MediaPicker({
               aria-label='Remove selected media'
               onClick={() => {
                 setSelectedMimeType("");
+                onMediaTypeChange?.("");
                 onChange("");
               }}
               className='absolute top-2 right-2 rounded-full bg-black/70 p-1.5 text-white shadow-lg transition hover:bg-black'
@@ -199,6 +203,7 @@ export function MediaPicker({
                       type='button'
                       onClick={() => {
                         setSelectedMimeType(asset.mimeType);
+                        onMediaTypeChange?.(asset.mimeType);
                         onChange(asset.url);
                         setOpen(false);
                       }}

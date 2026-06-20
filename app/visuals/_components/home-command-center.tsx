@@ -200,6 +200,7 @@ export function HomeCommandCenter({
       title: post.title || "",
       content: post.content,
       mediaUrl: post.mediaUrl || "",
+      mediaType: "",
       platforms: [post.platform],
       integrationIds: post.integration
         ? { [post.platform]: post.integration }
