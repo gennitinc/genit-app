@@ -1,0 +1,28 @@
+{
+  "semi": true,
+  "singleQuote": false,
+  "trailingComma": "es5",
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "jsxSingleQuote": true,
+  "quoteProps": "as-needed",
+  "tabWidth": 2,
+  "printWidth": 80,
+  "useTabs": false,
+  "endOfLine": "lf",
+  "importOrderSortSpecifiers": true,
+  "importOrder": [
+    "^react$",
+    "^react-native$",
+    "^react-dom$",
+    "^react-intl$",
+    "^react-native-svg$",
+    "^react-native-svg-transformer$",
+    "^react-native-web$",
+    "^react-native-webview$"
+  ],
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss"
+  ]
+}

@@ -1,0 +1,7 @@
+node_modules
+.next
+.env
+bun.lock
+ios
+.git 
+.github
