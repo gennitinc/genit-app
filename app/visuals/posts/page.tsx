@@ -40,6 +40,7 @@ import {
   type IntegrationConnection,
   type IntegrationPlatform,
   deleteFacebookPost,
+  deleteThreadsPost,
   fetchFacebookInsights,
   fetchInstagramInsights,
   fetchPinterestPinAnalytics,
@@ -206,9 +207,7 @@ function PostMetrics({
         {compact(metrics.comments)}
       </span>
       {loading && (
-        <Loader2
-          className='h-3 w-3 animate-spin opacity-60'
-          aria-label='Refreshing post metrics'
+        <LoadingFileLoader size={12}
         />
       )}
     </div>
@@ -785,6 +784,12 @@ export default function PostsPage() {
         await deleteFacebookPost(post.integration, post.externalId);
         return;
       }
+      if (post.remote && post.platform === "threads") {
+        if (!post.integration || !post.externalId)
+          throw new Error("This Threads post is missing its account details.");
+        await deleteThreadsPost(post.integration, post.externalId);
+        return;
+      }
       await deleteSocialPost(post._id);
     },
     onSuccess: () => {
@@ -1013,7 +1018,7 @@ export default function PostsPage() {
               <Button
                 variant='outline'
                 size='icon'
-                className='rounded-full'
+                className='rounded-full border-none bg-transparent'
                 onClick={() => liveQuery.refetch()}
                 aria-label='Refresh live posts'
               >
@@ -1080,21 +1085,25 @@ export default function PostsPage() {
                 key={post._id}
                 className='group bg-background relative mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-2xl border border-black/5 align-top transition hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10'
               >
-                {(!post.remote || post.platform === "facebook") && (
+                {(!post.remote ||
+                  post.platform === "facebook" ||
+                  post.platform === "threads") && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button
-                        className='bg-background/90 absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full shadow-sm ring-1 ring-black/5 backdrop-blur dark:ring-white/10'
+                        className='absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-white/50 bg-white/55 text-zinc-800 shadow-[0_6px_20px_rgba(0,0,0,0.12)] backdrop-blur-xl transition hover:border-white/80 hover:bg-white/75 hover:shadow-[0_8px_24px_rgba(0,0,0,0.18)] dark:border-white/15 dark:bg-black/40 dark:text-white dark:hover:border-white/25 dark:hover:bg-black/55'
                         aria-label='Post actions'
                       >
                         <MoreHorizontal className='h-4 w-4' />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end' className='min-w-36'>
-                      <DropdownMenuItem onSelect={() => openEdit(post)}>
-                        <Edit3 className='h-3.5 w-3.5' />
-                        Edit
-                      </DropdownMenuItem>
+                      {(!post.remote || post.platform === "facebook") && (
+                        <DropdownMenuItem onSelect={() => openEdit(post)}>
+                          <Edit3 className='h-3.5 w-3.5' />
+                          Edit
+                        </DropdownMenuItem>
+                      )}
                       <DropdownMenuItem
                         onSelect={() => setDeleteTarget(post)}
                         className='text-red-600 focus:text-red-600'
@@ -1230,7 +1239,7 @@ export default function PostsPage() {
                 className='flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:opacity-50'
               >
                 {removeMutation.isPending ? (
-                  <Loader2 className='h-4 w-4 animate-spin' />
+                  <LoadingFileLoader />
                 ) : (
                   "Delete"
                 )}
@@ -1314,12 +1323,12 @@ export default function PostsPage() {
               <div className='space-y-4'>
                 {analyticsQuery.isLoading ? (
                   <div className='flex h-48 items-center justify-center'>
-                    <Loader2 className='h-5 w-5 animate-spin text-zinc-500' />
+                    <LoadingFileLoader />
                   </div>
                 ) : (
                   <>
                     {analyticsQuery.isError && (
-                      <div className='rounded-lg bg-amber-500/10 p-2.5 text-[11px] text-amber-300'>
+                      <div className='rounded-lg p-2.5 text-[11px] text-foreground/30'>
                         Live analytics could not be refreshed. Showing the latest
                         metrics supplied by the platform.
                       </div>
@@ -1411,7 +1420,7 @@ export default function PostsPage() {
             <Button
               variant='outline'
               onClick={() => analyticsQuery.refetch()}
-              className='rounded-md border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800 hover:text-white'
+              className='rounded-md border-none bg-transparent hover:text-white'
             >
               <RefreshCw className='h-4 w-4' />
               Refresh
