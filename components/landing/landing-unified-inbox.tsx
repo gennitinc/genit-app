@@ -1,5 +1,26 @@
 import { GradientFrame } from "@/utils/gradient-frame";
+import {
+  FacebookBrand,
+  GmailBrand,
+  InstagramBrand,
+  LinkedinBrand,
+  MessengerBrand,
+  TelegramBrand,
+  WhatsAppBrand,
+  XBrand,
+} from "@/app/(auth)/onboarding/_components/social-icons";
 import Image from "next/image";
+
+const messagingPlatforms = [
+  { name: "Instagram", Icon: InstagramBrand },
+  { name: "Facebook", Icon: FacebookBrand },
+  { name: "X", Icon: XBrand },
+  { name: "LinkedIn", Icon: LinkedinBrand },
+  { name: "Gmail", Icon: GmailBrand },
+  { name: "WhatsApp", Icon: WhatsAppBrand },
+  { name: "Messenger", Icon: MessengerBrand },
+  { name: "Telegram", Icon: TelegramBrand },
+];
 
 const LandingUnifiedInbox = () => {
   return (
@@ -11,6 +32,20 @@ const LandingUnifiedInbox = () => {
       <p className='text-muted-foreground mx-auto mt-5 max-w-2xl text-center text-base font-normal md:text-lg dark:text-white/70'>
         Bring all your DMs together, reply to all and never miss a conversation
       </p>
+      <div
+        className='mt-7 flex items-center justify-center -space-x-2.5'
+        aria-label='Supported messaging platforms'
+      >
+        {messagingPlatforms.map(({ name, Icon }) => (
+          <span
+            key={name}
+            title={name}
+            className='flex size-10 items-center justify-center rounded-full border border-zinc-200 bg-white p-2 shadow-sm ring-2 ring-white dark:border-zinc-700 dark:bg-zinc-900 dark:ring-zinc-950'
+          >
+            <Icon className='size-full' />
+          </span>
+        ))}
+      </div>
 
       {/* Unified inbox dashboard preview */}
       <div className='relative mx-auto mt-12 max-w-5xl overflow-hidden rounded-[2rem] bg-white p-2 shadow-2xl shadow-black/10 ring-1 ring-black/5 md:p-4 dark:bg-zinc-950/50 dark:shadow-black/30 dark:ring-white/10'>
