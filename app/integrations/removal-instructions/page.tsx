@@ -345,9 +345,9 @@ export default function RemovalInstructionsPage() {
               Email{" "}
               <a
                 className={LINK_CLASS}
-                href='mailto:support@trygenit.com?subject=Data%20deletion%20request'
+                href='mailto:team@trygenit.com?subject=Data%20deletion%20request'
               >
-                support@trygenit.com
+                team@trygenit.com
               </a>{" "}
               from the email address associated with your genit account.
             </li>
@@ -379,8 +379,8 @@ export default function RemovalInstructionsPage() {
             If anything in these steps doesn&apos;t work for you, or if you
             can&apos;t find the genit entry in the third-party platform&apos;s
             settings, please reach us at{" "}
-            <a className={LINK_CLASS} href='mailto:support@trygenit.com'>
-              support@trygenit.com
+            <a className={LINK_CLASS} href='mailto:team@trygenit.com'>
+              team@trygenit.com
             </a>{" "}
             and we&apos;ll help you complete the removal manually.
           </p>

@@ -239,7 +239,7 @@ export default function RootLayout({
                 contactPoint: {
                   "@type": "ContactPoint",
                   contactType: "customer service",
-                  email: "support@trygenit.com",
+                  email: "team@trygenit.com",
                   availableLanguage: "English",
                 },
               },

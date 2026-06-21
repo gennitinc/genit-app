@@ -615,9 +615,9 @@ export default function About2() {
               immediately by contacting{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@trygenit.com'
+                href='mailto:team@trygenit.com'
               >
-                support@trygenit.com
+                team@trygenit.com
               </a>
               .
             </p>
@@ -934,9 +934,9 @@ export default function About2() {
               via email to{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@trygenit.com'
+                href='mailto:team@trygenit.com'
               >
-                support@trygenit.com
+                team@trygenit.com
               </a>
               , with the subject line: "Copyright Infringement" and include in
               your claim a detailed description of the alleged Infringement as
@@ -1003,9 +1003,9 @@ export default function About2() {
               email at{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@trygenit.com'
+                href='mailto:team@trygenit.com'
               >
-                support@trygenit.com
+                team@trygenit.com
               </a>
             </p>
             <h2
@@ -1039,9 +1039,9 @@ export default function About2() {
               You may provide us either directly at{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@trygenit.com'
+                href='mailto:team@trygenit.com'
               >
-                support@trygenit.com
+                team@trygenit.com
               </a>{" "}
               or via third party sites and tools with information and feedback
               concerning errors, suggestions for improvements, ideas, problems,
@@ -1567,9 +1567,9 @@ export default function About2() {
               support: By email:{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:support@trygenit.com'
+                href='mailto:team@trygenit.com'
               >
-                support@trygenit.com
+                team@trygenit.com
               </a>
               .
             </p>
