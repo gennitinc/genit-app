@@ -37,6 +37,7 @@ import {
   Megaphone,
   Search,
   TrendingUp,
+  MoreHorizontal,
 } from "lucide-react";
 import {
   type CSSProperties,
@@ -330,159 +331,72 @@ export function resolveStatus(
   return integration.baseStatus;
 }
 
-function ConnectButton({
-  status,
-  name,
-  onConnect,
-  onManage,
-}: {
-  status: CardStatus;
-  name: string;
-  onConnect: () => void;
-  onManage: () => void;
-}) {
-  if (status === "connected") {
-    return (
-      <button
-        type='button'
-        aria-label={`Manage ${name} connection`}
-        onClick={onManage}
-        className='inline-flex items-center gap-1 rounded-md bg-linear-to-r from-emerald-500 to-teal-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-emerald-300 focus:outline-none dark:focus:ring-emerald-800'
-      >
-        <Cog className='size-4' />
-        Manage
-      </button>
-    );
-  }
-  if (status === "partial") {
-    return (
-      <button
-        type='button'
-        aria-label={`Manage ${name} Meta access`}
-        onClick={onManage}
-        className='inline-flex items-center gap-1 rounded-md bg-linear-to-r from-amber-500 to-orange-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:ring-amber-300 focus:outline-none dark:focus:ring-amber-800'
-      >
-        <Cog className='size-4' />
-        Manage
-      </button>
-    );
-  }
-  const isSoon = status === "soon";
-  return (
-    <button
-      type='button'
-      disabled={isSoon}
-      aria-label={isSoon ? `${name} is coming soon` : `Connect ${name}`}
-      title={isSoon ? `${name} is coming soon` : undefined}
-      onClick={isSoon ? undefined : onConnect}
-      className={
-        isSoon
-          ? "border-border bg-card/40 text-muted-foreground inline-flex cursor-not-allowed items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-medium opacity-60 dark:border-white/5 dark:bg-white/[0.02] dark:text-zinc-500"
-          : "focus:ring-primary/30 dark:focus:ring-primary/40 inline-flex items-center gap-1 rounded-md bg-linear-to-r from-cyan-500 to-blue-500 px-2.5 py-1 text-xs font-medium text-white transition-all hover:bg-linear-to-bl focus:ring-4 focus:outline-none"
-      }
-    >
-      Connect
-      <ArrowRight className='h-3 w-3' />
-    </button>
-  );
-}
-
-function StatusBadge({
-  status,
-  count,
-}: {
-  status: CardStatus;
-  count?: number;
-}) {
-  if (status === "connected") {
-    return (
-      <span className='bg-background inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300'>
-        <CheckCircle2 className='h-3 w-3' />
-        {count && count > 1 ? `Connected · ${count}` : "Connected"}
-      </span>
-    );
-  }
-  if (status === "partial") {
-    return (
-      <span className='bg-background inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
-        <AlertTriangle className='h-3 w-3' />
-        Needs setup
-      </span>
-    );
-  }
-  if (status === "soon") {
-    return (
-      <span className='bg-background inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
-        Coming soon
-      </span>
-    );
-  }
-  return (
-    <span className='bg-background inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
-      Available
-    </span>
-  );
-}
-
 function IntegrationCard({
   integration,
   status,
-  connectionCount,
   onConnect,
   onManage,
 }: {
   integration: Integration;
   status: CardStatus;
-  connectionCount: number;
   onConnect: () => void;
   onManage: () => void;
 }) {
   const Icon = integration.icon;
   return (
-    <div className='integration-card relative z-10 rounded-md p-px [background:radial-gradient(circle_230px_at_0%_0%,rgba(0,0,0,0.08),#ffffff)] dark:[background:radial-gradient(circle_230px_at_0%_0%,rgba(113,113,122,0.4),#0c0d0d)]'>
-      <div
-        className='animated-dot absolute z-2 h-[5px] w-[5px] rounded-full bg-zinc-500 dark:bg-zinc-400'
-        style={{
-          boxShadow: `${integration.glow} 0px 0px 10px`,
-          right: "10%",
-          top: "10%",
-          animation: "6s linear 0s infinite normal none paused moveDot",
-        }}
-      />
-      <div className='group border-border relative z-1 h-full rounded-md border bg-white px-9 py-7 backdrop-blur transition-all duration-300 [background:radial-gradient(circle_280px_at_0%_0%,rgba(0,0,0,0.04),#ffffff)] hover:[background:radial-gradient(circle_280px_at_0%_0%,rgba(0,0,0,0.06),#ffffff)] dark:border-[#202222] dark:bg-white/5 dark:[background:radial-gradient(circle_280px_at_0%_0%,rgba(68,68,68,0.3),#0c0d0d)] dark:hover:bg-white/10'>
-        <div
-          className='absolute top-0 left-0 z-10 h-[45px] w-[220px] rounded-full opacity-30 blur-[10px] dark:opacity-40'
-          style={{
-            backgroundColor: "rgba(113, 113, 122, 0.3)",
-            boxShadow: "0 0 50px rgba(113, 113, 122, 0.5)",
-            transform: "rotate(40deg)",
-            transformOrigin: "10%",
-          }}
-        />
-        <div className='relative z-10 flex items-start justify-between'>
-          <div className='flex h-12 w-12 items-center justify-center rounded-xl'>
-            <Icon className='h-6 w-6 text-slate-700 dark:text-slate-300' />
+    <div className="flex items-center justify-between py-4 group border-b border-zinc-100/40 dark:border-zinc-900/50 last:border-b-0">
+      <div className="flex items-center min-w-0 flex-1">
+        {/* Brand Icon wrapper */}
+        <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-2xl bg-zinc-50 border border-zinc-200/60 dark:bg-zinc-950 dark:border-zinc-800/80 shadow-xs">
+          <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-zinc-800 dark:text-zinc-200" />
+        </div>
+
+        {/* Text Area */}
+        <div className="flex-1 min-w-0 pl-4 pr-3 flex flex-col justify-center">
+          <div className="flex items-center gap-1.5">
+            <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 text-sm sm:text-base tracking-tight truncate">
+              {integration.name}
+            </h3>
+            {status === "partial" && (
+              <span className="inline-flex items-center text-amber-500" title="Setup incomplete">
+                <AlertTriangle className="h-3.5 w-3.5" />
+              </span>
+            )}
           </div>
-          <StatusBadge status={status} count={connectionCount} />
+          <p className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm line-clamp-2 leading-snug mt-0.5">
+            {integration.description}
+          </p>
         </div>
-        <h3 className='text-foreground relative z-10 mt-4 text-lg font-semibold tracking-tight'>
-          {integration.name}
-        </h3>
-        <p className='text-muted-foreground relative z-10 mt-1 text-sm'>
-          {integration.description}
-        </p>
-        <div className='relative z-10 mt-4 flex items-center justify-between gap-2'>
-          <span className='border-border bg-card/60 text-muted-foreground inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs ring-1 ring-transparent dark:border-transparent dark:bg-white/5 dark:text-zinc-400 dark:ring-white/10'>
-            {integration.category}
-          </span>
-          <ConnectButton
-            status={status}
-            name={integration.name}
-            onConnect={onConnect}
-            onManage={onManage}
-          />
-        </div>
-        <GradientFrame />
+      </div>
+
+      {/* Action Area */}
+      <div className="flex-shrink-0 ml-3">
+        {status === "soon" ? (
+          <button
+            type="button"
+            disabled
+            className="px-3 py-1 bg-zinc-100 dark:bg-zinc-900/40 text-zinc-400 dark:text-zinc-500 border border-zinc-200 dark:border-zinc-800 rounded-full text-xs font-semibold select-none cursor-not-allowed"
+          >
+            Soon
+          </button>
+        ) : status === "connected" || status === "partial" ? (
+          <button
+            type="button"
+            onClick={onManage}
+            className="p-2 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-full transition-all active:scale-95"
+            title={`Manage ${integration.name}`}
+          >
+            <MoreHorizontal className="h-5 w-5" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={onConnect}
+            className="px-3 py-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-900 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-800 rounded-full text-xs font-semibold transition-all active:scale-95"
+          >
+            Add
+          </button>
+        )}
       </div>
     </div>
   );
@@ -490,13 +404,30 @@ function IntegrationCard({
 
 export function IntegrationsExplorer() {
   const [query, setQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
   const { byPlatform, identityBySurface } = useIntegrations();
 
+  // Find all active/connected integrations to show in the "Added" bar
+  const connectedIntegrations = useMemo(() => {
+    return INTEGRATIONS.filter((integration) => {
+      const connections = byPlatform.get(integration.platform);
+      const hasIdentity = isMetaSurface(integration.platform)
+        ? identityBySurface.has(integration.platform)
+        : false;
+      const status = resolveStatus(integration, connections, hasIdentity);
+      return status === "connected" || status === "partial";
+    });
+  }, [byPlatform, identityBySurface]);
+
+  const categories = useMemo(() => ["All", ...CATEGORY_ORDER], []);
+
   const grouped = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const filtered = q
+    
+    // First query filter
+    let filtered = q
       ? INTEGRATIONS.filter(
           (i) =>
             i.name.toLowerCase().includes(q) ||
@@ -504,6 +435,11 @@ export function IntegrationsExplorer() {
             i.category.toLowerCase().includes(q)
         )
       : INTEGRATIONS;
+
+    // Second category tab filter
+    if (selectedCategory !== "All") {
+      filtered = filtered.filter((i) => i.category === selectedCategory);
+    }
 
     const byCategory = new Map<string, Integration[]>();
     for (const item of filtered) {
@@ -515,7 +451,7 @@ export function IntegrationsExplorer() {
     return CATEGORY_ORDER.filter((c) => byCategory.has(c)).map(
       (c) => [c, byCategory.get(c) as Integration[]] as const
     );
-  }, [query]);
+  }, [query, selectedCategory]);
 
   const manageConnections = manageFor
     ? (byPlatform.get(manageFor.platform) ?? [])
@@ -523,39 +459,123 @@ export function IntegrationsExplorer() {
 
   return (
     <>
-      <div className='mx-auto mb-12 max-w-md'>
-        <div className='relative'>
-          <Search className='text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+      {/* "Added" integrations section */}
+      {connectedIntegrations.length > 0 && (
+        <div className="mb-10">
+          <div className="flex justify-between items-baseline mb-4">
+            <h3 className="text-zinc-500 dark:text-zinc-400 font-semibold text-xs uppercase tracking-wider">Added</h3>
+            <button
+              type="button"
+              onClick={() => {
+                if (connectedIntegrations[0]) {
+                  setManageFor(connectedIntegrations[0]);
+                }
+              }}
+              className="text-xs text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300 transition-colors"
+            >
+              Manage
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {connectedIntegrations.map((integration) => {
+              const Icon = integration.icon;
+              return (
+                <button
+                  key={`added-${integration.platform}`}
+                  onClick={() => setManageFor(integration)}
+                  className="w-12 h-12 flex items-center justify-center rounded-2xl bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-950 dark:hover:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/80 transition-all active:scale-95 shadow-xs"
+                  title={`Manage ${integration.name}`}
+                >
+                  <Icon className="h-6 w-6 text-zinc-800 dark:text-zinc-200" />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Search and filter slider bar */}
+      <div className="flex gap-3 mb-8 items-center">
+        <div className="relative flex-1">
+          <Search className="text-zinc-400 pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
           <input
-            type='search'
+            type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder='Search integrations...'
-            className='border-border bg-card/60 text-foreground placeholder:text-muted-foreground w-full rounded-lg border py-2.5 pr-4 pl-10 text-sm backdrop-blur transition focus:ring-1 focus:ring-violet-500/40 focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:border-white/20'
+            placeholder="Search plugins and skills"
+            className="w-full rounded-full border border-zinc-200 bg-zinc-50/50 py-2.5 pr-4 pl-10 text-sm placeholder:text-zinc-400 text-zinc-900 focus:border-zinc-300 focus:outline-none dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-700/80 transition-colors shadow-xs"
           />
         </div>
+        <button
+          type="button"
+          onClick={() => {
+            setQuery("");
+            setSelectedCategory("All");
+          }}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50/50 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800 dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition-all active:scale-95 shadow-xs"
+          title="Clear search and filters"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-4 w-4"
+          >
+            <line x1="4" y1='21' x2='4' y2='14' />
+            <line x1='4' y1='10' x2='4' y2='3' />
+            <line x1='12' y1='21' x2='12' y2='12' />
+            <line x1='12' y1='8' x2='12' y2='3' />
+            <line x1='20' y1='21' x2='20' y2='16' />
+            <line x1='20' y1='12' x2='20' y2='3' />
+            <line x1='1' y1='14' x2='7' y2='14' />
+            <line x1='9' y1='8' x2='15' y2='8' />
+            <line x1='17' y1='16' x2='23' y2='16' />
+          </svg>
+        </button>
+      </div>
+
+      {/* Categories Tabs Bar */}
+      <div className="flex gap-2 overflow-x-auto pb-2 mb-8 no-scrollbar scroll-smooth">
+        {categories.map((cat) => {
+          const isActive = selectedCategory === cat;
+          const displayLabel = cat === "Ads Campaigns" ? "Ads" : cat === "Email Campaigns" ? "Email" : cat;
+          return (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 select-none whitespace-nowrap ${
+                isActive
+                  ? "bg-zinc-900 text-white dark:bg-zinc-800 dark:text-zinc-100"
+                  : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:text-zinc-200 dark:hover:bg-zinc-900/60"
+              }`}
+            >
+              {displayLabel}
+            </button>
+          );
+        })}
       </div>
 
       {grouped.length === 0 ? (
         <div className='py-16 text-center'>
-          <p className='text-muted-foreground text-sm'>
+          <p className='text-zinc-500 dark:text-zinc-400 text-sm'>
             No integrations match &ldquo;{query}&rdquo;.
           </p>
         </div>
       ) : (
-        <div className='space-y-16'>
+        <div className='space-y-12'>
           {grouped.map(([category, items]) => (
             <section key={category}>
-              <div className='mb-6 flex items-baseline gap-3'>
-                <h3 className='text-foreground text-xl font-semibold tracking-tight'>
+              <div className='mb-2 border-b border-zinc-100/80 dark:border-zinc-900/80 pb-3'>
+                <h3 className='text-zinc-900 dark:text-zinc-100 font-semibold tracking-tight text-sm uppercase tracking-wider'>
                   {category}
                 </h3>
-                <span className='text-muted-foreground text-xs'>
-                  {items.length}{" "}
-                  {items.length === 1 ? "integration" : "integrations"}
-                </span>
               </div>
-              <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-1'>
                 {items.map((integration) => {
                   const connections = byPlatform.get(integration.platform);
                   const hasIdentityForSurface = isMetaSurface(
@@ -573,7 +593,6 @@ export function IntegrationsExplorer() {
                       key={integration.name}
                       integration={integration}
                       status={status}
-                      connectionCount={connections?.length ?? 0}
                       onConnect={() => setConnectFor(integration)}
                       onManage={() => setManageFor(integration)}
                     />

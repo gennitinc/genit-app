@@ -32,19 +32,15 @@ export default function IntegrationsPage() {
           id='main-content'
           className='mr-2 ml-0 flex-1 rounded-t-2xl md:mr-4 lg:border-2 lg:border-b-0'
         >
-          <div className='mx-auto w-full max-w-6xl space-y-8 px-6 pb-16'>
+          <div className='mx-auto w-full max-w-4xl space-y-8 px-6 pb-16'>
             <section className='relative z-10'>
-              <div className='mr-auto ml-auto max-w-6xl pt-20 pr-4 pb-20 pl-4 sm:px-6 lg:px-8'>
-                <div className='mb-16 text-center'>
-                  <div className='border-border bg-card/60 text-muted-foreground mb-6 inline-flex items-center gap-2 rounded-md border px-3 py-1 text-xs font-medium backdrop-blur dark:border-white/10 dark:bg-white/5 dark:text-zinc-200'>
-                    <GitBranchPlus className='h-3.5 w-3.5 text-violet-500 dark:text-violet-300' />
-                    Tool kit connect
-                  </div>
-                  <h2 className='text-foreground text-3xl font-semibold tracking-tight sm:text-4xl'>
-                    Integrations your favorite tools
-                  </h2>
-                  <p className='text-muted-foreground mt-3 text-base'>
-                    Connect to the tools your brands already use every day
+              <div className='mr-auto ml-auto max-w-4xl pt-12 pr-4 pb-20 pl-4 sm:px-6 lg:px-8'>
+                <div className='mb-10 text-left'>
+                  <h1 className='text-foreground text-3xl font-bold tracking-tight sm:text-4xl'>
+                    Plugins
+                  </h1>
+                  <p className='text-zinc-500 dark:text-zinc-400 mt-2 text-sm sm:text-base'>
+                    Work with Gennit across your favorite tools
                   </p>
                 </div>
                 <IntegrationsExplorer />
@@ -83,17 +79,17 @@ export default function IntegrationsPage() {
                           <div className='flex h-12 w-12 items-center justify-center rounded-xl'>
                             <Code className='h-6 w-6 text-slate-700 dark:text-slate-300' />
                           </div>
-                          <span className='inline-flex items-center gap-1.5 rounded-md bg-zinc-500/10 px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
+                          {/* <span className='inline-flex items-center gap-1.5 rounded-md bg-zinc-500/10 px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
                             <Zap className='h-3 w-3' />
                             API - Coming Soon
-                          </span>
+                          </span> */}
                         </div>
                         <h3 className='text-foreground relative z-10 mt-4 text-lg font-semibold tracking-tight'>
                           Custom Integration
                         </h3>
                         <p className='text-muted-foreground relative z-10 mt-1 text-sm'>
                           Build your own integration with our REST API and
-                          webhooks. Full documentation included.
+                          webhooks.
                         </p>
                         <div className='relative z-10 mt-4 flex items-center gap-2'>
                           <a

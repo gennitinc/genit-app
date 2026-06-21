@@ -257,31 +257,29 @@ export default function VisualsHomePage() {
                   key={integration.name}
                   className='basis-full p-2 pl-[-5] sm:basis-1/2 lg:basis-1/4 xl:basis-1/4'
                 >
-                  <div className='group relative h-full w-full overflow-hidden rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
+                  <div className='group relative h-full w-full overflow-hidden rounded-2xl bg-zinc-50/50 border border-zinc-200/50 p-5 dark:bg-zinc-950/30 dark:border-zinc-900/60 transition-all hover:border-zinc-300 dark:hover:border-zinc-800 shadow-xs'>
                     <div className='relative z-10 flex h-full flex-col'>
                       <div className='flex items-start justify-between'>
-                        <div className='flex h-12 w-12 items-center justify-center rounded-xl bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10'>
+                        <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-zinc-50 border border-zinc-200/60 dark:bg-zinc-950 dark:border-zinc-800/80 shadow-xs">
                           <integration.icon
                             className={
                               integration.name === "Shopify"
                                 ? "h-6 w-6 text-[#95BF47]"
-                                : "h-6 w-6"
+                                : "h-6 w-6 text-zinc-800 dark:text-zinc-200"
                             }
                           />
                         </div>
                         <div
-                          className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium ${
+                          className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium border ${
                             status === "connected"
-                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                              ? "bg-emerald-50/5 border-emerald-50/20 text-emerald-600 dark:text-emerald-400"
                               : status === "partial"
-                                ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                                : status === "soon"
-                                  ? "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400"
-                                  : "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400"
+                                ? "bg-amber-50/5 border-amber-50/20 text-amber-600 dark:text-amber-400"
+                                : "bg-zinc-100 border-zinc-200 text-zinc-500 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-400"
                           }`}
                         >
                           <div
-                            className={`h-1.5 w-1.5 rounded-full ${
+                            className={`h-1 w-1 rounded-full ${
                               status === "connected"
                                 ? "bg-emerald-500"
                                 : status === "partial"
@@ -299,32 +297,37 @@ export default function VisualsHomePage() {
                         </div>
                       </div>
 
-                      <div className='mt-5'>
-                        <h4 className='text-foreground line-clamp-1 text-base font-semibold tracking-tight dark:text-white'>
+                      <div className='mt-5 flex-1'>
+                        <h4 className='text-zinc-900 dark:text-zinc-100 line-clamp-1 text-sm sm:text-base font-semibold tracking-tight'>
                           {integration.name}
                         </h4>
-                        <p className='text-muted-foreground mt-1 line-clamp-2 text-xs dark:text-white/60'>
+                        <p className='text-zinc-500 dark:text-zinc-400 mt-1 line-clamp-2 text-xs leading-normal'>
                           {integration.description}
                         </p>
                       </div>
 
-                      <div className='mt-auto flex w-full items-center gap-2 pt-6'>
+                      <div className='mt-auto pt-5 flex w-full items-center'>
                         {status === "connected" || status === "partial" ? (
-                          <Button
-                            variant='outline'
+                          <button
+                            type="button"
                             onClick={() => setManageFor(integration)}
-                            className='h-8 w-full border-black/10 bg-black/5 text-xs hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10'
+                            className="h-8 w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-900 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-800 rounded-full text-xs font-semibold transition-all active:scale-95"
                           >
                             Manage
-                          </Button>
+                          </button>
                         ) : (
-                          <Button
+                          <button
+                            type="button"
                             disabled={isSoon}
                             onClick={() => setConnectFor(integration)}
-                            className='h-8 w-full bg-indigo-600 text-xs text-white hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700'
+                            className={`h-8 w-full rounded-full text-xs font-semibold transition-all ${
+                              isSoon
+                                ? "bg-zinc-100 dark:bg-zinc-900/40 text-zinc-400 dark:text-zinc-500 border border-zinc-200 dark:border-zinc-800 cursor-not-allowed select-none"
+                                : "bg-zinc-900 hover:bg-black text-white dark:bg-zinc-850 dark:hover:bg-zinc-800 dark:text-zinc-200 border border-zinc-800 dark:border-zinc-700/60 active:scale-95"
+                            }`}
                           >
-                            Connect
-                          </Button>
+                            {isSoon ? "Soon" : "Add"}
+                          </button>
                         )}
                       </div>
                     </div>
