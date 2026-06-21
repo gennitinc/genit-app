@@ -99,10 +99,10 @@ import {
   Trash2,
   XCircle,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 
 const INBOX_PLATFORMS = new Set<IntegrationPlatform>([
   "instagram",
@@ -1463,19 +1463,16 @@ export default function InboxPage() {
             <div className='flex h-full flex-col items-center justify-center p-8 text-center'>
               <span className='mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-white shadow-sm ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10'>
                 <Image
-                src="/gennit2.png"
-                height="200"
-                width="200"
-                alt="logo"
-                className=""/>
+                  src='/gennit2.png'
+                  height='200'
+                  width='200'
+                  alt='logo'
+                  className=''
+                />
               </span>
-              <h2 className='text-lg font-semibold'>
-                Your conversations, in one place
+              <h2 className='text-muted-foreground text-lg font-medium'>
+                Multi Channel As One
               </h2>
-              <p className='text-muted-foreground mt-2 max-w-sm text-sm leading-6'>
-                Choose a conversation to read, reply, snooze, resolve, or delete
-                it.
-              </p>
             </div>
           )}
         </main>
