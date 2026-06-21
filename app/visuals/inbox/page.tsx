@@ -236,11 +236,21 @@ export default function InboxPage() {
     const mql = window.matchMedia("(min-width: 1024px)");
 
     const targets = () => ({
-      scrollContainer: document.querySelector(".scroll-container") as HTMLElement | null,
-      mainContent: document.querySelector("#main-content") as HTMLElement | null,
-      mainContentChild: document.querySelector("#main-content > div") as HTMLElement | null,
-      mainContentFlex: document.querySelector("#main-content > div > div") as HTMLElement | null,
-      childrenWrapper: document.querySelector("#main-content > div > div > div:last-child") as HTMLElement | null,
+      scrollContainer: document.querySelector(
+        ".scroll-container"
+      ) as HTMLElement | null,
+      mainContent: document.querySelector(
+        "#main-content"
+      ) as HTMLElement | null,
+      mainContentChild: document.querySelector(
+        "#main-content > div"
+      ) as HTMLElement | null,
+      mainContentFlex: document.querySelector(
+        "#main-content > div > div"
+      ) as HTMLElement | null,
+      childrenWrapper: document.querySelector(
+        "#main-content > div > div > div:last-child"
+      ) as HTMLElement | null,
     });
 
     const apply = () => {
@@ -248,31 +258,72 @@ export default function InboxPage() {
       const t = targets();
       if (t.scrollContainer) t.scrollContainer.style.overflow = "hidden";
       if (t.mainContent) {
-        Object.assign(t.mainContent.style, { height: "calc(100vh - 4rem)", display: "flex", flexDirection: "column", overflow: "hidden" });
+        Object.assign(t.mainContent.style, {
+          height: "calc(100vh - 4rem)",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        });
       }
       if (t.mainContentChild) {
-        Object.assign(t.mainContentChild.style, { height: "100%", display: "flex", flexDirection: "column", paddingBottom: "0" });
+        Object.assign(t.mainContentChild.style, {
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          paddingBottom: "0",
+        });
       }
       if (t.mainContentFlex) {
-        Object.assign(t.mainContentFlex.style, { height: "100%", minHeight: "0" });
+        Object.assign(t.mainContentFlex.style, {
+          height: "100%",
+          minHeight: "0",
+        });
       }
       if (t.childrenWrapper) {
-        Object.assign(t.childrenWrapper.style, { height: "100%", display: "flex", flexDirection: "column", overflow: "hidden", minHeight: "0" });
+        Object.assign(t.childrenWrapper.style, {
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          minHeight: "0",
+        });
       }
     };
 
     const remove = () => {
       const t = targets();
       if (t.scrollContainer) t.scrollContainer.style.overflow = "";
-      if (t.mainContent) { t.mainContent.style.height = ""; t.mainContent.style.display = ""; t.mainContent.style.flexDirection = ""; t.mainContent.style.overflow = ""; }
-      if (t.mainContentChild) { t.mainContentChild.style.height = ""; t.mainContentChild.style.display = ""; t.mainContentChild.style.flexDirection = ""; t.mainContentChild.style.paddingBottom = ""; }
-      if (t.mainContentFlex) { t.mainContentFlex.style.height = ""; t.mainContentFlex.style.minHeight = ""; }
-      if (t.childrenWrapper) { t.childrenWrapper.style.height = ""; t.childrenWrapper.style.display = ""; t.childrenWrapper.style.flexDirection = ""; t.childrenWrapper.style.overflow = ""; t.childrenWrapper.style.minHeight = ""; }
+      if (t.mainContent) {
+        t.mainContent.style.height = "";
+        t.mainContent.style.display = "";
+        t.mainContent.style.flexDirection = "";
+        t.mainContent.style.overflow = "";
+      }
+      if (t.mainContentChild) {
+        t.mainContentChild.style.height = "";
+        t.mainContentChild.style.display = "";
+        t.mainContentChild.style.flexDirection = "";
+        t.mainContentChild.style.paddingBottom = "";
+      }
+      if (t.mainContentFlex) {
+        t.mainContentFlex.style.height = "";
+        t.mainContentFlex.style.minHeight = "";
+      }
+      if (t.childrenWrapper) {
+        t.childrenWrapper.style.height = "";
+        t.childrenWrapper.style.display = "";
+        t.childrenWrapper.style.flexDirection = "";
+        t.childrenWrapper.style.overflow = "";
+        t.childrenWrapper.style.minHeight = "";
+      }
     };
 
     apply();
     mql.addEventListener("change", apply);
-    return () => { mql.removeEventListener("change", apply); remove(); };
+    return () => {
+      mql.removeEventListener("change", apply);
+      remove();
+    };
   }, []);
 
   const {
@@ -548,7 +599,10 @@ export default function InboxPage() {
   };
 
   return (
-    <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100vh-8rem)] w-full flex-col gap-5 duration-500' style={{ height: '100%', minHeight: 0, gap: '1rem', overflow: 'hidden' }}>
+    <div
+      className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100vh-8rem)] w-full flex-col gap-5 duration-500'
+      style={{ height: "100%", minHeight: 0, gap: "1rem", overflow: "hidden" }}
+    >
       <header className='flex items-end justify-between lg:items-end'>
         <div>
           <h1 className='text-foreground text-2xl font-bold tracking-tight'>
@@ -672,7 +726,7 @@ export default function InboxPage() {
         <aside
           className={`${activeId ? "hidden lg:flex" : "flex"} min-h-0 flex-col border-r border-black/5 dark:border-white/10`}
         >
-          <div className='border-b border-black/5 p-4 dark:border-white/10'>
+          <div className='border-b border-black/5 px-4 py-2 dark:border-white/10'>
             <div className='flex items-center gap-2'>
               <div className='relative min-w-0 flex-1'>
                 <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
@@ -922,8 +976,8 @@ export default function InboxPage() {
         >
           {activeConversation ? (
             <>
-              <div className='flex h-16 shrink-0 items-center justify-between gap-3 border-b border-black/5 bg-white/80 px-4 backdrop-blur sm:px-6 dark:border-white/10 dark:bg-zinc-950/80'>
-                <div className='flex min-w-0 items-center gap-3'>
+              <div className='flex h-14 shrink-0 items-center justify-between gap-3 border-b border-black/5 bg-white/80 px-4 backdrop-blur sm:px-6 dark:border-white/10 dark:bg-zinc-950/80'>
+                <div className='flex min-w-0 items-center gap-2'>
                   <Button
                     variant='ghost'
                     size='icon'
@@ -944,21 +998,23 @@ export default function InboxPage() {
                     </span>
                   )}
                   <div className='min-w-0'>
-                    <h2 className='truncate text-sm font-semibold'>
-                      {activeConversation.customerName}
-                    </h2>
-                    <p className='text-muted-foreground flex items-center gap-1.5 truncate text-xs'>
-                      <PlatformIcon
-                        platform={activeConversation.platform}
-                        className='h-3 w-3'
-                      />
-                      {PLATFORM_LABELS[activeConversation.platform]}
-                      {activeConversation.customerHandle
-                        ? ` · ${activeConversation.customerHandle}`
-                        : ""}
-                    </p>
+                    <div className='flex flex-row items-center gap-2'>
+                      <h2 className='truncate text-sm font-semibold'>
+                        {activeConversation.customerName}
+                      </h2>
+                      <p className='text-muted-foreground flex items-center gap-1.5 truncate text-xs'>
+                        <PlatformIcon
+                          platform={activeConversation.platform}
+                          className='h-3 w-3'
+                        />
+                        {PLATFORM_LABELS[activeConversation.platform]}
+                        {activeConversation.customerHandle
+                          ? ` · ${activeConversation.customerHandle}`
+                          : ""}
+                      </p>
+                    </div>
                     {activeConversation.subject && (
-                      <p className='text-muted-foreground mt-0.5 truncate text-xs'>
+                      <p className='text-muted-foreground mt-0.5 line-clamp-1 truncate text-xs'>
                         {activeConversation.subject}
                       </p>
                     )}
@@ -1227,7 +1283,7 @@ export default function InboxPage() {
                 )}
               </div>
 
-              <div className='border-t border-black/5 bg-white p-4 shrink-0 dark:border-white/10 dark:bg-zinc-950'>
+              <div className='shrink-0 border-t border-black/5 bg-white p-4 dark:border-white/10 dark:bg-zinc-950'>
                 {activeConversation.status === "resolved" ? (
                   <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
                     <Check className='h-4 w-4' />
