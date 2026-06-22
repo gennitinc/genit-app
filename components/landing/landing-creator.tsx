@@ -17,7 +17,7 @@ const LandingCreator = () => {
 
         <Link
           href='/creators-program'
-          className='text-muted-foreground mx-auto flex w-fit max-w-2xl items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-base shadow-lg shadow-black/5 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:bg-white/20 md:text-base dark:bg-white/5 dark:hover:bg-white/10'
+          className='text-muted-foreground mx-auto flex w-fit max-w-2xl items-center justify-center gap-2 rounded-full border border-gray-200 dark:border-gray-800 bg-white/10 px-6 py-2 text-base shadow-lg shadow-black/5 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:bg-white/20 md:text-base dark:bg-white/5 dark:hover:bg-white/10'
         >
           <span>Get Started</span>
           <ArrowRightIcon className='h-4 w-4' />

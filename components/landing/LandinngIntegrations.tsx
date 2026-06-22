@@ -29,8 +29,10 @@ import {
   Target,
   UserPlus,
   Workflow,
+  ArrowRight,
 } from "lucide-react";
 import React from "react";
+import Link from "next/link";
 
 const TEAM_MEMBERS = [
   "https://i.pinimg.com/736x/a0/cb/f8/a0cbf895e3e033b27a823ef8bb5b6a31.jpg",
@@ -50,6 +52,17 @@ const LandinngIntegrations = () => {
         From content creation and scheduling to ads and analytics, Genit
         streamlines your entire workflow.
       </p>
+
+         {/* Call to Action */}
+      <div className="flex justify-center mb-12 mt-12">
+        <Link
+          href="/signup"
+          className="relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all duration-200 active:scale-95 shadow-md"
+        >
+          <span>Connect your stack</span>
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
 
       {/* Grid */}
       <div className='mt-12 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2'>
@@ -729,6 +742,8 @@ const LandinngIntegrations = () => {
           </div>
         </section>
       </div>
+
+   
     </section>
   );
 };

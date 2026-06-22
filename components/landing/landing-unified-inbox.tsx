@@ -10,6 +10,8 @@ import {
   XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const messagingPlatforms = [
   { name: "Instagram", Icon: InstagramBrand },
@@ -32,6 +34,16 @@ const LandingUnifiedInbox = () => {
       <p className='text-muted-foreground mx-auto mt-5 max-w-2xl text-center text-base font-normal md:text-lg dark:text-white/70'>
         Bring all your DMs together, reply to all and never miss a conversation
       </p>
+
+        <div className="flex justify-center mt-8 mb-12">
+        <Link
+          href="/signup"
+          className="relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all duration-200 active:scale-95 shadow-md"
+        >
+          <span>Get your unified inbox</span>
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
       <div
         className='mt-7 flex items-center justify-center -space-x-2.5'
         aria-label='Supported messaging platforms'
@@ -70,6 +82,9 @@ const LandingUnifiedInbox = () => {
           />
         </div>
       </div>
+
+      {/* Call to Action */}
+    
     </section>
   );
 };

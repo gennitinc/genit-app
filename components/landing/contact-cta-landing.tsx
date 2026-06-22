@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const ContactCtaLanding = () => {
   return (
@@ -83,7 +84,7 @@ const ContactCtaLanding = () => {
         {/* Hero/main left-side content */}
         <div className='p-8 md:col-span-2 md:p-14'>
           <h2 className='text-left text-xl font-medium tracking-tight text-neutral-500 md:text-3xl dark:text-neutral-200'>
-            Ready to create stunning AI-generated images and videos?{" "}
+            Ready to up you brand Marketing?{" "} <br />
             <span className='font-bold text-black dark:text-white'>
               Get started today
             </span>
@@ -96,9 +97,9 @@ const ContactCtaLanding = () => {
           </p>
           <div className='flex flex-col items-start sm:flex-row sm:items-center sm:gap-4'>
             <div className='mt-6 flex justify-center'>
-              <a className='group relative z-20 flex h-10 w-full cursor-pointer items-center justify-center space-x-2 rounded-lg bg-black p-px px-4 py-2 text-center text-sm font-semibold text-white no-underline transition duration-200 sm:w-44 dark:bg-white dark:text-black'>
+              <Link href='/signup' className='group relative z-20 flex h-10 w-full cursor-pointer items-center justify-center space-x-2 rounded-lg bg-black p-px px-4 py-2 text-center text-sm font-semibold text-white no-underline transition duration-200 sm:w-44 dark:bg-white dark:text-black'>
                 Start creating
-              </a>
+              </Link>
             </div>
           </div>
         </div>

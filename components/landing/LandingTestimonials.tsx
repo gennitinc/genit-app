@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const testimonials = [
   {
@@ -157,6 +159,17 @@ const LandingTestimonials = () => {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Call to Action */}
+      <div className="flex justify-center mt-12">
+        <Link
+          href="/signup"
+          className="relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all duration-200 active:scale-95 shadow-md"
+        >
+          <span>Start for free today</span>
+          <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
     </div>
   );

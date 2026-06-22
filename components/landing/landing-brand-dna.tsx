@@ -1,5 +1,6 @@
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
+  ArrowRight,
   CheckCircle2,
   Fingerprint,
   Globe,
@@ -10,13 +11,14 @@ import {
   Wand2,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export const LandingBrandDNA = () => {
   return (
     <section className='relative mr-auto ml-auto max-w-6xl px-2 py-16 pb-20 md:px-6 md:pt-10'>
       {/* Header */}
-      <div className='relative z-10 mb-16 flex flex-col items-center'>
+      <div className='relative z-10 mb-6 flex flex-col items-center'>
         <h2 className='text-foreground mt-6 text-center text-4xl font-semibold tracking-tight md:text-6xl dark:text-white'>
           One URL - Full Brand DNA.
         </h2>
@@ -24,6 +26,16 @@ export const LandingBrandDNA = () => {
           Just paste your website and our AI instantly extracts your visual
           identity, tone of voice, and core assets in seconds.
         </p>
+      </div>
+
+      <div className='mb-8 flex justify-center'>
+        <Link
+          href='/signup'
+          className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
+        >
+          <span>Scan your brand now</span>
+          <ArrowRight className='h-4 w-4' />
+        </Link>
       </div>
 
       {/* Central Interactive Window */}
@@ -233,6 +245,8 @@ export const LandingBrandDNA = () => {
           </div>
         </div>
       </div>
+
+      {/* Call to Action */}
     </section>
   );
 };
