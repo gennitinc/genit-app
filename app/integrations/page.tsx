@@ -37,7 +37,7 @@ export default function IntegrationsPage() {
               <div className='mr-auto ml-auto max-w-4xl pt-12 pr-4 pb-20 pl-4 sm:px-6 lg:px-8'>
                 <div className='mb-10 text-left'>
                   <h1 className='text-foreground text-3xl font-bold tracking-tight sm:text-4xl'>
-                    Plugins
+                    Integration
                   </h1>
                   <p className='text-zinc-500 dark:text-zinc-400 mt-2 text-sm sm:text-base'>
                     Work with Gennit across your favorite tools
