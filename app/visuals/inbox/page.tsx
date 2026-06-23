@@ -103,6 +103,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 const INBOX_PLATFORMS = new Set<IntegrationPlatform>([
   "instagram",
@@ -1360,7 +1361,7 @@ export default function InboxPage() {
                           ? 280
                           : undefined
                       }
-                      className='min-h-20 w-full resize-none bg-transparent px-4 py-3 text-sm outline-none'
+                      className='min-h-20 w-full resize-none bg-transparent px-2 py-2 text-sm outline-none'
                     />
                     <div className='flex items-center justify-between gap-2 px-3 pb-3'>
                       <div className='relative flex items-center gap-1'>
@@ -1438,7 +1439,7 @@ export default function InboxPage() {
                           AI Write
                         </Button>
                       </div>
-                      <Button
+                      {/* <Button
                         size='icon'
                         onClick={sendReply}
                         disabled={
@@ -1453,7 +1454,49 @@ export default function InboxPage() {
                         ) : (
                           <Send className='h-4 w-4' />
                         )}
-                      </Button>
+                      </Button> */}
+                      <button
+                        type='submit'
+                        onClick={sendReply}
+                        disabled={
+                          (!reply.trim() && attachments.length === 0) ||
+                          sendMutation.isPending ||
+                          isUploading
+                        }
+                        className='relative cursor-pointer rounded-[10px] bg-[linear-gradient(to_top,#292929,#555555,#292929)] p-[2px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)] transition-all duration-150 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50'
+                      >
+                        {/* Border effects behind content */}
+                        <div className='absolute inset-0 overflow-hidden rounded-[10px]'>
+                          <BorderBeam
+                            duration={6}
+                            size={40}
+                            className='from-transparent via-red-500 to-transparent'
+                          />
+                          <BorderBeam
+                            duration={6}
+                            delay={10}
+                            size={40}
+                            borderWidth={2}
+                            className='from-transparent via-blue-500 to-transparent'
+                          />
+                        </div>
+
+                        {/* Button content */}
+                        <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
+                          {sendMutation.isPending || isUploading ? (
+                            <Loader2 className='h-4 w-4 animate-spin text-white' />
+                          ) : (
+                            <svg
+                              className='h-4 w-4 text-white'
+                              viewBox='0 0 512 512'
+                              fill='currentColor'
+                              xmlns='http://www.w3.org/2000/svg'
+                            >
+                              <path d='M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05' />
+                            </svg>
+                          )}
+                        </div>
+                      </button>
                     </div>
                   </div>
                 )}
