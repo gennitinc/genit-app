@@ -21,7 +21,7 @@ export function LandingVoiceClone() {
           href="/signup"
           className="relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all duration-200 active:scale-95 shadow-md"
         >
-          <span>Try Voice Cloning</span>
+          <span>Voice your prompt</span>
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
