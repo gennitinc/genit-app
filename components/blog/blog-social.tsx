@@ -47,11 +47,11 @@ export function BlogSocial({
 
   useEffect(() => {
     // Generate a unique visitor ID for anonymous views if not exists
-    let visitorId = localStorage.getItem("gennit_blog_visitor_id");
+    let visitorId = localStorage.getItem("genit_blog_visitor_id");
     if (!visitorId) {
       visitorId =
         Math.random().toString(36).substring(2) + Date.now().toString(36);
-      localStorage.setItem("gennit_blog_visitor_id", visitorId);
+      localStorage.setItem("genit_blog_visitor_id", visitorId);
     }
 
     if (recordView) {

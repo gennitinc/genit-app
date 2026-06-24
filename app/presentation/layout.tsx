@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Presentation Studio - Gennit AI",
+  title: "Presentation Studio - Genit AI",
   description: "Create stunning AI-powered presentations in minutes.",
   keywords: ["AI presentation maker", "slide generator", "pitch deck creator"],
 };

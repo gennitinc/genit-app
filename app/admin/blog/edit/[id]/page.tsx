@@ -207,7 +207,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                 }
               }}
               className='w-full rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-base text-white transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 focus:outline-none'
-              placeholder='e.g. How Gennit uses AI in marketing'
+              placeholder='e.g. How Genit uses AI in marketing'
             />
           </div>
 
@@ -339,7 +339,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                     }
                     className='w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs text-white transition focus:border-cyan-500 focus:outline-none'
                   >
-                    <option value='Platform'>Platform (Gennit Official)</option>
+                    <option value='Platform'>Platform (Genit Official)</option>
                     <option value='Author'>Author (Your Admin Profile)</option>
                   </select>
                 </div>

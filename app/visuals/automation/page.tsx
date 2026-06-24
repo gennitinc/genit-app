@@ -592,7 +592,7 @@ export default function AutomationPage() {
           <p className='mt-1.5 max-w-sm text-xs leading-relaxed text-neutral-500 dark:text-neutral-400'>
             {query
               ? "Try another search term."
-              : "Describe what you want to automate in chat and Gennit will help you build it."}
+              : "Describe what you want to automate in chat and Genit will help you build it."}
           </p>
           {!query && (
             <Button

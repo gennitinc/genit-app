@@ -40,7 +40,7 @@ export default function IntegrationsPage() {
                     Integration
                   </h1>
                   <p className='text-zinc-500 dark:text-zinc-400 mt-2 text-sm sm:text-base'>
-                    Work with Gennit across your favorite tools
+                    Work with Genit across your favorite tools
                   </p>
                 </div>
                 <IntegrationsExplorer />
