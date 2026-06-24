@@ -227,7 +227,7 @@ export const INTEGRATIONS: Integration[] = [
       "Hook genit into Microsoft Graph for enterprise email and calendar workflows.",
     category: "Email Campaigns",
     icon: MicrosoftOutlookBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(14, 165, 233, 0.8)",
   },
   {
