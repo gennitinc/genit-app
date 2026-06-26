@@ -78,6 +78,7 @@ import {
   Archive,
   Check,
   CheckCheck,
+  CheckCircle,
   ChevronDown,
   ChevronLeft,
   Circle,
@@ -761,7 +762,7 @@ export default function InboxPage() {
                       <Shapes className='h-4 w-4' />
                     )}
                     {selectedAccountId !== "all" && (
-                      <span className='absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-indigo-500' />
+                      <CheckCircle className='absolute top-1.5 right-1 size-[12px] rounded-full bg-indigo-500' />
                     )}
                   </Button>
                 </DropdownMenuTrigger>
@@ -782,9 +783,9 @@ export default function InboxPage() {
                       </span>
                     </DropdownMenuRadioItem>
                     {accounts.map((account) => (
-                      <DropdownMenuRadioItem
+                      <DropdownMenuItem
                         key={account._id}
-                        value={account._id}
+                        // value={account._id}
                       >
                         <PlatformIcon
                           platform={account.platform}
@@ -799,7 +800,7 @@ export default function InboxPage() {
                             Primary
                           </span>
                         )}
-                      </DropdownMenuRadioItem>
+                      </DropdownMenuItem>
                     ))}
                   </DropdownMenuRadioGroup>
                   {!integrationsLoading && accounts.length === 0 && (
