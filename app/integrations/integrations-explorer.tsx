@@ -234,7 +234,7 @@ export const INTEGRATIONS: Integration[] = [
     platform: "mailchimp",
     name: "Mailchimp",
     description:
-      "Build newsletters and automations. Generate drip sequences from a single prompt.",
+      "Build newsletters and automation. Generate drip sequences from a single prompt.",
     category: "Email Campaigns",
     icon: Megaphone,
     baseStatus: "soon",
