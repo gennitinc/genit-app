@@ -47,10 +47,7 @@ import type {
   IntegrationConnection,
   IntegrationPlatform,
 } from "@/lib/integrations-api";
-import type {
-  SocialPostMedia,
-  SocialPostStatus,
-} from "@/lib/social-posts-api";
+import type { SocialPostMedia, SocialPostStatus } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
@@ -606,9 +603,9 @@ export function PostEditorDialog({
           ? "Saving…"
           : form.status === "published"
             ? "Publish"
-          : editing
-            ? "Save post"
-            : `Create ${form.platforms.length || ""} post${form.platforms.length === 1 ? "" : "s"}`}
+            : editing
+              ? "Save post"
+              : `Create ${form.platforms.length || ""} post${form.platforms.length === 1 ? "" : "s"}`}
       </Button>
     </>
   );
