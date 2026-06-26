@@ -66,6 +66,7 @@ import {
   deleteSocialPost,
   generateSocialPostText,
   listSocialPosts,
+  publishSocialPosts,
   updateSocialPosts,
 } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
@@ -729,7 +730,7 @@ export default function PostsPage() {
         content: form.content,
         mediaUrl: form.mediaUrl || undefined,
         media: form.media,
-        status: form.status,
+        status: form.status === "published" ? "draft" : form.status,
         scheduledFor:
           form.status === "scheduled" ? form.scheduledFor : undefined,
       };
@@ -753,15 +754,20 @@ export default function PostsPage() {
             integrationId: form.integrationIds[platform] || undefined,
           })),
         });
-        return posts;
+        return form.status === "published"
+          ? publishSocialPosts(posts.map((post) => post._id))
+          : posts;
       }
-      return createSocialPosts({
+      const posts = await createSocialPosts({
         ...shared,
         targets: form.platforms.map((platform) => ({
           platform,
           integrationId: form.integrationIds[platform] || undefined,
         })),
       });
+      return form.status === "published"
+        ? publishSocialPosts(posts.map((post) => post._id))
+        : posts;
     },
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ["social-posts"] });
@@ -769,9 +775,12 @@ export default function PostsPage() {
       setEditorOpen(false);
       const count = result.length;
       toast({
-        title: editing
-          ? "Post updated"
-          : `${count} platform post${count === 1 ? "" : "s"} created`,
+        title:
+          form.status === "published"
+            ? `${count} post${count === 1 ? "" : "s"} published`
+            : editing
+              ? "Post updated"
+              : `${count} platform post${count === 1 ? "" : "s"} created`,
       });
     },
     onError: (error: any) =>

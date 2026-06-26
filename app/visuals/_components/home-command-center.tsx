@@ -23,6 +23,7 @@ import {
   deleteSocialPost,
   generateSocialPostText,
   listSocialPosts,
+  publishSocialPosts,
   updateSocialPosts,
 } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
@@ -109,26 +110,32 @@ export function HomeCommandCenter({
         content: form.content.trim(),
         mediaUrl: form.mediaUrl.trim() || undefined,
         media: form.media,
-        status: form.status,
+        status: form.status === "published" ? "draft" : form.status,
         scheduledFor:
           form.status === "scheduled" ? form.scheduledFor : undefined,
       };
       if (editing) {
-        return updateSocialPosts(editing._id, {
+        const posts = await updateSocialPosts(editing._id, {
           ...shared,
           targets: form.platforms.map((platform) => ({
             platform,
             integrationId: form.integrationIds[platform] || undefined,
           })),
         });
+        return form.status === "published"
+          ? publishSocialPosts(posts.map((post) => post._id))
+          : posts;
       }
-      return createSocialPosts({
+      const posts = await createSocialPosts({
         ...shared,
         targets: form.platforms.map((platform) => ({
           platform,
           integrationId: form.integrationIds[platform] || undefined,
         })),
       });
+      return form.status === "published"
+        ? publishSocialPosts(posts.map((post) => post._id))
+        : posts;
     },
     onSuccess: (saved) => {
       queryClient.setQueryData<SocialPost[]>(
@@ -143,9 +150,12 @@ export function HomeCommandCenter({
       setEditorOpen(false);
       setEditing(null);
       toast({
-        title: editing
-          ? "Post updated"
-          : `${saved.length} post${saved.length === 1 ? "" : "s"} created`,
+        title:
+          form.status === "published"
+            ? `${saved.length} post${saved.length === 1 ? "" : "s"} published`
+            : editing
+              ? "Post updated"
+              : `${saved.length} post${saved.length === 1 ? "" : "s"} created`,
       });
     },
     onError: (error) =>

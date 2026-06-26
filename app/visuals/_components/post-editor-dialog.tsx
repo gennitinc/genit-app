@@ -553,7 +553,7 @@ export function PostEditorDialog({
               <SelectContent>
                 <SelectItem value='draft'>Draft</SelectItem>
                 <SelectItem value='scheduled'>Scheduled</SelectItem>
-                <SelectItem value='published'>Mark as published</SelectItem>
+                <SelectItem value='published'>Publish</SelectItem>
                 <SelectItem value='failed'>Failed</SelectItem>
               </SelectContent>
             </Select>
@@ -597,11 +597,15 @@ export function PostEditorDialog({
           <LoadingFileLoader />
         ) : form.status === "scheduled" ? (
           <CalendarClock className='h-4 w-4' />
+        ) : form.status === "published" ? (
+          <Send className='h-4 w-4' />
         ) : (
           <FileText className='h-4 w-4' />
         )}
         {isSaving
           ? "Saving…"
+          : form.status === "published"
+            ? "Publish"
           : editing
             ? "Save post"
             : `Create ${form.platforms.length || ""} post${form.platforms.length === 1 ? "" : "s"}`}

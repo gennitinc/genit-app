@@ -110,6 +110,14 @@ export async function updateSocialPosts(
   }>(`/social-posts/${id}`, input, { timeout: 20_000 });
   return data.posts || [data.post];
 }
+export async function publishSocialPosts(ids: string[]): Promise<SocialPost[]> {
+  const { data } = await apiResponse.post<{ posts: SocialPost[] }>(
+    "/social-posts/publish",
+    { ids },
+    { timeout: 120_000 }
+  );
+  return data.posts;
+}
 export async function deleteSocialPost(id: string): Promise<void> {
   await apiResponse.delete(`/social-posts/${id}`, { timeout: 20_000 });
 }
