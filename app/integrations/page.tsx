@@ -39,68 +39,53 @@ export default function IntegrationsPage() {
                   <h1 className='text-foreground text-3xl font-bold tracking-tight sm:text-4xl'>
                     Integration
                   </h1>
-                  <p className='text-zinc-500 dark:text-zinc-400 mt-2 text-sm sm:text-base'>
+                  <p className='mt-2 text-sm text-zinc-500 sm:text-base dark:text-zinc-400'>
                     Work with Genit across your favorite tools
                   </p>
                 </div>
                 <IntegrationsExplorer />
-                <section className='mt-16'>
-                  <div className='mb-6 flex items-baseline gap-3'>
-                    <h3 className='text-foreground text-xl font-semibold tracking-tight'>
+                <section className='mt-12'>
+                  <div className='mb-4'>
+                    <h3 className='text-foreground text-lg font-semibold tracking-tight'>
                       Developers
                     </h3>
-                    <span className='text-muted-foreground text-xs'>
-                      Build your own
-                    </span>
+                    <p className='text-muted-foreground mt-0.5 text-xs'>
+                      Build custom agents
+                    </p>
                   </div>
-                  <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
-                    <div className='integration-card relative z-1 rounded-md p-px [background:radial-gradient(230px_at_0%_0%,rgba(0,0,0,0.08),#ffffff)] dark:[background:radial-gradient(230px_at_0%_0%,rgba(113,113,122,0.4),rgb(12,13,13))]'>
-                      <div
-                        className='animated-dot absolute z-2 h-[5px] w-[5px] rounded-full bg-zinc-400 dark:bg-zinc-400'
-                        style={{
-                          boxShadow: "0 0 10px rgba(113, 113, 122, 0.8)",
-                          right: "10%",
-                          top: "10%",
-                          animation: "moveDot 6s linear infinite",
-                          animationPlayState: "paused",
-                        }}
-                      />
-                      <div className='group border-border relative z-1 h-full rounded-md border bg-white px-9 py-7 backdrop-blur transition-all duration-300 [background:radial-gradient(circle_280px_at_0%_0%,rgba(0,0,0,0.04),#ffffff)] hover:[background:radial-gradient(circle_280px_at_0%_0%,rgba(0,0,0,0.06),#ffffff)] dark:border-[#202222] dark:bg-white/5 dark:[background:radial-gradient(circle_280px_at_0%_0%,rgba(68,68,68,0.3),#0c0d0d)] dark:hover:bg-white/10'>
-                        <div
-                          className='absolute top-0 left-0 h-[45px] w-[220px] rounded-full opacity-30 blur-[10px] dark:opacity-40'
-                          style={{
-                            backgroundColor: "rgba(113, 113, 122, 0.3)",
-                            boxShadow: "0 0 50px rgba(113, 113, 122, 0.5)",
-                            transform: "rotate(40deg)",
-                            transformOrigin: "10%",
-                          }}
-                        />
-                        <div className='relative z-10 flex items-start justify-between'>
-                          <div className='flex h-12 w-12 items-center justify-center rounded-xl'>
-                            <Code className='h-6 w-6 text-slate-700 dark:text-slate-300' />
-                          </div>
-                          {/* <span className='inline-flex items-center gap-1.5 rounded-md bg-zinc-500/10 px-2 py-1 text-xs text-zinc-700 ring-1 ring-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-400/20'>
-                            <Zap className='h-3 w-3' />
-                            API - Coming Soon
-                          </span> */}
+
+                  <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+                    <div className='group border-border bg-background rounded-lg border p-4 transition-all hover:-translate-y-0.5 hover:shadow-sm'>
+                      {/* icon + title row */}
+                      <div className='flex items-center gap-2'>
+                        <div className='border-border bg-muted/40 flex h-8 w-8 items-center justify-center rounded-md border'>
+                          <Code className='text-foreground h-4 w-4' />
                         </div>
-                        <h3 className='text-foreground relative z-10 mt-4 text-lg font-semibold tracking-tight'>
-                          Custom Integration
+
+                        <h3 className='text-foreground text-sm font-semibold'>
+                          Custom Agent
                         </h3>
-                        <p className='text-muted-foreground relative z-10 mt-1 text-sm'>
-                          Build your own integration with our REST API and
-                          webhooks.
-                        </p>
-                        <div className='relative z-10 mt-4 flex items-center gap-2'>
-                          <a
-                            href='#'
-                            className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs'
-                          >
-                            View API docs
-                            <ArrowRight className='h-3 w-3' />
-                          </a>
-                        </div>
-                        <GradientFrame />
+                      </div>
+
+                      {/* description */}
+                      <p className='text-muted-foreground mt-2 text-xs leading-relaxed'>
+                        Build and deploy AI agents with full SDK control and
+                        integration hooks.
+                      </p>
+
+                      {/* CTA */}
+                      <div className='mt-3 flex items-center justify-between'>
+                        <a
+                          href='#'
+                          className='inline-flex items-center gap-1 text-xs font-medium text-indigo-500 hover:text-indigo-400'
+                        >
+                          View SDK
+                          <ArrowRight className='h-3 w-3' />
+                        </a>
+
+                        <span className='text-muted-foreground text-[10px]'>
+                          SDK
+                        </span>
                       </div>
                     </div>
                   </div>

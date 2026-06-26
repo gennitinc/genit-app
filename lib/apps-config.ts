@@ -106,21 +106,21 @@ export const APP_SECTIONS: AppSection[] = [
         imageSrc:
           "https://imgv3.fotor.com/images/homepage-feature-card/use-fotor-ai-inpainting-tool-to-generate-a-spooted-white-trousers-for-female.jpg",
         badge: {
-          text: "Coming soon",
+          text: "Soon",
           bgColor: "rgb(157, 78, 221)",
           textColor: "rgb(255, 255, 255)",
         },
       },
       {
-        id: "logo-animation",
+        id: "animation",
         href: "/apps/logo-animation",
-        title: "Logo Animator",
+        title: "Animation",
         description: "Bring your logo to life with stunning animations",
         type: "image",
         imageSrc:
           "https://i.pinimg.com/originals/46/5b/c4/465bc4bc137942ccd0a2a8ecb96387e8.gif",
         badge: {
-          text: "Coming soon",
+          text: "Soon",
           bgColor: "rgb(157, 78, 221)",
           textColor: "rgb(255, 255, 255)",
         },
@@ -134,7 +134,7 @@ export const APP_SECTIONS: AppSection[] = [
         imageSrc:
           "https://i.pinimg.com/736x/11/a2/41/11a2417bd10628b011dcb9e8792ecf7e.jpg",
         badge: {
-          text: "Coming soon",
+          text: "Soon",
           bgColor: "rgb(157, 78, 221)",
           textColor: "rgb(255, 255, 255)",
         },
@@ -148,7 +148,7 @@ export const APP_SECTIONS: AppSection[] = [
         imageSrc:
           "https://i.pinimg.com/736x/9a/43/11/9a43113d58e58236248dd4ffa7f9559f.jpg",
         badge: {
-          text: "Coming soon",
+          text: "Soon",
           bgColor: "rgb(157, 78, 221)",
           textColor: "rgb(255, 255, 255)",
         },

@@ -10,6 +10,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import {
   Activity,
+  BookOpen,
   CircleFadingArrowUp,
   Cpu,
   CreditCard,
@@ -69,6 +70,11 @@ export function AdminNavMain() {
       title: "Blog Posts",
       icon: FileText,
       href: "/admin/blog",
+    },
+    {
+      title: "Docs",
+      icon: BookOpen,
+      href: "/admin/docs",
     },
     {
       title: "Media Library",
