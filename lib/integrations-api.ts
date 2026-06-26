@@ -766,6 +766,7 @@ export interface TelegramConnectResult {
   integrationId: string;
   botId: number;
   username?: string;
+  warning?: string;
 }
 
 export async function connectTelegramWithToken(
@@ -776,11 +777,13 @@ export async function connectTelegramWithToken(
     integrationId: string;
     botId: number;
     username?: string;
+    warning?: string;
   }>(`/integrations/telegram/connect-with-token`, { botToken });
   return {
     integrationId: data.integrationId,
     botId: data.botId,
     username: data.username,
+    warning: data.warning,
   };
 }
 

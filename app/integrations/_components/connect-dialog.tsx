@@ -620,6 +620,11 @@ export function ConnectDialog({
       if (platform === "telegram") {
         const result = await connectTelegramWithToken(value);
         name = result.username ? `@${result.username}` : `Bot ${result.botId}`;
+        if (result.warning) {
+          toast.warning("Telegram bot saved, but webhook needs attention", {
+            description: result.warning,
+          });
+        }
       } else if (platform === "brevo") {
         const result = await connectBrevoWithApiKey(value);
         name = result.displayName || result.email;
