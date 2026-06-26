@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { GradientFrame } from "@/utils/gradient-frame";
 import { Download, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -168,32 +169,35 @@ export function PWAInstaller() {
   return (
     <Dialog open={showInstallPrompt} onOpenChange={setShowInstallPrompt}>
       <DialogContent className='z-[100] !max-w-sm !rounded-2xl !p-6'>
-        <div className='flex flex-col items-center space-y-4 text-center'>
-          {/* Text */}
-          <div className='space-y-2'>
-            <DialogTitle className='text-xl font-semibold'>
-              Install Genit AI
-            </DialogTitle>
-            <DialogDescription className='text-muted-foreground text-sm'>
-              Get faster access, offline support, and a smoother experience when
-              you install the app.
-            </DialogDescription>
-          </div>
+        <div className='relative'>
+          <GradientFrame />
+          <div className='flex flex-col items-center space-y-4 text-center'>
+            {/* Text */}
+            <div className='space-y-2'>
+              <DialogTitle className='text-xl font-semibold'>
+                Install Genit AI
+              </DialogTitle>
+              <DialogDescription className='text-muted-foreground text-sm'>
+                Get faster access, offline support, and a smoother experience
+                when you install the app.
+              </DialogDescription>
+            </div>
 
-          {/* Image */}
-          <img
-            src='https://i.pinimg.com/originals/ea/f6/81/eaf68175b624f9f2d9f681ffabc8d437.gif'
-            alt='Install genit App'
-            className='h-40 w-40 rounded-xl object-contain'
-            loading='lazy'
-          />
+            {/* Image */}
+            <img
+              src='https://i.pinimg.com/originals/ea/f6/81/eaf68175b624f9f2d9f681ffabc8d437.gif'
+              alt='Install genit App'
+              className='h-40 w-40 rounded-xl object-contain'
+              loading='lazy'
+            />
 
-          {/* Actions */}
-          <div className='flex w-full gap-3 pt-2'>
-            <Button onClick={handleInstallClick} className='flex-1 gap-2'>
-              <Download className='h-4 w-4' />
-              Install App
-            </Button>
+            {/* Actions */}
+            <div className='flex w-full gap-3 pt-2'>
+              <Button onClick={handleInstallClick} className='flex-1 gap-2'>
+                <Download className='h-4 w-4' />
+                Install App
+              </Button>
+            </div>
           </div>
         </div>
       </DialogContent>
