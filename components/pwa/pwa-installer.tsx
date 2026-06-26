@@ -179,7 +179,7 @@ export function PWAInstaller() {
               </DialogTitle>
               <DialogDescription className='text-muted-foreground text-sm'>
                 Get faster access, offline support, and a smoother experience
-                when you install the app.
+                when you install the app. 
               </DialogDescription>
             </div>
 
