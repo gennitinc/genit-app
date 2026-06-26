@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 export type MediaAsset = {
   _id: string;
@@ -250,7 +251,7 @@ export function MediaPicker({
             <div className='max-h-[65vh] overflow-y-auto p-5'>
               {loading ? (
                 <div className='flex h-48 items-center justify-center'>
-                  <Loader2 className='h-7 w-7 animate-spin text-cyan-400' />
+                  <LoadingFileLoader size={16} />
                 </div>
               ) : assets.length === 0 ? (
                 <div className='flex h-48 flex-col items-center justify-center gap-2 text-zinc-500'>
