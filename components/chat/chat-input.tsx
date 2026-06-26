@@ -6,12 +6,18 @@ import ShinyText from "../ui/shiny-text";
 import { BrandIdentityPanel } from "./messages/brand-identity-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { classifyPrompt } from "@/lib/agents-api";
 import { trackEvent } from "@/lib/mixpanelClient";
+import { enhancePromptText } from "@/lib/prompt-enhancement-api";
 import { appendClientTimeContext, cn } from "@/lib/utils";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import { GradientFrame } from "@/utils/gradient-frame";
@@ -20,6 +26,7 @@ import {
   AlertCircle,
   CheckCircle2,
   ChevronDown,
+  CircleFadingArrowUp,
   Loader2,
   Mic,
   MicOff,
@@ -136,6 +143,7 @@ export function ChatInput({
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isBrandSettingsOpen, setIsBrandSettingsOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState<any>(null);
+  const [isEnhancingPrompt, setIsEnhancingPrompt] = useState(false);
 
   useEffect(() => {
     setSelectedModel(null);
@@ -158,6 +166,50 @@ export function ChatInput({
       startListening();
     }
   }, [isListening, startListening, stopListening, inputValue]);
+
+  const handleEnhancePrompt = useCallback(async () => {
+    const prompt = inputValue.trim();
+    if (
+      !prompt ||
+      isGenerating ||
+      isAgentRunning ||
+      isAgentAwaitingInput ||
+      isClassifying ||
+      isProcessingDraft ||
+      isEnhancingPrompt
+    )
+      return;
+
+    setIsEnhancingPrompt(true);
+    try {
+      const enhancedPrompt = await enhancePromptText(prompt);
+      setInputValue(enhancedPrompt);
+      trackEvent("chat_prompt_enhanced", {
+        prompt_length: prompt.length,
+        project_id: project?._id,
+      });
+      requestAnimationFrame(() => textareaRef.current?.focus());
+    } catch (error: any) {
+      toast.error("Could not enhance prompt", {
+        description:
+          error?.response?.data?.message ||
+          error?.message ||
+          "Please try again.",
+      });
+    } finally {
+      setIsEnhancingPrompt(false);
+    }
+  }, [
+    inputValue,
+    isGenerating,
+    isAgentRunning,
+    isAgentAwaitingInput,
+    isClassifying,
+    isProcessingDraft,
+    isEnhancingPrompt,
+    setInputValue,
+    project?._id,
+  ]);
 
   // Local autoResize implementation using textareaRef
   const autoResize = useCallback(() => {
@@ -475,9 +527,35 @@ export function ChatInput({
                         : placeholder
                   }
                   disabled={isGenerating || isProcessingDraft}
-                  className='placeholder:text-muted-foreground/60 max-h-[300px] w-full resize-none scrollbar-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
+                  className='placeholder:text-muted-foreground/60 max-h-[300px] w-full resize-none scrollbar-none border-none bg-transparent px-3 py-2 pr-10 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                   style={{ height: "60px", minHeight: "60px" }}
                 />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type='button'
+                      aria-label='Enhance with AI'
+                      className='text-muted-foreground hover:text-foreground absolute top-1.5 right-1.5 z-10 inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors hover:bg-indigo-600/10 disabled:cursor-not-allowed disabled:opacity-50'
+                      onClick={handleEnhancePrompt}
+                      disabled={
+                        isGenerating ||
+                        isAgentRunning ||
+                        isAgentAwaitingInput ||
+                        isClassifying ||
+                        isProcessingDraft ||
+                        isEnhancingPrompt ||
+                        !inputValue.trim()
+                      }
+                    >
+                      {isEnhancingPrompt ? (
+                        <Loader2 className='h-3.5 w-3.5 animate-spin' />
+                      ) : (
+                        <CircleFadingArrowUp className='h-3.5 w-3.5' />
+                      )}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side='top'>Enhance with AI</TooltipContent>
+                </Tooltip>
               </div>
             </div>
 

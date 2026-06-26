@@ -29,6 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -48,6 +49,7 @@ import {
   useDeleteInboxMessage,
   useInboxConversations,
   useInboxMessages,
+  useInboxRealtime,
   useMarkAllConversationsAsRead,
   useMarkConversationAsRead,
   useRetryInboxMessage,
@@ -79,6 +81,7 @@ import {
   ChevronDown,
   ChevronLeft,
   Circle,
+  CircleFadingArrowUp,
   Clock3,
   Inbox,
   ListFilter,
@@ -103,7 +106,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
-import { BorderBeam } from "@/components/ui/border-beam";
 
 const INBOX_PLATFORMS = new Set<IntegrationPlatform>([
   "instagram",
@@ -382,6 +384,7 @@ export default function InboxPage() {
   const { data: messages = [], isLoading: messagesLoading } = useInboxMessages(
     activeId || undefined
   );
+  useInboxRealtime(activeId || undefined);
   const sendMutation = useSendMessage();
   const retryMutation = useRetryInboxMessage();
   const markReadMutation = useMarkConversationAsRead();

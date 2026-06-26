@@ -29,6 +29,7 @@ import { imageGenApi, videoGenApi } from "@/utils/inspire-api";
 import { IconTemplate } from "@tabler/icons-react";
 import {
   BookOpen,
+  CircleFadingArrowUp,
   History,
   Image as ImageIcon,
   Loader2,

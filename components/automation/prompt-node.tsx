@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Sparkles, Trash2 } from "lucide-react";
+import { CircleFadingArrowUp, Sparkles, Trash2 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
 import React from "react";
 

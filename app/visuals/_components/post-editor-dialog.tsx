@@ -37,18 +37,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import type {
   IntegrationConnection,
   IntegrationPlatform,
 } from "@/lib/integrations-api";
-import type { SocialPostStatus } from "@/lib/social-posts-api";
+import type {
+  SocialPostMedia,
+  SocialPostStatus,
+} from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
   AlertCircle,
   CalendarClock,
   Check,
+  CircleFadingArrowUp,
   FileText,
   Send,
   X,
@@ -84,6 +93,7 @@ export type PostEditorForm = {
   content: string;
   mediaUrl: string;
   mediaType: string;
+  media: SocialPostMedia[];
   platforms: IntegrationPlatform[];
   integrationIds: Partial<Record<IntegrationPlatform, string>>;
   status: SocialPostStatus;
@@ -95,6 +105,7 @@ export const EMPTY_POST_FORM: PostEditorForm = {
   content: "",
   mediaUrl: "",
   mediaType: "",
+  media: [],
   platforms: [],
   integrationIds: {},
   status: "draft",
@@ -121,7 +132,9 @@ type PostEditorDialogProps = {
   form: PostEditorForm;
   setForm: Dispatch<SetStateAction<PostEditorForm>>;
   isSaving: boolean;
+  isGeneratingText?: boolean;
   onSave: () => void;
+  onEnhanceText?: (field: "title" | "content") => void;
 };
 
 type PlatformRule = {
@@ -196,12 +209,24 @@ function inferMediaKind(mediaType: string, mediaUrl: string) {
   return "unknown";
 }
 
+function getMediaKinds(form: PostEditorForm) {
+  const media =
+    form.media.length > 0
+      ? form.media
+      : form.mediaUrl
+        ? [{ url: form.mediaUrl, mimeType: form.mediaType }]
+        : [];
+  return media.map((item) => inferMediaKind(item.mimeType || "", item.url));
+}
+
 export function getPostValidationErrors(form: PostEditorForm): string[] {
   if (!form.platforms.length) return ["Choose at least one destination."];
   const content = form.content.trim();
   const title = form.title.trim();
-  const hasMedia = Boolean(form.mediaUrl.trim());
-  const mediaKind = inferMediaKind(form.mediaType, form.mediaUrl);
+  const mediaKinds = getMediaKinds(form);
+  const hasMedia = mediaKinds.length > 0;
+  const hasImage = mediaKinds.includes("image");
+  const hasVideo = mediaKinds.includes("video");
   const errors = new Set<string>();
 
   for (const platform of form.platforms) {
@@ -221,10 +246,10 @@ export function getPostValidationErrors(form: PostEditorForm): string[] {
       errors.add(
         `${label} requires ${rule.media === "required" ? "an image or video" : `a ${rule.media}`}.`
       );
-    if (hasMedia && rule.media === "image" && mediaKind === "video")
-      errors.add(`${label} requires an image, not a video.`);
-    if (hasMedia && rule.media === "video" && mediaKind === "image")
-      errors.add(`${label} requires a video, not an image.`);
+    if (hasMedia && rule.media === "image" && !hasImage)
+      errors.add(`${label} requires an image.`);
+    if (hasMedia && rule.media === "video" && !hasVideo)
+      errors.add(`${label} requires a video.`);
     if (rule.contentMax && content.length > rule.contentMax)
       errors.add(
         `${label} captions cannot exceed ${rule.contentMax.toLocaleString()} characters.`
@@ -246,7 +271,9 @@ export function PostEditorDialog({
   form,
   setForm,
   isSaving,
+  isGeneratingText = false,
   onSave,
+  onEnhanceText,
 }: PostEditorDialogProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const validationErrors = getPostValidationErrors(form);
@@ -256,9 +283,7 @@ export function PostEditorDialog({
       ...current,
       platforms: current.platforms.includes(platform)
         ? current.platforms.filter((item) => item !== platform)
-        : editing
-          ? [platform]
-          : [...current.platforms, platform],
+        : [...current.platforms, platform],
       integrationIds: current.platforms.includes(platform)
         ? current.integrationIds
         : {
@@ -272,6 +297,30 @@ export function PostEditorDialog({
   const description = editing
     ? "Update this post and its destination."
     : "Check every platform you want to post to, then compose once.";
+
+  const renderEnhanceButton = (field: "title" | "content") =>
+    onEnhanceText ? (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            type='button'
+            size='icon'
+            variant='ghost'
+            aria-label='Enhance with AI'
+            className='absolute top-1.5 right-1.5 h-7 w-7 rounded-md text-indigo-200 hover:bg-indigo-500/10 hover:text-white'
+            disabled={isGeneratingText}
+            onClick={() => onEnhanceText(field)}
+          >
+            {isGeneratingText ? (
+              <LoadingFileLoader size={12} />
+            ) : (
+              <CircleFadingArrowUp className='h-3.5 w-3.5' />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side='top'>Enhance with AI</TooltipContent>
+      </Tooltip>
+    ) : null;
 
   const formContent = (
     <div className='grid gap-4 lg:grid-cols-[0.9fr_1.1fr]'>
@@ -402,15 +451,18 @@ export function PostEditorDialog({
               ? "Post title"
               : "Internal title"}
           </Label>
-          <Input
-            id='post-title'
-            value={form.title}
-            onChange={(event) =>
-              setForm({ ...form, title: event.target.value })
-            }
-            placeholder='Summer launch'
-            className='border-white/10 bg-white/[0.02] text-white placeholder:text-zinc-600 focus-visible:ring-white/20 focus-visible:ring-offset-0'
-          />
+          <div className='relative'>
+            <Input
+              id='post-title'
+              value={form.title}
+              onChange={(event) =>
+                setForm({ ...form, title: event.target.value })
+              }
+              placeholder='Summer launch'
+              className='border-white/10 bg-white/[0.02] pr-10 text-white placeholder:text-zinc-600 focus-visible:ring-white/20 focus-visible:ring-offset-0'
+            />
+            {renderEnhanceButton("title")}
+          </div>
         </div>
         <div className='grid gap-2'>
           <Label
@@ -419,24 +471,42 @@ export function PostEditorDialog({
           >
             Caption
           </Label>
-          <Textarea
-            id='post-content'
-            value={form.content}
-            onChange={(event) =>
-              setForm({ ...form, content: event.target.value })
-            }
-            rows={5}
-            placeholder='Write your post…'
-            className='resize-none border-white/10 bg-white/[0.02] text-white placeholder:text-zinc-600 focus-visible:ring-white/20 focus-visible:ring-offset-0'
-          />
+          <div className='relative'>
+            <Textarea
+              id='post-content'
+              value={form.content}
+              onChange={(event) =>
+                setForm({ ...form, content: event.target.value })
+              }
+              rows={5}
+              placeholder='Write your post…'
+              className='resize-none border-white/10 bg-white/[0.02] pr-10 text-white placeholder:text-zinc-600 focus-visible:ring-white/20 focus-visible:ring-offset-0'
+            />
+            {renderEnhanceButton("content")}
+          </div>
         </div>
         <div className='grid gap-2'>
-          <Label className='text-zinc-300'>Media</Label>
+          <div className='flex items-center justify-between gap-3'>
+            <Label className='text-zinc-300'>Media</Label>
+            <span className='text-[10px] text-zinc-500'>
+              Images and videos only
+            </span>
+          </div>
           <MediaPicker
             accept='media'
+            multiple
             value={form.mediaUrl}
             onChange={(mediaUrl) =>
               setForm((current) => ({ ...current, mediaUrl }))
+            }
+            values={form.media}
+            onValuesChange={(media) =>
+              setForm((current) => ({
+                ...current,
+                media,
+                mediaUrl: media[0]?.url || "",
+                mediaType: media[0]?.mimeType || "",
+              }))
             }
             onMediaTypeChange={(mediaType) =>
               setForm((current) => ({ ...current, mediaType }))

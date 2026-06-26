@@ -51,6 +51,7 @@ import {
   BookOpen,
   ChevronDown,
   ChevronUp,
+  CircleFadingArrowUp,
   History,
   Image as ImageIcon,
   LayoutDashboard,

@@ -33,6 +33,7 @@ import {
   ArrowRight,
   BarChart,
   CalendarCheck,
+  CircleFadingArrowUp,
   Heart,
   MessageSquare,
   MoreHorizontal,
@@ -257,10 +258,10 @@ export default function VisualsHomePage() {
                   key={integration.name}
                   className='basis-full p-2 pl-[-5] sm:basis-1/2 lg:basis-1/4 xl:basis-1/4'
                 >
-                  <div className='group relative h-full w-full overflow-hidden rounded-2xl bg-zinc-50/50 border border-zinc-200/50 p-5 dark:bg-zinc-950/30 dark:border-zinc-900/60 transition-all hover:border-zinc-300 dark:hover:border-zinc-800 shadow-xs'>
+                  <div className='group relative h-full w-full overflow-hidden rounded-2xl border border-zinc-200/50 bg-zinc-50/50 p-5 shadow-xs transition-all hover:border-zinc-300 dark:border-zinc-900/60 dark:bg-zinc-950/30 dark:hover:border-zinc-800'>
                     <div className='relative z-10 flex h-full flex-col'>
                       <div className='flex items-start justify-between'>
-                        <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-zinc-50 border border-zinc-200/60 dark:bg-zinc-950 dark:border-zinc-800/80 shadow-xs">
+                        <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-zinc-200/60 bg-zinc-50 shadow-xs dark:border-zinc-800/80 dark:bg-zinc-950'>
                           <integration.icon
                             className={
                               integration.name === "Shopify"
@@ -270,12 +271,12 @@ export default function VisualsHomePage() {
                           />
                         </div>
                         <div
-                          className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium border ${
+                          className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-medium ${
                             status === "connected"
-                              ? "bg-emerald-50/5 border-emerald-50/20 text-emerald-600 dark:text-emerald-400"
+                              ? "border-emerald-50/20 bg-emerald-50/5 text-emerald-600 dark:text-emerald-400"
                               : status === "partial"
-                                ? "bg-amber-50/5 border-amber-50/20 text-amber-600 dark:text-amber-400"
-                                : "bg-zinc-100 border-zinc-200 text-zinc-500 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-400"
+                                ? "border-amber-50/20 bg-amber-50/5 text-amber-600 dark:text-amber-400"
+                                : "border-zinc-200 bg-zinc-100 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-400"
                           }`}
                         >
                           <div
@@ -298,32 +299,32 @@ export default function VisualsHomePage() {
                       </div>
 
                       <div className='mt-5 flex-1'>
-                        <h4 className='text-zinc-900 dark:text-zinc-100 line-clamp-1 text-sm sm:text-base font-semibold tracking-tight'>
+                        <h4 className='line-clamp-1 text-sm font-semibold tracking-tight text-zinc-900 sm:text-base dark:text-zinc-100'>
                           {integration.name}
                         </h4>
-                        <p className='text-zinc-500 dark:text-zinc-400 mt-1 line-clamp-2 text-xs leading-normal'>
+                        <p className='mt-1 line-clamp-2 text-xs leading-normal text-zinc-500 dark:text-zinc-400'>
                           {integration.description}
                         </p>
                       </div>
 
-                      <div className='mt-auto pt-5 flex w-full items-center'>
+                      <div className='mt-auto flex w-full items-center pt-5'>
                         {status === "connected" || status === "partial" ? (
                           <button
-                            type="button"
+                            type='button'
                             onClick={() => setManageFor(integration)}
-                            className="h-8 w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-900 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-800 rounded-full text-xs font-semibold transition-all active:scale-95"
+                            className='h-8 w-full rounded-full border border-zinc-200/80 bg-zinc-100 text-xs font-semibold text-zinc-900 transition-all hover:bg-zinc-200 active:scale-95 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800'
                           >
                             Manage
                           </button>
                         ) : (
                           <button
-                            type="button"
+                            type='button'
                             disabled={isSoon}
                             onClick={() => setConnectFor(integration)}
                             className={`h-8 w-full rounded-full text-xs font-semibold transition-all ${
                               isSoon
-                                ? "bg-zinc-100 dark:bg-zinc-900/40 text-zinc-400 dark:text-zinc-500 border border-zinc-200 dark:border-zinc-800 cursor-not-allowed select-none"
-                                : "bg-zinc-900 hover:bg-black text-white dark:bg-zinc-850 dark:hover:bg-zinc-800 dark:text-zinc-200 border border-zinc-800 dark:border-zinc-700/60 active:scale-95"
+                                ? "cursor-not-allowed border border-zinc-200 bg-zinc-100 text-zinc-400 select-none dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-500"
+                                : "dark:bg-zinc-850 border border-zinc-800 bg-zinc-900 text-white hover:bg-black active:scale-95 dark:border-zinc-700/60 dark:text-zinc-200 dark:hover:bg-zinc-800"
                             }`}
                           >
                             {isSoon ? "Soon" : "Add"}

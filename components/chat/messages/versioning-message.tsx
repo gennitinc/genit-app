@@ -19,6 +19,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Circle,
+  CircleFadingArrowUp,
   Download,
   Edit,
   Eye,

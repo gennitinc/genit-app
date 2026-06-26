@@ -25,6 +25,7 @@ import { apiResponse } from "@/utils/apiResponse";
 import { imageGenApi, presenterApi } from "@/utils/inspire-api";
 import {
   Check,
+  CircleFadingArrowUp,
   Download,
   HistoryIcon,
   Loader2,

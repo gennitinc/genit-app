@@ -59,12 +59,14 @@ import {
 } from "@/lib/integrations-api";
 import {
   type SocialPost,
+  type SocialPostMedia,
   type SocialPostMetrics,
   type SocialPostStatus,
   createSocialPosts,
   deleteSocialPost,
+  generateSocialPostText,
   listSocialPosts,
-  updateSocialPost,
+  updateSocialPosts,
 } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -148,6 +150,7 @@ const EMPTY_FORM = {
   content: "",
   mediaUrl: "",
   mediaType: "",
+  media: [] as SocialPostMedia[],
   platforms: [] as IntegrationPlatform[],
   integrationIds: {} as Partial<Record<IntegrationPlatform, string>>,
   status: "draft" as SocialPostStatus,
@@ -250,18 +253,20 @@ function facebookMedia(post: FacebookPostSummary) {
 
 function MediaPreview({ post }: { post: DisplayPost }) {
   const [failed, setFailed] = useState(false);
-  const source = post.thumbnailUrl || post.mediaUrl;
+  const primaryMedia = post.media?.[0];
+  const source = post.thumbnailUrl || primaryMedia?.url || post.mediaUrl;
   const isVideo =
+    primaryMedia?.mimeType?.toLowerCase().includes("video") ||
     post.mediaType?.toLowerCase().includes("video") ||
-    isVideoMedia(post.mediaUrl);
+    isVideoMedia(primaryMedia?.url || post.mediaUrl);
 
   if (!source || failed) {
     return null;
   }
-  if (isVideo && post.mediaUrl) {
+  if (isVideo && (primaryMedia?.url || post.mediaUrl)) {
     return (
       <video
-        src={post.mediaUrl}
+        src={primaryMedia?.url || post.mediaUrl}
         poster={post.thumbnailUrl}
         controls
         muted
@@ -723,6 +728,7 @@ export default function PostsPage() {
         title: form.title,
         content: form.content,
         mediaUrl: form.mediaUrl || undefined,
+        media: form.media,
         status: form.status,
         scheduledFor:
           form.status === "scheduled" ? form.scheduledFor : undefined,
@@ -740,12 +746,14 @@ export default function PostsPage() {
           );
           return [editing];
         }
-        const post = await updateSocialPost(editing._id, {
+        const posts = await updateSocialPosts(editing._id, {
           ...shared,
-          platform: form.platforms[0],
-          integrationId: form.integrationIds[form.platforms[0]] || undefined,
+          targets: form.platforms.map((platform) => ({
+            platform,
+            integrationId: form.integrationIds[platform] || undefined,
+          })),
         });
-        return [post];
+        return posts;
       }
       return createSocialPosts({
         ...shared,
@@ -809,6 +817,26 @@ export default function PostsPage() {
       }),
   });
 
+  const textMutation = useMutation({
+    mutationFn: generateSocialPostText,
+    onSuccess: ({ text }, variables) => {
+      setForm((current) => ({
+        ...current,
+        [variables.field === "title" ? "title" : "content"]: text,
+      }));
+      toast({ title: "AI enhancement added" });
+    },
+    onError: (error: any) =>
+      toast({
+        title: "Could not generate text",
+        description:
+          error?.response?.data?.msg ||
+          error?.response?.data?.message ||
+          error.message,
+        variant: "destructive",
+      }),
+  });
+
   function openCreate() {
     setEditing(null);
     setForm({
@@ -824,6 +852,12 @@ export default function PostsPage() {
       title: post.title || "",
       content: post.content,
       mediaUrl: post.mediaUrl || "",
+      media:
+        post.media && post.media.length
+          ? post.media
+          : post.mediaUrl
+            ? [{ url: post.mediaUrl, mimeType: post.mediaType }]
+            : [],
       mediaType: post.mediaType || "",
       platforms: [post.platform],
       integrationIds: post.integration
@@ -1197,6 +1231,17 @@ export default function PostsPage() {
         form={form}
         setForm={setForm}
         isSaving={saveMutation.isPending}
+        isGeneratingText={textMutation.isPending}
+        onEnhanceText={(field) =>
+          textMutation.mutate({
+            mode: "enhance",
+            field,
+            title: form.title,
+            content: form.content,
+            platforms: form.platforms,
+            media: form.media,
+          })
+        }
         onSave={() => saveMutation.mutate()}
       />
 

@@ -27,6 +27,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
   Camera,
+  CircleFadingArrowUp,
   FileText,
   Image,
   Image as ImageIcon,
@@ -572,6 +573,7 @@ export function IdeaSection() {
       id: "generic_design",
       label: "Generic Design",
       icon: Sparkles,
+      CircleFadingArrowUp,
     },
   ];
 

@@ -6,6 +6,7 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   ArrowLeft,
+  CircleFadingArrowUp,
   Image as ImageIcon,
   ImageOff,
   Loader2,

@@ -31,6 +31,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   ArrowRight,
   CheckCircle2,
+  CircleFadingArrowUp,
   KeyRound,
   Loader2,
   Lock,

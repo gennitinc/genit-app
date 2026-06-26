@@ -30,6 +30,7 @@ import { apiResponse } from "@/utils/apiResponse";
 import {
   ChevronLeft,
   ChevronRight,
+  CircleFadingArrowUp,
   Download,
   HistoryIcon,
   ImageIcon,

@@ -3,8 +3,10 @@
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { ScrollArea } from "./scroll-area";
 import ShinyText from "./shiny-text";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
+import { enhancePromptText } from "@/lib/prompt-enhancement-api";
 import { cn } from "@/lib/utils";
 import { Model } from "@/types/inspire";
 import { apiResponse } from "@/utils/apiResponse";
@@ -20,6 +22,7 @@ import {
   AlertCircle,
   Check,
   ChevronDown,
+  CircleFadingArrowUp,
   History,
   Image as ImageIcon,
   Loader2,
@@ -32,6 +35,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 const MODELS_BY_TYPE = {
   text: [
@@ -128,6 +132,7 @@ export function WorkflowPremiumInput({
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isEnhancingPrompt, setIsEnhancingPrompt] = useState(false);
 
   useEffect(() => {
     if (propModels) {
@@ -324,6 +329,26 @@ export function WorkflowPremiumInput({
     }
   }, [isListening, startListening, stopListening, value]);
 
+  const handleEnhancePrompt = useCallback(async () => {
+    const prompt = value.trim();
+    if (!prompt || isGenerating || disabled || isEnhancingPrompt) return;
+    setIsEnhancingPrompt(true);
+    try {
+      const enhancedPrompt = await enhancePromptText(prompt);
+      onChange(enhancedPrompt);
+      requestAnimationFrame(() => textareaRef.current?.focus());
+    } catch (error: any) {
+      toast.error("Could not enhance prompt", {
+        description:
+          error?.response?.data?.message ||
+          error?.message ||
+          "Please try again.",
+      });
+    } finally {
+      setIsEnhancingPrompt(false);
+    }
+  }, [value, isGenerating, disabled, isEnhancingPrompt, onChange]);
+
   const handleSubmit = useCallback(() => {
     if (!value.trim() || isGenerating || disabled) return;
     onSubmit();
@@ -427,7 +452,7 @@ export function WorkflowPremiumInput({
           disabled && "cursor-not-allowed opacity-60"
         )}
       >
-        <div className='w-full min-w-0'>
+        <div className='relative w-full min-w-0'>
           <textarea
             ref={textareaRef}
             value={isGenerating ? "" : value}
@@ -442,11 +467,34 @@ export function WorkflowPremiumInput({
             }
             disabled={isGenerating || disabled}
             className={cn(
-              "placeholder:text-muted-foreground/60 flex w-full resize-none scrollbar-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base",
+              "placeholder:text-muted-foreground/60 flex w-full resize-none scrollbar-none border-none bg-transparent px-3 py-2 pr-10 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base",
               isGenerating && "placeholder:opacity-0"
             )}
             style={{ minHeight }}
           />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type='button'
+                aria-label='Enhance with AI'
+                className='text-muted-foreground hover:text-foreground absolute top-1.5 right-1.5 z-10 inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors hover:bg-indigo-600/10 disabled:cursor-not-allowed disabled:opacity-50'
+                onClick={handleEnhancePrompt}
+                disabled={
+                  isGenerating ||
+                  disabled ||
+                  isEnhancingPrompt ||
+                  !value.trim()
+                }
+              >
+                {isEnhancingPrompt ? (
+                  <Loader2 className='h-3.5 w-3.5 animate-spin' />
+                ) : (
+                  <CircleFadingArrowUp className='h-3.5 w-3.5' />
+                )}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side='top'>Enhance with AI</TooltipContent>
+          </Tooltip>
         </div>
 
         {footerContent && <div className='px-1'>{footerContent}</div>}

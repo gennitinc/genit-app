@@ -7,6 +7,7 @@ import {
   Award,
   Briefcase,
   ChevronRight,
+  CircleFadingArrowUp,
   Clock,
   Globe,
   Layers,

@@ -21,8 +21,9 @@ import {
   type SocialPost,
   createSocialPosts,
   deleteSocialPost,
+  generateSocialPostText,
   listSocialPosts,
-  updateSocialPost,
+  updateSocialPosts,
 } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -30,6 +31,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowRight,
   CalendarClock,
+  CircleFadingArrowUp,
   Clock3,
   Edit3,
   FileText,
@@ -106,19 +108,19 @@ export function HomeCommandCenter({
         title: form.title.trim() || undefined,
         content: form.content.trim(),
         mediaUrl: form.mediaUrl.trim() || undefined,
+        media: form.media,
         status: form.status,
         scheduledFor:
           form.status === "scheduled" ? form.scheduledFor : undefined,
       };
       if (editing) {
-        const platform = form.platforms[0];
-        return [
-          await updateSocialPost(editing._id, {
-            ...shared,
+        return updateSocialPosts(editing._id, {
+          ...shared,
+          targets: form.platforms.map((platform) => ({
             platform,
             integrationId: form.integrationIds[platform] || undefined,
-          }),
-        ];
+          })),
+        });
       }
       return createSocialPosts({
         ...shared,
@@ -154,6 +156,23 @@ export function HomeCommandCenter({
       }),
     onSettled: () =>
       queryClient.invalidateQueries({ queryKey: ["social-posts"] }),
+  });
+
+  const textMutation = useMutation({
+    mutationFn: generateSocialPostText,
+    onSuccess: ({ text }, variables) => {
+      setForm((current) => ({
+        ...current,
+        [variables.field === "title" ? "title" : "content"]: text,
+      }));
+      toast({ title: "AI enhancement added" });
+    },
+    onError: (error) =>
+      toast({
+        title: "Could not generate text",
+        description: errorMessage(error),
+        variant: "destructive",
+      }),
   });
 
   const deleteMutation = useMutation({
@@ -200,6 +219,12 @@ export function HomeCommandCenter({
       title: post.title || "",
       content: post.content,
       mediaUrl: post.mediaUrl || "",
+      media:
+        post.media && post.media.length
+          ? post.media
+          : post.mediaUrl
+            ? [{ url: post.mediaUrl }]
+            : [],
       mediaType: "",
       platforms: [post.platform],
       integrationIds: post.integration
@@ -426,6 +451,17 @@ export function HomeCommandCenter({
         form={form}
         setForm={setForm}
         isSaving={saveMutation.isPending}
+        isGeneratingText={textMutation.isPending}
+        onEnhanceText={(field) =>
+          textMutation.mutate({
+            mode: "enhance",
+            field,
+            title: form.title,
+            content: form.content,
+            platforms: form.platforms,
+            media: form.media,
+          })
+        }
         onSave={() => saveMutation.mutate()}
       />
 

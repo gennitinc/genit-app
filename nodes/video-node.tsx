@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Captions,
+  CircleFadingArrowUp,
   Download,
   Edit3,
   ExternalLink,

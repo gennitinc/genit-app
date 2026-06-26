@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { Model, ModelType } from "@/types/inspire";
 import { modelApi } from "@/utils/inspire-api";
 import {
+  CircleFadingArrowUp,
   Crown,
   FileText,
   Image as ImageIcon,

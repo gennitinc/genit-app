@@ -4,7 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { BarChart3, MessageCircle, Send, Sparkles, X } from "lucide-react";
+import {
+  BarChart3,
+  CircleFadingArrowUp,
+  MessageCircle,
+  Send,
+  Sparkles,
+  X,
+} from "lucide-react";
 import { Handle, Position } from "reactflow";
 import { useState } from "react";
 

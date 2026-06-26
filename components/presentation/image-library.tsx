@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import {
+  CircleFadingArrowUp,
   Download,
   ExternalLink,
   Image as ImageIcon,

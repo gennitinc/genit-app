@@ -13,6 +13,7 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
+  CircleFadingArrowUp,
   Image,
   Loader2,
   MessageSquare,

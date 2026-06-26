@@ -15,7 +15,13 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { trackEvent } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { GradientFrame } from "@/utils/gradient-frame";
-import { Bolt, Crown, Sparkles, TrendingUp } from "lucide-react";
+import {
+  Bolt,
+  CircleFadingArrowUp,
+  Crown,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import type * as React from "react";

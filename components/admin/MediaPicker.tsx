@@ -25,17 +25,23 @@ export type MediaAsset = {
 type Props = {
   value: string;
   onChange: (url: string) => void;
+  values?: Array<{ url: string; mimeType?: string }>;
+  onValuesChange?: (items: Array<{ url: string; mimeType?: string }>) => void;
   onMediaTypeChange?: (mimeType: string) => void;
   onUploadingChange?: (uploading: boolean) => void;
   accept?: "image" | "media";
+  multiple?: boolean;
 };
 
 export function MediaPicker({
   value,
   onChange,
+  values,
+  onValuesChange,
   onMediaTypeChange,
   onUploadingChange,
   accept = "image",
+  multiple = false,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
@@ -44,6 +50,39 @@ export function MediaPicker({
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [selectedMimeType, setSelectedMimeType] = useState("");
   const acceptsVideo = accept === "media";
+  const selectedItems = multiple ? values || [] : value ? [{ url: value, mimeType: selectedMimeType }] : [];
+
+  const addSelectedItems = (items: Array<{ url: string; mimeType?: string }>) => {
+    if (!multiple) {
+      const first = items[0];
+      setSelectedMimeType(first?.mimeType || "");
+      onMediaTypeChange?.(first?.mimeType || "");
+      onChange(first?.url || "");
+      return;
+    }
+    const next = [...selectedItems];
+    for (const item of items) {
+      if (item.url && !next.some((selected) => selected.url === item.url)) {
+        next.push(item);
+      }
+    }
+    onValuesChange?.(next);
+    onChange(next[0]?.url || "");
+    onMediaTypeChange?.(next[0]?.mimeType || "");
+  };
+
+  const removeSelectedItem = (url: string) => {
+    if (!multiple) {
+      setSelectedMimeType("");
+      onMediaTypeChange?.("");
+      onChange("");
+      return;
+    }
+    const next = selectedItems.filter((item) => item.url !== url);
+    onValuesChange?.(next);
+    onChange(next[0]?.url || "");
+    onMediaTypeChange?.(next[0]?.mimeType || "");
+  };
 
   const loadAssets = async () => {
     setLoading(true);
@@ -51,7 +90,14 @@ export function MediaPicker({
       const response = await apiResponse.get(
         acceptsVideo ? "/blog/library?type=visual" : "/blog/library?type=image"
       );
-      setAssets(response.data.assets || []);
+      setAssets(
+        (response.data.assets || []).filter((asset: MediaAsset) =>
+          acceptsVideo
+            ? asset.mimeType.startsWith("image/") ||
+              asset.mimeType.startsWith("video/")
+            : asset.mimeType.startsWith("image/")
+        )
+      );
     } catch (error: any) {
       toast.error(
         error.response?.data?.message || "Could not load your library"
@@ -65,21 +111,29 @@ export function MediaPicker({
     if (open) loadAssets();
   }, [open]);
 
-  const uploadFile = async (file?: File) => {
-    if (!file) return;
+  const uploadFiles = async (files?: FileList | File[]) => {
+    const selectedFiles = Array.from(files || []);
+    if (!selectedFiles.length) return;
     setUploading(true);
     onUploadingChange?.(true);
-    const formData = new FormData();
-    formData.append("file", file);
     try {
-      const response = await apiResponse.post("/blog/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setSelectedMimeType(response.data.asset?.mimeType || file.type);
-      onMediaTypeChange?.(response.data.asset?.mimeType || file.type);
-      onChange(response.data.url);
+      const uploaded = [];
+      for (const file of selectedFiles) {
+        const formData = new FormData();
+        formData.append("file", file);
+        const response = await apiResponse.post("/blog/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        uploaded.push({
+          url: response.data.url,
+          mimeType: response.data.asset?.mimeType || file.type,
+        });
+      }
+      addSelectedItems(uploaded);
       setOpen(false);
-      toast.success("Media uploaded to your library");
+      toast.success(
+        `${uploaded.length} media file${uploaded.length === 1 ? "" : "s"} uploaded to your library`
+      );
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to upload media");
     } finally {
@@ -99,23 +153,45 @@ export function MediaPicker({
             ? "image/*,video/*"
             : "image/png,image/jpeg,image/webp,image/gif"
         }
+        multiple={multiple}
         className='hidden'
-        onChange={(event) => uploadFile(event.target.files?.[0])}
+        onChange={(event) => uploadFiles(event.target.files || undefined)}
       />
       <div className='space-y-3'>
-        <div className='relative flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/40'>
-          {value && selectedMimeType.startsWith("video/") ? (
-            <video
-              src={value}
-              controls
-              className='h-full w-full object-contain'
-            />
-          ) : value ? (
-            <img
-              src={value}
-              alt='Selected cover'
-              className='h-full w-full object-cover'
-            />
+        <div className='relative flex min-h-44 items-center justify-center overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/40'>
+          {selectedItems.length ? (
+            <div className='grid h-full w-full grid-cols-2 gap-2 p-2 sm:grid-cols-3'>
+              {selectedItems.map((item) => (
+                <div
+                  key={item.url}
+                  className='relative aspect-video overflow-hidden rounded-lg bg-black'
+                >
+                  {item.mimeType?.startsWith("video/") ? (
+                    <video
+                      src={item.url}
+                      controls
+                      className='h-full w-full object-contain'
+                    />
+                  ) : (
+                    <img
+                      src={item.url}
+                      alt='Selected media'
+                      className='h-full w-full object-cover'
+                    />
+                  )}
+                  {!uploading && (
+                    <button
+                      type='button'
+                      aria-label='Remove selected media'
+                      onClick={() => removeSelectedItem(item.url)}
+                      className='absolute top-1.5 right-1.5 rounded-full bg-black/70 p-1.5 text-white shadow-lg transition hover:bg-black'
+                    >
+                      <X className='h-4 w-4' />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
           ) : (
             <div className='flex flex-col items-center gap-2 text-zinc-500'>
               <ImageIcon className='h-7 w-7' />
@@ -130,20 +206,6 @@ export function MediaPicker({
             <div className='absolute inset-0 flex items-center justify-center bg-black/70'>
               <Loader2 className='h-6 w-6 animate-spin text-cyan-400' />
             </div>
-          )}
-          {value && !uploading && (
-            <button
-              type='button'
-              aria-label='Remove selected media'
-              onClick={() => {
-                setSelectedMimeType("");
-                onMediaTypeChange?.("");
-                onChange("");
-              }}
-              className='absolute top-2 right-2 rounded-full bg-black/70 p-1.5 text-white shadow-lg transition hover:bg-black'
-            >
-              <X className='h-4 w-4' />
-            </button>
           )}
         </div>
         <div className='grid grid-cols-2 gap-2'>
@@ -202,10 +264,10 @@ export function MediaPicker({
                       key={asset._id}
                       type='button'
                       onClick={() => {
-                        setSelectedMimeType(asset.mimeType);
-                        onMediaTypeChange?.(asset.mimeType);
-                        onChange(asset.url);
-                        setOpen(false);
+                        addSelectedItems([
+                          { url: asset.url, mimeType: asset.mimeType },
+                        ]);
+                        if (!multiple) setOpen(false);
                       }}
                       className='group relative aspect-square overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900 text-left hover:border-cyan-500'
                     >
@@ -229,7 +291,7 @@ export function MediaPicker({
                           {asset.name}
                         </p>
                       </div>
-                      {value === asset.url && (
+                      {selectedItems.some((item) => item.url === asset.url) && (
                         <span className='absolute top-2 right-2 rounded-full bg-cyan-500 p-1 text-black'>
                           <Check className='h-3 w-3' />
                         </span>

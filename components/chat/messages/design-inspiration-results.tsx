@@ -13,7 +13,15 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Loader2, Plus, Sparkles, X, ZoomIn } from "lucide-react";
+import {
+  Check,
+  CircleFadingArrowUp,
+  Loader2,
+  Plus,
+  Sparkles,
+  X,
+  ZoomIn,
+} from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
 // import { ColorManagement } from "./color-management";

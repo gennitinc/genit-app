@@ -35,6 +35,7 @@ import {
   ArrowRight,
   ArrowUpRight,
   Bot,
+  CircleFadingArrowUp,
   Clock,
   Code2,
   GitBranch,
@@ -141,7 +142,7 @@ function getNodeIconAndName(node: any) {
     return { IconComponent: Bot, label: "AI Prompt" };
   }
   if (type === "ai_generate") {
-    return { IconComponent: Sparkles, label: "AI Gen" };
+    return { IconComponent: Sparkles, CircleFadingArrowUp, label: "AI Gen" };
   }
   if (type === "condition") {
     return { IconComponent: GitBranch, label: "Condition" };
@@ -242,6 +243,7 @@ const TEMPLATES = [
     prompt:
       "Create a content repurposing workflow that triggers on YouTube video uploads, calls the video transcript analyzer, generates a short thread post for X, and saves it in a brand folder.",
     icon: Sparkles,
+    CircleFadingArrowUp,
     badge: "AI Workflow",
   },
 ];

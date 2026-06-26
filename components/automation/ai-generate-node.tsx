@@ -1,7 +1,7 @@
 import { type AIContentType, AI_CONTENT_TYPES } from "./automation-types";
 import { cn } from "@/lib/utils";
 import { modelApi } from "@/utils/inspire-api";
-import { Loader2, Sparkles, Trash2 } from "lucide-react";
+import { CircleFadingArrowUp, Loader2, Sparkles, Trash2 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
 import React, { useEffect, useState } from "react";
 

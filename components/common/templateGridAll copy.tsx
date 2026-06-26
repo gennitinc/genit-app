@@ -32,6 +32,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
   ArrowRight,
+  CircleFadingArrowUp,
   Eye,
   Image as ImageIcon,
   Loader,

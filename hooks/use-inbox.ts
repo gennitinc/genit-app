@@ -20,7 +20,12 @@ import {
   updateConversationStatus,
   updateInboxMessage,
 } from "@/lib/inbox-api";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { serverUrlSocket } from "@/utils/apiResponse";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import cookie from "js-cookie";
+import { io, type Socket } from "socket.io-client";
+import { useEffect, useState } from "react";
 
 export function inboxConversationsQueryKey(filters: InboxFilters = {}) {
   return ["inbox_conversations", filters] as const;
@@ -47,6 +52,75 @@ export function useInboxMessages(conversationId?: string) {
     staleTime: 5_000,
     refetchInterval: conversationId ? 8_000 : false,
   });
+}
+
+type InboxRealtimeEvent = {
+  type: string;
+  organizationId: string;
+  conversationId?: string;
+  messageId?: string;
+  platform?: string;
+  integrationId?: string;
+  emittedAt?: string;
+};
+
+export function useInboxRealtime(activeConversationId?: string) {
+  const qc = useQueryClient();
+  const { user } = useUserContext();
+  const [connected, setConnected] = useState(false);
+  const organizationId =
+    user?.currentOrganization?._id || user?.business?._id || "";
+
+  useEffect(() => {
+    if (!organizationId) return;
+
+    const socket: Socket = io(serverUrlSocket || "http://localhost:5000", {
+      auth: { token: cookie.get("genituToken") || "" },
+      transports: ["websocket", "polling"],
+      withCredentials: true,
+    });
+
+    const refreshInbox = (event: InboxRealtimeEvent) => {
+      if (event.organizationId !== organizationId) return;
+
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
+      if (event.conversationId) {
+        qc.invalidateQueries({
+          queryKey: inboxMessagesQueryKey(event.conversationId),
+        });
+      }
+      if (
+        activeConversationId &&
+        (!event.conversationId || event.conversationId === activeConversationId)
+      ) {
+        qc.invalidateQueries({
+          queryKey: inboxMessagesQueryKey(activeConversationId),
+        });
+      }
+    };
+
+    socket.on("connect", () => {
+      setConnected(true);
+      socket.emit("join-inbox", organizationId);
+      if (activeConversationId) {
+        socket.emit("join-inbox-conversation", activeConversationId);
+      }
+    });
+    socket.on("disconnect", () => setConnected(false));
+    socket.on("inbox:update", refreshInbox);
+
+    return () => {
+      socket.off("inbox:update", refreshInbox);
+      socket.emit("leave-inbox", organizationId);
+      if (activeConversationId) {
+        socket.emit("leave-inbox-conversation", activeConversationId);
+      }
+      socket.disconnect();
+      setConnected(false);
+    };
+  }, [activeConversationId, organizationId, qc]);
+
+  return connected;
 }
 
 export function useSendMessage() {

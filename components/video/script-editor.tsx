@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { Mic, Play, RefreshCw, Sparkles, Volume2 } from "lucide-react";
+import { Mic, Play, RefreshCw, Sparkles, CircleFadingArrowUp, Volume2 } from "lucide-react";
 import { useState } from "react";
 
 interface ScriptEditorProps {

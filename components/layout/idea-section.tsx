@@ -49,6 +49,11 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { PointerHighlight } from "@/components/ui/pointer-highlight";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useIsMobile } from "@/components/ui/use-mobile";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
@@ -59,6 +64,7 @@ import {
   trackEvent,
   trackFeatureUsed,
 } from "@/lib/mixpanelClient";
+import { enhancePromptText } from "@/lib/prompt-enhancement-api";
 import { appendClientTimeContext, cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
@@ -68,6 +74,7 @@ import {
   ArrowRightIcon,
   Camera,
   CheckCircle2,
+  CircleFadingArrowUp,
   FileText,
   Grid2X2Plus,
   Image,
@@ -614,6 +621,7 @@ export function IdeaSection() {
   >("illustration");
   const [extraKeywords, setExtraKeywords] = useState<string>("");
   const [selectedModel, setSelectedModel] = useState<any>(null);
+  const [isEnhancingPrompt, setIsEnhancingPrompt] = useState(false);
 
   useEffect(() => {
     setSelectedModel(null);
@@ -693,6 +701,36 @@ export function IdeaSection() {
       startListening();
     }
   }, [isListening, startListening, stopListening, inputValue]);
+
+  const handleEnhancePrompt = useCallback(async () => {
+    const prompt = inputValue.trim();
+    if (!prompt || isGenerating || isSubmitting || isEnhancingPrompt) return;
+    setIsEnhancingPrompt(true);
+    try {
+      const enhancedPrompt = await enhancePromptText(prompt);
+      setInputValue(enhancedPrompt);
+      setInputError(null);
+      trackFeatureUsed("idea_prompt_enhanced", {
+        prompt_length: prompt.length,
+      });
+      requestAnimationFrame(() => textareaRef.current?.focus());
+    } catch (error: any) {
+      toast.error("Could not enhance prompt", {
+        description:
+          error?.response?.data?.message ||
+          error?.message ||
+          "Please try again.",
+      });
+    } finally {
+      setIsEnhancingPrompt(false);
+    }
+  }, [
+    inputValue,
+    isGenerating,
+    isSubmitting,
+    isEnhancingPrompt,
+    setInputValue,
+  ]);
 
   // Handle file processing with validation
   const handleFileProcess = useCallback(
@@ -1514,7 +1552,7 @@ export function IdeaSection() {
                           value={isGenerating ? "" : inputValue}
                           onChange={handleInputChange}
                           onKeyDown={handleKeyPress}
-                          className='placeholder:text-muted-foreground/60 flex max-h-[300px] min-h-[95px] w-full flex-1 resize-none scrollbar-none border-none bg-transparent px-3 py-2 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
+                          className='placeholder:text-muted-foreground/60 flex max-h-[300px] min-h-[95px] w-full flex-1 resize-none scrollbar-none border-none bg-transparent px-3 py-2 pr-10 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                           placeholder={
                             isGenerating
                               ? ""
@@ -1526,6 +1564,31 @@ export function IdeaSection() {
                           }
                           disabled={isGenerating || isSubmitting}
                         />
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              type='button'
+                              aria-label='Enhance with AI'
+                              className='text-muted-foreground hover:text-foreground absolute top-1.5 right-1.5 z-10 inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors hover:bg-indigo-600/10 disabled:cursor-not-allowed disabled:opacity-50'
+                              onClick={handleEnhancePrompt}
+                              disabled={
+                                isGenerating ||
+                                isSubmitting ||
+                                isEnhancingPrompt ||
+                                !inputValue.trim()
+                              }
+                            >
+                              {isEnhancingPrompt ? (
+                                <Loader2 className='h-3.5 w-3.5 animate-spin' />
+                              ) : (
+                                <CircleFadingArrowUp className='h-3.5 w-3.5' />
+                              )}
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent side='top'>
+                            Enhance with AI
+                          </TooltipContent>
+                        </Tooltip>
                       </div>
                     </div>
                     <div className='flex flex-wrap items-center gap-1'>

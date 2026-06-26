@@ -36,6 +36,7 @@ import { ArrowRight, PanelRight } from "lucide-react";
 import {
   BadgeCheck,
   Bell,
+  CircleFadingArrowUp,
   CreditCard,
   LogOut,
   Moon,

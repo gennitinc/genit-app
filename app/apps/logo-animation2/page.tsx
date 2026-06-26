@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   CheckCircle2,
+  CircleFadingArrowUp,
   Download,
   HistoryIcon,
   ImageIcon,

@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Model, ModelType } from "@/types/inspire";
 import { modelApi } from "@/utils/inspire-api";
 import {
+  CircleFadingArrowUp,
   Edit,
   FileText,
   Image as ImageIcon,

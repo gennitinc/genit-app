@@ -19,6 +19,7 @@ export interface SocialPost {
   title?: string;
   content: string;
   mediaUrl?: string;
+  media?: SocialPostMedia[];
   permalink?: string;
   externalId?: string;
   source: "visuals" | "chat" | "integration";
@@ -30,9 +31,14 @@ export interface SocialPost {
   updatedAt: string;
 }
 
+export type SocialPostMedia = {
+  url: string;
+  mimeType?: string;
+};
+
 export type SocialPostInput = Pick<SocialPost, "platform" | "content"> &
   Partial<
-    Pick<SocialPost, "title" | "mediaUrl" | "status" | "scheduledFor">
+    Pick<SocialPost, "title" | "mediaUrl" | "media" | "status" | "scheduledFor">
   > & { integrationId?: string };
 
 export type SocialPostTarget = {
@@ -45,6 +51,15 @@ export type MultiSocialPostInput = Omit<
   "platform" | "integrationId"
 > & {
   targets: SocialPostTarget[];
+};
+
+export type SocialPostTextInput = {
+  mode: "generate" | "analyze" | "enhance";
+  field?: "title" | "content";
+  title?: string;
+  content?: string;
+  platforms?: IntegrationPlatform[];
+  media?: SocialPostMedia[];
 };
 
 export async function listSocialPosts(): Promise<SocialPost[]> {
@@ -85,6 +100,26 @@ export async function updateSocialPost(
   );
   return data.post;
 }
+export async function updateSocialPosts(
+  id: string,
+  input: Partial<MultiSocialPostInput>
+): Promise<SocialPost[]> {
+  const { data } = await apiResponse.patch<{
+    post: SocialPost;
+    posts?: SocialPost[];
+  }>(`/social-posts/${id}`, input, { timeout: 20_000 });
+  return data.posts || [data.post];
+}
 export async function deleteSocialPost(id: string): Promise<void> {
   await apiResponse.delete(`/social-posts/${id}`, { timeout: 20_000 });
+}
+export async function generateSocialPostText(
+  input: SocialPostTextInput
+): Promise<{ text: string; cost: number }> {
+  const { data } = await apiResponse.post<{ text: string; cost: number }>(
+    "/social-posts/ai-text",
+    input,
+    { timeout: 30_000 }
+  );
+  return data;
 }
