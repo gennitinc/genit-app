@@ -13,6 +13,7 @@ import { AuthenticatedContextProvider } from "@/context/AuthenticatedContext";
 import { ProjectProvider } from "@/context/DesignProject";
 import MixpanelProvider from "@/provider/MixpanelProver";
 import Loading from "@/utils/Loading";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Analytics } from "@vercel/analytics/next";
@@ -510,30 +511,38 @@ export default function RootLayout({
       >
         <TooltipProvider>
           <QueryClientProvider client={queryClient}>
-            <AuthenticatedContextProvider>
-              <ThemeProvider
-                attribute='class'
-                defaultTheme='dark'
-                enableSystem
-                disableTransitionOnChange
-                storageKey='genit-theme'
-              >
-                <ProjectProvider>
-                  <Suspense
-                  // fallback={
-                  //   <div className='flex h-screen flex-col items-center justify-center bg-white dark:bg-black'>
-                  //     <Loading />
-                  //   </div>
-                  // }
-                  >
-                    <Wrapper>
-                      <MixpanelProvider>{children}</MixpanelProvider>
-                    </Wrapper>
-                  </Suspense>
-                </ProjectProvider>
-              </ThemeProvider>
-              <Toaster />
-            </AuthenticatedContextProvider>
+            <GoogleOAuthProvider
+              clientId={
+                process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+                process.env.NEXT_PUBLIC_GG_APP_ID ||
+                ""
+              }
+            >
+              <AuthenticatedContextProvider>
+                <ThemeProvider
+                  attribute='class'
+                  defaultTheme='dark'
+                  enableSystem
+                  disableTransitionOnChange
+                  storageKey='genit-theme'
+                >
+                  <ProjectProvider>
+                    <Suspense
+                    // fallback={
+                    //   <div className='flex h-screen flex-col items-center justify-center bg-white dark:bg-black'>
+                    //     <Loading />
+                    //   </div>
+                    // }
+                    >
+                      <Wrapper>
+                        <MixpanelProvider>{children}</MixpanelProvider>
+                      </Wrapper>
+                    </Suspense>
+                  </ProjectProvider>
+                </ThemeProvider>
+                <Toaster />
+              </AuthenticatedContextProvider>
+            </GoogleOAuthProvider>
 
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>

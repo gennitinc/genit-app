@@ -1005,18 +1005,21 @@ export default function InboxPage() {
                   )}
                   <div className='min-w-0'>
                     <div className='flex flex-row items-center gap-2'>
-                      <h2 className='truncate text-sm font-semibold'>
+                      <h2 className='w-fit max-w-14 truncate text-sm font-semibold'>
                         {activeConversation.customerName}
                       </h2>
-                      <p className='text-muted-foreground flex items-center gap-1.5 truncate text-xs'>
+                      <p className='text-muted-foreground flex w-48 min-w-0 items-center gap-1.5 text-xs'>
                         <PlatformIcon
                           platform={activeConversation.platform}
-                          className='h-3 w-3'
+                          className='h-3 w-3 flex-shrink-0'
                         />
-                        {PLATFORM_LABELS[activeConversation.platform]}
-                        {activeConversation.customerHandle
-                          ? ` · ${activeConversation.customerHandle}`
-                          : ""}
+
+                        <span className='truncate'>
+                          {PLATFORM_LABELS[activeConversation.platform]}
+                          {activeConversation.customerHandle
+                            ? ` · ${activeConversation.customerHandle}`
+                            : ""}
+                        </span>
                       </p>
                     </div>
                     {activeConversation.subject && (
