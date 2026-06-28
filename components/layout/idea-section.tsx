@@ -37,7 +37,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Drawer,
@@ -57,6 +56,7 @@ import {
 import { useIsMobile } from "@/components/ui/use-mobile";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
 import {
@@ -89,8 +89,6 @@ import {
   PaperclipIcon,
   Play,
   Presentation,
-  Settings,
-  Settings2,
   Sparkles,
   Table,
   TrendingUp,
@@ -531,6 +529,73 @@ const EnterpriseAutoDialog = ({
   );
 };
 
+const BrandIdentityDialog = ({
+  isOpen,
+  onOpenChange,
+}: {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+}) => {
+  const isMobileOrTablet = useMediaQuery("(max-width: 1023px)");
+
+  const content = (
+    <div
+      className={cn(
+        "group relative flex w-full flex-col overflow-hidden rounded-xs bg-white/95 ring-1 ring-black/5 backdrop-blur-xl dark:bg-black/95 dark:ring-white/10",
+        isMobileOrTablet ? "h-[80vh]" : "h-[64vh] max-h-[540px]"
+      )}
+    >
+      <GradientFrame />
+
+      <div className='border-border/70 relative z-10 flex shrink-0 items-center justify-between border-b px-4 py-3 md:px-5'>
+        <div className='flex min-w-0 items-center gap-2'>
+          <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600/10 text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-300'>
+            <Palette className='h-4 w-4' />
+          </div>
+          <div className='min-w-0'>
+            <h3 className='text-foreground truncate text-sm font-semibold'>
+              Brand Identity
+            </h3>
+            <p className='text-muted-foreground truncate text-[11px]'>
+              Voice, colors, logo, and brand memory
+            </p>
+          </div>
+        </div>
+        <button
+          type='button'
+          onClick={() => onOpenChange(false)}
+          className='text-muted-foreground hover:text-foreground flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-black/5 dark:hover:bg-white/10'
+          aria-label='Close brand identity'
+        >
+          <X className='h-4 w-4' />
+        </button>
+      </div>
+
+      <div className='relative z-10 min-h-0 flex-1'>
+        <BrandIdentityPanel />
+      </div>
+    </div>
+  );
+
+  if (isMobileOrTablet) {
+    return (
+      <Drawer open={isOpen} onOpenChange={onOpenChange}>
+        <DrawerContent className='max-h-[80vh] border-none bg-transparent p-0 shadow-none'>
+          {content}
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className='border-none bg-transparent p-0 shadow-none sm:max-w-lg md:max-w-xl [&>button]:hidden'>
+        {content}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export function IdeaSection() {
   const placeholders = [
     "Design high converting logo",
@@ -595,16 +660,6 @@ export function IdeaSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedDesignTypeId, setSelectedDesignTypeId] =
     useState<string>("auto");
-  const [selectedOrientation, setSelectedOrientation] = useState<string | null>(
-    "portrait"
-  );
-  const [customSize, setCustomSize] = useState<{
-    width: string;
-    height: string;
-  }>({ width: "", height: "" });
-  const [showOrientationSelection, setShowOrientationSelection] =
-    useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isBrandSettingsOpen, setIsBrandSettingsOpen] = useState(false);
   const [isPresentationDrawerOpen, setIsPresentationDrawerOpen] =
     useState(false);
@@ -921,14 +976,8 @@ export function IdeaSection() {
           attachedFiles as any,
           undefined,
           selectedDesignTypeId || undefined,
-          selectedOrientation === "auto"
-            ? undefined
-            : selectedOrientation || undefined,
-          selectedOrientation === "auto"
-            ? undefined
-            : customSize.width && customSize.height
-              ? customSize
-              : undefined,
+          undefined,
+          undefined,
           {
             finalizedSelections: {
               selectedColorScales,
@@ -940,17 +989,12 @@ export function IdeaSection() {
 
         trackEvent("idea_project_created", {
           design_type: selectedDesignTypeId,
-          orientation: selectedOrientation,
-          has_custom_size: Boolean(customSize.width && customSize.height),
           prompt_length: inputValue.trim().length,
           attached_files_count: attachedFiles.length,
         });
 
         clearInput();
         setSelectedDesignTypeId("auto");
-        setSelectedOrientation(null);
-        setShowOrientationSelection(false);
-        setCustomSize({ width: "", height: "" });
 
         if (res.type && res.id) {
           // Redirect to chat page with project ID
@@ -1135,78 +1179,6 @@ export function IdeaSection() {
       icon: Sparkles,
     },
   ];
-
-  const selectedDesignType = designTypeItems.find(
-    (item) => item.id === selectedDesignTypeId
-  );
-
-  // Orientation options for different design types
-  const getOrientationOptions = (designTypeId: string | null) => {
-    if (!designTypeId) return [];
-
-    const options: { id: string; label: string; dimensions?: string }[] = [
-      { id: "auto", label: "Auto" },
-    ];
-
-    switch (designTypeId) {
-      case "video":
-        options.push(
-          { id: "reels", label: "Reels", dimensions: "9:16" },
-          { id: "video", label: "Video", dimensions: "16:9" },
-          { id: "square", label: "Square", dimensions: "1:1" },
-          { id: "story", label: "Story", dimensions: "9:16" }
-        );
-        break;
-      case "instagram_post":
-        options.push(
-          { id: "square", label: "Square", dimensions: "1:1" },
-          { id: "portrait", label: "Portrait", dimensions: "4:5" },
-          { id: "landscape", label: "Landscape", dimensions: "1.91:1" }
-        );
-        break;
-      case "youtube_thumbnail":
-        options.push({ id: "standard", label: "Standard", dimensions: "16:9" });
-        break;
-      case "facebook_post":
-      case "facebook_cover":
-        options.push(
-          { id: "landscape", label: "Landscape", dimensions: "16:9" },
-          { id: "square", label: "Square", dimensions: "1:1" }
-        );
-        break;
-      case "poster":
-      case "banner":
-        options.push(
-          { id: "portrait", label: "Portrait", dimensions: "2:3" },
-          { id: "landscape", label: "Landscape", dimensions: "3:2" },
-          { id: "square", label: "Square", dimensions: "1:1" }
-        );
-        break;
-      case "presentation":
-        options.push(
-          { id: "standard", label: "Standard", dimensions: "16:9" },
-          { id: "widescreen", label: "Widescreen", dimensions: "16:10" },
-          { id: "square", label: "Square", dimensions: "1:1" }
-        );
-        break;
-      case "flier":
-        options.push(
-          { id: "portrait", label: "Portrait", dimensions: "8.5:11" },
-          { id: "landscape", label: "Landscape", dimensions: "11:8.5" }
-        );
-        break;
-      default:
-        options.push(
-          { id: "portrait", label: "Portrait", dimensions: "2:3" },
-          { id: "landscape", label: "Landscape", dimensions: "3:2" },
-          { id: "square", label: "Square", dimensions: "1:1" }
-        );
-    }
-
-    return options;
-  };
-
-  const orientationOptions = getOrientationOptions(selectedDesignTypeId);
 
   return (
     <div className='w-full md:px-4'>
@@ -1482,12 +1454,6 @@ export function IdeaSection() {
                             </button>
                           </div>
 
-                          {/* <BrandIndicator
-                            onClick={() => {
-                              setIsBrandSettingsOpen(!isBrandSettingsOpen);
-                              setIsSettingsOpen(false);
-                            }}
-                          /> */}
                           {user && (user?.creditsRemaining ?? 0) === 0 && (
                             <div className='text-xs font-medium'>
                               {String(user?.userPlan) === "Basic" ? (
@@ -1611,27 +1577,17 @@ export function IdeaSection() {
                         accept='image/*,video/*'
                       />
 
-                      {selectedDesignType && (
-                        <Badge
-                          variant='secondary'
-                          className='flex h-7 cursor-pointer items-center gap-1.5 rounded-full border border-neutral-200 bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-neutral-700 transition-colors hover:bg-neutral-200 md:text-xs dark:border-white/10 dark:bg-white/5 dark:text-neutral-300 dark:hover:bg-white/10'
-                          onClick={() => {
-                            setIsSettingsOpen(true);
-                            setShowOrientationSelection(false);
+                      <div className='ml-2 flex items-center gap-1.5'>
+                        <ModelSelector
+                          type='general'
+                          selectedModel={selectedModel}
+                          initialModelId={imageModel}
+                          onSelectModel={(model) => {
+                            setSelectedModel(model);
+                            setImageModel(model.modelId);
                           }}
-                        >
-                          <selectedDesignType.icon className='h-3 w-3' />
-                          {selectedDesignType.label}
-                          {selectedOrientation &&
-                            selectedOrientation !== "custom" &&
-                            selectedOrientation !== "auto" &&
-                            selectedDesignTypeId !== "auto" && (
-                              <span className='font-normal opacity-60'>
-                                • {selectedOrientation}
-                              </span>
-                            )}
-                        </Badge>
-                      )}
+                        />
+                      </div>
 
                       <div className='ml-auto flex items-center gap-1.5'>
                         {brandSaveStatus !== "idle" && (
@@ -1647,32 +1603,6 @@ export function IdeaSection() {
                             )}
                           </div>
                         )}
-                        <div className='flex items-center gap-1.5'>
-                          <ModelSelector
-                            type='general'
-                            selectedModel={selectedModel}
-                            initialModelId={imageModel}
-                            onSelectModel={(model) => {
-                              setSelectedModel(model);
-                              setImageModel(model.modelId);
-                            }}
-                          />
-                        </div>
-
-                        <button
-                          className='focus-visible:ring-ring text-muted-foreground hover:text-foreground relative box-border hidden h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out hover:bg-indigo-600 hover:bg-indigo-700/5 focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5'
-                          type='button'
-                          aria-label='Settings'
-                          onClick={() => {
-                            setIsSettingsOpen(!isSettingsOpen);
-                            setShowOrientationSelection(true);
-                            trackFeatureUsed("idea_advanced_settings_opened", {
-                              source: "input_toolbar",
-                            });
-                          }}
-                        >
-                          <Settings className='size-4 shrink-0' />
-                        </button>
                         <button
                           className={cn(
                             "focus-visible:ring-ring h-h-fit relative box-border inline-flex min-w-fit items-center justify-center gap-2 rounded-full bg-transparent p-0.5 p-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
@@ -1684,7 +1614,6 @@ export function IdeaSection() {
                           aria-label='Brand settings'
                           onClick={() => {
                             setIsBrandSettingsOpen(!isBrandSettingsOpen);
-                            setIsSettingsOpen(false);
                             trackFeatureUsed("idea_brand_settings_toggled", {
                               is_opening: !isBrandSettingsOpen,
                             });
@@ -1759,334 +1688,6 @@ export function IdeaSection() {
                 </div>
               </div>
             </div>
-
-            {/* Settings Dropdown - overlays content below input section */}
-
-            <AnimatePresence>
-              {isSettingsOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  className='border-border absolute top-full right-0 left-0 z-50 mt-2 max-h-[450px] w-full overflow-y-auto rounded-xl border bg-white shadow-md dark:bg-black'
-                >
-                  <div className='flex flex-col p-4'>
-                    {/* Header */}
-                    <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
-                      <div className='flex items-center gap-2'>
-                        <h3 className='text-foreground text-sm font-semibold'>
-                          Advanced Settings
-                        </h3>
-                      </div>
-                      <button
-                        type='button'
-                        onClick={() => {
-                          setIsSettingsOpen(false);
-                          setShowOrientationSelection(false);
-                        }}
-                        className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
-                        aria-label='Close settings'
-                      >
-                        <X className='h-4 w-4' />
-                      </button>
-                    </div>
-
-                    {/* Design Type Selection or Orientation Selection */}
-                    <div className='flex-1'>
-                      {!showOrientationSelection ? (
-                        <div className='space-y-0.5'>
-                          {designTypeItems.map((item) => {
-                            const IconComponent = item.icon;
-                            const isSelected = selectedDesignTypeId === item.id;
-                            const isComingSoon = (item as any).comingSoon;
-                            return (
-                              <button
-                                key={item.id}
-                                type='button'
-                                onClick={() => {
-                                  if (isComingSoon) return;
-                                  trackFeatureUsed(
-                                    "idea_design_type_selected",
-                                    {
-                                      design_type: item.id,
-                                    }
-                                  );
-                                  if (item.id == "video") {
-                                    trackAppOpened(
-                                      "video-generation",
-                                      "AI Video",
-                                      "idea_settings",
-                                      {
-                                        design_type: item.id,
-                                      }
-                                    );
-                                    router.push(
-                                      "/inspire/create?mode=ai-video-gen"
-                                    );
-                                  }
-                                  // else if (item.id == "image") {
-                                  //   router.push(
-                                  //     "/inspire/create?mode=ai-image-gen",
-                                  //   );
-                                  // }
-                                  else {
-                                    setSelectedDesignTypeId(item.id);
-                                    setSelectedOrientation(null);
-                                    if (item.id === "auto") {
-                                      setIsSettingsOpen(false);
-                                      setShowOrientationSelection(false);
-                                    } else {
-                                      setShowOrientationSelection(true);
-                                    }
-                                  }
-                                }}
-                                disabled={isComingSoon}
-                                className={`flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors ${
-                                  isComingSoon
-                                    ? "cursor-not-allowed opacity-50"
-                                    : isSelected
-                                      ? "text-foreground"
-                                      : "text-muted-foreground hover:text-foreground"
-                                }`}
-                              >
-                                <Checkbox
-                                  checked={isSelected}
-                                  disabled={isComingSoon}
-                                  className='flex-shrink-0'
-                                  onCheckedChange={() => {}}
-                                />
-                                <IconComponent
-                                  className={`h-4 w-4 flex-shrink-0 ${
-                                    isComingSoon
-                                      ? "text-muted-foreground/50"
-                                      : isSelected
-                                        ? "text-foreground"
-                                        : "text-muted-foreground"
-                                  }`}
-                                />
-                                <span className='flex-1 text-sm font-normal'>
-                                  {item.label}
-                                </span>
-                                {isComingSoon && (
-                                  <Badge
-                                    variant='secondary'
-                                    className='bg-muted text-muted-foreground px-2 py-0.5 text-xs'
-                                  >
-                                    Coming Soon
-                                  </Badge>
-                                )}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      ) : (
-                        <div className='space-y-4'>
-                          {/* Back button */}
-                          <button
-                            type='button'
-                            onClick={() => {
-                              setShowOrientationSelection(false);
-                            }}
-                            className='text-muted-foreground hover:text-foreground mb-2 flex items-center gap-2 text-sm transition-colors'
-                          >
-                            <svg
-                              className='h-4 w-4'
-                              fill='none'
-                              stroke='currentColor'
-                              viewBox='0 0 24 24'
-                            >
-                              <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                strokeWidth={2}
-                                d='M15 19l-7-7 7-7'
-                              />
-                            </svg>
-                            Change Design Type
-                          </button>
-                          <div className='text-muted-foreground mb-3 px-3 text-xs'>
-                            {selectedDesignType?.label} Settings
-                          </div>
-
-                          {/* Orientation Options */}
-                          <div className='space-y-0.5'>
-                            {orientationOptions.length > 0 && (
-                              <>
-                                <p className='text-muted-foreground mb-2 px-3 text-xs'>
-                                  Select orientation
-                                </p>
-                                {orientationOptions.map((option) => (
-                                  <button
-                                    key={option.id}
-                                    type='button'
-                                    onClick={() => {
-                                      setSelectedOrientation(option.id);
-                                      trackFeatureUsed(
-                                        "idea_orientation_selected",
-                                        {
-                                          orientation: option.id,
-                                          design_type: selectedDesignTypeId,
-                                        }
-                                      );
-                                      setIsSettingsOpen(false);
-                                      setShowOrientationSelection(false);
-                                    }}
-                                    className={`flex w-full items-center justify-between px-3 py-2.5 text-left transition-colors ${
-                                      selectedOrientation === option.id
-                                        ? "text-foreground"
-                                        : "text-muted-foreground hover:text-foreground"
-                                    }`}
-                                  >
-                                    <div className='flex items-center gap-3'>
-                                      <Checkbox
-                                        checked={
-                                          selectedOrientation === option.id
-                                        }
-                                        className='flex-shrink-0'
-                                        onCheckedChange={() => {}}
-                                      />
-                                      <span className='text-sm font-normal'>
-                                        {option.label}
-                                      </span>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                      {option.dimensions && (
-                                        <span className='text-muted-foreground text-xs'>
-                                          {option.dimensions}
-                                        </span>
-                                      )}
-                                    </div>
-                                  </button>
-                                ))}
-                              </>
-                            )}
-
-                            {/* Custom Size Option */}
-                            <div
-                              className={`${orientationOptions.length > 0 ? "border-border mt-2 border-t pt-2" : ""}`}
-                            >
-                              <button
-                                type='button'
-                                onClick={() => {
-                                  setSelectedOrientation("custom");
-                                }}
-                                className={`flex w-full items-center justify-between px-3 py-2.5 text-left transition-colors ${
-                                  selectedOrientation === "custom"
-                                    ? "text-foreground"
-                                    : "text-muted-foreground hover:text-foreground"
-                                }`}
-                              >
-                                <div className='flex items-center gap-3'>
-                                  <Checkbox
-                                    checked={selectedOrientation === "custom"}
-                                    className='flex-shrink-0'
-                                    onCheckedChange={() => {}}
-                                  />
-                                  <span className='text-sm font-normal'>
-                                    Custom Size
-                                  </span>
-                                </div>
-                              </button>
-
-                              {selectedOrientation === "custom" && (
-                                <div className='space-y-2 px-3 py-3'>
-                                  <div className='flex items-center gap-2'>
-                                    <Input
-                                      type='number'
-                                      placeholder='px width'
-                                      value={customSize.width}
-                                      onChange={(e) =>
-                                        setCustomSize((prev) => ({
-                                          ...prev,
-                                          width: e.target.value,
-                                        }))
-                                      }
-                                      className='h-8 text-sm'
-                                      min='1'
-                                    />
-                                    <span className='text-muted-foreground text-xs'>
-                                      ×
-                                    </span>
-                                    <Input
-                                      type='number'
-                                      placeholder='px height'
-                                      value={customSize.height}
-                                      onChange={(e) =>
-                                        setCustomSize((prev) => ({
-                                          ...prev,
-                                          height: e.target.value,
-                                        }))
-                                      }
-                                      className='h-8 text-sm'
-                                      min='1'
-                                    />
-                                  </div>
-                                  <button
-                                    type='button'
-                                    onClick={() => {
-                                      if (
-                                        customSize.width &&
-                                        customSize.height
-                                      ) {
-                                        setIsSettingsOpen(false);
-                                        setShowOrientationSelection(false);
-                                      }
-                                    }}
-                                    className='bg-foreground text-background w-full rounded px-3 py-1.5 text-xs transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50'
-                                    disabled={
-                                      !customSize.width || !customSize.height
-                                    }
-                                  >
-                                    Apply
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <AnimatePresence>
-              {isBrandSettingsOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  className='border-border absolute top-full right-0 left-0 z-50 mx-auto mt-2 max-h-[500px] w-full max-w-md overflow-hidden rounded-xl border bg-white shadow-md md:mx-0 dark:bg-black'
-                >
-                  <div className='flex flex-col p-4'>
-                    {/* Header */}
-                    <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
-                      <div className='flex items-center gap-2'>
-                        <Palette className='text-primary h-4 w-4' />
-                        <h3 className='text-foreground text-sm font-semibold'>
-                          Brand Identity
-                        </h3>
-                      </div>
-                      <button
-                        type='button'
-                        onClick={() => setIsBrandSettingsOpen(false)}
-                        className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
-                        aria-label='Close brand settings'
-                      >
-                        <X className='h-4 w-4' />
-                      </button>
-                    </div>
-
-                    <div className='custom-scrollbar max-h-[400px] overflow-y-auto'>
-                      <BrandIdentityPanel />
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
 
             {/* Quick Task Search - only show when not generating and no input */}
             <div className='absolute'></div>
@@ -2387,10 +1988,7 @@ export function IdeaSection() {
                           onClick={() =>
                             setTextAmount(
                               option.id as
-                                | "minimal"
-                                | "concise"
-                                | "detailed"
-                                | "extensive"
+                                "minimal" | "concise" | "detailed" | "extensive"
                             )
                           }
                           className={`flex flex-col items-center gap-2 rounded-lg border p-3 transition-all ${
@@ -2609,9 +2207,6 @@ export function IdeaSection() {
                     title: inputValue,
                     type: "presentation",
                     outline: presentationOutline,
-                    orientation: selectedOrientation,
-                    customSize:
-                      customSize.width && customSize.height ? customSize : null,
                     textAmount,
                     theme: selectedTheme,
                     imageStyle,
@@ -2627,9 +2222,6 @@ export function IdeaSection() {
                   if (response.data && response.data.project) {
                     clearInput();
                     setSelectedDesignTypeId("generic_design");
-                    setSelectedOrientation(null);
-                    setShowOrientationSelection(false);
-                    setCustomSize({ width: "", height: "" });
                     setPresentationOutline([]);
                     setIsPresentationDrawerOpen(false);
 
@@ -2667,6 +2259,10 @@ export function IdeaSection() {
       <EnterpriseAutoDialog
         isOpen={isEnterpriseDialogOpen}
         onOpenChange={setIsEnterpriseDialogOpen}
+      />
+      <BrandIdentityDialog
+        isOpen={isBrandSettingsOpen}
+        onOpenChange={setIsBrandSettingsOpen}
       />
     </div>
   );

@@ -172,172 +172,175 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
   }
 
   return (
-    <div className='space-y-4'>
+    <div className='flex h-full min-h-0 flex-col overflow-hidden'>
       <BrandOnboardingDialog
         open={isImportOpen}
         onOpenChange={setIsImportOpen}
         mode={dialogMode}
       />
-      {/* Toggle row */}
-      <div className='bg-muted/40 flex items-center justify-between gap-3 rounded-lg border border-neutral-200 px-3 py-2.5 dark:border-white/10'>
-        <div className='min-w-0'>
-          <p className='text-foreground text-xs font-semibold'>
-            Apply brand identity
-          </p>
-          <p className='text-muted-foreground mt-0.5 text-[10px] leading-tight'>
-            {enabled
-              ? "genit will use your brand's voice, colors, and assets."
-              : "Generations will ignore your brand identity."}
-          </p>
+
+      <div className='custom-scrollbar min-h-0 flex-1 space-y-4 overflow-y-auto px-4 pt-4 pb-6'>
+        {/* Toggle row */}
+        <div className='bg-muted/40 flex items-center justify-between gap-3 rounded-lg border border-neutral-200 px-3 py-2.5 dark:border-white/10'>
+          <div className='min-w-0'>
+            <p className='text-foreground text-xs font-semibold'>
+              Apply brand identity
+            </p>
+            <p className='text-muted-foreground mt-0.5 text-[10px] leading-tight'>
+              {enabled
+                ? "genit will use your brand's voice, colors, and assets."
+                : "Generations will ignore your brand identity."}
+            </p>
+          </div>
+          <Switch
+            checked={enabled}
+            onCheckedChange={setEnabled}
+            disabled={disabled}
+            aria-label='Toggle brand identity'
+          />
         </div>
-        <Switch
-          checked={enabled}
-          onCheckedChange={setEnabled}
-          disabled={disabled}
-          aria-label='Toggle brand identity'
-        />
+
+        <div
+          className={cn(
+            "space-y-4 transition-opacity",
+            !enabled && "pointer-events-none opacity-50"
+          )}
+        >
+          {/* Header: logo + name + bio */}
+          <div className='flex items-start gap-3'>
+            {o.brandLogo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={o.brandLogo}
+                alt={o.businessName || "Brand logo"}
+                className='border-border h-12 w-12 shrink-0 rounded-lg border bg-white object-contain p-1'
+              />
+            ) : (
+              <div className='bg-muted text-muted-foreground flex h-12 w-12 shrink-0 items-center justify-center rounded-lg text-sm font-semibold'>
+                {(o.businessName || "B").slice(0, 1).toUpperCase()}
+              </div>
+            )}
+            <div className='min-w-0 flex-1'>
+              {o.businessName && (
+                <p className='text-foreground truncate text-sm font-semibold'>
+                  {o.businessName}
+                </p>
+              )}
+              {o.industry && (
+                <p className='text-muted-foreground truncate text-[11px]'>
+                  {o.industry}
+                </p>
+              )}
+              {o.businessBio && (
+                <p className='text-muted-foreground mt-1 line-clamp-2 text-[11px] leading-snug'>
+                  {o.businessBio}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Brand colors */}
+          {!!o.brandColors?.length && (
+            <Section label='Brand colors'>
+              <div className='flex flex-wrap gap-1.5'>
+                {o.brandColors.slice(0, 8).map((hex, i) => (
+                  <div
+                    key={`${hex}-${i}`}
+                    className='border-border h-6 w-6 rounded-md border'
+                    style={{ backgroundColor: hex }}
+                    title={hex}
+                  />
+                ))}
+              </div>
+            </Section>
+          )}
+
+          {/* Slogan */}
+          {o.slogan && (
+            <Section label='Slogan'>
+              <p className='text-foreground text-xs italic'>"{o.slogan}"</p>
+            </Section>
+          )}
+
+          {/* Voice & tone */}
+          {!!o.voiceTone?.length && (
+            <Section label='Voice & tone'>
+              <div className='flex flex-wrap gap-1.5'>
+                {o.voiceTone.map((tone) => (
+                  <span
+                    key={tone}
+                    className='bg-muted text-foreground rounded-full px-2 py-0.5 text-[10px] font-medium'
+                  >
+                    {tone}
+                  </span>
+                ))}
+              </div>
+            </Section>
+          )}
+
+          {/* Mission */}
+          {o.mission && (
+            <Section label='Mission'>
+              <p className='text-muted-foreground line-clamp-3 text-xs leading-snug'>
+                {o.mission}
+              </p>
+            </Section>
+          )}
+
+          {/* Vision */}
+          {o.vision && (
+            <Section label='Vision'>
+              <p className='text-muted-foreground line-clamp-3 text-xs leading-snug'>
+                {o.vision}
+              </p>
+            </Section>
+          )}
+
+          {/* About */}
+          {o.aboutUs && (
+            <Section label='About'>
+              <p className='text-muted-foreground line-clamp-4 text-xs leading-snug'>
+                {o.aboutUs}
+              </p>
+            </Section>
+          )}
+
+          {/* Values */}
+          {!!o.values?.length && (
+            <Section label='Values'>
+              <div className='flex flex-wrap gap-1.5'>
+                {o.values.map((v) => (
+                  <span
+                    key={v}
+                    className='border-border text-foreground rounded-full border px-2 py-0.5 text-[10px]'
+                  >
+                    {v}
+                  </span>
+                ))}
+              </div>
+            </Section>
+          )}
+        </div>
       </div>
 
-      <div
-        className={cn(
-          "space-y-4 transition-opacity",
-          !enabled && "pointer-events-none opacity-50"
-        )}
-      >
-        {/* Header: logo + name + bio */}
-        <div className='flex items-start gap-3'>
-          {o.brandLogo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={o.brandLogo}
-              alt={o.businessName || "Brand logo"}
-              className='border-border h-12 w-12 shrink-0 rounded-lg border bg-white object-contain p-1'
-            />
-          ) : (
-            <div className='bg-muted text-muted-foreground flex h-12 w-12 shrink-0 items-center justify-center rounded-lg text-sm font-semibold'>
-              {(o.businessName || "B").slice(0, 1).toUpperCase()}
-            </div>
-          )}
-          <div className='min-w-0 flex-1'>
-            {o.businessName && (
-              <p className='text-foreground truncate text-sm font-semibold'>
-                {o.businessName}
-              </p>
-            )}
-            {o.industry && (
-              <p className='text-muted-foreground truncate text-[11px]'>
-                {o.industry}
-              </p>
-            )}
-            {o.businessBio && (
-              <p className='text-muted-foreground mt-1 line-clamp-2 text-[11px] leading-snug'>
-                {o.businessBio}
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Brand colors */}
-        {!!o.brandColors?.length && (
-          <Section label='Brand colors'>
-            <div className='flex flex-wrap gap-1.5'>
-              {o.brandColors.slice(0, 8).map((hex, i) => (
-                <div
-                  key={`${hex}-${i}`}
-                  className='border-border h-6 w-6 rounded-md border'
-                  style={{ backgroundColor: hex }}
-                  title={hex}
-                />
-              ))}
-            </div>
-          </Section>
-        )}
-
-        {/* Slogan */}
-        {o.slogan && (
-          <Section label='Slogan'>
-            <p className='text-foreground text-xs italic'>"{o.slogan}"</p>
-          </Section>
-        )}
-
-        {/* Voice & tone */}
-        {!!o.voiceTone?.length && (
-          <Section label='Voice & tone'>
-            <div className='flex flex-wrap gap-1.5'>
-              {o.voiceTone.map((tone) => (
-                <span
-                  key={tone}
-                  className='bg-muted text-foreground rounded-full px-2 py-0.5 text-[10px] font-medium'
-                >
-                  {tone}
-                </span>
-              ))}
-            </div>
-          </Section>
-        )}
-
-        {/* Mission */}
-        {o.mission && (
-          <Section label='Mission'>
-            <p className='text-muted-foreground line-clamp-3 text-xs leading-snug'>
-              {o.mission}
-            </p>
-          </Section>
-        )}
-
-        {/* Vision */}
-        {o.vision && (
-          <Section label='Vision'>
-            <p className='text-muted-foreground line-clamp-3 text-xs leading-snug'>
-              {o.vision}
-            </p>
-          </Section>
-        )}
-
-        {/* About */}
-        {o.aboutUs && (
-          <Section label='About'>
-            <p className='text-muted-foreground line-clamp-4 text-xs leading-snug'>
-              {o.aboutUs}
-            </p>
-          </Section>
-        )}
-
-        {/* Values */}
-        {!!o.values?.length && (
-          <Section label='Values'>
-            <div className='flex flex-wrap gap-1.5'>
-              {o.values.map((v) => (
-                <span
-                  key={v}
-                  className='border-border text-foreground rounded-full border px-2 py-0.5 text-[10px]'
-                >
-                  {v}
-                </span>
-              ))}
-            </div>
-          </Section>
-        )}
-
-        <div className='flex items-center justify-between gap-3'>
-          <Link
-            href='/user/settings?tab=brand'
-            target='_blank'
-            className='text-primary text-[11px] font-medium hover:underline'
+      <div className='border-border/70 sticky bottom-0 flex items-center justify-between gap-3 border-t bg-white/90 px-4 py-3 backdrop-blur-xl dark:bg-black/90'>
+        <Link
+          href='/user/settings?tab=brand'
+          target='_blank'
+          className='inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-xs font-medium text-white transition-colors hover:bg-indigo-700'
+        >
+          Edit Brand
+        </Link>
+        {canReimport && (
+          <button
+            type='button'
+            onClick={() => setIsImportOpen(true)}
+            className='text-muted-foreground hover:text-foreground inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-neutral-200 px-3 text-xs font-medium transition-colors hover:bg-neutral-100 dark:border-white/10 dark:hover:bg-white/5'
           >
-            Edit brand identity →
-          </Link>
-          {canReimport && (
-            <button
-              type='button'
-              onClick={() => setIsImportOpen(true)}
-              className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 rounded-md border border-neutral-200 px-2 py-1 text-[10px] font-medium transition-colors hover:bg-neutral-100 dark:border-white/10 dark:hover:bg-white/5'
-            >
-              <Download className='h-3 w-3' />
-              Re-import
-            </button>
-          )}
-        </div>
+            <Download className='h-3.5 w-3.5' />
+            Re-import Brand
+          </button>
+        )}
       </div>
     </div>
   );
