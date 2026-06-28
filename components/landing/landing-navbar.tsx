@@ -102,7 +102,7 @@ export function LandingNavbar() {
   return (
     <>
       <header className='sticky top-0 z-50 w-full border-b border-black/[0.06] bg-white/65 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/55 dark:border-white/10 dark:bg-zinc-950/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.22)] dark:supports-[backdrop-filter]:bg-zinc-950/50'>
-        <nav className='z-50 mx-auto flex h-16 items-center justify-between px-2 md:px-12 lg:px-20 xl:px-24'>
+        <nav className='z-50 mx-auto flex h-fit py-1 items-center justify-between px-2 md:px-12 lg:px-20 xl:px-24'>
           {/* Replace <img> with new <Image> */}
           <Link href='/' className='z-40 flex items-center'>
             <Logo className='h-12 w-12 flex-shrink-0' />
