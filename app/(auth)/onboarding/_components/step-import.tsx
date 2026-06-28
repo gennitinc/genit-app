@@ -124,7 +124,7 @@ export function StepImport({
   }
 
   return (
-    <div className='mx-auto w-full max-w-5xl px-4 pb-16 sm:px-6 lg:px-8'>
+    <div className='mx-auto w-full max-w-5xl px-4 pb-8 sm:px-6 lg:px-8'>
       {/* Hero */}
       <div className='text-center'>
         <h1 className='onb-animate-in onb-stagger-1 mt-4 text-4xl font-semibold tracking-tight text-neutral-900 sm:text-4xl lg:mt-14 dark:text-white'>
@@ -170,7 +170,7 @@ export function StepImport({
       {/* URL input */}
       <div className='onb-animate-in onb-stagger-4 mx-auto mt-6 max-w-xl'>
         <div className='relative'>
-          <Link2 className='absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-neutral-500 dark:text-neutral-400' />
+          <Link2 className='absolute top-1/2 left-4 h-fit py-1 w-5 -translate-y-1/2 text-neutral-500 dark:text-neutral-400' />
           <Input
             value={url}
             onChange={(e) => setUrl(e.target.value)}
@@ -201,7 +201,7 @@ export function StepImport({
         <div className='flex w-full flex-col items-center gap-3'>
           <button
             onClick={() => setMode("manual")}
-            className='mx-auto inline-flex h-14 w-fit items-center justify-center gap-2 rounded-2xl border border-dashed border-cyan-300/30 px-4 text-base text-neutral-500 transition-colors hover:bg-cyan-400/10 dark:text-neutral-400'
+            className='mx-auto inline-flex h-fit py-2 w-fit items-center justify-center gap-2 rounded-2xl border border-dashed border-cyan-300/30 px-4 text-base text-neutral-500 transition-colors hover:bg-cyan-400/10 dark:text-neutral-400'
           >
             <Plus className='h-5 w-5' />
             Add brand manually
@@ -224,31 +224,6 @@ export function StepImport({
           )}
         </div>
       </div>
-
-      {/* Feature row */}
-      {/* <div className='onb-animate-in onb-stagger-5 mx-auto mt-12 max-w-4xl'>
-        <div className='flex flex-wrap items-center justify-center gap-3 text-sm text-neutral-600 dark:text-neutral-300'>
-          <Feature
-            icon={<Camera className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />}
-            label='Live screenshot'
-          />
-          <Divider />
-          <Feature
-            icon={<Palette className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />}
-            label='Real brand colors'
-          />
-          <Divider />
-          <Feature
-            icon={<Workflow className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />}
-            label='Multi-page scan'
-          />
-          <Divider />
-          <Feature
-            icon={<ShieldCheck className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />}
-            label='Private & secure'
-          />
-        </div>
-      </div> */}
     </div>
   );
 }
