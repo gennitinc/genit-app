@@ -1292,7 +1292,7 @@ export default function InboxPage() {
                 )}
               </div>
 
-              <div className='shrink-0 border-t border-black/5 bg-white p-4 dark:border-white/10 dark:bg-zinc-950'>
+              <div className='shrink-0 border-t border-black/5 bg-white p-2 dark:border-white/10 dark:bg-zinc-950'>
                 {activeConversation.status === "resolved" ? (
                   <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
                     <Check className='h-4 w-4' />
@@ -1322,7 +1322,7 @@ export default function InboxPage() {
                         {attachments.map((attachment) => (
                           <div
                             key={attachment.url}
-                            className='relative flex h-14 min-w-36 items-center gap-2 rounded-xl bg-white p-2 pr-8 text-xs shadow-sm dark:bg-zinc-800'
+                            className='relative flex h-14 min-w-fit items-center gap-2 rounded-xl bg-white p-2 text-xs shadow-sm dark:bg-zinc-800'
                           >
                             {attachment.kind === "image" ? (
                               <img
@@ -1333,7 +1333,7 @@ export default function InboxPage() {
                             ) : (
                               <Paperclip className='h-5 w-5 shrink-0' />
                             )}
-                            <span className='truncate'>{attachment.name}</span>
+                            {/* <span className='truncate line-clamp-1 w-[20px]'>{attachment.name}</span> */}
                             <button
                               onClick={() =>
                                 setAttachments((current) =>
@@ -1342,7 +1342,7 @@ export default function InboxPage() {
                                   )
                                 )
                               }
-                              className='text-muted-foreground hover:text-foreground absolute top-1.5 right-1.5'
+                              className='text-muted-foreground absolute top-1.5 right-1.5 bg-foreground rounded-full'
                               aria-label={`Remove ${attachment.name}`}
                             >
                               <XCircle className='h-4 w-4' />
@@ -1434,34 +1434,19 @@ export default function InboxPage() {
                           type='button'
                           variant='ghost'
                           size='sm'
-                          className='h-8 rounded-full text-xs'
+                          className='h-fit py-1 border rounded-full text-xs'
                           disabled={isWriting}
                           onClick={writeWithAi}
                         >
                           {isWriting ? (
                             <LoadingFileLoader size={20} />
                           ) : (
-                            <Sparkles className='mr-1.5 h-3.5 w-3.5' />
+                            <></>
                           )}
                           AI Write
                         </Button>
                       </div>
-                      {/* <Button
-                        size='icon'
-                        onClick={sendReply}
-                        disabled={
-                          (!reply.trim() && attachments.length === 0) ||
-                          sendMutation.isPending ||
-                          isUploading
-                        }
-                        className='h-9 w-9 rounded-full bg-indigo-600 text-white hover:bg-indigo-700'
-                      >
-                        {sendMutation.isPending ? (
-                          <LoadingFileLoader size={20} />
-                        ) : (
-                          <Send className='h-4 w-4' />
-                        )}
-                      </Button> */}
+                     
                       <button
                         type='submit'
                         onClick={sendReply}
