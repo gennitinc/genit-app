@@ -110,24 +110,32 @@ export function PostListCard({ data }: { data: any }) {
     data?.media ||
     data?.tweets ||
     data?.videos ||
+    data?.playlists ||
+    data?.items ||
     data?.pins ||
     [];
+  const label = data?.playlists ? "playlist" : data?.items ? "item" : "post";
   return (
     <AgentCard
       icon={<FileText className='h-3.5 w-3.5' />}
-      title={`${items.length} ${items.length === 1 ? "post" : "posts"}`}
+      title={`${items.length} ${items.length === 1 ? label : `${label}s`}`}
       meta={data?.account}
     >
       {items.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
-          No posts found.
+          No {label}s found.
         </div>
       ) : (
         <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {items.slice(0, 5).map((p, i) => (
             <li key={p.id || i} className='px-3.5 py-2.5'>
               <div className='text-foreground line-clamp-2 text-[12.5px] leading-relaxed'>
-                {p.message || p.caption || p.text || p.title || "(no caption)"}
+                {p.message ||
+                  p.caption ||
+                  p.text ||
+                  p.title ||
+                  p.snippet?.title ||
+                  "(no title)"}
               </div>
               {(p.permalink_url || p.permalink || p.url) && (
                 <div className='mt-1'>

@@ -154,6 +154,8 @@ const EMPTY_FORM = {
   media: [] as SocialPostMedia[],
   platforms: [] as IntegrationPlatform[],
   integrationIds: {} as Partial<Record<IntegrationPlatform, string>>,
+  youtubePlaylistId: "",
+  youtubePlaylistTitle: "",
   status: "draft" as SocialPostStatus,
   scheduledFor: "",
 };
@@ -730,6 +732,10 @@ export default function PostsPage() {
         content: form.content,
         mediaUrl: form.mediaUrl || undefined,
         media: form.media,
+        metadata: {
+          youtubePlaylistId: form.youtubePlaylistId || undefined,
+          youtubePlaylistTitle: form.youtubePlaylistTitle || undefined,
+        },
         status: form.status === "published" ? "draft" : form.status,
         scheduledFor:
           form.status === "scheduled" ? form.scheduledFor : undefined,
@@ -874,6 +880,14 @@ export default function PostsPage() {
         : {},
       status: post.status,
       scheduledFor: post.scheduledFor?.slice(0, 16) || "",
+      youtubePlaylistId:
+        typeof post.metadata?.youtubePlaylistId === "string"
+          ? post.metadata.youtubePlaylistId
+          : "",
+      youtubePlaylistTitle:
+        typeof post.metadata?.youtubePlaylistTitle === "string"
+          ? post.metadata.youtubePlaylistTitle
+          : "",
     });
     setEditorOpen(true);
   }

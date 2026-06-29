@@ -20,6 +20,7 @@ export interface SocialPost {
   content: string;
   mediaUrl?: string;
   media?: SocialPostMedia[];
+  metadata?: Record<string, any>;
   permalink?: string;
   externalId?: string;
   source: "visuals" | "chat" | "integration";
@@ -39,7 +40,7 @@ export type SocialPostMedia = {
 export type SocialPostInput = Pick<SocialPost, "platform" | "content"> &
   Partial<
     Pick<SocialPost, "title" | "mediaUrl" | "media" | "status" | "scheduledFor">
-  > & { integrationId?: string };
+  > & { integrationId?: string; metadata?: Record<string, any> };
 
 export type SocialPostTarget = {
   platform: IntegrationPlatform;

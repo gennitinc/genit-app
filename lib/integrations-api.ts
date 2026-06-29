@@ -26,11 +26,7 @@ export type IntegrationPlatform =
   | "google_drive";
 
 export type MetaSurface =
-  | "facebook"
-  | "instagram"
-  | "meta_ads"
-  | "whatsapp"
-  | "messenger";
+  "facebook" | "instagram" | "meta_ads" | "whatsapp" | "messenger";
 
 export type ConnectionState = "active" | "expired" | "revoked" | "error";
 
@@ -579,12 +575,7 @@ export async function fetchThreadsInsights(
 // -----------------------------------------------------------------------------
 
 export type WhatsAppMessageKind =
-  | "text"
-  | "template"
-  | "image"
-  | "video"
-  | "audio"
-  | "document";
+  "text" | "template" | "image" | "video" | "audio" | "document";
 
 export interface SendWhatsAppMessageInput {
   kind: WhatsAppMessageKind;
@@ -1186,6 +1177,8 @@ export interface InitYouTubeUploadInput {
   categoryId?: string;
   privacyStatus?: YouTubePrivacy;
   madeForKids?: boolean;
+  playlistId?: string;
+  playlistTitle?: string;
   contentLength: number;
   contentType?: string;
 }
@@ -1247,6 +1240,52 @@ export async function listYouTubeVideos(
     nextPageToken?: string;
   }>(`/integrations/youtube/${integrationId}/videos${qs ? `?${qs}` : ""}`);
   return { videos: data.videos, nextPageToken: data.nextPageToken };
+}
+
+export interface YouTubePlaylistSummary {
+  id: string;
+  snippet?: {
+    title: string;
+    description?: string;
+    publishedAt?: string;
+  };
+  status?: {
+    privacyStatus?: YouTubePrivacy;
+  };
+  contentDetails?: {
+    itemCount?: number;
+  };
+}
+
+export async function listYouTubePlaylists(
+  integrationId: string,
+  q: ListYouTubeVideosQuery = {}
+): Promise<{ playlists: YouTubePlaylistSummary[]; nextPageToken?: string }> {
+  const params = new URLSearchParams();
+  if (q.maxResults) params.set("maxResults", String(q.maxResults));
+  if (q.pageToken) params.set("pageToken", q.pageToken);
+  const qs = params.toString();
+  const { data } = await apiResponse.get<{
+    success: boolean;
+    playlists: YouTubePlaylistSummary[];
+    nextPageToken?: string;
+  }>(`/integrations/youtube/${integrationId}/playlists${qs ? `?${qs}` : ""}`);
+  return { playlists: data.playlists, nextPageToken: data.nextPageToken };
+}
+
+export async function createYouTubePlaylist(
+  integrationId: string,
+  input: {
+    title: string;
+    description?: string;
+    privacyStatus?: YouTubePrivacy;
+  }
+): Promise<YouTubePlaylistSummary> {
+  const { data } = await apiResponse.post<{
+    success: boolean;
+    playlist: YouTubePlaylistSummary;
+  }>(`/integrations/youtube/${integrationId}/playlists`, input);
+  return data.playlist;
 }
 
 export interface YouTubeComment {

@@ -110,6 +110,10 @@ export function HomeCommandCenter({
         content: form.content.trim(),
         mediaUrl: form.mediaUrl.trim() || undefined,
         media: form.media,
+        metadata: {
+          youtubePlaylistId: form.youtubePlaylistId || undefined,
+          youtubePlaylistTitle: form.youtubePlaylistTitle || undefined,
+        },
         status: form.status === "published" ? "draft" : form.status,
         scheduledFor:
           form.status === "scheduled" ? form.scheduledFor : undefined,
@@ -242,6 +246,14 @@ export function HomeCommandCenter({
         : {},
       status: post.status,
       scheduledFor: post.scheduledFor?.slice(0, 16) || "",
+      youtubePlaylistId:
+        typeof post.metadata?.youtubePlaylistId === "string"
+          ? post.metadata.youtubePlaylistId
+          : "",
+      youtubePlaylistTitle:
+        typeof post.metadata?.youtubePlaylistTitle === "string"
+          ? post.metadata.youtubePlaylistTitle
+          : "",
     });
     setEditorOpen(true);
   }

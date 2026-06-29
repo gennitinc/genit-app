@@ -47,6 +47,10 @@ import type {
   IntegrationConnection,
   IntegrationPlatform,
 } from "@/lib/integrations-api";
+import {
+  type YouTubePlaylistSummary,
+  listYouTubePlaylists,
+} from "@/lib/integrations-api";
 import type { SocialPostMedia, SocialPostStatus } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -59,7 +63,13 @@ import {
   Send,
   X,
 } from "lucide-react";
-import type { Dispatch, SetStateAction } from "react";
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 export const POST_PLATFORMS: IntegrationPlatform[] = [
   "facebook",
@@ -93,6 +103,8 @@ export type PostEditorForm = {
   media: SocialPostMedia[];
   platforms: IntegrationPlatform[];
   integrationIds: Partial<Record<IntegrationPlatform, string>>;
+  youtubePlaylistId: string;
+  youtubePlaylistTitle: string;
   status: SocialPostStatus;
   scheduledFor: string;
 };
@@ -105,6 +117,8 @@ export const EMPTY_POST_FORM: PostEditorForm = {
   media: [],
   platforms: [],
   integrationIds: {},
+  youtubePlaylistId: "",
+  youtubePlaylistTitle: "",
   status: "draft",
   scheduledFor: "",
 };
@@ -274,6 +288,45 @@ export function PostEditorDialog({
 }: PostEditorDialogProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const validationErrors = getPostValidationErrors(form);
+  const youtubeIntegrationId = form.integrationIds.youtube || "";
+  const showYouTubePlaylist = form.platforms.includes("youtube");
+  const [youtubePlaylists, setYoutubePlaylists] = useState<
+    YouTubePlaylistSummary[]
+  >([]);
+  const [isCustomYoutubePlaylist, setIsCustomYoutubePlaylist] = useState(false);
+  const [isLoadingYoutubePlaylists, setIsLoadingYoutubePlaylists] =
+    useState(false);
+  const selectedYouTubePlaylistValue = useMemo(() => {
+    if (form.youtubePlaylistId) return form.youtubePlaylistId;
+    if (isCustomYoutubePlaylist || form.youtubePlaylistTitle) return "custom";
+    return "none";
+  }, [
+    form.youtubePlaylistId,
+    form.youtubePlaylistTitle,
+    isCustomYoutubePlaylist,
+  ]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!showYouTubePlaylist || !youtubeIntegrationId) {
+      setYoutubePlaylists([]);
+      return;
+    }
+    setIsLoadingYoutubePlaylists(true);
+    listYouTubePlaylists(youtubeIntegrationId, { maxResults: 50 })
+      .then((result) => {
+        if (!cancelled) setYoutubePlaylists(result.playlists);
+      })
+      .catch(() => {
+        if (!cancelled) setYoutubePlaylists([]);
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoadingYoutubePlaylists(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [showYouTubePlaylist, youtubeIntegrationId]);
 
   function togglePlatform(platform: IntegrationPlatform) {
     setForm((current) => ({
@@ -405,15 +458,23 @@ export function PostEditorDialog({
                     </Label>
                     <Select
                       value={form.integrationIds[platform] || "none"}
-                      onValueChange={(value) =>
+                      onValueChange={(value) => {
+                        if (platform === "youtube")
+                          setIsCustomYoutubePlaylist(false);
                         setForm((current) => ({
                           ...current,
                           integrationIds: {
                             ...current.integrationIds,
                             [platform]: value === "none" ? "" : value,
                           },
-                        }))
-                      }
+                          ...(platform === "youtube"
+                            ? {
+                                youtubePlaylistId: "",
+                                youtubePlaylistTitle: "",
+                              }
+                            : {}),
+                        }));
+                      }}
                     >
                       <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
                         <SelectValue />
@@ -433,6 +494,84 @@ export function PostEditorDialog({
                 );
               })}
             </div>
+          </div>
+        )}
+        {showYouTubePlaylist && (
+          <div className='grid gap-3 rounded-xl border border-red-500/15 bg-red-500/[0.04] p-3'>
+            <div>
+              <p className='text-[10px] font-semibold tracking-[0.16em] text-red-200/80 uppercase'>
+                YouTube playlist
+              </p>
+              <p className='mt-1 text-[11px] leading-4 text-zinc-500'>
+                Optional. Select an existing playlist or type a new one.
+              </p>
+            </div>
+            <Select
+              value={selectedYouTubePlaylistValue}
+              disabled={!youtubeIntegrationId || isLoadingYoutubePlaylists}
+              onValueChange={(value) => {
+                if (value === "none") {
+                  setIsCustomYoutubePlaylist(false);
+                  setForm((current) => ({
+                    ...current,
+                    youtubePlaylistId: "",
+                    youtubePlaylistTitle: "",
+                  }));
+                  return;
+                }
+                if (value === "custom") {
+                  setIsCustomYoutubePlaylist(true);
+                  setForm((current) => ({
+                    ...current,
+                    youtubePlaylistId: "",
+                    youtubePlaylistTitle: current.youtubePlaylistTitle,
+                  }));
+                  return;
+                }
+                const playlist = youtubePlaylists.find(
+                  (item) => item.id === value
+                );
+                setIsCustomYoutubePlaylist(false);
+                setForm((current) => ({
+                  ...current,
+                  youtubePlaylistId: value,
+                  youtubePlaylistTitle: playlist?.snippet?.title || "",
+                }));
+              }}
+            >
+              <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
+                <SelectValue
+                  placeholder={
+                    youtubeIntegrationId
+                      ? "Choose playlist"
+                      : "Select a YouTube account first"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
+                <SelectItem value='none'>No playlist</SelectItem>
+                {youtubePlaylists.map((playlist) => (
+                  <SelectItem key={playlist.id} value={playlist.id}>
+                    {playlist.snippet?.title || playlist.id}
+                  </SelectItem>
+                ))}
+                <SelectItem value='custom'>New playlist</SelectItem>
+              </SelectContent>
+            </Select>
+            {selectedYouTubePlaylistValue === "custom" && (
+              <Input
+                value={form.youtubePlaylistTitle}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    youtubePlaylistId: "",
+                    youtubePlaylistTitle: event.target.value,
+                  }))
+                }
+                placeholder='Playlist name'
+                className='h-9 border-white/10 bg-white/[0.02] text-white placeholder:text-zinc-600'
+              />
+            )}
           </div>
         )}
       </section>
