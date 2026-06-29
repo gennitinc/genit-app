@@ -7,10 +7,16 @@ import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { enhancePromptText } from "@/lib/prompt-enhancement-api";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, CircleFadingArrowUp, Loader2, Mic, Zap } from "lucide-react";
+import {
+  AlertCircle,
+  CircleFadingArrowUp,
+  Loader2,
+  Mic,
+  Zap,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 interface PremiumInputProps {
   value: string;
@@ -234,10 +240,7 @@ export function PremiumInput({
                 className='text-muted-foreground hover:text-foreground absolute top-1.5 right-1.5 z-10 inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors hover:bg-indigo-600/10 disabled:cursor-not-allowed disabled:opacity-50'
                 onClick={handleEnhancePrompt}
                 disabled={
-                  isGenerating ||
-                  disabled ||
-                  isEnhancingPrompt ||
-                  !value.trim()
+                  isGenerating || disabled || isEnhancingPrompt || !value.trim()
                 }
               >
                 {isEnhancingPrompt ? (
@@ -273,26 +276,6 @@ export function PremiumInput({
               title={isListening ? "Stop listening" : "Start voice input"}
             >
               <Mic className='size-4 shrink-0' />
-            </button>
-
-            <button
-              type='button'
-              onClick={handleSubmit}
-              disabled={isGenerating || !value.trim() || disabled}
-              className='text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full bg-indigo-600 !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out hover:bg-indigo-700 disabled:opacity-50'
-            >
-              {isGenerating ? (
-                <Loader2 className='h-4 w-4 animate-spin' />
-              ) : (
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='currentColor'
-                  viewBox='0 0 24 24'
-                  className='size-5 shrink-0'
-                >
-                  <path d='M11 19V7.415l-3.293 3.293a1 1 0 1 1-1.414-1.414l5-5 .074-.067a1 1 0 0 1 1.34.067l5 5a1 1 0 1 1-1.414 1.414L13 7.415V19a1 1 0 1 1-2 0' />
-                </svg>
-              )}
             </button>
           </div>
         </div>
