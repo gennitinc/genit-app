@@ -654,7 +654,7 @@ function VideoGenerationPage() {
             model_id: selectedImageModel?._id,
           });
         } else {
-          toast(response.message || "Failed to generate image");
+          throw new Error(response.message || "Failed to generate image");
         }
       } catch (error: any) {
         console.error(error);
@@ -662,6 +662,7 @@ function VideoGenerationPage() {
           reason: error?.message || "unknown",
           model_id: selectedImageModel?._id,
         });
+        toast.error(error.message || "Image generation failed");
       } finally {
         setIsGenerating(false);
       }
@@ -738,7 +739,7 @@ function VideoGenerationPage() {
           model_id: selectedVideoModel?._id,
         });
       } else {
-        toast(response.message);
+        throw new Error(response.message || "Failed to generate video");
       }
     } catch (error: any) {
       console.error(error);
@@ -757,6 +758,8 @@ function VideoGenerationPage() {
               router.push(isBasic ? "/pricing" : "/user/settings?tab=billing"),
           },
         });
+      } else {
+        toast.error(error.message || "Video generation failed");
       }
     } finally {
       setIsGenerating(false);

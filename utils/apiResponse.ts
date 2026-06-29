@@ -1,12 +1,14 @@
 import axios from "axios";
 import cookie from "js-cookie";
 
+const API_BASE_URL =
+  (process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_LIVE_URL
+    : process.env.NEXT_PUBLIC_LOCAL_URL) || "http://localhost:8000/api/v1/";
+
 //api controller
 export const apiResponse = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_LIVE_URL
-      : process.env.NEXT_PUBLIC_LOCAL_URL,
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -16,10 +18,28 @@ export const apiResponse = axios.create({
 
 // Add request interceptor to dynamically add the token
 apiResponse.interceptors.request.use((config) => {
+  if (
+    typeof FormData !== "undefined" &&
+    config.data instanceof FormData &&
+    config.headers
+  ) {
+    delete config.headers["Content-Type"];
+  }
   if (typeof window !== "undefined") {
     const token = cookie.get("genituToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+    if (
+      process.env.NODE_ENV !== "production" &&
+      typeof config.url === "string" &&
+      config.url.includes("/inspire/generate/")
+    ) {
+      const url = new URL(config.url, config.baseURL || API_BASE_URL);
+      console.info("[api] generation request", {
+        method: config.method,
+        url: url.toString(),
+      });
     }
   }
   return config;

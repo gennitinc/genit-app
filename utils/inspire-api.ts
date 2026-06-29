@@ -800,9 +800,7 @@ export const imageGenApi = {
       formData,
       {
         withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        timeout: 180_000,
       }
     );
     return response.data;
@@ -870,9 +868,7 @@ export const videoGenApi = {
       formData,
       {
         withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        timeout: 900_000,
       }
     );
     return response.data;
