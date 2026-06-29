@@ -1103,7 +1103,9 @@ export default function InboxPage() {
               <div className='min-h-0 flex-1 overflow-y-auto p-4 sm:p-6'>
                 {messagesLoading ? (
                   <div className='text-muted-foreground flex h-40 items-center justify-center text-sm'>
-                    <LoadingFileLoader size={20} />
+                    <div className="mr-2">
+                        <LoadingFileLoader size={20} />
+                    </div>
                     Loading messages
                   </div>
                 ) : (
