@@ -61,6 +61,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import React, { useEffect, useMemo, useState } from "react";
 import { useCallback, useRef } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 type TemplateItem = {
   id: string;
@@ -987,7 +988,7 @@ export default function TemplateGridAll() {
                               className='from-transparent via-blue-500 to-transparent'
                             />
                             {isGenerating || isSubmitting ? (
-                              <Loader2 className='h-4 w-4 animate-spin' />
+                              <LoadingFileLoader size={20} />
                             ) : (
                               <WandSparklesIcon className='h-4 w-4' />
                             )}
@@ -1316,7 +1317,7 @@ export default function TemplateGridAll() {
                               className='from-transparent via-blue-500 to-transparent'
                             />
                             {isGenerating || isSubmitting ? (
-                              <Loader2 className='h-4 w-4 animate-spin' />
+                              <LoadingFileLoader size={20} />
                             ) : (
                               <WandSparklesIcon className='h-4 w-4' />
                             )}

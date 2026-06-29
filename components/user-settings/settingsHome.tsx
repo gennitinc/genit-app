@@ -24,6 +24,7 @@ import { useAccountActions } from "@/hooks/use-account-actions";
 import { useToast } from "@/hooks/use-toast";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   Check,
   ChevronRight,
@@ -541,7 +542,7 @@ const SettingsHome = () => {
                     >
                       {isSigningOut ? (
                         <>
-                          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                         <LoadingFileLoader size={20} />
                           Signing out...
                         </>
                       ) : (
@@ -577,7 +578,7 @@ const SettingsHome = () => {
                         >
                           {isDeletingAccount ? (
                             <>
-                              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                            <LoadingFileLoader size={20} />
                               Deleting...
                             </>
                           ) : (

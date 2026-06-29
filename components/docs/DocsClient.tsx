@@ -2,6 +2,7 @@
 
 import { Logo } from "@/components/logo";
 import { apiResponse } from "@/utils/apiResponse";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   BookOpen,
   ChevronRight,
@@ -297,7 +298,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
         <main className='min-w-0 flex-1'>
           {isLoading ? (
             <div className='flex min-h-[calc(100vh-4rem)] items-center justify-center'>
-              <Loader2 className='h-8 w-8 animate-spin text-zinc-500' />
+               <LoadingFileLoader size={20} />
             </div>
           ) : !activeDoc ? (
             <div className='mx-auto max-w-2xl px-6 py-32 text-center'>

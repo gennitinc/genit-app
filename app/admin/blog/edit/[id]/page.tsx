@@ -2,6 +2,7 @@
 
 import { MediaPicker } from "@/components/admin/MediaPicker";
 import { NotionEditor } from "@/components/admin/NotionEditor";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { ArrowLeft, Loader2, RefreshCw, Save, X } from "lucide-react";
 import Link from "next/link";
@@ -154,7 +155,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
   if (isLoading) {
     return (
       <div className='flex h-[60vh] flex-col items-center justify-center gap-4'>
-        <Loader2 className='h-8 w-8 animate-spin text-cyan-500' />
+         <LoadingFileLoader size={20} />
         <p className='text-sm text-zinc-500'>Loading article details...</p>
       </div>
     );
@@ -400,7 +401,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className='h-3.5 w-3.5 animate-spin' /> Saving...
+                    <LoadingFileLoader size={20} />
                   </>
                 ) : (
                   <>

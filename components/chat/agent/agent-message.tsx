@@ -20,6 +20,7 @@ import type {
   AgentTask,
   AgentToolCall,
 } from "@/lib/agents-api";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   AlertTriangle,
   CalendarCheck2,
@@ -122,7 +123,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
   if (!call.result) {
     return (
       <div className='border-border/70 bg-card text-muted-foreground my-3 flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-[12.5px] shadow-[0_1px_0_rgba(0,0,0,0.02)] dark:border-white/10 dark:bg-white/[0.02] dark:shadow-none'>
-        <Loader2 className='text-foreground h-3.5 w-3.5 animate-spin' />
+        <LoadingFileLoader size={20} />
         <span className='text-foreground font-medium'>{pendingLabel}</span>
         <span className='text-muted-foreground'>running…</span>
       </div>
@@ -202,7 +203,7 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
   if (status === "running") {
     return (
       <span className='bg-foreground/[0.06] text-muted-foreground inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-medium dark:bg-white/[0.06]'>
-        <Loader2 className='h-2.5 w-2.5 animate-spin' />
+         <LoadingFileLoader size={20} />
         Working
       </span>
     );

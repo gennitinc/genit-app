@@ -3,6 +3,7 @@
 import { AgentButton, AgentCard, AgentInput } from "./agent-card";
 import { BorderBeam } from "@/components/ui/border-beam";
 import type { AgentElicitation } from "@/lib/agents-api";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { Loader2, MessageCircleQuestion, Send } from "lucide-react";
 import { useState } from "react";
 
@@ -80,7 +81,7 @@ export function ElicitationCard({
                 }
               >
                 {isPicked && submitting && (
-                  <Loader2 className='h-3 w-3 animate-spin' />
+                  <LoadingFileLoader size={20} />
                 )}
                 {opt.label}
               </button>
@@ -111,7 +112,7 @@ export function ElicitationCard({
             aria-label='Send'
           >
             {submitting ? (
-              <Loader2 className='h-3 w-3 animate-spin' />
+             <LoadingFileLoader size={20} />
             ) : (
               <Send className='h-3 w-3' />
             )}

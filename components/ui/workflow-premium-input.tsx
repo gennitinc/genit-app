@@ -9,6 +9,7 @@ import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { enhancePromptText } from "@/lib/prompt-enhancement-api";
 import { cn } from "@/lib/utils";
 import { Model } from "@/types/inspire";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   audioGenApi,
@@ -34,8 +35,8 @@ import {
   Zap,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const MODELS_BY_TYPE = {
   text: [
@@ -480,14 +481,11 @@ export function WorkflowPremiumInput({
                 className='text-muted-foreground hover:text-foreground absolute top-1.5 right-1.5 z-10 inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors hover:bg-indigo-600/10 disabled:cursor-not-allowed disabled:opacity-50'
                 onClick={handleEnhancePrompt}
                 disabled={
-                  isGenerating ||
-                  disabled ||
-                  isEnhancingPrompt ||
-                  !value.trim()
+                  isGenerating || disabled || isEnhancingPrompt || !value.trim()
                 }
               >
                 {isEnhancingPrompt ? (
-                  <Loader2 className='h-3.5 w-3.5 animate-spin' />
+                  <LoadingFileLoader size={20} />
                 ) : (
                   <CircleFadingArrowUp className='h-3.5 w-3.5' />
                 )}
@@ -505,7 +503,7 @@ export function WorkflowPremiumInput({
               <button className='hover:bg-muted text-muted-foreground hover:text-foreground flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium transition-colors'>
                 <span className='opacity-70'>
                   {isLoadingModels ? (
-                    <Loader2 className='h-3 w-3 animate-spin' />
+                    <LoadingFileLoader size={20} />
                   ) : (
                     activeModel?.icon || "✦"
                   )}
@@ -520,7 +518,7 @@ export function WorkflowPremiumInput({
               <div className='space-y-1'>
                 {isLoadingModels ? (
                   <div className='flex items-center justify-center p-4'>
-                    <Loader2 className='text-muted-foreground h-4 w-4 animate-spin' />
+                    <LoadingFileLoader size={20} />
                   </div>
                 ) : (
                   currentModels.map((model) => (
@@ -609,7 +607,7 @@ export function WorkflowPremiumInput({
                 <div className='p-2'>
                   {isLoadingHistory ? (
                     <div className='flex flex-col items-center justify-center gap-2 py-8'>
-                      <Loader2 className='text-muted-foreground h-5 w-5 animate-spin' />
+                      <LoadingFileLoader size={20} />
                       <span className='text-muted-foreground text-[10px]'>
                         Loading history...
                       </span>
@@ -712,7 +710,7 @@ export function WorkflowPremiumInput({
               className='text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full bg-indigo-600 !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out hover:bg-indigo-700 disabled:opacity-50'
             >
               {isGenerating ? (
-                <Loader2 className='h-4 w-4 animate-spin' />
+                <LoadingFileLoader size={20} />
               ) : (
                 <svg
                   xmlns='http://www.w3.org/2000/svg'

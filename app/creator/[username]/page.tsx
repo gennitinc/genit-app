@@ -43,7 +43,7 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { CommunityContent } from "@/types/inspire";
-import Loading from "@/utils/Loading";
+import Loading, { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { creatorApi } from "@/utils/inspire-api";
 import {
@@ -651,7 +651,7 @@ export default function CreatorProfilePage() {
                   className='flex h-10 w-10 items-center justify-center rounded-full bg-black/70 transition-colors hover:bg-black/80'
                 >
                   {isUploadingCover ? (
-                    <Loader2 className='h-5 w-5 animate-spin text-white' />
+                    <LoadingFileLoader size={20} />
                   ) : (
                     <Camera className='h-5 w-5 text-white' />
                   )}
@@ -697,7 +697,7 @@ export default function CreatorProfilePage() {
                         className='z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/70 transition-colors hover:bg-black/80'
                       >
                         {isUploadingProfile ? (
-                          <Loader2 className='h-5 w-5 animate-spin text-white' />
+                         <LoadingFileLoader size={20} />
                         ) : (
                           <Camera className='h-5 w-5 text-white' />
                         )}
@@ -880,7 +880,7 @@ export default function CreatorProfilePage() {
                               disabled={isSavingSettings}
                             >
                               {isSavingSettings ? (
-                                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                                <LoadingFileLoader size={20} />
                               ) : null}
                               Save
                             </Button>
@@ -929,7 +929,7 @@ export default function CreatorProfilePage() {
                         className='flex h-10 w-10 items-center justify-center rounded-full bg-black/70 transition-colors hover:bg-black/80'
                       >
                         {isUploadingProfile ? (
-                          <Loader2 className='h-5 w-5 animate-spin text-white' />
+                           <LoadingFileLoader size={20} />
                         ) : (
                           <Camera className='h-5 w-5 text-white' />
                         )}
@@ -1310,7 +1310,7 @@ export default function CreatorProfilePage() {
                             disabled={isSavingSettings}
                           >
                             {isSavingSettings ? (
-                              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                              <LoadingFileLoader size={20} />
                             ) : null}
                             Save
                           </Button>
@@ -1330,7 +1330,7 @@ export default function CreatorProfilePage() {
                     )}
                   >
                     {following ? (
-                      <Loader2 className='h-4 w-4 animate-spin' />
+                      <LoadingFileLoader size={20} />
                     ) : isFollowing ? (
                       "Following"
                     ) : (
@@ -1525,7 +1525,7 @@ export default function CreatorProfilePage() {
                             disabled={isSavingSettings}
                           >
                             {isSavingSettings ? (
-                              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                              <LoadingFileLoader size={20} />
                             ) : null}
                             Save
                           </Button>
@@ -1545,7 +1545,7 @@ export default function CreatorProfilePage() {
                     )}
                   >
                     {following ? (
-                      <Loader2 className='h-4 w-4 animate-spin' />
+                       <LoadingFileLoader size={20} />
                     ) : isFollowing ? (
                       "Following"
                     ) : (

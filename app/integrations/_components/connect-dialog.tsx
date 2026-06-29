@@ -49,6 +49,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 type PopupMessage =
   | {
@@ -927,7 +928,7 @@ export function ConnectDialog({
                       // style={{ background: glow, opacity: 0.5 }}
                     />
                     <div className='border-border bg-card relative flex h-14 w-14 items-center justify-center rounded-full border dark:border-white/10'>
-                      <Loader2 className='h-6 w-6 animate-spin' />
+                    <LoadingFileLoader size={20} />
                     </div>
                   </div>
                   <p className='text-foreground mt-4 text-sm font-medium'>
@@ -1044,7 +1045,7 @@ export function ConnectDialog({
                   >
                     {provisionLoading ? (
                       <>
-                        <Loader2 className='mr-1 h-3 w-3 animate-spin' />
+                       <LoadingFileLoader size={20} />
                         Connecting…
                       </>
                     ) : (

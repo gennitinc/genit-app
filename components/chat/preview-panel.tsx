@@ -10,6 +10,7 @@ import AutomationWorkflow from "../automation";
 import genittWorkflow from "../workflow";
 import { GraphicsCanvas } from "./graphics-canvas";
 import { useProjectDesign } from "@/context/DesignProject";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   Globe,
   Image as ImageIcon,
@@ -85,7 +86,7 @@ const PreviewPanelContent = ({
   if (isLoadingProject) {
     return (
       <div className='bg-muted/10 flex h-full flex-col items-center justify-center gap-4'>
-        <Loader2 className='text-primary h-8 w-8 animate-spin' />
+        <LoadingFileLoader size={20} />
         <p className='text-muted-foreground animate-pulse text-sm'>
           Loading preview...
         </p>

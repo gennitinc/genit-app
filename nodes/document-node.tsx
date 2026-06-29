@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   CircleFadingArrowUp,
   Download,
@@ -197,7 +198,7 @@ export const DocumentNode = memo(
                       className='borber-primary/20 text-primary h-7 gap-1 bg-indigo-600 px-2 text-[10px] hover:bg-indigo-700/5'
                     >
                       {isAnalyzing ? (
-                        <Loader2 className='h-3 w-3 animate-spin' />
+                        <LoadingFileLoader size={20} />
                       ) : (
                         <Sparkles className='h-3 w-3' />
                       )}

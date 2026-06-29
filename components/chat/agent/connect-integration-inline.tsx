@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 // Inline "Connect this integration to continue" card shown inside an
 // in-progress agent message. After successful OAuth, the server's callback
@@ -151,7 +152,7 @@ export function ConnectIntegrationInline({
                 >
                   {phase === "connecting" ? (
                     <>
-                      <Loader2 className='h-3 w-3 animate-spin' />
+                       <LoadingFileLoader size={20} />
                       Connecting…
                     </>
                   ) : (

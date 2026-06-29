@@ -21,17 +21,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { useToast } from "@/hooks/use-toast";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import { ImageIcon, Loader2, Lock, Palette, Plus, Save, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type SocialPlatform =
-  | "facebook"
-  | "instagram"
-  | "linkedin"
-  | "youtube"
-  | "twitter"
-  | "tiktok";
+  "facebook" | "instagram" | "linkedin" | "youtube" | "twitter" | "tiktok";
 
 type SocialUrls = Partial<Record<SocialPlatform, string>>;
 
@@ -370,7 +366,7 @@ export default function BrandSettings() {
                 )}
                 {isUploadingLogo && (
                   <div className='bg-background/60 absolute inset-0 flex items-center justify-center backdrop-blur-sm'>
-                    <Loader2 className='size-6 animate-spin' />
+                    <LoadingFileLoader size={20} />
                   </div>
                 )}
               </button>
@@ -581,7 +577,7 @@ export default function BrandSettings() {
             <Button onClick={handleSave} disabled={!dirty || isSaving}>
               {isSaving ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Saving...
                 </>
               ) : (

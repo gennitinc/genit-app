@@ -3,6 +3,7 @@
 import { MediaPicker } from "@/components/admin/MediaPicker";
 import { NotionEditor } from "@/components/admin/NotionEditor";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   ArrowLeft,
@@ -343,7 +344,7 @@ export default function NewBlogPostPage() {
               >
                 {isGeneratingBody ? (
                   <>
-                    <Loader2 className='h-3.5 w-3.5 animate-spin' />
+                    <LoadingFileLoader size={20} />
                     Generating...
                   </>
                 ) : (
@@ -548,7 +549,7 @@ export default function NewBlogPostPage() {
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className='h-3.5 w-3.5 animate-spin' />{" "}
+                    <LoadingFileLoader size={20} />
                     Publishing...
                   </>
                 ) : (
@@ -678,8 +679,8 @@ export default function NewBlogPostPage() {
               >
                 {isGeneratingAi ? (
                   <>
-                    <Loader2 className='h-3.5 w-3.5 animate-spin' /> Writing
-                    Article...
+                    <LoadingFileLoader size={20} />
+                    Writing Article...
                   </>
                 ) : (
                   <>

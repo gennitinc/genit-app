@@ -205,7 +205,7 @@ export function MediaPicker({
           )}
           {uploading && (
             <div className='absolute inset-0 flex items-center justify-center bg-black/70'>
-              <Loader2 className='h-6 w-6 animate-spin text-cyan-400' />
+              <LoadingFileLoader size={20} />
             </div>
           )}
         </div>

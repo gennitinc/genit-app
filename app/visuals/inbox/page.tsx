@@ -693,7 +693,7 @@ export default function InboxPage() {
                 }
               >
                 {markAllMutation.isPending ? (
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                 ) : (
                   <CheckCheck className='mr-2 h-4 w-4' />
                 )}
@@ -704,7 +704,7 @@ export default function InboxPage() {
                 onSelect={() => syncChannels(false)}
               >
                 {syncMutation.isPending ? (
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                 ) : (
                   <RefreshCw className='mr-2 h-4 w-4' />
                 )}
@@ -1103,7 +1103,7 @@ export default function InboxPage() {
               <div className='min-h-0 flex-1 overflow-y-auto p-4 sm:p-6'>
                 {messagesLoading ? (
                   <div className='text-muted-foreground flex h-40 items-center justify-center text-sm'>
-                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                    <LoadingFileLoader size={20} />
                     Loading messages
                   </div>
                 ) : (
@@ -1258,7 +1258,7 @@ export default function InboxPage() {
                             {relativeTime(message.createdAt)}
                             {!inbound &&
                               (message.status === "sending" ? (
-                                <Loader2 className='h-3 w-3 animate-spin' />
+                                <LoadingFileLoader size={20} />
                               ) : message.status === "failed" ? (
                                 <button
                                   className='flex items-center gap-1 text-red-600 hover:underline'
@@ -1398,7 +1398,7 @@ export default function InboxPage() {
                           }
                         >
                           {isUploading ? (
-                            <Loader2 className='h-4 w-4 animate-spin' />
+                            <LoadingFileLoader size={20} />
                           ) : (
                             <Paperclip className='h-4 w-4' />
                           )}
@@ -1439,7 +1439,7 @@ export default function InboxPage() {
                           onClick={writeWithAi}
                         >
                           {isWriting ? (
-                            <Loader2 className='mr-1.5 h-3.5 w-3.5 animate-spin' />
+                            <LoadingFileLoader size={20} />
                           ) : (
                             <Sparkles className='mr-1.5 h-3.5 w-3.5' />
                           )}
@@ -1457,7 +1457,7 @@ export default function InboxPage() {
                         className='h-9 w-9 rounded-full bg-indigo-600 text-white hover:bg-indigo-700'
                       >
                         {sendMutation.isPending ? (
-                          <Loader2 className='h-4 w-4 animate-spin' />
+                          <LoadingFileLoader size={20} />
                         ) : (
                           <Send className='h-4 w-4' />
                         )}
@@ -1491,7 +1491,7 @@ export default function InboxPage() {
                         {/* Button content */}
                         <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
                           {sendMutation.isPending || isUploading ? (
-                            <Loader2 className='h-4 w-4 animate-spin text-white' />
+                            <LoadingFileLoader size={20} />
                           ) : (
                             <svg
                               className='h-4 w-4 text-white'

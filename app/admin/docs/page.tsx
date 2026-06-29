@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   BookOpen,
@@ -81,7 +82,9 @@ export default function AdminDocsPage() {
   };
 
   const triggerSeed = async () => {
-    if (!confirm("This will reset documentation pages to seeded data. Continue?")) {
+    if (
+      !confirm("This will reset documentation pages to seeded data. Continue?")
+    ) {
       return;
     }
 
@@ -123,7 +126,7 @@ export default function AdminDocsPage() {
 
       {isLoading ? (
         <div className='flex items-center justify-center py-20'>
-          <Loader2 className='h-8 w-8 animate-spin text-cyan-500' />
+          <LoadingFileLoader size={20} />
         </div>
       ) : docs.length === 0 ? (
         <div className='rounded-3xl border border-dashed border-zinc-800 py-20 text-center'>

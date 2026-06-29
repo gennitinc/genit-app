@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useInpaint } from "@/hooks/use-inpaint";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { serverUrlSocket } from "@/utils/apiResponse";
 import { IconBrush } from "@tabler/icons-react";
 import {
@@ -302,7 +303,7 @@ export const DesignNode = memo(
                 className='h-9 flex-[1.4] rounded-xl'
               >
                 {isInpainting ? (
-                  <Loader2 className='mr-1 h-3.5 w-3.5 animate-spin' />
+                  <LoadingFileLoader size={20} />
                 ) : (
                   <Wand2 className='mr-1 h-3.5 w-3.5' />
                 )}

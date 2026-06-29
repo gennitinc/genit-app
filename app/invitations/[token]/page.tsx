@@ -3,6 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import cookie from "js-cookie";
 import { Building2, Loader2, MailWarning, Users } from "lucide-react";
@@ -11,11 +12,7 @@ import { toast } from "sonner";
 import { useCallback, useEffect, useState } from "react";
 
 type InvitationStatus =
-  | "pending"
-  | "accepted"
-  | "declined"
-  | "revoked"
-  | "expired";
+  "pending" | "accepted" | "declined" | "revoked" | "expired";
 
 interface InvitationView {
   _id: string;
@@ -109,7 +106,7 @@ export default function AcceptInvitationPage() {
   if (loading) {
     return (
       <main className='flex min-h-[80vh] items-center justify-center'>
-        <Loader2 className='text-muted-foreground h-6 w-6 animate-spin' />
+        <LoadingFileLoader size={20} />
       </main>
     );
   }
@@ -217,9 +214,7 @@ export default function AcceptInvitationPage() {
               disabled={!!badStatus || accepting || (isAuthed && !emailMatch)}
               className='w-full'
             >
-              {accepting ? (
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-              ) : null}
+              {accepting ? <LoadingFileLoader size={20} /> : null}
               {isAuthed ? "Accept invitation" : "Sign in to accept"}
             </Button>
             {!isAuthed && (

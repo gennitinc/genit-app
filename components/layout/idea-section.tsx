@@ -66,6 +66,7 @@ import {
 } from "@/lib/mixpanelClient";
 import { enhancePromptText } from "@/lib/prompt-enhancement-api";
 import { appendClientTimeContext, cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
@@ -1545,7 +1546,7 @@ export function IdeaSection() {
                               }
                             >
                               {isEnhancingPrompt ? (
-                                <Loader2 className='h-3.5 w-3.5 animate-spin' />
+                                <LoadingFileLoader size={20} />
                               ) : (
                                 <CircleFadingArrowUp className='h-3.5 w-3.5' />
                               )}
@@ -1594,7 +1595,7 @@ export function IdeaSection() {
                           <div className='animate-in fade-in slide-in-from-right-1 flex items-center gap-1.5 px-1.5 text-[10px] font-medium duration-300'>
                             {brandSaveStatus === "saving" ? (
                               <>
-                                <Loader2 className='text-primary size-3 animate-spin' />
+                                <LoadingFileLoader size={20} />
                               </>
                             ) : (
                               <>
@@ -1662,7 +1663,7 @@ export function IdeaSection() {
                           {/* Button content */}
                           <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
                             {isGenerating || isSubmitting ? (
-                              <Loader2 className='h-4 w-4 animate-spin text-white' />
+                              <LoadingFileLoader size={20} />
                             ) : (
                               <svg
                                 className='h-4 w-4 text-white'
@@ -1850,7 +1851,7 @@ export function IdeaSection() {
           <div className='space-y-4 overflow-y-auto px-4 pb-4'>
             {isGeneratingOutline ? (
               <div className='flex flex-col items-center justify-center py-12'>
-                <Loader2 className='text-muted-foreground mb-4 h-8 w-8 animate-spin' />
+                <LoadingFileLoader size={20} />
                 <p className='text-muted-foreground text-sm'>
                   Generating presentation outline...
                 </p>
@@ -2242,7 +2243,7 @@ export function IdeaSection() {
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Creating...
                 </>
               ) : (

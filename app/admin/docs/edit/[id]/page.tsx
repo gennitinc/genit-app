@@ -9,6 +9,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import React, { use, useEffect, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 interface EditDocPageProps {
   params: Promise<{ id: string }>;
@@ -41,7 +42,7 @@ export default function EditDocPage({ params }: EditDocPageProps) {
   if (isLoading) {
     return (
       <div className='flex h-[60vh] flex-col items-center justify-center gap-4'>
-        <Loader2 className='h-8 w-8 animate-spin text-cyan-500' />
+         <LoadingFileLoader size={20} />
         <p className='text-sm text-zinc-500'>Loading documentation...</p>
       </div>
     );

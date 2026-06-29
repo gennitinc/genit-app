@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   CheckCircle2,
@@ -152,7 +153,7 @@ export default function AdminBlogPage() {
       {/* Main Panel table list */}
       {isLoading ? (
         <div className='flex items-center justify-center py-20'>
-          <Loader2 className='h-8 w-8 animate-spin text-cyan-500' />
+          <LoadingFileLoader size={20} />
         </div>
       ) : posts.length === 0 ? (
         <div className='rounded-3xl border border-dashed border-zinc-800 py-20 text-center'>

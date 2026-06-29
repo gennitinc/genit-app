@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 interface StepImportProps {
   onComplete: (brand: BrandData) => void;
@@ -214,7 +215,7 @@ export function StepImport({
             >
               {isSkipping ? (
                 <>
-                  <Loader2 className='h-4 w-4 animate-spin' />
+                   <LoadingFileLoader size={20} />
                   Skipping...
                 </>
               ) : (
@@ -499,7 +500,7 @@ function ManualSetup({
             )}
             {isUploading && (
               <div className='absolute inset-0 flex items-center justify-center rounded-2xl bg-white backdrop-blur-sm dark:bg-neutral-950/60'>
-                <Loader2 className='size-6 animate-spin text-neutral-500 dark:text-neutral-400' />
+                <LoadingFileLoader size={20} />
               </div>
             )}
           </button>

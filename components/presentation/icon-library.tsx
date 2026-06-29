@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { Icon } from "@iconify/react";
 import { Download, Loader2, Palette, Search, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -419,9 +420,7 @@ export function IconLibrary({
             onChange={(e) => setSearchQuery(e.target.value)}
             className='h-9 pl-9 text-sm'
           />
-          {isSearching && (
-            <Loader2 className='text-muted-foreground absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 animate-spin' />
-          )}
+          {isSearching && <LoadingFileLoader size={20} />}
         </div>
 
         {/* Icon Customization (when selected) */}
@@ -491,7 +490,7 @@ export function IconLibrary({
           <div ref={scrollAreaRef}>
             {isSearching && displayedIcons.length === 0 ? (
               <div className='flex h-32 items-center justify-center'>
-                <Loader2 className='text-muted-foreground h-6 w-6 animate-spin' />
+                <LoadingFileLoader size={20} />
               </div>
             ) : displayedIcons.length === 0 ? (
               <div className='flex h-32 items-center justify-center'>
@@ -554,7 +553,7 @@ export function IconLibrary({
                 </div>
                 {isLoadingMore && (
                   <div className='flex items-center justify-center py-4'>
-                    <Loader2 className='text-muted-foreground h-5 w-5 animate-spin' />
+                    <LoadingFileLoader size={20} />
                   </div>
                 )}
               </>

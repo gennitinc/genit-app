@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { Image as ImageIcon, Loader2, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -291,7 +292,7 @@ export default function AdminTemplatesPage() {
 
       {isLoading ? (
         <div className='flex items-center justify-center py-12'>
-          <Loader2 className='text-muted-foreground h-8 w-8 animate-spin' />
+          <LoadingFileLoader size={20} />
         </div>
       ) : templates.length === 0 ? (
         <div className='text-muted-foreground py-12 text-center'>
@@ -391,7 +392,7 @@ export default function AdminTemplatesPage() {
             className='flex h-20 items-center justify-center'
           >
             {isFetchingMore && (
-              <Loader2 className='text-muted-foreground h-6 w-6 animate-spin' />
+               <LoadingFileLoader size={20} />
             )}
             {!hasNextPage && templates.length > 0 && (
               <p className='text-muted-foreground text-sm'>
@@ -429,7 +430,7 @@ export default function AdminTemplatesPage() {
             >
               {isDeleting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Deleting...
                 </>
               ) : (
@@ -468,7 +469,7 @@ export default function AdminTemplatesPage() {
             >
               {isBulkDeleting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Deleting...
                 </>
               ) : (

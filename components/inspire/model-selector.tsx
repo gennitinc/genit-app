@@ -10,6 +10,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { Model, ModelType } from "@/types/inspire";
 import { modelApi } from "@/utils/inspire-api";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   FileText,
   Image as ImageIcon,
@@ -155,7 +156,7 @@ export function ModelSelector({
     return (
       <div className='space-y-2'>
         <div className='flex items-center justify-center py-2'>
-          <Loader2 className='h-4 w-4 animate-spin text-neutral-400' />
+          <LoadingFileLoader size={20} />
         </div>
       </div>
     );

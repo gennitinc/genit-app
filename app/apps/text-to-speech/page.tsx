@@ -23,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { cn } from "@/lib/utils";
 import { Voice } from "@/types/inspire";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { audioGenApi, voiceApi } from "@/utils/inspire-api";
 import {
   AudioWaveform,
@@ -529,7 +530,7 @@ function TextToSpeechPage() {
                       )}
                     >
                       {isGenerating ? (
-                        <Loader2 className='h-4 w-4 animate-spin' />
+                        <LoadingFileLoader size={20} />
                       ) : isPlaying ? (
                         <Pause className='h-4 w-4 fill-current' />
                       ) : (
@@ -619,7 +620,7 @@ function TextToSpeechPage() {
                   >
                     {isGenerating ? (
                       <>
-                        <Loader2 className='h-3.5 w-3.5 animate-spin' />
+                        <LoadingFileLoader size={20} />
                         <span className='hidden sm:inline'>Generating...</span>
                       </>
                     ) : (
@@ -957,7 +958,7 @@ function TextToSpeechPage() {
               <div className='scrollbar-hide flex-1 overflow-y-auto px-8 pb-10'>
                 {isLoadingVoices ? (
                   <div className='flex flex-col items-center justify-center gap-3 py-20'>
-                    <Loader2 className='text-primary/40 h-8 w-8 animate-spin' />
+                    <LoadingFileLoader size={20} />
                     <span className='text-muted-foreground text-sm font-medium'>
                       Loading voices...
                     </span>

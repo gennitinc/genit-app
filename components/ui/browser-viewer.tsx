@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingFileLoader } from "@/utils/Loading";
 import { Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -115,7 +116,7 @@ export function BrowserViewer({
       {isLoading && (
         <div className='bg-opacity-50 absolute inset-0 z-10 flex items-center justify-center bg-gray-100'>
           <div className='flex flex-col items-center gap-2'>
-            <Loader2 className='text-primary h-8 w-8 animate-spin' />
+             <LoadingFileLoader size={20} />
             <p className='text-sm text-gray-600'>Loading preview...</p>
           </div>
         </div>

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Presenter } from "@/types/inspire";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { presenterApi } from "@/utils/inspire-api";
 import {
@@ -279,7 +280,7 @@ export default function AdminPresentersPage() {
 
       {isLoading ? (
         <div className='flex items-center justify-center py-12'>
-          <Loader2 className='text-muted-foreground h-8 w-8 animate-spin' />
+          <LoadingFileLoader size={20} />
         </div>
       ) : filteredPresenters.length === 0 ? (
         <div className='text-muted-foreground py-12 text-center'>
@@ -493,7 +494,7 @@ export default function AdminPresentersPage() {
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Creating...
                 </>
               ) : (
@@ -613,7 +614,7 @@ export default function AdminPresentersPage() {
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Updating...
                 </>
               ) : (
@@ -651,7 +652,7 @@ export default function AdminPresentersPage() {
             >
               {isDeleting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Deleting...
                 </>
               ) : (

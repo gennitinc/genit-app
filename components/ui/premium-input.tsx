@@ -6,6 +6,7 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { enhancePromptText } from "@/lib/prompt-enhancement-api";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
@@ -244,7 +245,7 @@ export function PremiumInput({
                 }
               >
                 {isEnhancingPrompt ? (
-                  <Loader2 className='h-3.5 w-3.5 animate-spin' />
+                  <LoadingFileLoader size={20} />
                 ) : (
                   <CircleFadingArrowUp className='h-3.5 w-3.5' />
                 )}

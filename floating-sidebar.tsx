@@ -42,6 +42,7 @@ import {
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
 import React from "react";
+import { LoadingFileLoader } from "./utils/Loading";
 
 interface FloatingSidebarProps {
   onAddIntegration: (type: string, data?: any) => void;
@@ -1834,7 +1835,7 @@ export function FloatingSidebar({
                   <label htmlFor='audio-upload' className='cursor-pointer'>
                     {isUploading ? (
                       <div className='flex flex-col items-center'>
-                        <Loader2 className='text-primary mb-2 h-8 w-8 animate-spin' />
+                        <LoadingFileLoader size={20} />
                         <p className='text-primary text-sm font-medium'>
                           Uploading audio...
                         </p>
@@ -2208,7 +2209,7 @@ export function FloatingSidebar({
               <label htmlFor='image-upload' className='cursor-pointer'>
                 {isUploading ? (
                   <div className='flex flex-col items-center'>
-                    <Loader2 className='text-primary mb-2 h-8 w-8 animate-spin' />
+                   <LoadingFileLoader size={20} />
                     <p className='text-primary text-sm font-medium'>
                       Uploading image...
                     </p>
@@ -2616,7 +2617,7 @@ export function FloatingSidebar({
               <label htmlFor='video-upload' className='cursor-pointer'>
                 {isUploading ? (
                   <div className='flex flex-col items-center'>
-                    <Loader2 className='text-primary mb-2 h-8 w-8 animate-spin' />
+                   <LoadingFileLoader size={20} />
                     <p className='text-primary text-sm font-medium'>
                       Uploading video...
                     </p>
@@ -4137,7 +4138,7 @@ export function FloatingSidebar({
                 >
                   {isUploading ? (
                     <>
-                      <Loader2 className='mr-1 h-3 w-3 animate-spin' />
+                      <LoadingFileLoader size={20} />
                       Uploading...
                     </>
                   ) : (

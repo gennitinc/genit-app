@@ -3,6 +3,7 @@
 import { toast } from "@/hooks/use-toast";
 import { Tutorial } from "@/types/inspire";
 import { tutorialApi } from "@/utils/inspire-api";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { ExternalLink, Loader2, PlayCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -72,7 +73,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
     return (
       <section className='p-4'>
         <div className='flex min-h-[60vh] flex-col items-center justify-center'>
-          <Loader2 className='mb-3 h-6 w-6 animate-spin text-neutral-400 dark:text-neutral-500' />
+          <LoadingFileLoader size={20} />
           <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading tutorials
           </p>

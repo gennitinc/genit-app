@@ -11,6 +11,7 @@ import {
   XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   AtSign,
   CalendarDays,
@@ -340,7 +341,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                   )}
                 >
                   {data.isTesting ? (
-                    <Loader2 className='h-3.5 w-3.5 animate-spin' />
+                    <LoadingFileLoader size={20} />
                   ) : (
                     <Play className='h-3.5 w-3.5' />
                   )}

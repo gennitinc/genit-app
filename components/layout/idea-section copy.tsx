@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
@@ -658,7 +659,7 @@ export function IdeaSection() {
                   >
                     <div className="w-[34px] h-[34px] flex items-center justify-center bg-gray-100/50 dark:bg-black/10 rounded-[10px] backdrop-blur-[3px] text-gray-500 dark:text-[#8b8b8b] group-hover:text-gray-700 dark:group-hover:text-white transition-colors">
                       {isGenerating || isSubmitting ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
+                         <LoadingFileLoader size={20} />
                       ) : (
                         <svg
                           viewBox="0 0 512 512"
@@ -676,7 +677,7 @@ export function IdeaSection() {
                     <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]' />
                     <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl'>
                       {isGenerating || isSubmitting ? (
-                        <Loader2 className='h-5 w-5 animate-spin' />
+                        <LoadingFileLoader size={20} />
                       ) : (
                         <div className='flex flex-row items-center gap-2'>
                           <WandSparklesIcon className='h-3 w-3' />

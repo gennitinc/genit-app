@@ -20,6 +20,7 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Presenter } from "@/types/inspire";
 import { presenterApi } from "@/utils/inspire-api";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { Check, Loader2, Plus, Trash2, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -463,7 +464,7 @@ export function PresenterSelector({
         <div className='max-h-[60vh] overflow-y-auto pr-2'>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
-              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
+              <LoadingFileLoader size={20} />
             </div>
           ) : presenters.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
@@ -490,7 +491,7 @@ export function PresenterSelector({
             </div>
           ) : loading ? (
             <div className='flex items-center justify-center py-8'>
-              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
+              <LoadingFileLoader size={20} />
             </div>
           ) : (
             <>
@@ -654,7 +655,7 @@ export function PresenterSelector({
                     >
                       {uploading ? (
                         <>
-                          <Loader2 className='h-4 w-4 animate-spin' />
+                         <LoadingFileLoader size={20} />
                           Saving...
                         </>
                       ) : (
@@ -725,7 +726,7 @@ export function PresenterSelector({
           </h3>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
-              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
+              <LoadingFileLoader size={20} />
             </div>
           ) : presenters.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
@@ -767,7 +768,7 @@ export function PresenterSelector({
             </div>
           ) : loading ? (
             <div className='flex items-center justify-center py-8'>
-              <Loader2 className='h-6 w-6 animate-spin text-neutral-400' />
+              <LoadingFileLoader size={20} />
             </div>
           ) : (
             <>
@@ -945,7 +946,7 @@ export function PresenterSelector({
                     >
                       {uploading ? (
                         <>
-                          <Loader2 className='h-4 w-4 animate-spin' />
+                         <LoadingFileLoader size={20} />
                           Saving...
                         </>
                       ) : (

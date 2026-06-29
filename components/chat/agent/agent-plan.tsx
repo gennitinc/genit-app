@@ -2,11 +2,12 @@
 
 import { AgentCard } from "./agent-card";
 import type { AgentTask } from "@/lib/agents-api";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { CheckCircle2, Circle, ListTodo, Loader2, XCircle } from "lucide-react";
 
 function Icon({ status }: { status: AgentTask["status"] }) {
   if (status === "running")
-    return <Loader2 className='text-foreground h-3.5 w-3.5 animate-spin' />;
+    return  <LoadingFileLoader size={20} />;
   if (status === "done")
     return (
       <CheckCircle2 className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />

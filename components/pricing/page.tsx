@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Spotlight } from "@/components/ui/spotlight-new";
 import { trackEvent, trackExperimentExposure } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { ArrowRight, Check, Crown, Loader2 } from "lucide-react";
@@ -592,7 +593,7 @@ export default function PricingComponent() {
                     )}
                   >
                     {loadingPlan === plan.name ? (
-                      <Loader2 className='h-4 w-4 animate-spin' />
+                      <LoadingFileLoader size={20} />
                     ) : plan.id === "enterprise" ? (
                       "Contact Sales"
                     ) : (

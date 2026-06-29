@@ -51,6 +51,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Socket, io } from "socket.io-client";
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 export type Resolution = "1080p" | "720p" | "480p" | "4K";
 export type AspectRatio = "16:9" | "9:16" | "1:1" | "4:3";
@@ -2268,7 +2269,7 @@ function VideoCreatePage() {
                     >
                       {isGenerating ? (
                         <>
-                          <Loader2 className='h-5 w-5 animate-spin' />
+                         <LoadingFileLoader size={20} />
                           Generating...
                         </>
                       ) : (

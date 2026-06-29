@@ -42,6 +42,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCallback, useEffect, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 export default function AdminModelsPage() {
   const [models, setModels] = useState<Model[]>([]);
@@ -300,7 +301,7 @@ export default function AdminModelsPage() {
 
       {isLoading ? (
         <div className='flex items-center justify-center py-12'>
-          <Loader2 className='text-muted-foreground h-8 w-8 animate-spin' />
+         <LoadingFileLoader size={20} />
         </div>
       ) : filteredModels.length === 0 ? (
         <div className='text-muted-foreground py-12 text-center'>
@@ -701,7 +702,7 @@ export default function AdminModelsPage() {
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Creating...
                 </>
               ) : (
@@ -1015,7 +1016,7 @@ export default function AdminModelsPage() {
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Updating...
                 </>
               ) : (
@@ -1053,7 +1054,7 @@ export default function AdminModelsPage() {
             >
               {isDeleting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Deleting...
                 </>
               ) : (

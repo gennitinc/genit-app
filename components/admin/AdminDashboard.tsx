@@ -5,6 +5,7 @@ import { RecentUsersTable } from "./RecentUsersTable";
 import { StatsCards } from "./StatsCards";
 import { Button } from "@/components/ui/button";
 import { apiResponse } from "@/utils/apiResponse";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, Loader2, RefreshCcw } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -48,7 +49,7 @@ export const AdminDashboard = () => {
   if (loading) {
     return (
       <div className='flex h-[600px] flex-col items-center justify-center gap-4'>
-        <Loader2 className='text-primary h-10 w-10 animate-spin' />
+         <LoadingFileLoader size={20} />
         <p className='text-muted-foreground animate-pulse text-sm'>
           Loading analytics dashboard...
         </p>

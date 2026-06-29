@@ -24,6 +24,7 @@ import {
   type GoogleCalendarEvent,
   type GoogleCalendarSummary,
 } from "@/lib/integrations-api";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
   CalendarDays,
@@ -266,10 +267,8 @@ export function CalendarEventPanel({
                         }}
                         className='rounded-xl bg-red-500 text-white hover:bg-red-600'
                       >
-                        {deleting && (
-                          <Loader2 className='mr-1 h-4 w-4 animate-spin' />
-                        )}{" "}
-                        Delete event
+                        {deleting && <LoadingFileLoader size={20} />} Delete
+                        event
                       </Button>
                       <Button
                         size='sm'
@@ -489,7 +488,7 @@ export function CalendarEventPanel({
                   disabled={saving || !values.summary.trim()}
                   className='rounded-xl bg-violet-600 text-white hover:bg-violet-700'
                 >
-                  {saving && <Loader2 className='h-4 w-4 animate-spin' />}
+                  {saving && <LoadingFileLoader size={20} />}
                   {event ? "Save changes" : "Create event"}
                 </Button>
               </div>

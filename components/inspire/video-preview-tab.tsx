@@ -8,6 +8,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { AspectRatio } from "@/types/inspire";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { communityApi } from "@/utils/inspire-api";
 import {
   Clock,
@@ -301,7 +302,7 @@ export function VideoPreviewTab({
           {/* Generating State */}
           {isGenerating && (
             <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
-              <Loader2 className='mb-4 h-8 w-8 animate-spin text-neutral-400 dark:text-neutral-500' />
+              <LoadingFileLoader size={20} />
               <h3 className='mb-2 text-base font-semibold text-neutral-900 dark:text-white'>
                 Generating video
               </h3>
@@ -512,7 +513,7 @@ export function VideoPreviewTab({
             >
               {publishing ? (
                 <>
-                  <Loader2 className='h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Publishing...
                 </>
               ) : isPublished ? (

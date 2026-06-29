@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   Captions,
   CircleFadingArrowUp,
@@ -139,7 +140,7 @@ export const FacebookNode = memo(
                     className='border-primary/20 hover:border-primary/50 text-primary h-8 gap-1.5 bg-indigo-600 px-2 text-xs transition-all duration-300 hover:bg-indigo-600 hover:bg-indigo-700/5 hover:bg-indigo-700/10'
                   >
                     {isAnalyzing ? (
-                      <Loader2 className='h-3.5 w-3.5 animate-spin' />
+                      <LoadingFileLoader size={20} />
                     ) : (
                       <Sparkles className='h-3.5 w-3.5' />
                     )}

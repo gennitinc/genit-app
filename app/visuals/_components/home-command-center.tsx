@@ -510,7 +510,7 @@ export function HomeCommandCenter({
               }
             >
               {deleteMutation.isPending && (
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                <LoadingFileLoader size={20} />
               )}
               Delete post
             </Button>

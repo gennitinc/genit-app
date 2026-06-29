@@ -4,6 +4,7 @@ import { modelApi } from "@/utils/inspire-api";
 import { CircleFadingArrowUp, Loader2, Sparkles, Trash2 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
 import React, { useEffect, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 interface AIGenerateNodeData {
   title: string;
@@ -157,7 +158,7 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
                   ))}
                 </select>
                 {isLoadingModels && (
-                  <Loader2 className='pointer-events-none absolute top-1/2 right-6 h-3.5 w-3.5 -translate-y-1/2 animate-spin text-zinc-500 dark:text-neutral-400' />
+                   <LoadingFileLoader size={20} />
                 )}
               </div>
             </div>

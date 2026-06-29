@@ -74,6 +74,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Socket, io } from "socket.io-client";
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 export type { Presenter, Voice, Model } from "@/types/inspire";
 
@@ -1749,7 +1750,7 @@ function VideoGenerationPage() {
                     >
                       {isGenerating ? (
                         <div className='flex items-center gap-2'>
-                          <Loader2 className='animate-spin' size={16} />
+                          <LoadingFileLoader size={20} />
                           <span>{generationProgress}%</span>
                         </div>
                       ) : (

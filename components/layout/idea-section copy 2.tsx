@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { PointerHighlight } from "@/components/ui/pointer-highlight";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -1100,7 +1101,7 @@ export function IdeaSection() {
                           />
                           <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl'>
                             {isGenerating || isSubmitting ? (
-                              <Loader2 className='h-5 w-5 animate-spin' />
+                              <LoadingFileLoader size={20} />
                             ) : (
                               <div className='flex flex-row items-center gap-2'>
                                 <WandSparklesIcon className='h-3 w-3' />
@@ -1400,7 +1401,7 @@ export function IdeaSection() {
           <div className='space-y-4 overflow-y-auto px-4 pb-4'>
             {isGeneratingOutline ? (
               <div className='flex flex-col items-center justify-center py-12'>
-                <Loader2 className='text-muted-foreground mb-4 h-8 w-8 animate-spin' />
+                <LoadingFileLoader size={20} />
                 <p className='text-muted-foreground text-sm'>
                   Generating presentation outline...
                 </p>
@@ -1538,10 +1539,7 @@ export function IdeaSection() {
                           onClick={() =>
                             setTextAmount(
                               option.id as
-                                | "minimal"
-                                | "concise"
-                                | "detailed"
-                                | "extensive"
+                                "minimal" | "concise" | "detailed" | "extensive"
                             )
                           }
                           className={`flex flex-col items-center gap-2 rounded-lg border p-3 transition-all ${
@@ -1801,7 +1799,7 @@ export function IdeaSection() {
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Creating...
                 </>
               ) : (

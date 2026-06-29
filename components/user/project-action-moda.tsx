@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -69,7 +70,7 @@ export const ProjectActionModal = ({
             className='min-w-[120px]'
           >
             {loading ? (
-              <Loader2 className='h-4 w-4 animate-spin' />
+            <LoadingFileLoader size={20} />
             ) : (
               confirmLabel
             )}

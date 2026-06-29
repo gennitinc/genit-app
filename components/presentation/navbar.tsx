@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import appLogo from "@/resources/images/gennit.svg";
+import { LoadingFileLoader } from "@/utils/Loading";
 import cookie from "js-cookie";
 import {
   Book,
@@ -177,7 +178,7 @@ export function PresentationNavbar({
                 // Saving State: Loader + subtle text
 
                 <div className='flex items-center gap-1'>
-                  <Loader2 className='h-3.5 w-3.5 animate-spin text-yellow-600 dark:text-yellow-400' />
+                  <LoadingFileLoader size={20} />
 
                   <span className='hidden font-medium sm:inline'>
                     Saving...
@@ -317,7 +318,7 @@ export function PresentationNavbar({
             {saving !== undefined && (
               <div className='mr-1 flex items-center'>
                 {saving ? (
-                  <Loader2 className='text-muted-foreground h-4 w-4 animate-spin' />
+                   <LoadingFileLoader size={20} />
                 ) : (
                   // Use CheckCircle2 for better visual confirmation than a dot
 

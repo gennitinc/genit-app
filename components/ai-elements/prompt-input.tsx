@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import type { ChatStatus, FileUIPart } from "ai";
 import {
   ImageIcon,
@@ -615,7 +616,7 @@ export const PromptInputSubmit = ({
   let Icon = <SendIcon className='size-4' />;
 
   if (status === "submitted") {
-    Icon = <Loader2Icon className='size-4 animate-spin' />;
+    Icon =  <LoadingFileLoader size={20} />;
   } else if (status === "streaming") {
     Icon = <SquareIcon className='size-4' />;
   } else if (status === "error") {

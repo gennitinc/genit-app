@@ -2,7 +2,7 @@
 
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
-import Loading from "@/utils/Loading";
+import Loading, { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { Eye, Heart, Loader2, MessageSquare } from "lucide-react";
 import Image from "next/image";
@@ -225,7 +225,7 @@ export default function BlogIndex() {
                     className='flex items-center justify-center py-8'
                   >
                     {isLoadingMore && (
-                      <Loader2 className='h-6 w-6 animate-spin text-zinc-400' />
+                      <LoadingFileLoader size={20} />
                     )}
                   </div>
                 )}

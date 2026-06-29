@@ -21,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import withAuth from "@/helper/hoc/withAuth";
 import { cn } from "@/lib/utils";
 import { Model } from "@/types/inspire";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { imageGenApi, presenterApi } from "@/utils/inspire-api";
 import {
@@ -335,7 +336,7 @@ const PresenterPage = () => {
                         className='h-fit w-full bg-gradient-to-r from-blue-500 to-cyan-500'
                       >
                         {isGenerating ? (
-                          <Loader2 className='animate-spin' />
+                          <LoadingFileLoader size={20} />
                         ) : (
                           <Sparkles className='mr-2' size={16} />
                         )}
@@ -351,7 +352,7 @@ const PresenterPage = () => {
                       className='text-md h-fit w-full'
                     >
                       {isCreating ? (
-                        <Loader2 className='animate-spin' />
+                        <LoadingFileLoader size={20} />
                       ) : (
                         <SaveIcon className='mr-2' />
                       )}
@@ -465,10 +466,7 @@ const PresenterPage = () => {
                         />
                         {isGenerating && (
                           <div className='absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm'>
-                            <Loader2
-                              className='animate-spin text-white'
-                              size={48}
-                            />
+                            <LoadingFileLoader size={20} />
                           </div>
                         )}
                       </div>

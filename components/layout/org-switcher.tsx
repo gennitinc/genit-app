@@ -69,6 +69,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useCallback, useMemo, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 type CreateMode = "team" | null;
 
@@ -438,7 +439,7 @@ export function OrgSwitcher({
                         {org.businessName}
                       </span>
                       {switchingId === org._id ? (
-                        <Loader2 className='h-3 w-3 animate-spin' />
+                         <LoadingFileLoader size={20} />
                       ) : isActive ? (
                         <Check className='h-3 w-3 opacity-70' />
                       ) : null}
@@ -463,7 +464,7 @@ export function OrgSwitcher({
                       </DropdownMenuLabel>
                       {loadingTeamsFor === org._id ? (
                         <div className='text-muted-foreground flex items-center px-2 py-1.5 text-xs'>
-                          <Loader2 className='mr-2 h-3 w-3 animate-spin' />
+                          <LoadingFileLoader size={20} />
                           Loading teams…
                         </div>
                       ) : (teamsByOrg[org._id] || []).length === 0 ? (
@@ -688,7 +689,7 @@ export function OrgSwitcher({
               disabled={!name.trim() || submitting}
             >
               {submitting ? (
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                <LoadingFileLoader size={20} />
               ) : null}
               Create
             </Button>
@@ -766,7 +767,7 @@ export function OrgSwitcher({
               disabled={!inviteEmail.trim() || inviting}
             >
               {inviting ? (
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                <LoadingFileLoader size={20} />
               ) : (
                 <Mail className='mr-2 h-4 w-4' />
               )}

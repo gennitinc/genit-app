@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   CircleFadingArrowUp,
@@ -557,7 +558,7 @@ export function ImageLibrary({
               >
                 {isUploading ? (
                   <>
-                    <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                    <LoadingFileLoader size={20} />
                     Uploading...
                   </>
                 ) : (
@@ -594,9 +595,7 @@ export function ImageLibrary({
                 }}
                 className='h-9 pl-9 text-sm'
               />
-              {isSearching && (
-                <Loader2 className='text-muted-foreground absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 animate-spin' />
-              )}
+              {isSearching && <LoadingFileLoader size={20} />}
             </div>
             {!searchQuery.trim() && (
               <div className='text-muted-foreground mb-2 text-xs'>
@@ -625,7 +624,7 @@ export function ImageLibrary({
             >
               {isGenerating ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Generating...
                 </>
               ) : (
@@ -649,7 +648,7 @@ export function ImageLibrary({
             <div ref={scrollAreaRef}>
               {isSearching && currentImages.length === 0 ? (
                 <div className='flex h-32 items-center justify-center'>
-                  <Loader2 className='text-muted-foreground h-6 w-6 animate-spin' />
+                  <LoadingFileLoader size={20} />
                 </div>
               ) : currentImages.length === 0 ? (
                 <div className='flex h-32 flex-col items-center justify-center'>

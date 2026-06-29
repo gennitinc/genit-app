@@ -1,6 +1,7 @@
 "use client";
 
 import { NotionEditor } from "@/components/admin/NotionEditor";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { ArrowLeft, Loader2, Save, X } from "lucide-react";
 import Link from "next/link";
@@ -71,9 +72,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
     initialDoc?.readTime || "1 min read"
   );
   const [isActive, setIsActive] = useState(initialDoc?.isActive ?? true);
-  const [isFeatured, setIsFeatured] = useState(
-    initialDoc?.isFeatured ?? false
-  );
+  const [isFeatured, setIsFeatured] = useState(initialDoc?.isFeatured ?? false);
   const [tagsInput, setTagsInput] = useState(
     initialDoc?.tags?.join(", ") || ""
   );
@@ -346,7 +345,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className='h-3.5 w-3.5 animate-spin' /> Saving...
+                    <LoadingFileLoader size={20} />
                   </>
                 ) : (
                   <>

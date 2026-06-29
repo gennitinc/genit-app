@@ -8,6 +8,7 @@ import { modelApi } from "@/utils/inspire-api";
 import { Loader2, Monitor, X } from "lucide-react";
 import { Handle, type NodeProps, NodeResizer, Position } from "reactflow";
 import { useCallback, useEffect, useState } from "react";
+import { LoadingFileLoader } from "@/utils/Loading";
 
 const CONTENT_TYPES = [
   // { id: "all", label: "All" },
@@ -237,7 +238,7 @@ export function PromptNode({
           {isGenerating && (
             <div className='bg-background/60 absolute inset-0 z-10 flex items-center justify-center rounded-b-3xl backdrop-blur-sm'>
               <div className='text-muted-foreground flex items-center gap-2 text-xs'>
-                <Loader2 className='text-primary h-4 w-4 animate-spin' />
+               <LoadingFileLoader size={20} />
                 Generating…
               </div>
             </div>

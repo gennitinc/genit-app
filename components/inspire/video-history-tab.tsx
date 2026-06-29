@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { Loader2, Play, Trash2, VideoIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -129,7 +130,7 @@ export function VideoHistoryTab({
     return (
       <section className='p-4'>
         <div className='flex min-h-[60vh] flex-col items-center justify-center'>
-          <Loader2 className='mb-3 h-6 w-6 animate-spin text-neutral-400 dark:text-neutral-500' />
+          <LoadingFileLoader size={20} />
           <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading history videos
           </p>
@@ -336,7 +337,7 @@ function VideoCard({
               title='Delete'
             >
               {deletingId === video._id ? (
-                <Loader2 className='h-4 w-4 animate-spin' />
+                <LoadingFileLoader size={20} />
               ) : (
                 <Trash2 className='h-4 w-4' />
               )}

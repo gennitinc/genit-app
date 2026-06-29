@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Voice } from "@/types/inspire";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { voiceApi } from "@/utils/inspire-api";
 import {
   Edit,
@@ -365,7 +366,7 @@ export default function AdminVoicesPage() {
 
       {isLoading ? (
         <div className='flex items-center justify-center py-12'>
-          <Loader2 className='text-muted-foreground h-6 w-6 animate-spin' />
+          <LoadingFileLoader size={20} />
         </div>
       ) : filteredVoices.length === 0 ? (
         <div className='py-12 text-center'>
@@ -645,7 +646,7 @@ export default function AdminVoicesPage() {
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Creating...
                 </>
               ) : (
@@ -778,7 +779,7 @@ export default function AdminVoicesPage() {
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Updating...
                 </>
               ) : (
@@ -817,7 +818,7 @@ export default function AdminVoicesPage() {
             >
               {isDeleting ? (
                 <>
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <LoadingFileLoader size={20} />
                   Deleting...
                 </>
               ) : (
