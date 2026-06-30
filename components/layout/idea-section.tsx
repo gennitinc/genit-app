@@ -766,6 +766,12 @@ export function IdeaSection() {
       const enhancedPrompt = await enhancePromptText(prompt);
       setInputValue(enhancedPrompt);
       setInputError(null);
+      if (textareaRef.current) {
+        textareaRef.current.value = enhancedPrompt;
+        textareaRef.current.style.height = "auto";
+        textareaRef.current.style.height =
+          Math.min(textareaRef.current.scrollHeight, 300) + "px";
+      }
       trackFeatureUsed("idea_prompt_enhanced", {
         prompt_length: prompt.length,
       });

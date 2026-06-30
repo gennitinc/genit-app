@@ -337,7 +337,13 @@ export function WorkflowPremiumInput({
     try {
       const enhancedPrompt = await enhancePromptText(prompt);
       onChange(enhancedPrompt);
-      requestAnimationFrame(() => textareaRef.current?.focus());
+      if (textareaRef.current) {
+        textareaRef.current.value = enhancedPrompt;
+      }
+      requestAnimationFrame(() => {
+        adjustHeight();
+        textareaRef.current?.focus();
+      });
     } catch (error: any) {
       toast.error("Could not enhance prompt", {
         description:
@@ -348,7 +354,14 @@ export function WorkflowPremiumInput({
     } finally {
       setIsEnhancingPrompt(false);
     }
-  }, [value, isGenerating, disabled, isEnhancingPrompt, onChange]);
+  }, [
+    value,
+    isGenerating,
+    disabled,
+    isEnhancingPrompt,
+    onChange,
+    adjustHeight,
+  ]);
 
   const handleSubmit = useCallback(() => {
     if (!value.trim() || isGenerating || disabled) return;
