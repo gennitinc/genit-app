@@ -298,8 +298,8 @@ export function HomeCommandCenter({
           </div>
         ) : (
           <section className='ml-2 grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(300px,.75fr)]'>
-            <div className='overflow-hidden rounded-lg border-none bg-black/[0.015] shadow-sm ring-1 ring-black/5 dark:bg-white/[0.03] dark:ring-white/10'>
-              <div className='flex items-center justify-between gap-3 border-b border-black/5 px-3 py-3 dark:border-white/10'>
+            <div className='overflow-hidden rounded-lg bg-neutral-800 p-5 text-white shadow-sm ring-1 ring-white/10'>
+              <div className='flex items-center justify-between gap-3 border-b border-white/10 pb-4'>
                 <div>
                   <h3 className='font-bold tracking-tight'>Content pipeline</h3>
                 </div>
@@ -308,7 +308,7 @@ export function HomeCommandCenter({
                     variant='outline'
                     size='sm'
                     onClick={openCreate}
-                    className='rounded-full'
+                    className='rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white'
                   >
                     <Plus className='mr-1 h-3.5 w-3.5' /> New post
                   </Button>
@@ -316,7 +316,7 @@ export function HomeCommandCenter({
                     asChild
                     variant='ghost'
                     size='sm'
-                    className='rounded-full'
+                    className='rounded-full text-white/70 hover:bg-white/10 hover:text-white'
                   >
                     <Link href='/visuals/posts'>
                       View all <ArrowRight className='ml-1.5 h-3.5 w-3.5' />
@@ -325,13 +325,13 @@ export function HomeCommandCenter({
                 </div>
               </div>
               {recent.length ? (
-                <div className='divide-y divide-black/5 dark:divide-white/10'>
+                <div className='divide-y divide-white/10 mt-2'>
                   {recent.map((post) => (
                     <article
                       key={post._id}
-                      className='group flex items-center gap-3 p-4 transition hover:bg-black/[0.02] dark:hover:bg-white/[0.025]'
+                      className='group flex items-center gap-3 rounded-xl p-3 transition hover:bg-white/[0.06]'
                     >
-                      <div className='flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-indigo-500/15 to-violet-500/5 ring-1 ring-black/5 dark:ring-white/10'>
+                      <div className='flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/[0.08] ring-1 ring-white/10'>
                         {post.mediaUrl ? (
                           <img
                             src={post.mediaUrl}
@@ -339,30 +339,30 @@ export function HomeCommandCenter({
                             className='h-full w-full object-cover'
                           />
                         ) : (
-                          <Sparkles className='h-4 w-4 text-indigo-500' />
+                          <Sparkles className='h-4 w-4 text-indigo-300' />
                         )}
                       </div>
                       <div className='min-w-0 flex-1'>
                         <div className='flex items-center gap-2'>
-                          <h4 className='truncate text-sm font-semibold'>
+                          <h4 className='truncate text-sm font-semibold text-white'>
                             {post.title || post.content}
                           </h4>
                           <span
                             className={cn(
                               "shrink-0 rounded-full px-2 py-0.5 text-[9px] font-semibold capitalize",
                               post.status === "published"
-                                ? "bg-emerald-500/10 text-emerald-600"
+                                ? "bg-emerald-500/20 text-emerald-300"
                                 : post.status === "scheduled"
-                                  ? "bg-sky-500/10 text-sky-600"
+                                  ? "bg-sky-500/20 text-sky-300"
                                   : post.status === "failed"
-                                    ? "bg-rose-500/10 text-rose-600"
-                                    : "bg-amber-500/10 text-amber-600"
+                                    ? "bg-rose-500/20 text-rose-300"
+                                    : "bg-amber-500/20 text-amber-300"
                             )}
                           >
                             {post.status}
                           </span>
                         </div>
-                        <p className='text-muted-foreground mt-1 truncate text-xs'>
+                        <p className='text-white/55 mt-1 truncate text-xs'>
                           {POST_PLATFORM_LABELS[post.platform] || post.platform}{" "}
                           ·{" "}
                           {post.status === "scheduled"
@@ -372,14 +372,14 @@ export function HomeCommandCenter({
                       </div>
                       <button
                         onClick={() => openEdit(post)}
-                        className='text-muted-foreground hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-black/5 dark:hover:bg-white/10'
+                        className='text-white/50 hover:text-white flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-white/10'
                         aria-label={`Edit ${post.title || "post"}`}
                       >
                         <Edit3 className='h-3.5 w-3.5' />
                       </button>
                       <button
                         onClick={() => setDeleteTarget(post)}
-                        className='text-muted-foreground flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-rose-500/10 hover:text-rose-600'
+                        className='text-white/50 flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-rose-500/20 hover:text-rose-400'
                         aria-label={`Delete ${post.title || "post"}`}
                       >
                         <Trash2 className='h-3.5 w-3.5' />
@@ -388,16 +388,16 @@ export function HomeCommandCenter({
                   ))}
                 </div>
               ) : (
-                <div className='flex min-h-64 flex-col items-center justify-center px-6 text-center'>
-                  <FileText className='text-muted-foreground/60 h-7 w-7' />
-                  <h4 className='mt-3 font-semibold'>Your pipeline is ready</h4>
-                  <p className='text-muted-foreground mt-1 max-w-sm text-sm'>
+                <div className='flex min-h-64 flex-col items-center justify-center px-6 text-center text-white'>
+                  <FileText className='text-white/40 h-7 w-7' />
+                  <h4 className='mt-3 font-semibold text-white'>Your pipeline is ready</h4>
+                  <p className='text-white/50 mt-1 max-w-sm text-sm'>
                     Start a draft, schedule it, and track it through publishing.
                   </p>
                   <Button
                     onClick={openCreate}
                     variant='outline'
-                    className='mt-4 rounded-full'
+                    className='mt-4 rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white'
                   >
                     <Plus className='mr-1.5 h-4 w-4' />
                     New post

@@ -252,26 +252,31 @@ export default function VisualsHomePage() {
                 hasIdentityForSurface
               );
               const isSoon = status === "soon";
-
               return (
                 <CarouselItem
                   key={integration.name}
-                  className='basis-full p-2 pl-[-5] sm:basis-1/2 lg:basis-1/4 xl:basis-1/4'
+                  className='basis-[45%] sm:basis-[30%] lg:basis-[22%] p-1.5'
                 >
-                  <div className='group relative h-full w-full overflow-hidden rounded-2xl border border-zinc-200/50 bg-zinc-50/50 p-5 shadow-xs transition-all hover:border-zinc-300 dark:border-zinc-900/60 dark:bg-zinc-950/30 dark:hover:border-zinc-800'>
-                    <div className='relative z-10 flex h-full flex-col'>
+                  <div className='group relative flex h-[164px] w-full flex-col justify-between overflow-hidden rounded-xl border border-zinc-200/50 bg-zinc-50/30 p-4 pb-[18px] shadow-xs transition-all duration-300 hover:border-zinc-300 dark:border-zinc-900/60 dark:bg-zinc-950/20 dark:hover:border-zinc-800'>
+                    {/* Glow background effect */}
+                    <div
+                      className="absolute -right-6 -top-6 h-14 w-14 rounded-full blur-xl opacity-15 transition-opacity duration-300 group-hover:opacity-30"
+                      style={{ backgroundColor: integration.glow || "rgba(113,113,122,0.4)" }}
+                    />
+                    
+                    <div className='relative z-10 flex h-full flex-col justify-between'>
                       <div className='flex items-start justify-between'>
-                        <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-zinc-200/60 bg-zinc-50 shadow-xs dark:border-zinc-800/80 dark:bg-zinc-950'>
+                        <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl border border-zinc-200/60 bg-zinc-50 shadow-xs dark:border-zinc-800/80 dark:bg-zinc-950'>
                           <integration.icon
                             className={
                               integration.name === "Shopify"
-                                ? "h-6 w-6 text-[#95BF47]"
-                                : "h-6 w-6 text-zinc-800 dark:text-zinc-200"
+                                ? "h-5 w-5 text-[#95BF47]"
+                                : "h-5 w-5 text-zinc-800 dark:text-zinc-200"
                             }
                           />
                         </div>
                         <div
-                          className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-medium ${
+                          className={`flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-medium ${
                             status === "connected"
                               ? "border-emerald-50/20 bg-emerald-50/5 text-emerald-600 dark:text-emerald-400"
                               : status === "partial"
@@ -298,21 +303,21 @@ export default function VisualsHomePage() {
                         </div>
                       </div>
 
-                      <div className='mt-5 flex-1'>
-                        <h4 className='line-clamp-1 text-sm font-semibold tracking-tight text-zinc-900 sm:text-base dark:text-zinc-100'>
+                      <div className='mt-3 flex-1'>
+                        <h4 className='line-clamp-1 text-[13px] font-semibold tracking-tight text-zinc-900 dark:text-zinc-100'>
                           {integration.name}
                         </h4>
-                        <p className='mt-1 line-clamp-2 text-xs leading-normal text-zinc-500 dark:text-zinc-400'>
+                        <p className='mt-0.5 line-clamp-2 text-[11px] leading-snug text-zinc-500 dark:text-zinc-400'>
                           {integration.description}
                         </p>
                       </div>
 
-                      <div className='mt-auto flex w-full items-center pt-5'>
+                      <div className='mt-3 flex w-full items-center'>
                         {status === "connected" || status === "partial" ? (
                           <button
                             type='button'
                             onClick={() => setManageFor(integration)}
-                            className='h-8 w-full rounded-full border border-zinc-200/80 bg-zinc-100 text-xs font-semibold text-zinc-900 transition-all hover:bg-zinc-200 active:scale-95 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800'
+                            className='h-7 w-full rounded-lg border border-zinc-200/80 bg-zinc-100 text-[10px] font-semibold text-zinc-900 transition-all hover:bg-zinc-200 active:scale-95 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800'
                           >
                             Manage
                           </button>
@@ -321,7 +326,7 @@ export default function VisualsHomePage() {
                             type='button'
                             disabled={isSoon}
                             onClick={() => setConnectFor(integration)}
-                            className={`h-8 w-full rounded-full text-xs font-semibold transition-all ${
+                            className={`h-7 w-full rounded-lg text-[10px] font-semibold transition-all ${
                               isSoon
                                 ? "cursor-not-allowed border border-zinc-200 bg-zinc-100 text-zinc-400 select-none dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-500"
                                 : "dark:bg-zinc-850 border border-zinc-800 bg-zinc-900 text-white hover:bg-black active:scale-95 dark:border-zinc-700/60 dark:text-zinc-200 dark:hover:bg-zinc-800"
