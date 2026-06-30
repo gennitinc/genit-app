@@ -1,7 +1,7 @@
 "use client";
 
 import { Brain, ChevronDown, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function AgentThinkingStream({
   text,
@@ -10,14 +10,26 @@ export function AgentThinkingStream({
   text: string;
   active: boolean;
 }) {
-  const [open, setOpen] = useState(true);
+  const [userOpen, setUserOpen] = useState(false);
+  const open = active || userOpen;
+
+  useEffect(() => {
+    if (!active) {
+      setUserOpen(false);
+    }
+  }, [active]);
+
   if (!text && !active) return null;
 
   return (
     <div className='border-border/50 bg-muted-foreground/[0.04] my-2 overflow-hidden rounded-lg border text-[12.5px] dark:border-white/[0.07] dark:bg-white/[0.025]'>
       <button
         type='button'
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => {
+          if (!active) {
+            setUserOpen((o) => !o);
+          }
+        }}
         aria-expanded={open}
         className='hover:bg-muted-foreground/[0.04] flex w-full items-center gap-2 px-3 py-2 text-left transition-colors dark:hover:bg-white/[0.03]'
       >
