@@ -27,6 +27,9 @@ import { useRouter } from "next/navigation";
 import { Toaster } from "sonner";
 import React, { useMemo, useState } from "react";
 
+const FARMNET_EMAIL = "farmnetent@gmail.com";
+const GOOGLE_FLOW_URL = "https://labs.google/fx/tools/flow";
+
 const AppCard = ({
   app,
   onAction,
@@ -105,6 +108,7 @@ const Apps = () => {
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const router = useRouter();
+  const { user } = useUserContext();
 
   React.useEffect(() => {
     trackEvent("agents_directory_viewed", {
@@ -117,10 +121,20 @@ const Apps = () => {
   }, []);
 
   const handleAction = (app: AppCardProps) => {
+    const shouldOpenGoogleFlow =
+      user?.email?.toLowerCase() === FARMNET_EMAIL;
+    const href = shouldOpenGoogleFlow ? GOOGLE_FLOW_URL : app.href;
+
     trackAppOpened(app.id, app.title, "agents_directory", {
       app_type: app.type,
-      href: app.href,
+      href,
     });
+
+    if (shouldOpenGoogleFlow) {
+      window.location.assign(GOOGLE_FLOW_URL);
+      return;
+    }
+
     router.push(app.href);
   };
 
