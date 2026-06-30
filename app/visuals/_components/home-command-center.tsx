@@ -298,8 +298,8 @@ export function HomeCommandCenter({
           </div>
         ) : (
           <section className='ml-2 grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(300px,.75fr)]'>
-            <div className='overflow-hidden rounded-lg bg-neutral-800 p-5 text-white shadow-sm ring-1 ring-white/10'>
-              <div className='flex items-center justify-between gap-3 border-b border-white/10 pb-4'>
+            <div className='overflow-hidden rounded-lg bg-neutral-800 px-2 text-white shadow-sm ring-1 ring-white/10'>
+              <div className='flex items-center justify-between gap-3 border-b border-white/10 p-2'>
                 <div>
                   <h3 className='font-bold tracking-tight'>Content pipeline</h3>
                 </div>
@@ -331,7 +331,7 @@ export function HomeCommandCenter({
                       key={post._id}
                       className='group flex items-center gap-3 rounded-xl p-3 transition hover:bg-white/[0.06]'
                     >
-                      <div className='flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/[0.08] ring-1 ring-white/10'>
+                      <div className='flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-md ring-1 ring-white/10'>
                         {post.mediaUrl ? (
                           <img
                             src={post.mediaUrl}
