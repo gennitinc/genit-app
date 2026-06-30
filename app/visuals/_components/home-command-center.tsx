@@ -113,6 +113,11 @@ export function HomeCommandCenter({
         metadata: {
           youtubePlaylistId: form.youtubePlaylistId || undefined,
           youtubePlaylistTitle: form.youtubePlaylistTitle || undefined,
+          youtubePlaylistDescription:
+            form.youtubePlaylistDescription || undefined,
+          youtubePlaylistPrivacyStatus: form.youtubePlaylistPrivacyStatus,
+          youtubePrivacyStatus: form.youtubePrivacyStatus,
+          youtubeMadeForKids: form.youtubeMadeForKids,
         },
         status: form.status === "published" ? "draft" : form.status,
         scheduledFor:
@@ -254,6 +259,26 @@ export function HomeCommandCenter({
         typeof post.metadata?.youtubePlaylistTitle === "string"
           ? post.metadata.youtubePlaylistTitle
           : "",
+      youtubePlaylistDescription:
+        typeof post.metadata?.youtubePlaylistDescription === "string"
+          ? post.metadata.youtubePlaylistDescription
+          : "",
+      youtubePlaylistPrivacyStatus:
+        post.metadata?.youtubePlaylistPrivacyStatus === "private" ||
+        post.metadata?.youtubePlaylistPrivacyStatus === "unlisted" ||
+        post.metadata?.youtubePlaylistPrivacyStatus === "public"
+          ? post.metadata.youtubePlaylistPrivacyStatus
+          : "public",
+      youtubePrivacyStatus:
+        post.metadata?.youtubePrivacyStatus === "private" ||
+        post.metadata?.youtubePrivacyStatus === "unlisted" ||
+        post.metadata?.youtubePrivacyStatus === "public"
+          ? post.metadata.youtubePrivacyStatus
+          : "public",
+      youtubeMadeForKids:
+        typeof post.metadata?.youtubeMadeForKids === "boolean"
+          ? post.metadata.youtubeMadeForKids
+          : false,
     });
     setEditorOpen(true);
   }

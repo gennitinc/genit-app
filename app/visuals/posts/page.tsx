@@ -9,7 +9,10 @@ import {
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
-import { PostEditorDialog } from "@/app/visuals/_components/post-editor-dialog";
+import {
+  type PostEditorForm,
+  PostEditorDialog,
+} from "@/app/visuals/_components/post-editor-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -61,7 +64,6 @@ import {
   type SocialPost,
   type SocialPostMedia,
   type SocialPostMetrics,
-  type SocialPostStatus,
   createSocialPosts,
   deleteSocialPost,
   generateSocialPostText,
@@ -146,7 +148,7 @@ const EMPTY_METRICS: SocialPostMetrics = {
   shares: 0,
   clicks: 0,
 };
-const EMPTY_FORM = {
+const EMPTY_FORM: PostEditorForm = {
   title: "",
   content: "",
   mediaUrl: "",
@@ -156,7 +158,11 @@ const EMPTY_FORM = {
   integrationIds: {} as Partial<Record<IntegrationPlatform, string>>,
   youtubePlaylistId: "",
   youtubePlaylistTitle: "",
-  status: "draft" as SocialPostStatus,
+  youtubePlaylistDescription: "",
+  youtubePlaylistPrivacyStatus: "public",
+  youtubePrivacyStatus: "public",
+  youtubeMadeForKids: false,
+  status: "draft",
   scheduledFor: "",
 };
 
@@ -735,6 +741,11 @@ export default function PostsPage() {
         metadata: {
           youtubePlaylistId: form.youtubePlaylistId || undefined,
           youtubePlaylistTitle: form.youtubePlaylistTitle || undefined,
+          youtubePlaylistDescription:
+            form.youtubePlaylistDescription || undefined,
+          youtubePlaylistPrivacyStatus: form.youtubePlaylistPrivacyStatus,
+          youtubePrivacyStatus: form.youtubePrivacyStatus,
+          youtubeMadeForKids: form.youtubeMadeForKids,
         },
         status: form.status === "published" ? "draft" : form.status,
         scheduledFor:
@@ -888,6 +899,26 @@ export default function PostsPage() {
         typeof post.metadata?.youtubePlaylistTitle === "string"
           ? post.metadata.youtubePlaylistTitle
           : "",
+      youtubePlaylistDescription:
+        typeof post.metadata?.youtubePlaylistDescription === "string"
+          ? post.metadata.youtubePlaylistDescription
+          : "",
+      youtubePlaylistPrivacyStatus:
+        post.metadata?.youtubePlaylistPrivacyStatus === "private" ||
+        post.metadata?.youtubePlaylistPrivacyStatus === "unlisted" ||
+        post.metadata?.youtubePlaylistPrivacyStatus === "public"
+          ? post.metadata.youtubePlaylistPrivacyStatus
+          : "public",
+      youtubePrivacyStatus:
+        post.metadata?.youtubePrivacyStatus === "private" ||
+        post.metadata?.youtubePrivacyStatus === "unlisted" ||
+        post.metadata?.youtubePrivacyStatus === "public"
+          ? post.metadata.youtubePrivacyStatus
+          : "public",
+      youtubeMadeForKids:
+        typeof post.metadata?.youtubeMadeForKids === "boolean"
+          ? post.metadata.youtubeMadeForKids
+          : false,
     });
     setEditorOpen(true);
   }

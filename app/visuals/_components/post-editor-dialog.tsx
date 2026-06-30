@@ -49,9 +49,11 @@ import type {
 } from "@/lib/integrations-api";
 import {
   type YouTubePlaylistSummary,
+  type YouTubePrivacy,
   listYouTubePlaylists,
 } from "@/lib/integrations-api";
 import type { SocialPostMedia, SocialPostStatus } from "@/lib/social-posts-api";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
@@ -105,6 +107,10 @@ export type PostEditorForm = {
   integrationIds: Partial<Record<IntegrationPlatform, string>>;
   youtubePlaylistId: string;
   youtubePlaylistTitle: string;
+  youtubePlaylistDescription: string;
+  youtubePlaylistPrivacyStatus: YouTubePrivacy;
+  youtubePrivacyStatus: YouTubePrivacy;
+  youtubeMadeForKids: boolean;
   status: SocialPostStatus;
   scheduledFor: string;
 };
@@ -119,6 +125,10 @@ export const EMPTY_POST_FORM: PostEditorForm = {
   integrationIds: {},
   youtubePlaylistId: "",
   youtubePlaylistTitle: "",
+  youtubePlaylistDescription: "",
+  youtubePlaylistPrivacyStatus: "public",
+  youtubePrivacyStatus: "public",
+  youtubeMadeForKids: false,
   status: "draft",
   scheduledFor: "",
 };
@@ -471,6 +481,8 @@ export function PostEditorDialog({
                             ? {
                                 youtubePlaylistId: "",
                                 youtubePlaylistTitle: "",
+                                youtubePlaylistDescription: "",
+                                youtubePlaylistPrivacyStatus: "public",
                               }
                             : {}),
                         }));
@@ -516,6 +528,8 @@ export function PostEditorDialog({
                     ...current,
                     youtubePlaylistId: "",
                     youtubePlaylistTitle: "",
+                    youtubePlaylistDescription: "",
+                    youtubePlaylistPrivacyStatus: "public",
                   }));
                   return;
                 }
@@ -525,6 +539,8 @@ export function PostEditorDialog({
                     ...current,
                     youtubePlaylistId: "",
                     youtubePlaylistTitle: current.youtubePlaylistTitle,
+                    youtubePlaylistPrivacyStatus:
+                      current.youtubePlaylistPrivacyStatus || "public",
                   }));
                   return;
                 }
@@ -536,6 +552,10 @@ export function PostEditorDialog({
                   ...current,
                   youtubePlaylistId: value,
                   youtubePlaylistTitle: playlist?.snippet?.title || "",
+                  youtubePlaylistDescription:
+                    playlist?.snippet?.description || "",
+                  youtubePlaylistPrivacyStatus:
+                    playlist?.status?.privacyStatus || "public",
                 }));
               }}
             >
@@ -572,6 +592,100 @@ export function PostEditorDialog({
                 className='h-9 border-white/10 bg-white/[0.02] text-white placeholder:text-zinc-600'
               />
             )}
+            {selectedYouTubePlaylistValue === "custom" && (
+              <>
+                <Textarea
+                  value={form.youtubePlaylistDescription}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      youtubePlaylistDescription: event.target.value,
+                    }))
+                  }
+                  rows={2}
+                  placeholder='Playlist description'
+                  className='resize-none border-white/10 bg-white/[0.02] text-white placeholder:text-zinc-600'
+                />
+                <div className='grid gap-2'>
+                  <Label className='text-xs font-medium text-zinc-300'>
+                    Playlist visibility
+                  </Label>
+                  <Select
+                    value={form.youtubePlaylistPrivacyStatus}
+                    onValueChange={(value) =>
+                      setForm((current) => ({
+                        ...current,
+                        youtubePlaylistPrivacyStatus: value as YouTubePrivacy,
+                      }))
+                    }
+                  >
+                    <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
+                      <SelectItem value='public'>Public</SelectItem>
+                      <SelectItem value='unlisted'>Unlisted</SelectItem>
+                      <SelectItem value='private'>Private</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+        {showYouTubePlaylist && (
+          <div className='grid gap-3 rounded-xl border border-red-500/15 bg-red-500/[0.04] p-3'>
+            <div>
+              <p className='text-[10px] font-semibold tracking-[0.16em] text-red-200/80 uppercase'>
+                YouTube video settings
+              </p>
+              <p className='mt-1 text-[11px] leading-4 text-zinc-500'>
+                Upload defaults for this YouTube video.
+              </p>
+            </div>
+            <div className='grid gap-2'>
+              <Label className='text-xs font-medium text-zinc-300'>
+                Video visibility
+              </Label>
+              <Select
+                value={form.youtubePrivacyStatus}
+                onValueChange={(value) =>
+                  setForm((current) => ({
+                    ...current,
+                    youtubePrivacyStatus: value as YouTubePrivacy,
+                  }))
+                }
+              >
+                <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
+                  <SelectItem value='public'>Public</SelectItem>
+                  <SelectItem value='unlisted'>Unlisted</SelectItem>
+                  <SelectItem value='private'>Private</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className='flex items-center justify-between gap-3 rounded-lg border border-white/[0.06] bg-zinc-950/60 p-3'>
+              <div>
+                <Label className='text-xs font-medium text-zinc-200'>
+                  Made for kids
+                </Label>
+                <p className='mt-1 text-[11px] text-zinc-500'>
+                  Off by default.
+                </p>
+              </div>
+              <Switch
+                checked={form.youtubeMadeForKids}
+                onCheckedChange={(checked) =>
+                  setForm((current) => ({
+                    ...current,
+                    youtubeMadeForKids: checked,
+                  }))
+                }
+                aria-label='Made for kids'
+              />
+            </div>
           </div>
         )}
       </section>
