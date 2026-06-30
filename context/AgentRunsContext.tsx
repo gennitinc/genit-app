@@ -2,7 +2,7 @@
 
 import { useProjectDesign } from "@/context/DesignProject";
 import { type AgentRunView, useAgentRuns } from "@/hooks/use-agent-runs";
-import { startAgentRun } from "@/lib/agents-api";
+import { type AgentAttachedFile, startAgentRun } from "@/lib/agents-api";
 import {
   type ReactNode,
   createContext,
@@ -15,7 +15,7 @@ interface AgentRunsContextValue {
   runs: AgentRunView[];
   startAgent: (
     prompt: string,
-    attachedFiles?: { name: string; type: string; url: string }[],
+    attachedFiles?: AgentAttachedFile[],
     selectedIntegrations?: Record<string, string>,
     useBrandIdentity?: boolean
   ) => Promise<{ runId: string } | null>;
@@ -32,7 +32,7 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
   const startAgent = useCallback(
     async (
       prompt: string,
-      attachedFiles?: { name: string; type: string; url: string }[],
+      attachedFiles?: AgentAttachedFile[],
       selectedIntegrations?: Record<string, string>,
       useBrandIdentity?: boolean
     ) => {

@@ -6,6 +6,7 @@ import type {
   AgentRunStatus,
   AgentTask,
   AgentToolCall,
+  AgentAttachedFile,
 } from "@/lib/agents-api";
 import { listAgentRuns } from "@/lib/agents-api";
 import { serverUrlSocket } from "@/utils/apiResponse";
@@ -15,7 +16,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export interface AgentRunView {
   runId: string;
   prompt: string;
-  attachedFiles?: { name: string; type: string; url: string }[];
+  attachedFiles?: AgentAttachedFile[];
   status: AgentRunStatus;
   plan: AgentTask[];
   thinking: string;
@@ -263,7 +264,7 @@ export function useAgentRuns(projectId: string | undefined) {
     (
       runId: string,
       prompt: string,
-      attachedFiles?: { name: string; type: string; url: string }[]
+      attachedFiles?: AgentAttachedFile[]
     ) => {
       upsert(runId, prompt, (r) => ({
         ...r,

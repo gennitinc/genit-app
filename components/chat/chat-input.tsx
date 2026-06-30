@@ -235,7 +235,7 @@ export function ChatInput({
       if (isAgentic) {
         // Build uploaded file list for the agent
         let uploadedFiles:
-          { name: string; type: string; url: string }[] | undefined;
+          { name: string; type: string; url: string; size?: number }[] | undefined;
 
         if (attachedFiles.length > 0) {
           const formData = new FormData();
@@ -248,6 +248,7 @@ export function ChatInput({
                 name: file.name || "file",
                 type: file.type || "application/octet-stream",
                 url: file.url || file.filePath,
+                size: file.size,
               });
             }
           }
@@ -524,7 +525,7 @@ export function ChatInput({
                   <div className='animate-in fade-in slide-in-from-right-1 flex items-center gap-1.5 px-1.5 text-[10px] font-medium duration-300'>
                     {brandSaveStatus === "saving" ? (
                       <>
-                         <LoadingFileLoader size={20} />
+                         <LoadingFileLoader size={14} />
                       </>
                     ) : (
                       <>
@@ -625,7 +626,7 @@ export function ChatInput({
                   {/* Button content */}
                   <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
                     {isGenerating ? (
-                       <LoadingFileLoader size={20} />
+                       <LoadingFileLoader size={14} />
                     ) : (
                       <svg
                         className='h-4 w-4 text-white'

@@ -86,7 +86,7 @@ const PreviewPanelContent = ({
   if (isLoadingProject) {
     return (
       <div className='bg-muted/10 flex h-full flex-col items-center justify-center gap-4'>
-        <LoadingFileLoader size={20} />
+        <LoadingFileLoader size={14} />
         <p className='text-muted-foreground animate-pulse text-sm'>
           Loading preview...
         </p>

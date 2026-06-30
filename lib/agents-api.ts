@@ -35,10 +35,17 @@ export interface AgentIntegrationRequired {
   reason: string;
 }
 
+export interface AgentAttachedFile {
+  name: string;
+  type: string;
+  url: string;
+  size?: number;
+}
+
 export async function startAgentRun(input: {
   projectId: string;
   prompt: string;
-  attachedFiles?: { name: string; type: string; url: string }[];
+  attachedFiles?: AgentAttachedFile[];
   selectedIntegrations?: Record<string, string>;
   useBrandIdentity?: boolean;
 }): Promise<{ runId: string }> {

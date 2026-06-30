@@ -81,7 +81,7 @@ export function ElicitationCard({
                 }
               >
                 {isPicked && submitting && (
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={14} />
                 )}
                 {opt.label}
               </button>
@@ -112,7 +112,7 @@ export function ElicitationCard({
             aria-label='Send'
           >
             {submitting ? (
-             <LoadingFileLoader size={20} />
+             <LoadingFileLoader size={14} />
             ) : (
               <Send className='h-3 w-3' />
             )}

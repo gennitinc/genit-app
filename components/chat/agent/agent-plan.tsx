@@ -7,7 +7,7 @@ import { CheckCircle2, Circle, ListTodo, Loader2, XCircle } from "lucide-react";
 
 function Icon({ status }: { status: AgentTask["status"] }) {
   if (status === "running")
-    return  <LoadingFileLoader size={20} />;
+    return  <LoadingFileLoader size={14} />;
   if (status === "done")
     return (
       <CheckCircle2 className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />

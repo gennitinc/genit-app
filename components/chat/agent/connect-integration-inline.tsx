@@ -152,7 +152,7 @@ export function ConnectIntegrationInline({
                 >
                   {phase === "connecting" ? (
                     <>
-                       <LoadingFileLoader size={20} />
+                       <LoadingFileLoader size={14} />
                       Connecting…
                     </>
                   ) : (

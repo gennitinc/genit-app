@@ -14,6 +14,7 @@ import { UserMessage } from "@/components/chat/messages/user-message";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { resumeAgentRunUserInput } from "@/lib/agents-api";
 import type {
+  AgentAttachedFile,
   AgentElicitation,
   AgentIntegrationRequired,
   AgentRunStatus,
@@ -42,7 +43,7 @@ export interface AgentRunView {
   elicitation?: AgentElicitation;
   integrationRequired?: AgentIntegrationRequired;
   error?: string;
-  attachedFiles?: { name: string; type: string; url: string }[];
+  attachedFiles?: AgentAttachedFile[];
 }
 
 // Humanize a tool name for display — "facebook_publish_post" → "Facebook · publish post".
@@ -123,7 +124,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
   if (!call.result) {
     return (
       <div className='border-border/70 bg-card text-muted-foreground my-3 flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-[12.5px] shadow-[0_1px_0_rgba(0,0,0,0.02)] dark:border-white/10 dark:bg-white/[0.02] dark:shadow-none'>
-        <LoadingFileLoader size={20} />
+        <LoadingFileLoader size={14} />
         <span className='text-foreground font-medium'>{pendingLabel}</span>
         <span className='text-muted-foreground'>running…</span>
       </div>
@@ -203,7 +204,7 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
   if (status === "running") {
     return (
       <span className='bg-foreground/[0.06] text-muted-foreground inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-medium dark:bg-white/[0.06]'>
-         <LoadingFileLoader size={20} />
+         <LoadingFileLoader size={14} />
         Working
       </span>
     );

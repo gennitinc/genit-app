@@ -621,6 +621,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           name: string;
           type: string;
           filePath: string;
+          size?: number;
           status: "uploaded";
         }[] = [];
 
@@ -639,6 +640,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                 name: (file as File).name || "file",
                 type: (file as File).type || "application/octet-stream",
                 filePath: URL.createObjectURL(file as File),
+                size: (file as File).size,
                 status: "uploaded",
               });
               blobFilesToUpload.push(file as File);
@@ -655,6 +657,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                 name,
                 type,
                 filePath: file.filePath || file.url,
+                size: file.size,
                 status: "uploaded",
               });
             }
@@ -880,19 +883,28 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                 agentFiles = res.data.files || [];
               } else {
                 agentFiles = restoredFiles.map((f: any) => ({
-                  name: f.name || "file",
-                  type: f.type || "application/octet-stream",
-                  url: f.filePath || f.url,
-                }));
+                name: f.name || "file",
+                type: f.type || "application/octet-stream",
+                url: f.filePath || f.url,
+                size: f.size,
+              }));
               }
             }
 
             if (selectedFiles && selectedFiles.length > 0) {
-              const selectedAgentFiles = selectedFiles.map((url: string) => ({
-                name: url.split("/").pop() || "selected-file",
-                type: url.endsWith(".png") ? "image/png" : "image/jpeg",
-                url: url,
-              }));
+              const selectedAgentFiles = selectedFiles.map((url: string) => {
+                const name = url.split("/").pop() || "selected-file";
+                const ext = name.split(".").pop()?.toLowerCase();
+                const type = ext === "png"
+                  ? "image/png"
+                  : ext === "mov"
+                    ? "video/quicktime"
+                  : ["mp4", "mov", "avi", "mkv", "webm"].includes(ext || "")
+                    ? `video/${ext}`
+                    : "image/jpeg";
+
+                return { name, type, url };
+              });
               agentFiles = [...agentFiles, ...selectedAgentFiles];
             }
 
