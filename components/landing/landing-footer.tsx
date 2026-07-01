@@ -463,6 +463,12 @@ export function LandingFooter() {
                     About
                   </Link>
                   <Link
+                    href='/teams'
+                    className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                  >
+                    Team
+                  </Link>
+                  <Link
                     href='/legal/privacy-policy'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
