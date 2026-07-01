@@ -49,6 +49,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export function LandingNavbar() {
+  const FARMNET_EMAIL = "farmnetent@gmail.com";
   const { theme, setTheme } = useTheme();
   const user = useUserContext().user;
   const [mounted, setMounted] = useState(false);
@@ -58,11 +59,13 @@ export function LandingNavbar() {
 
   const currentUser = mounted ? user : null;
   const currentIsSmallScreen = mounted ? isSmallScreen : false;
+  const isFarmnetUser = currentUser?.email?.toLowerCase() === FARMNET_EMAIL;
 
   const navigation = [
     { name: "Chat", href: "/chat" },
     { name: "Integrations", href: "/integrations" },
     { name: "Visual Flow", href: "/visuals" },
+    ...(isFarmnetUser ? [{ name: "Apps", href: "/apps" }] : []),
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
     { name: "Community", href: "/community" },
     { name: "Blog", href: "/blog" },
@@ -134,6 +137,14 @@ export function LandingNavbar() {
                 >
                   Visual Flow
                 </Link>
+                {isFarmnetUser && (
+                  <Link
+                    className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'
+                    href='/apps'
+                  >
+                    Apps
+                  </Link>
+                )}
                 <Link
                   target='__blank'
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'

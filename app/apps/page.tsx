@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation";
 import { Toaster } from "sonner";
 import React, { useMemo, useState } from "react";
 
-const FARMNET_EMAIL = "farmnetent@gmail.com";
+  const FARMNET_EMAIL = "farmnetent@gmail.com";
 const GOOGLE_FLOW_URL = "https://labs.google/fx/tools/flow";
 
 const AppCard = ({

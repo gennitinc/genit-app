@@ -19,7 +19,6 @@ import {
   Gift,
   GitBranchPlus,
   Grid2X2Plus,
-  // Grid2X2Plus,
   HelpCircle,
   History,
   Image as ImageIcon,
@@ -40,7 +39,10 @@ export function NavMain() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const FARMNET_EMAIL = "farmnetent@gmail.com";
+
   const user = useUserContext().user;
+  const isFarmnetUser = user?.email?.toLowerCase() === FARMNET_EMAIL;
   const navItems = [
     {
       title: "Agentic Chat",
@@ -59,17 +61,15 @@ export function NavMain() {
       href: "/integrations",
       // badge: "New",
     },
-    {
-      title: "Apps",
-      icon: Grid2X2Plus,
-      href: "/apps",
-    },
-    // {
-    //   title: "Workflow",
-    //   icon: Workflow,
-    //   href: "/apps/workflow",
-    //   badge: "New",
-    // },
+    ...(isFarmnetUser
+      ? [
+          {
+            title: "Apps",
+            icon: Grid2X2Plus,
+            href: "/apps",
+          },
+        ]
+      : []),
     {
       title: "Community",
       icon: Users,
