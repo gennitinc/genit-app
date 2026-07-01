@@ -18,6 +18,7 @@ import {
   GalleryHorizontal,
   Gift,
   GitBranchPlus,
+  Grid2X2Plus,
   // Grid2X2Plus,
   HelpCircle,
   History,
@@ -58,11 +59,11 @@ export function NavMain() {
       href: "/integrations",
       // badge: "New",
     },
-    // {
-    //   title: "Apps",
-    //   icon: Grid2X2Plus,
-    //   href: "/apps",
-    // },
+    {
+      title: "Apps",
+      icon: Grid2X2Plus,
+      href: "/apps",
+    },
     // {
     //   title: "Workflow",
     //   icon: Workflow,
