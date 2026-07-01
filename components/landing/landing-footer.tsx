@@ -541,7 +541,7 @@ export function LandingFooter() {
               <div>
                 <h4 className='text-foreground mb-4 font-semibold'>Apps</h4>
                 <ul className='space-y-3'>
-                  <li>
+                  {/* <li>
                     <Link
                       href='/apps/chat'
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
@@ -556,8 +556,8 @@ export function LandingFooter() {
                     >
                       Angle Reshape
                     </Link>
-                  </li>
-                  <li>
+                  </li> */}
+                  {/* <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                       href='/apps/skin-enhancer'
@@ -565,6 +565,7 @@ export function LandingFooter() {
                       Skin Enhancer
                     </Link>
                   </li>
+                  */}
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
@@ -589,14 +590,14 @@ export function LandingFooter() {
                       Glow Control
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                       href='/apps'
                     >
                       More Apps
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
               <div>

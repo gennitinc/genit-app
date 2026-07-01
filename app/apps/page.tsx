@@ -121,8 +121,7 @@ const Apps = () => {
   }, []);
 
   const handleAction = (app: AppCardProps) => {
-    const shouldOpenGoogleFlow =
-      user?.email?.toLowerCase() === FARMNET_EMAIL;
+    const shouldOpenGoogleFlow = user?.email?.toLowerCase() === FARMNET_EMAIL;
     const href = shouldOpenGoogleFlow ? GOOGLE_FLOW_URL : app.href;
 
     trackAppOpened(app.id, app.title, "agents_directory", {
@@ -315,7 +314,7 @@ const Apps = () => {
                           href='#'
                           className='inline-flex items-center gap-1 text-xs font-medium text-indigo-500 hover:text-indigo-400'
                         >
-                          View SDK
+                          SDK Coming soon
                           <ArrowRight className='h-3 w-3' />
                         </a>
 

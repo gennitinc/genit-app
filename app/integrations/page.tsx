@@ -79,7 +79,7 @@ export default function IntegrationsPage() {
                           href='#'
                           className='inline-flex items-center gap-1 text-xs font-medium text-indigo-500 hover:text-indigo-400'
                         >
-                          View SDK
+                          SDK Coming soon
                           <ArrowRight className='h-3 w-3' />
                         </a>
 
