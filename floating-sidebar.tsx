@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingFileLoader } from "./utils/Loading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -42,7 +43,6 @@ import {
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
 import React from "react";
-import { LoadingFileLoader } from "./utils/Loading";
 
 interface FloatingSidebarProps {
   onAddIntegration: (type: string, data?: any) => void;
@@ -1835,7 +1835,7 @@ export function FloatingSidebar({
                   <label htmlFor='audio-upload' className='cursor-pointer'>
                     {isUploading ? (
                       <div className='flex flex-col items-center'>
-                        <LoadingFileLoader size={20} />
+                        <LoadingFileLoader size={16} />
                         <p className='text-primary text-sm font-medium'>
                           Uploading audio...
                         </p>
@@ -2209,7 +2209,7 @@ export function FloatingSidebar({
               <label htmlFor='image-upload' className='cursor-pointer'>
                 {isUploading ? (
                   <div className='flex flex-col items-center'>
-                   <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                     <p className='text-primary text-sm font-medium'>
                       Uploading image...
                     </p>
@@ -2617,7 +2617,7 @@ export function FloatingSidebar({
               <label htmlFor='video-upload' className='cursor-pointer'>
                 {isUploading ? (
                   <div className='flex flex-col items-center'>
-                   <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                     <p className='text-primary text-sm font-medium'>
                       Uploading video...
                     </p>
@@ -4138,7 +4138,7 @@ export function FloatingSidebar({
                 >
                   {isUploading ? (
                     <>
-                      <LoadingFileLoader size={20} />
+                      <LoadingFileLoader size={16} />
                       Uploading...
                     </>
                   ) : (

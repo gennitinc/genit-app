@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import {
@@ -29,7 +30,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 interface StepImportProps {
   onComplete: (brand: BrandData) => void;
@@ -171,7 +171,7 @@ export function StepImport({
       {/* URL input */}
       <div className='onb-animate-in onb-stagger-4 mx-auto mt-6 max-w-xl'>
         <div className='relative'>
-          <Link2 className='absolute top-1/2 left-4 h-fit py-1 w-5 -translate-y-1/2 text-neutral-500 dark:text-neutral-400' />
+          <Link2 className='absolute top-1/2 left-4 h-fit w-5 -translate-y-1/2 py-1 text-neutral-500 dark:text-neutral-400' />
           <Input
             value={url}
             onChange={(e) => setUrl(e.target.value)}
@@ -202,7 +202,7 @@ export function StepImport({
         <div className='flex w-full flex-col items-center gap-3'>
           <button
             onClick={() => setMode("manual")}
-            className='mx-auto inline-flex h-fit py-2 w-fit items-center justify-center gap-2 rounded-2xl border border-dashed border-cyan-300/30 px-4 text-base text-neutral-500 transition-colors hover:bg-cyan-400/10 dark:text-neutral-400'
+            className='mx-auto inline-flex h-fit w-fit items-center justify-center gap-2 rounded-2xl border border-dashed border-cyan-300/30 px-4 py-2 text-base text-neutral-500 transition-colors hover:bg-cyan-400/10 dark:text-neutral-400'
           >
             <Plus className='h-5 w-5' />
             Add brand manually
@@ -215,7 +215,7 @@ export function StepImport({
             >
               {isSkipping ? (
                 <>
-                   <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Skipping...
                 </>
               ) : (
@@ -500,7 +500,7 @@ function ManualSetup({
             )}
             {isUploading && (
               <div className='absolute inset-0 flex items-center justify-center rounded-2xl bg-white backdrop-blur-sm dark:bg-neutral-950/60'>
-                <LoadingFileLoader size={20} />
+                <LoadingFileLoader size={16} />
               </div>
             )}
           </button>

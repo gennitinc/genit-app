@@ -116,7 +116,7 @@ export function BrowserViewer({
       {isLoading && (
         <div className='bg-opacity-50 absolute inset-0 z-10 flex items-center justify-center bg-gray-100'>
           <div className='flex flex-col items-center gap-2'>
-             <LoadingFileLoader size={20} />
+            <LoadingFileLoader size={16} />
             <p className='text-sm text-gray-600'>Loading preview...</p>
           </div>
         </div>

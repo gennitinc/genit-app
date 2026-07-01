@@ -530,7 +530,7 @@ function TextToSpeechPage() {
                       )}
                     >
                       {isGenerating ? (
-                        <LoadingFileLoader size={20} />
+                        <LoadingFileLoader size={16} />
                       ) : isPlaying ? (
                         <Pause className='h-4 w-4 fill-current' />
                       ) : (
@@ -620,7 +620,7 @@ function TextToSpeechPage() {
                   >
                     {isGenerating ? (
                       <>
-                        <LoadingFileLoader size={20} />
+                        <LoadingFileLoader size={16} />
                         <span className='hidden sm:inline'>Generating...</span>
                       </>
                     ) : (
@@ -958,7 +958,7 @@ function TextToSpeechPage() {
               <div className='scrollbar-hide flex-1 overflow-y-auto px-8 pb-10'>
                 {isLoadingVoices ? (
                   <div className='flex flex-col items-center justify-center gap-3 py-20'>
-                    <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                     <span className='text-muted-foreground text-sm font-medium'>
                       Loading voices...
                     </span>

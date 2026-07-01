@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   Check,
@@ -11,7 +12,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 export type MediaAsset = {
   _id: string;
@@ -51,9 +51,15 @@ export function MediaPicker({
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [selectedMimeType, setSelectedMimeType] = useState("");
   const acceptsVideo = accept === "media";
-  const selectedItems = multiple ? values || [] : value ? [{ url: value, mimeType: selectedMimeType }] : [];
+  const selectedItems = multiple
+    ? values || []
+    : value
+      ? [{ url: value, mimeType: selectedMimeType }]
+      : [];
 
-  const addSelectedItems = (items: Array<{ url: string; mimeType?: string }>) => {
+  const addSelectedItems = (
+    items: Array<{ url: string; mimeType?: string }>
+  ) => {
     if (!multiple) {
       const first = items[0];
       setSelectedMimeType(first?.mimeType || "");
@@ -205,7 +211,7 @@ export function MediaPicker({
           )}
           {uploading && (
             <div className='absolute inset-0 flex items-center justify-center bg-black/70'>
-              <LoadingFileLoader size={20} />
+              <LoadingFileLoader size={16} />
             </div>
           )}
         </div>

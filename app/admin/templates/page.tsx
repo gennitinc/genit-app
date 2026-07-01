@@ -292,7 +292,7 @@ export default function AdminTemplatesPage() {
 
       {isLoading ? (
         <div className='flex items-center justify-center py-12'>
-          <LoadingFileLoader size={20} />
+          <LoadingFileLoader size={16} />
         </div>
       ) : templates.length === 0 ? (
         <div className='text-muted-foreground py-12 text-center'>
@@ -391,9 +391,7 @@ export default function AdminTemplatesPage() {
             ref={loadMoreRef}
             className='flex h-20 items-center justify-center'
           >
-            {isFetchingMore && (
-               <LoadingFileLoader size={20} />
-            )}
+            {isFetchingMore && <LoadingFileLoader size={16} />}
             {!hasNextPage && templates.length > 0 && (
               <p className='text-muted-foreground text-sm'>
                 No more templates to load
@@ -430,7 +428,7 @@ export default function AdminTemplatesPage() {
             >
               {isDeleting ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Deleting...
                 </>
               ) : (
@@ -469,7 +467,7 @@ export default function AdminTemplatesPage() {
             >
               {isBulkDeleting ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Deleting...
                 </>
               ) : (

@@ -30,6 +30,7 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { appendClientTimeContext, cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
@@ -61,7 +62,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import React, { useEffect, useMemo, useState } from "react";
 import { useCallback, useRef } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 type TemplateItem = {
   id: string;
@@ -988,7 +988,7 @@ export default function TemplateGridAll() {
                               className='from-transparent via-blue-500 to-transparent'
                             />
                             {isGenerating || isSubmitting ? (
-                              <LoadingFileLoader size={20} />
+                              <LoadingFileLoader size={16} />
                             ) : (
                               <WandSparklesIcon className='h-4 w-4' />
                             )}
@@ -1317,7 +1317,7 @@ export default function TemplateGridAll() {
                               className='from-transparent via-blue-500 to-transparent'
                             />
                             {isGenerating || isSubmitting ? (
-                              <LoadingFileLoader size={20} />
+                              <LoadingFileLoader size={16} />
                             ) : (
                               <WandSparklesIcon className='h-4 w-4' />
                             )}

@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { Model, ModelType } from "@/types/inspire";
-import { modelApi } from "@/utils/inspire-api";
 import { LoadingFileLoader } from "@/utils/Loading";
+import { modelApi } from "@/utils/inspire-api";
 import {
   FileText,
   Image as ImageIcon,
@@ -156,7 +156,7 @@ export function ModelSelector({
     return (
       <div className='space-y-2'>
         <div className='flex items-center justify-center py-2'>
-          <LoadingFileLoader size={20} />
+          <LoadingFileLoader size={16} />
         </div>
       </div>
     );
@@ -198,10 +198,7 @@ export function ModelSelector({
             .map((model) => {
               const modelId = model._id || model.id || "";
               return (
-                <SelectItem
-                  key={modelId}
-                  value={modelId}
-                >
+                <SelectItem key={modelId} value={modelId}>
                   <div className='flex w-full items-center justify-between gap-2'>
                     <div className='flex min-w-0 flex-1 items-start gap-2'>
                       <ModelIcon

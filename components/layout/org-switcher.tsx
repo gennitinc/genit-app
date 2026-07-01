@@ -47,6 +47,7 @@ import {
 } from "@/context/AuthenticatedContext";
 import { useAccountActions } from "@/hooks/use-account-actions";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   BadgeCheck,
   Check,
@@ -69,7 +70,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useCallback, useMemo, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 type CreateMode = "team" | null;
 
@@ -439,7 +439,7 @@ export function OrgSwitcher({
                         {org.businessName}
                       </span>
                       {switchingId === org._id ? (
-                         <LoadingFileLoader size={20} />
+                        <LoadingFileLoader size={16} />
                       ) : isActive ? (
                         <Check className='h-3 w-3 opacity-70' />
                       ) : null}
@@ -464,7 +464,7 @@ export function OrgSwitcher({
                       </DropdownMenuLabel>
                       {loadingTeamsFor === org._id ? (
                         <div className='text-muted-foreground flex items-center px-2 py-1.5 text-xs'>
-                          <LoadingFileLoader size={20} />
+                          <LoadingFileLoader size={16} />
                           Loading teams…
                         </div>
                       ) : (teamsByOrg[org._id] || []).length === 0 ? (
@@ -688,9 +688,7 @@ export function OrgSwitcher({
               onClick={handleSubmitCreate}
               disabled={!name.trim() || submitting}
             >
-              {submitting ? (
-                <LoadingFileLoader size={20} />
-              ) : null}
+              {submitting ? <LoadingFileLoader size={16} /> : null}
               Create
             </Button>
           </DialogFooter>
@@ -767,7 +765,7 @@ export function OrgSwitcher({
               disabled={!inviteEmail.trim() || inviting}
             >
               {inviting ? (
-                <LoadingFileLoader size={20} />
+                <LoadingFileLoader size={16} />
               ) : (
                 <Mail className='mr-2 h-4 w-4' />
               )}

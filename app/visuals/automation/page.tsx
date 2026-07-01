@@ -523,7 +523,7 @@ export default function AutomationPage() {
                 className='h-9 shrink-0 gap-2 rounded-sm bg-indigo-600 px-4 text-white hover:bg-indigo-700'
               >
                 {creating ? (
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                 ) : (
                   <Plus className='h-4 w-4' />
                 )}
@@ -602,7 +602,7 @@ export default function AutomationPage() {
               className='mt-5 gap-2 bg-neutral-900 px-5 text-xs text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200'
             >
               {creating ? (
-                <LoadingFileLoader size={20} />
+                <LoadingFileLoader size={16} />
               ) : (
                 <Plus className='h-3.5 w-3.5' />
               )}
@@ -663,7 +663,7 @@ export default function AutomationPage() {
                       aria-label={`Delete ${title}`}
                     >
                       {isBusy ? (
-                        <LoadingFileLoader size={20} />
+                        <LoadingFileLoader size={16} />
                       ) : (
                         <Trash2 className='h-3.5 w-3.5' />
                       )}

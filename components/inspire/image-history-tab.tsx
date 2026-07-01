@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { apiResponse } from "@/utils/apiResponse";
 import { LoadingFileLoader } from "@/utils/Loading";
+import { apiResponse } from "@/utils/apiResponse";
 import { ImageIcon, Loader2, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -129,7 +129,7 @@ export function ImageHistoryTab({
     return (
       <section className='p-4'>
         <div className='flex min-h-[60vh] flex-col items-center justify-center'>
-          <LoadingFileLoader size={20} />
+          <LoadingFileLoader size={16} />
           <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading history images
           </p>
@@ -197,7 +197,7 @@ export function ImageHistoryTab({
                       title='Delete'
                     >
                       {deletingId === image._id ? (
-                         <LoadingFileLoader size={20} />
+                        <LoadingFileLoader size={16} />
                       ) : (
                         <Trash2 className='h-4 w-4' />
                       )}

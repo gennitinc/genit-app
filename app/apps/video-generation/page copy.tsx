@@ -24,6 +24,7 @@ import withAuth from "@/helper/hoc/withAuth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { Model, Presenter, Voice } from "@/types/inspire";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { imageGenApi, videoGenApi } from "@/utils/inspire-api";
 import { IconTemplate } from "@tabler/icons-react";
@@ -51,7 +52,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Socket, io } from "socket.io-client";
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 export type Resolution = "1080p" | "720p" | "480p" | "4K";
 export type AspectRatio = "16:9" | "9:16" | "1:1" | "4:3";
@@ -244,12 +244,7 @@ function VideoCreatePage() {
   const urlMode = searchParams.get("mode");
   const projectId = searchParams.get("projectId");
   const urlContentTab = searchParams.get("tab") as
-    | "preview"
-    | "history"
-    | "community"
-    | "templates"
-    | "tutorial"
-    | null;
+    "preview" | "history" | "community" | "templates" | "tutorial" | null;
 
   const [selectedPresenter, setSelectedPresenter] = useState<Presenter | null>(
     null
@@ -740,12 +735,7 @@ function VideoCreatePage() {
   // Sync activeContentTab with URL parameter changes (for browser back/forward)
   useEffect(() => {
     const currentTab = searchParams.get("tab") as
-      | "preview"
-      | "history"
-      | "community"
-      | "templates"
-      | "tutorial"
-      | null;
+      "preview" | "history" | "community" | "templates" | "tutorial" | null;
 
     if (
       currentTab &&
@@ -765,12 +755,7 @@ function VideoCreatePage() {
   // Open drawer on mobile/tablet when tab is set from URL
   useEffect(() => {
     const currentTab = searchParams.get("tab") as
-      | "preview"
-      | "history"
-      | "community"
-      | "templates"
-      | "tutorial"
-      | null;
+      "preview" | "history" | "community" | "templates" | "tutorial" | null;
 
     if (
       isMobile &&
@@ -2269,7 +2254,7 @@ function VideoCreatePage() {
                     >
                       {isGenerating ? (
                         <>
-                         <LoadingFileLoader size={20} />
+                          <LoadingFileLoader size={16} />
                           Generating...
                         </>
                       ) : (

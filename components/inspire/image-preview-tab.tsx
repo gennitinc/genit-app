@@ -318,7 +318,7 @@ export function ImagePreviewTab({
           {/* Generating State */}
           {isGenerating && (
             <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
-               <LoadingFileLoader size={20} />
+              <LoadingFileLoader size={16} />
               <h3 className='mb-2 text-base font-semibold text-neutral-900 dark:text-white'>
                 Generating image
               </h3>
@@ -517,7 +517,7 @@ export function ImagePreviewTab({
             >
               {publishing ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Publishing...
                 </>
               ) : isPublished ? (

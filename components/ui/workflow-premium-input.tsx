@@ -498,7 +498,7 @@ export function WorkflowPremiumInput({
                 }
               >
                 {isEnhancingPrompt ? (
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                 ) : (
                   <CircleFadingArrowUp className='h-3.5 w-3.5' />
                 )}
@@ -516,7 +516,7 @@ export function WorkflowPremiumInput({
               <button className='hover:bg-muted text-muted-foreground hover:text-foreground flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium transition-colors'>
                 <span className='opacity-70'>
                   {isLoadingModels ? (
-                    <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                   ) : (
                     activeModel?.icon || "✦"
                   )}
@@ -531,7 +531,7 @@ export function WorkflowPremiumInput({
               <div className='space-y-1'>
                 {isLoadingModels ? (
                   <div className='flex items-center justify-center p-4'>
-                    <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                   </div>
                 ) : (
                   currentModels.map((model) => (
@@ -620,7 +620,7 @@ export function WorkflowPremiumInput({
                 <div className='p-2'>
                   {isLoadingHistory ? (
                     <div className='flex flex-col items-center justify-center gap-2 py-8'>
-                      <LoadingFileLoader size={20} />
+                      <LoadingFileLoader size={16} />
                       <span className='text-muted-foreground text-[10px]'>
                         Loading history...
                       </span>
@@ -723,7 +723,7 @@ export function WorkflowPremiumInput({
               className='text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 rounded-full bg-indigo-600 !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out hover:bg-indigo-700 disabled:opacity-50'
             >
               {isGenerating ? (
-                <LoadingFileLoader size={20} />
+                <LoadingFileLoader size={16} />
               ) : (
                 <svg
                   xmlns='http://www.w3.org/2000/svg'

@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   CircleFadingArrowUp,
   Download,
@@ -16,7 +17,6 @@ import {
 } from "lucide-react";
 import { Handle, type NodeProps, NodeResizer, Position } from "reactflow";
 import { useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 interface PDFNodeData {
   url?: string;
@@ -114,7 +114,7 @@ export function PDFNode({ data, selected }: NodeProps<PDFNodeData>) {
                     className='borber-primary/20 text-primary h-7 gap-1 bg-indigo-600 px-2 text-[10px] hover:bg-indigo-700/5'
                   >
                     {isAnalyzing ? (
-                     <LoadingFileLoader size={20} />
+                      <LoadingFileLoader size={16} />
                     ) : (
                       <Sparkles className='h-3 w-3' />
                     )}

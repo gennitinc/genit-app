@@ -267,7 +267,7 @@ export function CalendarEventPanel({
                         }}
                         className='rounded-xl bg-red-500 text-white hover:bg-red-600'
                       >
-                        {deleting && <LoadingFileLoader size={20} />} Delete
+                        {deleting && <LoadingFileLoader size={16} />} Delete
                         event
                       </Button>
                       <Button
@@ -488,7 +488,7 @@ export function CalendarEventPanel({
                   disabled={saving || !values.summary.trim()}
                   className='rounded-xl bg-violet-600 text-white hover:bg-violet-700'
                 >
-                  {saving && <LoadingFileLoader size={20} />}
+                  {saving && <LoadingFileLoader size={16} />}
                   {event ? "Save changes" : "Create event"}
                 </Button>
               </div>

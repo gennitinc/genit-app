@@ -224,9 +224,7 @@ export default function BlogIndex() {
                     ref={loadMoreRef}
                     className='flex items-center justify-center py-8'
                   >
-                    {isLoadingMore && (
-                      <LoadingFileLoader size={20} />
-                    )}
+                    {isLoadingMore && <LoadingFileLoader size={16} />}
                   </div>
                 )}
               </div>

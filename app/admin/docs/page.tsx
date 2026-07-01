@@ -126,7 +126,7 @@ export default function AdminDocsPage() {
 
       {isLoading ? (
         <div className='flex items-center justify-center py-20'>
-          <LoadingFileLoader size={20} />
+          <LoadingFileLoader size={16} />
         </div>
       ) : docs.length === 0 ? (
         <div className='rounded-3xl border border-dashed border-zinc-800 py-20 text-center'>

@@ -155,7 +155,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
   if (isLoading) {
     return (
       <div className='flex h-[60vh] flex-col items-center justify-center gap-4'>
-         <LoadingFileLoader size={20} />
+        <LoadingFileLoader size={16} />
         <p className='text-sm text-zinc-500'>Loading article details...</p>
       </div>
     );
@@ -401,7 +401,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
               >
                 {isSubmitting ? (
                   <>
-                    <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                   </>
                 ) : (
                   <>

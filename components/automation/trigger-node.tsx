@@ -341,7 +341,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                   )}
                 >
                   {data.isTesting ? (
-                    <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                   ) : (
                     <Play className='h-3.5 w-3.5' />
                   )}

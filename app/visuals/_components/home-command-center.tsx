@@ -299,7 +299,7 @@ export function HomeCommandCenter({
         {postsQuery.isLoading ? (
           <div className='flex h-[20px] items-center justify-center'>
             <div className='text-muted-foreground flex items-center gap-2 text-sm'>
-              <LoadingFileLoader size={20} />
+              <LoadingFileLoader size={16} />
             </div>
           </div>
         ) : postsQuery.isError ? (
@@ -350,7 +350,7 @@ export function HomeCommandCenter({
                 </div>
               </div>
               {recent.length ? (
-                <div className='divide-y divide-white/10 mt-2'>
+                <div className='mt-2 divide-y divide-white/10'>
                   {recent.map((post) => (
                     <article
                       key={post._id}
@@ -387,7 +387,7 @@ export function HomeCommandCenter({
                             {post.status}
                           </span>
                         </div>
-                        <p className='text-white/55 mt-1 truncate text-xs'>
+                        <p className='mt-1 truncate text-xs text-white/55'>
                           {POST_PLATFORM_LABELS[post.platform] || post.platform}{" "}
                           ·{" "}
                           {post.status === "scheduled"
@@ -397,14 +397,14 @@ export function HomeCommandCenter({
                       </div>
                       <button
                         onClick={() => openEdit(post)}
-                        className='text-white/50 hover:text-white flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-white/10'
+                        className='flex h-8 w-8 items-center justify-center rounded-full text-white/50 transition hover:bg-white/10 hover:text-white'
                         aria-label={`Edit ${post.title || "post"}`}
                       >
                         <Edit3 className='h-3.5 w-3.5' />
                       </button>
                       <button
                         onClick={() => setDeleteTarget(post)}
-                        className='text-white/50 flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-rose-500/20 hover:text-rose-400'
+                        className='flex h-8 w-8 items-center justify-center rounded-full text-white/50 transition hover:bg-rose-500/20 hover:text-rose-400'
                         aria-label={`Delete ${post.title || "post"}`}
                       >
                         <Trash2 className='h-3.5 w-3.5' />
@@ -414,9 +414,11 @@ export function HomeCommandCenter({
                 </div>
               ) : (
                 <div className='flex min-h-64 flex-col items-center justify-center px-6 text-center text-white'>
-                  <FileText className='text-white/40 h-7 w-7' />
-                  <h4 className='mt-3 font-semibold text-white'>Your pipeline is ready</h4>
-                  <p className='text-white/50 mt-1 max-w-sm text-sm'>
+                  <FileText className='h-7 w-7 text-white/40' />
+                  <h4 className='mt-3 font-semibold text-white'>
+                    Your pipeline is ready
+                  </h4>
+                  <p className='mt-1 max-w-sm text-sm text-white/50'>
                     Start a draft, schedule it, and track it through publishing.
                   </p>
                   <Button
@@ -534,9 +536,7 @@ export function HomeCommandCenter({
                 deleteTarget && deleteMutation.mutate(deleteTarget._id)
               }
             >
-              {deleteMutation.isPending && (
-                <LoadingFileLoader size={20} />
-              )}
+              {deleteMutation.isPending && <LoadingFileLoader size={16} />}
               Delete post
             </Button>
           </DialogFooter>

@@ -558,7 +558,7 @@ export function ImageLibrary({
               >
                 {isUploading ? (
                   <>
-                    <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                     Uploading...
                   </>
                 ) : (
@@ -595,7 +595,7 @@ export function ImageLibrary({
                 }}
                 className='h-9 pl-9 text-sm'
               />
-              {isSearching && <LoadingFileLoader size={20} />}
+              {isSearching && <LoadingFileLoader size={16} />}
             </div>
             {!searchQuery.trim() && (
               <div className='text-muted-foreground mb-2 text-xs'>
@@ -624,7 +624,7 @@ export function ImageLibrary({
             >
               {isGenerating ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Generating...
                 </>
               ) : (
@@ -648,7 +648,7 @@ export function ImageLibrary({
             <div ref={scrollAreaRef}>
               {isSearching && currentImages.length === 0 ? (
                 <div className='flex h-32 items-center justify-center'>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                 </div>
               ) : currentImages.length === 0 ? (
                 <div className='flex h-32 flex-col items-center justify-center'>

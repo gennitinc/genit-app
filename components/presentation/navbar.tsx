@@ -178,7 +178,7 @@ export function PresentationNavbar({
                 // Saving State: Loader + subtle text
 
                 <div className='flex items-center gap-1'>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
 
                   <span className='hidden font-medium sm:inline'>
                     Saving...
@@ -318,7 +318,7 @@ export function PresentationNavbar({
             {saving !== undefined && (
               <div className='mr-1 flex items-center'>
                 {saving ? (
-                   <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                 ) : (
                   // Use CheckCircle2 for better visual confirmation than a dot
 

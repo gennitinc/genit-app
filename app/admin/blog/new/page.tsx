@@ -344,7 +344,7 @@ export default function NewBlogPostPage() {
               >
                 {isGeneratingBody ? (
                   <>
-                    <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                     Generating...
                   </>
                 ) : (
@@ -549,7 +549,7 @@ export default function NewBlogPostPage() {
               >
                 {isSubmitting ? (
                   <>
-                    <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                     Publishing...
                   </>
                 ) : (
@@ -679,7 +679,7 @@ export default function NewBlogPostPage() {
               >
                 {isGeneratingAi ? (
                   <>
-                    <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                     Writing Article...
                   </>
                 ) : (

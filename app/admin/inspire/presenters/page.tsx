@@ -280,7 +280,7 @@ export default function AdminPresentersPage() {
 
       {isLoading ? (
         <div className='flex items-center justify-center py-12'>
-          <LoadingFileLoader size={20} />
+          <LoadingFileLoader size={16} />
         </div>
       ) : filteredPresenters.length === 0 ? (
         <div className='text-muted-foreground py-12 text-center'>
@@ -494,7 +494,7 @@ export default function AdminPresentersPage() {
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Creating...
                 </>
               ) : (
@@ -614,7 +614,7 @@ export default function AdminPresentersPage() {
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Updating...
                 </>
               ) : (
@@ -652,7 +652,7 @@ export default function AdminPresentersPage() {
             >
               {isDeleting ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Deleting...
                 </>
               ) : (

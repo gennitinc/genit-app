@@ -130,7 +130,7 @@ export function VideoHistoryTab({
     return (
       <section className='p-4'>
         <div className='flex min-h-[60vh] flex-col items-center justify-center'>
-          <LoadingFileLoader size={20} />
+          <LoadingFileLoader size={16} />
           <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading history videos
           </p>
@@ -337,7 +337,7 @@ function VideoCard({
               title='Delete'
             >
               {deletingId === video._id ? (
-                <LoadingFileLoader size={20} />
+                <LoadingFileLoader size={16} />
               ) : (
                 <Trash2 className='h-4 w-4' />
               )}

@@ -33,6 +33,7 @@ import { trackEvent, trackFeatureUsed } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { AspectRatio, Resolution } from "@/types/inspire";
 import { Model } from "@/types/inspire";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { imageGenApi } from "@/utils/inspire-api";
 import { IconTemplate } from "@tabler/icons-react";
@@ -52,7 +53,6 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 export type ImageStyle =
   | "realistic"
@@ -69,12 +69,7 @@ function ImageGenerationPage() {
 
   const projectId = searchParams.get("projectId");
   const urlContentTab = searchParams.get("tab") as
-    | "preview"
-    | "history"
-    | "community"
-    | "templates"
-    | "tutorial"
-    | null;
+    "preview" | "history" | "community" | "templates" | "tutorial" | null;
 
   const [selectedResolution, setSelectedResolution] =
     useState<Resolution>("1080p");
@@ -690,7 +685,7 @@ function ImageGenerationPage() {
                     className='flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-transform hover:bg-indigo-700 active:scale-95'
                   >
                     {isGenerating ? (
-                      <LoadingFileLoader size={20} />
+                      <LoadingFileLoader size={16} />
                     ) : (
                       <Wand2 size={16} />
                     )}

@@ -693,7 +693,7 @@ export default function InboxPage() {
                 }
               >
                 {markAllMutation.isPending ? (
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                 ) : (
                   <CheckCheck className='mr-2 h-4 w-4' />
                 )}
@@ -704,7 +704,7 @@ export default function InboxPage() {
                 onSelect={() => syncChannels(false)}
               >
                 {syncMutation.isPending ? (
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                 ) : (
                   <RefreshCw className='mr-2 h-4 w-4' />
                 )}
@@ -1103,8 +1103,8 @@ export default function InboxPage() {
               <div className='min-h-0 flex-1 overflow-y-auto p-4 sm:p-6'>
                 {messagesLoading ? (
                   <div className='text-muted-foreground flex h-40 items-center justify-center text-sm'>
-                    <div className="mr-2">
-                        <LoadingFileLoader size={20} />
+                    <div className='mr-2'>
+                      <LoadingFileLoader size={16} />
                     </div>
                     Loading messages
                   </div>
@@ -1260,7 +1260,7 @@ export default function InboxPage() {
                             {relativeTime(message.createdAt)}
                             {!inbound &&
                               (message.status === "sending" ? (
-                                <LoadingFileLoader size={20} />
+                                <LoadingFileLoader size={16} />
                               ) : message.status === "failed" ? (
                                 <button
                                   className='flex items-center gap-1 text-red-600 hover:underline'
@@ -1344,7 +1344,7 @@ export default function InboxPage() {
                                   )
                                 )
                               }
-                              className='text-muted-foreground absolute top-1.5 right-1.5 bg-foreground rounded-full'
+                              className='text-muted-foreground bg-foreground absolute top-1.5 right-1.5 rounded-full'
                               aria-label={`Remove ${attachment.name}`}
                             >
                               <XCircle className='h-4 w-4' />
@@ -1400,7 +1400,7 @@ export default function InboxPage() {
                           }
                         >
                           {isUploading ? (
-                            <LoadingFileLoader size={20} />
+                            <LoadingFileLoader size={16} />
                           ) : (
                             <Paperclip className='h-4 w-4' />
                           )}
@@ -1436,19 +1436,15 @@ export default function InboxPage() {
                           type='button'
                           variant='ghost'
                           size='sm'
-                          className='h-fit py-1 border rounded-full text-xs'
+                          className='h-fit rounded-full border py-1 text-xs'
                           disabled={isWriting}
                           onClick={writeWithAi}
                         >
-                          {isWriting ? (
-                            <LoadingFileLoader size={20} />
-                          ) : (
-                            <></>
-                          )}
+                          {isWriting ? <LoadingFileLoader size={16} /> : <></>}
                           AI Write
                         </Button>
                       </div>
-                     
+
                       <button
                         type='submit'
                         onClick={sendReply}
@@ -1478,7 +1474,7 @@ export default function InboxPage() {
                         {/* Button content */}
                         <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
                           {sendMutation.isPending || isUploading ? (
-                            <LoadingFileLoader size={20} />
+                            <LoadingFileLoader size={16} />
                           ) : (
                             <svg
                               className='h-4 w-4 text-white'

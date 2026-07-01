@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   CircleFadingArrowUp,
   Download,
@@ -29,7 +30,6 @@ import {
 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
 import { memo, useEffect, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 interface ImageNodeData {
   instruction?: string;
@@ -156,7 +156,7 @@ export const ImageNode = memo(
                     className='borber-primary/20 text-primary h-7 gap-1 bg-indigo-600 px-2 text-[10px] hover:bg-indigo-700/5'
                   >
                     {isAnalyzing ? (
-                     <LoadingFileLoader size={20} />
+                      <LoadingFileLoader size={16} />
                     ) : (
                       <Sparkles className='h-3 w-3' />
                     )}

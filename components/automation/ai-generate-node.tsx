@@ -1,10 +1,10 @@
 import { type AIContentType, AI_CONTENT_TYPES } from "./automation-types";
 import { cn } from "@/lib/utils";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { modelApi } from "@/utils/inspire-api";
 import { CircleFadingArrowUp, Loader2, Sparkles, Trash2 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
 import React, { useEffect, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 interface AIGenerateNodeData {
   title: string;
@@ -157,9 +157,7 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
                     </option>
                   ))}
                 </select>
-                {isLoadingModels && (
-                   <LoadingFileLoader size={20} />
-                )}
+                {isLoadingModels && <LoadingFileLoader size={16} />}
               </div>
             </div>
 

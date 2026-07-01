@@ -22,9 +22,9 @@ import {
 } from "@/context/AuthenticatedContext";
 import { useAccountActions } from "@/hooks/use-account-actions";
 import { useToast } from "@/hooks/use-toast";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
-import { LoadingFileLoader } from "@/utils/Loading";
 import {
   Check,
   ChevronRight,
@@ -542,7 +542,7 @@ const SettingsHome = () => {
                     >
                       {isSigningOut ? (
                         <>
-                         <LoadingFileLoader size={20} />
+                          <LoadingFileLoader size={16} />
                           Signing out...
                         </>
                       ) : (
@@ -578,7 +578,7 @@ const SettingsHome = () => {
                         >
                           {isDeletingAccount ? (
                             <>
-                            <LoadingFileLoader size={20} />
+                              <LoadingFileLoader size={16} />
                               Deleting...
                             </>
                           ) : (

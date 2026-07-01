@@ -345,7 +345,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
               >
                 {isSubmitting ? (
                   <>
-                    <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                   </>
                 ) : (
                   <>

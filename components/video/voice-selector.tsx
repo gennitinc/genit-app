@@ -25,8 +25,8 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Voice } from "@/types/inspire";
-import { voiceApi } from "@/utils/inspire-api";
 import { LoadingFileLoader } from "@/utils/Loading";
+import { voiceApi } from "@/utils/inspire-api";
 import {
   Check,
   Loader2,
@@ -575,7 +575,7 @@ export function VoiceSelector({
         <div className='max-h-[60vh] overflow-y-auto pr-2'>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
-             <LoadingFileLoader size={20} />
+              <LoadingFileLoader size={16} />
             </div>
           ) : voices.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
@@ -611,7 +611,7 @@ export function VoiceSelector({
         <div className='max-h-[60vh] overflow-y-auto pr-2'>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
-             <LoadingFileLoader size={20} />
+              <LoadingFileLoader size={16} />
             </div>
           ) : userVoices.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
@@ -828,7 +828,7 @@ export function VoiceSelector({
                 >
                   {isProcessing ? (
                     <>
-                   <LoadingFileLoader size={20} />
+                      <LoadingFileLoader size={16} />
                       Saving Voice...
                     </>
                   ) : (
@@ -893,7 +893,7 @@ export function VoiceSelector({
           </h3>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
-             <LoadingFileLoader size={20} />
+              <LoadingFileLoader size={16} />
             </div>
           ) : voices.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
@@ -931,7 +931,7 @@ export function VoiceSelector({
         <div className='space-y-4 py-4'>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
-             <LoadingFileLoader size={20} />
+              <LoadingFileLoader size={16} />
             </div>
           ) : userVoices.length === 0 ? (
             <div className='py-4 text-center'>
@@ -1151,7 +1151,7 @@ export function VoiceSelector({
                 >
                   {isProcessing ? (
                     <>
-                   <LoadingFileLoader size={20} />
+                      <LoadingFileLoader size={16} />
                       Saving Voice...
                     </>
                   ) : (

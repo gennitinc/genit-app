@@ -1008,7 +1008,7 @@ export default function AutomationWorkflow({
           <div className='text-muted-foreground flex items-center gap-1 px-1.5 text-[10px]'>
             {saveStatus === "saving" && (
               <>
-                 <LoadingFileLoader size={20} />
+                <LoadingFileLoader size={16} />
                 {/* <span>Saving</span> */}
               </>
             )}

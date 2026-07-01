@@ -303,7 +303,7 @@ export const DesignNode = memo(
                 className='h-9 flex-[1.4] rounded-xl'
               >
                 {isInpainting ? (
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                 ) : (
                   <Wand2 className='mr-1 h-3.5 w-3.5' />
                 )}

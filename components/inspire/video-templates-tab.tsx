@@ -207,7 +207,7 @@ export function VideoTemplatesTab({
     return (
       <section className='p-4'>
         <div className='flex min-h-[60vh] flex-col items-center justify-center'>
-          <LoadingFileLoader size={20} />
+          <LoadingFileLoader size={16} />
           <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading templates
           </p>

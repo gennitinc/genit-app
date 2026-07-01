@@ -1101,7 +1101,7 @@ export function IdeaSection() {
                           />
                           <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl'>
                             {isGenerating || isSubmitting ? (
-                              <LoadingFileLoader size={20} />
+                              <LoadingFileLoader size={16} />
                             ) : (
                               <div className='flex flex-row items-center gap-2'>
                                 <WandSparklesIcon className='h-3 w-3' />
@@ -1401,7 +1401,7 @@ export function IdeaSection() {
           <div className='space-y-4 overflow-y-auto px-4 pb-4'>
             {isGeneratingOutline ? (
               <div className='flex flex-col items-center justify-center py-12'>
-                <LoadingFileLoader size={20} />
+                <LoadingFileLoader size={16} />
                 <p className='text-muted-foreground text-sm'>
                   Generating presentation outline...
                 </p>
@@ -1799,7 +1799,7 @@ export function IdeaSection() {
             >
               {isSubmitting ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Creating...
                 </>
               ) : (

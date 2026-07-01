@@ -1552,7 +1552,7 @@ export function IdeaSection() {
                               }
                             >
                               {isEnhancingPrompt ? (
-                                <LoadingFileLoader size={20} />
+                                <LoadingFileLoader size={16} />
                               ) : (
                                 <CircleFadingArrowUp className='h-3.5 w-3.5' />
                               )}
@@ -1601,7 +1601,7 @@ export function IdeaSection() {
                           <div className='animate-in fade-in slide-in-from-right-1 flex items-center gap-1.5 px-1.5 text-[10px] font-medium duration-300'>
                             {brandSaveStatus === "saving" ? (
                               <>
-                                <LoadingFileLoader size={20} />
+                                <LoadingFileLoader size={16} />
                               </>
                             ) : (
                               <>
@@ -1669,7 +1669,7 @@ export function IdeaSection() {
                           {/* Button content */}
                           <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
                             {isGenerating || isSubmitting ? (
-                              <LoadingFileLoader size={20} />
+                              <LoadingFileLoader size={16} />
                             ) : (
                               <svg
                                 className='h-4 w-4 text-white'
@@ -1857,7 +1857,7 @@ export function IdeaSection() {
           <div className='space-y-4 overflow-y-auto px-4 pb-4'>
             {isGeneratingOutline ? (
               <div className='flex flex-col items-center justify-center py-12'>
-                <LoadingFileLoader size={20} />
+                <LoadingFileLoader size={16} />
                 <p className='text-muted-foreground text-sm'>
                   Generating presentation outline...
                 </p>
@@ -2249,7 +2249,7 @@ export function IdeaSection() {
             >
               {isSubmitting ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Creating...
                 </>
               ) : (

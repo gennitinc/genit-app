@@ -1,8 +1,8 @@
 "use client";
 
 import { Logo } from "@/components/logo";
-import { apiResponse } from "@/utils/apiResponse";
 import { LoadingFileLoader } from "@/utils/Loading";
+import { apiResponse } from "@/utils/apiResponse";
 import {
   BookOpen,
   ChevronRight,
@@ -147,7 +147,9 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
 
   const copyLink = async () => {
     if (!activeDoc || typeof window === "undefined") return;
-    await navigator.clipboard.writeText(`${window.location.origin}/docs/${activeDoc.slug}`);
+    await navigator.clipboard.writeText(
+      `${window.location.origin}/docs/${activeDoc.slug}`
+    );
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1500);
   };
@@ -174,7 +176,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder='Search...'
-            className='h-11 w-full rounded-xl border border-zinc-800 bg-black pr-3 pl-10 text-sm text-zinc-200 outline-none transition placeholder:text-zinc-500 focus:border-zinc-600'
+            className='h-11 w-full rounded-xl border border-zinc-800 bg-black pr-3 pl-10 text-sm text-zinc-200 transition outline-none placeholder:text-zinc-500 focus:border-zinc-600'
           />
         </div>
         <button
@@ -298,7 +300,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
         <main className='min-w-0 flex-1'>
           {isLoading ? (
             <div className='flex min-h-[calc(100vh-4rem)] items-center justify-center'>
-               <LoadingFileLoader size={20} />
+              <LoadingFileLoader size={16} />
             </div>
           ) : !activeDoc ? (
             <div className='mx-auto max-w-2xl px-6 py-32 text-center'>
@@ -373,7 +375,9 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
                           key={heading.id}
                           href={`#${heading.id}`}
                           className={`block text-sm leading-6 transition hover:text-white ${
-                            heading.level === 3 ? "pl-4 text-zinc-600" : "text-zinc-400"
+                            heading.level === 3
+                              ? "pl-4 text-zinc-600"
+                              : "text-zinc-400"
                           }`}
                         >
                           {heading.text}

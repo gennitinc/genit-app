@@ -106,7 +106,7 @@ export default function AcceptInvitationPage() {
   if (loading) {
     return (
       <main className='flex min-h-[80vh] items-center justify-center'>
-        <LoadingFileLoader size={20} />
+        <LoadingFileLoader size={16} />
       </main>
     );
   }
@@ -214,7 +214,7 @@ export default function AcceptInvitationPage() {
               disabled={!!badStatus || accepting || (isAuthed && !emailMatch)}
               className='w-full'
             >
-              {accepting ? <LoadingFileLoader size={20} /> : null}
+              {accepting ? <LoadingFileLoader size={16} /> : null}
               {isAuthed ? "Accept invitation" : "Sign in to accept"}
             </Button>
             {!isAuthed && (

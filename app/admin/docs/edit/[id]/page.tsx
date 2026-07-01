@@ -4,12 +4,12 @@ import {
   DocPage,
   DocsEditorForm,
 } from "@/components/admin/docs/DocsEditorForm";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import React, { use, useEffect, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 interface EditDocPageProps {
   params: Promise<{ id: string }>;
@@ -42,7 +42,7 @@ export default function EditDocPage({ params }: EditDocPageProps) {
   if (isLoading) {
     return (
       <div className='flex h-[60vh] flex-col items-center justify-center gap-4'>
-         <LoadingFileLoader size={20} />
+        <LoadingFileLoader size={16} />
         <p className='text-sm text-zinc-500'>Loading documentation...</p>
       </div>
     );

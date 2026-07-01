@@ -44,6 +44,7 @@ import {
   Resolution,
   Voice,
 } from "@/types/inspire";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { imageGenApi, videoGenApi } from "@/utils/inspire-api";
 import { IconTemplate } from "@tabler/icons-react";
@@ -74,7 +75,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Socket, io } from "socket.io-client";
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 export type { Presenter, Voice, Model } from "@/types/inspire";
 
@@ -1750,7 +1750,7 @@ function VideoGenerationPage() {
                     >
                       {isGenerating ? (
                         <div className='flex items-center gap-2'>
-                          <LoadingFileLoader size={20} />
+                          <LoadingFileLoader size={16} />
                           <span>{generationProgress}%</span>
                         </div>
                       ) : (

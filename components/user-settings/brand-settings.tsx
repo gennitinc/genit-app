@@ -366,7 +366,7 @@ export default function BrandSettings() {
                 )}
                 {isUploadingLogo && (
                   <div className='bg-background/60 absolute inset-0 flex items-center justify-center backdrop-blur-sm'>
-                    <LoadingFileLoader size={20} />
+                    <LoadingFileLoader size={16} />
                   </div>
                 )}
               </button>
@@ -577,7 +577,7 @@ export default function BrandSettings() {
             <Button onClick={handleSave} disabled={!dirty || isSaving}>
               {isSaving ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Saving...
                 </>
               ) : (

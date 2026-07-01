@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/drawer";
 import { toast } from "@/hooks/use-toast";
 import { ImageGenTemplate, ImageGenTemplateGroup } from "@/types/inspire";
-import { imageGenTemplatesApi } from "@/utils/inspire-api";
 import { LoadingFileLoader } from "@/utils/Loading";
+import { imageGenTemplatesApi } from "@/utils/inspire-api";
 import { IconTemplate } from "@tabler/icons-react";
 import { ChevronRight, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -341,7 +341,7 @@ export function ImageTemplatesTab({
     return (
       <section className='p-4'>
         <div className='flex min-h-[60vh] flex-col items-center justify-center'>
-           <LoadingFileLoader size={20} />
+          <LoadingFileLoader size={16} />
           <p className='text-sm text-neutral-500 dark:text-neutral-400'>
             Loading templates
           </p>

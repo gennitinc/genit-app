@@ -23,6 +23,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Model, ModelType } from "@/types/inspire";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { modelApi } from "@/utils/inspire-api";
 import {
   CircleFadingArrowUp,
@@ -42,7 +43,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCallback, useEffect, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 export default function AdminModelsPage() {
   const [models, setModels] = useState<Model[]>([]);
@@ -301,7 +301,7 @@ export default function AdminModelsPage() {
 
       {isLoading ? (
         <div className='flex items-center justify-center py-12'>
-         <LoadingFileLoader size={20} />
+          <LoadingFileLoader size={16} />
         </div>
       ) : filteredModels.length === 0 ? (
         <div className='text-muted-foreground py-12 text-center'>
@@ -702,7 +702,7 @@ export default function AdminModelsPage() {
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Creating...
                 </>
               ) : (
@@ -1016,7 +1016,7 @@ export default function AdminModelsPage() {
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Updating...
                 </>
               ) : (
@@ -1054,7 +1054,7 @@ export default function AdminModelsPage() {
             >
               {isDeleting ? (
                 <>
-                  <LoadingFileLoader size={20} />
+                  <LoadingFileLoader size={16} />
                   Deleting...
                 </>
               ) : (
