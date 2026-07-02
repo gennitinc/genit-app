@@ -88,7 +88,7 @@ export default function About2() {
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
                 Unlike traditional AI tools that only generate content, genit is
                 designed to take action. It combines AI agents with 25+
-                integrations to help businesses execute marketing tasks
+                plugins to help businesses execute marketing tasks
                 end-to-end, reducing the need to switch between multiple tools
                 or hire large marketing teams.
               </p>
@@ -143,7 +143,7 @@ export default function About2() {
                   alt='Blog Image'
                 />
                 <figcaption className='mt-3 text-center text-sm text-gray-500 dark:text-neutral-500'>
-                  AI agents and marketing integrations automating brand
+                  AI agents and marketing plugins automating brand
                   workflows.
                 </figcaption>
               </figure>
@@ -218,7 +218,7 @@ export default function About2() {
                   className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
                   href='#'
                 >
-                  Integrations
+                  Plugins
                 </a>
                 <a
                   className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'

@@ -231,7 +231,7 @@ export function AIMessage({
                 if (!integrationToConnect) {
                   const match =
                     textContent.match(
-                      /(?:reconnect|connect) (?:your )?([A-Z][A-Za-z0-9\s]+?)(?: account| integration| in the integrations page)/i
+                      /(?:reconnect|connect) (?:your )?([A-Z][A-Za-z0-9\s]+?)(?: account| integration| plugin| in the integrations page| in the plugin page)/i
                     ) ||
                     textContent.match(
                       /([A-Z][A-Za-z0-9\s]+?) needs reconnection/i
@@ -260,7 +260,7 @@ export function AIMessage({
                             variant='default'
                             className='w-fit'
                           >
-                            <Link href='/integrations'>
+                            <Link href='/plugin'>
                               {isReconnect ? "Reconnect / Manage" : "Connect"}{" "}
                               {integrationToConnect}
                             </Link>

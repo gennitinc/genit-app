@@ -513,6 +513,12 @@ export function LandingFooter() {
                     Pricing
                   </Link>
                   <Link
+                    href='/plugin'
+                    className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                  >
+                    Plugin
+                  </Link>
+                  <Link
                     href='/creators-program'
                     className='text-muted-foreground hover:text-foreground transition-colors'
                   >

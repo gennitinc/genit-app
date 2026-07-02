@@ -214,12 +214,12 @@ export default function VisualsHomePage() {
         </div>
       </div>
 
-      {/* Integrations Carousel */}
+      {/* Plugins Carousel */}
       <div className='mt-2 flex flex-col shadow-sm'>
         <div className='mb-6 flex items-start justify-between lg:mx-6'>
           <div>
             <h3 className='text-foreground text-base font-bold dark:text-white'>
-              Integration Status
+              Plugin Status
             </h3>
             <p className='text-muted-foreground mt-1 text-xs'>
               Manage your connected channels
@@ -230,7 +230,7 @@ export default function VisualsHomePage() {
             size='sm'
             className='h-8 rounded-full border-zinc-200 text-xs dark:border-zinc-800'
             onClick={() => {
-              router.push("/integrations");
+              router.push("/plugin");
             }}
           >
             View more

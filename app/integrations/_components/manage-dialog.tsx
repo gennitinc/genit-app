@@ -262,7 +262,7 @@ export function ManageDialog({
                       </p>
                     ) : (
                       <p className='text-muted-foreground mt-1 text-[11px]'>
-                        Click Connect from the integrations page to set up{" "}
+                        Click Connect from the plugin page to set up{" "}
                         {platformName}.
                       </p>
                     )}

@@ -1716,11 +1716,11 @@ export function IdeaSection() {
           <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
             with over 25+ marketing{" "}
             <Link
-              href='/integrations'
+              href='/plugin'
               target='_blank'
               className='text-foreground text-sm font-medium underline md:text-base'
             >
-              Integrations
+              Plugin
             </Link>
           </h2>
           <div className='relative z-10 mx-auto max-w-5xl'>
@@ -1730,7 +1730,7 @@ export function IdeaSection() {
                   ({ name, Icon }, i) => (
                     <Link
                       key={`${name}-${i}`}
-                      href={`/integrations#${name.toLowerCase().replace(/\s+/g, "-")}`}
+                      href={`/plugin#${name.toLowerCase().replace(/\s+/g, "-")}`}
                       className='group text-muted-foreground hover:text-foreground flex shrink-0 items-center gap-2 transition-colors'
                     >
                       <span className='flex h-6 items-center md:h-7'>

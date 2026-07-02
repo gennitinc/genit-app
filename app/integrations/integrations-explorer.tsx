@@ -459,7 +459,7 @@ export function IntegrationsExplorer() {
 
   return (
     <>
-      {/* "Added" integrations section */}
+      {/* "Added" plugins section */}
       {connectedIntegrations.length > 0 && (
         <div className="mb-10">
           <div className="flex justify-between items-baseline mb-4">
@@ -563,7 +563,7 @@ export function IntegrationsExplorer() {
       {grouped.length === 0 ? (
         <div className='py-16 text-center'>
           <p className='text-zinc-500 dark:text-zinc-400 text-sm'>
-            No integrations match &ldquo;{query}&rdquo;.
+            No plugins match &ldquo;{query}&rdquo;.
           </p>
         </div>
       ) : (

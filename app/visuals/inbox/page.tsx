@@ -718,9 +718,9 @@ export default function InboxPage() {
                 Import older channel history
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href='/integrations'>
+                <Link href='/plugin'>
                   <Settings className='mr-2 h-4 w-4' />
-                  Manage integrations
+                  Manage plugins
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -807,7 +807,7 @@ export default function InboxPage() {
                     <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
-                        <Link href='/integrations'>
+                        <Link href='/plugin'>
                           <Plus className='mr-2 h-4 w-4' />
                           Connect a channel
                         </Link>

@@ -3,9 +3,9 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Data & Integration Removal Instructions – Genit AI",
+  title: "Data & Plugin Removal Instructions – Genit AI",
   description:
-    "Step-by-step instructions for disconnecting your Facebook, Instagram, Meta Ads, Threads and other integrations from Genit AI and removing the data genit stored on your behalf.",
+    "Step-by-step instructions for disconnecting your Facebook, Instagram, Meta Ads, Threads and other plugins from Genit AI and removing the data genit stored on your behalf.",
   robots: {
     index: true,
     follow: true,
@@ -68,7 +68,7 @@ export default function RemovalInstructionsPage() {
         <div className='content mx-auto max-w-4xl'>
           <div>
             <h1 className='text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl'>
-              Data & Integration{" "}
+              Data & Plugin{" "}
               <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
                 Removal
               </span>
@@ -91,7 +91,7 @@ export default function RemovalInstructionsPage() {
             This page tells you exactly how to do that. It covers three things:
           </p>
           <ul className={LIST_CLASS}>
-            <li>How to disconnect a single integration from inside genit.</li>
+            <li>How to disconnect a single plugin from inside genit.</li>
             <li>
               How to revoke genit&apos;s access directly from the third-party
               platform (Facebook, Instagram, Meta Business, Threads, etc.).
@@ -104,10 +104,10 @@ export default function RemovalInstructionsPage() {
 
           <SectionHeading
             id='2-remove-from-genit'
-            label='2. Disconnect a single integration in genit'
+            label='2. Disconnect a single plugin in genit'
           />
           <p className={P_CLASS}>
-            The fastest way to remove an integration is from inside the genit
+            The fastest way to remove a plugin is from inside the genit
             app. We immediately delete the encrypted access token we hold for
             that target and stop any scheduled work that depends on it.
           </p>
@@ -126,8 +126,8 @@ export default function RemovalInstructionsPage() {
             </li>
             <li>
               Open{" "}
-              <a className={LINK_CLASS} href='/integrations'>
-                Integrations
+              <a className={LINK_CLASS} href='/plugin'>
+                Plugin
               </a>{" "}
               from the navigation menu.
             </li>
@@ -165,8 +165,8 @@ export default function RemovalInstructionsPage() {
           <ol className={ORDERED_CLASS}>
             <li>
               Open{" "}
-              <a className={LINK_CLASS} href='/integrations'>
-                Integrations
+              <a className={LINK_CLASS} href='/plugin'>
+                Plugin
               </a>{" "}
               in genit.
             </li>
@@ -183,7 +183,7 @@ export default function RemovalInstructionsPage() {
             </li>
           </ol>
           <p className={P_CLASS}>
-            This removes every Facebook, Instagram and Meta Ads integration tied
+            This removes every Facebook, Instagram and Meta Ads plugin tied
             to your Meta identity for this organization, and deletes the
             encrypted token genit stored.
           </p>
@@ -228,7 +228,7 @@ export default function RemovalInstructionsPage() {
           </ol>
           <p className={P_CLASS}>
             Facebook will instantly invalidate the access token. genit detects
-            the revocation on the next request and marks the integration as{" "}
+            the revocation on the next request and marks the plugin as{" "}
             <strong className={STRONG_CLASS}>revoked</strong> in your dashboard.
           </p>
 
@@ -237,7 +237,7 @@ export default function RemovalInstructionsPage() {
             label='5. Revoke from Instagram directly'
           />
           <p className={P_CLASS}>
-            Instagram Business integrations live under the linked Facebook Page.
+            Instagram Business plugins live under the linked Facebook Page.
             To revoke them from Instagram&apos;s side:
           </p>
           <ol className={ORDERED_CLASS}>
@@ -331,7 +331,7 @@ export default function RemovalInstructionsPage() {
             label='8. Request a permanent data deletion'
           />
           <p className={P_CLASS}>
-            Disconnecting an integration immediately deletes the encrypted
+            Disconnecting a plugin immediately deletes the encrypted
             access token we held for it. However, depending on what you used
             genit for, we may also have stored: cached account metadata (profile
             name, account id), the content of scheduled or published posts you
