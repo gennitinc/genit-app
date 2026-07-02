@@ -65,17 +65,17 @@ const LandingUnifiedInbox = () => {
 
         <div className='relative overflow-hidden rounded-[1.4rem] bg-zinc-100 ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10'>
           <Image
-            src='/dm2.png'
+            src='/dm1.png'
             alt='Unified social media DM dashboard for managing brand conversations'
-            width={1555}
+            width={1554}
             height={1012}
             sizes='(min-width: 1024px) 960px, calc(100vw - 32px)'
             className='h-auto w-full dark:hidden'
           />
           <Image
-            src='/dm1.png'
+            src='/dm2.png'
             alt='Unified social media DM dashboard for managing brand conversations in dark mode'
-            width={1554}
+            width={1555}
             height={1012}
             sizes='(min-width: 1024px) 960px, calc(100vw - 32px)'
             className='hidden h-auto w-full dark:block'
