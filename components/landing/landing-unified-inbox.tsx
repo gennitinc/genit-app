@@ -32,17 +32,6 @@ const LandingUnifiedInbox = () => {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const isDarkMode = resolvedTheme === "dark";
-  const inboxPreview = isDarkMode
-    ? {
-        src: "/dm2.png",
-        alt: "Unified social media DM dashboard for managing brand conversations in dark mode",
-        width: 1555,
-      }
-    : {
-        src: "/dm1.png",
-        alt: "Unified social media DM dashboard for managing brand conversations",
-        width: 1554,
-      };
 
   useEffect(() => {
     setMounted(true);
@@ -87,17 +76,28 @@ const LandingUnifiedInbox = () => {
         <GradientFrame />
 
         <div className='relative overflow-hidden rounded-[1.4rem] bg-zinc-100 ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10'>
-          {mounted ? (
+          {!mounted ? (
+            <div className='aspect-[1555/1012] w-full' />
+          ) : isDarkMode ? (
             <Image
-              src={inboxPreview.src}
-              alt={inboxPreview.alt}
-              width={inboxPreview.width}
+              key='unified-inbox-dark'
+              src='/dm2.png'
+              alt='Unified social media DM dashboard for managing brand conversations in dark mode'
+              width={1555}
               height={1012}
               sizes='(min-width: 1024px) 960px, calc(100vw - 32px)'
               className='h-auto w-full'
             />
           ) : (
-            <div className='aspect-[1555/1012] w-full' />
+            <Image
+              key='unified-inbox-light'
+              src='/dm1.png'
+              alt='Unified social media DM dashboard for managing brand conversations'
+              width={1554}
+              height={1012}
+              sizes='(min-width: 1024px) 960px, calc(100vw - 32px)'
+              className='h-auto w-full'
+            />
           )}
         </div>
       </div>
