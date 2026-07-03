@@ -291,4 +291,6 @@ export interface IProjectDesignContext {
   updateProjectModel: (projectId: string, model: string) => Promise<void>;
   brandIdentityEnabled: boolean;
   setBrandIdentityEnabled: (enabled: boolean) => void;
+  chatCostMode: "economy" | "balanced" | "quality";
+  setChatCostMode: (mode: "economy" | "balanced" | "quality") => void;
 }

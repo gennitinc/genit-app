@@ -24,21 +24,17 @@ import {
   listGoogleCalendars,
   updateGoogleCalendarEvent,
 } from "@/lib/integrations-api";
-import Loading, { LoadingFileLoader } from "@/utils/Loading";
-import { GradientFrame } from "@/utils/gradient-frame";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CalendarDays,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ExternalLink,
-  Loader2,
   Plus,
   RefreshCw,
   Search,
 } from "lucide-react";
-import Link from "next/link";
 import React, {
   useCallback,
   useDeferredValue,
@@ -66,20 +62,6 @@ function initialMonthRange() {
   return { start: start.toISOString(), end: end.toISOString() };
 }
 
-function escapeHtml(value: string) {
-  return value.replace(
-    /[&<>'"]/g,
-    (character) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        "'": "&#39;",
-        '"': "&quot;",
-      })[character] || character
-  );
-}
-
 function eventStart(event: GoogleCalendarEvent) {
   return event.start?.dateTime || event.start?.date;
 }
@@ -96,11 +78,45 @@ function eventColor(id: string) {
   return EVENT_COLORS[hash % EVENT_COLORS.length];
 }
 
+function localDateString(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function toMovedEventInput(
+  event: GoogleCalendarEvent,
+  calendarId: string,
+  start: Date,
+  end: Date | undefined,
+  allDay: boolean
+): CreateGoogleCalendarEventInput {
+  const fallbackEnd = new Date(start.getTime() + 60 * 60_000);
+  return {
+    calendarId,
+    summary: event.summary || "Untitled event",
+    description: event.description,
+    location: event.location,
+    start: allDay
+      ? { date: localDateString(start) }
+      : { dateTime: start.toISOString() },
+    end: allDay
+      ? {
+          date: localDateString(
+            end || new Date(start.getTime() + 24 * 60 * 60_000)
+          ),
+        }
+      : { dateTime: (end || fallbackEnd).toISOString() },
+    attendees: event.attendees,
+    sendUpdates: "all",
+  };
+}
+
 export default function CalendarPage() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { user } = useUserContext();
-  const members = user?.currentOrganization?.members || [];
   const { byPlatform, isLoading: integrationsLoading } = useIntegrations();
   const googleConnections = byPlatform.get("google_calendar") || [];
   const activeConnection = googleConnections.find(
@@ -108,15 +124,6 @@ export default function CalendarPage() {
   );
 
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
-  const handleConnectCalendar = () => {
-    const gcalIntegration = INTEGRATIONS.find(
-      (i) => i.platform === "google_calendar"
-    );
-    if (gcalIntegration) {
-      setConnectFor(gcalIntegration);
-    }
-  };
-
   const [currentView, setCurrentView] = useState<CalendarView>("dayGridMonth");
   const [visibleRange, setVisibleRange] = useState(initialMonthRange);
   const [calendarTitle, setCalendarTitle] = useState(() =>
@@ -132,6 +139,15 @@ export default function CalendarPage() {
     useState<GoogleCalendarEvent | null>(null);
   const deferredSearch = useDeferredValue(search.trim());
   const calendarRef = useRef<EventCalendarHandle>(null);
+
+  const handleConnectCalendar = () => {
+    const gcalIntegration = INTEGRATIONS.find(
+      (i) => i.platform === "google_calendar"
+    );
+    if (gcalIntegration) {
+      setConnectFor(gcalIntegration);
+    }
+  };
 
   const calendarsQuery = useQuery({
     queryKey: ["google-calendars", activeConnection?._id],
@@ -184,15 +200,50 @@ export default function CalendarPage() {
   );
 
   const handleDatesSet = useCallback((info: any) => {
-    // Event Calendar's startStr/endStr omit the timezone, but Google Calendar
-    // requires RFC-3339 timestamps with an explicit offset. Date objects give
-    // us canonical UTC timestamps regardless of the calendar's display zone.
     setVisibleRange({
       start: info.start.toISOString(),
       end: info.end.toISOString(),
     });
     setCalendarTitle(info.view?.title || "Calendar");
   }, []);
+
+  const moveEvent = useCallback(
+    async (info: any) => {
+      if (!activeConnection) return;
+      const sourceEvent =
+        info.oldEvent?.extendedProps?.sourceEvent ||
+        info.event?.extendedProps?.sourceEvent;
+      if (!sourceEvent) return;
+
+      try {
+        await updateGoogleCalendarEvent(
+          activeConnection._id,
+          sourceEvent.id,
+          toMovedEventInput(
+            sourceEvent,
+            selectedCalendarId,
+            info.newStart,
+            info.newEnd,
+            Boolean(info.allDay)
+          )
+        );
+        await queryClient.invalidateQueries({
+          queryKey: ["google-calendar-events"],
+        });
+        toast({ title: "Event moved" });
+      } catch (error: any) {
+        toast({
+          title: "Could not move event",
+          description: error?.response?.data?.message || error?.message,
+          variant: "destructive",
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ["google-calendar-events"],
+        });
+      }
+    },
+    [activeConnection, queryClient, selectedCalendarId, toast]
+  );
 
   const calendarOptions = useMemo(
     () => ({
@@ -204,36 +255,19 @@ export default function CalendarPage() {
       slotMaxTime: "22:00:00",
       slotDuration: "00:30:00",
       allDaySlot: true,
-      editable: false,
+      editable: true,
       nowIndicator: true,
       firstDay: 1,
       dayMaxEvents: 3,
       moreLinkContent: (info: any) => `View ${info.num} more`,
       dayHeaderFormat: { weekday: "short" },
+      eventDrop: moveEvent,
       eventClick: (info: any) => {
         setSelectedEvent(info.event?.extendedProps?.sourceEvent || null);
         setEventPanelOpen(true);
       },
-      eventContent: (info: any) => {
-        const title = escapeHtml(info.event.title || "Untitled event");
-        const location = info.event.extendedProps?.location
-          ? escapeHtml(info.event.extendedProps.location)
-          : "";
-        const accent = info.event.extendedProps?.accent || "#2563eb";
-        const time = info.timeText ? escapeHtml(info.timeText) : "All day";
-        return {
-          html: `<div class="gcal-event-card" style="--event-accent:${accent}">
-            <span class="gcal-event-dot"></span>
-            <div class="gcal-event-copy">
-              <span class="gcal-event-time">${time}</span>
-              <span class="gcal-event-title">${title}</span>
-              ${location ? `<span class="gcal-event-location">${location}</span>` : ""}
-            </div>
-          </div>`,
-        };
-      },
     }),
-    [currentView, events, handleDatesSet]
+    [currentView, events, handleDatesSet, moveEvent]
   );
 
   const openCreateEvent = () => {
@@ -310,86 +344,45 @@ export default function CalendarPage() {
           className='pointer-events-none absolute inset-0 h-full w-full object-cover select-none'
           alt=''
         />
-        <div className='pointer-events-none absolute -top-24 -left-20 h-64 w-64 rounded-md bg-indigo-500/10 blur-3xl' />
-
         <div className='relative grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-stretch'>
-          <div className='flex min-w-0 flex-col justify-between py-1 lg:pl-6'>
-            <div className=''></div>
-            <div className=''>
-              <div className=''>
-                <div className='flex flex-col gap-2'>
-                  <div className='hidden items-center gap-4 sm:flex'>
-                    {/* Team Avatars */}
+          <div className='flex min-w-0 flex-col justify-end py-1 lg:pl-6'>
+            <div>
+              <h3 className='font-instrument-serif text-2xl font-semibold tracking-tight text-white md:text-3xl'>
+                Brand Events
+              </h3>
+              <p className='text-muted-foreground mt-1 text-sm'>
+                Plan your work and keep every Google Calendar event in sync.
+              </p>
+            </div>
 
-                    {/* Title */}
-                    <div>
-                      <h3 className='font-instrument-serif text-2xl font-semibold tracking-tight text-white md:text-3xl'>
-                        Brand Events
-                      </h3>
-
-                      {/* <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-white/50">
-      Collaboration • Planning • Execution
-    </p> */}
-                    </div>
-                  </div>
-                </div>
-                <p className='text-muted-foreground mt-1 text-sm'>
-                  Plan your work and keep every Google Calendar event in sync.
-                </p>
+            <div className='mt-4 flex flex-wrap items-center gap-2'>
+              <div className='relative min-w-56 flex-1 sm:flex-none'>
+                <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+                <input
+                  type='search'
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder='Search events'
+                  className='border-border/70 bg-background h-10 w-full rounded-sm border pr-3 pl-9 text-sm shadow-sm transition outline-none focus:border-indigo-400 focus:ring-3 focus:ring-indigo-500/10 sm:w-64'
+                />
               </div>
-
-              <div className='mt-4 flex flex-wrap items-center gap-2'>
-                <div className='relative min-w-56 flex-1 sm:flex-none'>
-                  <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
-                  <input
-                    type='search'
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                    placeholder='Search events'
-                    className='border-border/70 bg-background h-10 w-full rounded-sm border pr-3 pl-9 text-sm shadow-sm transition outline-none focus:border-indigo-400 focus:ring-3 focus:ring-indigo-500/10 sm:w-64'
-                  />
-                </div>
-                {/* <div className="flex items-center">
-    {members.slice(0, 4).map((member, index) => {
-      const memberUser =
-        typeof member.user === "object" ? member.user : null;
-
-      const avatar =
-        (memberUser as any)?.userdp ||
-        (member.user === user?._id ? user?.userdp : undefined);
-
-      return avatar ? (
-        <div
-          key={index}
-          className="-ml-2 first:ml-0 overflow-hidden rounded-xl border border-white/10 bg-white/5 p-0.5 backdrop-blur-sm"
-        >
-          <img
-            src={avatar}
-            alt="Team member"
-            className="h-9 w-9 rounded-[10px] object-cover"
-          />
-        </div>
-      ) : null;
-    })}
-  </div> */}
-                {activeConnection ? (
-                  <Button
-                    className='my-2 rounded-sm bg-indigo-600 px-4 text-white hover:bg-indigo-700'
-                    onClick={openCreateEvent}
-                  >
-                    New event
-                    <Plus className='h-4 w-4' />
-                  </Button>
-                ) : (
-                  <Button
-                    className='h-10 rounded-sm'
-                    onClick={handleConnectCalendar}
-                  >
-                    <GoogleCalendarBrand />
-                    Connect calendar
-                  </Button>
-                )}
-              </div>
+              {activeConnection ? (
+                <Button
+                  className='my-2 rounded-sm bg-indigo-600 px-4 text-white hover:bg-indigo-700'
+                  onClick={openCreateEvent}
+                >
+                  New event
+                  <Plus className='h-4 w-4' />
+                </Button>
+              ) : (
+                <Button
+                  className='h-10 rounded-sm'
+                  onClick={handleConnectCalendar}
+                >
+                  <GoogleCalendarBrand />
+                  Connect calendar
+                </Button>
+              )}
             </div>
           </div>
 
@@ -416,7 +409,9 @@ export default function CalendarPage() {
                 }`}
               >
                 <span
-                  className={`h-1.5 w-1.5 rounded-sm ${activeConnection ? "bg-emerald-500" : "bg-zinc-400"}`}
+                  className={`h-1.5 w-1.5 rounded-sm ${
+                    activeConnection ? "bg-emerald-500" : "bg-zinc-400"
+                  }`}
                 />
                 {activeConnection ? "Synced" : "Offline"}
               </span>
@@ -441,11 +436,6 @@ export default function CalendarPage() {
                 </p>
               </div>
             </div>
-
-            {/* <p className='text-muted-foreground mt-4 text-xs leading-5 dark:text-white/50'>
-              Changes from Google appear automatically when this calendar is
-              refreshed.
-            </p> */}
           </div>
         </div>
       </section>
@@ -536,9 +526,7 @@ export default function CalendarPage() {
               aria-label='Refresh events'
             >
               {eventsQuery.isFetching ? (
-                <div className=''>
-                  <LoadingFileLoader size={18} />
-                </div>
+                <LoadingFileLoader size={18} />
               ) : (
                 <RefreshCw className='h-4 text-gray-400' />
               )}
@@ -566,12 +554,20 @@ export default function CalendarPage() {
         )}
 
         <div
-          className={`relative w-full ${currentView === "dayGridMonth" ? "h-[580px] sm:h-[680px] lg:h-[720px]" : "h-[620px] lg:h-[680px]"} overflow-x-auto bg-transparent`}
+          className={`relative w-full ${
+            currentView === "dayGridMonth"
+              ? "h-[580px] sm:h-[680px] lg:h-[720px]"
+              : "h-[620px] lg:h-[680px]"
+          } calendar-scrollbar-hidden overflow-x-auto bg-transparent`}
         >
           <EventCalendar
             options={calendarOptions}
             ref={calendarRef}
-            className={`h-full bg-transparent ${currentView === "dayGridMonth" ? "min-w-0" : "min-w-[680px] sm:min-w-0"}`}
+            className={`h-full bg-transparent ${
+              currentView === "dayGridMonth"
+                ? "min-w-0"
+                : "min-w-[680px] sm:min-w-0"
+            }`}
           />
 
           {(integrationsLoading ||
@@ -582,7 +578,6 @@ export default function CalendarPage() {
           {!integrationsLoading && !activeConnection && (
             <div className='absolute inset-0 z-20 flex items-center justify-center bg-white/55 p-5 text-center backdrop-blur-[2px] dark:bg-zinc-950/55'>
               <div className='relative w-full max-w-sm overflow-hidden rounded-3xl bg-white/95 p-6 shadow-sm ring-1 ring-black/5 dark:bg-zinc-950/95 dark:ring-white/10'>
-                {/* <div className='relative mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600 ring-1 ring-indigo-500/15 dark:text-indigo-300'><CalendarDays className='h-5 w-5' /></div> */}
                 <h3 className='relative text-lg font-semibold'>
                   Bring your schedule into Genit
                 </h3>
@@ -619,16 +614,6 @@ export default function CalendarPage() {
               ? `Synced with ${activeConnection.accountName}`
               : "Google Calendar is not connected"}
           </span>
-          {/* {activeConnection && (
-            <a
-              href='https://calendar.google.com'
-              target='_blank'
-              rel='noreferrer'
-              className='flex items-center gap-1 font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400'
-            >
-              Open Google Calendar <ExternalLink className='h-3 w-3' />
-            </a>
-          )} */}
         </footer>
       </section>
 

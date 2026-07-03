@@ -5,11 +5,14 @@ import { Switch } from "@/components/ui/switch";
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { ProjectDesignContext } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
-import { Download, Sparkles } from "lucide-react";
+import { Download, Gauge, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useContext, useEffect, useMemo, useState } from "react";
 
 const STORAGE_KEY = "genit:brandIdentityEnabled";
+const COST_MODE_STORAGE_KEY = "genit:chatCostMode";
+
+export type ChatCostMode = "economy" | "balanced" | "quality";
 
 export function useBrandIdentityEnabled() {
   const [enabled, setEnabled] = useState(true);
@@ -48,6 +51,24 @@ export function useBrandIdentityEnabled() {
   return [enabled, update] as const;
 }
 
+export function useChatCostMode() {
+  const [mode, setMode] = useState<ChatCostMode>("economy");
+
+  useEffect(() => {
+    const stored = localStorage.getItem(COST_MODE_STORAGE_KEY);
+    if (stored === "economy" || stored === "balanced" || stored === "quality") {
+      setMode(stored);
+    }
+  }, []);
+
+  const update = (next: ChatCostMode) => {
+    setMode(next);
+    localStorage.setItem(COST_MODE_STORAGE_KEY, next);
+  };
+
+  return [mode, update] as const;
+}
+
 type BrandView = {
   businessName?: string;
   brandLogo?: string;
@@ -66,6 +87,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
   const { user } = useUserContext();
   const projectContext = useContext(ProjectDesignContext);
   const [localEnabled, setLocalEnabled] = useBrandIdentityEnabled();
+  const [localCostMode, setLocalCostMode] = useChatCostMode();
 
   const enabled = projectContext
     ? projectContext.brandIdentityEnabled
@@ -73,6 +95,10 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
   const setEnabled = projectContext
     ? projectContext.setBrandIdentityEnabled
     : setLocalEnabled;
+  const costMode = projectContext ? projectContext.chatCostMode : localCostMode;
+  const setCostMode = projectContext
+    ? projectContext.setChatCostMode
+    : setLocalCostMode;
 
   const [isImportOpen, setIsImportOpen] = useState(false);
 
@@ -198,6 +224,38 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
             disabled={disabled}
             aria-label='Toggle brand identity'
           />
+        </div>
+
+        <div className='bg-muted/40 rounded-lg border border-neutral-200 px-3 py-2.5 dark:border-white/10'>
+          <div className='mb-2 flex items-center gap-2'>
+            <Gauge className='text-muted-foreground h-3.5 w-3.5' />
+            <p className='text-foreground text-xs font-semibold'>
+              AI cost mode
+            </p>
+          </div>
+          <div className='grid grid-cols-3 gap-1 rounded-md bg-white p-1 dark:bg-black/30'>
+            {(
+              [
+                ["economy", "Economy"],
+                ["balanced", "Balanced"],
+                ["quality", "Quality"],
+              ] as const
+            ).map(([value, label]) => (
+              <button
+                key={value}
+                type='button'
+                onClick={() => setCostMode(value)}
+                className={cn(
+                  "h-8 rounded px-1 text-[10px] font-medium transition-colors",
+                  costMode === value
+                    ? "bg-indigo-600 text-white"
+                    : "text-muted-foreground hover:bg-neutral-100 dark:hover:bg-white/10"
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div

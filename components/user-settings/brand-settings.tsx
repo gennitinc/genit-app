@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { BrandBrainSettings } from "@/components/user-settings/brand-brain-settings";
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -565,6 +566,8 @@ export default function BrandSettings() {
           </CardContent>
         </Card>
 
+        <BrandBrainSettings organization={currentOrg} readOnly={isReadOnly} />
+
         {!isReadOnly && (
           <div className='bg-background/80 sticky bottom-0 -mx-1 flex items-center justify-end gap-2 border-t py-3 backdrop-blur'>
             <Button
@@ -613,7 +616,7 @@ function FontSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className='border-input bg-background h-10 w-full rounded-md border px-3 text-sm focus:ring-2 focus:ring-cyan-400/40 focus:outline-none'
+        className='border-input dark:bg-input/30 h-10 w-full rounded-md border bg-transparent px-3 text-sm focus:ring-2 focus:ring-cyan-400/40 focus:outline-none'
         style={{ fontFamily: value || "inherit" }}
       >
         <option value=''>Select font</option>

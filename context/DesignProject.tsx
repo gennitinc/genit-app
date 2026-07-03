@@ -1,5 +1,8 @@
 import { demoMessages } from "../components/chat/dummyMessage";
-import { useBrandIdentityEnabled } from "../components/chat/messages/brand-identity-panel";
+import {
+  useBrandIdentityEnabled,
+  useChatCostMode,
+} from "../components/chat/messages/brand-identity-panel";
 import { useUserContext } from "./AuthenticatedContext";
 import { toast } from "@/hooks/use-toast";
 import { classifyPrompt, startAgentRun } from "@/lib/agents-api";
@@ -121,6 +124,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [brandIdentityEnabled, setBrandIdentityEnabled] =
     useBrandIdentityEnabled();
+  const [chatCostMode, setChatCostMode] = useChatCostMode();
 
   const addLiveNode = useCallback(
     (node: { id: string; filePath: string; name: string; prompt: string }) => {
@@ -153,8 +157,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
             // Normalize role and type
             role: (msg.type === "user" ? "user" : "assistant") as
-              | "user"
-              | "assistant",
+              "user" | "assistant",
             type: msg.type === "user" ? "user" : "ai",
             parts: msg.parts,
             ...(msg.type === "user" &&
@@ -178,8 +181,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           id: msg.id || msg._id || `msg-${index}-${Date.now()}`,
           // Normalize role and type
           role: (msg.type === "user" ? "user" : "assistant") as
-            | "user"
-            | "assistant",
+            "user" | "assistant",
           type: msg.type === "user" ? "user" : "ai",
           parts:
             msg.type === "user"
@@ -611,6 +613,12 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setAiStatus(null);
         setStreamingContent("");
 
+        const effectiveMetadata = {
+          ...(metadata || {}),
+          useBrandIdentity: brandIdentityEnabled,
+          costMode: chatCostMode,
+        };
+
         const now = Date.now();
         const generateId = () =>
           `file-${now}-${Math.random().toString(36).substr(2, 9)}`;
@@ -707,7 +715,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             },
           ],
           fileAttachments: attachedFiles.length > 0 ? attachedFiles : undefined,
-          metadata: metadata || {},
+          metadata: effectiveMetadata,
           createdAt: new Date(),
         };
 
@@ -735,9 +743,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         }
 
         // Append metadata as JSON string
-        if (metadata) {
-          formData.append("metadata", JSON.stringify(metadata));
-        }
+        formData.append("metadata", JSON.stringify(effectiveMetadata));
 
         // Debugging — see what's really inside FormData
         console.group("📦 FormData Content");
@@ -772,7 +778,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsTyping(false);
       }
     },
-    [transformMessages]
+    [brandIdentityEnabled, chatCostMode, transformMessages]
   );
 
   const updateProjectModel = useCallback(
@@ -883,11 +889,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                 agentFiles = res.data.files || [];
               } else {
                 agentFiles = restoredFiles.map((f: any) => ({
-                name: f.name || "file",
-                type: f.type || "application/octet-stream",
-                url: f.filePath || f.url,
-                size: f.size,
-              }));
+                  name: f.name || "file",
+                  type: f.type || "application/octet-stream",
+                  url: f.filePath || f.url,
+                  size: f.size,
+                }));
               }
             }
 
@@ -895,13 +901,14 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
               const selectedAgentFiles = selectedFiles.map((url: string) => {
                 const name = url.split("/").pop() || "selected-file";
                 const ext = name.split(".").pop()?.toLowerCase();
-                const type = ext === "png"
-                  ? "image/png"
-                  : ext === "mov"
-                    ? "video/quicktime"
-                  : ["mp4", "mov", "avi", "mkv", "webm"].includes(ext || "")
-                    ? `video/${ext}`
-                    : "image/jpeg";
+                const type =
+                  ext === "png"
+                    ? "image/png"
+                    : ext === "mov"
+                      ? "video/quicktime"
+                      : ["mp4", "mov", "avi", "mkv", "webm"].includes(ext || "")
+                        ? `video/${ext}`
+                        : "image/jpeg";
 
                 return { name, type, url };
               });
@@ -1621,6 +1628,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         updateProjectModel,
         brandIdentityEnabled,
         setBrandIdentityEnabled,
+        chatCostMode,
+        setChatCostMode,
       }}
     >
       {children}
