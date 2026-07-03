@@ -1,5 +1,5 @@
-const CACHE_NAME = "genit-ai-v2";
-const RUNTIME_CACHE = "genit-runtime-v2";
+const CACHE_NAME = "genit-ai-v3";
+const RUNTIME_CACHE = "genit-runtime-v3";
 
 // Assets to cache on install
 const PRECACHE_ASSETS = [
@@ -69,6 +69,13 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Never cache or fallback HTML documents. Stale app-shell HTML can point to
+  // old Next chunks and crash client-side routes until the user refreshes.
+  if (event.request.mode === "navigate") {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   // Skip Next.js JavaScript chunks - always fetch fresh
   // This prevents cached component code from being served
   if (
@@ -91,9 +98,10 @@ self.addEventListener("fetch", (event) => {
           return response;
         }
 
-        // Only cache non-JavaScript assets (images, CSS, etc.)
-        // Don't cache JavaScript files to avoid stale component code
+        // Only cache non-document, non-JavaScript assets (images, CSS, etc.)
+        // Don't cache JavaScript or HTML to avoid stale component code.
         const shouldCache =
+          event.request.destination !== "document" &&
           event.request.destination !== "script" &&
           !event.request.url.includes(".js") &&
           !event.request.url.includes("_next");
@@ -115,10 +123,7 @@ self.addEventListener("fetch", (event) => {
           if (cachedResponse) {
             return cachedResponse;
           }
-          // Return offline page if available
-          if (event.request.destination === "document") {
-            return caches.match("/");
-          }
+          return Response.error();
         });
       })
   );

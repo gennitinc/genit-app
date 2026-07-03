@@ -41,10 +41,6 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { PointerHighlight } from "@/components/ui/pointer-highlight";
@@ -67,7 +63,6 @@ import {
 import { enhancePromptText } from "@/lib/prompt-enhancement-api";
 import { appendClientTimeContext, cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
-import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -89,7 +84,6 @@ import {
   Palette,
   PaperclipIcon,
   Play,
-  Presentation,
   Sparkles,
   Table,
   TrendingUp,
@@ -109,11 +103,9 @@ import {
 import {
   Activity,
   Calendar,
-  GripVertical,
   Layers,
   Megaphone,
   Plus,
-  Trash2,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -207,6 +199,28 @@ const images = [
   "https://img.freepik.com/free-photo/freedom-concept-with-hiker-mountain_23-2148107064.jpg?ga=GA1.1.1557987898.1750353078&semt=ais_hybrid&w=740",
   "https://img.freepik.com/free-vector/woman-doodle-drawing-sketch-illustration-vector_53876-118.jpg?ga=GA1.1.1557987898.1750353078&semt=ais_hybrid&w=740",
   "https://img.freepik.com/free-photo/smiling-man_1098-15443.jpg?ga=GA1.1.1557987898.1750353078&w=740",
+];
+
+const PLACEHOLDERS = [
+  "Design high converting logo",
+  "Create viral Instagram carousel",
+  "Generate bold product poster",
+  "Design clickable YouTube thumbnail",
+  "Create SaaS landing banner",
+  "Design clear pricing graphic",
+  "Generate scroll stopping Facebook ads",
+  "Create professional business card",
+  "Design eye catching event flyer",
+  "Create personal brand banner",
+  "Design realistic product mockup",
+  "Create simple data infographic",
+  "Generate engaging video ad",
+  "Create animated social video",
+  "Design modern app interface",
+  "Generate product launch visuals",
+  "Create email marketing banner",
+  "Generate brand style guidelines",
+  "Create short promotional animation",
 ];
 
 const IDEA_ITEMS: IdeaItemData[] = [
@@ -598,29 +612,6 @@ const BrandIdentityDialog = ({
 };
 
 export function IdeaSection() {
-  const placeholders = [
-    "Design high converting logo",
-    "Create viral Instagram carousel",
-    "Generate bold product poster",
-    "Design clickable YouTube thumbnail",
-    "Create SaaS landing banner",
-    "Design clear pricing graphic",
-    "Generate scroll stopping Facebook ads",
-    "Create professional business card",
-    "Design eye catching event flyer",
-    "Create personal brand banner",
-    "Design realistic product mockup",
-    "Create simple data infographic",
-    "Generate engaging video ad",
-    "Create animated social video",
-    "Design modern app interface",
-    "Generate product launch visuals",
-    "Create email marketing banner",
-    "Design clean presentation slides",
-    "Generate brand style guidelines",
-    "Create short promotional animation",
-  ];
-
   const {
     attachedFiles,
     setAttachedFiles,
@@ -662,20 +653,6 @@ export function IdeaSection() {
   const [selectedDesignTypeId, setSelectedDesignTypeId] =
     useState<string>("auto");
   const [isBrandSettingsOpen, setIsBrandSettingsOpen] = useState(false);
-  const [isPresentationDrawerOpen, setIsPresentationDrawerOpen] =
-    useState(false);
-  const [presentationOutline, setPresentationOutline] = useState<
-    Array<{ title: string; content: string[]; id: string }>
-  >([]);
-  const [isGeneratingOutline, setIsGeneratingOutline] = useState(false);
-  const [textAmount, setTextAmount] = useState<
-    "minimal" | "concise" | "detailed" | "extensive"
-  >("concise");
-  const [selectedTheme, setSelectedTheme] = useState<string>("bubble-gum");
-  const [imageStyle, setImageStyle] = useState<
-    "illustration" | "photorealistic" | "abstract" | "3d" | "line-art"
-  >("illustration");
-  const [extraKeywords, setExtraKeywords] = useState<string>("");
   const [selectedModel, setSelectedModel] = useState<any>(null);
   const [isEnhancingPrompt, setIsEnhancingPrompt] = useState(false);
 
@@ -705,7 +682,7 @@ export function IdeaSection() {
   const router = useRouter();
 
   const placeholderText = useTypewriterEffect({
-    words: placeholders,
+    words: PLACEHOLDERS,
     typingSpeed: 40,
     delay: 1000,
   });
@@ -850,59 +827,6 @@ export function IdeaSection() {
     [handleFileProcess]
   );
 
-  // Generate presentation outline using AI
-  const generatePresentationOutline = useCallback(
-    async (prompt: string) => {
-      setIsGeneratingOutline(true);
-      try {
-        const response = await apiResponse.post(
-          "/presentation/generate-outline",
-          { prompt },
-          { withCredentials: true }
-        );
-
-        if (response.data && response.data.outline) {
-          const outline = response.data.outline.map(
-            (slide: any, index: number) => ({
-              id: `slide-${index + 1}`,
-              title: slide.title || `Slide ${index + 1}`,
-              content: slide.content || slide.bulletPoints || [],
-            })
-          );
-          setPresentationOutline(outline);
-          setIsPresentationDrawerOpen(true);
-        } else {
-          throw new Error("Invalid response format");
-        }
-      } catch (error: any) {
-        console.error("Failed to generate outline:", error);
-        toast("Failed to generate presentation outline.");
-        // Fallback: create a simple outline
-        setPresentationOutline([
-          {
-            id: "slide-1",
-            title: "Introduction",
-            content: ["Introduction to the topic"],
-          },
-          {
-            id: "slide-2",
-            title: "Main Content",
-            content: ["Key points and details"],
-          },
-          {
-            id: "slide-3",
-            title: "Conclusion",
-            content: ["Summary and next steps"],
-          },
-        ]);
-        setIsPresentationDrawerOpen(true);
-      } finally {
-        setIsGeneratingOutline(false);
-      }
-    },
-    [toast]
-  );
-
   // Handle form submission
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -959,18 +883,6 @@ export function IdeaSection() {
       }
 
       if (isGenerating || isSubmitting) return;
-
-      // Handle presentation projects differently
-      if (selectedDesignTypeId === "presentation") {
-        trackFeatureUsed("idea_presentation_outline_requested", {
-          prompt_length: inputValue.trim().length,
-        });
-        setIsSubmitting(true);
-        setInputError(null);
-        await generatePresentationOutline(inputValue);
-        setIsSubmitting(false);
-        return;
-      }
 
       setIsSubmitting(true);
       setInputError(null);
@@ -1030,7 +942,6 @@ export function IdeaSection() {
       user,
       router,
       selectedDesignTypeId,
-      generatePresentationOutline,
       toast,
       selectedModel,
       brandIdentityEnabled,
@@ -1173,12 +1084,6 @@ export function IdeaSection() {
       id: "logo",
       label: "Logo",
       icon: Type,
-    },
-    {
-      id: "presentation",
-      label: "Presentation",
-      icon: Presentation,
-      comingSoon: true,
     },
     {
       id: "generic_design",
@@ -1841,427 +1746,6 @@ export function IdeaSection() {
           </div>
         </div> */}
       </div>
-
-      {/* Presentation Organization Drawer */}
-      <Drawer
-        open={isPresentationDrawerOpen}
-        onOpenChange={setIsPresentationDrawerOpen}
-      >
-        <DrawerContent className='max-h-[90vh] lg:px-82'>
-          <DrawerHeader>
-            <DrawerTitle>Organize Your Presentation</DrawerTitle>
-            <DrawerDescription>
-              Review and modify your presentation structure before generating
-            </DrawerDescription>
-          </DrawerHeader>
-          <div className='space-y-4 overflow-y-auto px-4 pb-4'>
-            {isGeneratingOutline ? (
-              <div className='flex flex-col items-center justify-center py-12'>
-                <LoadingFileLoader size={16} />
-                <p className='text-muted-foreground text-sm'>
-                  Generating presentation outline...
-                </p>
-              </div>
-            ) : (
-              <div className='space-y-3'>
-                {presentationOutline.map((slide, index) => (
-                  <div
-                    key={slide.id}
-                    className='border-border bg-muted/30 rounded-lg border p-4'
-                  >
-                    <div className='flex items-start gap-3'>
-                      <div className='flex flex-shrink-0 items-center gap-2 pt-1'>
-                        <GripVertical className='text-muted-foreground h-4 w-4 cursor-move' />
-                        <span className='text-muted-foreground w-8 text-xs font-medium'>
-                          {index + 1}
-                        </span>
-                      </div>
-                      <div className='flex-1 space-y-2'>
-                        <Input
-                          value={slide.title}
-                          onChange={(e) => {
-                            const newOutline = [...presentationOutline];
-                            newOutline[index].title = e.target.value;
-                            setPresentationOutline(newOutline);
-                          }}
-                          className='font-medium'
-                          placeholder='Slide title'
-                        />
-                        <div className='space-y-1'>
-                          {slide.content.map((point, pointIndex) => (
-                            <div
-                              key={pointIndex}
-                              className='flex items-center gap-2'
-                            >
-                              <span className='text-muted-foreground text-xs'>
-                                •
-                              </span>
-                              <Input
-                                value={point}
-                                onChange={(e) => {
-                                  const newOutline = [...presentationOutline];
-                                  newOutline[index].content[pointIndex] =
-                                    e.target.value;
-                                  setPresentationOutline(newOutline);
-                                }}
-                                className='text-sm'
-                                placeholder='Bullet point'
-                              />
-                              <button
-                                type='button'
-                                onClick={() => {
-                                  const newOutline = [...presentationOutline];
-                                  newOutline[index].content.splice(
-                                    pointIndex,
-                                    1
-                                  );
-                                  setPresentationOutline(newOutline);
-                                }}
-                                className='text-muted-foreground hover:text-destructive transition-colors'
-                              >
-                                <Trash2 className='h-4 w-4' />
-                              </button>
-                            </div>
-                          ))}
-                          <button
-                            type='button'
-                            onClick={() => {
-                              const newOutline = [...presentationOutline];
-                              newOutline[index].content.push("");
-                              setPresentationOutline(newOutline);
-                            }}
-                            className='text-muted-foreground hover:text-foreground mt-2 flex items-center gap-2 text-sm transition-colors'
-                          >
-                            <Plus className='h-4 w-4' />
-                            Add bullet point
-                          </button>
-                        </div>
-                      </div>
-                      <button
-                        type='button'
-                        onClick={() => {
-                          const newOutline = presentationOutline.filter(
-                            (_, i) => i !== index
-                          );
-                          setPresentationOutline(newOutline);
-                        }}
-                        className='text-muted-foreground hover:text-destructive flex-shrink-0 transition-colors'
-                      >
-                        <Trash2 className='h-4 w-4' />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  type='button'
-                  onClick={() => {
-                    setPresentationOutline([
-                      ...presentationOutline,
-                      {
-                        id: `slide-${presentationOutline.length + 1}`,
-                        title: "",
-                        content: [""],
-                      },
-                    ]);
-                  }}
-                  className='border-border text-muted-foreground hover:text-foreground hover:border-foreground/50 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 transition-colors'
-                >
-                  <Plus className='h-4 w-4' />
-                  Add Slide
-                </button>
-
-                {/* Customization Sections */}
-                <div className='border-border space-y-6 border-t pt-6'>
-                  {/* Text Content Section */}
-                  <div className='space-y-3'>
-                    <div>
-                      <h3 className='mb-1 text-sm font-semibold'>
-                        Text Content
-                      </h3>
-                      <p className='text-muted-foreground text-xs'>
-                        Amount of text per card
-                      </p>
-                    </div>
-                    <div className='grid grid-cols-4 gap-2'>
-                      {[
-                        { id: "minimal", label: "Minimal", lines: 1 },
-                        { id: "concise", label: "Concise", lines: 2 },
-                        { id: "detailed", label: "Detailed", lines: 3 },
-                        { id: "extensive", label: "Extensive", lines: 4 },
-                      ].map((option) => (
-                        <button
-                          key={option.id}
-                          type='button'
-                          onClick={() =>
-                            setTextAmount(
-                              option.id as
-                                "minimal" | "concise" | "detailed" | "extensive"
-                            )
-                          }
-                          className={`flex flex-col items-center gap-2 rounded-lg border p-3 transition-all ${
-                            textAmount === option.id
-                              ? "border-foreground bg-foreground/5"
-                              : "border-border hover:border-foreground/50"
-                          }`}
-                        >
-                          <div className='flex flex-col gap-0.5'>
-                            {Array.from({ length: option.lines }).map(
-                              (_, i) => (
-                                <div
-                                  key={i}
-                                  className={`h-1 rounded ${
-                                    textAmount === option.id
-                                      ? "bg-foreground w-8"
-                                      : "bg-muted-foreground w-6"
-                                  }`}
-                                />
-                              )
-                            )}
-                          </div>
-                          <span className='text-xs font-medium'>
-                            {option.label}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Theme Selection */}
-                  <div className='space-y-3'>
-                    <div>
-                      <h3 className='mb-1 text-sm font-semibold'>Visuals</h3>
-                      <p className='text-muted-foreground text-xs'>Theme</p>
-                    </div>
-                    <div className='grid grid-cols-3 gap-2'>
-                      {[
-                        {
-                          id: "bubble-gum",
-                          label: "Bubble Gum",
-                          bg: "bg-pink-900",
-                          text: "text-pink-300",
-                        },
-                        {
-                          id: "blueberry",
-                          label: "Blueberry",
-                          bg: "bg-purple-900",
-                          text: "text-purple-300",
-                        },
-                        {
-                          id: "onyx",
-                          label: "Onyx",
-                          bg: "bg-gray-900",
-                          text: "text-gray-300",
-                        },
-                        {
-                          id: "electric",
-                          label: "Electric",
-                          bg: "bg-blue-900",
-                          text: "text-blue-300",
-                        },
-                        {
-                          id: "moss-mist",
-                          label: "Moss & Mist",
-                          bg: "bg-green-900",
-                          text: "text-green-300",
-                        },
-                        {
-                          id: "wine",
-                          label: "Wine",
-                          bg: "bg-red-900",
-                          text: "text-red-300",
-                        },
-                      ].map((theme) => (
-                        <button
-                          key={theme.id}
-                          type='button'
-                          onClick={() => setSelectedTheme(theme.id)}
-                          className={`relative rounded-lg border-2 p-3 transition-all ${
-                            selectedTheme === theme.id
-                              ? "border-foreground"
-                              : "border-border hover:border-foreground/50"
-                          }`}
-                        >
-                          <div
-                            className={`${theme.bg} min-h-[60px] space-y-1 rounded p-2`}
-                          >
-                            <div
-                              className={`${theme.text} text-xs font-medium`}
-                            >
-                              Title
-                            </div>
-                            <div className='text-xs text-white'>
-                              Body & <span className={theme.text}>link</span>
-                            </div>
-                          </div>
-                          <span className='mt-2 block text-center text-xs font-medium'>
-                            {theme.label}
-                          </span>
-                          {selectedTheme === theme.id && (
-                            <div className='bg-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full'>
-                              <svg
-                                className='text-background h-3 w-3'
-                                fill='none'
-                                stroke='currentColor'
-                                viewBox='0 0 24 24'
-                              >
-                                <path
-                                  strokeLinecap='round'
-                                  strokeLinejoin='round'
-                                  strokeWidth={3}
-                                  d='M5 13l4 4L19 7'
-                                />
-                              </svg>
-                            </div>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Image Style Selection */}
-                  <div className='space-y-3'>
-                    <div>
-                      <h3 className='mb-1 text-sm font-semibold'>
-                        Image art style
-                      </h3>
-                    </div>
-                    <div className='grid grid-cols-3 gap-2'>
-                      {[
-                        { id: "illustration", label: "Illustration" },
-                        { id: "photorealistic", label: "Photorealistic" },
-                        { id: "abstract", label: "Abstract" },
-                        { id: "3d", label: "3D" },
-                        { id: "line-art", label: "Line Art" },
-                      ].map((style) => (
-                        <button
-                          key={style.id}
-                          type='button'
-                          onClick={() =>
-                            setImageStyle(
-                              style.id as
-                                | "illustration"
-                                | "photorealistic"
-                                | "abstract"
-                                | "3d"
-                                | "line-art"
-                            )
-                          }
-                          className={`flex items-center justify-center gap-2 rounded-lg border p-3 transition-all ${
-                            imageStyle === style.id
-                              ? "border-foreground bg-foreground/5"
-                              : "border-border hover:border-foreground/50"
-                          }`}
-                        >
-                          <span className='text-sm font-medium'>
-                            {style.label}
-                          </span>
-                          {imageStyle === style.id && (
-                            <div className='bg-foreground flex h-4 w-4 items-center justify-center rounded-full'>
-                              <svg
-                                className='text-background h-2.5 w-2.5'
-                                fill='none'
-                                stroke='currentColor'
-                                viewBox='0 0 24 24'
-                              >
-                                <path
-                                  strokeLinecap='round'
-                                  strokeLinejoin='round'
-                                  strokeWidth={3}
-                                  d='M5 13l4 4L19 7'
-                                />
-                              </svg>
-                            </div>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Extra Keywords */}
-                  <div className='space-y-2'>
-                    <div>
-                      <h3 className='mb-1 text-sm font-semibold'>
-                        Add extra keywords
-                      </h3>
-                      <p className='text-muted-foreground text-xs'>
-                        Optional: Add keywords to maintain consistency in image
-                        style
-                      </p>
-                    </div>
-                    <Input
-                      value={extraKeywords}
-                      onChange={(e) => setExtraKeywords(e.target.value)}
-                      placeholder='e.g. minimalism, colorful'
-                      className='text-sm'
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          <DrawerFooter>
-            <Button
-              onClick={async () => {
-                if (presentationOutline.length === 0) {
-                  toast("Please add at least one slide");
-                  return;
-                }
-
-                setIsSubmitting(true);
-                try {
-                  // Create presentation project
-                  const presentationData = {
-                    title: inputValue,
-                    type: "presentation",
-                    outline: presentationOutline,
-                    textAmount,
-                    theme: selectedTheme,
-                    imageStyle,
-                    extraKeywords: extraKeywords.trim() || undefined,
-                  };
-
-                  const response = await apiResponse.post(
-                    "/presentation/create",
-                    presentationData,
-                    { withCredentials: true }
-                  );
-
-                  if (response.data && response.data.project) {
-                    clearInput();
-                    setSelectedDesignTypeId("generic_design");
-                    setPresentationOutline([]);
-                    setIsPresentationDrawerOpen(false);
-
-                    // Navigate to presentation studio
-                    router.push(
-                      `/presentation/${response.data.project._id || response.data.project.id}/studio`
-                    );
-                  }
-                } catch (error: any) {
-                  console.error("Failed to create presentation:", error);
-                  toast("Failed to create presentation. Please try again.");
-                } finally {
-                  setIsSubmitting(false);
-                }
-              }}
-              className='w-full'
-              disabled={isSubmitting || presentationOutline.length === 0}
-            >
-              {isSubmitting ? (
-                <>
-                  <LoadingFileLoader size={16} />
-                  Creating...
-                </>
-              ) : (
-                <>
-                  <WandSparklesIcon className='mr-2 h-4 w-4' />
-                  Generate Presentation
-                </>
-              )}
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
 
       <EnterpriseAutoDialog
         isOpen={isEnterpriseDialogOpen}

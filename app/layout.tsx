@@ -21,7 +21,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import type React from "react";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -132,7 +132,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const queryClient = new QueryClient();
+  const [queryClient] = useState(() => new QueryClient());
   return (
     <html lang='en' suppressHydrationWarning>
       <head>

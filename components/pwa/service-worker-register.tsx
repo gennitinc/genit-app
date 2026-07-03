@@ -8,6 +8,28 @@ export function ServiceWorkerRegister() {
       return;
     }
 
+    const reloadForStaleChunk = (error: unknown) => {
+      const message = String(
+        error instanceof Error ? error.message : (error as any)?.reason || error
+      );
+      if (
+        !/ChunkLoadError|Loading chunk|failed to fetch dynamically imported module/i.test(
+          message
+        )
+      ) {
+        return;
+      }
+      if (sessionStorage.getItem("genit-stale-chunk-reloaded")) return;
+      sessionStorage.setItem("genit-stale-chunk-reloaded", "1");
+      window.location.reload();
+    };
+    const handleError = (event: ErrorEvent) => reloadForStaleChunk(event.error);
+    const handleRejection = (event: PromiseRejectionEvent) =>
+      reloadForStaleChunk(event.reason);
+
+    window.addEventListener("error", handleError);
+    window.addEventListener("unhandledrejection", handleRejection);
+
     // Check if we're in production (not localhost)
     const isProduction =
       window.location.hostname !== "localhost" &&
@@ -19,10 +41,14 @@ export function ServiceWorkerRegister() {
     const isProductionBuild = process.env.NODE_ENV === "production";
 
     if (!isProduction && !isProductionBuild) {
-      return;
+      return () => {
+        window.removeEventListener("error", handleError);
+        window.removeEventListener("unhandledrejection", handleRejection);
+      };
     }
 
     // Register service worker
+    let updateInterval: ReturnType<typeof setInterval> | undefined;
     navigator.serviceWorker
       .register("/sw.js", {
         scope: "/",
@@ -32,15 +58,12 @@ export function ServiceWorkerRegister() {
         registration.update();
 
         // Check for updates every hour
-        const updateInterval = setInterval(
+        updateInterval = setInterval(
           () => {
             registration.update();
           },
           60 * 60 * 1000
         );
-
-        // Cleanup interval on unmount
-        return () => clearInterval(updateInterval);
       })
       .catch((error) => {
         console.error("[Service Worker] Registration failed:", error);
@@ -56,6 +79,12 @@ export function ServiceWorkerRegister() {
 
     // Listen for service worker messages
     navigator.serviceWorker.addEventListener("message", (event) => {});
+
+    return () => {
+      window.removeEventListener("error", handleError);
+      window.removeEventListener("unhandledrejection", handleRejection);
+      if (updateInterval) clearInterval(updateInterval);
+    };
   }, []);
 
   return null;
