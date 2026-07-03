@@ -32,7 +32,7 @@ export const APP_SECTIONS: AppSection[] = [
       {
         id: "design-chat",
         href: "/chat",
-        title: "Agentic Chat",
+        title: "Chat",
         description: "Transform perspective and camera angles with precision",
         type: "image",
         imageSrc:

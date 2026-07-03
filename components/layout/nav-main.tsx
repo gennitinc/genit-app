@@ -45,7 +45,7 @@ export function NavMain() {
   const isFarmnetUser = user?.email?.toLowerCase() === FARMNET_EMAIL;
   const navItems = [
     {
-      title: "Agentic Chat",
+      title: "Chat",
       icon: SquarePen,
       href: "/chat",
     },

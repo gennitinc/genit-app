@@ -223,7 +223,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
   },
   {
     id: "design-chat",
-    label: "Agentic Chat",
+    label: "Chat",
     href: "/chat",
     icon: WandSparklesIcon,
     bg: "rgba(255, 183, 77, 0.45)",

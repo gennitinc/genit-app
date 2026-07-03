@@ -10,8 +10,8 @@ import {
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import {
-  type PostEditorForm,
   PostEditorDialog,
+  type PostEditorForm,
 } from "@/app/visuals/_components/post-editor-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -67,7 +67,7 @@ import {
   createSocialPosts,
   deleteSocialPost,
   generateSocialPostText,
-  listSocialPosts,
+  listSocialPostsPage,
   publishSocialPosts,
   updateSocialPosts,
 } from "@/lib/social-posts-api";
@@ -75,6 +75,7 @@ import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
+  useInfiniteQuery,
   useMutation,
   useQueries,
   useQuery,
@@ -99,6 +100,7 @@ import {
   Share2,
   Trash2,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import {
   Bar,
   BarChart,
@@ -108,7 +110,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const PLATFORMS: IntegrationPlatform[] = [
   "facebook",
@@ -120,6 +122,7 @@ const PLATFORMS: IntegrationPlatform[] = [
   "youtube",
   "pinterest",
 ];
+const POSTS_PAGE_SIZE = 50;
 const LABEL: Partial<Record<IntegrationPlatform, string>> = {
   facebook: "Facebook",
   instagram: "Instagram",
@@ -636,6 +639,8 @@ export default function PostsPage() {
   const { integrations, isLoading: integrationsLoading } = useIntegrations();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const [view, setView] = useState<View>("live");
   const [search, setSearch] = useState("");
   const [platformFilter, setPlatformFilter] = useState("all");
@@ -644,6 +649,7 @@ export default function PostsPage() {
   const [deleteTarget, setDeleteTarget] = useState<DisplayPost | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [analyticsPost, setAnalyticsPost] = useState<DisplayPost | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const connected = useMemo(
     () =>
@@ -652,9 +658,15 @@ export default function PostsPage() {
       ),
     [integrations]
   );
-  const postsQuery = useQuery({
+  const postsQuery = useInfiniteQuery({
     queryKey: ["social-posts"],
-    queryFn: listSocialPosts,
+    queryFn: ({ pageParam }) =>
+      listSocialPostsPage({ page: pageParam, limit: POSTS_PAGE_SIZE }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.pagination.hasNextPage
+        ? lastPage.pagination.page + 1
+        : undefined,
   });
   const liveQuery = useQuery({
     queryKey: ["connected-social-posts", ...connected.map((item) => item._id)],
@@ -668,7 +680,28 @@ export default function PostsPage() {
     enabled: Boolean(analyticsPost),
   });
 
-  const workspacePosts = postsQuery.data || [];
+  useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target || !postsQuery.hasNextPage) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !postsQuery.isFetchingNextPage) {
+        postsQuery.fetchNextPage();
+      }
+    });
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [
+    postsQuery.hasNextPage,
+    postsQuery.isFetchingNextPage,
+    postsQuery.fetchNextPage,
+  ]);
+
+  const workspacePosts = useMemo(
+    () => postsQuery.data?.pages.flatMap((page) => page.posts) || [],
+    [postsQuery.data]
+  );
   const scheduled = workspacePosts.filter(
     (post) => post.status === "scheduled"
   );
@@ -967,6 +1000,9 @@ export default function PostsPage() {
     name: label,
     value: value || 0,
   }));
+  const chartMuted = isDark ? "rgba(255,255,255,0.4)" : "rgba(24,24,27,0.55)";
+  const chartGrid = isDark ? "rgba(255,255,255,0.06)" : "rgba(24,24,27,0.08)";
+  const chartHover = isDark ? "rgba(255,255,255,0.04)" : "rgba(79,70,229,0.08)";
 
   return (
     <div className='animate-in fade-in flex w-full flex-col gap-6 pb-14 duration-500'>
@@ -1273,6 +1309,18 @@ export default function PostsPage() {
                 </div>
               </article>
             ))}
+            {postsQuery.hasNextPage && (
+              <div
+                ref={loadMoreRef}
+                className='text-muted-foreground flex h-12 break-inside-avoid items-center justify-center text-xs'
+              >
+                {postsQuery.isFetchingNextPage ? (
+                  <LoadingFileLoader size={18} />
+                ) : (
+                  "Loading more..."
+                )}
+              </div>
+            )}
           </div>
         )}
       </section>
@@ -1353,19 +1401,19 @@ export default function PostsPage() {
         onOpenChange={(open) => !open && setAnalyticsPost(null)}
       >
         <DialogContent
-          className='flex max-h-[88vh] flex-col gap-0 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c0c0e] p-0 text-white shadow-2xl sm:max-w-3xl'
+          className='bg-background text-foreground flex max-h-[88vh] flex-col gap-0 overflow-hidden rounded-2xl border border-black/10 p-0 shadow-2xl sm:max-w-3xl dark:border-white/[0.08] dark:bg-[#0c0c0e] dark:text-white'
           hideDialogClose
         >
-          <DialogHeader className='relative border-b border-white/[0.05] px-5 pt-4 pb-3 text-left'>
+          <DialogHeader className='relative border-b border-black/5 px-5 pt-4 pb-3 text-left dark:border-white/[0.05]'>
             <div className='flex items-center gap-2.5'>
               <span className='flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600/10 text-indigo-400 ring-1 ring-indigo-500/20'>
                 <BarChart3 className='h-4 w-4' />
               </span>
               <div>
-                <DialogTitle className='text-sm font-semibold text-white'>
+                <DialogTitle className='text-foreground text-sm font-semibold dark:text-white'>
                   Post analytics
                 </DialogTitle>
-                <DialogDescription className='text-[11px] text-zinc-500'>
+                <DialogDescription className='text-muted-foreground text-[11px]'>
                   Performance metrics · last 28 days
                 </DialogDescription>
               </div>
@@ -1375,13 +1423,13 @@ export default function PostsPage() {
           <div className='min-h-0 flex-1 overflow-y-auto px-5 py-4'>
             <div className='grid gap-4 lg:grid-cols-[1fr_1.4fr]'>
               {/* Left column: Post Preview Card */}
-              <div className='flex flex-col gap-3 lg:border-r lg:border-white/[0.05] lg:pr-4'>
+              <div className='flex flex-col gap-3 lg:border-r lg:border-black/5 lg:pr-4 dark:lg:border-white/[0.05]'>
                 <div>
-                  <h3 className='mb-2 text-[10px] font-semibold tracking-wider text-zinc-500 uppercase'>
+                  <h3 className='text-muted-foreground mb-2 text-[10px] font-semibold tracking-wider uppercase'>
                     Post Details
                   </h3>
-                  <div className='group overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02]'>
-                    <div className='relative flex aspect-video w-full items-center justify-center overflow-hidden border-b border-white/[0.05] bg-zinc-900'>
+                  <div className='group overflow-hidden rounded-xl border border-black/10 bg-black/[0.015] dark:border-white/[0.08] dark:bg-white/[0.02]'>
+                    <div className='relative flex aspect-video w-full items-center justify-center overflow-hidden border-b border-black/5 bg-zinc-100 dark:border-white/[0.05] dark:bg-zinc-900'>
                       {analyticsPost && <MediaPreview post={analyticsPost} />}
                       <div className='absolute top-2 left-2 flex items-center gap-1.5'>
                         <span className='rounded-full bg-black/70 px-2 py-0.5 text-[9px] font-semibold text-white/90 capitalize backdrop-blur'>
@@ -1396,7 +1444,7 @@ export default function PostsPage() {
                     </div>
                     <div className='p-3'>
                       <div className='flex items-center justify-between gap-3'>
-                        <span className='flex items-center gap-2 text-xs font-medium text-white/90'>
+                        <span className='text-foreground flex items-center gap-2 text-xs font-medium dark:text-white/90'>
                           {analyticsPost && (
                             <PlatformIcon
                               platform={analyticsPost.platform}
@@ -1405,14 +1453,14 @@ export default function PostsPage() {
                           )}
                           {analyticsPost && LABEL[analyticsPost.platform]}
                         </span>
-                        <span className='text-[10px] text-zinc-500'>
+                        <span className='text-muted-foreground text-[10px]'>
                           {analyticsPost && postDate(analyticsPost)}
                         </span>
                       </div>
-                      <h4 className='mt-2 line-clamp-1 text-sm font-semibold text-white'>
+                      <h4 className='text-foreground mt-2 line-clamp-1 text-sm font-semibold dark:text-white'>
                         {analyticsPost?.title || "Untitled Post"}
                       </h4>
-                      <p className='mt-1 line-clamp-3 text-xs leading-5 text-zinc-400'>
+                      <p className='text-muted-foreground mt-1 line-clamp-3 text-xs leading-5'>
                         {analyticsPost?.content || "No caption"}
                       </p>
                     </div>
@@ -1436,10 +1484,10 @@ export default function PostsPage() {
                     )}
 
                     <div>
-                      <h3 className='mb-2 text-[10px] font-semibold tracking-wider text-zinc-500 uppercase'>
+                      <h3 className='text-muted-foreground mb-2 text-[10px] font-semibold tracking-wider uppercase'>
                         Engagement
                       </h3>
-                      <div className='h-48 w-full rounded-xl border border-white/[0.08] bg-white/[0.02] p-3'>
+                      <div className='h-48 w-full rounded-xl border border-black/10 bg-black/[0.015] p-3 dark:border-white/[0.08] dark:bg-white/[0.02]'>
                         <ResponsiveContainer width='100%' height='100%'>
                           <BarChart
                             data={analyticsChartData}
@@ -1448,7 +1496,7 @@ export default function PostsPage() {
                             <CartesianGrid
                               strokeDasharray='3 3'
                               vertical={false}
-                              stroke='rgba(255,255,255,0.06)'
+                              stroke={chartGrid}
                             />
                             <XAxis
                               dataKey='name'
@@ -1456,7 +1504,7 @@ export default function PostsPage() {
                               tickLine={false}
                               tick={{
                                 fontSize: 10,
-                                fill: "rgba(255,255,255,0.4)",
+                                fill: chartMuted,
                               }}
                             />
                             <YAxis
@@ -1466,20 +1514,22 @@ export default function PostsPage() {
                               tickFormatter={(value) => compact(Number(value))}
                               tick={{
                                 fontSize: 10,
-                                fill: "rgba(255,255,255,0.4)",
+                                fill: chartMuted,
                               }}
                             />
                             <Tooltip
-                              cursor={{ fill: "rgba(255,255,255,0.04)" }}
+                              cursor={{ fill: chartHover }}
                               formatter={(value) => [
                                 Number(value).toLocaleString(),
                                 "Total",
                               ]}
                               contentStyle={{
                                 borderRadius: 10,
-                                border: "1px solid rgba(255,255,255,.1)",
-                                background: "#18181b",
-                                color: "#fff",
+                                border: isDark
+                                  ? "1px solid rgba(255,255,255,.1)"
+                                  : "1px solid rgba(24,24,27,.12)",
+                                background: isDark ? "#18181b" : "#fff",
+                                color: isDark ? "#fff" : "#18181b",
                                 fontSize: 11,
                               }}
                             />
@@ -1495,7 +1545,7 @@ export default function PostsPage() {
                     </div>
 
                     <div>
-                      <h3 className='mb-2 text-[10px] font-semibold tracking-wider text-zinc-500 uppercase'>
+                      <h3 className='text-muted-foreground mb-2 text-[10px] font-semibold tracking-wider uppercase'>
                         Breakdown
                       </h3>
                       <div className='grid grid-cols-2 gap-2 sm:grid-cols-3'>
@@ -1503,13 +1553,13 @@ export default function PostsPage() {
                           ({ label, value, icon: Icon }) => (
                             <div
                               key={label}
-                              className='rounded-lg border border-white/[0.08] bg-white/[0.02] p-2.5 transition-all duration-200 hover:bg-white/[0.04]'
+                              className='rounded-lg border border-black/10 bg-black/[0.015] p-2.5 transition-all duration-200 hover:bg-black/[0.03] dark:border-white/[0.08] dark:bg-white/[0.02] dark:hover:bg-white/[0.04]'
                             >
-                              <div className='flex items-center justify-between text-[11px] text-zinc-500'>
+                              <div className='text-muted-foreground flex items-center justify-between text-[11px]'>
                                 <span>{label}</span>
                                 <Icon className='h-3.5 w-3.5' />
                               </div>
-                              <p className='mt-1.5 text-lg font-semibold tracking-tight text-white'>
+                              <p className='text-foreground mt-1.5 text-lg font-semibold tracking-tight dark:text-white'>
                                 {compact(value || 0)}
                               </p>
                             </div>
@@ -1523,11 +1573,11 @@ export default function PostsPage() {
             </div>
           </div>
 
-          <DialogFooter className='gap-2 border-t border-white/[0.05] bg-[#0c0c0e]/95 px-5 py-3 sm:justify-between'>
+          <DialogFooter className='bg-background/95 gap-2 border-t border-black/5 px-5 py-3 sm:justify-between dark:border-white/[0.05] dark:bg-[#0c0c0e]/95'>
             <Button
               variant='outline'
               onClick={() => analyticsQuery.refetch()}
-              className='rounded-md border-none bg-transparent hover:text-white'
+              className='rounded-md border-none bg-transparent dark:hover:text-white'
             >
               <RefreshCw className='h-4 w-4' />
               Refresh

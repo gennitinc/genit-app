@@ -63,6 +63,35 @@ export type SocialPostTextInput = {
   media?: SocialPostMedia[];
 };
 
+export type SocialPostsPage = {
+  posts: SocialPost[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNextPage: boolean;
+  };
+};
+
+export async function listSocialPostsPage({
+  page = 1,
+  limit = 50,
+}: {
+  page?: number;
+  limit?: number;
+} = {}): Promise<SocialPostsPage> {
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+  const { data } = await apiResponse.get<SocialPostsPage>(
+    `/social-posts?${params}`,
+    { timeout: 15_000 }
+  );
+  return data;
+}
+
 export async function listSocialPosts(): Promise<SocialPost[]> {
   const { data } = await apiResponse.get<{ posts: SocialPost[] }>(
     "/social-posts",

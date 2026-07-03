@@ -552,7 +552,7 @@ export function LandingFooter() {
                       href='/apps/chat'
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                     >
-                      Agentic Chat
+                      Chat
                     </Link>
                   </li>
                   <li>
