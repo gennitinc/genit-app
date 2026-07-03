@@ -1,5 +1,5 @@
 "use client";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRight, ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -14,13 +14,12 @@ const LandingCreator = () => {
         <p className='text-muted-foreground mx-auto w-[90%] max-w-2xl text-base md:w-full md:text-base'>
           Join the creators program and start earning money by referring others.
         </p>
-
         <Link
           href='/creators-program'
-          className='text-muted-foreground mx-auto flex w-fit max-w-2xl items-center justify-center gap-2 rounded-full border border-gray-200 dark:border-gray-800 bg-white/10 px-6 py-2 text-base shadow-lg shadow-black/5 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:bg-white/20 md:text-base dark:bg-white/5 dark:hover:bg-white/10'
+          className="relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all duration-200 active:scale-95 shadow-md"
         >
           <span>Get Started</span>
-          <ArrowRightIcon className='h-4 w-4' />
+          <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
       <div className='relative flex w-full items-center justify-center px-2 md:px-12 lg:px-20 xl:px-24'>
