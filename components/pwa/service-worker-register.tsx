@@ -8,7 +8,7 @@ export function ServiceWorkerRegister() {
       return;
     }
 
-    const reloadForStaleChunk = (error: unknown) => {
+    const reloadForStaleChunk = async (error: unknown) => {
       const message = String(
         error instanceof Error ? error.message : (error as any)?.reason || error
       );
@@ -19,8 +19,30 @@ export function ServiceWorkerRegister() {
       ) {
         return;
       }
-      if (sessionStorage.getItem("genit-stale-chunk-reloaded")) return;
-      sessionStorage.setItem("genit-stale-chunk-reloaded", "1");
+
+      const lastReload = Number(
+        sessionStorage.getItem("genit-stale-chunk-reloaded-at") || 0
+      );
+      if (Date.now() - lastReload < 10_000) return;
+      sessionStorage.setItem(
+        "genit-stale-chunk-reloaded-at",
+        String(Date.now())
+      );
+
+      await Promise.allSettled([
+        caches
+          .keys()
+          .then((keys) =>
+            Promise.all(keys.map((key) => caches.delete(key)))
+          ),
+        navigator.serviceWorker
+          .getRegistrations()
+          .then((registrations) =>
+            Promise.all(
+              registrations.map((registration) => registration.unregister())
+            )
+          ),
+      ]);
       window.location.reload();
     };
     const handleError = (event: ErrorEvent) => reloadForStaleChunk(event.error);

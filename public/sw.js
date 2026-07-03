@@ -1,9 +1,8 @@
-const CACHE_NAME = "genit-ai-v3";
-const RUNTIME_CACHE = "genit-runtime-v3";
+const CACHE_NAME = "genit-ai-v4";
+const RUNTIME_CACHE = "genit-runtime-v4";
 
 // Assets to cache on install
 const PRECACHE_ASSETS = [
-  "/",
   "/favicon.ico",
   "/icon-192x192.png",
   "/icon-512x512.png",

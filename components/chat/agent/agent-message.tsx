@@ -110,6 +110,9 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
 
   // Friendlier in-progress label for automation tools
   const pendingLabel = (() => {
+    if (call.name === "web_search") {
+      return "Searching the web";
+    }
     if (call.name === "create_automation_node") {
       const title = call.args?.data?.title || call.args?.type || "node";
       return `Creating ${title}`;
@@ -178,6 +181,30 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
       </AgentCard>
     );
   }
+  if (call.render === "web_search_results") {
+    const results = Array.isArray(data.results) ? data.results : [];
+    return (
+      <AgentCard
+        icon={<CheckCircle2 className='h-3.5 w-3.5' />}
+        title='Web sources'
+        tone='success'
+      >
+        <div className='space-y-2'>
+          {results.slice(0, 5).map((result: any, index: number) => (
+            <a
+              key={`${result.url || index}`}
+              href={result.url}
+              target='_blank'
+              rel='noreferrer'
+              className='text-foreground hover:text-foreground/80 block text-[12.5px] leading-snug underline-offset-2 hover:underline'
+            >
+              {result.title || result.url}
+            </a>
+          ))}
+        </div>
+      </AgentCard>
+    );
+  }
 
   // Generic dispatcher covers every other platform tool render hint.
   const rendered = renderToolResult(call.render, data);
@@ -204,7 +231,7 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
   if (status === "running") {
     return (
       <span className='bg-foreground/[0.06] text-muted-foreground inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-medium dark:bg-white/[0.06]'>
-         <LoadingFileLoader size={14} />
+        <LoadingFileLoader size={14} />
         Working
       </span>
     );
