@@ -8,11 +8,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
 import {
   useDisconnectIntegration,
   useDisconnectMetaIdentity,
   useIntegrations,
   useSetPrimaryIntegration,
+  useUpdateIntegrationInboxSettings,
 } from "@/hooks/use-integrations";
 import {
   IntegrationConnection,
@@ -121,6 +123,7 @@ export function ManageDialog({
   const disconnectOne = useDisconnectIntegration();
   const disconnectIdentity = useDisconnectMetaIdentity();
   const setPrimary = useSetPrimaryIntegration();
+  const updateInboxSettings = useUpdateIntegrationInboxSettings();
   const { identityBySurface } = useIntegrations();
 
   // Each Meta surface (FB, IG, Meta Ads, WhatsApp) has its own identity row
@@ -166,6 +169,21 @@ export function ManageDialog({
     } catch (err: any) {
       const msg =
         err?.response?.data?.message || err?.message || "Failed to set primary";
+      toast.error("Update failed", { description: msg });
+    }
+  }
+
+  async function handleAutoReply(id: string, enabled: boolean) {
+    try {
+      await updateInboxSettings.mutateAsync({ id, autoReplyEnabled: enabled });
+      toast.success(
+        enabled ? "AI auto-replies enabled" : "AI auto-replies disabled"
+      );
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to update inbox settings";
       toast.error("Update failed", { description: msg });
     }
   }
@@ -359,6 +377,40 @@ export function ManageDialog({
                               </span>
                             ))}
                           </div>
+                        </div>
+                      )}
+
+                      {platform &&
+                        [
+                          "instagram",
+                          "linkedin",
+                          "x",
+                          "gmail",
+                          "outlook",
+                          "whatsapp",
+                          "messenger",
+                          "telegram",
+                        ].includes(platform) && (
+                        <div className='mt-3 flex items-center justify-between gap-3 rounded-md border border-black/5 bg-white/70 px-3 py-2 dark:border-white/10 dark:bg-white/5'>
+                          <div className='min-w-0'>
+                            <p className='text-foreground text-xs font-medium'>
+                              AI auto-replies
+                            </p>
+                            <p className='text-muted-foreground mt-0.5 text-[11px]'>
+                              New inbound messages land in Unified Inbox and
+                              get a Genit AI reply. Turn off for manual admin response.
+                            </p>
+                          </div>
+                          <Switch
+                            checked={Boolean(
+                              conn.metadata?.inboxAutoReplyEnabled ||
+                                conn.metadata?.telegramAutoReplyEnabled
+                            )}
+                            disabled={updateInboxSettings.isPending}
+                            onCheckedChange={(checked) =>
+                              handleAutoReply(conn._id, checked)
+                            }
+                          />
                         </div>
                       )}
 

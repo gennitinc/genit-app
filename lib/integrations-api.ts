@@ -79,6 +79,7 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "whatsapp",
   "messenger",
   "gmail",
+  "outlook",
   "telegram",
   "x",
   "linkedin",
@@ -89,14 +90,20 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "snapchat",
   "google_ads",
   "tiktok_ads",
+  "linkedin_ads",
+  "x_ads",
   "google_calendar",
   "google_drive",
+  "mailchimp",
 ]);
 
 // Platforms that connect via a credential-entry form (no OAuth popup).
 const CREDENTIAL_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "telegram",
   "brevo",
+  "mailchimp",
+  "linkedin_ads",
+  "x_ads",
 ]);
 
 export function isCredentialPlatform(platform: IntegrationPlatform): boolean {
@@ -235,6 +242,28 @@ export async function disconnectMetaIdentityById(id: string): Promise<void> {
 
 export async function setPrimaryIntegrationById(id: string): Promise<void> {
   await apiResponse.post(`/integrations/${id}/primary`);
+}
+
+export async function updateTelegramSettings(
+  id: string,
+  input: { autoReplyEnabled: boolean }
+): Promise<Record<string, any>> {
+  const { data } = await apiResponse.patch<{
+    success: boolean;
+    metadata: Record<string, any>;
+  }>(`/integrations/telegram/${id}/settings`, input);
+  return data.metadata;
+}
+
+export async function updateIntegrationInboxSettings(
+  id: string,
+  input: { autoReplyEnabled: boolean }
+): Promise<Record<string, any>> {
+  const { data } = await apiResponse.patch<{
+    success: boolean;
+    metadata: Record<string, any>;
+  }>(`/integrations/${id}/inbox-settings`, input);
+  return data.metadata;
 }
 
 // -----------------------------------------------------------------------------
@@ -1380,6 +1409,48 @@ export async function connectBrevoWithApiKey(
     email: data.email,
     displayName: data.displayName,
   };
+}
+
+export interface CredentialConnectResult {
+  integrationId: string;
+  accountId: string;
+  displayName: string;
+}
+
+export async function connectMailchimpWithApiKey(
+  apiKey: string
+): Promise<CredentialConnectResult> {
+  const { data } = await apiResponse.post<{
+    success: boolean;
+    integrationId: string;
+    accountId: string;
+    displayName: string;
+  }>(`/integrations/mailchimp/connect-with-api-key`, { apiKey });
+  return data;
+}
+
+export async function connectLinkedInAdsWithAccountId(
+  accountId: string
+): Promise<CredentialConnectResult> {
+  const { data } = await apiResponse.post<{
+    success: boolean;
+    integrationId: string;
+    accountId: string;
+    displayName: string;
+  }>(`/integrations/linkedin_ads/connect-with-account-id`, { accountId });
+  return data;
+}
+
+export async function connectXAdsWithAccountId(
+  accountId: string
+): Promise<CredentialConnectResult> {
+  const { data } = await apiResponse.post<{
+    success: boolean;
+    integrationId: string;
+    accountId: string;
+    displayName: string;
+  }>(`/integrations/x_ads/connect-with-account-id`, { accountId });
+  return data;
 }
 
 export interface BrevoEmailRecipient {

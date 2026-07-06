@@ -12,6 +12,8 @@ import {
   fetchIntegrations,
   requestConnectUrl,
   setPrimaryIntegrationById,
+  updateIntegrationInboxSettings,
+  updateTelegramSettings,
 } from "@/lib/integrations-api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
@@ -117,6 +119,48 @@ export function useSetPrimaryIntegration() {
 
   return useMutation({
     mutationFn: (id: string) => setPrimaryIntegrationById(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+    },
+  });
+}
+
+export function useUpdateTelegramSettings() {
+  const qc = useQueryClient();
+  const { user } = useUserContext();
+  const currentOrg = user?.currentOrganization;
+  const orgId =
+    typeof currentOrg === "object" && currentOrg ? currentOrg._id : undefined;
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      autoReplyEnabled,
+    }: {
+      id: string;
+      autoReplyEnabled: boolean;
+    }) => updateTelegramSettings(id, { autoReplyEnabled }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+    },
+  });
+}
+
+export function useUpdateIntegrationInboxSettings() {
+  const qc = useQueryClient();
+  const { user } = useUserContext();
+  const currentOrg = user?.currentOrganization;
+  const orgId =
+    typeof currentOrg === "object" && currentOrg ? currentOrg._id : undefined;
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      autoReplyEnabled,
+    }: {
+      id: string;
+      autoReplyEnabled: boolean;
+    }) => updateIntegrationInboxSettings(id, { autoReplyEnabled }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
     },

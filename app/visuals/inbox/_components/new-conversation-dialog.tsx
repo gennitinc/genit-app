@@ -85,7 +85,7 @@ export function NewConversationDialog({
               value={recipient}
               onChange={(event) => setRecipient(event.target.value)}
               placeholder={
-                account?.platform === "gmail"
+                account?.platform === "gmail" || account?.platform === "outlook"
                   ? "name@example.com"
                   : account?.platform === "telegram"
                     ? "Telegram chat ID"
@@ -95,7 +95,7 @@ export function NewConversationDialog({
               }
             />
           </label>
-          {account && ["gmail", "email"].includes(account.platform) && (
+          {account && ["gmail", "email", "outlook"].includes(account.platform) && (
             <label className='block text-sm font-medium'>
               Subject (optional)
               <Input

@@ -81,6 +81,8 @@ export interface InboxFilters {
   status?: "all" | "open" | "resolved" | "snoozed";
   search?: string;
   sort?: "newest" | "oldest" | "unread";
+  limit?: number;
+  offset?: number;
 }
 
 export interface CreateConversationInput {
@@ -109,10 +111,20 @@ export type UpdateConversationInput = Partial<
 export async function fetchConversations(
   filters: InboxFilters = {}
 ): Promise<InboxConversation[]> {
+  const page = await fetchConversationPage(filters);
+  return page.conversations;
+}
+
+export async function fetchConversationPage(
+  filters: InboxFilters = {}
+): Promise<{ conversations: InboxConversation[]; nextOffset: number | null }> {
   const res = await apiResponse.get(`/inbox/conversations`, {
     params: filters,
   });
-  return res.data.conversations;
+  return {
+    conversations: res.data.conversations,
+    nextOffset: res.data.nextOffset ?? null,
+  };
 }
 
 export async function fetchMessages(

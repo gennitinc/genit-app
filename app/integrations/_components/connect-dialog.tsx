@@ -18,7 +18,10 @@ import {
   InstagramCandidate,
   IntegrationPlatform,
   connectBrevoWithApiKey,
+  connectLinkedInAdsWithAccountId,
+  connectMailchimpWithApiKey,
   connectTelegramWithToken,
+  connectXAdsWithAccountId,
   isCredentialPlatform,
   isMetaSurface,
   isPlatformSupported,
@@ -348,6 +351,30 @@ const CREDENTIAL_INPUT: Partial<
     helpUrlLabel: "your Brevo account",
     helpSuffix: ". Keys are AES-encrypted at rest.",
   },
+  mailchimp: {
+    label: "Mailchimp API key",
+    placeholder: "abcd1234-us1",
+    autoComplete: "off",
+    helpUrl: "https://mailchimp.com/help/about-api-keys/",
+    helpUrlLabel: "Mailchimp API keys",
+    helpSuffix: ". Include the datacenter suffix, for example -us1.",
+  },
+  linkedin_ads: {
+    label: "LinkedIn Ads account ID",
+    placeholder: "123456789",
+    autoComplete: "off",
+    helpUrl: "https://www.linkedin.com/campaignmanager/accounts",
+    helpUrlLabel: "Campaign Manager",
+    helpSuffix: ". Connect LinkedIn first so Genit can reuse the authorized token.",
+  },
+  x_ads: {
+    label: "X Ads account ID",
+    placeholder: "18ce54d4x5t",
+    autoComplete: "off",
+    helpUrl: "https://ads.x.com/",
+    helpUrlLabel: "X Ads",
+    helpSuffix: ". Connect X first so Genit can reuse the authorized token.",
+  },
 };
 
 // Turn any URL embedded in a requirement string into a clickable blue link.
@@ -629,6 +656,15 @@ export function ConnectDialog({
       } else if (platform === "brevo") {
         const result = await connectBrevoWithApiKey(value);
         name = result.displayName || result.email;
+      } else if (platform === "mailchimp") {
+        const result = await connectMailchimpWithApiKey(value);
+        name = result.displayName || result.accountId;
+      } else if (platform === "linkedin_ads") {
+        const result = await connectLinkedInAdsWithAccountId(value);
+        name = result.displayName || result.accountId;
+      } else if (platform === "x_ads") {
+        const result = await connectXAdsWithAccountId(value);
+        name = result.displayName || result.accountId;
       } else {
         throw new Error(`Credential connect not implemented for ${platform}`);
       }

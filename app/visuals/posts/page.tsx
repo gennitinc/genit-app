@@ -9,11 +9,14 @@ import {
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+
 import {
   PostEditorDialog,
   type PostEditorForm,
 } from "@/app/visuals/_components/post-editor-dialog";
+
 import { Button } from "@/components/ui/button";
+
 import {
   Dialog,
   DialogContent,
@@ -22,13 +25,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { Input } from "@/components/ui/input";
+
 import {
   Select,
   SelectContent,
@@ -38,6 +44,7 @@ import {
 } from "@/components/ui/select";
 import { useIntegrations } from "@/hooks/use-integrations";
 import { useToast } from "@/hooks/use-toast";
+
 import {
   type FacebookPostSummary,
   type IntegrationConnection,
@@ -72,9 +79,11 @@ import {
   publishSocialPosts,
   updateSocialPosts,
 } from "@/lib/social-posts-api";
+
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { GradientFrame } from "@/utils/gradient-frame";
+
 import {
   useInfiniteQuery,
   useMutation,

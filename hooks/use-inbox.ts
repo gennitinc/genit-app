@@ -10,6 +10,7 @@ import {
   deleteConversation,
   deleteInboxMessage,
   fetchConversations,
+  fetchConversationPage,
   fetchMessages,
   markAllConversationsAsRead,
   markConversationAsRead,
@@ -22,7 +23,12 @@ import {
 } from "@/lib/inbox-api";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { serverUrlSocket } from "@/utils/apiResponse";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import cookie from "js-cookie";
 import { io, type Socket } from "socket.io-client";
 import { useEffect, useState } from "react";
@@ -41,6 +47,18 @@ export function useInboxConversations(filters: InboxFilters = {}) {
     queryFn: () => fetchConversations(filters),
     staleTime: 10_000,
     refetchInterval: 15_000,
+  });
+}
+
+export function useInfiniteInboxConversations(filters: InboxFilters = {}) {
+  return useInfiniteQuery({
+    queryKey: inboxConversationsQueryKey(filters),
+    queryFn: ({ pageParam = 0 }) =>
+      fetchConversationPage({ ...filters, limit: 30, offset: pageParam }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextOffset ?? undefined,
+    staleTime: 5_000,
+    refetchInterval: 5_000,
   });
 }
 

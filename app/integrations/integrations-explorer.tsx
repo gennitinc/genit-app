@@ -107,7 +107,7 @@ export const INTEGRATIONS: Integration[] = [
       "Post to your profile and company pages. Read comments and track post analytics.",
     category: "Socials",
     icon: LinkedinBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(14, 165, 233, 0.8)",
   },
   {
@@ -117,7 +117,7 @@ export const INTEGRATIONS: Integration[] = [
       "Compose tweets and threads. Pull mentions, replies and per-tweet analytics.",
     category: "Socials",
     icon: XBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(244, 244, 245, 0.7)",
   },
   {
@@ -127,7 +127,7 @@ export const INTEGRATIONS: Integration[] = [
       "Direct-publish videos, track per-video metrics and read viewer comments.",
     category: "Socials",
     icon: TikTokBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(12, 12, 12, 1)",
   },
   {
@@ -147,7 +147,7 @@ export const INTEGRATIONS: Integration[] = [
       "Create pins on your boards, list recent pins and pull per-pin + account analytics.",
     category: "Socials",
     icon: PinterestBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(244, 63, 94, 0.8)",
   },
   {
@@ -157,7 +157,7 @@ export const INTEGRATIONS: Integration[] = [
       "Manage Snap ad campaigns and read account-level + per-campaign performance stats.",
     category: "Ads Campaigns",
     icon: SnapchatBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(250, 204, 21, 0.8)",
   },
   {
@@ -177,7 +177,7 @@ export const INTEGRATIONS: Integration[] = [
       "List Google Ads campaigns across your manager + child accounts and pull per-day performance metrics.",
     category: "Ads Campaigns",
     icon: TrendingUp,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(250, 204, 21, 0.8)",
   },
   {
@@ -187,7 +187,7 @@ export const INTEGRATIONS: Integration[] = [
       "List authorized advertiser campaigns and pull TikTok Marketing API reports for any date range.",
     category: "Ads Campaigns",
     icon: TikTokBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(12, 12, 12, 1)",
   },
   {
@@ -197,7 +197,7 @@ export const INTEGRATIONS: Integration[] = [
       "Target by job, industry and seniority. Drive B2B pipeline with AI-built campaigns.",
     category: "Ads Campaigns",
     icon: LinkedinBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(14, 165, 233, 0.8)",
   },
   {
@@ -207,7 +207,7 @@ export const INTEGRATIONS: Integration[] = [
       "Run promoted posts and trend takeovers with autonomous creative iteration.",
     category: "Ads Campaigns",
     icon: XBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(244, 244, 245, 0.6)",
   },
   {
@@ -227,7 +227,7 @@ export const INTEGRATIONS: Integration[] = [
       "Hook genit into Microsoft Graph for enterprise email and calendar workflows.",
     category: "Email Campaigns",
     icon: MicrosoftOutlookBrand,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(14, 165, 233, 0.8)",
   },
   {
@@ -237,7 +237,7 @@ export const INTEGRATIONS: Integration[] = [
       "Build newsletters and automation. Generate drip sequences from a single prompt.",
     category: "Email Campaigns",
     icon: Megaphone,
-    baseStatus: "soon",
+    baseStatus: "available",
     glow: "rgba(250, 204, 21, 0.8)",
   },
   {

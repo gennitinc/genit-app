@@ -47,7 +47,7 @@ import {
   useCreateConversation,
   useDeleteConversation,
   useDeleteInboxMessage,
-  useInboxConversations,
+  useInfiniteInboxConversations,
   useInboxMessages,
   useInboxRealtime,
   useMarkAllConversationsAsRead,
@@ -232,6 +232,7 @@ export default function InboxPage() {
     useState<InboxConversation | null>(null);
   const deferredSearch = useDeferredValue(search.trim());
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /* Lock parent layout ancestors to viewport height so only the
@@ -358,7 +359,9 @@ export default function InboxPage() {
     () =>
       accounts.filter(
         (account) =>
-          ["gmail", "email", "telegram"].includes(account.platform) ||
+          ["gmail", "email", "outlook", "telegram"].includes(
+            account.platform
+          ) ||
           (account.platform === "x" && account.scopes.includes("dm.write"))
       ),
     [accounts]
@@ -378,10 +381,18 @@ export default function InboxPage() {
   );
 
   const {
-    data: conversations = [],
+    data: conversationPages,
     isLoading,
     isFetching,
-  } = useInboxConversations(filters);
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteInboxConversations(filters);
+  const conversations = useMemo(
+    () =>
+      conversationPages?.pages.flatMap((page) => page.conversations) ?? [],
+    [conversationPages]
+  );
   const { data: messages = [], isLoading: messagesLoading } = useInboxMessages(
     activeId || undefined
   );
@@ -414,17 +425,23 @@ export default function InboxPage() {
         Date.parse(String(activeConversation.metadata.lastInboundAt)) >
         24 * 60 * 60 * 1000)
   );
-  const providerReplyUnavailable = Boolean(
-    activeConversation &&
-    ["linkedin", "outlook"].includes(activeConversation.platform)
-  );
+  const providerReplyUnavailable = false;
   const syncableAccounts = accounts.filter((account) =>
-    ["gmail", "instagram", "messenger", "whatsapp", "telegram", "x"].includes(
-      account.platform
-    )
+    [
+      "gmail",
+      "outlook",
+      "instagram",
+      "linkedin",
+      "messenger",
+      "whatsapp",
+      "telegram",
+      "x",
+    ].includes(account.platform)
   );
   const historyAccounts = syncableAccounts.filter((account) =>
-    ["gmail", "instagram", "messenger", "x"].includes(account.platform)
+    ["gmail", "outlook", "instagram", "linkedin", "messenger", "x"].includes(
+      account.platform
+    )
   );
 
   const syncChannels = (continueHistory = false) => {
@@ -515,6 +532,16 @@ export default function InboxPage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    const node = loadMoreRef.current;
+    if (!node || !hasNextPage) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !isFetchingNextPage) fetchNextPage();
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   useEffect(() => {
     setReply("");
@@ -783,9 +810,9 @@ export default function InboxPage() {
                       </span>
                     </DropdownMenuRadioItem>
                     {accounts.map((account) => (
-                      <DropdownMenuItem
+                      <DropdownMenuRadioItem
                         key={account._id}
-                        // value={account._id}
+                        value={account._id}
                       >
                         <PlatformIcon
                           platform={account.platform}
@@ -800,7 +827,7 @@ export default function InboxPage() {
                             Primary
                           </span>
                         )}
-                      </DropdownMenuItem>
+                      </DropdownMenuRadioItem>
                     ))}
                   </DropdownMenuRadioGroup>
                   {!integrationsLoading && accounts.length === 0 && (
@@ -914,65 +941,70 @@ export default function InboxPage() {
                 </p>
               </div>
             ) : (
-              conversations.map((conversation) => (
-                <button
-                  key={conversation._id}
-                  onClick={() => setActiveId(conversation._id)}
-                  className={`mb-1 flex w-full gap-3 rounded-2xl p-3 text-left transition ${activeId === conversation._id ? "bg-zinc-100 dark:bg-zinc-900" : "hover:bg-zinc-50 dark:hover:bg-white/[0.03]"}`}
-                >
-                  <div className='relative shrink-0'>
-                    {conversation.customerAvatar ? (
-                      <img
-                        src={conversation.customerAvatar}
-                        alt=''
-                        className='h-11 w-11 rounded-full object-cover'
-                      />
-                    ) : (
-                      <span className='flex h-11 w-11 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'>
-                        {conversation.customerName.charAt(0).toUpperCase()}
-                      </span>
-                    )}
-                    <span className='absolute -right-0.5 -bottom-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-white ring-2 ring-white dark:bg-zinc-950 dark:ring-zinc-950'>
-                      <PlatformIcon
-                        platform={conversation.platform}
-                        className='h-3 w-3'
-                      />
-                    </span>
-                  </div>
-                  <span className='min-w-0 flex-1'>
-                    <span className='flex items-center justify-between gap-2'>
-                      <span
-                        className={`truncate text-sm ${conversation.unreadCount ? "font-bold" : "font-medium"}`}
-                      >
-                        {conversation.customerName}
-                      </span>
-                      <span
-                        className={`text-[10px] ${conversation.unreadCount ? "font-semibold text-indigo-600" : "text-muted-foreground"}`}
-                      >
-                        {relativeTime(conversation.lastMessageAt)}
-                      </span>
-                    </span>
-                    <span className='mt-0.5 flex items-center gap-2'>
-                      <span
-                        className={`min-w-0 flex-1 truncate text-xs ${conversation.unreadCount ? "text-foreground font-medium" : "text-muted-foreground"}`}
-                      >
-                        {conversation.lastMessage}
-                      </span>
-                      {conversation.unreadCount > 0 && (
-                        <span className='flex h-5 min-w-5 items-center justify-center rounded-full bg-indigo-600 px-1 text-[10px] font-bold text-white'>
-                          {conversation.unreadCount}
+              <>
+                {conversations.map((conversation) => (
+                  <button
+                    key={conversation._id}
+                    onClick={() => setActiveId(conversation._id)}
+                    className={`mb-1 flex w-full gap-3 rounded-2xl p-3 text-left transition ${activeId === conversation._id ? "bg-zinc-100 dark:bg-zinc-900" : "hover:bg-zinc-50 dark:hover:bg-white/[0.03]"}`}
+                  >
+                    <div className='relative shrink-0'>
+                      {conversation.customerAvatar ? (
+                        <img
+                          src={conversation.customerAvatar}
+                          alt=''
+                          className='h-11 w-11 rounded-full object-cover'
+                        />
+                      ) : (
+                        <span className='flex h-11 w-11 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'>
+                          {conversation.customerName.charAt(0).toUpperCase()}
                         </span>
                       )}
+                      <span className='absolute -right-0.5 -bottom-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-white ring-2 ring-white dark:bg-zinc-950 dark:ring-zinc-950'>
+                        <PlatformIcon
+                          platform={conversation.platform}
+                          className='h-3 w-3'
+                        />
+                      </span>
+                    </div>
+                    <span className='min-w-0 flex-1'>
+                      <span className='flex items-center justify-between gap-2'>
+                        <span
+                          className={`truncate text-sm ${conversation.unreadCount ? "font-bold" : "font-medium"}`}
+                        >
+                          {conversation.customerName}
+                        </span>
+                        <span
+                          className={`text-[10px] ${conversation.unreadCount ? "font-semibold text-indigo-600" : "text-muted-foreground"}`}
+                        >
+                          {relativeTime(conversation.lastMessageAt)}
+                        </span>
+                      </span>
+                      <span className='mt-0.5 flex items-center gap-2'>
+                        <span
+                          className={`min-w-0 flex-1 truncate text-xs ${conversation.unreadCount ? "text-foreground font-medium" : "text-muted-foreground"}`}
+                        >
+                          {conversation.lastMessage}
+                        </span>
+                        {conversation.unreadCount > 0 && (
+                          <span className='flex h-5 min-w-5 items-center justify-center rounded-full bg-indigo-600 px-1 text-[10px] font-bold text-white'>
+                            {conversation.unreadCount}
+                          </span>
+                        )}
+                      </span>
+                      <span className='text-muted-foreground mt-1.5 flex items-center gap-1 text-[10px] capitalize'>
+                        <Circle
+                          className={`h-1.5 w-1.5 fill-current ${conversation.status === "open" ? "text-indigo-500" : conversation.status === "snoozed" ? "text-amber-500" : "text-zinc-400"}`}
+                        />
+                        {conversation.status}
+                      </span>
                     </span>
-                    <span className='text-muted-foreground mt-1.5 flex items-center gap-1 text-[10px] capitalize'>
-                      <Circle
-                        className={`h-1.5 w-1.5 fill-current ${conversation.status === "open" ? "text-indigo-500" : conversation.status === "snoozed" ? "text-amber-500" : "text-zinc-400"}`}
-                      />
-                      {conversation.status}
-                    </span>
-                  </span>
-                </button>
-              ))
+                  </button>
+                ))}
+                <div ref={loadMoreRef} className='flex h-10 items-center justify-center'>
+                  {isFetchingNextPage && <LoadingFileLoader size={16} />}
+                </div>
+              </>
             )}
           </div>
         </aside>
