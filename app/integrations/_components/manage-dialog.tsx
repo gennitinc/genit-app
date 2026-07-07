@@ -8,7 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { Switch } from "@/components/ui/switch";
+import { useIsMobile } from "@/components/ui/use-mobile";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import {
   useDisconnectIntegration,
   useDisconnectMetaIdentity,
@@ -30,6 +33,7 @@ import {
   Unplug,
   X,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   type CSSProperties,
@@ -37,6 +41,83 @@ import {
   useMemo,
   useState,
 } from "react";
+
+const EnterpriseAutoReplyDialog = ({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) => {
+  const isMobile = useIsMobile();
+  const router = useRouter();
+
+  const content = (
+    <div className='group relative flex w-full flex-col overflow-hidden rounded-xs bg-black/[0.02] ring-1 ring-black/5 md:flex-row dark:bg-white/[0.04] dark:ring-white/10'>
+      <GradientFrame />
+      <div className='relative min-h-[220px] w-full flex-shrink-0 md:min-h-full md:w-1/2'>
+        <img
+          src='/genit-auto.png'
+          alt='Enterprise AI auto-replies'
+          className='absolute inset-0 h-full w-full object-cover object-[center_12%] lg:object-[center_80%]'
+        />
+        <div className='absolute inset-0 z-0 bg-gradient-to-t from-white/30 to-transparent md:bg-gradient-to-l dark:from-black/30' />
+      </div>
+      <div className='relative z-10 flex w-full flex-col justify-center bg-white/70 p-5 backdrop-blur-md md:w-1/2 md:bg-transparent md:p-8 md:backdrop-blur-none dark:bg-black/70 md:dark:bg-transparent'>
+        <div className='relative z-10 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-none dark:ring-white/10'>
+          <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
+            <CheckCircle2 className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
+            <span className='font-medium'>AI inbox automation</span>
+          </div>
+          <p className='text-muted-foreground mt-3 text-xs dark:text-white/70'>
+            Let Genit reply to new inbound messages from your connected plugins.
+          </p>
+        </div>
+
+        <h3 className='text-foreground relative z-10 mt-6 text-xl font-semibold tracking-tight md:text-2xl dark:text-white'>
+          Upgrade to Enterprise
+        </h3>
+        <p className='text-muted-foreground relative z-10 mt-2 text-sm font-normal dark:text-white/70'>
+          AI auto-replies are exclusive to the Enterprise plan.
+        </p>
+
+        <div className='relative z-10 mt-8 flex justify-end gap-3'>
+          <Button
+            variant='outline'
+            className='border-none bg-transparent text-sm'
+            onClick={() => onOpenChange(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            className='rounded-sm bg-indigo-600 text-sm text-white hover:bg-indigo-700'
+            onClick={() => router.push("/pricing")}
+          >
+            Upgrade Now
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={onOpenChange}>
+        <DrawerContent className='border-none bg-transparent p-0 shadow-none'>
+          {content}
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className='border-none bg-transparent p-0 shadow-none sm:max-w-3xl md:max-w-4xl [&>button]:hidden'>
+        {content}
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 interface ManageDialogProps {
   open: boolean;
@@ -120,11 +201,13 @@ export function ManageDialog({
     null
   );
   const [confirmIdentityWipe, setConfirmIdentityWipe] = useState(false);
+  const [enterpriseDialogOpen, setEnterpriseDialogOpen] = useState(false);
   const disconnectOne = useDisconnectIntegration();
   const disconnectIdentity = useDisconnectMetaIdentity();
   const setPrimary = useSetPrimaryIntegration();
   const updateInboxSettings = useUpdateIntegrationInboxSettings();
   const { identityBySurface } = useIntegrations();
+  const { user } = useUserContext();
 
   // Each Meta surface (FB, IG, Meta Ads, WhatsApp) has its own identity row
   // now. Pull the one for THIS dialog's platform — revoking it should only
@@ -174,6 +257,11 @@ export function ManageDialog({
   }
 
   async function handleAutoReply(id: string, enabled: boolean) {
+    if (enabled && String(user?.userPlan) !== "Enterprise") {
+      setEnterpriseDialogOpen(true);
+      return;
+    }
+
     try {
       await updateInboxSettings.mutateAsync({ id, autoReplyEnabled: enabled });
       toast.success(
@@ -569,6 +657,10 @@ export function ManageDialog({
           </div>
         </div>
       </DialogContent>
+      <EnterpriseAutoReplyDialog
+        open={enterpriseDialogOpen}
+        onOpenChange={setEnterpriseDialogOpen}
+      />
     </Dialog>
   );
 }
