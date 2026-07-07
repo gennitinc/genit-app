@@ -53,13 +53,13 @@ const EnterpriseAutoReplyDialog = ({
   const router = useRouter();
 
   const content = (
-    <div className='group relative flex w-full flex-col overflow-hidden rounded-xs bg-black/[0.02] ring-1 ring-black/5 md:flex-row dark:bg-white/[0.04] dark:ring-white/10'>
+    <div className='group relative flex min-h-[620px] w-full flex-col overflow-hidden rounded-xs bg-black/[0.02] ring-1 ring-black/5 md:min-h-[460px] md:flex-row dark:bg-white/[0.04] dark:ring-white/10'>
       <GradientFrame />
       <div className='relative min-h-[220px] w-full flex-shrink-0 md:min-h-full md:w-1/2'>
         <img
           src='/genit-auto.png'
           alt='Enterprise AI auto-replies'
-          className='absolute inset-0 h-full w-full object-cover object-[center_12%] lg:object-[center_80%]'
+          className='absolute inset-0 h-full w-full object-cover object-[center_12%] lg:object-cover lg:object-[center_80%]'
         />
         <div className='absolute inset-0 z-0 bg-gradient-to-t from-white/30 to-transparent md:bg-gradient-to-l dark:from-black/30' />
       </div>
