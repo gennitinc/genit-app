@@ -669,7 +669,7 @@ export default function PostsPage() {
     [integrations]
   );
   const postsQuery = useInfiniteQuery({
-    queryKey: ["social-posts"],
+    queryKey: ["social-posts", "pages"],
     queryFn: ({ pageParam }) =>
       listSocialPostsPage({ page: pageParam, limit: POSTS_PAGE_SIZE }),
     initialPageParam: 1,

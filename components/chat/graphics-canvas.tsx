@@ -336,7 +336,7 @@ const GraphicsCanvasContent = ({
           {/* Loading State Overlay */}
         </ReactFlow>
         {(isGenerating || isGeneratingImage) && (
-          <div className='absolute inset-0 z-50 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl dark:bg-black/10'>
+          <div className='absolute inset-0 z-50 rounded-b-3xl border border-white/10 bg-white/5 backdrop-blur-2xl dark:bg-black/10'>
             {/* subtle light gradient for glass depth */}
             <div className='pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-white/10 to-transparent' />
 
