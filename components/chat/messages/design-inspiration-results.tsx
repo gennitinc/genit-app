@@ -17,7 +17,9 @@ import {
   Check,
   CircleFadingArrowUp,
   Loader2,
+  Pause,
   Plus,
+  Play,
   Sparkles,
   X,
   ZoomIn,
@@ -45,6 +47,7 @@ export function DesignInspirationResults({
   query,
   message,
 }: DesignInspirationResultsProps) {
+  const safeResults = results || [];
   const {
     selectedFiles,
     setSelectedFiles,
@@ -61,9 +64,11 @@ export function DesignInspirationResults({
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewIndex, setPreviewIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
-  if (!results || results.length === 0) return null;
+  const [countdown, setCountdown] = useState(10);
+  const [isCountdownPaused, setIsCountdownPaused] = useState(false);
+  const autoPickedRef = useRef(false);
 
-  const isAutoSelected = results.some((r: any) => r.isAutoSelected);
+  const isAutoSelected = safeResults.some((r: any) => r.isAutoSelected);
   const gridRef = useRef<HTMLDivElement>(null);
 
   // 🔒 Lock Logic
@@ -74,6 +79,9 @@ export function DesignInspirationResults({
   const effectiveSelectedFiles = isLocked
     ? finalized.selectedInspirations || []
     : selectedFiles;
+  const hasSelection = safeResults.some((pin) =>
+    effectiveSelectedFiles?.includes(pin.image)
+  );
 
   // Remove chunking - we want a continuous carousel
 
@@ -81,8 +89,53 @@ export function DesignInspirationResults({
     effectiveSelectedFiles?.includes(image) ?? false;
 
   const handleSelect = (image: string) => {
-    // Selection disabled - AI handles selection automatically
+    if (isLocked) return;
+    autoPickedRef.current = true;
+    setSelectedFiles((current: string[]) =>
+      current.includes(image) ? [] : [image]
+    );
   };
+
+  useEffect(() => {
+    autoPickedRef.current = false;
+    setCountdown(10);
+    setIsCountdownPaused(false);
+  }, [query, safeResults]);
+
+  useEffect(() => {
+    if (
+      isLocked ||
+      isCountdownPaused ||
+      hasSelection ||
+      autoPickedRef.current ||
+      !safeResults.length
+    ) {
+      return;
+    }
+
+    if (countdown <= 0) {
+      const randomPin =
+        safeResults[Math.floor(Math.random() * safeResults.length)];
+      if (randomPin?.image) {
+        autoPickedRef.current = true;
+        setSelectedFiles([randomPin.image]);
+      }
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setCountdown((seconds) => seconds - 1);
+    }, 1000);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    countdown,
+    hasSelection,
+    isCountdownPaused,
+    isLocked,
+    safeResults,
+    setSelectedFiles,
+  ]);
 
   // Sync carousel position when dialog opens
   useEffect(() => {
@@ -90,6 +143,8 @@ export function DesignInspirationResults({
       api.scrollTo(previewIndex, true);
     }
   }, [isPreviewOpen, api, previewIndex]);
+
+  if (safeResults.length === 0) return null;
 
   return (
     <div className='my-4 w-full space-y-3'>
@@ -107,6 +162,32 @@ export function DesignInspirationResults({
         </p>
       </div>
 
+      {!isLocked && !hasSelection && (
+        <div className='flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2'>
+          <p className='text-muted-foreground text-[11px]'>
+            {isCountdownPaused
+              ? "Auto-pick paused until you select an inspiration."
+              : `Auto-picking a random inspiration in ${countdown}s.`}
+          </p>
+          <button
+            type='button'
+            className='flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/8 text-white/70 hover:bg-white/12 hover:text-white'
+            onClick={() => setIsCountdownPaused((paused) => !paused)}
+            aria-label={
+              isCountdownPaused
+                ? "Resume inspiration countdown"
+                : "Pause inspiration countdown"
+            }
+          >
+            {isCountdownPaused ? (
+              <Play className='h-3.5 w-3.5' />
+            ) : (
+              <Pause className='h-3.5 w-3.5' />
+            )}
+          </button>
+        </div>
+      )}
+
       {/* ─── Design Grid Carousel (fixed height, no overflow) ─── */}
       <div ref={gridRef} className='w-full'>
         <Carousel
@@ -114,7 +195,7 @@ export function DesignInspirationResults({
           className='group/carousel w-full'
         >
           <CarouselContent className='-ml-3'>
-            {results.map((pin, i) => {
+            {safeResults.map((pin, i) => {
               const selected = isSelected(pin.image);
               return (
                 <CarouselItem
@@ -139,10 +220,7 @@ export function DesignInspirationResults({
                           ? "border-primary/60 ring-primary/30 ring-1"
                           : "border-white/8 hover:border-white/20"
                       )}
-                      onClick={() => {
-                        setPreviewIndex(i);
-                        setIsPreviewOpen(true);
-                      }}
+                      onClick={() => handleSelect(pin.image)}
                     >
                       <img
                         src={pin.image}
@@ -154,12 +232,40 @@ export function DesignInspirationResults({
                       <div className='absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover/card:opacity-100'>
                         <ZoomIn className='h-5 w-5 text-white/70' />
                       </div>
-                      {/* Selected badge */}
-                      {selected && (
-                        <div className='absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 shadow-lg hover:bg-indigo-700'>
-                          <Check className='h-3 w-3 text-white' />
-                        </div>
-                      )}
+                      <button
+                        type='button'
+                        className={cn(
+                          "absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full shadow-lg",
+                          selected
+                            ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                            : "bg-black/60 text-white hover:bg-black/80"
+                        )}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleSelect(pin.image);
+                        }}
+                        aria-label={
+                          selected ? "Remove inspiration" : "Use inspiration"
+                        }
+                      >
+                        {selected ? (
+                          <Check className='h-3.5 w-3.5' />
+                        ) : (
+                          <Plus className='h-3.5 w-3.5' />
+                        )}
+                      </button>
+                      <button
+                        type='button'
+                        className='absolute right-2 bottom-2 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white shadow-lg hover:bg-black/80'
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setPreviewIndex(i);
+                          setIsPreviewOpen(true);
+                        }}
+                        aria-label='Preview inspiration'
+                      >
+                        <ZoomIn className='h-3.5 w-3.5' />
+                      </button>
                     </motion.div>
                   </div>
                 </CarouselItem>
@@ -167,7 +273,7 @@ export function DesignInspirationResults({
             })}
           </CarouselContent>
 
-          {results.length > 2 && (
+          {safeResults.length > 2 && (
             <div className='mt-2 flex justify-end gap-1.5 opacity-0 transition-opacity duration-200 group-hover/carousel:opacity-100'>
               <CarouselPrevious className='static h-7 w-7 translate-y-0 rounded-full border-white/10 bg-white/5 hover:bg-white/10' />
               <CarouselNext className='static h-7 w-7 translate-y-0 rounded-full border-white/10 bg-white/5 hover:bg-white/10' />
@@ -179,7 +285,7 @@ export function DesignInspirationResults({
           <p className='text-muted-foreground text-[11px]'>
             {isAutoSelected
               ? "The AI has automatically selected a design foundation to begin generating your concept."
-              : "Inspirations considered for your design."}
+              : "Tap inspirations to use them as references for your next design."}
           </p>
         </div>
       </div>
@@ -199,7 +305,7 @@ export function DesignInspirationResults({
             className='flex min-h-0 flex-1 flex-col'
           >
             <CarouselContent className='ml-0 h-full flex-1'>
-              {results.map((pin, idx) => {
+              {safeResults.map((pin, idx) => {
                 const selected = isSelected(pin.image);
                 return (
                   <CarouselItem
@@ -225,7 +331,7 @@ export function DesignInspirationResults({
                           {pin.alt || "Design Concept"}
                         </p>
                         <p className='mt-0.5 font-mono text-[9px] tracking-widest text-white/25'>
-                          {idx + 1} / {results.length}
+                          {idx + 1} / {safeResults.length}
                         </p>
                       </div>
                       <CarouselNext className='static size-7 translate-y-0 rounded-full border-none bg-white/10 text-white hover:bg-white/20' />

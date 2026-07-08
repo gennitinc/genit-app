@@ -168,6 +168,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                     name: file.name || "Untitled",
                     type: file.type || "unknown",
                     filePath: file.url || file.filePath || "",
+                    size: file.size,
+                    fileSize: file.fileSize || file.size,
                     status: "uploaded" as const,
                   })
                 ),
@@ -203,6 +205,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
                   name: file.name || "Untitled",
                   type: file.type || "unknown",
                   filePath: file.url || file.filePath || "",
+                  size: file.size,
+                  fileSize: file.fileSize || file.size,
                   status: "uploaded" as const,
                 })
               ),
@@ -673,8 +677,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         }
 
         // --- 2. Handle selectedFiles (pre-stored URLs) ---
-        if (selectedFiles && selectedFiles.length > 0) {
-          for (const filePath of selectedFiles) {
+        const selectedDesigns = (selectedFiles || []).slice(0, 1);
+
+        if (selectedDesigns.length > 0) {
+          for (const filePath of selectedDesigns) {
             const name = filePath.split("/").pop() || "selected-file";
             const ext = name.split(".").pop()?.toLowerCase();
             let type = "application/octet-stream";
@@ -738,8 +744,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         }
 
         // Append selected file URLs (references) as JSON string
-        if (selectedFiles && selectedFiles.length > 0) {
-          formData.append("selectedFiles", JSON.stringify(selectedFiles));
+        if (selectedDesigns.length > 0) {
+          formData.append("selectedFiles", JSON.stringify(selectedDesigns));
         }
 
         // Append metadata as JSON string
@@ -1450,6 +1456,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!files || files.length === 0) return;
     const allowedPrefixes = ["image/", "video/"];
     const maxFileSizeBytes = 10 * 1024 * 1024;
+    const maxFiles = 4;
 
     const filtered = files.filter((file) => {
       const isAllowedType =
@@ -1460,10 +1467,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
     if (filtered.length === 0) return;
 
-    setAttachedFiles((prev) => [...prev, ...filtered]);
+    const accepted = filtered.slice(0, Math.max(0, maxFiles - attachedFiles.length));
+    if (accepted.length === 0) return;
+
+    setAttachedFiles((prev) => [...prev, ...accepted]);
     setFileLoadingStates((prev) => {
       const next = { ...prev };
-      filtered.forEach((f, idx) => {
+      accepted.forEach((f, idx) => {
         const key = (f as any).fileKey || `${f.name}-${Date.now()}-${idx}`;
         (f as any).fileKey = key;
         next[key] = false;

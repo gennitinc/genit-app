@@ -14,7 +14,6 @@ import {
 import { HoverActions } from "@/components/ui/hover-actions";
 import { stripClientTimeContext } from "@/lib/utils";
 import { Download, Eye, File, FileText, ImageIcon } from "lucide-react";
-import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import { useEffect, useState } from "react";
 
@@ -49,6 +48,8 @@ export function UserMessage({
   const [isEditing, setIsEditing] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const messageAttachments =
+    message.attachedFiles || message.fileAttachments || [];
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -188,9 +189,9 @@ export function UserMessage({
           </MessageContent>
 
           {/* Attached Files from message level */}
-          {message.attachedFiles?.length > 0 && (
+          {messageAttachments.length > 0 && (
             <div className='mt-3 space-y-2'>
-              {message.attachedFiles.map((file: any, index: number) => (
+              {messageAttachments.map((file: any, index: number) => (
                 <AttachedFilePreview key={file.id || index} file={file} />
               ))}
             </div>
@@ -288,15 +289,17 @@ function AttachedFilePreview({ file }: { file: any }) {
 
   const isImage = file.type?.startsWith("image/");
   const isVideo = file.type?.startsWith("video/");
-  const fileSize = file.fileSize
-    ? `${(file.fileSize / (1024 * 1024)).toFixed(2)} MB`
+  const fileBytes = file.fileSize || file.size;
+  const fileSize = fileBytes
+    ? `${(fileBytes / (1024 * 1024)).toFixed(2)} MB`
     : "Unknown size";
+  const filePath = file.filePath || file.url || "";
 
   const handleDownload = async () => {
     try {
-      if (!file.filePath) return;
+      if (!filePath) return;
 
-      const response = await fetch(file.filePath, {
+      const response = await fetch(filePath, {
         method: "GET",
       });
 
@@ -328,11 +331,9 @@ function AttachedFilePreview({ file }: { file: any }) {
         <div className='flex-shrink-0'>
           {isImage ? (
             <div className='bg-muted-foreground/5 h-12 w-12 overflow-hidden rounded-md border'>
-              <Image
-                src={file.filePath || "/placeholder.svg"}
+              <img
+                src={filePath || "/placeholder.svg"}
                 alt={file.name}
-                width={48}
-                height={48}
                 className='h-full w-full object-cover transition-transform duration-200 group-hover:scale-105'
               />
             </div>
@@ -375,17 +376,14 @@ function AttachedFilePreview({ file }: { file: any }) {
                 <div className=''>
                   <div className='relative h-auto w-auto'>
                     {isImage ? (
-                      <Image
-                        src={file.filePath}
+                      <img
+                        src={filePath}
                         alt={file.name}
-                        width={0}
-                        height={0}
-                        className='h-auto w-auto rounded-md object-contain'
-                        unoptimized
+                        className='max-h-[90vh] max-w-[90vw] rounded-md object-contain'
                       />
                     ) : (
                       <video
-                        src={file.filePath}
+                        src={filePath}
                         controls
                         className='max-h-[90vh] max-w-[90vw] rounded-md object-contain'
                       />

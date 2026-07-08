@@ -97,6 +97,7 @@ export function ChatInput({
     isProcessingDraft,
     brandIdentityEnabled,
     setBrandIdentityEnabled,
+    selectedFiles,
   } = useProjectDesign();
 
   const { startAgent, runs } = useAgentRunsContext();
@@ -283,7 +284,7 @@ export function ChatInput({
           formattedInput,
           attachedFiles,
           project._id,
-          undefined,
+          selectedFiles,
           { useBrandIdentity: brandIdentityEnabled }
         );
       }
