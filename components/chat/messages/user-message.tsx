@@ -1,6 +1,7 @@
 "use client";
 
 import { ImagePreviewDialog, MessageEditor } from "@/components/chat/messages";
+import { Response } from "@/components/ai-elements/response";
 import { MessageContainer, MessageContent } from "@/components/chat/messages";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,6 @@ import {
 import { HoverActions } from "@/components/ui/hover-actions";
 import { stripClientTimeContext } from "@/lib/utils";
 import { Download, Eye, File, FileText, ImageIcon } from "lucide-react";
-import ReactMarkdown from "react-markdown";
 import { useEffect, useState } from "react";
 
 interface UserMessageProps {
@@ -180,12 +180,12 @@ export function UserMessage({
           onMouseLeave={() => setIsHovered(false)}
         >
           <MessageContent variant='user'>
-            <ReactMarkdown>
+            <Response mode='static'>
               {stripClientTimeContext(
                 message.parts?.find((part: any) => part.type === "text")
                   ?.text || ""
               )}
-            </ReactMarkdown>
+            </Response>
           </MessageContent>
 
           {/* Attached Files from message level */}

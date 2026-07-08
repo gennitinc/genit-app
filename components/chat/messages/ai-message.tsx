@@ -33,7 +33,6 @@ import {
   Loader2,
 } from "lucide-react";
 import Link from "next/link";
-import Markdown from "react-markdown";
 import { useEffect, useState } from "react";
 
 /** Strip raw JSON / API error dumps from AI text and replace with a friendly message. */
@@ -250,7 +249,7 @@ export function AIMessage({
                     key={`${message.id}-${i}`}
                     className='flex flex-col gap-2'
                   >
-                    <Response>{textContent}</Response>
+                    <Response isAnimating={isStreaming}>{textContent}</Response>
                     {(integrationToConnect || needsAdBalanceTopUp) && (
                       <div className='mt-2 flex flex-wrap gap-2'>
                         {integrationToConnect && (
