@@ -49,12 +49,12 @@ const CATEGORIES = [
     icon: FolderSync,
     href: "/visuals/automation",
   },
-  {
-    id: "summary",
-    label: "Summary and Report",
-    icon: BarChart,
-    href: "/visuals/summary",
-  },
+  // {
+  //   id: "summary",
+  //   label: "Summary and Report",
+  //   icon: BarChart,
+  //   href: "/visuals/summary",
+  // },
 ];
 
 export function VisualsSidebar() {

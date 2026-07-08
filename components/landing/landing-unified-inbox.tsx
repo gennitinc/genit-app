@@ -86,6 +86,7 @@ const LandingUnifiedInbox = () => {
               width={1555}
               height={1012}
               sizes='(min-width: 1024px) 960px, calc(100vw - 32px)'
+              draggable={false}
               className='h-auto w-full'
             />
           ) : (
@@ -96,6 +97,7 @@ const LandingUnifiedInbox = () => {
               width={1554}
               height={1012}
               sizes='(min-width: 1024px) 960px, calc(100vw - 32px)'
+              draggable={false}
               className='h-auto w-full'
             />
           )}

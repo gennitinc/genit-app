@@ -35,6 +35,7 @@ import {
   ArrowRight,
   ArrowUpRight,
   Bot,
+  CircleDashed,
   CircleFadingArrowUp,
   Clock,
   Code2,
@@ -242,7 +243,7 @@ const TEMPLATES = [
       "Auto-extract transcripts from YouTube videos to write scripts, summaries, and social promo threads.",
     prompt:
       "Create a content repurposing workflow that triggers on YouTube video uploads, calls the video transcript analyzer, generates a short thread post for X, and saves it in a brand folder.",
-    icon: Sparkles,
+    icon: CircleDashed,
     CircleFadingArrowUp,
     badge: "AI Workflow",
   },
@@ -645,30 +646,6 @@ export default function AutomationPage() {
                       {relativeDate(automation.updatedAt)}
                     </span>
                   </div>
-                  <div className='flex items-center gap-1.5'>
-                    <Switch
-                      checked={automation.enabled}
-                      disabled={isBusy}
-                      className='scale-[0.8] data-[state=checked]:bg-neutral-900 dark:data-[state=checked]:bg-white'
-                      onCheckedChange={(checked) =>
-                        handleStatusChange(automation, checked)
-                      }
-                      aria-label={`${automation.enabled ? "Pause" : "Activate"} ${title}`}
-                    />
-                    <button
-                      type='button'
-                      disabled={isBusy}
-                      onClick={() => setDeleteTarget(automation)}
-                      className='flex h-7 w-7 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-red-500 disabled:opacity-50 dark:hover:bg-zinc-800 dark:hover:text-red-400'
-                      aria-label={`Delete ${title}`}
-                    >
-                      {isBusy ? (
-                        <LoadingFileLoader size={16} />
-                      ) : (
-                        <Trash2 className='h-3.5 w-3.5' />
-                      )}
-                    </button>
-                  </div>
                 </div>
 
                 {/* Title */}
@@ -723,14 +700,39 @@ export default function AutomationPage() {
                 </div>
 
                 {/* Footer */}
-                <div className='mt-4 flex items-center justify-end border-t border-neutral-100 pt-3 dark:border-zinc-800'>
+                <div className='mt-4 flex items-center justify-between border-t border-neutral-100 pt-3 dark:border-zinc-800'>
+                  <div className='flex items-center gap-1.5'>
+                    <Switch
+                      checked={automation.enabled}
+                      disabled={isBusy}
+                      className='scale-[0.8] data-[state=checked]:bg-neutral-900 dark:data-[state=checked]:bg-white'
+                      onCheckedChange={(checked) =>
+                        handleStatusChange(automation, checked)
+                      }
+                      aria-label={`${automation.enabled ? "Pause" : "Activate"} ${title}`}
+                    />
+                    <button
+                      type='button'
+                      disabled={isBusy}
+                      onClick={() => setDeleteTarget(automation)}
+                      className='flex h-7 w-7 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-red-500 disabled:opacity-50 dark:hover:bg-zinc-800 dark:hover:text-red-400'
+                      aria-label={`Delete ${title}`}
+                    >
+                      {isBusy ? (
+                        <LoadingFileLoader size={16} />
+                      ) : (
+                        <Trash2 className='h-3.5 w-3.5' />
+                      )}
+                    </button>
+                  </div>
+
                   <button
                     type='button'
                     onClick={() => router.push(`/chat/${automation._id}`)}
-                    className='flex h-7 items-center gap-1 rounded-lg bg-neutral-900 px-3 text-[11px] font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200'
+                    className='inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-2 py-1.5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 hover:shadow-md active:scale-95'
                   >
-                    Configure
-                    <ArrowUpRight className='h-3 w-3' />
+                    <span>Configure</span>
+                    <ArrowUpRight className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5' />
                   </button>
                 </div>
               </article>
@@ -758,7 +760,7 @@ export default function AutomationPage() {
                 key={idx}
                 className='group flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 transition-colors duration-200 hover:border-neutral-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700'
               >
-                <div className='mb-3 flex items-center justify-between'>
+                <div className='mb-3 flex items-center gap-2'>
                   <div className='flex h-9 w-9 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-neutral-300'>
                     <IconComponent className='h-4 w-4' />
                   </div>
@@ -778,11 +780,10 @@ export default function AutomationPage() {
                   <Button
                     onClick={() => handleCreate(tmpl.prompt)}
                     disabled={creating}
-                    variant='outline'
-                    className='h-8 w-full text-xs font-medium'
+                    className='group inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 hover:shadow-md active:scale-95 disabled:cursor-not-allowed disabled:opacity-60'
                   >
-                    Use Template
-                    <ArrowRight className='ml-1.5 h-3 w-3' />
+                    <span>{creating ? "Creating..." : "Use Template"}</span>
+                    <ArrowRight className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-1' />
                   </Button>
                 </div>
               </div>

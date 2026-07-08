@@ -1,12 +1,6 @@
 "use client";
 
-import { HomeCommandCenter } from "./_components/home-command-center";
 import { POST_PLATFORMS } from "./_components/post-editor-dialog";
-import {
-  FacebookBrand,
-  InstagramBrand,
-  XBrand,
-} from "@/app/(auth)/onboarding/_components/social-icons";
 import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import { ManageDialog } from "@/app/integrations/_components/manage-dialog";
 import {
@@ -14,65 +8,166 @@ import {
   type Integration,
   resolveStatus,
 } from "@/app/integrations/integrations-explorer";
-import { Button } from "@/components/ui/button";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { useIntegrations } from "@/hooks/use-integrations";
 import { isMetaSurface } from "@/lib/integrations-api";
 import { listSocialPosts } from "@/lib/social-posts-api";
-import { GradientFrame } from "@/utils/gradient-frame";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Activity,
-  ArrowRight,
-  BarChart,
-  CalendarCheck,
-  CircleFadingArrowUp,
-  Heart,
-  MessageSquare,
-  MoreHorizontal,
+  BarChart3,
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  Folder,
+  Layers3,
+  PenLine,
   Plus,
-  Sparkles,
-  TrendingUp,
-  Users,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
-  Line,
-  LineChart,
-  Tooltip as RechartsTooltip,
   ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import React, { useMemo, useState } from "react";
 
-const chartData = [
-  { name: "Week 1", Traffic: 15, Engagement: 10 },
-  { name: "Week 2", Traffic: 24, Engagement: 30 },
-  { name: "Week 3", Traffic: 18, Engagement: 25 },
-  { name: "Week 4", Traffic: 45, Engagement: 25 },
-];
+const dayMs = 86_400_000;
+
+function isoDate(date: Date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function dateFromIso(value: string) {
+  return new Date(`${value}T12:00:00`);
+}
+
+function countDone(values: unknown[]) {
+  return values.filter((value) =>
+    Array.isArray(value) ? value.length > 0 : Boolean(value)
+  ).length;
+}
+
+function prettyDateRange(from: string, to: string) {
+  const format = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  return `${format.format(dateFromIso(from))} - ${format.format(
+    dateFromIso(to)
+  )}`;
+}
+
+function addMonths(date: Date, months: number) {
+  return new Date(date.getFullYear(), date.getMonth() + months, 1);
+}
+
+function monthTitle(date: Date) {
+  return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+}
+
+function sameDay(a: Date, b: Date) {
+  return isoDate(a) === isoDate(b);
+}
+
+function isBetween(day: Date, from: Date, to: Date) {
+  return day.getTime() > from.getTime() && day.getTime() < to.getTime();
+}
+
+function monthCells(month: Date) {
+  const start = new Date(month.getFullYear(), month.getMonth(), 1);
+  const first = new Date(start);
+  first.setDate(first.getDate() - first.getDay());
+  return Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(first);
+    date.setDate(first.getDate() + index);
+    return date;
+  });
+}
+
+function DateRangeMonth({
+  month,
+  from,
+  to,
+  onSelect,
+}: {
+  month: Date;
+  from: Date;
+  to: Date;
+  onSelect: (date: Date) => void;
+}) {
+  return (
+    <div>
+      <h3 className='mb-4 text-center text-sm font-semibold text-zinc-950 dark:text-white'>
+        {monthTitle(month)}
+      </h3>
+      <div className='mb-2 grid grid-cols-7 text-center text-xs text-zinc-500 dark:text-white/45'>
+        {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+          <span key={day}>{day}</span>
+        ))}
+      </div>
+      <div className='grid grid-cols-7 gap-y-1'>
+        {monthCells(month).map((day) => {
+          const muted = day.getMonth() !== month.getMonth();
+          const selected = sameDay(day, from) || sameDay(day, to);
+          const ranged = isBetween(day, from, to);
+          return (
+            <button
+              key={day.toISOString()}
+              type='button'
+              onClick={() => onSelect(day)}
+              className={[
+                "mx-auto flex h-9 w-9 items-center justify-center rounded-lg text-sm transition",
+                muted
+                  ? "text-zinc-300 dark:text-white/25"
+                  : "text-zinc-700 hover:bg-zinc-100 dark:text-white/65 dark:hover:bg-white/10",
+                ranged ? "bg-sky-500/10 text-sky-600 dark:text-sky-300" : "",
+                selected
+                  ? "bg-sky-500 text-white shadow-sm shadow-sky-500/20 hover:bg-sky-500 dark:bg-sky-500 dark:text-white"
+                  : "",
+              ].join(" ")}
+            >
+              {day.getDate()}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 export default function VisualsHomePage() {
+  const today = useMemo(() => new Date(), []);
+  const [from, setFrom] = useState(() =>
+    isoDate(new Date(Date.now() - dayMs * 6))
+  );
+  const [to, setTo] = useState(() => isoDate(today));
+  const [isPickingRangeEnd, setIsPickingRangeEnd] = useState(false);
+  const [rangeStart, rangeEnd] = useMemo(() => {
+    const start = dateFromIso(from);
+    const end = dateFromIso(to);
+    return start <= end ? [start, end] : [end, start];
+  }, [from, to]);
+  const [visibleMonth, setVisibleMonth] = useState(
+    () => new Date(today.getFullYear(), today.getMonth(), 1)
+  );
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
-  const [postComposerRequest, setPostComposerRequest] = useState(0);
   const { byPlatform, identityBySurface, integrations } = useIntegrations();
   const postsQuery = useQuery({
     queryKey: ["social-posts"],
     queryFn: listSocialPosts,
   });
-
   const { user } = useUserContext();
-  const router = useRouter();
 
   const organizations = useMemo<Organization[]>(() => {
     const list = user?.allOrganizations || [];
@@ -82,7 +177,7 @@ export default function VisualsHomePage() {
       : [];
   }, [user]);
 
-  const current: Organization | null = useMemo(() => {
+  const current = useMemo<Organization | null>(() => {
     if (
       user?.currentOrganization &&
       typeof user.currentOrganization === "object"
@@ -90,285 +185,466 @@ export default function VisualsHomePage() {
       return user.currentOrganization;
     }
     return organizations[0] || null;
-  }, [user?.currentOrganization, organizations]);
+  }, [organizations, user?.currentOrganization]);
 
-  const sortedIntegrations = useMemo(() => {
-    return [...INTEGRATIONS].sort((a, b) => {
-      const aHasId = isMetaSurface(a.platform)
-        ? identityBySurface.has(a.platform)
-        : false;
-      const bHasId = isMetaSurface(b.platform)
-        ? identityBySurface.has(b.platform)
-        : false;
-      const aStatus = resolveStatus(a, byPlatform.get(a.platform), aHasId);
-      const bStatus = resolveStatus(b, byPlatform.get(b.platform), bHasId);
+  const posts = postsQuery.data || [];
+  const filteredPosts = useMemo(() => {
+    const start = new Date(
+      rangeStart.getFullYear(),
+      rangeStart.getMonth(),
+      rangeStart.getDate()
+    ).getTime();
+    const end = new Date(
+      rangeEnd.getFullYear(),
+      rangeEnd.getMonth(),
+      rangeEnd.getDate(),
+      23,
+      59,
+      59
+    ).getTime();
+    return posts.filter((post) => {
+      const time = new Date(
+        post.publishedAt || post.scheduledFor || post.createdAt
+      ).getTime();
+      return time >= start && time <= end;
+    });
+  }, [posts, rangeEnd, rangeStart]);
 
-      const order = { connected: 0, available: 1, partial: 2, soon: 3 };
+  const connectedChannels = integrations.filter(
+    (item) => item.status === "active" && POST_PLATFORMS.includes(item.platform)
+  ).length;
+  const activeProjects = new Set(
+    filteredPosts.map((post) => post.project).filter(Boolean)
+  ).size;
+  const totalEngagement = filteredPosts.reduce(
+    (sum, post) =>
+      sum +
+      (post.metrics?.likes || 0) +
+      (post.metrics?.comments || 0) +
+      (post.metrics?.shares || 0) +
+      (post.metrics?.clicks || 0),
+    0
+  );
+  const completedFields = countDone([
+    current?.businessName,
+    current?.businessLogo,
+    current?.businessBio || current?.businessDescription,
+    current?.businessWebsite,
+    current?.industry || current?.businessCategory,
+    current?.country,
+    current?.language,
+    current?.brandColors,
+    current?.primaryColor,
+    current?.fontHeadline,
+    current?.fontBody,
+    current?.mission,
+    current?.vision,
+    current?.values,
+    current?.voiceTone,
+    current?.socialMediaUrls,
+  ]);
+  const profileScore = Math.round((completedFields / 16) * 100);
+
+  const activityData = useMemo(() => {
+    return Array.from({ length: 7 }, (_, index) => {
+      const date = new Date(dateFromIso(to).getTime() - dayMs * (6 - index));
+      const key = isoDate(date);
+      const dayPosts = posts.filter((post) =>
+        (post.publishedAt || post.scheduledFor || post.createdAt).startsWith(
+          key
+        )
+      );
+      return {
+        name: date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        }),
+        Drafted: dayPosts.filter((post) => post.status === "draft").length,
+        Published: dayPosts.filter((post) => post.status === "published")
+          .length,
+      };
+    });
+  }, [posts, to]);
+
+  const connectedIntegrations = useMemo(() => {
+    return INTEGRATIONS.filter((integration) => {
+      const hasIdentity = isMetaSurface(integration.platform)
+        ? identityBySurface.has(integration.platform)
+        : false;
       return (
-        order[aStatus as keyof typeof order] -
-        order[bStatus as keyof typeof order]
+        resolveStatus(
+          integration,
+          byPlatform.get(integration.platform),
+          hasIdentity
+        ) === "connected"
       );
     });
   }, [byPlatform, identityBySurface]);
 
+  const pluginCards = useMemo(() => INTEGRATIONS.slice(0, 8), []);
   const manageConnections = manageFor
     ? (byPlatform.get(manageFor.platform) ?? [])
     : [];
-  const homePosts = postsQuery.data || [];
-  const connectedChannels = integrations.filter(
-    (item) => item.status === "active" && POST_PLATFORMS.includes(item.platform)
-  ).length;
-  const homeStats = [
+
+  const selectRangeDate = (date: Date) => {
+    if (!isPickingRangeEnd) {
+      setFrom(isoDate(date));
+      setTo(isoDate(date));
+      setIsPickingRangeEnd(true);
+      return;
+    }
+    if (date < rangeStart) {
+      setFrom(isoDate(date));
+      setIsPickingRangeEnd(false);
+      return;
+    }
+    setTo(isoDate(date));
+    setIsPickingRangeEnd(false);
+  };
+
+  const statCards = [
     {
-      label: "Drafts",
-      value: homePosts.filter((post) => post.status === "draft").length,
+      label: "Posts drafted",
+      value: filteredPosts.filter((post) => post.status === "draft").length,
+      detail: "In selected range",
+      Icon: PenLine,
+      color: "#60a5fa",
     },
     {
-      label: "Scheduled",
-      value: homePosts.filter((post) => post.status === "scheduled").length,
+      label: "Active projects",
+      value: activeProjects,
+      detail: "With content activity",
+      Icon: Folder,
+      color: "#60a5fa",
     },
     {
-      label: "Published",
-      value: homePosts.filter((post) => post.status === "published").length,
+      label: "Connected channels",
+      value: connectedChannels,
+      detail: "Ready to publish",
+      Icon: Layers3,
+      color: "#60a5fa",
+    },
+    {
+      label: "Engagement",
+      value: totalEngagement,
+      detail: "Likes, replies, shares, clicks",
+      Icon: BarChart3,
+      color: "#60a5fa",
     },
   ];
 
-  const image = "./visual-flow.jpg";
-
   return (
-    <div className='animate-in fade-in slide-in-from-bottom-4 flex w-full flex-col gap-2 duration-500'>
-      <div className='relative overflow-hidden rounded-3xl border p-4'>
-        {/* Background image */}
-        <img
-          src='https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg'
-          className='pointer-events-none absolute inset-0 h-full w-full object-cover select-none'
-          alt=''
-        />
+    <div className='min-h-[calc(100dvh-7rem)] rounded-2xl bg-[#070707] p-4 text-white sm:p-6'>
+      <div className='mb-8 flex flex-col gap-4 md:flex-row md:items-start md:justify-between'>
+        <div>
+          <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight sm:text-3xl'>
+            Hello {current?.businessName || user?.username || "User"} 👋
+          </h1>
+          <div className='mt-4 flex items-center'>
+            {connectedIntegrations.slice(0, 6).map((integration, index) => (
+              <span
+                key={integration.name}
+                className='relative -ml-2 flex h-10 w-10 items-center justify-center rounded-xl border border-[#070707] bg-[#151515] shadow-sm ring-1 ring-white/10 first:ml-0'
+                style={{
+                  zIndex: connectedIntegrations.length - index,
+                }}
+                title={integration.name}
+              >
+                <integration.icon className='h-6 w-6' />
+              </span>
+            ))}
+            <Link
+              href='/plugin'
+              className='relative -ml-2 flex h-10 w-10 items-center justify-center rounded-2xl border border-[#070707] bg-[#151515] text-white shadow-sm ring-1 ring-white/10 transition hover:bg-white/10'
+              style={{ zIndex: 0 }}
+              title='Add plugin'
+              aria-label='Add plugin'
+            >
+              <Plus className='h-5 w-5' />
+            </Link>
+            {connectedIntegrations.length === 0 && (
+              <span className='text-xs text-white/45'>
+                No channels connected yet
+              </span>
+            )}
+          </div>
+        </div>
 
-        {/* Content */}
-        <div className='relative z-10 grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] lg:items-center'>
-          <div className='flex min-w-0 flex-col items-start justify-center py-1 lg:pl-6'>
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              type='button'
+              className='flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white/80 transition hover:bg-white/[0.07] sm:w-auto'
+            >
+              <CalendarDays className='h-4 w-4 text-white/55' />
+              {prettyDateRange(from, to)}
+            </button>
+          </PopoverTrigger>
+          <PopoverContent
+            align='end'
+            className='w-[min(calc(100vw-2rem),760px)] rounded-2xl border-zinc-200 bg-white p-4 text-zinc-950 dark:border-white/10 dark:bg-[#0b0b0b] dark:text-white'
+          >
+            <div className='mb-4 flex items-center justify-between'>
+              <button
+                type='button'
+                onClick={() => setVisibleMonth((month) => addMonths(month, -1))}
+                className='flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10'
+                aria-label='Previous month'
+              >
+                <ChevronLeft className='h-4 w-4' />
+              </button>
+              <p className='text-sm font-medium text-zinc-600 dark:text-white/60'>
+                {prettyDateRange(from, to)}
+              </p>
+              <button
+                type='button'
+                onClick={() => setVisibleMonth((month) => addMonths(month, 1))}
+                className='flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10'
+                aria-label='Next month'
+              >
+                <ChevronRight className='h-4 w-4' />
+              </button>
+            </div>
+            <div className='grid gap-6 md:grid-cols-2'>
+              <DateRangeMonth
+                month={visibleMonth}
+                from={rangeStart}
+                to={rangeEnd}
+                onSelect={selectRangeDate}
+              />
+              <DateRangeMonth
+                month={addMonths(visibleMonth, 1)}
+                from={rangeStart}
+                to={rangeEnd}
+                onSelect={selectRangeDate}
+              />
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      <div className='grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+        {statCards.map(({ label, value, detail, Icon, color }) => (
+          <section
+            key={label}
+            className='rounded-2xl border border-white/10 bg-white/[0.035] p-4'
+          >
+            <div className='flex items-start justify-between gap-3'>
+              <div>
+                <p className='text-sm text-white/60'>{label}</p>
+                <p className='mt-1 text-3xl font-semibold'>{value}</p>
+              </div>
+              <span className='flex h-9 w-9 items-center justify-center rounded-xl bg-white/10'>
+                <Icon className='h-4 w-4 text-white/70' />
+              </span>
+            </div>
+            <div className='mt-12 h-0.5 rounded-full bg-white/10'>
+              <div
+                className='h-full rounded-full'
+                style={{
+                  width: `${Math.min(100, Number(value) * 12 || profileScore)}%`,
+                  background: color,
+                }}
+              />
+            </div>
+            <p className='mt-3 text-xs text-white/45'>{detail}</p>
+          </section>
+        ))}
+      </div>
+
+      <div className='mt-5'>
+        <section className='rounded-2xl border border-white/10 bg-white/[0.035] p-4'>
+          <div className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
             <div>
-              <h3 className='font-instrument-serif text-2xl font-bold tracking-tight text-white'>
-                Hello, {`${current?.businessName || "Organization"}`} 👋
-              </h3>
-              <p className='mt-1 text-sm leading-5 text-white/70'>
-                Welcome back, here is the latest overview of your brand.
+              <h2 className='text-base font-semibold'>Content activity</h2>
+              <p className='mt-1 text-sm text-white/55'>
+                Posts drafted vs posts published, last 7 days
               </p>
             </div>
-            <Button
-              className='mt-4 h-9 rounded-sm bg-indigo-600 px-4 text-white hover:bg-indigo-700'
-              onClick={() => setPostComposerRequest((request) => request + 1)}
-            >
-              New Post <Plus className='h-4 w-4' />
-            </Button>
           </div>
-
-          <div className='rounded-2xl bg-white/95 p-4 shadow-sm ring-1 ring-black/5 dark:bg-zinc-950/95 dark:shadow-none dark:ring-white/10'>
-            <div className='flex items-center justify-between gap-3 border-b border-black/5 pb-3 dark:border-white/10'>
-              <div className='flex min-w-0 items-center gap-3'>
-                <div className='h-10 w-10 shrink-0 overflow-hidden rounded-sm bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10'>
-                  {current?.businessLogo ? (
-                    <img
-                      src={current.businessLogo}
-                      alt={`${current.businessName || "Brand"} logo`}
-                      className='block h-full w-full bg-white object-contain'
-                    />
-                  ) : (
-                    <div className='flex h-full w-full items-center justify-center'>
-                      <span className='text-foreground text-sm font-bold dark:text-white'>
-                        {(current?.businessName || "B")
-                          .slice(0, 1)
-                          .toUpperCase()}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className='min-w-0'>
-                  <p className='text-foreground truncate text-sm font-semibold dark:text-white'>
-                    {current?.businessName || "Brand overview"}
-                  </p>
-                  <p className='text-muted-foreground truncate text-xs dark:text-white/50'>
-                    {connectedChannels} connected channel
-                    {connectedChannels === 1 ? "" : "s"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className='mt-3 grid grid-cols-3 gap-2'>
-              {homeStats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className='rounded-sm bg-black/[0.025] px-3 py-2.5 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'
-                >
-                  <p className='text-muted-foreground truncate text-[11px] dark:text-white/50'>
-                    {stat.label}
-                  </p>
-                  <p className='text-foreground mt-0.5 text-lg font-semibold dark:text-white'>
-                    {stat.value}
-                  </p>
-                </div>
-              ))}
-            </div>
+          <div className='mt-5 h-[360px]'>
+            <ResponsiveContainer width='100%' height='100%'>
+              <AreaChart
+                data={activityData}
+                margin={{ left: -24, right: 12, top: 12, bottom: 20 }}
+              >
+                <defs>
+                  <linearGradient
+                    id='contentActivityDrafted'
+                    x1='0'
+                    y1='0'
+                    x2='0'
+                    y2='1'
+                  >
+                    <stop offset='5%' stopColor='#94a3b8' stopOpacity={0.22} />
+                    <stop offset='95%' stopColor='#94a3b8' stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient
+                    id='contentActivityPublished'
+                    x1='0'
+                    y1='0'
+                    x2='0'
+                    y2='1'
+                  >
+                    <stop offset='5%' stopColor='#60a5fa' stopOpacity={0.35} />
+                    <stop offset='95%' stopColor='#60a5fa' stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid
+                  stroke='rgba(255,255,255,.06)'
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey='name'
+                  tick={{ fill: "rgba(255,255,255,.42)", fontSize: 12 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fill: "rgba(255,255,255,.42)", fontSize: 12 }}
+                  axisLine={false}
+                  tickLine={false}
+                  allowDecimals={false}
+                />
+                <Tooltip
+                  contentStyle={{
+                    background: "#080808",
+                    border: "1px solid rgba(255,255,255,.12)",
+                    borderRadius: 10,
+                  }}
+                  labelStyle={{ color: "#fff" }}
+                />
+                <Area
+                  type='monotone'
+                  dataKey='Drafted'
+                  stroke='#94a3b8'
+                  strokeWidth={2}
+                  fill='url(#contentActivityDrafted)'
+                  dot={false}
+                />
+                <Area
+                  type='monotone'
+                  dataKey='Published'
+                  stroke='#60a5fa'
+                  strokeWidth={2}
+                  fill='url(#contentActivityPublished)'
+                  dot={false}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
-        </div>
+          <div className='flex items-center justify-center gap-2 text-sm text-white/70'>
+            <span className='flex items-center gap-2'>
+              <span className='h-2.5 w-2.5 rounded-sm bg-slate-400' />
+              Drafted
+            </span>
+            <span className='flex items-center gap-2'>
+              <span className='h-2.5 w-2.5 rounded-sm bg-sky-400' />
+              Published
+            </span>
+          </div>
+        </section>
       </div>
 
-      {/* Plugins Carousel */}
-      <div className='mt-2 flex flex-col shadow-sm'>
-        <div className='mb-6 flex items-start justify-between lg:mx-6'>
+      <section className='mt-5 rounded-2xl border border-white/10 bg-white/[0.035] p-4'>
+        <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
           <div>
-            <h3 className='text-foreground text-base font-bold dark:text-white'>
-              Plugin Status
-            </h3>
-            <p className='text-muted-foreground mt-1 text-xs'>
-              Manage your connected channels
+            <h2 className='text-base font-semibold'>Plugins</h2>
+            <p className='mt-1 text-sm text-white/55'>
+              Add channels and tools for this organization.
             </p>
           </div>
-          <Button
-            variant='outline'
-            size='sm'
-            className='h-8 rounded-full border-zinc-200 text-xs dark:border-zinc-800'
-            onClick={() => {
-              router.push("/plugin");
-            }}
+          <Link
+            href='/plugin'
+            className='inline-flex h-9 items-center justify-center rounded-xl border border-white/10 px-3 text-sm text-white/70 transition hover:bg-white/10 hover:text-white'
           >
-            View more
-          </Button>
+            View all
+          </Link>
         </div>
 
-        <Carousel
-          opts={{ align: "start", loop: false }}
-          className='group/carousel mt-2 w-full'
-        >
-          <CarouselContent className='-ml-1'>
-            {sortedIntegrations.map((integration, i) => {
-              const hasIdentityForSurface = isMetaSurface(integration.platform)
-                ? identityBySurface.has(integration.platform)
-                : false;
-              const status = resolveStatus(
-                integration,
-                byPlatform.get(integration.platform),
-                hasIdentityForSurface
-              );
-              const isSoon = status === "soon";
-              return (
-                <CarouselItem
-                  key={integration.name}
-                  className='basis-[45%] sm:basis-[30%] lg:basis-[22%] p-1.5'
+        <div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
+          {pluginCards.map((integration) => {
+            const connections = byPlatform.get(integration.platform);
+            const hasIdentityForSurface = isMetaSurface(integration.platform)
+              ? identityBySurface.has(integration.platform)
+              : false;
+            const status = resolveStatus(
+              integration,
+              connections,
+              hasIdentityForSurface
+            );
+            const Icon = integration.icon;
+            const isManageable = status === "connected" || status === "partial";
+            const isSoon = status === "soon";
+            const statusLabel =
+              status === "connected"
+                ? "Connected"
+                : status === "partial"
+                  ? "Needs setup"
+                  : status === "soon"
+                    ? "Soon"
+                    : "Available";
+
+            return (
+              <article
+                key={integration.name}
+                className='rounded-2xl border border-white/10 bg-[#0c0c0c] p-4'
+              >
+                <div className='flex items-start justify-between gap-3'>
+                  <span className='flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/10'>
+                    <Icon className='h-5 w-5' />
+                  </span>
+                  <span
+                    className={[
+                      "rounded-full px-2.5 py-1 text-xs",
+                      isManageable
+                        ? "bg-sky-500/10 text-sky-200"
+                        : "bg-white/10 text-white/55",
+                    ].join(" ")}
+                  >
+                    {statusLabel}
+                  </span>
+                </div>
+                <h3 className='mt-4 font-semibold'>{integration.name}</h3>
+                <p className='mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-white/50'>
+                  {integration.description}
+                </p>
+                <button
+                  type='button'
+                  disabled={isSoon}
+                  onClick={() =>
+                    isManageable
+                      ? setManageFor(integration)
+                      : setConnectFor(integration)
+                  }
+                  className='mt-4 inline-flex h-9 w-full items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-sm text-white/75 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-45'
                 >
-                  <div className='group relative flex h-[164px] w-full flex-col justify-between overflow-hidden rounded-xl border border-zinc-200/50 bg-zinc-50/30 p-4 pb-[18px] shadow-xs transition-all duration-300 hover:border-zinc-300 dark:border-zinc-900/60 dark:bg-zinc-950/20 dark:hover:border-zinc-800'>
-                    {/* Glow background effect */}
-                    <div
-                      className="absolute -right-6 -top-6 h-14 w-14 rounded-full blur-xl opacity-15 transition-opacity duration-300 group-hover:opacity-30"
-                      style={{ backgroundColor: integration.glow || "rgba(113,113,122,0.4)" }}
-                    />
-                    
-                    <div className='relative z-10 flex h-full flex-col justify-between'>
-                      <div className='flex items-start justify-between'>
-                        <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl border border-zinc-200/60 bg-zinc-50 shadow-xs dark:border-zinc-800/80 dark:bg-zinc-950'>
-                          <integration.icon
-                            className={
-                              integration.name === "Shopify"
-                                ? "h-5 w-5 text-[#95BF47]"
-                                : "h-5 w-5 text-zinc-800 dark:text-zinc-200"
-                            }
-                          />
-                        </div>
-                        <div
-                          className={`flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-medium ${
-                            status === "connected"
-                              ? "border-emerald-50/20 bg-emerald-50/5 text-emerald-600 dark:text-emerald-400"
-                              : status === "partial"
-                                ? "border-amber-50/20 bg-amber-50/5 text-amber-600 dark:text-amber-400"
-                                : "border-zinc-200 bg-zinc-100 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-400"
-                          }`}
-                        >
-                          <div
-                            className={`h-1 w-1 rounded-full ${
-                              status === "connected"
-                                ? "bg-emerald-500"
-                                : status === "partial"
-                                  ? "bg-amber-500"
-                                  : "bg-zinc-400"
-                            }`}
-                          />
-                          {status === "connected"
-                            ? "Connected"
-                            : status === "partial"
-                              ? "Needs Setup"
-                              : status === "soon"
-                                ? "Coming Soon"
-                                : "Available"}
-                        </div>
-                      </div>
-
-                      <div className='mt-3 flex-1'>
-                        <h4 className='line-clamp-1 text-[13px] font-semibold tracking-tight text-zinc-900 dark:text-zinc-100'>
-                          {integration.name}
-                        </h4>
-                        <p className='mt-0.5 line-clamp-2 text-[11px] leading-snug text-zinc-500 dark:text-zinc-400'>
-                          {integration.description}
-                        </p>
-                      </div>
-
-                      <div className='mt-3 flex w-full items-center'>
-                        {status === "connected" || status === "partial" ? (
-                          <button
-                            type='button'
-                            onClick={() => setManageFor(integration)}
-                            className='h-7 w-full rounded-lg border border-zinc-200/80 bg-zinc-100 text-[10px] font-semibold text-zinc-900 transition-all hover:bg-zinc-200 active:scale-95 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800'
-                          >
-                            Manage
-                          </button>
-                        ) : (
-                          <button
-                            type='button'
-                            disabled={isSoon}
-                            onClick={() => setConnectFor(integration)}
-                            className={`h-7 w-full rounded-lg text-[10px] font-semibold transition-all ${
-                              isSoon
-                                ? "cursor-not-allowed border border-zinc-200 bg-zinc-100 text-zinc-400 select-none dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-500"
-                                : "dark:bg-zinc-850 border border-zinc-800 bg-zinc-900 text-white hover:bg-black active:scale-95 dark:border-zinc-700/60 dark:text-zinc-200 dark:hover:bg-zinc-800"
-                            }`}
-                          >
-                            {isSoon ? "Soon" : "Add"}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </CarouselItem>
-              );
-            })}
-          </CarouselContent>
-          <div className='mt-4 flex justify-end gap-1.5 opacity-0 transition-opacity duration-200 group-hover/carousel:opacity-100'>
-            <CarouselPrevious className='border-border/50 bg-background/50 hover:bg-background/80 static h-8 w-8 translate-y-0 rounded-full' />
-            <CarouselNext className='border-border/50 bg-background/50 hover:bg-background/80 static h-8 w-8 translate-y-0 rounded-full' />
-          </div>
-        </Carousel>
-      </div>
-
-      <HomeCommandCenter createRequest={postComposerRequest} />
+                  {isManageable ? "Manage" : isSoon ? "Coming soon" : "Add"}
+                </button>
+              </article>
+            );
+          })}
+        </div>
+      </section>
 
       <ConnectDialog
         open={Boolean(connectFor)}
-        onOpenChange={(o) => !o && setConnectFor(null)}
+        onOpenChange={(open) => !open && setConnectFor(null)}
         platform={connectFor?.platform ?? null}
         platformName={connectFor?.name ?? ""}
         platformDescription={connectFor?.description ?? ""}
         Icon={connectFor?.icon ?? (() => null)}
-        glow={connectFor?.glow ?? "rgba(113,113,122,0.4)"}
+        glow={connectFor?.glow ?? "rgba(96,165,250,0.5)"}
       />
 
       <ManageDialog
         open={Boolean(manageFor)}
-        onOpenChange={(o) => !o && setManageFor(null)}
+        onOpenChange={(open) => !open && setManageFor(null)}
         connections={manageConnections}
         platform={manageFor?.platform ?? null}
         platformName={manageFor?.name ?? ""}
         Icon={manageFor?.icon ?? (() => null)}
-        glow={manageFor?.glow ?? "rgba(113,113,122,0.4)"}
+        glow={manageFor?.glow ?? "rgba(96,165,250,0.5)"}
       />
     </div>
   );
