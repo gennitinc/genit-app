@@ -9,14 +9,11 @@ import {
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
-
 import {
   PostEditorDialog,
   type PostEditorForm,
 } from "@/app/visuals/_components/post-editor-dialog";
-
 import { Button } from "@/components/ui/button";
-
 import {
   Dialog,
   DialogContent,
@@ -25,16 +22,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { Input } from "@/components/ui/input";
-
 import {
   Select,
   SelectContent,
@@ -44,7 +38,6 @@ import {
 } from "@/components/ui/select";
 import { useIntegrations } from "@/hooks/use-integrations";
 import { useToast } from "@/hooks/use-toast";
-
 import {
   type FacebookPostSummary,
   type IntegrationConnection,
@@ -67,7 +60,6 @@ import {
   listYouTubeVideos,
   updateFacebookPost,
 } from "@/lib/integrations-api";
-
 import {
   type SocialPost,
   type SocialPostMedia,
@@ -79,11 +71,9 @@ import {
   publishSocialPosts,
   updateSocialPosts,
 } from "@/lib/social-posts-api";
-
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { GradientFrame } from "@/utils/gradient-frame";
-
 import {
   useInfiniteQuery,
   useMutation,
@@ -1015,43 +1005,38 @@ export default function PostsPage() {
   const chartHover = isDark ? "rgba(255,255,255,0.04)" : "rgba(79,70,229,0.08)";
 
   return (
-    <div className='animate-in fade-in flex w-full flex-col gap-6 pb-14 duration-500'>
-      <header className='relative overflow-hidden rounded-3xl border bg-black/[0.025] p-4 dark:bg-white/[0.04]'>
-        <img
-          src='https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg'
-          className='pointer-events-none absolute inset-0 h-full w-full object-cover select-none'
-          alt=''
-        />
-        <div className='relative grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-center'>
-          <div className='flex min-w-0 flex-col items-start justify-center py-1 lg:pl-6'>
+    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-[#070707] p-2 pb-14 text-white duration-500 lg:p-6' >
+      <header className='p-1'>
+        <div className='grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-center'>
+          <div className='flex min-w-0 flex-col items-start justify-center py-1'>
             <div>
               <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight text-white'>
                 Content workspace
               </h1>
-              <p className='mt-1 max-w-2xl text-sm leading-5 text-white/70'>
+              <p className='mt-1 max-w-2xl text-sm leading-5 text-white/55'>
                 Create, schedule, and publish posts across all your social
                 channels.
               </p>
             </div>
             <Button
               onClick={openCreate}
-              className='mt-4 flex h-9 w-fit items-center gap-2 rounded-sm bg-indigo-600 px-4 text-sm text-white hover:bg-indigo-500 disabled:opacity-50'
+              className='mt-4 flex h-9 w-fit items-center gap-2 rounded-xl px-4 text-sm disabled:opacity-50'
             >
               New Post <Plus className='h-4 w-4' />
             </Button>
           </div>
 
-          <div className='hidden rounded-2xl bg-white/95 p-4 shadow-sm ring-1 ring-black/5 sm:block dark:bg-zinc-950/95 dark:shadow-none dark:ring-white/10'>
-            <div className='flex items-center justify-between gap-3 border-b border-black/5 pb-3 dark:border-white/10'>
+          <div className='hidden rounded-2xl border border-white/10 bg-[#0c0c0c] p-4 sm:block'>
+            <div className='flex items-center justify-between gap-3 border-b border-white/10 pb-3'>
               <div className='flex min-w-0 items-center gap-3'>
-                <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-sm bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10'>
-                  <BarChart3 className='h-4 w-4' />
+                <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10'>
+                  <BarChart3 className='h-4 w-4 text-white/70' />
                 </div>
                 <div className='min-w-0'>
-                  <p className='text-foreground truncate text-sm font-medium dark:text-white'>
+                  <p className='truncate text-sm font-medium'>
                     Content overview
                   </p>
-                  <p className='text-muted-foreground truncate text-xs dark:text-white/50'>
+                  <p className='truncate text-xs text-white/50'>
                     {connected.length} connected channel
                     {connected.length === 1 ? "" : "s"}
                   </p>
@@ -1061,8 +1046,8 @@ export default function PostsPage() {
                 className={cn(
                   "inline-flex shrink-0 items-center gap-1.5 rounded-sm px-2.5 py-1 text-[11px] font-medium ring-1",
                   connected.length
-                    ? "bg-emerald-500/10 text-emerald-700 ring-emerald-500/15 dark:text-emerald-400"
-                    : "bg-black/5 text-zinc-600 ring-black/5 dark:bg-white/5 dark:text-white/60 dark:ring-white/10"
+                    ? "bg-emerald-500/10 text-emerald-300 ring-emerald-500/15"
+                    : "bg-white/10 text-white/60 ring-white/10"
                 )}
               >
                 <span
@@ -1087,14 +1072,10 @@ export default function PostsPage() {
               ].map((item) => (
                 <div
                   key={item.label}
-                  className='rounded-sm bg-black/[0.025] px-3 py-2.5 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'
+                  className='rounded-xl bg-white/[0.04] px-3 py-2.5 ring-1 ring-white/10'
                 >
-                  <p className='text-muted-foreground text-[11px] dark:text-white/50'>
-                    {item.label}
-                  </p>
-                  <p className='text-foreground mt-0.5 text-lg font-semibold dark:text-white'>
-                    {item.value}
-                  </p>
+                  <p className='text-[11px] text-white/50'>{item.label}</p>
+                  <p className='mt-0.5 text-lg font-semibold'>{item.value}</p>
                 </div>
               ))}
             </div>
@@ -1102,9 +1083,9 @@ export default function PostsPage() {
         </div>
       </header>
 
-      <section className='overflow-hidden rounded-xl border border-black/5 bg-black/[0.015] dark:border-white/10 dark:bg-white/[0.025]'>
-        <div className='flex flex-col gap-4 border-b border-black/5 p-2 md:flex-row md:items-center md:justify-between md:p-2 dark:border-white/10'>
-          <div className='inline-flex w-fit rounded-full bg-black/[0.04] p-1 dark:bg-white/[0.06]'>
+      <section className='overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035]'>
+        <div className='flex flex-col gap-4 border-b border-white/10 p-3 md:flex-row md:items-center md:justify-between'>
+          <div className='inline-flex w-fit rounded-xl bg-white/[0.06] p-1'>
             {(
               [
                 ["live", "Live posts", live.length],
@@ -1118,8 +1099,8 @@ export default function PostsPage() {
                 className={cn(
                   "rounded-full px-4 py-2 text-xs font-medium transition",
                   view === value
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-white text-black shadow-sm"
+                    : "text-white/55 hover:text-white"
                 )}
               >
                 {label} <span className='ml-1.5 opacity-60'>{count}</span>
@@ -1128,16 +1109,16 @@ export default function PostsPage() {
           </div>
           <div className='flex flex-col gap-2 sm:flex-row'>
             <div className='relative'>
-              <Search className='text-muted-foreground absolute top-2.5 left-3 h-4 w-4' />
+              <Search className='absolute top-2.5 left-3 h-4 w-4 text-white/45' />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder='Search posts'
-                className='rounded-full pl-9 sm:w-56'
+                className='rounded-xl border-white/10 bg-white/[0.04] pl-9 text-white placeholder:text-white/35 sm:w-56'
               />
             </div>
             <Select value={platformFilter} onValueChange={setPlatformFilter}>
-              <SelectTrigger className='rounded-full sm:w-40'>
+              <SelectTrigger className='rounded-xl border-white/10 bg-white/[0.04] text-white sm:w-40'>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -1153,7 +1134,7 @@ export default function PostsPage() {
               <Button
                 variant='outline'
                 size='icon'
-                className='rounded-full border-none bg-transparent'
+                className='rounded-xl border-white/10 bg-white/[0.04] text-white hover:bg-white/10'
                 onClick={() => liveQuery.refetch()}
                 aria-label='Refresh live posts'
               >
@@ -1172,18 +1153,18 @@ export default function PostsPage() {
         </div>
 
         {loading ? (
-          <div className='text-muted-foreground flex min-h-72 items-center justify-center'>
+          <div className='flex min-h-72 items-center justify-center text-white/50'>
             <LoadingFileLoader size={24} />
           </div>
         ) : visible.length === 0 ? (
           <div className='flex min-h-72 flex-col items-center justify-center px-6 text-center'>
-            <div className='flex h-12 w-12 items-center justify-center rounded-2xl bg-black/[0.04] dark:bg-white/[0.06]'>
+            <div className='flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.06]'>
               {view === "drafts" ? (
-                <FileText className='text-muted-foreground h-5 w-5' />
+                <FileText className='h-5 w-5 text-white/50' />
               ) : view === "scheduled" ? (
-                <CalendarClock className='text-muted-foreground h-5 w-5' />
+                <CalendarClock className='h-5 w-5 text-white/50' />
               ) : (
-                <BarChart3 className='text-muted-foreground h-5 w-5' />
+                <BarChart3 className='h-5 w-5 text-white/50' />
               )}
             </div>
             <p className='mt-4 font-medium'>
@@ -1193,7 +1174,7 @@ export default function PostsPage() {
                   ? "Nothing scheduled"
                   : "No live posts found"}
             </p>
-            <p className='text-muted-foreground mt-1 max-w-sm text-sm'>
+            <p className='mt-1 max-w-sm text-sm text-white/50'>
               {view === "drafts"
                 ? "Create a draft here, or generate content in chat and it will appear automatically."
                 : view === "scheduled"
@@ -1205,7 +1186,7 @@ export default function PostsPage() {
             {view !== "live" && (
               <Button
                 variant='outline'
-                className='mt-5 rounded-full'
+                className='mt-5 rounded-xl border-white/10 bg-white/[0.04] text-white hover:bg-white/10'
                 onClick={openCreate}
               >
                 <Plus className='mr-2 h-4 w-4' />
@@ -1218,7 +1199,7 @@ export default function PostsPage() {
             {visible.map((post) => (
               <article
                 key={post._id}
-                className='group bg-background relative mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-2xl border border-black/5 align-top transition hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10'
+                className='group relative mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-2xl border border-white/10 bg-[#0c0c0c] align-top transition hover:-translate-y-0.5 hover:bg-white/[0.05]'
               >
                 {(!post.remote ||
                   post.platform === "facebook" ||
@@ -1276,7 +1257,7 @@ export default function PostsPage() {
                         {post.status}
                       </span>
                       {post.accountName && (
-                        <span className='text-muted-foreground max-w-32 truncate text-[10px]'>
+                        <span className='max-w-32 truncate text-[10px] text-white/45'>
                           @{post.accountName}
                         </span>
                       )}
@@ -1290,18 +1271,18 @@ export default function PostsPage() {
                       />
                       {LABEL[post.platform]}
                     </span>
-                    <span className='text-muted-foreground text-[10px]'>
+                    <span className='text-[10px] text-white/45'>
                       {postDate(post)}
                     </span>
                   </div>
                   <h2 className='mt-3 line-clamp-1 text-sm font-semibold'>
                     {post.title || post.content || "Untitled post"}
                   </h2>
-                  <p className='text-muted-foreground mt-1 line-clamp-2 min-h-10 text-xs leading-5'>
+                  <p className='mt-1 line-clamp-2 min-h-10 text-xs leading-5 text-white/50'>
                     {post.content || "No caption yet"}
                   </p>
                   {view === "live" ? (
-                    <div className='mt-4 flex items-center justify-between gap-3 border-t border-black/5 pt-3 dark:border-white/10'>
+                    <div className='mt-4 flex items-center justify-between gap-3 border-t border-white/10 pt-3'>
                       <PostMetrics
                         metrics={liveMetricsById.get(post._id) || EMPTY_METRICS}
                         loading={loadingMetricIds.has(post._id)}
@@ -1309,7 +1290,7 @@ export default function PostsPage() {
                       <div className='flex items-center gap-3'>
                         <button
                           onClick={() => setAnalyticsPost(post)}
-                          className='flex items-center gap-1 text-[11px] font-semibold text-indigo-600 dark:text-indigo-400'
+                          className='flex items-center gap-1 text-[11px] font-semibold text-sky-300'
                         >
                           Analytics <BarChart3 className='h-3 w-3' />
                         </button>
@@ -1416,7 +1397,7 @@ export default function PostsPage() {
         >
           <DialogHeader className='relative border-b border-black/5 px-5 pt-4 pb-3 text-left dark:border-white/[0.05]'>
             <div className='flex items-center gap-2.5'>
-              <span className='flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600/10 text-indigo-400 ring-1 ring-indigo-500/20'>
+              <span className='flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500/10 text-sky-300 ring-1 ring-sky-500/20'>
                 <BarChart3 className='h-4 w-4' />
               </span>
               <div>
@@ -1593,10 +1574,7 @@ export default function PostsPage() {
               Refresh
             </Button>
             {analyticsPost?.permalink && (
-              <Button
-                asChild
-                className='rounded-md bg-indigo-600 font-medium text-white hover:bg-indigo-500'
-              >
+              <Button asChild className='rounded-md font-medium'>
                 <a
                   href={analyticsPost.permalink}
                   target='_blank'

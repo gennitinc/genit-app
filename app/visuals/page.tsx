@@ -8,6 +8,7 @@ import {
   type Integration,
   resolveStatus,
 } from "@/app/integrations/integrations-explorer";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
@@ -33,6 +34,8 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -48,12 +51,6 @@ function isoDate(date: Date) {
 
 function dateFromIso(value: string) {
   return new Date(`${value}T12:00:00`);
-}
-
-function countDone(values: unknown[]) {
-  return values.filter((value) =>
-    Array.isArray(value) ? value.length > 0 : Boolean(value)
-  ).length;
 }
 
 function prettyDateRange(from: string, to: string) {
@@ -148,7 +145,7 @@ function DateRangeMonth({
 export default function VisualsHomePage() {
   const today = useMemo(() => new Date(), []);
   const [from, setFrom] = useState(() =>
-    isoDate(new Date(Date.now() - dayMs * 6))
+    isoDate(new Date(Date.now() - dayMs * 29))
   );
   const [to, setTo] = useState(() => isoDate(today));
   const [isPickingRangeEnd, setIsPickingRangeEnd] = useState(false);
@@ -225,34 +222,17 @@ export default function VisualsHomePage() {
       (post.metrics?.clicks || 0),
     0
   );
-  const completedFields = countDone([
-    current?.businessName,
-    current?.businessLogo,
-    current?.businessBio || current?.businessDescription,
-    current?.businessWebsite,
-    current?.industry || current?.businessCategory,
-    current?.country,
-    current?.language,
-    current?.brandColors,
-    current?.primaryColor,
-    current?.fontHeadline,
-    current?.fontBody,
-    current?.mission,
-    current?.vision,
-    current?.values,
-    current?.voiceTone,
-    current?.socialMediaUrls,
-  ]);
-  const profileScore = Math.round((completedFields / 16) * 100);
-
   const activityData = useMemo(() => {
-    return Array.from({ length: 7 }, (_, index) => {
-      const date = new Date(dateFromIso(to).getTime() - dayMs * (6 - index));
+    const days =
+      Math.round((rangeEnd.getTime() - rangeStart.getTime()) / dayMs) + 1;
+    return Array.from({ length: Math.max(1, days) }, (_, index) => {
+      const date = new Date(rangeStart.getTime() + dayMs * index);
       const key = isoDate(date);
-      const dayPosts = posts.filter((post) =>
-        (post.publishedAt || post.scheduledFor || post.createdAt).startsWith(
-          key
-        )
+      const dayPosts = filteredPosts.filter(
+        (post) =>
+          isoDate(
+            new Date(post.publishedAt || post.scheduledFor || post.createdAt)
+          ) === key
       );
       return {
         name: date.toLocaleDateString("en-US", {
@@ -262,9 +242,21 @@ export default function VisualsHomePage() {
         Drafted: dayPosts.filter((post) => post.status === "draft").length,
         Published: dayPosts.filter((post) => post.status === "published")
           .length,
+        Projects: new Set(dayPosts.map((post) => post.project).filter(Boolean))
+          .size,
+        Channels: connectedChannels,
+        Engagement: dayPosts.reduce(
+          (sum, post) =>
+            sum +
+            (post.metrics?.likes || 0) +
+            (post.metrics?.comments || 0) +
+            (post.metrics?.shares || 0) +
+            (post.metrics?.clicks || 0),
+          0
+        ),
       };
     });
-  }, [posts, to]);
+  }, [connectedChannels, filteredPosts, rangeEnd, rangeStart]);
 
   const connectedIntegrations = useMemo(() => {
     return INTEGRATIONS.filter((integration) => {
@@ -308,6 +300,7 @@ export default function VisualsHomePage() {
       value: filteredPosts.filter((post) => post.status === "draft").length,
       detail: "In selected range",
       Icon: PenLine,
+      dataKey: "Drafted",
       color: "#60a5fa",
     },
     {
@@ -315,13 +308,7 @@ export default function VisualsHomePage() {
       value: activeProjects,
       detail: "With content activity",
       Icon: Folder,
-      color: "#60a5fa",
-    },
-    {
-      label: "Connected channels",
-      value: connectedChannels,
-      detail: "Ready to publish",
-      Icon: Layers3,
+      dataKey: "Projects",
       color: "#60a5fa",
     },
     {
@@ -329,12 +316,29 @@ export default function VisualsHomePage() {
       value: totalEngagement,
       detail: "Likes, replies, shares, clicks",
       Icon: BarChart3,
+      dataKey: "Engagement",
+      color: "#60a5fa",
+    },
+    {
+      label: "Channels",
+      value: connectedChannels,
+      detail: "Ready to publish",
+      Icon: Layers3,
+      dataKey: "Channels",
       color: "#60a5fa",
     },
   ];
 
+  const chartTooltipStyle = {
+    background: "#080808",
+    border: "1px solid rgba(255,255,255,.12)",
+    borderRadius: 10,
+    color: "#fff",
+    fontSize: 12,
+  };
+
   return (
-    <div className='min-h-[calc(100dvh-7rem)] rounded-2xl bg-[#070707] p-4 text-white sm:p-6'>
+    <div className='min-h-[calc(100dvh-7rem)] rounded-2xl bg-[#070707] p-2 text-white lg:p-6'>
       <div className='mb-8 flex flex-col gap-4 md:flex-row md:items-start md:justify-between'>
         <div>
           <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight sm:text-3xl'>
@@ -423,31 +427,66 @@ export default function VisualsHomePage() {
         </Popover>
       </div>
 
-      <div className='grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
-        {statCards.map(({ label, value, detail, Icon, color }) => (
+      <div className='grid grid-cols-2 gap-3 xl:grid-cols-4'>
+        {statCards.map(({ label, value, detail, Icon, dataKey, color }) => (
           <section
             key={label}
-            className='rounded-2xl border border-white/10 bg-white/[0.035] p-4'
+            className='rounded-2xl border border-white/10 bg-white/[0.035] p-3.5'
           >
             <div className='flex items-start justify-between gap-3'>
               <div>
-                <p className='text-sm text-white/60'>{label}</p>
-                <p className='mt-1 text-3xl font-semibold'>{value}</p>
+                <p className='text-xs font-medium text-white/55'>{label}</p>
+                <p className='mt-1 text-xl leading-none font-semibold'>
+                  {value}
+                </p>
               </div>
-              <span className='flex h-9 w-9 items-center justify-center rounded-xl bg-white/10'>
-                <Icon className='h-4 w-4 text-white/70' />
+              <span className='flex h-8 w-8 items-center justify-center rounded-xl bg-white/10'>
+                <Icon className='h-3.5 w-3.5 text-white/70' />
               </span>
             </div>
-            <div className='mt-12 h-0.5 rounded-full bg-white/10'>
-              <div
-                className='h-full rounded-full'
-                style={{
-                  width: `${Math.min(100, Number(value) * 12 || profileScore)}%`,
-                  background: color,
-                }}
-              />
+            <div className='mt-3 h-14'>
+              {dataKey === "Channels" || value === 0 ? (
+                <div
+                  className='flex h-full items-end pb-1'
+                  title={`${label}: ${value}`}
+                >
+                  <div
+                    className='h-0.5 w-full rounded-full'
+                    style={{ background: color }}
+                  />
+                </div>
+              ) : (
+                <ResponsiveContainer width='100%' height='100%'>
+                  <LineChart
+                    data={activityData}
+                    margin={{ top: 4, right: 2, bottom: 2, left: 2 }}
+                  >
+                    <YAxis
+                      hide
+                      domain={[
+                        0,
+                        (dataMax: number) => Math.max(10, dataMax * 1.4),
+                      ]}
+                    />
+                    <Tooltip
+                      contentStyle={chartTooltipStyle}
+                      labelStyle={{ color: "#fff", fontSize: 12 }}
+                      itemStyle={{ color: "#fff", fontSize: 12 }}
+                      cursor={{ stroke: "rgba(255,255,255,.14)" }}
+                    />
+                    <Line
+                      type='monotone'
+                      dataKey={dataKey}
+                      stroke={color}
+                      strokeWidth={2}
+                      dot={false}
+                      isAnimationActive={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
             </div>
-            <p className='mt-3 text-xs text-white/45'>{detail}</p>
+            <p className='mt-2 text-[11px] text-white/42'>{detail}</p>
           </section>
         ))}
       </div>
@@ -458,7 +497,7 @@ export default function VisualsHomePage() {
             <div>
               <h2 className='text-base font-semibold'>Content activity</h2>
               <p className='mt-1 text-sm text-white/55'>
-                Posts drafted vs posts published, last 7 days
+                Posts drafted vs posts published in selected range
               </p>
             </div>
           </div>
@@ -496,23 +535,21 @@ export default function VisualsHomePage() {
                 />
                 <XAxis
                   dataKey='name'
-                  tick={{ fill: "rgba(255,255,255,.42)", fontSize: 12 }}
+                  tick={{ fill: "rgba(255,255,255,.38)", fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <YAxis
-                  tick={{ fill: "rgba(255,255,255,.42)", fontSize: 12 }}
+                  tick={{ fill: "rgba(255,255,255,.38)", fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
                   allowDecimals={false}
                 />
                 <Tooltip
-                  contentStyle={{
-                    background: "#080808",
-                    border: "1px solid rgba(255,255,255,.12)",
-                    borderRadius: 10,
-                  }}
-                  labelStyle={{ color: "#fff" }}
+                  contentStyle={chartTooltipStyle}
+                  labelStyle={{ color: "#fff", fontSize: 12 }}
+                  itemStyle={{ color: "#fff", fontSize: 12 }}
+                  cursor={{ stroke: "rgba(255,255,255,.12)" }}
                 />
                 <Area
                   type='monotone'
@@ -533,13 +570,13 @@ export default function VisualsHomePage() {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          <div className='flex items-center justify-center gap-2 text-sm text-white/70'>
+          <div className='flex items-center justify-center gap-2 text-xs text-white/65'>
             <span className='flex items-center gap-2'>
-              <span className='h-2.5 w-2.5 rounded-sm bg-slate-400' />
+              <span className='h-2 w-2 rounded-sm bg-slate-400' />
               Drafted
             </span>
             <span className='flex items-center gap-2'>
-              <span className='h-2.5 w-2.5 rounded-sm bg-sky-400' />
+              <span className='h-2 w-2 rounded-sm bg-sky-400' />
               Published
             </span>
           </div>
@@ -609,7 +646,7 @@ export default function VisualsHomePage() {
                 <p className='mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-white/50'>
                   {integration.description}
                 </p>
-                <button
+                <Button
                   type='button'
                   disabled={isSoon}
                   onClick={() =>
@@ -617,10 +654,11 @@ export default function VisualsHomePage() {
                       ? setManageFor(integration)
                       : setConnectFor(integration)
                   }
-                  className='mt-4 inline-flex h-9 w-full items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-sm text-white/75 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-45'
+                  variant={isManageable ? "outline" : "default"}
+                  className='mt-4 w-full rounded-xl disabled:cursor-not-allowed'
                 >
                   {isManageable ? "Manage" : isSoon ? "Coming soon" : "Add"}
-                </button>
+                </Button>
               </article>
             );
           })}

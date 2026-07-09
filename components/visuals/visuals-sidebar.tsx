@@ -2,21 +2,12 @@
 
 import { OrgSwitcher } from "@/components/layout/org-switcher";
 import {
-  BarChart,
-  CalendarDays,
   CalendarFold,
-  CircleFadingArrowUp,
-  FileText,
   FolderSync,
   Home,
   Inbox,
   Layers,
   Library,
-  MessageSquare,
-  MessagesSquare,
-  Sparkles,
-  Turntable,
-  Zap,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -38,7 +29,7 @@ const CATEGORIES = [
   },
   {
     id: "posts",
-    label: "Post & Analytics",
+    label: "Posts",
     icon: Layers,
     href: "/visuals/posts",
   },
@@ -49,12 +40,6 @@ const CATEGORIES = [
     icon: FolderSync,
     href: "/visuals/automation",
   },
-  // {
-  //   id: "summary",
-  //   label: "Summary and Report",
-  //   icon: BarChart,
-  //   href: "/visuals/summary",
-  // },
 ];
 
 export function VisualsSidebar() {
@@ -82,7 +67,7 @@ export function VisualsSidebar() {
               }`}
             >
               <cat.icon
-                className={`h-4 w-4 ${isActive ? "text-indigo-500 dark:text-indigo-400" : ""}`}
+                className={`h-4 w-4 ${isActive ? "text-sky-500 dark:text-sky-300" : ""}`}
               />
               {cat.label}
             </Link>

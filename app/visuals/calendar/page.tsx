@@ -337,38 +337,33 @@ export default function CalendarPage() {
   const eventCount = eventsQuery.data?.events.length || 0;
 
   return (
-    <div className='animate-in fade-in flex w-full flex-col gap-5 duration-500'>
-      <section className='relative overflow-hidden rounded-3xl border p-4'>
-        <img
-          src='https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg'
-          className='pointer-events-none absolute inset-0 h-full w-full object-cover select-none'
-          alt=''
-        />
-        <div className='relative grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-stretch'>
-          <div className='flex min-w-0 flex-col justify-end py-1 lg:pl-6'>
+    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-[#070707] p-2 text-white duration-500 lg:p-6'>
+      <section className='p-1'>
+        <div className='grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-stretch'>
+          <div className='flex min-w-0 flex-col justify-end py-1'>
             <div>
               <h3 className='font-instrument-serif text-2xl font-semibold tracking-tight text-white md:text-3xl'>
                 Brand Events
               </h3>
-              <p className='text-muted-foreground mt-1 text-sm'>
+              <p className='mt-1 text-sm text-white/55'>
                 Plan your work and keep every Google Calendar event in sync.
               </p>
             </div>
 
             <div className='mt-4 flex flex-wrap items-center gap-2'>
               <div className='relative min-w-56 flex-1 sm:flex-none'>
-                <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+                <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-white/45' />
                 <input
                   type='search'
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   placeholder='Search events'
-                  className='border-border/70 bg-background h-10 w-full rounded-sm border pr-3 pl-9 text-sm shadow-sm transition outline-none focus:border-indigo-400 focus:ring-3 focus:ring-indigo-500/10 sm:w-64'
+                  className='h-10 w-full rounded-xl border border-white/10 bg-white/[0.04] pr-3 pl-9 text-sm text-white transition outline-none placeholder:text-white/35 focus:border-sky-400/60 sm:w-64'
                 />
               </div>
               {activeConnection ? (
                 <Button
-                  className='my-2 rounded-sm bg-indigo-600 px-4 text-white hover:bg-indigo-700'
+                  className='my-2 rounded-xl px-4'
                   onClick={openCreateEvent}
                 >
                   New event
@@ -376,7 +371,7 @@ export default function CalendarPage() {
                 </Button>
               ) : (
                 <Button
-                  className='h-10 rounded-sm'
+                  className='h-10 rounded-xl px-4'
                   onClick={handleConnectCalendar}
                 >
                   <GoogleCalendarBrand />
@@ -386,17 +381,17 @@ export default function CalendarPage() {
             </div>
           </div>
 
-          <div className='hidden rounded-2xl bg-white/95 p-4 shadow-sm ring-1 ring-black/5 sm:block sm:p-5 dark:bg-zinc-950/95 dark:shadow-none dark:ring-white/10'>
-            <div className='flex items-center justify-between gap-3 border-b border-black/5 pb-4 dark:border-white/10'>
+          <div className='hidden rounded-2xl border border-white/10 bg-[#0c0c0c] p-4 sm:block sm:p-5'>
+            <div className='flex items-center justify-between gap-3 border-b border-white/10 pb-4'>
               <div className='flex min-w-0 items-center gap-3'>
-                <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-sm bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10'>
-                  <CalendarDays className='h-4 w-4' />
+                <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10'>
+                  <CalendarDays className='h-4 w-4 text-white/70' />
                 </div>
                 <div className='min-w-0'>
-                  <p className='text-foreground truncate text-sm font-medium dark:text-white'>
+                  <p className='truncate text-sm font-medium'>
                     Google Calendar
                   </p>
-                  <p className='text-muted-foreground truncate text-xs dark:text-white/50'>
+                  <p className='truncate text-xs text-white/50'>
                     {activeConnection?.accountName || "Not connected"}
                   </p>
                 </div>
@@ -404,8 +399,8 @@ export default function CalendarPage() {
               <span
                 className={`inline-flex shrink-0 items-center gap-1.5 rounded-sm px-2.5 py-1 text-[11px] font-medium ring-1 ${
                   activeConnection
-                    ? "bg-emerald-500/10 text-emerald-700 ring-emerald-500/15 dark:text-emerald-400"
-                    : "bg-black/5 text-zinc-600 ring-black/5 dark:bg-white/5 dark:text-white/60 dark:ring-white/10"
+                    ? "bg-emerald-500/10 text-emerald-300 ring-emerald-500/15"
+                    : "bg-white/10 text-white/60 ring-white/10"
                 }`}
               >
                 <span
@@ -418,19 +413,13 @@ export default function CalendarPage() {
             </div>
 
             <div className='mt-4 grid grid-cols-2 gap-3'>
-              <div className='rounded-sm bg-black/[0.025] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
-                <p className='text-muted-foreground text-[11px] dark:text-white/50'>
-                  Events in view
-                </p>
-                <p className='text-foreground mt-1 text-xl font-semibold dark:text-white'>
-                  {eventCount}
-                </p>
+              <div className='rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10'>
+                <p className='text-[11px] text-white/50'>Events in view</p>
+                <p className='mt-1 text-xl font-semibold'>{eventCount}</p>
               </div>
-              <div className='rounded-sm bg-black/[0.025] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
-                <p className='text-muted-foreground text-[11px] dark:text-white/50'>
-                  Current view
-                </p>
-                <p className='text-foreground mt-1 truncate text-sm font-semibold dark:text-white'>
+              <div className='rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10'>
+                <p className='text-[11px] text-white/50'>Current view</p>
+                <p className='mt-1 truncate text-sm font-semibold'>
                   {VIEW_OPTIONS.find((option) => option.value === currentView)
                     ?.label || "Month"}
                 </p>
@@ -440,18 +429,18 @@ export default function CalendarPage() {
         </div>
       </section>
 
-      <section className='calendar-shell overflow-hidden rounded-xl border border-black/5 bg-white shadow-[0_16px_50px_-30px_rgba(15,23,42,0.25)] dark:border-white/10 dark:bg-zinc-950'>
-        <div className='grid gap-3 border-b border-zinc-200/80 p-3 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-4 dark:border-white/10'>
+      <section className='calendar-shell overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035]'>
+        <div className='grid gap-3 border-b border-white/10 p-3 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-4'>
           <div className='flex min-w-0 items-center gap-2'>
-            <div className='flex rounded-sm bg-zinc-100 p-1 dark:bg-white/[0.06]'>
+            <div className='flex rounded-xl bg-white/[0.06] p-1'>
               {VIEW_OPTIONS.map((option) => (
                 <button
                   key={option.value}
                   onClick={() => changeView(option.value)}
                   className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
                     currentView === option.value
-                      ? "bg-white text-zinc-950 shadow-sm dark:bg-zinc-800 dark:text-white"
-                      : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
+                      ? "bg-white text-black shadow-sm"
+                      : "text-white/55 hover:text-white"
                   }`}
                 >
                   {option.label}
@@ -468,7 +457,7 @@ export default function CalendarPage() {
                   }
                   disabled={calendarsQuery.isLoading}
                   aria-label='Google calendar'
-                  className='h-9 max-w-48 appearance-none truncate rounded-lg border border-zinc-200 bg-white py-1 pr-8 pl-3 text-sm font-medium outline-none dark:border-white/10 dark:bg-zinc-900'
+                  className='h-9 max-w-48 appearance-none truncate rounded-lg border border-white/10 bg-[#0c0c0c] py-1 pr-8 pl-3 text-sm font-medium text-white outline-none'
                 >
                   <option value='primary'>Primary calendar</option>
                   {(calendarsQuery.data || [])
@@ -491,32 +480,30 @@ export default function CalendarPage() {
             <button
               onClick={() => calendarApi()?.prev()}
               aria-label='Previous date range'
-              className='rounded-lg p-2 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-950 dark:hover:bg-white/10 dark:hover:text-white'
+              className='rounded-lg p-2 text-white/50 transition hover:bg-white/10 hover:text-white'
             >
               <ChevronLeft className='h-4 w-4' />
             </button>
             <button
               onClick={() => calendarApi()?.setOption("date", new Date())}
-              className='min-w-44 rounded-lg px-3 py-2 text-center text-base font-semibold tracking-tight hover:bg-zinc-50 dark:hover:bg-white/[0.05]'
+              className='min-w-44 rounded-lg px-3 py-2 text-center text-base font-semibold tracking-tight hover:bg-white/[0.06]'
             >
               {calendarTitle}
             </button>
             <button
               onClick={() => calendarApi()?.next()}
               aria-label='Next date range'
-              className='rounded-lg p-2 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-950 dark:hover:bg-white/10 dark:hover:text-white'
+              className='rounded-lg p-2 text-white/50 transition hover:bg-white/10 hover:text-white'
             >
               <ChevronRight className='h-4 w-4' />
             </button>
           </div>
 
           <div className='flex items-center justify-between gap-2 lg:justify-end'>
-            <span className='text-muted-foreground text-xs'>
-              {eventCount} events
-            </span>
+            <span className='text-xs text-white/50'>{eventCount} events</span>
             <button
               onClick={() => calendarApi()?.setOption("date", new Date())}
-              className='rounded-lg border border-zinc-200 px-3 py-1.5 text-sm font-medium shadow-sm transition hover:bg-zinc-50 dark:border-white/10 dark:hover:bg-white/[0.05]'
+              className='rounded-lg border border-white/10 px-3 py-1.5 text-sm font-medium transition hover:bg-white/[0.06]'
             >
               Today
             </button>
@@ -535,11 +522,11 @@ export default function CalendarPage() {
         </div>
 
         {activeConnection && (
-          <div className='border-b border-zinc-200/80 px-3 py-2 sm:hidden dark:border-white/10'>
+          <div className='border-b border-white/10 px-3 py-2 sm:hidden'>
             <select
               value={selectedCalendarId}
               onChange={(event) => setSelectedCalendarId(event.target.value)}
-              className='w-full rounded-lg bg-zinc-100 px-3 py-2 text-sm dark:bg-white/[0.06]'
+              className='w-full rounded-lg bg-white/[0.06] px-3 py-2 text-sm text-white'
             >
               <option value='primary'>Primary calendar</option>
               {(calendarsQuery.data || [])
@@ -576,16 +563,16 @@ export default function CalendarPage() {
           )}
 
           {!integrationsLoading && !activeConnection && (
-            <div className='absolute inset-0 z-20 flex items-center justify-center bg-white/55 p-5 text-center backdrop-blur-[2px] dark:bg-zinc-950/55'>
-              <div className='relative w-full max-w-sm overflow-hidden rounded-3xl bg-white/95 p-6 shadow-sm ring-1 ring-black/5 dark:bg-zinc-950/95 dark:ring-white/10'>
+            <div className='absolute inset-0 z-20 flex items-center justify-center bg-black/55 p-5 text-center backdrop-blur-[2px]'>
+              <div className='relative w-full max-w-sm overflow-hidden rounded-2xl bg-[#0c0c0c] p-6 ring-1 ring-white/10'>
                 <h3 className='relative text-lg font-semibold'>
                   Bring your schedule into Genit
                 </h3>
-                <p className='text-muted-foreground relative mt-1 mb-5 text-sm'>
+                <p className='relative mt-1 mb-5 text-sm text-white/55'>
                   Connect Google Calendar to create, edit, and manage events.
                 </p>
                 <Button
-                  className='relative rounded-sm bg-black text-white hover:bg-black/80 dark:bg-white dark:text-black'
+                  className='relative rounded-xl'
                   onClick={handleConnectCalendar}
                 >
                   <GoogleCalendarBrand />
@@ -608,7 +595,7 @@ export default function CalendarPage() {
           )}
         </div>
 
-        <footer className='flex flex-wrap items-center justify-between gap-2 border-t border-zinc-200/80 px-4 py-3 text-xs text-zinc-500 dark:border-white/10'>
+        <footer className='flex flex-wrap items-center justify-between gap-2 border-t border-white/10 px-4 py-3 text-xs text-white/45'>
           <span>
             {activeConnection
               ? `Synced with ${activeConnection.accountName}`

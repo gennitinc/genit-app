@@ -30,7 +30,6 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import { GradientFrame } from "@/utils/gradient-frame";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -469,88 +468,60 @@ export default function AutomationPage() {
   ).length;
 
   return (
-    <div className='animate-in fade-in slide-in-from-bottom-4 flex w-full flex-col gap-6 duration-500'>
-      {/* Inline styles for pipeline flow animation */}
-      {/* <style
-        dangerouslySetInnerHTML={{
-          __html: `
-          @keyframes flow-line-anim {
-            0% { left: 0%; opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { left: 100%; opacity: 0; }
-          }
-          .animate-flow-line {
-            animation: flow-line-anim 2.5s linear infinite;
-          }
-          .no-scrollbar::-webkit-scrollbar {
-            display: none;
-          }
-          .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-        `,
-        }}
-      /> */}
+    <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-[#070707] p-2 text-white duration-500 lg:p-6'>
 
-      <section className='relative overflow-hidden rounded-3xl border p-4 md:p-6'>
-        <img
-          src='https://i.pinimg.com/1200x/d3/fb/28/d3fb286b8631f66116718fdc97b1d6bf.jpg'
-          className='pointer-events-none absolute inset-0 h-full w-full object-cover select-none'
-          alt=''
-        />
-        <div className='relative z-10 grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] lg:items-center'>
-          <div className='flex min-w-0 flex-col items-start justify-center py-1 lg:pl-6'>
+
+      <section className='p-1'>
+        <div className='grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] lg:items-center'>
+          <div className='flex min-w-0 flex-col items-start justify-center py-1'>
             <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight text-white md:text-3xl'>
               Brand automations
             </h1>
-            <p className='mt-1 max-w-xl text-sm leading-5 text-white/70'>
+            <p className='mt-1 max-w-xl text-sm leading-5 text-white/55'>
               Build, monitor, and manage every workflow running for your brand.
             </p>
             <div className='mt-4 flex w-full max-w-xl items-center gap-2'>
               <div className='relative min-w-0 flex-1 sm:max-w-64'>
-                <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-white/55' />
+                <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-white/45' />
                 <Input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder='Search automations'
-                  className='h-9 border-white/15 bg-black/25 pl-9 text-white placeholder:text-white/45 focus-visible:ring-indigo-400'
+                  className='h-9 rounded-xl border-white/10 bg-white/[0.04] pl-9 text-white placeholder:text-white/35 focus-visible:ring-sky-400/30'
                 />
               </div>
               <Button
                 onClick={() => handleCreate()}
                 disabled={creating}
-                className='h-9 shrink-0 gap-2 rounded-sm bg-indigo-600 px-4 text-white hover:bg-indigo-700'
+                className='h-9 shrink-0 gap-2 rounded-xl px-4'
               >
                 {creating ? (
                   <LoadingFileLoader size={16} />
                 ) : (
                   <Plus className='h-4 w-4' />
                 )}
-                <span className='hidden sm:inline'>New automation</span>
-                <span className='sm:hidden'>New</span>
+                <span className=''>New </span>
               </Button>
             </div>
           </div>
 
           <div className='flex min-w-0 flex-col gap-3'>
-            <div className='hidden rounded-2xl bg-white/95 p-4 shadow-sm ring-1 ring-black/5 sm:block dark:bg-zinc-950/95 dark:shadow-none dark:ring-white/10'>
-              <div className='flex items-center justify-between gap-3 border-b border-black/5 pb-3 dark:border-white/10'>
+            <div className='hidden rounded-2xl border border-white/10 bg-[#0c0c0c] p-4 sm:block'>
+              <div className='flex items-center justify-between gap-3 border-b border-white/10 pb-3'>
                 <div className='flex min-w-0 items-center gap-3'>
-                  <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-sm bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10'>
-                    <Workflow className='h-4 w-4' />
+                  <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10'>
+                    <Workflow className='h-4 w-4 text-white/70' />
                   </div>
                   <div className='min-w-0'>
                     <p className='truncate text-sm font-medium'>
                       Automation overview
                     </p>
-                    <p className='text-muted-foreground truncate text-xs'>
+                    <p className='truncate text-xs text-white/50'>
                       Live workflow status
                     </p>
                   </div>
                 </div>
-                <span className='inline-flex shrink-0 items-center gap-1.5 rounded-sm bg-emerald-500/10 px-2.5 py-1 text-[11px] font-medium text-emerald-700 ring-1 ring-emerald-500/15 dark:text-emerald-400'>
+                <span className='inline-flex shrink-0 items-center gap-1.5 rounded-sm bg-emerald-500/10 px-2.5 py-1 text-[11px] font-medium text-emerald-300 ring-1 ring-emerald-500/15'>
                   <span className='h-1.5 w-1.5 rounded-sm bg-emerald-500' />
                   {activeCount} active
                 </span>
@@ -563,9 +534,9 @@ export default function AutomationPage() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className='rounded-sm bg-black/[0.025] px-3 py-2.5 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'
+                    className='rounded-xl bg-white/[0.04] px-3 py-2.5 ring-1 ring-white/10'
                   >
-                    <p className='text-muted-foreground truncate text-[11px]'>
+                    <p className='truncate text-[11px] text-white/50'>
                       {item.label}
                     </p>
                     <p className='mt-0.5 text-lg font-semibold'>{item.value}</p>
@@ -578,20 +549,20 @@ export default function AutomationPage() {
       </section>
 
       {loading ? (
-        <div className='flex min-h-64 items-center justify-center rounded-3xl border border-dashed border-neutral-200 bg-black/[0.01] dark:border-zinc-800 dark:bg-white/[0.01]'>
-          <div className='flex items-center gap-2.5 text-sm font-medium text-neutral-500 dark:text-neutral-400'>
+        <div className='flex min-h-64 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.035]'>
+          <div className='flex items-center gap-2.5 text-sm font-medium text-white/50'>
             <LoadingFileLoader />
           </div>
         </div>
       ) : visibleAutomations.length === 0 ? (
-        <div className='flex min-h-72 flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-200 bg-white px-6 py-10 text-center dark:border-zinc-800 dark:bg-zinc-900/60'>
-          <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-neutral-200 bg-neutral-50 text-neutral-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-neutral-400'>
+        <div className='flex min-h-72 flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.035] px-6 py-10 text-center'>
+          <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white/[0.06] text-white/50'>
             <Workflow className='h-5 w-5' />
           </div>
-          <h2 className='text-sm font-semibold text-neutral-900 dark:text-white'>
+          <h2 className='text-sm font-semibold'>
             {query ? "No automations found" : "Build your first automation"}
           </h2>
-          <p className='mt-1.5 max-w-sm text-xs leading-relaxed text-neutral-500 dark:text-neutral-400'>
+          <p className='mt-1.5 max-w-sm text-xs leading-relaxed text-white/50'>
             {query
               ? "Try another search term."
               : "Describe what you want to automate in chat and Genit will help you build it."}
@@ -600,7 +571,7 @@ export default function AutomationPage() {
             <Button
               onClick={() => handleCreate()}
               disabled={creating}
-              className='mt-5 gap-2 bg-neutral-900 px-5 text-xs text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200'
+              className='mt-5 gap-2 rounded-xl px-5 text-xs'
             >
               {creating ? (
                 <LoadingFileLoader size={16} />
@@ -625,7 +596,7 @@ export default function AutomationPage() {
             return (
               <article
                 key={automation._id}
-                className='group flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 transition-colors duration-200 hover:border-neutral-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700'
+                className='group flex flex-col rounded-2xl border border-white/10 bg-white/[0.035] p-5 transition-colors duration-200 hover:bg-white/[0.055]'
               >
                 {/* Header: status + actions */}
                 <div className='mb-3 flex items-center justify-between gap-3'>
@@ -633,8 +604,8 @@ export default function AutomationPage() {
                     <span
                       className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[10px] font-medium ${
                         automation.enabled
-                          ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400"
-                          : "bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400"
+                          ? "bg-emerald-500/10 text-emerald-300"
+                          : "bg-white/10 text-white/50"
                       }`}
                     >
                       <span
@@ -642,24 +613,24 @@ export default function AutomationPage() {
                       />
                       {automation.enabled ? "Active" : "Paused"}
                     </span>
-                    <span className='text-[10px] text-neutral-400 dark:text-neutral-500'>
+                    <span className='text-[10px] text-white/40'>
                       {relativeDate(automation.updatedAt)}
                     </span>
                   </div>
                 </div>
 
                 {/* Title */}
-                <h2 className='mb-1 line-clamp-2 text-sm font-semibold text-neutral-900 dark:text-white'>
+                <h2 className='mb-1 line-clamp-2 text-sm font-semibold'>
                   {title}
                 </h2>
-                <p className='text-[11px] text-neutral-400 dark:text-neutral-500'>
+                <p className='text-[11px] text-white/45'>
                   {nodeCount} {nodeCount === 1 ? "step" : "steps"}
                 </p>
 
                 {/* Pipeline preview */}
                 <div className='mt-3 flex-1'>
                   {pipeline.length > 0 ? (
-                    <div className='no-scrollbar flex items-center gap-1 overflow-x-auto rounded-lg border border-neutral-100 bg-neutral-50/80 px-2.5 py-2 dark:border-zinc-800 dark:bg-zinc-800/50'>
+                    <div className='no-scrollbar flex items-center gap-1 overflow-x-auto rounded-xl border border-white/10 bg-[#0c0c0c] px-2.5 py-2'>
                       {pipeline.map((node, i) => {
                         const { IconComponent, label } =
                           getNodeIconAndName(node);
@@ -673,16 +644,16 @@ export default function AutomationPage() {
                             <div className='flex shrink-0 flex-col items-center gap-0.5'>
                               <div
                                 title={label}
-                                className='flex h-7 w-7 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-neutral-300'
+                                className='flex h-7 w-7 items-center justify-center rounded-lg bg-white/10 text-white/70'
                               >
                                 <IconComponent className='h-3.5 w-3.5' />
                               </div>
-                              <span className='max-w-[48px] truncate text-center text-[8px] text-neutral-400 dark:text-neutral-500'>
+                              <span className='max-w-[48px] truncate text-center text-[8px] text-white/40'>
                                 {label}
                               </span>
                             </div>
                             {!isLast && (
-                              <div className='relative mx-1 h-px w-4 shrink-0 bg-neutral-200 dark:bg-zinc-700'>
+                              <div className='relative mx-1 h-px w-4 shrink-0 bg-white/15'>
                                 {automation.enabled && (
                                   <span className='animate-flow-line absolute -top-[3px] left-0 h-1.5 w-1.5 rounded-full bg-emerald-500' />
                                 )}
@@ -693,19 +664,19 @@ export default function AutomationPage() {
                       })}
                     </div>
                   ) : (
-                    <div className='flex h-10 items-center justify-center rounded-lg border border-dashed border-neutral-200 text-[10px] text-neutral-400 dark:border-zinc-800 dark:text-neutral-500'>
+                    <div className='flex h-10 items-center justify-center rounded-lg border border-dashed border-white/10 text-[10px] text-white/40'>
                       No steps configured
                     </div>
                   )}
                 </div>
 
                 {/* Footer */}
-                <div className='mt-4 flex items-center justify-between border-t border-neutral-100 pt-3 dark:border-zinc-800'>
+                <div className='mt-4 flex items-center justify-between border-t border-white/10 pt-3'>
                   <div className='flex items-center gap-1.5'>
                     <Switch
                       checked={automation.enabled}
                       disabled={isBusy}
-                      className='scale-[0.8] data-[state=checked]:bg-neutral-900 dark:data-[state=checked]:bg-white'
+                      className='scale-[0.8] data-[state=checked]:bg-white'
                       onCheckedChange={(checked) =>
                         handleStatusChange(automation, checked)
                       }
@@ -715,7 +686,7 @@ export default function AutomationPage() {
                       type='button'
                       disabled={isBusy}
                       onClick={() => setDeleteTarget(automation)}
-                      className='flex h-7 w-7 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-red-500 disabled:opacity-50 dark:hover:bg-zinc-800 dark:hover:text-red-400'
+                      className='flex h-7 w-7 items-center justify-center rounded-lg text-white/45 transition-colors hover:bg-white/10 hover:text-red-300 disabled:opacity-50'
                       aria-label={`Delete ${title}`}
                     >
                       {isBusy ? (
@@ -726,14 +697,15 @@ export default function AutomationPage() {
                     </button>
                   </div>
 
-                  <button
+                  <Button
+                    size='sm'
                     type='button'
                     onClick={() => router.push(`/chat/${automation._id}`)}
-                    className='inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-2 py-1.5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 hover:shadow-md active:scale-95'
+                    className='rounded-lg'
                   >
                     <span>Configure</span>
                     <ArrowUpRight className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5' />
-                  </button>
+                  </Button>
                 </div>
               </article>
             );
@@ -742,12 +714,10 @@ export default function AutomationPage() {
       )}
 
       {/* Automation Templates */}
-      <section className='mt-8 border-t border-neutral-200 pt-8 dark:border-zinc-800'>
+      <section className='mt-3 rounded-2xl border border-white/10 bg-white/[0.035] p-4'>
         <div className='mb-5'>
-          <h2 className='text-base font-semibold text-neutral-900 dark:text-white'>
-            Templates
-          </h2>
-          <p className='mt-0.5 text-xs text-neutral-500 dark:text-neutral-400'>
+          <h2 className='text-base font-semibold'>Templates</h2>
+          <p className='mt-0.5 text-xs text-white/50'>
             Start with a pre-built workflow and customize it for your brand.
           </p>
         </div>
@@ -758,29 +728,27 @@ export default function AutomationPage() {
             return (
               <div
                 key={idx}
-                className='group flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 transition-colors duration-200 hover:border-neutral-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700'
+                className='group flex flex-col rounded-2xl border border-white/10 bg-[#0c0c0c] p-5 transition-colors duration-200 hover:bg-white/[0.05]'
               >
                 <div className='mb-3 flex items-center gap-2'>
-                  <div className='flex h-9 w-9 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-neutral-300'>
+                  <div className='flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 text-white/70'>
                     <IconComponent className='h-4 w-4' />
                   </div>
-                  <span className='rounded-md bg-neutral-100 px-2 py-0.5 text-[10px] font-medium text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400'>
+                  <span className='rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-medium text-white/50'>
                     {tmpl.badge}
                   </span>
                 </div>
 
-                <h3 className='text-sm font-semibold text-neutral-900 dark:text-white'>
-                  {tmpl.title}
-                </h3>
-                <p className='mt-1 flex-1 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400'>
+                <h3 className='text-sm font-semibold'>{tmpl.title}</h3>
+                <p className='mt-1 flex-1 text-xs leading-relaxed text-white/50'>
                   {tmpl.description}
                 </p>
 
-                <div className='mt-4 border-t border-neutral-100 pt-3 dark:border-zinc-800'>
+                <div className='mt-4 border-t border-white/10 pt-3'>
                   <Button
                     onClick={() => handleCreate(tmpl.prompt)}
                     disabled={creating}
-                    className='group inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 hover:shadow-md active:scale-95 disabled:cursor-not-allowed disabled:opacity-60'
+                    className='group rounded-lg px-5 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-60'
                   >
                     <span>{creating ? "Creating..." : "Use Template"}</span>
                     <ArrowRight className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-1' />
