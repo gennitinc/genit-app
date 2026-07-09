@@ -118,7 +118,7 @@ export default function BlogLibraryPage() {
   };
 
   const previewContent = selectedAsset ? (
-    <div className='group relative mx-auto w-full max-w-3xl overflow-hidden rounded-3xl bg-black/[0.02] p-2 ring-1 ring-black/5 lg:p-6 dark:bg-white/[0.04] dark:ring-white/10'>
+    <div className='group relative mx-auto w-full max-w-3xl overflow-hidden rounded-3xl p-2 ring-1 ring-black/5 lg:p-6 lg:px-0 dark:bg-white/[0.04] dark:ring-white/10'>
       <GradientFrame />
 
       <div className='relative z-10 flex flex-col gap-5 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 md:flex-row dark:bg-[#0a0a0a] dark:ring-white/10'>

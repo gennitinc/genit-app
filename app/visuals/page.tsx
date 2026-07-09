@@ -340,7 +340,7 @@ export default function VisualsHomePage() {
   const chartGridColor = "var(--border)";
 
   return (
-    <div className='min-h-[calc(100dvh-7rem)] rounded-2xl bg-zinc-50 p-2 text-zinc-950 lg:p-6 dark:bg-[#070707] dark:text-white'>
+    <div className='min-h-[calc(100dvh-7rem)] rounded-2xl bg-zinc-50 p-2 text-zinc-950 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
       <div className='mb-8 flex flex-col gap-4 md:flex-row md:items-start md:justify-between'>
         <div>
           <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight sm:text-3xl'>

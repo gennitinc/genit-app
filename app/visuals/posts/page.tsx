@@ -1005,7 +1005,7 @@ export default function PostsPage() {
   const chartHover = isDark ? "rgba(255,255,255,0.04)" : "rgba(79,70,229,0.08)";
 
   return (
-    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-zinc-50 p-2 pb-14 text-zinc-950 duration-500 lg:p-6 dark:bg-[#070707] dark:text-white'>
+    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-zinc-50 p-2 pb-14 text-zinc-950 duration-500 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
       <header className='p-1'>
         <div className='grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-center'>
           <div className='flex min-w-0 flex-col items-start justify-center py-1'>

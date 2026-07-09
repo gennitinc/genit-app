@@ -337,7 +337,7 @@ export default function CalendarPage() {
   const eventCount = eventsQuery.data?.events.length || 0;
 
   return (
-    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-zinc-50 p-2 text-zinc-950 duration-500 lg:p-6 dark:bg-[#070707] dark:text-white'>
+    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-zinc-50 p-2 text-zinc-950 duration-500 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
       <section className='p-1'>
         <div className='grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-stretch'>
           <div className='flex min-w-0 flex-col justify-end py-1'>
