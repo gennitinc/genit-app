@@ -8,6 +8,7 @@ import {
   Inbox,
   Layers,
   Library,
+  Workflow,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -37,7 +38,7 @@ const CATEGORIES = [
   {
     id: "automation",
     label: "Automation",
-    icon: FolderSync,
+    icon: Workflow,
     href: "/visuals/automation",
   },
 ];
