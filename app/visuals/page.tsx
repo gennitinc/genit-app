@@ -614,7 +614,7 @@ export default function VisualsHomePage() {
           </Link>
         </div>
 
-        <div className='mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
+        <div className='mt-4 grid gap-3 grid-cols-2 xl:grid-cols-4'>
           {pluginCards.map((integration) => {
             const connections = byPlatform.get(integration.platform);
             const hasIdentityForSurface = isMetaSurface(integration.platform)
