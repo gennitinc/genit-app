@@ -1005,15 +1005,15 @@ export default function PostsPage() {
   const chartHover = isDark ? "rgba(255,255,255,0.04)" : "rgba(79,70,229,0.08)";
 
   return (
-    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-[#070707] p-2 pb-14 text-white duration-500 lg:p-6' >
+    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-zinc-50 p-2 pb-14 text-zinc-950 duration-500 lg:p-6 dark:bg-[#070707] dark:text-white'>
       <header className='p-1'>
         <div className='grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-center'>
           <div className='flex min-w-0 flex-col items-start justify-center py-1'>
             <div>
-              <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight text-white'>
+              <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight'>
                 Content workspace
               </h1>
-              <p className='mt-1 max-w-2xl text-sm leading-5 text-white/55'>
+              <p className='mt-1 max-w-2xl text-sm leading-5 text-zinc-500 dark:text-white/55'>
                 Create, schedule, and publish posts across all your social
                 channels.
               </p>
@@ -1026,17 +1026,17 @@ export default function PostsPage() {
             </Button>
           </div>
 
-          <div className='hidden rounded-2xl border border-white/10 bg-[#0c0c0c] p-4 sm:block'>
-            <div className='flex items-center justify-between gap-3 border-b border-white/10 pb-3'>
+          <div className='hidden rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:block dark:border-white/10 dark:bg-[#0c0c0c] dark:shadow-none'>
+            <div className='flex items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-white/10'>
               <div className='flex min-w-0 items-center gap-3'>
-                <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10'>
-                  <BarChart3 className='h-4 w-4 text-white/70' />
+                <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 dark:bg-white/10'>
+                  <BarChart3 className='h-4 w-4 text-zinc-500 dark:text-white/70' />
                 </div>
                 <div className='min-w-0'>
                   <p className='truncate text-sm font-medium'>
                     Content overview
                   </p>
-                  <p className='truncate text-xs text-white/50'>
+                  <p className='truncate text-xs text-zinc-500 dark:text-white/50'>
                     {connected.length} connected channel
                     {connected.length === 1 ? "" : "s"}
                   </p>
@@ -1072,9 +1072,11 @@ export default function PostsPage() {
               ].map((item) => (
                 <div
                   key={item.label}
-                  className='rounded-xl bg-white/[0.04] px-3 py-2.5 ring-1 ring-white/10'
+                  className='rounded-xl bg-zinc-50 px-3 py-2.5 ring-1 ring-zinc-200 dark:bg-white/[0.04] dark:ring-white/10'
                 >
-                  <p className='text-[11px] text-white/50'>{item.label}</p>
+                  <p className='text-[11px] text-zinc-500 dark:text-white/50'>
+                    {item.label}
+                  </p>
                   <p className='mt-0.5 text-lg font-semibold'>{item.value}</p>
                 </div>
               ))}
@@ -1083,9 +1085,9 @@ export default function PostsPage() {
         </div>
       </header>
 
-      <section className='overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035]'>
-        <div className='flex flex-col gap-4 border-b border-white/10 p-3 md:flex-row md:items-center md:justify-between'>
-          <div className='inline-flex w-fit rounded-xl bg-white/[0.06] p-1'>
+      <section className='overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+        <div className='flex flex-col gap-4 border-b border-zinc-200 p-3 md:flex-row md:items-center md:justify-between dark:border-white/10'>
+          <div className='inline-flex w-fit rounded-xl bg-zinc-100 p-1 dark:bg-white/[0.06]'>
             {(
               [
                 ["live", "Live", live.length],
@@ -1099,8 +1101,8 @@ export default function PostsPage() {
                 className={cn(
                   "rounded-full px-4 py-2 text-xs font-medium transition",
                   view === value
-                    ? "bg-white text-black shadow-sm"
-                    : "text-white/55 hover:text-white"
+                    ? "bg-white text-zinc-950 shadow-sm"
+                    : "text-zinc-500 hover:text-zinc-950 dark:text-white/55 dark:hover:text-white"
                 )}
               >
                 {label} <span className='ml-1.5 opacity-60'>{count}</span>
@@ -1109,16 +1111,16 @@ export default function PostsPage() {
           </div>
           <div className='flex flex-col gap-2 sm:flex-row'>
             <div className='relative'>
-              <Search className='absolute top-2.5 left-3 h-4 w-4 text-white/45' />
+              <Search className='absolute top-2.5 left-3 h-4 w-4 text-zinc-400 dark:text-white/45' />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder='Search posts'
-                className='rounded-xl border-white/10 bg-white/[0.04] pl-9 text-white placeholder:text-white/35 sm:w-56'
+                className='rounded-xl border-zinc-200 bg-white pl-9 text-zinc-950 placeholder:text-zinc-400 sm:w-56 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/35'
               />
             </div>
             <Select value={platformFilter} onValueChange={setPlatformFilter}>
-              <SelectTrigger className='rounded-xl border-white/10 bg-white/[0.04] text-white sm:w-40'>
+              <SelectTrigger className='rounded-xl border-zinc-200 bg-white text-zinc-950 sm:w-40 dark:border-white/10 dark:bg-white/[0.04] dark:text-white'>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -1134,7 +1136,7 @@ export default function PostsPage() {
               <Button
                 variant='outline'
                 size='icon'
-                className='rounded-xl border-white/10 bg-white/[0.04] text-white hover:bg-white/10'
+                className='rounded-xl border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:bg-white/10'
                 onClick={() => liveQuery.refetch()}
                 aria-label='Refresh live posts'
               >
@@ -1153,18 +1155,18 @@ export default function PostsPage() {
         </div>
 
         {loading ? (
-          <div className='flex min-h-72 items-center justify-center text-white/50'>
+          <div className='flex min-h-72 items-center justify-center text-zinc-500 dark:text-white/50'>
             <LoadingFileLoader size={24} />
           </div>
         ) : visible.length === 0 ? (
           <div className='flex min-h-72 flex-col items-center justify-center px-6 text-center'>
-            <div className='flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.06]'>
+            <div className='flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-white/[0.06]'>
               {view === "drafts" ? (
-                <FileText className='h-5 w-5 text-white/50' />
+                <FileText className='h-5 w-5 text-zinc-500 dark:text-white/50' />
               ) : view === "scheduled" ? (
-                <CalendarClock className='h-5 w-5 text-white/50' />
+                <CalendarClock className='h-5 w-5 text-zinc-500 dark:text-white/50' />
               ) : (
-                <BarChart3 className='h-5 w-5 text-white/50' />
+                <BarChart3 className='h-5 w-5 text-zinc-500 dark:text-white/50' />
               )}
             </div>
             <p className='mt-4 font-medium'>
@@ -1174,7 +1176,7 @@ export default function PostsPage() {
                   ? "Nothing scheduled"
                   : "No live posts found"}
             </p>
-            <p className='mt-1 max-w-sm text-sm text-white/50'>
+            <p className='mt-1 max-w-sm text-sm text-zinc-500 dark:text-white/50'>
               {view === "drafts"
                 ? "Create a draft here, or generate content in chat and it will appear automatically."
                 : view === "scheduled"
@@ -1186,7 +1188,7 @@ export default function PostsPage() {
             {view !== "live" && (
               <Button
                 variant='outline'
-                className='mt-5 rounded-xl border-white/10 bg-white/[0.04] text-white hover:bg-white/10'
+                className='mt-5 rounded-xl border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:bg-white/10'
                 onClick={openCreate}
               >
                 <Plus className='mr-2 h-4 w-4' />
@@ -1199,7 +1201,7 @@ export default function PostsPage() {
             {visible.map((post) => (
               <article
                 key={post._id}
-                className='group relative mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-2xl border border-white/10 bg-[#0c0c0c] align-top transition hover:-translate-y-0.5 hover:bg-white/[0.05]'
+                className='group relative mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 align-top transition hover:-translate-y-0.5 hover:bg-white dark:border-white/10 dark:bg-[#0c0c0c] dark:hover:bg-white/[0.05]'
               >
                 {(!post.remote ||
                   post.platform === "facebook" ||
@@ -1257,7 +1259,7 @@ export default function PostsPage() {
                         {post.status}
                       </span>
                       {post.accountName && (
-                        <span className='max-w-32 truncate text-[10px] text-white/45'>
+                        <span className='max-w-32 truncate text-[10px] text-zinc-500 dark:text-white/45'>
                           @{post.accountName}
                         </span>
                       )}
@@ -1271,18 +1273,18 @@ export default function PostsPage() {
                       />
                       {LABEL[post.platform]}
                     </span>
-                    <span className='text-[10px] text-white/45'>
+                    <span className='text-[10px] text-zinc-500 dark:text-white/45'>
                       {postDate(post)}
                     </span>
                   </div>
                   <h2 className='mt-3 line-clamp-1 text-sm font-semibold'>
                     {post.title || post.content || "Untitled post"}
                   </h2>
-                  <p className='mt-1 line-clamp-2 min-h-10 text-xs leading-5 text-white/50'>
+                  <p className='mt-1 line-clamp-2 min-h-10 text-xs leading-5 text-zinc-500 dark:text-white/50'>
                     {post.content || "No caption yet"}
                   </p>
                   {view === "live" ? (
-                    <div className='mt-4 flex items-center justify-between gap-3 border-t border-white/10 pt-3'>
+                    <div className='mt-4 flex items-center justify-between gap-3 border-t border-zinc-200 pt-3 dark:border-white/10'>
                       <PostMetrics
                         metrics={liveMetricsById.get(post._id) || EMPTY_METRICS}
                         loading={loadingMetricIds.has(post._id)}

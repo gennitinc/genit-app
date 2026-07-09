@@ -468,24 +468,24 @@ export default function AutomationPage() {
   ).length;
 
   return (
-    <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-[#070707] p-2 text-white duration-500 lg:p-6'>
+    <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-zinc-50 p-2 text-zinc-950 duration-500 lg:p-6 dark:bg-[#070707] dark:text-white'>
       <section className='p-1'>
         <div className='grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] lg:items-center'>
           <div className='flex min-w-0 flex-col items-start justify-center py-1'>
-            <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight text-white md:text-3xl'>
+            <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight md:text-3xl'>
               Brand automations
             </h1>
-            <p className='mt-1 max-w-xl text-sm leading-5 text-white/55'>
+            <p className='mt-1 max-w-xl text-sm leading-5 text-zinc-500 dark:text-white/55'>
               Build, monitor, and manage every workflow running for your brand.
             </p>
             <div className='mt-4 flex w-full max-w-xl items-center gap-2'>
               <div className='relative min-w-0 flex-1 sm:max-w-64'>
-                <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-white/45' />
+                <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400 dark:text-white/45' />
                 <Input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder='Search automations'
-                  className='h-9 rounded-xl border-white/10 bg-white/[0.04] pl-9 text-white placeholder:text-white/35 focus-visible:ring-sky-400/30'
+                  className='h-9 rounded-xl border-zinc-200 bg-white pl-9 text-zinc-950 placeholder:text-zinc-400 focus-visible:ring-sky-400/30 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/35'
                 />
               </div>
               <Button
@@ -504,17 +504,17 @@ export default function AutomationPage() {
           </div>
 
           <div className='flex min-w-0 flex-col gap-3'>
-            <div className='hidden rounded-2xl border border-white/10 bg-[#0c0c0c] p-4 sm:block'>
-              <div className='flex items-center justify-between gap-3 border-b border-white/10 pb-3'>
+            <div className='hidden rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:block dark:border-white/10 dark:bg-[#0c0c0c] dark:shadow-none'>
+              <div className='flex items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-white/10'>
                 <div className='flex min-w-0 items-center gap-3'>
-                  <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10'>
-                    <Workflow className='h-4 w-4 text-white/70' />
+                  <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 dark:bg-white/10'>
+                    <Workflow className='h-4 w-4 text-zinc-500 dark:text-white/70' />
                   </div>
                   <div className='min-w-0'>
                     <p className='truncate text-sm font-medium'>
                       Automation overview
                     </p>
-                    <p className='truncate text-xs text-white/50'>
+                    <p className='truncate text-xs text-zinc-500 dark:text-white/50'>
                       Live workflow status
                     </p>
                   </div>
@@ -532,9 +532,9 @@ export default function AutomationPage() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className='rounded-xl bg-white/[0.04] px-3 py-2.5 ring-1 ring-white/10'
+                    className='rounded-xl bg-zinc-50 px-3 py-2.5 ring-1 ring-zinc-200 dark:bg-white/[0.04] dark:ring-white/10'
                   >
-                    <p className='truncate text-[11px] text-white/50'>
+                    <p className='truncate text-[11px] text-zinc-500 dark:text-white/50'>
                       {item.label}
                     </p>
                     <p className='mt-0.5 text-lg font-semibold'>{item.value}</p>
@@ -547,20 +547,20 @@ export default function AutomationPage() {
       </section>
 
       {loading ? (
-        <div className='flex min-h-64 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.035]'>
-          <div className='flex items-center gap-2.5 text-sm font-medium text-white/50'>
+        <div className='flex min-h-64 items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white dark:border-white/10 dark:bg-white/[0.035]'>
+          <div className='flex items-center gap-2.5 text-sm font-medium text-zinc-500 dark:text-white/50'>
             <LoadingFileLoader />
           </div>
         </div>
       ) : visibleAutomations.length === 0 ? (
-        <div className='flex min-h-72 flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.035] px-6 py-10 text-center'>
-          <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white/[0.06] text-white/50'>
+        <div className='flex min-h-72 flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white px-6 py-10 text-center dark:border-white/10 dark:bg-white/[0.035]'>
+          <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 dark:bg-white/[0.06] dark:text-white/50'>
             <Workflow className='h-5 w-5' />
           </div>
           <h2 className='text-sm font-semibold'>
             {query ? "No automations found" : "Build your first automation"}
           </h2>
-          <p className='mt-1.5 max-w-sm text-xs leading-relaxed text-white/50'>
+          <p className='mt-1.5 max-w-sm text-xs leading-relaxed text-zinc-500 dark:text-white/50'>
             {query
               ? "Try another search term."
               : "Describe what you want to automate in chat and Genit will help you build it."}
@@ -594,7 +594,7 @@ export default function AutomationPage() {
             return (
               <article
                 key={automation._id}
-                className='group flex flex-col rounded-2xl border border-white/10 bg-white/[0.035] p-5 transition-colors duration-200 hover:bg-white/[0.055]'
+                className='group flex flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-colors duration-200 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none dark:hover:bg-white/[0.055]'
               >
                 {/* Header: status + actions */}
                 <div className='mb-3 flex items-center justify-between gap-3'>
@@ -602,8 +602,8 @@ export default function AutomationPage() {
                     <span
                       className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[10px] font-medium ${
                         automation.enabled
-                          ? "bg-emerald-500/10 text-emerald-300"
-                          : "bg-white/10 text-white/50"
+                          ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                          : "bg-zinc-100 text-zinc-500 dark:bg-white/10 dark:text-white/50"
                       }`}
                     >
                       <span
@@ -611,7 +611,7 @@ export default function AutomationPage() {
                       />
                       {automation.enabled ? "Active" : "Paused"}
                     </span>
-                    <span className='text-[10px] text-white/40'>
+                    <span className='text-[10px] text-zinc-500 dark:text-white/40'>
                       {relativeDate(automation.updatedAt)}
                     </span>
                   </div>
@@ -621,14 +621,14 @@ export default function AutomationPage() {
                 <h2 className='mb-1 line-clamp-2 text-sm font-semibold'>
                   {title}
                 </h2>
-                <p className='text-[11px] text-white/45'>
+                <p className='text-[11px] text-zinc-500 dark:text-white/45'>
                   {nodeCount} {nodeCount === 1 ? "step" : "steps"}
                 </p>
 
                 {/* Pipeline preview */}
                 <div className='mt-3 flex-1'>
                   {pipeline.length > 0 ? (
-                    <div className='no-scrollbar flex items-center gap-1 overflow-x-auto rounded-xl border border-white/10 bg-[#0c0c0c] px-2.5 py-2'>
+                    <div className='no-scrollbar flex items-center gap-1 overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 px-2.5 py-2 dark:border-white/10 dark:bg-[#0c0c0c]'>
                       {pipeline.map((node, i) => {
                         const { IconComponent, label } =
                           getNodeIconAndName(node);
@@ -642,16 +642,16 @@ export default function AutomationPage() {
                             <div className='flex shrink-0 flex-col items-center gap-0.5'>
                               <div
                                 title={label}
-                                className='flex h-7 w-7 items-center justify-center rounded-lg bg-white/10 text-white/70'
+                                className='flex h-7 w-7 items-center justify-center rounded-lg bg-white text-zinc-600 ring-1 ring-zinc-200 dark:bg-white/10 dark:text-white/70 dark:ring-0'
                               >
                                 <IconComponent className='h-3.5 w-3.5' />
                               </div>
-                              <span className='max-w-[48px] truncate text-center text-[8px] text-white/40'>
+                              <span className='max-w-[48px] truncate text-center text-[8px] text-zinc-500 dark:text-white/40'>
                                 {label}
                               </span>
                             </div>
                             {!isLast && (
-                              <div className='relative mx-1 h-px w-4 shrink-0 bg-white/15'>
+                              <div className='relative mx-1 h-px w-4 shrink-0 bg-zinc-300 dark:bg-white/15'>
                                 {automation.enabled && (
                                   <span className='animate-flow-line absolute -top-[3px] left-0 h-1.5 w-1.5 rounded-full bg-emerald-500' />
                                 )}
@@ -662,14 +662,14 @@ export default function AutomationPage() {
                       })}
                     </div>
                   ) : (
-                    <div className='flex h-10 items-center justify-center rounded-lg border border-dashed border-white/10 text-[10px] text-white/40'>
+                    <div className='flex h-10 items-center justify-center rounded-lg border border-dashed border-zinc-200 text-[10px] text-zinc-500 dark:border-white/10 dark:text-white/40'>
                       No steps configured
                     </div>
                   )}
                 </div>
 
                 {/* Footer */}
-                <div className='mt-4 flex items-center justify-between border-t border-white/10 pt-3'>
+                <div className='mt-4 flex items-center justify-between border-t border-zinc-200 pt-3 dark:border-white/10'>
                   <div className='flex items-center gap-1.5'>
                     <Switch
                       checked={automation.enabled}
@@ -684,7 +684,7 @@ export default function AutomationPage() {
                       type='button'
                       disabled={isBusy}
                       onClick={() => setDeleteTarget(automation)}
-                      className='flex h-7 w-7 items-center justify-center rounded-lg text-white/45 transition-colors hover:bg-white/10 hover:text-red-300 disabled:opacity-50'
+                      className='flex h-7 w-7 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-red-600 disabled:opacity-50 dark:text-white/45 dark:hover:bg-white/10 dark:hover:text-red-300'
                       aria-label={`Delete ${title}`}
                     >
                       {isBusy ? (
@@ -712,10 +712,10 @@ export default function AutomationPage() {
       )}
 
       {/* Automation Templates */}
-      <section className='mt-3 rounded-2xl border border-white/10 bg-white/[0.035] p-4'>
+      <section className='mt-3 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
         <div className='mb-5'>
           <h2 className='text-base font-semibold'>Templates</h2>
-          <p className='mt-0.5 text-xs text-white/50'>
+          <p className='mt-0.5 text-xs text-zinc-500 dark:text-white/50'>
             Start with a pre-built workflow and customize it for your brand.
           </p>
         </div>
@@ -726,23 +726,23 @@ export default function AutomationPage() {
             return (
               <div
                 key={idx}
-                className='group flex flex-col rounded-2xl border border-white/10 bg-[#0c0c0c] p-5 transition-colors duration-200 hover:bg-white/[0.05]'
+                className='group flex flex-col rounded-2xl border border-zinc-200 bg-zinc-50 p-5 transition-colors duration-200 hover:bg-white dark:border-white/10 dark:bg-[#0c0c0c] dark:hover:bg-white/[0.05]'
               >
                 <div className='mb-3 flex items-center gap-2'>
-                  <div className='flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 text-white/70'>
+                  <div className='flex h-9 w-9 items-center justify-center rounded-lg bg-white text-zinc-600 ring-1 ring-zinc-200 dark:bg-white/10 dark:text-white/70 dark:ring-0'>
                     <IconComponent className='h-4 w-4' />
                   </div>
-                  <span className='rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-medium text-white/50'>
+                  <span className='rounded-md bg-zinc-200/70 px-2 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-white/10 dark:text-white/50'>
                     {tmpl.badge}
                   </span>
                 </div>
 
                 <h3 className='text-sm font-semibold'>{tmpl.title}</h3>
-                <p className='mt-1 flex-1 text-xs leading-relaxed text-white/50'>
+                <p className='mt-1 flex-1 text-xs leading-relaxed text-zinc-500 dark:text-white/50'>
                   {tmpl.description}
                 </p>
 
-                <div className='mt-4 border-t border-white/10 pt-3'>
+                <div className='mt-4 border-t border-zinc-200 pt-3 dark:border-white/10'>
                   <Button
                     onClick={() => handleCreate(tmpl.prompt)}
                     disabled={creating}

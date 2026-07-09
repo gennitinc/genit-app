@@ -178,6 +178,16 @@
 }
 
 @layer base {
+  ::selection {
+    background: rgb(212 212 216 / 0.45);
+    color: inherit;
+  }
+
+  .dark ::selection {
+    background: rgb(255 255 255 / 0.18);
+    color: inherit;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
@@ -263,7 +273,7 @@
   animation-delay: calc(var(--i) * 0.6s);
 } */
 
-/* From Uiverse.io by jonas_5925 */ 
+/* From Uiverse.io by jonas_5925 */
 .loader {
   height: 80px;
   width: 80px;
@@ -408,16 +418,32 @@
   animation: onb-fade-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.onb-stagger-1 { animation-delay: 0.1s; }
-.onb-stagger-2 { animation-delay: 0.25s; }
-.onb-stagger-3 { animation-delay: 0.4s; }
-.onb-stagger-4 { animation-delay: 0.55s; }
-.onb-stagger-5 { animation-delay: 0.7s; }
+.onb-stagger-1 {
+  animation-delay: 0.1s;
+}
+.onb-stagger-2 {
+  animation-delay: 0.25s;
+}
+.onb-stagger-3 {
+  animation-delay: 0.4s;
+}
+.onb-stagger-4 {
+  animation-delay: 0.55s;
+}
+.onb-stagger-5 {
+  animation-delay: 0.7s;
+}
 
 @keyframes onb-karaoke {
-  0%   { opacity: 0.25; }
-  60%  { opacity: 0.8; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0.25;
+  }
+  60% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .onb-karaoke {
@@ -432,8 +458,13 @@
 }
 
 @keyframes onb-pulse-dot {
-  0%, 100% { opacity: 0.4; }
-  50%      { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .onb-pulse-dot {
@@ -441,8 +472,12 @@
 }
 
 @keyframes onb-spin-glow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .onb-glow {
@@ -520,6 +555,10 @@
 }
 
 @keyframes onb-radar-spin {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

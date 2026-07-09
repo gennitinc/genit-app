@@ -330,15 +330,17 @@ export default function VisualsHomePage() {
   ];
 
   const chartTooltipStyle = {
-    background: "#080808",
-    border: "1px solid rgba(255,255,255,.12)",
+    background: "var(--popover)",
+    border: "1px solid var(--border)",
     borderRadius: 10,
-    color: "#fff",
+    color: "var(--popover-foreground)",
     fontSize: 12,
   };
+  const chartTextColor = "var(--muted-foreground)";
+  const chartGridColor = "var(--border)";
 
   return (
-    <div className='min-h-[calc(100dvh-7rem)] rounded-2xl bg-[#070707] p-2 text-white lg:p-6'>
+    <div className='min-h-[calc(100dvh-7rem)] rounded-2xl bg-zinc-50 p-2 text-zinc-950 lg:p-6 dark:bg-[#070707] dark:text-white'>
       <div className='mb-8 flex flex-col gap-4 md:flex-row md:items-start md:justify-between'>
         <div>
           <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight sm:text-3xl'>
@@ -348,7 +350,7 @@ export default function VisualsHomePage() {
             {connectedIntegrations.slice(0, 6).map((integration, index) => (
               <span
                 key={integration.name}
-                className='relative -ml-2 flex h-10 w-10 items-center justify-center rounded-xl border border-[#070707] bg-[#151515] shadow-sm ring-1 ring-white/10 first:ml-0'
+                className='relative -ml-2 flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-50 bg-white shadow-sm ring-1 ring-zinc-200 first:ml-0 dark:border-[#070707] dark:bg-[#151515] dark:ring-white/10'
                 style={{
                   zIndex: connectedIntegrations.length - index,
                 }}
@@ -359,7 +361,7 @@ export default function VisualsHomePage() {
             ))}
             <Link
               href='/plugin'
-              className='relative -ml-2 flex h-10 w-10 items-center justify-center rounded-2xl border border-[#070707] bg-[#151515] text-white shadow-sm ring-1 ring-white/10 transition hover:bg-white/10'
+              className='relative -ml-2 flex h-10 w-10 items-center justify-center rounded-2xl border border-zinc-50 bg-white text-zinc-700 shadow-sm ring-1 ring-zinc-200 transition hover:bg-zinc-100 dark:border-[#070707] dark:bg-[#151515] dark:text-white dark:ring-white/10 dark:hover:bg-white/10'
               style={{ zIndex: 0 }}
               title='Add plugin'
               aria-label='Add plugin'
@@ -367,7 +369,7 @@ export default function VisualsHomePage() {
               <Plus className='h-5 w-5' />
             </Link>
             {connectedIntegrations.length === 0 && (
-              <span className='text-xs text-white/45'>
+              <span className='text-xs text-zinc-500 dark:text-white/45'>
                 No channels connected yet
               </span>
             )}
@@ -378,9 +380,9 @@ export default function VisualsHomePage() {
           <PopoverTrigger asChild>
             <button
               type='button'
-              className='flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white/80 transition hover:bg-white/[0.07] sm:w-auto'
+              className='flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 text-sm text-zinc-700 shadow-sm transition hover:bg-zinc-100 sm:w-auto dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:shadow-none dark:hover:bg-white/[0.07]'
             >
-              <CalendarDays className='h-4 w-4 text-white/55' />
+              <CalendarDays className='h-4 w-4 text-zinc-500 dark:text-white/55' />
               {prettyDateRange(from, to)}
             </button>
           </PopoverTrigger>
@@ -431,17 +433,19 @@ export default function VisualsHomePage() {
         {statCards.map(({ label, value, detail, Icon, dataKey, color }) => (
           <section
             key={label}
-            className='rounded-2xl border border-white/10 bg-white/[0.035] p-3.5'
+            className='rounded-2xl border border-zinc-200 bg-white p-3.5 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'
           >
             <div className='flex items-start justify-between gap-3'>
               <div>
-                <p className='text-xs font-medium text-white/55'>{label}</p>
+                <p className='text-xs font-medium text-zinc-500 dark:text-white/55'>
+                  {label}
+                </p>
                 <p className='mt-1 text-xl leading-none font-semibold'>
                   {value}
                 </p>
               </div>
-              <span className='flex h-8 w-8 items-center justify-center rounded-xl bg-white/10'>
-                <Icon className='h-3.5 w-3.5 text-white/70' />
+              <span className='flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-100 dark:bg-white/10'>
+                <Icon className='h-3.5 w-3.5 text-zinc-500 dark:text-white/70' />
               </span>
             </div>
             <div className='mt-3 h-14'>
@@ -470,9 +474,15 @@ export default function VisualsHomePage() {
                     />
                     <Tooltip
                       contentStyle={chartTooltipStyle}
-                      labelStyle={{ color: "#fff", fontSize: 12 }}
-                      itemStyle={{ color: "#fff", fontSize: 12 }}
-                      cursor={{ stroke: "rgba(255,255,255,.14)" }}
+                      labelStyle={{
+                        color: "var(--popover-foreground)",
+                        fontSize: 12,
+                      }}
+                      itemStyle={{
+                        color: "var(--popover-foreground)",
+                        fontSize: 12,
+                      }}
+                      cursor={{ stroke: chartGridColor }}
                     />
                     <Line
                       type='monotone'
@@ -486,17 +496,19 @@ export default function VisualsHomePage() {
                 </ResponsiveContainer>
               )}
             </div>
-            <p className='mt-2 text-[11px] text-white/42'>{detail}</p>
+            <p className='mt-2 text-[11px] text-zinc-500 dark:text-white/42'>
+              {detail}
+            </p>
           </section>
         ))}
       </div>
 
       <div className='mt-5'>
-        <section className='rounded-2xl border border-white/10 bg-white/[0.035] p-4'>
+        <section className='rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
           <div className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
             <div>
               <h2 className='text-base font-semibold'>Content activity</h2>
-              <p className='mt-1 text-sm text-white/55'>
+              <p className='mt-1 text-sm text-zinc-500 dark:text-white/55'>
                 Posts drafted vs posts published in selected range
               </p>
             </div>
@@ -529,27 +541,30 @@ export default function VisualsHomePage() {
                     <stop offset='95%' stopColor='#60a5fa' stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid
-                  stroke='rgba(255,255,255,.06)'
-                  vertical={false}
-                />
+                <CartesianGrid stroke={chartGridColor} vertical={false} />
                 <XAxis
                   dataKey='name'
-                  tick={{ fill: "rgba(255,255,255,.38)", fontSize: 11 }}
+                  tick={{ fill: chartTextColor, fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <YAxis
-                  tick={{ fill: "rgba(255,255,255,.38)", fontSize: 11 }}
+                  tick={{ fill: chartTextColor, fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
                   allowDecimals={false}
                 />
                 <Tooltip
                   contentStyle={chartTooltipStyle}
-                  labelStyle={{ color: "#fff", fontSize: 12 }}
-                  itemStyle={{ color: "#fff", fontSize: 12 }}
-                  cursor={{ stroke: "rgba(255,255,255,.12)" }}
+                  labelStyle={{
+                    color: "var(--popover-foreground)",
+                    fontSize: 12,
+                  }}
+                  itemStyle={{
+                    color: "var(--popover-foreground)",
+                    fontSize: 12,
+                  }}
+                  cursor={{ stroke: chartGridColor }}
                 />
                 <Area
                   type='monotone'
@@ -570,7 +585,7 @@ export default function VisualsHomePage() {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          <div className='flex items-center justify-center gap-2 text-xs text-white/65'>
+          <div className='flex items-center justify-center gap-2 text-xs text-zinc-600 dark:text-white/65'>
             <span className='flex items-center gap-2'>
               <span className='h-2 w-2 rounded-sm bg-slate-400' />
               Drafted
@@ -583,17 +598,17 @@ export default function VisualsHomePage() {
         </section>
       </div>
 
-      <section className='mt-5 rounded-2xl border border-white/10 bg-white/[0.035] p-4'>
+      <section className='mt-5 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
         <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
           <div>
             <h2 className='text-base font-semibold'>Plugins</h2>
-            <p className='mt-1 text-sm text-white/55'>
+            <p className='mt-1 text-sm text-zinc-500 dark:text-white/55'>
               Add channels and tools for this organization.
             </p>
           </div>
           <Link
             href='/plugin'
-            className='inline-flex h-9 items-center justify-center rounded-xl border border-white/10 px-3 text-sm text-white/70 transition hover:bg-white/10 hover:text-white'
+            className='inline-flex h-9 items-center justify-center rounded-xl border border-zinc-200 px-3 text-sm text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-950 dark:border-white/10 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white'
           >
             View all
           </Link>
@@ -625,25 +640,25 @@ export default function VisualsHomePage() {
             return (
               <article
                 key={integration.name}
-                className='rounded-2xl border border-white/10 bg-[#0c0c0c] p-4'
+                className='rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-white/10 dark:bg-[#0c0c0c]'
               >
                 <div className='flex items-start justify-between gap-3'>
-                  <span className='flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/10'>
+                  <span className='flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white ring-1 ring-zinc-200 dark:bg-white/10 dark:ring-white/10'>
                     <Icon className='h-5 w-5' />
                   </span>
                   <span
                     className={[
                       "rounded-full px-2.5 py-1 text-xs",
                       isManageable
-                        ? "bg-sky-500/10 text-sky-200"
-                        : "bg-white/10 text-white/55",
+                        ? "bg-sky-500/10 text-sky-700 dark:text-sky-200"
+                        : "bg-zinc-200/70 text-zinc-600 dark:bg-white/10 dark:text-white/55",
                     ].join(" ")}
                   >
                     {statusLabel}
                   </span>
                 </div>
                 <h3 className='mt-4 font-semibold'>{integration.name}</h3>
-                <p className='mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-white/50'>
+                <p className='mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-zinc-500 dark:text-white/50'>
                   {integration.description}
                 </p>
                 <Button
