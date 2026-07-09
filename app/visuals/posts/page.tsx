@@ -1042,7 +1042,7 @@ export default function PostsPage() {
                   </p>
                 </div>
               </div>
-              <span
+              {/* <span
                 className={cn(
                   "inline-flex shrink-0 items-center gap-1.5 rounded-sm px-2.5 py-1 text-[11px] font-medium ring-1",
                   connected.length
@@ -1057,7 +1057,7 @@ export default function PostsPage() {
                   )}
                 />
                 {connected.length ? "Ready" : "Offline"}
-              </span>
+              </span> */}
             </div>
 
             <div className='mt-3 grid grid-cols-3 gap-2'>
@@ -1067,7 +1067,7 @@ export default function PostsPage() {
                   value: drafts.filter((post) => post.status === "draft")
                     .length,
                 },
-                { label: "Live posts", value: live.length },
+                { label: "Live", value: live.length },
                 { label: "Scheduled", value: scheduled.length },
               ].map((item) => (
                 <div
@@ -1088,7 +1088,7 @@ export default function PostsPage() {
           <div className='inline-flex w-fit rounded-xl bg-white/[0.06] p-1'>
             {(
               [
-                ["live", "Live posts", live.length],
+                ["live", "Live", live.length],
                 ["scheduled", "Scheduled", scheduled.length],
                 ["drafts", "Drafts", drafts.length],
               ] as const

@@ -469,8 +469,6 @@ export default function AutomationPage() {
 
   return (
     <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-[#070707] p-2 text-white duration-500 lg:p-6'>
-
-
       <section className='p-1'>
         <div className='grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] lg:items-center'>
           <div className='flex min-w-0 flex-col items-start justify-center py-1'>
@@ -521,10 +519,10 @@ export default function AutomationPage() {
                     </p>
                   </div>
                 </div>
-                <span className='inline-flex shrink-0 items-center gap-1.5 rounded-sm bg-emerald-500/10 px-2.5 py-1 text-[11px] font-medium text-emerald-300 ring-1 ring-emerald-500/15'>
+                {/* <span className='inline-flex shrink-0 items-center gap-1.5 rounded-sm bg-emerald-500/10 px-2.5 py-1 text-[11px] font-medium text-emerald-300 ring-1 ring-emerald-500/15'>
                   <span className='h-1.5 w-1.5 rounded-sm bg-emerald-500' />
                   {activeCount} active
-                </span>
+                </span> */}
               </div>
               <div className='mt-3 grid grid-cols-3 gap-2'>
                 {[
