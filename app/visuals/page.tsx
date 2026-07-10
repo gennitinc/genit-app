@@ -636,7 +636,6 @@ export default function VisualsHomePage() {
                   : status === "soon"
                     ? "Soon"
                     : "Available";
-
             return (
               <article
                 key={integration.name}

@@ -19,6 +19,7 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { toast } from "@/hooks/use-toast";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { templateApi } from "@/utils/inspire-api";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   BarChart3,
   CheckCircle2,
@@ -27,6 +28,7 @@ import {
   File as FileIcon,
   FileText,
   Folder,
+  Forward,
   LayoutGrid,
   Loader2,
   Mail,
@@ -636,9 +638,9 @@ export function GeneratedDesignCard({ data }: { data: any }) {
               className='h-7 w-fit gap-1.5 px-2 text-xs'
             >
               {publishing ? (
-                <Loader2 className='h-3 w-3 animate-spin' />
+                <LoadingFileLoader size={12} />
               ) : (
-                <Sparkles className='h-3 w-3' />
+                <Forward className='h-3 w-3' />
               )}
               {publishing ? "Publishing..." : "Publish"}
             </Button>
