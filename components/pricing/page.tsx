@@ -265,14 +265,20 @@ export default function PricingComponent({
     const detectLocalCurrency = async () => {
       try {
         const geoResponse = await fetch("https://ipapi.co/json/");
-        const geo = (await geoResponse.json()) as { country_code?: string };
+        const geo = (await geoResponse.json()) as {
+          country_code?: string;
+          currency?: string;
+        };
         const country = geo.country_code;
+        const currency = geo.currency;
 
-        if (!country) return;
+        if (!country && !currency) return;
 
-        const currencyResponse = await fetch(
-          `/api/pricing-currency?country=${encodeURIComponent(country)}`
-        );
+        const params = new URLSearchParams();
+        if (country) params.set("country", country);
+        if (currency) params.set("currency", currency);
+
+        const currencyResponse = await fetch(`/api/pricing-currency?${params}`);
         const nextPricingCurrency = (await currencyResponse.json()) as PricingCurrency;
 
         if (nextPricingCurrency.currency !== "USD") {
