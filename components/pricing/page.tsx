@@ -5,6 +5,7 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { Button } from "@/components/ui/button";
 import { Spotlight } from "@/components/ui/spotlight-new";
 import { trackEvent, trackExperimentExposure } from "@/lib/mixpanelClient";
+import { formatUsdPrice, type PricingCurrency } from "@/lib/pricing-currency";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
@@ -242,7 +243,12 @@ const plansProd = [
 
 const plans = process.env.NODE_ENV == "production" ? plansProd : plansDev;
 
-export default function PricingComponent() {
+export default function PricingComponent({
+  pricingCurrency,
+}: {
+  pricingCurrency: PricingCurrency;
+}) {
+  const [localPricingCurrency, setLocalPricingCurrency] = useState(pricingCurrency);
   const [isYearly, setIsYearly] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
@@ -252,6 +258,31 @@ export default function PricingComponent() {
     });
     trackExperimentExposure("pricing_billing_cycle_toggle", "default_monthly");
   }, []);
+
+  useEffect(() => {
+    if (pricingCurrency.currency !== "USD") return;
+
+    const detectLocalCurrency = async () => {
+      try {
+        const geoResponse = await fetch("https://ipapi.co/json/");
+        const geo = (await geoResponse.json()) as { country_code?: string };
+        const country = geo.country_code;
+
+        if (!country) return;
+
+        const currencyResponse = await fetch(
+          `/api/pricing-currency?country=${encodeURIComponent(country)}`
+        );
+        const nextPricingCurrency = (await currencyResponse.json()) as PricingCurrency;
+
+        if (nextPricingCurrency.currency !== "USD") {
+          setLocalPricingCurrency(nextPricingCurrency);
+        }
+      } catch {}
+    };
+
+    detectLocalCurrency();
+  }, [pricingCurrency]);
 
   const handleCheckout = async (plan: any) => {
     const billing = isYearly ? "yearly" : "monthly";
@@ -562,7 +593,7 @@ export default function PricingComponent() {
                         </span>
                       ) : (
                         <span className='text-foreground text-3xl font-medium md:text-4xl'>
-                          ${displayPrice}
+                          {formatUsdPrice(displayPrice, localPricingCurrency)}
                         </span>
                       )}
                     </div>

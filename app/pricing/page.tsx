@@ -1,9 +1,10 @@
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import PricingComponent from "@/components/pricing/page";
-import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { pricingCurrencyForCountry } from "@/lib/pricing-currency";
+import { getUsdRates } from "@/lib/pricing-rates";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Pricing – Genit AI | Affordable Plans for Media Design",
@@ -33,11 +34,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Pricing() {
+export default async function Pricing() {
+  const headerList = await headers();
+  const country =
+    headerList.get("x-vercel-ip-country") ??
+    headerList.get("cf-ipcountry") ??
+    headerList.get("x-country-code");
+  const pricingCurrency = pricingCurrencyForCountry(country, await getUsdRates());
+
   return (
     <div className='min-h-screen bg-white dark:bg-black'>
       <LandingNavbar />
-      <PricingComponent />
+      <PricingComponent pricingCurrency={pricingCurrency} />
       <LandingFooter />
     </div>
   );
