@@ -14,9 +14,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { toast } from "@/hooks/use-toast";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
+import { templateApi } from "@/utils/inspire-api";
 import {
   BarChart3,
   CheckCircle2,
@@ -26,12 +28,15 @@ import {
   FileText,
   Folder,
   LayoutGrid,
+  Loader2,
   Mail,
   MessageSquare,
   Send,
+  Sparkles,
   TrendingUp,
   Users,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const getFullUrl = (url: string) => {
@@ -438,7 +443,13 @@ export function ContactListCard({ data }: { data: any }) {
 export function GeneratedDesignCard({ data }: { data: any }) {
   const isVideo = data.url?.endsWith(".mp4") || data.message?.includes("video");
   const { project, setFocusedGenerationId } = useProjectDesign();
+  const { user } = useUserContext();
+  const router = useRouter();
   const projectId = project?._id;
+  const [publishing, setPublishing] = useState(false);
+  const [published, setPublished] = useState(
+    data.publishStatus === "published" || data.isPublished
+  );
 
   const handleSetAsActive = async (
     itemId: string,
@@ -473,6 +484,70 @@ export function GeneratedDesignCard({ data }: { data: any }) {
   };
 
   const downloadUrl = data.url ? getFullUrl(data.url) : "";
+
+  const handlePublishToInspiration = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to publish to inspiration",
+        variant: "destructive",
+      });
+      router.push("/signin");
+      return;
+    }
+
+    if (!downloadUrl) return;
+
+    try {
+      setPublishing(true);
+      const response = await templateApi.publishToInspiration({
+        mediaUrl: downloadUrl,
+        thumbnailUrl: downloadUrl,
+        mediaType: isVideo ? "video" : "image",
+        prompt: data.prompt || data.message || data.name || "",
+        category: project?.category || "generic_design",
+        title: data.name || (isVideo ? "Generated video" : "Generated design"),
+      });
+
+      if (
+        response.success ||
+        response.message?.toLowerCase().includes("already")
+      ) {
+        setPublished(true);
+        toast({
+          title: response.success
+            ? "Published to inspiration"
+            : "Already published",
+          description: response.success
+            ? "Your content has been added to the inspiration gallery"
+            : "This content has already been published to inspiration",
+        });
+        return;
+      }
+
+      throw new Error(response.message || "Failed to publish");
+    } catch (err: any) {
+      const message = err?.response?.data?.message || err?.message || "";
+      if (err?.response?.status === 409 || message.includes("already")) {
+        setPublished(true);
+        toast({
+          title: "Already published",
+          description: "This content has already been published to inspiration",
+        });
+      } else {
+        toast({
+          title: "Publish failed",
+          description:
+            message || "Failed to publish to inspiration. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setPublishing(false);
+    }
+  };
 
   return (
     <AgentCard
@@ -540,6 +615,32 @@ export function GeneratedDesignCard({ data }: { data: any }) {
             >
               <LayoutGrid className='h-3 w-3' />
               View
+            </Button>
+          )}
+          {published ? (
+            <Button
+              variant='outline'
+              size='sm'
+              disabled
+              className='h-7 w-fit gap-1.5 px-2 text-xs'
+            >
+              <CheckCircle2 className='h-3 w-3' />
+              Published
+            </Button>
+          ) : (
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={handlePublishToInspiration}
+              disabled={publishing}
+              className='h-7 w-fit gap-1.5 px-2 text-xs'
+            >
+              {publishing ? (
+                <Loader2 className='h-3 w-3 animate-spin' />
+              ) : (
+                <Sparkles className='h-3 w-3' />
+              )}
+              {publishing ? "Publishing..." : "Publish"}
             </Button>
           )}
           <ExternalLinkInline href={getFullUrl(data.url)}>
