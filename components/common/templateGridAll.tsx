@@ -33,10 +33,12 @@ import { appendClientTimeContext, cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
+import { templateApi } from "@/utils/inspire-api";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
   ArrowRight,
+  CheckCircle2,
   CircleFadingArrowUp,
   Eye,
   Image as ImageIcon,
@@ -103,6 +105,12 @@ export default function TemplateGridAll() {
   const [loading, setLoading] = useState<boolean>(false);
   const [limit, setLimit] = useState(20);
   const [isBrandSettingsOpen, setIsBrandSettingsOpen] = useState(false);
+  const [publishingTemplateId, setPublishingTemplateId] = useState<
+    string | null
+  >(null);
+  const [publishedTemplateIds, setPublishedTemplateIds] = useState<Set<string>>(
+    new Set()
+  );
   // Pagination & search
   const [page, setPage] = useState<number>(1);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
@@ -271,12 +279,62 @@ export default function TemplateGridAll() {
     return () => observer.unobserve(el);
   }, [hasNextPage, isFetchingMore, isLoading]);
 
+  const onView = (item: TemplateItem) => {
+    setSelected(item);
+    setViewOpen(true);
+  };
+
   const onEdit = (item: TemplateItem) => {
     setSelected(item);
     setEditOpen(true);
 
     // Add the template URL to selectedFiles only if it's not already included
     setSelectedFiles((prev) => (prev.includes(item.src) ? prev : [item.src]));
+  };
+
+  const handlePublish = async (item: TemplateItem) => {
+    if (!user) {
+      router.push("/signin");
+      return;
+    }
+
+    try {
+      setPublishingTemplateId(item.id);
+      const response = await templateApi.publishToInspiration({
+        mediaUrl: item.src,
+        thumbnailUrl: item.src,
+        mediaType: "image",
+        prompt: item.alt || "",
+        category: item.category || "generic_design",
+        title: item.alt || "Design inspiration",
+      });
+
+      if (
+        response.success ||
+        response.message?.toLowerCase().includes("already")
+      ) {
+        setPublishedTemplateIds((prev) => new Set(prev).add(item.id));
+        toast.success(
+          response.success ? "Published to inspiration" : "Already published"
+        );
+        return;
+      }
+
+      throw new Error(response.message || "Failed to publish");
+    } catch (error: any) {
+      const message = error?.response?.data?.message || error?.message || "";
+      if (error?.response?.status === 409 || message.includes("already")) {
+        setPublishedTemplateIds((prev) => new Set(prev).add(item.id));
+        toast.success("Already published");
+      } else {
+        toast.error("Publish failed", {
+          description:
+            message || "Failed to publish to inspiration. Please try again.",
+        });
+      }
+    } finally {
+      setPublishingTemplateId(null);
+    }
   };
 
   const placeholders = [
@@ -621,12 +679,21 @@ export default function TemplateGridAll() {
             )}
           </>
         )}
-        {templates.map((t) => (
-          <div
-            key={t.id}
-            className='group border-border relative mb-4 inline-block w-full rounded-lg border align-top'
-            style={{ breakInside: "avoid" }}
-          >
+        {templates.map((t) => {
+          const currentUserId = (user as any)?._id || (user as any)?.id;
+          const isPublished =
+            publishedTemplateIds.has(t.id) ||
+            (t.isUserGenerated &&
+              currentUserId &&
+              t.userId?._id &&
+              String(t.userId._id) === String(currentUserId));
+
+          return (
+            <div
+              key={t.id}
+              className='group border-border relative mb-4 inline-block w-full rounded-lg border align-top'
+              style={{ breakInside: "avoid" }}
+            >
             <div className='relative'>
               <img
                 className='h-auto max-w-full rounded-lg object-cover'
@@ -687,6 +754,38 @@ export default function TemplateGridAll() {
               <div className='absolute inset-0 flex items-center justify-center gap-2 opacity-100 transition-opacity group-hover:opacity-100 lg:opacity-0'>
                 <Button
                   size='icon'
+                  variant='secondary'
+                  onClick={() => onView(t)}
+                  className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-90 backdrop-blur-sm dark:bg-black/20'
+                  aria-label='View template'
+                >
+                  <Eye className='h-4 w-4 text-black dark:text-white' />
+                </Button>
+                <Button
+                  size='icon'
+                  variant='secondary'
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handlePublish(t);
+                  }}
+                  disabled={isPublished || publishingTemplateId === t.id}
+                  className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-90 backdrop-blur-sm dark:bg-black/20'
+                  aria-label={
+                    isPublished
+                      ? "Published to inspiration"
+                      : "Publish to inspiration"
+                  }
+                >
+                  {publishingTemplateId === t.id ? (
+                    <Loader2 className='h-4 w-4 animate-spin text-black dark:text-white' />
+                  ) : isPublished ? (
+                    <CheckCircle2 className='h-4 w-4 text-emerald-600 dark:text-emerald-300' />
+                  ) : (
+                    <Sparkles className='h-4 w-4 text-black dark:text-white' />
+                  )}
+                </Button>
+                <Button
+                  size='icon'
                   onClick={() => onEdit(t)}
                   className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-50 backdrop-blur-sm dark:bg-black/20'
                   aria-label='Edit template'
@@ -695,8 +794,9 @@ export default function TemplateGridAll() {
                 </Button>
               </div>
             </div>
-          </div>
-        ))}
+            </div>
+          );
+        })}
         {/* Sentinel for infinite scroll */}
         <div ref={loadMoreRef} className='col-span-full h-10'></div>
       </div>
@@ -704,6 +804,37 @@ export default function TemplateGridAll() {
         <div className='mt-4 flex justify-center'>
           <Loader className='h-5 w-5 animate-spin' />
         </div>
+      )}
+
+      {selected && !isMobile && (
+        <Dialog open={viewOpen} onOpenChange={setViewOpen}>
+          <DialogContent className='flex h-fit w-fit flex-col p-0'>
+            <div className='m-0 p-0'>
+              <img
+                src={selected.src}
+                alt={selected.alt || "Template"}
+                className='h-[75vh] w-full rounded-md object-contain'
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {selected && isMobile && (
+        <Drawer open={viewOpen} onOpenChange={setViewOpen}>
+          <DrawerContent className='h-[75vh]'>
+            <DrawerHeader className='border-b px-4 py-2'>
+              <DrawerTitle>Preview</DrawerTitle>
+            </DrawerHeader>
+            <div className='min-h-0 flex-1 overflow-hidden'>
+              <img
+                src={selected.src}
+                alt={selected.alt || "Template"}
+                className='h-full w-full rounded-md object-contain'
+              />
+            </div>
+          </DrawerContent>
+        </Drawer>
       )}
 
       {selected && !isMobile && (
