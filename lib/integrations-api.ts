@@ -99,6 +99,11 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "x_ads",
   "google_calendar",
   "google_drive",
+  "google_meet",
+  "google_sheets",
+  "google_slides",
+  "google_docs",
+  "google_forms",
   "mailchimp",
 ]);
 
@@ -213,6 +218,26 @@ export async function requestConnectUrl(
     `/integrations/${platform}/connect-url`
   );
   return data;
+}
+
+export type GoogleWorkspacePlatform = Extract<
+  IntegrationPlatform,
+  "google_meet" | "google_sheets" | "google_slides" | "google_docs" | "google_forms"
+>;
+
+/** Calls the full Google Workspace action surface. Roles map to Google Drive:
+ * reader=viewer, commenter=commenter, writer=editor, owner=owner. */
+export async function runGoogleWorkspaceAction<T = unknown>(
+  platform: GoogleWorkspacePlatform,
+  integrationId: string,
+  action: string,
+  input: Record<string, unknown> = {}
+): Promise<T> {
+  const { data } = await apiResponse.post<{ success: true; result: T }>(
+    `/integrations/${platform}/${integrationId}/actions/${action}`,
+    input
+  );
+  return data.result;
 }
 
 // Step 2 of the Instagram connect flow: takes the IG account IDs the user

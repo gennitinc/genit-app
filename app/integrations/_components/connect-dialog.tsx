@@ -228,6 +228,11 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
     "Create folders and upload new files to locations you choose",
     "Update or delete files genit creates on your behalf",
   ],
+  google_meet: ["Create and launch meeting spaces", "Read meeting details", "End active conferences"],
+  google_sheets: ["Create and read spreadsheets", "Write values and apply batch formatting", "Invite collaborators and assign viewer, commenter, editor or owner roles"],
+  google_slides: ["Create and read presentations", "Add and edit slides with batch updates", "Invite collaborators and manage their roles"],
+  google_docs: ["Create and read documents", "Insert, replace and format document content", "Invite collaborators and manage their roles"],
+  google_forms: ["Create surveys and quizzes", "Add and edit questions", "Read responses and invite collaborators"],
 };
 
 const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
@@ -319,6 +324,11 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
     "Drive's full-access scope is restricted — your Google Cloud app must be verified before going to production (development users work without verification)",
     "Add /api/v1/integrations/google_drive/callback as an authorized redirect URI on your Google OAuth client",
   ],
+  google_meet: ["Enable the Google Meet REST API in the same Google Cloud project", "Uses the existing Google Drive OAuth callback"],
+  google_sheets: ["Enable Google Sheets API and Google Drive API", "Uses the existing Google Drive OAuth callback"],
+  google_slides: ["Enable Google Slides API and Google Drive API", "Uses the existing Google Drive OAuth callback"],
+  google_docs: ["Enable Google Docs API and Google Drive API", "Uses the existing Google Drive OAuth callback"],
+  google_forms: ["Enable Google Forms API and Google Drive API", "Uses the existing Google Drive OAuth callback"],
 };
 
 // Per-platform copy for the credential-entry flow (no OAuth). Used to build

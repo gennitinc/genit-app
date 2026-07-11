@@ -179,6 +179,11 @@ const PLATFORM_SETTINGS_URL: Partial<Record<IntegrationPlatform, string>> = {
   telegram: "https://my.telegram.org/auth",
   google_calendar: "https://myaccount.google.com/permissions",
   google_drive: "https://myaccount.google.com/permissions",
+  google_meet: "https://myaccount.google.com/permissions",
+  google_sheets: "https://myaccount.google.com/permissions",
+  google_slides: "https://myaccount.google.com/permissions",
+  google_docs: "https://myaccount.google.com/permissions",
+  google_forms: "https://myaccount.google.com/permissions",
 };
 
 function platformSettingsUrl(
