@@ -728,83 +728,85 @@ export default function TemplateGridAll() {
               className='group border-border relative mb-4 inline-block w-full rounded-lg border align-top'
               style={{ breakInside: "avoid" }}
             >
-            <div className='relative'>
-              <img
-                className='h-auto max-w-full rounded-lg object-cover'
-                src={t.src}
-                alt={t.alt || "Template"}
-              />
-              {t.category && (
-                <Badge
-                  variant='secondary'
-                  className='pointer-events-none absolute top-2 left-2 z-2 hidden text-xs'
-                >
-                  {t.category
-                    .split("_")
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(" ")}
-                </Badge>
-              )}
-              <div className='pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:bg-black/30 group-hover:opacity-100' />
-              {/* Creator Info at Bottom */}
-              {t.isUserGenerated && (t.userId || t.author) && (
-                <div className='pointer-events-auto absolute right-0 bottom-0 left-0 z-10 hidden rounded-b-lg bg-gradient-to-t from-black/80 via-black/60 to-transparent p-2 opacity-100 transition-opacity lg:block lg:opacity-0 lg:group-hover:opacity-100'>
-                  <Link
-                    href={`/creator/${t.userId?.username || t.author || ""}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className='flex w-fit items-center gap-2 transition-opacity hover:opacity-80'
+              <div className='relative'>
+                <img
+                  className='h-auto max-w-full rounded-lg object-cover'
+                  src={t.src}
+                  alt={t.alt || "Template"}
+                />
+                {t.category && (
+                  <Badge
+                    variant='secondary'
+                    className='pointer-events-none absolute top-2 left-2 z-2 hidden text-xs'
                   >
-                    {t.userId?.profilePic ? (
-                      <img
-                        src={t.userId.profilePic}
-                        alt={t.userId.username || t.author || "Creator"}
-                        className='h-5 w-5 rounded-full object-cover'
-                      />
-                    ) : (
-                      <div className='flex h-5 w-5 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
-                        <User className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
-                      </div>
-                    )}
-                    <span className='text-xs font-medium text-white/80'>
-                      {t.userId?.username || t.author || "Creator"}
-                    </span>
-                    {t.userId?.isVerified && (
-                      <svg
-                        viewBox='0 0 22 22'
-                        aria-label='Verified account'
-                        role='img'
-                        className='h-3.5 w-3.5 flex-shrink-0'
-                        data-testid='icon-verified'
-                        fill='#3b82f6'
-                      >
-                        <g>
-                          <path d='M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z' />
-                        </g>
-                      </svg>
-                    )}
-                  </Link>
+                    {t.category
+                      .split("_")
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                      )
+                      .join(" ")}
+                  </Badge>
+                )}
+                <div className='pointer-events-none absolute inset-0 rounded-lg bg-black/0 opacity-0 transition-opacity group-hover:bg-black/30 group-hover:opacity-100' />
+                {/* Creator Info at Bottom */}
+                {t.isUserGenerated && (t.userId || t.author) && (
+                  <div className='pointer-events-auto absolute right-0 bottom-0 left-0 z-10 hidden rounded-b-lg bg-gradient-to-t from-black/80 via-black/60 to-transparent p-2 opacity-100 transition-opacity lg:block lg:opacity-0 lg:group-hover:opacity-100'>
+                    <Link
+                      href={`/creator/${t.userId?.username || t.author || ""}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className='flex w-fit items-center gap-2 transition-opacity hover:opacity-80'
+                    >
+                      {t.userId?.profilePic ? (
+                        <img
+                          src={t.userId.profilePic}
+                          alt={t.userId.username || t.author || "Creator"}
+                          className='h-5 w-5 rounded-full object-cover'
+                        />
+                      ) : (
+                        <div className='flex h-5 w-5 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
+                          <User className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
+                        </div>
+                      )}
+                      <span className='text-xs font-medium text-white/80'>
+                        {t.userId?.username || t.author || "Creator"}
+                      </span>
+                      {t.userId?.isVerified && (
+                        <svg
+                          viewBox='0 0 22 22'
+                          aria-label='Verified account'
+                          role='img'
+                          className='h-3.5 w-3.5 flex-shrink-0'
+                          data-testid='icon-verified'
+                          fill='#3b82f6'
+                        >
+                          <g>
+                            <path d='M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z' />
+                          </g>
+                        </svg>
+                      )}
+                    </Link>
+                  </div>
+                )}
+                <div className='absolute inset-0 flex items-center justify-center gap-2 opacity-100 transition-opacity group-hover:opacity-100 lg:opacity-0'>
+                  <Button
+                    size='icon'
+                    variant='secondary'
+                    onClick={() => onView(t)}
+                    className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-90 backdrop-blur-sm dark:bg-black/20'
+                    aria-label='View template'
+                  >
+                    <Eye className='h-4 w-4 text-black dark:text-white' />
+                  </Button>
+                  <Button
+                    size='icon'
+                    onClick={() => onEdit(t)}
+                    className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-50 backdrop-blur-sm dark:bg-black/20'
+                    aria-label='Edit template'
+                  >
+                    <Pencil className='h-4 w-4 text-black dark:text-white' />
+                  </Button>
                 </div>
-              )}
-              <div className='absolute inset-0 flex items-center justify-center gap-2 opacity-100 transition-opacity group-hover:opacity-100 lg:opacity-0'>
-                <Button
-                  size='icon'
-                  variant='secondary'
-                  onClick={() => onView(t)}
-                  className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-90 backdrop-blur-sm dark:bg-black/20'
-                  aria-label='View template'
-                >
-                  <Eye className='h-4 w-4 text-black dark:text-white' />
-                </Button>
-                <Button
-                  size='icon'
-                  onClick={() => onEdit(t)}
-                  className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-50 backdrop-blur-sm dark:bg-black/20'
-                  aria-label='Edit template'
-                >
-                  <Pencil className='h-4 w-4 text-black dark:text-white' />
-                </Button>
               </div>
-            </div>
             </div>
           );
         })}
@@ -1441,7 +1443,7 @@ export default function TemplateGridAll() {
                           >
                             <Mic className='size-4 shrink-0' />
                           </button>
-                          <button
+                          {/* <button
                             type='submit'
                             className='text-primary-foreground relative box-border inline-flex h-8 w-8 min-w-fit flex-shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full bg-indigo-600 !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap shadow-md brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out hover:bg-indigo-700'
                             disabled={isSubmitDisabled}
@@ -1463,6 +1465,43 @@ export default function TemplateGridAll() {
                             ) : (
                               <WandSparklesIcon className='h-4 w-4' />
                             )}
+                          </button> */}
+                          <button
+                            type='submit'
+                            disabled={isSubmitDisabled}
+                            className='relative cursor-pointer rounded-[10px] bg-[linear-gradient(to_top,#292929,#555555,#292929)] p-[2px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)] transition-all duration-150 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50'
+                          >
+                            {/* Border effects behind content */}
+                            <div className='absolute inset-0 overflow-hidden rounded-[10px]'>
+                              <BorderBeam
+                                duration={6}
+                                size={40}
+                                className='from-transparent via-red-500 to-transparent'
+                              />
+                              <BorderBeam
+                                duration={6}
+                                delay={10}
+                                size={40}
+                                borderWidth={2}
+                                className='from-transparent via-blue-500 to-transparent'
+                              />
+                            </div>
+
+                            {/* Button content */}
+                            <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
+                              {isGenerating || isSubmitting ? (
+                                <LoadingFileLoader size={16} />
+                              ) : (
+                                <svg
+                                  className='h-4 w-4 text-white'
+                                  viewBox='0 0 512 512'
+                                  fill='currentColor'
+                                  xmlns='http://www.w3.org/2000/svg'
+                                >
+                                  <path d='M473 39.05a24 24 0 0 0-25.5-5.46L47.47 185h-.08a24 24 0 0 0 1 45.16l.41.13l137.3 58.63a16 16 0 0 0 15.54-3.59L422 80a7.07 7.07 0 0 1 10 10L226.66 310.26a16 16 0 0 0-3.59 15.54l58.65 137.38c.06.2.12.38.19.57c3.2 9.27 11.3 15.81 21.09 16.25h1a24.63 24.63 0 0 0 23-15.46L478.39 64.62A24 24 0 0 0 473 39.05' />
+                                </svg>
+                              )}
+                            </div>
                           </button>
                         </div>
                       </div>
