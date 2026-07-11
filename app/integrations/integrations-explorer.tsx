@@ -8,6 +8,11 @@ import {
   GmailBrand,
   GoogleCalendarBrand,
   GoogleDriveBrand,
+  GoogleMeetBrand,
+  GoogleSheetsBrand,
+  GoogleSlidesBrand,
+  GoogleDocsBrand,
+  GoogleFormsBrand,
   InstagramBrand,
   LinkedinBrand,
   MessengerBrand,
@@ -19,6 +24,7 @@ import {
   WhatsAppBrand,
   XBrand,
   YoutubeBrand,
+  MailChimpBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { useIntegrations } from "@/hooks/use-integrations";
 import {
@@ -236,7 +242,7 @@ export const INTEGRATIONS: Integration[] = [
     description:
       "Build newsletters and automation. Generate drip sequences from a single prompt.",
     category: "Email Campaigns",
-    icon: Megaphone,
+    icon: MailChimpBrand,
     baseStatus: "available",
     glow: "rgba(250, 204, 21, 0.8)",
   },
@@ -299,6 +305,56 @@ export const INTEGRATIONS: Integration[] = [
     icon: GoogleDriveBrand,
     baseStatus: "available",
     glow: "rgba(34, 197, 94, 0.8)",
+  },
+  {
+    platform: "google_meet",
+    name: "Google Meet",
+    description:
+      "Schedule, manage and launch video meetings directly. Auto-generate calendar invites and link details.",
+    category: "Productivity",
+    icon: GoogleMeetBrand,
+    baseStatus: "available",
+    glow: "rgba(52, 168, 83, 0.8)",
+  },
+  {
+    platform: "google_sheets",
+    name: "Google Sheets",
+    description:
+      "Create, edit and read spreadsheets. Sync contacts, track campaign performance data or log items automatically.",
+    category: "Productivity",
+    icon: GoogleSheetsBrand,
+    baseStatus: "available",
+    glow: "rgba(15, 157, 88, 0.8)",
+  },
+  {
+    platform: "google_slides",
+    name: "Google Slides",
+    description:
+      "Generate presentations, modify decks and export layouts with structured design templates.",
+    category: "Productivity",
+    icon: GoogleSlidesBrand,
+    baseStatus: "available",
+    glow: "rgba(244, 180, 0, 0.8)",
+  },
+  {
+    platform: "google_docs",
+    name: "Google Docs",
+    description:
+      "Create and edit text documents. Export copy, write blog posts or compile summaries directly.",
+    category: "Productivity",
+    icon: GoogleDocsBrand,
+    baseStatus: "available",
+    glow: "rgba(66, 133, 244, 0.8)",
+  },
+  {
+    platform: "google_forms",
+    name: "Google Forms",
+    description:
+      "Create forms, surveys and quizzes. Collect responses and automate workflows from your AI agent.",
+    category: "Productivity",
+    icon: GoogleFormsBrand,
+    baseStatus: "available",
+    glow: "rgba(103, 58, 183, 0.8)",
   },
 ];
 

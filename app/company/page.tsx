@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
+import { INTEGRATIONS } from "../integrations/integrations-explorer";
 
 export const metadata: Metadata = {
   title: "About genit – Your AI Marketing Team & Agent Platform",
@@ -87,7 +88,7 @@ export default function About2() {
               </div>
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
                 Unlike traditional AI tools that only generate content, genit is
-                designed to take action. It combines AI agents with 25+
+                designed to take action. It combines AI agents with {INTEGRATIONS.length}+
                 plugins to help businesses execute marketing tasks
                 end-to-end, reducing the need to switch between multiple tools
                 or hire large marketing teams.

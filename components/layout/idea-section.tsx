@@ -113,6 +113,7 @@ import { toast } from "sonner";
 import { div } from "three/src/nodes/math/OperatorNode.js";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { INTEGRATIONS } from "@/app/integrations/integrations-explorer";
 
 const INTEGRATION_BRANDS = [
   { name: "Instagram", Icon: InstagramBrand },
@@ -1619,7 +1620,7 @@ export function IdeaSection() {
 
         <section className='relative mt-5 space-y-4 pt-6 pb-10 lg:mt-6'>
           <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
-            with over 25+ marketing{" "}
+            with over {INTEGRATIONS.length}+ marketing{" "}
             <Link
               href='/plugin'
               target='_blank'

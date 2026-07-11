@@ -23,7 +23,12 @@ export type IntegrationPlatform =
   | "telegram"
   | "messenger"
   | "google_calendar"
-  | "google_drive";
+  | "google_drive"
+  | "google_meet"
+  | "google_sheets"
+  | "google_slides"
+  | "google_docs"
+  | "google_forms";
 
 export type MetaSurface =
   "facebook" | "instagram" | "meta_ads" | "whatsapp" | "messenger";
