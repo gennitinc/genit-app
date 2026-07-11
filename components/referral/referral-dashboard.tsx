@@ -248,7 +248,7 @@ export default function ReferralDashboard() {
   }
 
   return (
-    <div className='mx-auto w-full max-w-6xl space-y-8 px-6 pt-10 pb-16'>
+    <div className='mx-auto w-full max-w-4xl space-y-8 px-6 pt-10 pb-16'>
       {/* Page Header */}
       <header className='flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
         <div>
@@ -276,7 +276,7 @@ export default function ReferralDashboard() {
       {/* KPI Row */}
       <section className='grid grid-cols-1 gap-6 md:grid-cols-3'>
         <Card className='relative'>
-          <GradientFrame />
+          {/* <GradientFrame /> */}
           <CardHeader className='pb-2'>
             <CardTitle className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
               Total Revenue
@@ -297,7 +297,7 @@ export default function ReferralDashboard() {
         </Card>
 
         <Card className='relative'>
-          <GradientFrame />
+          {/* <GradientFrame /> */}
           <CardHeader className='pb-2'>
             <CardTitle className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
               Total Supporters
@@ -317,7 +317,7 @@ export default function ReferralDashboard() {
         </Card>
 
         <Card className='relative'>
-          <GradientFrame />
+          {/* <GradientFrame /> */}
           <CardHeader className='pb-2'>
             <CardTitle className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
               Revenue Share
@@ -337,7 +337,7 @@ export default function ReferralDashboard() {
       {/* Analytics Row */}
       <section className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
         <Card className='relative lg:col-span-2'>
-          <GradientFrame />
+          {/* <GradientFrame /> */}
           <CardHeader>
             <CardTitle className='text-sm font-medium'>
               Supporters Distribution
@@ -399,7 +399,7 @@ export default function ReferralDashboard() {
         </Card>
 
         <Card className='relative h-fit lg:col-span-1'>
-          <GradientFrame />
+          {/* <GradientFrame /> */}
           <CardHeader>
             <CardTitle className='text-sm font-medium'>
               Top Supporters
@@ -446,7 +446,7 @@ export default function ReferralDashboard() {
       {/* Engagement Row */}
       <section className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
         <Card className='relative'>
-          <GradientFrame />
+          {/* <GradientFrame /> */}
           <CardHeader>
             <CardTitle className='text-sm font-medium'>
               Share Your Link
@@ -503,7 +503,7 @@ export default function ReferralDashboard() {
         </Card>
 
         <Card className='relative h-fit'>
-          <GradientFrame />
+          {/* <GradientFrame /> */}
           <CardHeader>
             <CardTitle className='text-sm font-medium'>Media Kit</CardTitle>
           </CardHeader>
