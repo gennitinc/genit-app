@@ -7,7 +7,6 @@ import TopNavWithAurora from "./top-nav-with-aurora";
 import { useSidebar } from "@/components/ui/sidebar";
 import {
   AgentRunsProvider,
-  useAgentRunsContext,
 } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -43,35 +42,25 @@ function ChatLayoutInner() {
     project,
     isGenerating,
   } = useProjectDesign();
-  const { runs: agentRuns } = useAgentRunsContext();
   const { setOpen: setSidebarOpen } = useSidebar();
-
-  const isAutomationProject = project?.category === "automation";
-
-  // Agent is actively running (not just awaiting user input)
-  const isAgentRunning = agentRuns.some((r) => r.status === "running");
 
   const isGenerationActive =
     Boolean(isGeneratingImage) ||
-    (liveNodes?.length ?? 0) > 0 ||
-    (isAgentRunning && isAutomationProject);
+    (liveNodes?.length ?? 0) > 0;
 
   const hasAnyPreview =
     isGenerationActive ||
     Boolean(artifactPreview) ||
     // Design projects: open when there are generated images
     (messages?.some((m: any) => (m.generationGroups?.length ?? 0) > 0) ??
-      false) ||
-    // Automation projects: always show the canvas if the project exists
-    isAutomationProject;
+      false);
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const prevActiveRef = useRef(false);
   const initialOpenForProjectRef = useRef<string | null>(null);
 
-  // First load of a project: if there's existing preview history (or it's an
-  // automation project), open the panel once.
+  // A project category alone is not evidence that a useful preview exists.
   useEffect(() => {
     const pid = project?._id?.toString?.() ?? null;
     if (!pid) return;
@@ -93,6 +82,13 @@ function ChatLayoutInner() {
   useEffect(() => {
     if (artifactPreview) setIsPreviewOpen(true);
   }, [artifactPreview]);
+
+  useEffect(() => {
+    if (!hasAnyPreview) {
+      setIsPreviewOpen(false);
+      setIsFullscreen(false);
+    }
+  }, [hasAnyPreview]);
 
   // Collapse the app sidebar when the preview opens (more room for canvas);
   // re-expand it when the preview closes.
@@ -140,32 +136,28 @@ function ChatLayoutInner() {
                 <TextChatContent />
               </div>
 
-              <button
-                type='button'
-                onClick={() => setIsPreviewOpen((v) => !v)}
-                className='border-border/50 bg-background/80 hover:bg-accent absolute top-0 right-3 z-30 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
-                aria-label={
-                  isPreviewOpen ? "Close preview panel" : "Open preview panel"
-                }
-                title={isPreviewOpen ? "Hide preview" : "Show preview"}
-              >
-                <AnimatePresence initial={false} mode='wait'>
-                  <motion.span
-                    key={isPreviewOpen ? "close" : "open"}
-                    initial={{ opacity: 0, scale: 0.7, rotate: -90 }}
-                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                    exit={{ opacity: 0, scale: 0.7, rotate: 90 }}
-                    transition={{ duration: 0.18, ease: "easeOut" }}
-                    className='inline-flex'
-                  >
-                    {isPreviewOpen ? (
-                      <PanelRightClose className='h-4 w-4' />
-                    ) : (
-                      <PanelRightOpen className='h-4 w-4' />
-                    )}
-                  </motion.span>
-                </AnimatePresence>
-              </button>
+              {hasAnyPreview && (
+                <button
+                  type='button'
+                  onClick={() => setIsPreviewOpen((v) => !v)}
+                  className='border-border/50 bg-background/80 hover:bg-accent absolute top-0 right-3 z-30 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
+                  aria-label={isPreviewOpen ? "Close preview panel" : "Open preview panel"}
+                  title={isPreviewOpen ? "Hide preview" : "Show preview"}
+                >
+                  <AnimatePresence initial={false} mode='wait'>
+                    <motion.span
+                      key={isPreviewOpen ? "close" : "open"}
+                      initial={{ opacity: 0, scale: 0.7, rotate: -90 }}
+                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                      exit={{ opacity: 0, scale: 0.7, rotate: 90 }}
+                      transition={{ duration: 0.18, ease: "easeOut" }}
+                      className='inline-flex'
+                    >
+                      {isPreviewOpen ? <PanelRightClose className='h-4 w-4' /> : <PanelRightOpen className='h-4 w-4' />}
+                    </motion.span>
+                  </AnimatePresence>
+                </button>
+              )}
             </motion.div>
 
             <AnimatePresence initial={false}>
