@@ -8,7 +8,7 @@ import type {
   AgentToolCall,
   AgentAttachedFile,
 } from "@/lib/agents-api";
-import { listAgentRuns } from "@/lib/agents-api";
+import { listAgentRuns, deleteAgentRun as deleteAgentRunApi } from "@/lib/agents-api";
 import { serverUrlSocket } from "@/utils/apiResponse";
 import { Socket, io as ioClient } from "socket.io-client";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -278,5 +278,15 @@ export function useAgentRuns(projectId: string | undefined) {
 
   const clear = useCallback(() => setRuns([]), []);
 
-  return { runs, registerNewRun, clear };
+  const deleteRun = useCallback(async (runId: string) => {
+    try {
+      await deleteAgentRunApi(runId);
+      setRuns((prev) => prev.filter((r) => r.runId !== runId));
+    } catch (err) {
+      console.error("[agent] failed to delete run", err);
+      throw err;
+    }
+  }, []);
+
+  return { runs, registerNewRun, clear, deleteRun };
 }

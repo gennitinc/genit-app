@@ -38,7 +38,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
   ArrowRight,
-  CheckCircle2,
   CircleFadingArrowUp,
   Eye,
   Image as ImageIcon,
@@ -108,9 +107,9 @@ export default function TemplateGridAll() {
   const [publishingTemplateId, setPublishingTemplateId] = useState<
     string | null
   >(null);
-  const [publishedTemplateIds, setPublishedTemplateIds] = useState<Set<string>>(
-    new Set()
-  );
+  const [publishedTemplateUrls, setPublishedTemplateUrls] = useState<
+    Set<string>
+  >(new Set());
   // Pagination & search
   const [page, setPage] = useState<number>(1);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
@@ -250,6 +249,93 @@ export default function TemplateGridAll() {
     fetchTemplatesPage(1, searchTerm, false);
   }, [searchTerm, fetchTemplatesPage]);
 
+  // On mount: drain any templates published from other pages (e.g. chat) that
+  // were written to localStorage before this component was mounted.
+  useEffect(() => {
+    const flushPending = () => {
+      try {
+        const raw = localStorage.getItem("gennit:pending_published_templates");
+        if (!raw) return;
+        const pending: TemplateItem[] = JSON.parse(raw);
+        if (!Array.isArray(pending) || pending.length === 0) return;
+        localStorage.removeItem("gennit:pending_published_templates");
+        pending.forEach((template) => {
+          if (!template?.src) return;
+          setPublishedTemplateUrls((prev) => new Set(prev).add(template.src));
+          setTemplates((prev) => {
+            if (prev.some((item) => item.src === template.src)) return prev;
+            return [template, ...prev];
+          });
+        });
+      } catch {
+        // ignore JSON parse errors
+      }
+    };
+
+    flushPending();
+  }, []);
+
+  useEffect(() => {
+    const handlePublished = (event: Event) => {
+      const template = (event as CustomEvent<{ template?: TemplateItem }>)
+        .detail?.template;
+      if (!template?.src) return;
+
+      setPublishedTemplateUrls((prev) => new Set(prev).add(template.src));
+      setTemplates((prev) => {
+        if (prev.some((item) => item.src === template.src)) return prev;
+        return [template, ...prev];
+      });
+    };
+
+    const handleUnpublished = (event: Event) => {
+      const mediaUrl = (event as CustomEvent<{ mediaUrl?: string }>).detail
+        ?.mediaUrl;
+      if (!mediaUrl) return;
+
+      setPublishedTemplateUrls((prev) => {
+        const next = new Set(prev);
+        next.delete(mediaUrl);
+        return next;
+      });
+      setTemplates((prev) =>
+        prev.filter((item) => item.src !== mediaUrl || !item.isUserGenerated)
+      );
+    };
+
+    // Also handle cross-page publishes via the storage event (fires when
+    // another tab/page writes to localStorage).
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== "gennit:pending_published_templates") return;
+      if (!event.newValue) return;
+      try {
+        const pending: TemplateItem[] = JSON.parse(event.newValue);
+        if (!Array.isArray(pending)) return;
+        localStorage.removeItem("gennit:pending_published_templates");
+        pending.forEach((template) => {
+          if (!template?.src) return;
+          setPublishedTemplateUrls((prev) => new Set(prev).add(template.src));
+          setTemplates((prev) => {
+            if (prev.some((item) => item.src === template.src)) return prev;
+            return [template, ...prev];
+          });
+        });
+      } catch {
+        // ignore
+      }
+    };
+
+    window.addEventListener("template:published", handlePublished);
+    window.addEventListener("template:unpublished", handleUnpublished);
+    window.addEventListener("storage", handleStorage);
+
+    return () => {
+      window.removeEventListener("template:published", handlePublished);
+      window.removeEventListener("template:unpublished", handleUnpublished);
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, []);
+
   // Load more when page increments
   useEffect(() => {
     if (page === 1) return;
@@ -292,7 +378,11 @@ export default function TemplateGridAll() {
     setSelectedFiles((prev) => (prev.includes(item.src) ? prev : [item.src]));
   };
 
-  const handlePublish = async (item: TemplateItem) => {
+  const handlePublishToggle = async (
+    item: TemplateItem,
+    isPublished: boolean,
+    isOwnedByCurrentUser: boolean
+  ) => {
     if (!user) {
       router.push("/signin");
       return;
@@ -300,6 +390,27 @@ export default function TemplateGridAll() {
 
     try {
       setPublishingTemplateId(item.id);
+
+      if (isPublished) {
+        const response = await templateApi.unpublishFromInspiration(item.src);
+        if (!response.success) {
+          throw new Error(response.message || "Failed to unpublish");
+        }
+
+        setPublishedTemplateUrls((prev) => {
+          const next = new Set(prev);
+          next.delete(item.src);
+          return next;
+        });
+        if (isOwnedByCurrentUser) {
+          setTemplates((prev) =>
+            prev.filter((template) => template.id !== item.id)
+          );
+        }
+        toast.success("Unpublished from inspiration");
+        return;
+      }
+
       const response = await templateApi.publishToInspiration({
         mediaUrl: item.src,
         thumbnailUrl: item.src,
@@ -313,7 +424,7 @@ export default function TemplateGridAll() {
         response.success ||
         response.message?.toLowerCase().includes("already")
       ) {
-        setPublishedTemplateIds((prev) => new Set(prev).add(item.id));
+        setPublishedTemplateUrls((prev) => new Set(prev).add(item.src));
         toast.success(
           response.success ? "Published to inspiration" : "Already published"
         );
@@ -324,7 +435,7 @@ export default function TemplateGridAll() {
     } catch (error: any) {
       const message = error?.response?.data?.message || error?.message || "";
       if (error?.response?.status === 409 || message.includes("already")) {
-        setPublishedTemplateIds((prev) => new Set(prev).add(item.id));
+        setPublishedTemplateUrls((prev) => new Set(prev).add(item.src));
         toast.success("Already published");
       } else {
         toast.error("Publish failed", {
@@ -681,12 +792,14 @@ export default function TemplateGridAll() {
         )}
         {templates.map((t) => {
           const currentUserId = (user as any)?._id || (user as any)?.id;
-          const isPublished =
-            publishedTemplateIds.has(t.id) ||
-            (t.isUserGenerated &&
+          const isOwnedByCurrentUser = Boolean(
+            t.isUserGenerated &&
               currentUserId &&
               t.userId?._id &&
-              String(t.userId._id) === String(currentUserId));
+              String(t.userId._id) === String(currentUserId)
+          );
+          const isPublished =
+            publishedTemplateUrls.has(t.src) || isOwnedByCurrentUser;
 
           return (
             <div
@@ -766,20 +879,22 @@ export default function TemplateGridAll() {
                   variant='secondary'
                   onClick={(event) => {
                     event.stopPropagation();
-                    handlePublish(t);
+                    handlePublishToggle(t, isPublished, isOwnedByCurrentUser);
                   }}
-                  disabled={isPublished || publishingTemplateId === t.id}
+                  disabled={publishingTemplateId === t.id}
                   className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-90 backdrop-blur-sm dark:bg-black/20'
                   aria-label={
                     isPublished
-                      ? "Published to inspiration"
+                      ? "Unpublish from inspiration"
                       : "Publish to inspiration"
                   }
                 >
                   {publishingTemplateId === t.id ? (
                     <Loader2 className='h-4 w-4 animate-spin text-black dark:text-white' />
                   ) : isPublished ? (
-                    <CheckCircle2 className='h-4 w-4 text-emerald-600 dark:text-emerald-300' />
+                    <span className='text-xs' aria-hidden='true'>
+                      🎉
+                    </span>
                   ) : (
                     <Sparkles className='h-4 w-4 text-black dark:text-white' />
                   )}

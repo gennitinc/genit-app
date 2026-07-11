@@ -8,6 +8,7 @@ import {
   Inbox,
   Layers,
   Library,
+  Megaphone,
   Workflow,
 } from "lucide-react";
 import Link from "next/link";
@@ -33,6 +34,12 @@ const CATEGORIES = [
     label: "Posts",
     icon: Layers,
     href: "/visuals/posts",
+  },
+  {
+    id: "campaigns",
+    label: "Campaigns",
+    icon: Megaphone,
+    href: "/visuals/campaigns",
   },
   { id: "inbox", label: "Unified Inbox", icon: Inbox, href: "/visuals/inbox" },
   {

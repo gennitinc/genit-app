@@ -108,6 +108,7 @@ export function ChatInput({
     (r) => r.status === "awaiting_input" || r.status === "awaiting_integration"
   );
   const [isClassifying, setIsClassifying] = useState(false);
+  const isAiResponding = isGenerating || isClassifying || isAgentRunning;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputSectionRef = useRef<HTMLDivElement>(null);
@@ -626,8 +627,8 @@ export function ChatInput({
 
                   {/* Button content */}
                   <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
-                    {isGenerating ? (
-                       <LoadingFileLoader size={14} />
+                    {isAiResponding ? (
+                      <LoadingFileLoader size={14} />
                     ) : (
                       <svg
                         className='h-4 w-4 text-white'

@@ -83,6 +83,10 @@ export async function listAgentRuns(projectId: string): Promise<any[]> {
   return data.runs;
 }
 
+export async function deleteAgentRun(runId: string): Promise<void> {
+  await apiResponse.delete(`/agents/${runId}`);
+}
+
 export async function classifyPrompt(prompt: string): Promise<boolean> {
   try {
     const { data } = await apiResponse.post<{

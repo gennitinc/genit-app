@@ -10,9 +10,12 @@ import { renderToolResult } from "./result-cards";
 import { Response } from "@/components/ai-elements/response";
 import { MessageContainer } from "@/components/chat/messages/message-container";
 import { MessageContent } from "@/components/chat/messages/message-content";
+import { MessageActions } from "@/components/chat/messages/message-actions";
+import { DeleteConfirmation } from "../messages/delete-confirmation";
 import { UserMessage } from "@/components/chat/messages/user-message";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { resumeAgentRunUserInput } from "@/lib/agents-api";
+import { useState } from "react";
 import type {
   AgentAttachedFile,
   AgentElicitation,
@@ -275,11 +278,22 @@ export function AgentMessage({
   run,
   userAvatar,
   userName,
+  onCopy,
+  onLike,
+  onDislike,
+  onDelete,
 }: {
   run: AgentRunView;
   userAvatar?: string;
   userName?: string;
+  onCopy?: () => void;
+  onLike?: () => void;
+  onDislike?: () => void;
+  onDelete?: () => void;
 }) {
+  const isDone = run.status !== "running";
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   return (
     <div className='flex flex-col gap-4'>
       {/* User prompt bubble — same as a regular user message */}
@@ -311,6 +325,16 @@ export function AgentMessage({
             src='../../resources/images/genit2.png'
             fallback='../../resources/images/genit2.png'
           />
+        }
+        actions={
+          isDone ? (
+            <MessageActions
+              onCopy={onCopy}
+              onLike={onLike}
+              onDislike={onDislike}
+              onDelete={onDelete ? () => setShowDeleteConfirm(true) : undefined}
+            />
+          ) : undefined
         }
       >
         {/* Header row: name + inline status badge */}
@@ -367,6 +391,15 @@ export function AgentMessage({
           </div>
         </MessageContent>
       </MessageContainer>
+
+      {onDelete && (
+        <DeleteConfirmation
+          open={showDeleteConfirm}
+          onOpenChange={setShowDeleteConfirm}
+          onConfirm={onDelete}
+          message='Are you sure you want to delete this agent run? This will delete both the prompt and all associated tool executions.'
+        />
+      )}
     </div>
   );
 }

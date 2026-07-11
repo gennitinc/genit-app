@@ -912,6 +912,7 @@ export const templateApi = {
     try {
       const response = await apiResponse.post(`/templates/publish`, data, {
         withCredentials: true,
+        timeout: 30000,
       });
       return response.data;
     } catch (error: any) {
@@ -922,6 +923,23 @@ export const templateApi = {
       // Re-throw other errors
       throw error;
     }
+  },
+
+  /**
+   * Unpublish current user's copy from inspiration/templates (requires auth)
+   */
+  unpublishFromInspiration: async (
+    mediaUrl: string
+  ): Promise<ApiResponse<{ id: string; assetId: string } | null>> => {
+    const response = await apiResponse.post(
+      `/templates/unpublish`,
+      { mediaUrl },
+      {
+        withCredentials: true,
+        timeout: 30000,
+      }
+    );
+    return response.data;
   },
 };
 

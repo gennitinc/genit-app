@@ -35,6 +35,7 @@ import {
   MessageSquare,
   Send,
   Sparkles,
+  Target,
   TrendingUp,
   Users,
 } from "lucide-react";
@@ -487,7 +488,7 @@ export function GeneratedDesignCard({ data }: { data: any }) {
 
   const downloadUrl = data.url ? getFullUrl(data.url) : "";
 
-  const handlePublishToInspiration = async (e: React.MouseEvent) => {
+  const handlePublishToggle = async (e: React.MouseEvent) => {
     e.stopPropagation();
 
     if (!user) {
@@ -504,6 +505,27 @@ export function GeneratedDesignCard({ data }: { data: any }) {
 
     try {
       setPublishing(true);
+      if (published) {
+        const response =
+          await templateApi.unpublishFromInspiration(downloadUrl);
+        if (!response.success) {
+          throw new Error(response.message || "Failed to unpublish");
+        }
+
+        setPublished(false);
+        window.dispatchEvent(
+          new CustomEvent("template:unpublished", {
+            detail: { mediaUrl: downloadUrl },
+          })
+        );
+        toast({
+          title: "Unpublished from inspiration",
+          description:
+            "This content has been removed from the inspiration gallery",
+        });
+        return;
+      }
+
       const response = await templateApi.publishToInspiration({
         mediaUrl: downloadUrl,
         thumbnailUrl: downloadUrl,
@@ -518,6 +540,52 @@ export function GeneratedDesignCard({ data }: { data: any }) {
         response.message?.toLowerCase().includes("already")
       ) {
         setPublished(true);
+        const templatePayload = {
+          id: response.data?.id || data.id || downloadUrl,
+          src: downloadUrl,
+          alt:
+            data.name ||
+            data.prompt ||
+            data.message ||
+            "Generated design",
+          category: project?.category || "generic_design",
+          userId: {
+            _id: (user as any)?._id || (user as any)?.id,
+            username: (user as any)?.username,
+            email: (user as any)?.email,
+            profilePic:
+              (user as any)?.userdp || (user as any)?.profilePic,
+            isVerified: (user as any)?.isVerified,
+          },
+          author: (user as any)?.username,
+          isUserGenerated: true,
+        };
+
+        // Fire in-page event (works when templateGridAll is already mounted)
+        window.dispatchEvent(
+          new CustomEvent("template:published", {
+            detail: { template: templatePayload },
+          })
+        );
+
+        // Also persist to localStorage so templateGridAll picks it up on next
+        // mount (e.g. when user navigates to the inspiration/home page).
+        try {
+          const existing = JSON.parse(
+            localStorage.getItem("gennit:pending_published_templates") || "[]"
+          );
+          const merged = Array.isArray(existing) ? existing : [];
+          if (!merged.some((t: any) => t.src === templatePayload.src)) {
+            merged.unshift(templatePayload);
+          }
+          localStorage.setItem(
+            "gennit:pending_published_templates",
+            JSON.stringify(merged)
+          );
+        } catch {
+          // ignore storage errors
+        }
+
         toast({
           title: response.success
             ? "Published to inspiration"
@@ -542,7 +610,10 @@ export function GeneratedDesignCard({ data }: { data: any }) {
         toast({
           title: "Publish failed",
           description:
-            message || "Failed to publish to inspiration. Please try again.",
+            err?.code === "ECONNABORTED"
+              ? "The server did not respond. Please try again."
+              : message ||
+                `Failed to ${published ? "unpublish from" : "publish to"} inspiration. Please try again.`,
           variant: "destructive",
         });
       }
@@ -619,32 +690,28 @@ export function GeneratedDesignCard({ data }: { data: any }) {
               View
             </Button>
           )}
-          {published ? (
-            <Button
-              variant='outline'
-              size='sm'
-              disabled
-              className='h-7 w-fit gap-1.5 px-2 text-xs'
-            >
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={handlePublishToggle}
+            disabled={publishing}
+            className='h-7 w-fit gap-1.5 px-2 text-xs'
+          >
+            {publishing ? (
+              <LoadingFileLoader size={12} />
+            ) : published ? (
               <CheckCircle2 className='h-3 w-3' />
-              Published
-            </Button>
-          ) : (
-            <Button
-              variant='outline'
-              size='sm'
-              onClick={handlePublishToInspiration}
-              disabled={publishing}
-              className='h-7 w-fit gap-1.5 px-2 text-xs'
-            >
-              {publishing ? (
-                <LoadingFileLoader size={12} />
-              ) : (
-                <Forward className='h-3 w-3' />
-              )}
-              {publishing ? "Publishing..." : "Publish"}
-            </Button>
-          )}
+            ) : (
+              <Forward className='h-3 w-3' />
+            )}
+            {publishing
+              ? published
+                ? "Unpublishing..."
+                : "Publishing..."
+              : published
+                ? "Published 🎉"
+                : "Publish"}
+          </Button>
           <ExternalLinkInline href={getFullUrl(data.url)}>
             Open {isVideo ? "Video" : "Image"}
           </ExternalLinkInline>
@@ -751,6 +818,208 @@ export function DesignInspirationCard({ data }: { data: any }) {
   );
 }
 
+export function GtmCampaignCard({ data }: { data: any }) {
+  const campaign = data?.campaign || data?.campaigns?.[0] || data;
+  const campaigns = data?.campaigns || (campaign?._id ? [campaign] : []);
+  return (
+    <AgentCard
+      icon={<Target className='h-3.5 w-3.5' />}
+      title={campaigns.length > 1 ? "GTM campaigns" : "GTM campaign"}
+      tone='success'
+      meta={campaigns.length > 1 ? `${campaigns.length} total` : campaign?.status}
+    >
+      {campaigns.slice(0, 4).map((item: any) => (
+        <div key={item._id || item.name} className='border-border/70 border-b py-2 last:border-b-0 dark:border-white/10'>
+          <div className='text-foreground text-[13.5px] font-medium'>
+            {item.name}
+          </div>
+          <p className='text-muted-foreground mt-1 line-clamp-2 text-[12.5px]'>
+            {item.objective || item.plan?.summary}
+          </p>
+        </div>
+      ))}
+    </AgentCard>
+  );
+}
+
+export function GtmLeadsCard({ data }: { data: any }) {
+  const leads: any[] = data?.leads || [];
+  return (
+    <AgentCard
+      icon={<Users className='h-3.5 w-3.5' />}
+      title={`${leads.length} ${leads.length === 1 ? "lead" : "leads"}`}
+      meta={data?.provider}
+      tone='success'
+    >
+      {leads.length === 0 ? (
+        <div className='text-muted-foreground text-[12.5px]'>No leads found.</div>
+      ) : (
+        <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
+          {leads.slice(0, 6).map((lead, i) => (
+            <li key={lead._id || lead.email || i} className='px-3.5 py-2.5'>
+              <div className='text-foreground text-[12.5px] font-medium'>
+                {lead.fullName || lead.email}
+              </div>
+              <div className='text-muted-foreground mt-0.5 text-[12px]'>
+                {[lead.title, lead.company, lead.email].filter(Boolean).join(" · ")}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </AgentCard>
+  );
+}
+
+export function GtmOutboundCard({ data }: { data: any }) {
+  const jobs: any[] = data?.jobs || [];
+  return (
+    <AgentCard
+      icon={<Mail className='h-3.5 w-3.5' />}
+      title='Outbound scheduled'
+      meta={`${jobs.length} email${jobs.length === 1 ? "" : "s"}`}
+      tone='success'
+    >
+      <p className='text-muted-foreground text-[12.5px]'>
+        Personalized sequence jobs were queued. Suppressed, unsubscribed, and invalid leads were skipped.
+      </p>
+    </AgentCard>
+  );
+}
+
+export function GtmAttributionCard({ data }: { data: any }) {
+  const metrics = data?.metrics || data?.attribution?.metrics || {};
+  const conversionValue = data?.conversionValue ?? data?.attribution?.conversionValue ?? 0;
+  const roi = data?.roi ?? data?.attribution?.roi;
+  return (
+    <AgentCard
+      icon={<BarChart3 className='h-3.5 w-3.5' />}
+      title='GTM attribution'
+      meta={data?.campaign?.name}
+      tone='success'
+    >
+      <dl className='grid grid-cols-2 gap-x-4 gap-y-3'>
+        {[
+          ["Clicks", metrics.clicks || 0],
+          ["Conversions", data?.conversions || 0],
+          ["Value", `$${conversionValue}`],
+          ["ROI", roi == null ? "n/a" : `${Math.round(roi * 100)}%`],
+        ].map(([label, value]) => (
+          <div key={label}>
+            <dt className='text-muted-foreground text-[10.5px] tracking-[0.04em] uppercase'>
+              {label}
+            </dt>
+            <dd className='text-foreground mt-0.5 text-[15px] font-semibold'>
+              {value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </AgentCard>
+  );
+}
+
+export function GtmOptimizerCard({ data }: { data: any }) {
+  const recommendations: any[] =
+    data?.recommendations || data?.campaign?.recommendations || [];
+  return (
+    <AgentCard
+      icon={<Sparkles className='h-3.5 w-3.5' />}
+      title='Optimizer recommendations'
+      meta={`${recommendations.length} new`}
+      tone='success'
+    >
+      {recommendations.length === 0 ? (
+        <div className='text-muted-foreground text-[12.5px]'>
+          No new recommendations.
+        </div>
+      ) : (
+        <ul className='space-y-2'>
+          {recommendations.slice(0, 4).map((rec, i) => (
+            <li key={`${rec.title}-${i}`} className='text-[12.5px]'>
+              <span className='text-foreground font-medium'>{rec.title}</span>
+              <span className='text-muted-foreground'> — {rec.action}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </AgentCard>
+  );
+}
+
+export function GtmPdfReportCard({ data }: { data: any }) {
+  const report = data?.report || data;
+  const url = getFullUrl(report?.url || "");
+  return (
+    <AgentCard
+      icon={<FileText className='h-3.5 w-3.5' />}
+      title='PDF report ready'
+      meta={report?.campaignName}
+      tone='success'
+    >
+      <div className='flex flex-wrap items-center gap-2'>
+        {url && (
+          <>
+            <Button asChild variant='outline' size='sm' className='h-7 px-2 text-xs'>
+              <a href={url} target='_blank' rel='noreferrer'>
+                <ExternalLink className='h-3 w-3' />
+                View
+              </a>
+            </Button>
+            <Button asChild variant='outline' size='sm' className='h-7 px-2 text-xs'>
+              <a href={url} download>
+                <Download className='h-3 w-3' />
+                Download
+              </a>
+            </Button>
+          </>
+        )}
+      </div>
+    </AgentCard>
+  );
+}
+
+export function ResearchReportCard({ data }: { data: any }) {
+  const report = data?.report || data;
+  const previewUrl = getFullUrl(report?.previewUrl || "");
+  const pdfUrl = getFullUrl(report?.pdfUrl || "");
+  return (
+    <AgentCard
+      icon={<FileText className='h-3.5 w-3.5' />}
+      title={report?.title || "Research report"}
+      meta='Document and PDF'
+      tone='success'
+    >
+      {previewUrl && (
+        <iframe
+          src={previewUrl}
+          title={report?.title || "Research report preview"}
+          sandbox='allow-popups allow-popups-to-escape-sandbox'
+          className='border-border/70 h-[26rem] w-full rounded-md border bg-white'
+        />
+      )}
+      <div className='mt-3 flex flex-wrap items-center gap-2'>
+        {previewUrl && (
+          <Button asChild variant='outline' size='sm' className='h-7 px-2 text-xs'>
+            <a href={previewUrl} target='_blank' rel='noreferrer'>
+              <ExternalLink className='h-3 w-3' />
+              Open preview
+            </a>
+          </Button>
+        )}
+        {pdfUrl && (
+          <Button asChild variant='outline' size='sm' className='h-7 px-2 text-xs'>
+            <a href={pdfUrl} download={report?.fileName}>
+              <Download className='h-3 w-3' />
+              Download PDF
+            </a>
+          </Button>
+        )}
+      </div>
+    </AgentCard>
+  );
+}
+
 // ─── Dispatcher: pick the right card for a render hint ───
 export function renderToolResult(
   hint: string | undefined,
@@ -790,6 +1059,21 @@ export function renderToolResult(
       return <GeneratedDesignCard data={data} />;
     case "design_inspiration":
       return <DesignInspirationCard data={data} />;
+    case "gtm_campaign":
+    case "gtm_campaign_list":
+      return <GtmCampaignCard data={data} />;
+    case "gtm_leads":
+      return <GtmLeadsCard data={data} />;
+    case "gtm_outbound":
+      return <GtmOutboundCard data={data} />;
+    case "gtm_attribution":
+      return <GtmAttributionCard data={data} />;
+    case "gtm_optimizer":
+      return <GtmOptimizerCard data={data} />;
+    case "gtm_pdf_report":
+      return <GtmPdfReportCard data={data} />;
+    case "research_report":
+      return <ResearchReportCard data={data} />;
     default:
       return null;
   }

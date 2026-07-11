@@ -46,7 +46,7 @@ export function TextChatContent() {
     isProcessingDraft,
   } = useProjectDesign();
 
-  const { runs: agentRuns } = useAgentRunsContext();
+  const { runs: agentRuns, deleteRun } = useAgentRunsContext();
 
   // We filter out regular messages that exactly match AgentRun prompts or final texts.
   // This cleans up historical database records from before we stopped duplicating AgentRuns as plain messages.
@@ -364,6 +364,17 @@ export function TextChatContent() {
                     run={item.data}
                     userAvatar={userAvatar}
                     userName={userName}
+                    onCopy={() =>
+                      handleCopyMessage(item.data.text || "")
+                    }
+                    onLike={() => {
+                      // Agent runs don't currently persist reactions server-side;
+                      // extend handleLikeToggle when runId-based storage is added.
+                    }}
+                    onDislike={() => {
+                      // Same as above for dislike.
+                    }}
+                    onDelete={() => deleteRun(item.data.runId)}
                   />
                 );
               }

@@ -20,6 +20,7 @@ interface AgentRunsContextValue {
     useBrandIdentity?: boolean
   ) => Promise<{ runId: string } | null>;
   clear: () => void;
+  deleteRun: (runId: string) => Promise<void>;
 }
 
 const AgentRunsContext = createContext<AgentRunsContextValue | null>(null);
@@ -27,7 +28,7 @@ const AgentRunsContext = createContext<AgentRunsContextValue | null>(null);
 export function AgentRunsProvider({ children }: { children: ReactNode }) {
   const { project } = useProjectDesign();
   const projectId = project?._id?.toString();
-  const { runs, registerNewRun, clear } = useAgentRuns(projectId);
+  const { runs, registerNewRun, clear, deleteRun } = useAgentRuns(projectId);
 
   const startAgent = useCallback(
     async (
@@ -56,8 +57,8 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
   );
 
   const value = useMemo<AgentRunsContextValue>(
-    () => ({ runs, startAgent, clear }),
-    [runs, startAgent, clear]
+    () => ({ runs, startAgent, clear, deleteRun }),
+    [runs, startAgent, clear, deleteRun]
   );
 
   return (
