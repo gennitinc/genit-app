@@ -33,7 +33,6 @@ import { appendClientTimeContext, cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
-import { templateApi } from "@/utils/inspire-api";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
@@ -42,14 +41,12 @@ import {
   Eye,
   Image as ImageIcon,
   Loader,
-  Loader2,
   MessageSquare,
   Mic,
   Palette,
   PaperclipIcon,
   Pencil,
   Plus,
-  Sparkles,
   TrendingUp,
   User,
   Users,
@@ -78,6 +75,20 @@ type TemplateItem = {
   };
   author?: string;
   isUserGenerated?: boolean;
+  isPendingPublished?: boolean;
+};
+
+const keepPendingPublished = (
+  current: TemplateItem[],
+  fetched: TemplateItem[]
+) => {
+  const fetchedUrls = new Set(fetched.map((item) => item.src));
+  return [
+    ...current.filter(
+      (item) => item.isPendingPublished && !fetchedUrls.has(item.src)
+    ),
+    ...fetched,
+  ];
 };
 
 type ImageDesignType =
@@ -104,12 +115,6 @@ export default function TemplateGridAll() {
   const [loading, setLoading] = useState<boolean>(false);
   const [limit, setLimit] = useState(20);
   const [isBrandSettingsOpen, setIsBrandSettingsOpen] = useState(false);
-  const [publishingTemplateId, setPublishingTemplateId] = useState<
-    string | null
-  >(null);
-  const [publishedTemplateUrls, setPublishedTemplateUrls] = useState<
-    Set<string>
-  >(new Set());
   // Pagination & search
   const [page, setPage] = useState<number>(1);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
@@ -218,19 +223,23 @@ export default function TemplateGridAll() {
                 : prev;
             });
           } else {
-            setTemplates(mapped.length > 0 ? mapped : []);
+            setTemplates((prev) => keepPendingPublished(prev, mapped));
           }
 
           // pagination flags
           setHasNextPage(Boolean(data.data?.pagination?.hasNextPage));
         } else {
-          if (!append) setTemplates([]);
+          if (!append) {
+            setTemplates((prev) => keepPendingPublished(prev, []));
+          }
           setHasNextPage(false);
         }
       } catch (err: any) {
         console.error("Failed to fetch inspirations:", err);
         setNewError(err.message || "Failed to load inspirations.");
-        if (!append) setTemplates([]);
+        if (!append) {
+          setTemplates((prev) => keepPendingPublished(prev, []));
+        }
         setHasNextPage(false);
       } finally {
         if (append) {
@@ -261,10 +270,9 @@ export default function TemplateGridAll() {
         localStorage.removeItem("gennit:pending_published_templates");
         pending.forEach((template) => {
           if (!template?.src) return;
-          setPublishedTemplateUrls((prev) => new Set(prev).add(template.src));
           setTemplates((prev) => {
             if (prev.some((item) => item.src === template.src)) return prev;
-            return [template, ...prev];
+            return [{ ...template, isPendingPublished: true }, ...prev];
           });
         });
       } catch {
@@ -281,10 +289,9 @@ export default function TemplateGridAll() {
         .detail?.template;
       if (!template?.src) return;
 
-      setPublishedTemplateUrls((prev) => new Set(prev).add(template.src));
       setTemplates((prev) => {
         if (prev.some((item) => item.src === template.src)) return prev;
-        return [template, ...prev];
+        return [{ ...template, isPendingPublished: true }, ...prev];
       });
     };
 
@@ -293,11 +300,6 @@ export default function TemplateGridAll() {
         ?.mediaUrl;
       if (!mediaUrl) return;
 
-      setPublishedTemplateUrls((prev) => {
-        const next = new Set(prev);
-        next.delete(mediaUrl);
-        return next;
-      });
       setTemplates((prev) =>
         prev.filter((item) => item.src !== mediaUrl || !item.isUserGenerated)
       );
@@ -314,10 +316,9 @@ export default function TemplateGridAll() {
         localStorage.removeItem("gennit:pending_published_templates");
         pending.forEach((template) => {
           if (!template?.src) return;
-          setPublishedTemplateUrls((prev) => new Set(prev).add(template.src));
           setTemplates((prev) => {
             if (prev.some((item) => item.src === template.src)) return prev;
-            return [template, ...prev];
+            return [{ ...template, isPendingPublished: true }, ...prev];
           });
         });
       } catch {
@@ -376,76 +377,6 @@ export default function TemplateGridAll() {
 
     // Add the template URL to selectedFiles only if it's not already included
     setSelectedFiles((prev) => (prev.includes(item.src) ? prev : [item.src]));
-  };
-
-  const handlePublishToggle = async (
-    item: TemplateItem,
-    isPublished: boolean,
-    isOwnedByCurrentUser: boolean
-  ) => {
-    if (!user) {
-      router.push("/signin");
-      return;
-    }
-
-    try {
-      setPublishingTemplateId(item.id);
-
-      if (isPublished) {
-        const response = await templateApi.unpublishFromInspiration(item.src);
-        if (!response.success) {
-          throw new Error(response.message || "Failed to unpublish");
-        }
-
-        setPublishedTemplateUrls((prev) => {
-          const next = new Set(prev);
-          next.delete(item.src);
-          return next;
-        });
-        if (isOwnedByCurrentUser) {
-          setTemplates((prev) =>
-            prev.filter((template) => template.id !== item.id)
-          );
-        }
-        toast.success("Unpublished from inspiration");
-        return;
-      }
-
-      const response = await templateApi.publishToInspiration({
-        mediaUrl: item.src,
-        thumbnailUrl: item.src,
-        mediaType: "image",
-        prompt: item.alt || "",
-        category: item.category || "generic_design",
-        title: item.alt || "Design inspiration",
-      });
-
-      if (
-        response.success ||
-        response.message?.toLowerCase().includes("already")
-      ) {
-        setPublishedTemplateUrls((prev) => new Set(prev).add(item.src));
-        toast.success(
-          response.success ? "Published to inspiration" : "Already published"
-        );
-        return;
-      }
-
-      throw new Error(response.message || "Failed to publish");
-    } catch (error: any) {
-      const message = error?.response?.data?.message || error?.message || "";
-      if (error?.response?.status === 409 || message.includes("already")) {
-        setPublishedTemplateUrls((prev) => new Set(prev).add(item.src));
-        toast.success("Already published");
-      } else {
-        toast.error("Publish failed", {
-          description:
-            message || "Failed to publish to inspiration. Please try again.",
-        });
-      }
-    } finally {
-      setPublishingTemplateId(null);
-    }
   };
 
   const placeholders = [
@@ -791,16 +722,6 @@ export default function TemplateGridAll() {
           </>
         )}
         {templates.map((t) => {
-          const currentUserId = (user as any)?._id || (user as any)?.id;
-          const isOwnedByCurrentUser = Boolean(
-            t.isUserGenerated &&
-              currentUserId &&
-              t.userId?._id &&
-              String(t.userId._id) === String(currentUserId)
-          );
-          const isPublished =
-            publishedTemplateUrls.has(t.src) || isOwnedByCurrentUser;
-
           return (
             <div
               key={t.id}
@@ -873,31 +794,6 @@ export default function TemplateGridAll() {
                   aria-label='View template'
                 >
                   <Eye className='h-4 w-4 text-black dark:text-white' />
-                </Button>
-                <Button
-                  size='icon'
-                  variant='secondary'
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handlePublishToggle(t, isPublished, isOwnedByCurrentUser);
-                  }}
-                  disabled={publishingTemplateId === t.id}
-                  className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-90 backdrop-blur-sm dark:bg-black/20'
-                  aria-label={
-                    isPublished
-                      ? "Unpublish from inspiration"
-                      : "Publish to inspiration"
-                  }
-                >
-                  {publishingTemplateId === t.id ? (
-                    <Loader2 className='h-4 w-4 animate-spin text-black dark:text-white' />
-                  ) : isPublished ? (
-                    <span className='text-xs' aria-hidden='true'>
-                      🎉
-                    </span>
-                  ) : (
-                    <Sparkles className='h-4 w-4 text-black dark:text-white' />
-                  )}
                 </Button>
                 <Button
                   size='icon'

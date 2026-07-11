@@ -908,7 +908,7 @@ export const templateApi = {
    */
   publishToInspiration: async (
     data: PublishToInspirationRequest
-  ): Promise<ApiResponse<{ id: string; assetId: string }>> => {
+  ): Promise<ApiResponse<{ id: string; assetId: string; category: string }>> => {
     try {
       const response = await apiResponse.post(`/templates/publish`, data, {
         withCredentials: true,

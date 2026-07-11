@@ -548,7 +548,7 @@ export function GeneratedDesignCard({ data }: { data: any }) {
             data.prompt ||
             data.message ||
             "Generated design",
-          category: project?.category || "generic_design",
+          category: response.data?.category || "generic_design",
           userId: {
             _id: (user as any)?._id || (user as any)?.id,
             username: (user as any)?.username,
@@ -559,6 +559,7 @@ export function GeneratedDesignCard({ data }: { data: any }) {
           },
           author: (user as any)?.username,
           isUserGenerated: true,
+          isPendingPublished: true,
         };
 
         // Fire in-page event (works when templateGridAll is already mounted)
