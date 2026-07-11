@@ -35,8 +35,14 @@ function ChatLayoutInner() {
   const isMobile = useMediaQuery("(max-width: 767px)");
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
-  const { isGeneratingImage, liveNodes, messages, project, isGenerating } =
-    useProjectDesign();
+  const {
+    artifactPreview,
+    isGeneratingImage,
+    liveNodes,
+    messages,
+    project,
+    isGenerating,
+  } = useProjectDesign();
   const { runs: agentRuns } = useAgentRunsContext();
   const { setOpen: setSidebarOpen } = useSidebar();
 
@@ -52,6 +58,7 @@ function ChatLayoutInner() {
 
   const hasAnyPreview =
     isGenerationActive ||
+    Boolean(artifactPreview) ||
     // Design projects: open when there are generated images
     (messages?.some((m: any) => (m.generationGroups?.length ?? 0) > 0) ??
       false) ||
@@ -82,6 +89,10 @@ function ChatLayoutInner() {
     }
     prevActiveRef.current = isGenerationActive;
   }, [isGenerationActive]);
+
+  useEffect(() => {
+    if (artifactPreview) setIsPreviewOpen(true);
+  }, [artifactPreview]);
 
   // Collapse the app sidebar when the preview opens (more room for canvas);
   // re-expand it when the preview closes.

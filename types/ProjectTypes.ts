@@ -123,6 +123,16 @@ export interface IDesignProject {
 export interface IProjectDesignContext {
   project: IDesignProject | null;
   setProject: React.Dispatch<React.SetStateAction<IDesignProject | null>>;
+  artifactPreview: {
+    type: "document" | "website";
+    title: string;
+    url: string;
+    downloadUrl?: string;
+    fileName?: string;
+  } | null;
+  setArtifactPreview: React.Dispatch<
+    React.SetStateAction<IProjectDesignContext["artifactPreview"]>
+  >;
 
   generations: any[];
   setGenerations: React.Dispatch<React.SetStateAction<any[]>>;

@@ -40,7 +40,7 @@ import {
   Users,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const getFullUrl = (url: string) => {
   if (!url) return "";
@@ -950,6 +950,20 @@ export function GtmOptimizerCard({ data }: { data: any }) {
 export function GtmPdfReportCard({ data }: { data: any }) {
   const report = data?.report || data;
   const url = getFullUrl(report?.url || "");
+  const { setArtifactPreview } = useProjectDesign();
+  const showPreview = () =>
+    setArtifactPreview({
+      type: "document",
+      title: report?.campaignName || "GTM campaign report",
+      url,
+      downloadUrl: url,
+      fileName: report?.fileName,
+    });
+
+  useEffect(() => {
+    if (url) showPreview();
+  }, [url]);
+
   return (
     <AgentCard
       icon={<FileText className='h-3.5 w-3.5' />}
@@ -960,11 +974,14 @@ export function GtmPdfReportCard({ data }: { data: any }) {
       <div className='flex flex-wrap items-center gap-2'>
         {url && (
           <>
-            <Button asChild variant='outline' size='sm' className='h-7 px-2 text-xs'>
-              <a href={url} target='_blank' rel='noreferrer'>
-                <ExternalLink className='h-3 w-3' />
-                View
-              </a>
+            <Button
+              variant='outline'
+              size='sm'
+              className='h-7 px-2 text-xs'
+              onClick={showPreview}
+            >
+              <ExternalLink className='h-3 w-3' />
+              View
             </Button>
             <Button asChild variant='outline' size='sm' className='h-7 px-2 text-xs'>
               <a href={url} download>
@@ -983,6 +1000,20 @@ export function ResearchReportCard({ data }: { data: any }) {
   const report = data?.report || data;
   const previewUrl = getFullUrl(report?.previewUrl || "");
   const pdfUrl = getFullUrl(report?.pdfUrl || "");
+  const { setArtifactPreview } = useProjectDesign();
+  const showPreview = () =>
+    setArtifactPreview({
+      type: "document",
+      title: report?.title || "Research report",
+      url: previewUrl,
+      downloadUrl: pdfUrl,
+      fileName: report?.fileName,
+    });
+
+  useEffect(() => {
+    if (previewUrl) showPreview();
+  }, [previewUrl]);
+
   return (
     <AgentCard
       icon={<FileText className='h-3.5 w-3.5' />}
@@ -990,21 +1021,16 @@ export function ResearchReportCard({ data }: { data: any }) {
       meta='Document and PDF'
       tone='success'
     >
-      {previewUrl && (
-        <iframe
-          src={previewUrl}
-          title={report?.title || "Research report preview"}
-          sandbox='allow-popups allow-popups-to-escape-sandbox'
-          className='border-border/70 h-[26rem] w-full rounded-md border bg-white'
-        />
-      )}
-      <div className='mt-3 flex flex-wrap items-center gap-2'>
+      <div className='flex flex-wrap items-center gap-2'>
         {previewUrl && (
-          <Button asChild variant='outline' size='sm' className='h-7 px-2 text-xs'>
-            <a href={previewUrl} target='_blank' rel='noreferrer'>
-              <ExternalLink className='h-3 w-3' />
-              Open preview
-            </a>
+          <Button
+            variant='outline'
+            size='sm'
+            className='h-7 px-2 text-xs'
+            onClick={showPreview}
+          >
+            <ExternalLink className='h-3 w-3' />
+            View report
           </Button>
         )}
         {pdfUrl && (
@@ -1016,6 +1042,69 @@ export function ResearchReportCard({ data }: { data: any }) {
           </Button>
         )}
       </div>
+    </AgentCard>
+  );
+}
+
+export function DocumentArtifactCard({ data }: { data: any }) {
+  const artifact = data?.artifact || data;
+  const previewUrl = getFullUrl(artifact?.previewUrl || artifact?.fileUrl || "");
+  const fileUrl = getFullUrl(artifact?.fileUrl || "");
+  const { setArtifactPreview } = useProjectDesign();
+  const showPreview = () =>
+    setArtifactPreview({
+      type: "document",
+      title: artifact?.title || "Document",
+      url: previewUrl,
+      downloadUrl: fileUrl,
+      fileName: artifact?.fileName,
+    });
+
+  useEffect(() => {
+    if (previewUrl) showPreview();
+  }, [previewUrl]);
+
+  return (
+    <AgentCard
+      icon={<FileText className='h-3.5 w-3.5' />}
+      title={artifact?.title || "Document"}
+      meta={`${String(artifact?.format || "file").toUpperCase()} · v${artifact?.version || 1}`}
+      tone='success'
+    >
+      <div className='flex flex-wrap items-center gap-2'>
+        {previewUrl && (
+          <Button variant='outline' size='sm' className='h-7 px-2 text-xs' onClick={showPreview}>
+            <ExternalLink className='h-3 w-3' />
+            View
+          </Button>
+        )}
+        {fileUrl && (
+          <Button asChild variant='outline' size='sm' className='h-7 px-2 text-xs'>
+            <a href={fileUrl} download={artifact?.fileName}>
+              <Download className='h-3 w-3' />
+              Download
+            </a>
+          </Button>
+        )}
+      </div>
+    </AgentCard>
+  );
+}
+
+export function DocumentListCard({ data }: { data: any }) {
+  const artifacts: any[] = data?.artifacts || [];
+  return (
+    <AgentCard icon={<FileText className='h-3.5 w-3.5' />} title='Documents' meta={`${artifacts.length} recent`}>
+      <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
+        {artifacts.slice(0, 10).map((artifact) => (
+          <li key={artifact._id} className='flex items-center justify-between gap-3 px-3.5 py-2.5'>
+            <span className='min-w-0 truncate text-[12.5px] font-medium'>{artifact.title}</span>
+            <span className='text-muted-foreground shrink-0 text-[11px] uppercase'>
+              {artifact.format} · v{artifact.version}
+            </span>
+          </li>
+        ))}
+      </ul>
     </AgentCard>
   );
 }
@@ -1074,6 +1163,10 @@ export function renderToolResult(
       return <GtmPdfReportCard data={data} />;
     case "research_report":
       return <ResearchReportCard data={data} />;
+    case "document_artifact":
+      return <DocumentArtifactCard data={data} />;
+    case "document_list":
+      return <DocumentListCard data={data} />;
     default:
       return null;
   }

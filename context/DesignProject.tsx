@@ -35,6 +35,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [project, setProject] = useState<IDesignProject | null>(null);
+  const [artifactPreview, setArtifactPreview] = useState<
+    IProjectDesignContext["artifactPreview"]
+  >(null);
   const router = useRouter();
   const user = useUserContext().user;
   const userId = String(user?._id);
@@ -243,6 +246,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsGenerating(false);
       setIsGeneratingImage(false);
       setGeneratingForMessageId(null);
+      setArtifactPreview(null);
 
       // Update the processed draft ref so new project can process its own draft
       hasProcessedDraftRef.current = false;
@@ -1543,6 +1547,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         project,
         setProject,
+        artifactPreview,
+        setArtifactPreview,
         generations,
         setGenerations,
         isGenerating,
