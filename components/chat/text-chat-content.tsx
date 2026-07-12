@@ -17,6 +17,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
+import type { StickToBottomContext } from "use-stick-to-bottom";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export function TextChatContent() {
@@ -110,7 +111,7 @@ export function TextChatContent() {
 
   const skeletonRef = useRef<HTMLDivElement | null>(null);
   const scrollElRef = useRef<HTMLElement | null>(null);
-  const localConversationRef = useRef<HTMLDivElement | null>(null);
+  const conversationContextRef = useRef<StickToBottomContext | null>(null);
 
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [showButton, setShowButton] = useState(false);
@@ -175,10 +176,10 @@ export function TextChatContent() {
   }, []);
 
   useEffect(() => {
-    // We favor our local ref as the primary scroll element now
-    if (localConversationRef.current) {
-      scrollElRef.current = localConversationRef.current;
-      const el = localConversationRef.current;
+    // Track the scroll element owned by StickToBottom.
+    const el = conversationContextRef.current?.scrollRef.current;
+    if (el) {
+      scrollElRef.current = el;
       el.addEventListener("scroll", onScroll, { passive: true });
 
       // Auto scroll on first mount
@@ -246,16 +247,16 @@ export function TextChatContent() {
   }, [isTyping, isAtBottom, doScrollToBottom]);
 
   useEffect(() => {
-    const el = localConversationRef.current;
-    if (!el) return;
+    const content = conversationContextRef.current?.contentRef.current;
+    if (!content) return;
 
     const resizeObserver = new ResizeObserver(() => {
       if (isAtBottom) {
-        doScrollToBottom({ behavior: "smooth" });
+        doScrollToBottom({ behavior: "auto" });
       }
     });
 
-    resizeObserver.observe(el);
+    resizeObserver.observe(content);
     return () => resizeObserver.disconnect();
   }, [isAtBottom, doScrollToBottom]);
 
@@ -350,11 +351,11 @@ export function TextChatContent() {
 
   return (
     <ChatInput placeholder='Ask a follow up message...' className='h-full'>
-      <div
-        ref={localConversationRef}
-        className='scroll-container custom-scrollbar min-w-0 flex-1 overflow-x-hidden overflow-y-auto px-2 md:px-6'
-      >
-        <Conversation className='m-0 px-0'>
+      <div className='min-w-0 flex-1 overflow-hidden px-2 md:px-6'>
+        <Conversation
+          contextRef={conversationContextRef}
+          className='scroll-container custom-scrollbar m-0 h-full px-0'
+        >
           <ConversationContent className='m-0 min-h-full space-y-4 overflow-x-hidden px-0 pb-10'>
             {allItems.map((item, index) => {
               if (item.type === "agent") {

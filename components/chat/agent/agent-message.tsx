@@ -1,5 +1,7 @@
 "use client";
 
+import { DeleteConfirmation } from "../messages/delete-confirmation";
+import { DesignInspirationResults } from "../messages/design-inspiration-results";
 import { AgentCard } from "./agent-card";
 import { AgentPlan } from "./agent-plan";
 import { AgentThinkingStream } from "./agent-thinking-stream";
@@ -8,14 +10,12 @@ import { ConnectIntegrationInline } from "./connect-integration-inline";
 import { ElicitationCard } from "./elicitation-card";
 import { renderToolResult } from "./result-cards";
 import { Response } from "@/components/ai-elements/response";
+import { MessageActions } from "@/components/chat/messages/message-actions";
 import { MessageContainer } from "@/components/chat/messages/message-container";
 import { MessageContent } from "@/components/chat/messages/message-content";
-import { MessageActions } from "@/components/chat/messages/message-actions";
-import { DeleteConfirmation } from "../messages/delete-confirmation";
 import { UserMessage } from "@/components/chat/messages/user-message";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { resumeAgentRunUserInput } from "@/lib/agents-api";
-import { useState } from "react";
 import type {
   AgentAttachedFile,
   AgentElicitation,
@@ -33,6 +33,7 @@ import {
   Loader2,
   XCircle,
 } from "lucide-react";
+import { useState } from "react";
 
 export interface AgentRunView {
   runId: string;
@@ -208,6 +209,17 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
       </AgentCard>
     );
   }
+  if (call.render === "design_inspiration") {
+    const results = Array.isArray(data)
+      ? data
+      : data?.pins || data?.inspirations || [];
+    return (
+      <DesignInspirationResults
+        results={results}
+        query={call.args?.query || "design inspiration"}
+      />
+    );
+  }
 
   // Generic dispatcher covers every other platform tool render hint.
   const rendered = renderToolResult(call.render, data);
@@ -293,6 +305,38 @@ export function AgentMessage({
 }) {
   const isDone = run.status !== "running";
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const inspirationCalls = run.toolCalls.filter(
+    (call) => call.render === "design_inspiration"
+  );
+  const displayedToolCalls =
+    inspirationCalls.length <= 1
+      ? run.toolCalls
+      : run.toolCalls
+          .filter((call, index) => {
+            if (call.render !== "design_inspiration") return true;
+            return (
+              index ===
+              run.toolCalls.findIndex(
+                (candidate) => candidate.render === "design_inspiration"
+              )
+            );
+          })
+          .map((call) => {
+            if (call.render !== "design_inspiration") return call;
+            const seen = new Set<string>();
+            const data = inspirationCalls
+              .flatMap((candidate) =>
+                Array.isArray(candidate.result?.data)
+                  ? candidate.result.data
+                  : []
+              )
+              .filter((item) => {
+                if (!item?.image || seen.has(item.image)) return false;
+                seen.add(item.image);
+                return true;
+              });
+            return { ...call, result: { ok: true, data } };
+          });
 
   return (
     <div className='flex flex-col gap-4'>
@@ -357,7 +401,7 @@ export function AgentMessage({
             <AgentPlan tasks={run.plan} />
 
             {/* Tool calls */}
-            {run.toolCalls.map((tc) => (
+            {displayedToolCalls.map((tc) => (
               <ToolCallView key={tc.id} call={tc} />
             ))}
 

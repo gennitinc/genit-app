@@ -23,6 +23,7 @@ import {
   Sparkles,
   X,
   ZoomIn,
+  Globe2,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -150,7 +151,7 @@ export function DesignInspirationResults({
     <div className='my-4 w-full space-y-3'>
       {/* ─── Header ─── */}
       <div className='flex items-center gap-2'>
-        <Sparkles className='text-primary h-3 w-3 shrink-0' />
+        <Globe2 className='text-primary h-3 w-3 shrink-0' />
         <p className='text-[11px] text-blue-500'>
           {isAutoSelected
             ? "AI Selected Foundation"
@@ -323,9 +324,8 @@ export function DesignInspirationResults({
                       {/* Select overlay removed */}
                     </div>
 
-                    {/* Caption + nav */}
-                    <div className='mt-3 flex w-full items-center justify-center gap-4'>
-                      <CarouselPrevious className='static size-7 translate-y-0 rounded-full border-none bg-white/10 text-white hover:bg-white/20' />
+                    {/* Caption */}
+                    <div className='mt-3 flex w-full items-center justify-center'>
                       <div className='text-center'>
                         <p className='line-clamp-1 text-[11px] text-white/60'>
                           {pin.alt || "Design Concept"}
@@ -334,12 +334,13 @@ export function DesignInspirationResults({
                           {idx + 1} / {safeResults.length}
                         </p>
                       </div>
-                      <CarouselNext className='static size-7 translate-y-0 rounded-full border-none bg-white/10 text-white hover:bg-white/20' />
                     </div>
                   </CarouselItem>
                 );
               })}
             </CarouselContent>
+            <CarouselPrevious className='absolute top-1/2 left-4 z-10 size-9 -translate-y-1/2 rounded-full border-none bg-black/55 text-white backdrop-blur-sm hover:bg-black/75' />
+            <CarouselNext className='absolute top-1/2 right-4 z-10 size-9 -translate-y-1/2 rounded-full border-none bg-black/55 text-white backdrop-blur-sm hover:bg-black/75' />
           </Carousel>
         </DialogContent>
       </Dialog>
