@@ -17,9 +17,18 @@ import {
 import { INTEGRATIONS } from "@/app/integrations/integrations-explorer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import Loading from "@/utils/Loading";
-import { SendIcon } from "lucide-react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Play, SendIcon, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
@@ -370,6 +379,7 @@ const ReelsCarousel = () => {
 };
 
 const LandingHero = () => {
+  const { user } = useUserContext();
   const [visibleMessages, setVisibleMessages] = useState<number>(0);
   const [isTyping, setIsTyping] = useState(false);
   const [streamingText, setStreamingText] = useState<{ [key: number]: string }>(
@@ -500,10 +510,10 @@ const LandingHero = () => {
             </p>
             <div className='mt-8 flex flex-wrap items-center gap-3'>
               <a
-                href='#'
+                href={user ? "/chat" : "/signup"}
                 className='group inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 font-medium text-neutral-50 transition hover:brightness-95 active:translate-y-[1px]'
               >
-                Get started
+                {user ? "Get started" : "Get started"}
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   width={24}
@@ -520,31 +530,43 @@ const LandingHero = () => {
                   <path d='m12 5 7 7-7 7' className='' />
                 </svg>
               </a>
-              <a
-                href='#'
-                className='inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-white/90 transition hover:bg-white/[0.08] active:translate-y-[1px]'
-              >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  width={24}
-                  height={24}
-                  viewBox='0 0 24 24'
-                  fill='none'
-                  stroke='currentColor'
-                  strokeWidth='1.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  className='h-4 w-4 text-white/80'
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className='inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-white/90 transition-[background-color,transform] duration-150 ease-out hover:bg-white/[0.08] active:scale-[0.97]'>
+                    <Play className='h-4 w-4 fill-white/20 text-white/80' />
+                    Watch Demo
+                  </button>
+                </DialogTrigger>
+                <DialogContent
+                  hideDialogClose
+                  className='w-[calc(100%-1.5rem)] max-w-4xl gap-0 overflow-hidden rounded-3xl border border-white/15 bg-black p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-2xl'
                 >
-                  <path
-                    d='M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z'
-                    className=''
-                  />
-                  <path d='M15 5.764v15' className='' />
-                  <path d='M9 3.236v15' className='' />
-                </svg>
-                Watch Demo
-              </a>
+                  <div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.2),transparent_42%),radial-gradient(circle_at_bottom_right,rgba(163,230,53,0.12),transparent_38%)]' />
+                  {/* <DialogHeader className='relative flex-row items-center justify-between space-y-0 border-b border-white/10 px-5 py-4 text-left'>
+                    <div>
+                      <DialogTitle className='text-base font-medium'>
+                        Gennit in action
+                      </DialogTitle>
+                      <DialogDescription className='mt-1 text-xs text-white/50'>
+                        From a simple prompt to campaign-ready creative.
+                      </DialogDescription>
+                    </div>
+                    <DialogClose className='rounded-full border border-white/10 bg-white/5 p-2 text-white/60 transition-[background-color,color,transform] duration-150 ease-out hover:bg-white/10 hover:text-white active:scale-[0.96]'>
+                      <X className='h-4 w-4' />
+                      <span className='sr-only'>Close demo</span>
+                    </DialogClose>
+                  </DialogHeader> */}
+                  <div className='relative m-2 overflow-hidden rounded-[1.15rem] border shadow-2xl'>
+                    <iframe
+                      title='Gennit product demo'
+                      src='https://www.youtube-nocookie.com/embed/IjS9eTpmhgk?autoplay=1&rel=0'
+                      allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+                      allowFullScreen
+                      className='aspect-video w-full bg-black'
+                    />
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
             {/* Avatars / social proof */}
             <h2 className='text-muted-foreground mt-6 text-start text-sm tracking-tight md:text-base'>
