@@ -562,3 +562,7 @@
     transform: rotate(360deg);
   }
 }
+
+.spline-watermark {
+  visibility: hidden !important;
+}

@@ -1,9 +1,10 @@
 "use client";
 
-import { IdeaSection } from "../layout/idea-section";
+import { INTEGRATION_BRANDS, IdeaSection } from "../layout/idea-section";
 import { MainContent } from "../layout/main-content";
 import { BorderBeam } from "../ui/border-beam";
 import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
+import { MarketingRobot3D } from "./marketing-robot-3d";
 import {
   BrevoBrand,
   FacebookBrand,
@@ -13,12 +14,14 @@ import {
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { INTEGRATIONS } from "@/app/integrations/integrations-explorer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Loading from "@/utils/Loading";
 import { SendIcon } from "lucide-react";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
 // Video data for Reels carousel
@@ -478,7 +481,152 @@ const LandingHero = () => {
   return (
     <section className='relative w-full overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
       <div className='relative flex w-full flex-col items-center justify-center'>
-        <IdeaSection />
+        {/* <IdeaSection /> */}
+        <div className='mt-6 grid w-full grid-cols-1 items-center gap-16 lg:grid-cols-2'>
+          {/* Left: Content */}
+          <div className='w-full max-w-2xl'>
+            <div className='mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-neutral-300'>
+              <span className='inline-flex h-1.5 w-1.5 rounded-full bg-lime-300' />
+              Grow without Hiring
+            </div>
+            <h1 className='font-bricolage text-5xl leading-[1.05] font-bold tracking-tight sm:text-6xl'>
+              Marketing Agents <br />
+              <span className='font-bricolage font-medium tracking-tight text-neutral-300'>
+                Than Never Sleeps
+              </span>
+            </h1>
+            <p className='mt-5 max-w-xl text-neutral-400'>
+              Autonomous AI Agents that works 24/7, so you don't have to.
+            </p>
+            <div className='mt-8 flex flex-wrap items-center gap-3'>
+              <a
+                href='#'
+                className='group inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 font-medium text-neutral-50 transition hover:brightness-95 active:translate-y-[1px]'
+              >
+                Get started
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width={24}
+                  height={24}
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='1.5'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  className='h-4 w-4 -translate-x-0.5 transition group-hover:translate-x-0.5'
+                >
+                  <path d='M5 12h14' className='' />
+                  <path d='m12 5 7 7-7 7' className='' />
+                </svg>
+              </a>
+              <a
+                href='#'
+                className='inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-white/90 transition hover:bg-white/[0.08] active:translate-y-[1px]'
+              >
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width={24}
+                  height={24}
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='1.5'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  className='h-4 w-4 text-white/80'
+                >
+                  <path
+                    d='M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z'
+                    className=''
+                  />
+                  <path d='M15 5.764v15' className='' />
+                  <path d='M9 3.236v15' className='' />
+                </svg>
+                Watch Demo
+              </a>
+            </div>
+            {/* Avatars / social proof */}
+            <h2 className='text-muted-foreground mt-6 text-start text-sm tracking-tight md:text-base'>
+              with over {INTEGRATIONS.length}+ marketing{" "}
+              <Link
+                href='/plugin'
+                target='_blank'
+                className='text-foreground text-sm font-medium underline md:text-base'
+              >
+                Plugins
+              </Link>
+            </h2>
+            <div className='mt-7 flex items-center gap-4'>
+              <div className='flex items-center -space-x-2'>
+                <img
+                  src='https://www.terso.com.ng/images/terso-logo.png'
+                  alt='Terso'
+                  className='h-12 w-fit rounded-full object-cover ring-2 ring-neutral-950'
+                />
+
+                <img
+                  src='https://i.pinimg.com/736x/d5/ea/70/d5ea7077bc2c1775edfda58a8d50ae26.jpg'
+                  alt='User'
+                  className='h-12 w-fit rounded-full object-cover ring-2 ring-neutral-950'
+                />
+
+                <img
+                  src='https://i.pinimg.com/736x/b2/ce/22/b2ce2290ea022f489ab3ca735a5b1a8b.jpg'
+                  alt='User'
+                  className='h-12 w-fit rounded-full object-cover ring-2 ring-neutral-950'
+                />
+
+                <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-800 text-[11px] font-semibold text-white ring-2 ring-neutral-950'>
+                  +12
+                </div>
+              </div>
+              <p className='text-sm text-neutral-400'>
+                Trusted by 600+ Brands globally
+              </p>
+            </div>
+          </div>
+          {/* Right: Showcase 3d */}
+          <div className='relative mx-auto w-full max-w-xl lg:ml-auto'>
+            <MarketingRobot3D />
+          </div>
+          {/* end 3d */}
+        </div>
+
+        <section className='relative mt-5 space-y-4 pt-6 pb-10 lg:mt-6'>
+          {/* <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
+            with over {INTEGRATIONS.length}+ marketing{" "}
+            <Link
+              href='/plugin'
+              target='_blank'
+              className='text-foreground text-sm font-medium underline md:text-base'
+            >
+              Plugins
+            </Link>
+          </h2> */}
+          <div className='relative z-10 mx-auto max-w-5xl'>
+            <div className='overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4'>
+              <div className='animate-marquee flex w-max gap-10 hover:[animation-play-state:paused]'>
+                {[...INTEGRATION_BRANDS, ...INTEGRATION_BRANDS].map(
+                  ({ name, Icon }, i) => (
+                    <Link
+                      key={`${name}-${i}`}
+                      href={`/plugin#${name.toLowerCase().replace(/\s+/g, "-")}`}
+                      className='group text-muted-foreground hover:text-foreground flex shrink-0 items-center gap-2 transition-colors'
+                    >
+                      <span className='flex h-6 items-center md:h-7'>
+                        <Icon className='h-full w-auto' />
+                      </span>
+                      <span className='text-sm font-medium whitespace-nowrap md:text-base'>
+                        {name}
+                      </span>
+                    </Link>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
       <div className='relative z-10 mt-10 mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-8'>

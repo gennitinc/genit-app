@@ -115,7 +115,7 @@ import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { INTEGRATIONS } from "@/app/integrations/integrations-explorer";
 
-const INTEGRATION_BRANDS = [
+export const INTEGRATION_BRANDS = [
   { name: "Instagram", Icon: InstagramBrand },
   { name: "Facebook", Icon: FacebookBrand },
   { name: "LinkedIn", Icon: LinkedinBrand },
@@ -1626,7 +1626,7 @@ export function IdeaSection() {
               target='_blank'
               className='text-foreground text-sm font-medium underline md:text-base'
             >
-              Plugin
+              Plugins
             </Link>
           </h2>
           <div className='relative z-10 mx-auto max-w-5xl'>
