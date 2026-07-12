@@ -548,11 +548,11 @@ const LandingHero = () => {
 
                 <DialogContent
                   hideDialogClose
-                  className='border-border bg-background w-[calc(100%-1.5rem)] max-w-4xl gap-0 overflow-hidden rounded-3xl border p-0 shadow-2xl'
+                  className='border-border bg-background w-[calc(100%-1.5rem)] max-w-4xl gap-0 overflow-hidden rounded-4xl border p-0 shadow-2xl'
                 >
-                  <div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.18),transparent_42%),radial-gradient(circle_at_bottom_right,rgba(99,102,241,0.12),transparent_38%)]' />
+                  {/* <div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.18),transparent_42%),radial-gradient(circle_at_bottom_right,rgba(99,102,241,0.12),transparent_38%)]' /> */}
 
-                  <div className='border-border relative m-2 overflow-hidden rounded-[1.15rem] border shadow-2xl'>
+                  <div className='border-border relative m-2 overflow-hidden rounded-2xl border shadow-2xl'>
                     <iframe
                       title='Genit product demo'
                       src='https://www.youtube-nocookie.com/embed/IjS9eTpmhgk?autoplay=1&rel=0'
