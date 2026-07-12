@@ -492,28 +492,35 @@ const LandingHero = () => {
     <section className='relative w-full overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
       <div className='relative flex w-full flex-col items-center justify-center'>
         {/* <IdeaSection /> */}
-        <div className='mt-6 grid w-full grid-cols-1 items-center gap-16 lg:grid-cols-2'>
+        <div className='mt-6 grid w-full grid-cols-1 items-center gap-16 px-2 md:px-4 lg:grid-cols-2 lg:px-0'>
           {/* Left: Content */}
           <div className='w-full max-w-2xl'>
-            <div className='mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-neutral-300'>
-              <span className='inline-flex h-1.5 w-1.5 rounded-full bg-lime-300' />
+            {/* Badge */}
+            <div className='border-border bg-muted text-muted-foreground mb-5 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium'>
               Grow without Hiring
             </div>
-            <h1 className='font-bricolage text-5xl leading-[1.05] font-bold tracking-tight sm:text-6xl'>
-              Marketing Agents <br />
-              <span className='font-bricolage font-medium tracking-tight text-neutral-300'>
-                Than Never Sleeps
+
+            {/* Heading */}
+            <h1 className='font-bricolage text-foreground text-5xl leading-[1.05] font-bold tracking-tight sm:text-6xl'>
+              Marketing Agents
+              <br />
+              <span className='text-muted-foreground font-medium'>
+                That Never Sleep
               </span>
             </h1>
-            <p className='mt-5 max-w-xl text-neutral-400'>
-              Autonomous AI Agents that works 24/7, so you don't have to.
+
+            {/* Description */}
+            <p className='text-muted-foreground mt-5 max-w-xl text-lg leading-7'>
+              Autonomous AI agents that work 24/7, so you don't have to.
             </p>
+
+            {/* CTA */}
             <div className='mt-8 flex flex-wrap items-center gap-3'>
               <a
                 href={user ? "/chat" : "/signup"}
-                className='group inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 font-medium text-neutral-50 transition hover:brightness-95 active:translate-y-[1px]'
+                className='group inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 font-medium text-white transition hover:bg-indigo-700 active:translate-y-px'
               >
-                {user ? "Get started" : "Get started"}
+                Get started
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   width={24}
@@ -524,41 +531,30 @@ const LandingHero = () => {
                   strokeWidth='1.5'
                   strokeLinecap='round'
                   strokeLinejoin='round'
-                  className='h-4 w-4 -translate-x-0.5 transition group-hover:translate-x-0.5'
+                  className='h-4 w-4 transition-transform group-hover:translate-x-1'
                 >
-                  <path d='M5 12h14' className='' />
-                  <path d='m12 5 7 7-7 7' className='' />
+                  <path d='M5 12h14' />
+                  <path d='m12 5 7 7-7 7' />
                 </svg>
               </a>
+
               <Dialog>
                 <DialogTrigger asChild>
-                  <button className='inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-white/90 transition-[background-color,transform] duration-150 ease-out hover:bg-white/[0.08] active:scale-[0.97]'>
-                    <Play className='h-4 w-4 fill-white/20 text-white/80' />
+                  <button className='border-border bg-background text-foreground hover:bg-muted inline-flex items-center gap-2 rounded-2xl border px-5 py-3 transition active:scale-[0.98]'>
+                    <Play className='h-4 w-4 fill-current opacity-30' />
                     Watch Demo
                   </button>
                 </DialogTrigger>
+
                 <DialogContent
                   hideDialogClose
-                  className='w-[calc(100%-1.5rem)] max-w-4xl gap-0 overflow-hidden rounded-3xl border border-white/15 bg-black p-0 text-white shadow-[0_32px_120px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-2xl'
+                  className='border-border bg-background w-[calc(100%-1.5rem)] max-w-4xl gap-0 overflow-hidden rounded-3xl border p-0 shadow-2xl'
                 >
-                  <div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.2),transparent_42%),radial-gradient(circle_at_bottom_right,rgba(163,230,53,0.12),transparent_38%)]' />
-                  {/* <DialogHeader className='relative flex-row items-center justify-between space-y-0 border-b border-white/10 px-5 py-4 text-left'>
-                    <div>
-                      <DialogTitle className='text-base font-medium'>
-                        Gennit in action
-                      </DialogTitle>
-                      <DialogDescription className='mt-1 text-xs text-white/50'>
-                        From a simple prompt to campaign-ready creative.
-                      </DialogDescription>
-                    </div>
-                    <DialogClose className='rounded-full border border-white/10 bg-white/5 p-2 text-white/60 transition-[background-color,color,transform] duration-150 ease-out hover:bg-white/10 hover:text-white active:scale-[0.96]'>
-                      <X className='h-4 w-4' />
-                      <span className='sr-only'>Close demo</span>
-                    </DialogClose>
-                  </DialogHeader> */}
-                  <div className='relative m-2 overflow-hidden rounded-[1.15rem] border shadow-2xl'>
+                  <div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.18),transparent_42%),radial-gradient(circle_at_bottom_right,rgba(99,102,241,0.12),transparent_38%)]' />
+
+                  <div className='border-border relative m-2 overflow-hidden rounded-[1.15rem] border shadow-2xl'>
                     <iframe
-                      title='Gennit product demo'
+                      title='Genit product demo'
                       src='https://www.youtube-nocookie.com/embed/IjS9eTpmhgk?autoplay=1&rel=0'
                       allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
                       allowFullScreen
@@ -568,43 +564,53 @@ const LandingHero = () => {
                 </DialogContent>
               </Dialog>
             </div>
-            {/* Avatars / social proof */}
-            <h2 className='text-muted-foreground mt-6 text-start text-sm tracking-tight md:text-base'>
-              with over {INTEGRATIONS.length}+ marketing{" "}
+
+            {/* Plugins */}
+            <h2 className='text-muted-foreground mt-6 text-sm tracking-tight md:text-base'>
+              Works with over{" "}
+              <span className='text-foreground font-semibold'>
+                {INTEGRATIONS.length}+
+              </span>{" "}
+              marketing{" "}
               <Link
                 href='/plugin'
                 target='_blank'
-                className='text-foreground text-sm font-medium underline md:text-base'
+                className='font-medium text-indigo-600 underline underline-offset-4 transition hover:text-indigo-500 dark:text-indigo-400'
               >
                 Plugins
               </Link>
             </h2>
+
+            {/* Social proof */}
             <div className='mt-7 flex items-center gap-4'>
               <div className='flex items-center -space-x-2'>
                 <img
                   src='https://www.terso.com.ng/images/terso-logo.png'
                   alt='Terso'
-                  className='h-12 w-fit rounded-full object-cover ring-2 ring-neutral-950'
+                  className='ring-background h-12 w-fit rounded-full object-cover ring-2'
                 />
 
                 <img
                   src='https://i.pinimg.com/736x/d5/ea/70/d5ea7077bc2c1775edfda58a8d50ae26.jpg'
                   alt='User'
-                  className='h-12 w-fit rounded-full object-cover ring-2 ring-neutral-950'
+                  className='ring-background h-12 w-fit rounded-full object-cover ring-2'
                 />
 
                 <img
                   src='https://i.pinimg.com/736x/b2/ce/22/b2ce2290ea022f489ab3ca735a5b1a8b.jpg'
                   alt='User'
-                  className='h-12 w-fit rounded-full object-cover ring-2 ring-neutral-950'
+                  className='ring-background h-12 w-fit rounded-full object-cover ring-2'
                 />
 
-                <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-800 text-[11px] font-semibold text-white ring-2 ring-neutral-950'>
+                <div className='border-border bg-muted text-foreground ring-background flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-xs font-semibold ring-2'>
                   +12
                 </div>
               </div>
-              <p className='text-sm text-neutral-400'>
-                Trusted by 600+ Brands globally
+
+              <p className='text-muted-foreground text-sm'>
+                Trusted by{" "}
+                <span className='text-foreground font-semibold'>600+</span>{" "}
+                brands worldwide.
               </p>
             </div>
           </div>
