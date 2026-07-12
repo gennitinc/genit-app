@@ -27,6 +27,7 @@ import {
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { INTEGRATIONS } from "@/app/integrations/integrations-explorer";
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -38,10 +39,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerContent,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { PointerHighlight } from "@/components/ui/pointer-highlight";
 import {
@@ -100,20 +98,13 @@ import {
   Youtube,
   Zap,
 } from "lucide-react";
-import {
-  Activity,
-  Calendar,
-  Layers,
-  Megaphone,
-  Plus,
-} from "lucide-react";
+import { Activity, Calendar, Layers, Megaphone, Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { div } from "three/src/nodes/math/OperatorNode.js";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { INTEGRATIONS } from "@/app/integrations/integrations-explorer";
 
 export const INTEGRATION_BRANDS = [
   { name: "Instagram", Icon: InstagramBrand },
@@ -1127,7 +1118,27 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Marketing without
+              Marketing Agents 
+              {/* <span>Humans</span> */}
+            </motion.h1>
+            <motion.h1
+              className='text-foreground xs:text-5xl mb-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight  sm:text-6xl md:mb-2.5 md:justify-start md:gap-x-1 md:text-left md:text-2xl lg:text-5xl'
+              custom={1}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: (custom: number) => ({
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    delay: custom * 0.1,
+                    duration: 0.5,
+                  },
+                }),
+              }}
+              initial='hidden'
+              animate='visible'
+            >
+              That Never
               <PointerHighlight
                 rectangleClassName='
       bg-blue-100 dark:bg-blue-900
@@ -1139,7 +1150,9 @@ export function IdeaSection() {
                 pointerClassName='text-blue-500 h-2.5 w-2.5 sm:h-3 sm:w-3'
                 containerClassName='inline-flex items-center'
               >
-                <span className='relative z-10 px-1 sm:px-2'>Humans</span>
+                <span className='relative z-10 px-1 sm:px-2'>
+                   Sleep
+                </span>
               </PointerHighlight>
               {/* <span>Humans</span> */}
             </motion.h1>
@@ -1161,8 +1174,7 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Autonomous agents that run your entire marketing <br />
-              operation across every channel.
+              Autonomous AI agents that work 24/7, so you don't have to.
             </motion.p>
           </motion.div>
         </div>
