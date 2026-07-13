@@ -1600,7 +1600,7 @@ export function IdeaSection() {
           <div className="absolute top-0 bottom-0 right-0 z-20 w-20 pointer-events-none bg-gradient-to-l from-background to-transparent rounded-r-3xl" />
         </div> */}
 
-        <section className='relative mt-24 space-y-4 pt-6 pb-10 lg:mt-6'>
+        <section className='relative mt-16 space-y-4 pt-6 pb-10 lg:mt-6'>
           <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
             with over {INTEGRATIONS.length}+ marketing{" "}
             <Link
