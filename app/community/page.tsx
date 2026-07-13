@@ -1,18 +1,10 @@
 "use client";
 
-import {
-  DesignsCommunityTab,
-  ImageCommunityTab,
-  VideoCommunityTab,
-} from "@/components/inspire";
+import CategoryAndSearch from "@/components/common/category-and-search";
 import CommunityComp from "@/components/landing/CommunityComp";
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Image as ImageIcon, Video } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function CommunityPage() {
   return (
@@ -30,6 +22,10 @@ export default function CommunityPage() {
               Discover amazing AI-generated videos and images created by our
               community.
             </p>
+            <CategoryAndSearch
+              destination='/community'
+              placeholder='Search community creations...'
+            />
           </div>
         </div>
       </main>

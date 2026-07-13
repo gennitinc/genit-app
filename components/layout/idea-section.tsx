@@ -10,23 +10,6 @@ import { ModelSelector } from "../inspire/model-selector";
 import { AnimatedShinyText } from "../ui/animated-shinny-text";
 import { BorderBeam } from "../ui/border-beam";
 import ShinyText from "../ui/shiny-text";
-import {
-  BrevoBrand,
-  FacebookBrand,
-  GmailBrand,
-  GoogleCalendarBrand,
-  GoogleDriveBrand,
-  InstagramBrand,
-  LinkedinBrand,
-  MicrosoftOutlookBrand,
-  PinterestBrand,
-  SnapchatBrand,
-  TelegramBrand,
-  TikTokBrand,
-  WhatsAppBrand,
-  XBrand,
-  YoutubeBrand,
-} from "@/app/(auth)/onboarding/_components/social-icons";
 import { INTEGRATIONS } from "@/app/integrations/integrations-explorer";
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -106,23 +89,10 @@ import { div } from "three/src/nodes/math/OperatorNode.js";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export const INTEGRATION_BRANDS = [
-  { name: "Instagram", Icon: InstagramBrand },
-  { name: "Facebook", Icon: FacebookBrand },
-  { name: "LinkedIn", Icon: LinkedinBrand },
-  { name: "YouTube", Icon: YoutubeBrand },
-  { name: "X", Icon: XBrand },
-  { name: "TikTok", Icon: TikTokBrand },
-  { name: "Pinterest", Icon: PinterestBrand },
-  { name: "Snapchat", Icon: SnapchatBrand },
-  { name: "WhatsApp", Icon: WhatsAppBrand },
-  { name: "Telegram", Icon: TelegramBrand },
-  { name: "Brevo", Icon: BrevoBrand },
-  { name: "Gmail", Icon: GmailBrand },
-  { name: "Outlook", Icon: MicrosoftOutlookBrand },
-  { name: "Google Calendar", Icon: GoogleCalendarBrand },
-  { name: "Google Drive", Icon: GoogleDriveBrand },
-] as const;
+export const INTEGRATION_BRANDS = INTEGRATIONS.map(({ name, icon }) => ({
+  name,
+  Icon: icon,
+}));
 
 interface TypewriterEffectProps {
   words: string[];

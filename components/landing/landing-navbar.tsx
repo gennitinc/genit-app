@@ -3,22 +3,9 @@
 import { Logo } from "../logo";
 import Aurora from "../ui/aurora";
 import UserPopOver from "../user/userPopOver";
-import CategoryAndSearch from "@/components/common/category-and-search";
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { ArrowRight, PanelRight } from "lucide-react";
 import {
@@ -54,11 +40,7 @@ export function LandingNavbar() {
   const user = useUserContext().user;
   const [mounted, setMounted] = useState(false);
 
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const isSmallScreen = useMediaQuery("(max-width: 1024px)");
-
   const currentUser = mounted ? user : null;
-  const currentIsSmallScreen = mounted ? isSmallScreen : false;
   const isFarmnetUser = currentUser?.email?.toLowerCase() === FARMNET_EMAIL;
 
   const navigation = [
@@ -90,22 +72,10 @@ export function LandingNavbar() {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    const handleSearchShortcut = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        setIsSearchOpen(true);
-      }
-    };
-
-    window.addEventListener("keydown", handleSearchShortcut);
-    return () => window.removeEventListener("keydown", handleSearchShortcut);
-  }, []);
-
   return (
     <>
       <header className='sticky top-0 z-50 w-full border-b border-black/[0.06] bg-white/65 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/55 dark:border-white/10 dark:bg-zinc-950/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.22)] dark:supports-[backdrop-filter]:bg-zinc-950/50'>
-        <nav className='z-50 mx-auto flex h-fit py-1 items-center justify-between px-2 md:px-12 lg:px-20 xl:px-24'>
+        <nav className='z-50 mx-auto flex h-fit items-center justify-between px-2 py-1 md:px-12 lg:px-20 xl:px-24'>
           {/* Replace <img> with new <Image> */}
           <Link href='/' className='z-40 flex items-center'>
             <Logo className='h-12 w-12 flex-shrink-0' />
@@ -218,34 +188,6 @@ export function LandingNavbar() {
                     <path d='M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772' />
                   </svg>
                 </Link>
-
-                <button
-                  onClick={() => setIsSearchOpen(true)}
-                  className='text-muted-foreground bg-muted relative flex w-fit items-center justify-start rounded-xl border border-transparent px-4 py-2 text-sm shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] dark:border-white/[0.2]'
-                >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width={24}
-                    height={24}
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeWidth={2}
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    className='h-4 w-4 text-neutral-500'
-                  >
-                    <path d='M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0' />
-                    <path d='M21 21l-6 -6' />
-                  </svg>
-                  <span className='hover:text-foreground/80 text-foreground/60 rex pr-4 pl-2 text-xs font-medium transition-colors sm:text-sm'>
-                    Search{" "}
-                    <span className='hidden xl:inline-block'>Community</span>
-                  </span>
-                  <kbd className='bg-muted pointer-events-none hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none sm:flex'>
-                    <span className='text-xs'>⌘</span>K
-                  </kbd>
-                </button>
               </div>
 
               <Button
@@ -377,36 +319,6 @@ export function LandingNavbar() {
           </div>
         </nav>
       </header>
-      {/* Search experience: Drawer on mobile/tablet, Dialog on desktop */}
-      {currentIsSmallScreen ? (
-        <Drawer open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-          <DrawerContent className='h-[85vh]'>
-            <DrawerHeader className='border-b px-4 py-2'>
-              <DrawerTitle>Search Community</DrawerTitle>
-            </DrawerHeader>
-            <div className='px-4 py-4'>
-              <CategoryAndSearch
-                destination='/community'
-                placeholder='Search community creations...'
-              />
-            </div>
-          </DrawerContent>
-        </Drawer>
-      ) : (
-        <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-          <DialogContent className='max-w-2xl overflow-hidden p-0'>
-            <DialogHeader className='border-b px-4 py-3'>
-              <DialogTitle>Search Community</DialogTitle>
-            </DialogHeader>
-            <div className='px-4 py-4'>
-              <CategoryAndSearch
-                destination='/community'
-                placeholder='Search community creations...'
-              />
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
     </>
   );
 }

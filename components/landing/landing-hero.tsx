@@ -2,6 +2,7 @@
 
 import { INTEGRATION_BRANDS, IdeaSection } from "../layout/idea-section";
 import { MainContent } from "../layout/main-content";
+import { AnimatedShinyText } from "../ui/animated-shinny-text";
 import { BorderBeam } from "../ui/border-beam";
 import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
 import { MarketingRobot3D } from "./marketing-robot-3d";
@@ -28,7 +29,7 @@ import {
 } from "@/components/ui/dialog";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import Loading from "@/utils/Loading";
-import { ChevronRight, Play, SendIcon, X } from "lucide-react";
+import { ChevronRight, Play, SendIcon, X, ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
@@ -496,9 +497,11 @@ const LandingHero = () => {
           {/* Left: Content */}
           <div className='w-full max-w-2xl'>
             {/* Badge */}
-            <div className='border-border bg-muted text-muted-foreground mb-5 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium'>
-              Grow without Hiring
-            </div>
+
+            <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400'>
+              <span className='text-xs'>✨ Grow without Hiring</span>
+              <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
+            </AnimatedShinyText>
 
             {/* Heading */}
             <h1 className='font-bricolage text-foreground text-5xl leading-[1.05] font-bold tracking-tight sm:text-6xl'>

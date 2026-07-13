@@ -701,6 +701,16 @@ export function ConnectDialog({
     if (fetchCurrentUser) fetchCurrentUser();
   }
 
+  useEffect(() => {
+    if (!open || phase !== "success") return;
+
+    const timeout = setTimeout(() => {
+      onOpenChange(false);
+      if (fetchCurrentUser) fetchCurrentUser();
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, [open, phase, onOpenChange, fetchCurrentUser]);
+
   // Final step of the connect flow: user picked accounts in the
   // select phase, now ask the server to actually create Integration rows
   // for those accounts only.
