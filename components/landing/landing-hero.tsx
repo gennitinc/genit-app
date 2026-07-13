@@ -504,7 +504,7 @@ const LandingHero = () => {
             </AnimatedShinyText>
 
             {/* Heading */}
-            <h1 className='font-bricolage text-foreground text-4xl leading-[1.05] font-bold tracking-tight sm:text-5xl md:text-6xl'>
+            <h1 className='font-bricolage text-foreground text-5xl leading-[1.05] font-bold tracking-tight sm:text-6xl md:text-6xl'>
               Marketing Agents
               <br />
               <span className='text-muted-foreground font-medium'>
@@ -585,7 +585,7 @@ const LandingHero = () => {
             </h2>
 
             {/* Social proof */}
-            <div className='mt-7 flex items-center gap-4'>
+            <div className='mt-7 flex flex-col md:flex-row items-start  md:items-center gap-4'>
               <div className='flex items-center -space-x-2'>
                 <img
                   src='https://www.terso.com.ng/images/terso-logo.png'
