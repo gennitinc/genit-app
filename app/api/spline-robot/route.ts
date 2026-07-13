@@ -30,10 +30,14 @@ export async function GET() {
         new MutationObserver(syncBackground).observe(parent.document.documentElement, {
           attributes: true,
           attributeFilter: ["class"],
-        });`
+        });
+        parent.postMessage({ type: "spline-robot-ready" }, "*");`
     );
 
   return new Response(html, {
-    headers: { "content-type": "text/html; charset=utf-8" },
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "public, max-age=86400, stale-while-revalidate=604800",
+    },
   });
 }
