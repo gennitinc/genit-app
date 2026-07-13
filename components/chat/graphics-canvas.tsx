@@ -239,40 +239,9 @@ const GraphicsCanvasContent = ({
         {/* Toolbar items at the far right */}
         <div className='bg-background/80 border-border flex items-center space-x-1 rounded-md border p-1 shadow-sm backdrop-blur-sm'>
           {/* Fullscreen Toggle */}
-          {onToggleFullscreen && (
-            <>
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={onToggleFullscreen}
-                className={cn(
-                  "text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800",
-                  isFullscreen && "bg-muted text-foreground"
-                )}
-                title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
-              >
-                {isFullscreen ? (
-                  <Minimize2 className='h-3.5 w-3.5' />
-                ) : (
-                  <Maximize2 className='h-3.5 w-3.5' />
-                )}
-              </Button>
-              <div className='bg-border mx-1 h-5 w-px' />
-            </>
-          )}
+         
 
-          {/* Fit View */}
-          <Button
-            variant='ghost'
-            size='sm'
-            onClick={() =>
-              reactFlowInstance?.fitView({ duration: 400, padding: 0.2 })
-            }
-            className='text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800'
-            title='Fit View'
-          >
-            <View className='h-3.5 w-3.5' />
-          </Button>
+          
 
           {/* Zoom In */}
           <Button
@@ -295,6 +264,39 @@ const GraphicsCanvasContent = ({
           >
             <Minus className='h-3.5 w-3.5' />
           </Button>
+          {/* Fit View */}
+          <Button
+            variant='ghost'
+            size='sm'
+            onClick={() =>
+              reactFlowInstance?.fitView({ duration: 400, padding: 0.2 })
+            }
+            className='text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+            title='Fit View'
+          >
+            <View className='h-3.5 w-3.5' />
+          </Button>
+           {onToggleFullscreen && (
+            <>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={onToggleFullscreen}
+                className={cn(
+                  "text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800",
+                  isFullscreen && "bg-muted text-foreground"
+                )}
+                title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+              >
+                {isFullscreen ? (
+                  <Minimize2 className='h-3.5 w-3.5' />
+                ) : (
+                  <Maximize2 className='h-3.5 w-3.5' />
+                )}
+              </Button>
+              <div className='bg-border mx-1 h-5 w-px' />
+            </>
+          )}
         </div>
       </div>
 

@@ -152,7 +152,7 @@ export function DesignInspirationResults({
       {/* ─── Header ─── */}
       <div className='flex items-center gap-2'>
         <Globe2 className='text-primary h-3 w-3 shrink-0' />
-        <p className='text-[11px] text-blue-500'>
+        <p className='text-[11px] text-blue-500 line-clamp-1 truncate'>
           {isAutoSelected
             ? "AI Selected Foundation"
             : "Deep Internet Search Results"}{" "}
