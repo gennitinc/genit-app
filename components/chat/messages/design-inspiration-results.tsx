@@ -68,17 +68,22 @@ export function DesignInspirationResults({
   const [countdown, setCountdown] = useState(10);
   const [isCountdownPaused, setIsCountdownPaused] = useState(false);
   const autoPickedRef = useRef(false);
+  const storageKey = project?._id
+    ? `design-inspiration-selection:${project._id}`
+    : null;
 
   const isAutoSelected = safeResults.some((r: any) => r.isAutoSelected);
   const gridRef = useRef<HTMLDivElement>(null);
 
   // 🔒 Lock Logic
-  const finalized = message?.metadata?.finalizedSelections;
-  const isLocked = !!finalized;
+  const savedInspiration =
+    message?.metadata?.selectedInspirationUrl ||
+    message?.metadata?.finalizedSelections?.selectedInspirations?.[0];
+  const isLocked = !!savedInspiration;
 
   // override local selections if locked
   const effectiveSelectedFiles = isLocked
-    ? finalized.selectedInspirations || []
+    ? [savedInspiration]
     : selectedFiles;
   const hasSelection = safeResults.some((pin) =>
     effectiveSelectedFiles?.includes(pin.image)
@@ -92,10 +97,25 @@ export function DesignInspirationResults({
   const handleSelect = (image: string) => {
     if (isLocked) return;
     autoPickedRef.current = true;
-    setSelectedFiles((current: string[]) =>
-      current.includes(image) ? [] : [image]
-    );
+    setSelectedFiles((current: string[]) => {
+      const next = current.includes(image) ? [] : [image];
+      if (storageKey) {
+        next.length
+          ? window.localStorage.setItem(storageKey, next[0])
+          : window.localStorage.removeItem(storageKey);
+      }
+      return next;
+    });
   };
+
+  useEffect(() => {
+    if (isLocked || !storageKey || selectedFiles.length) return;
+    const saved = window.localStorage.getItem(storageKey);
+    if (saved && safeResults.some((pin) => pin.image === saved)) {
+      autoPickedRef.current = true;
+      setSelectedFiles([saved]);
+    }
+  }, [isLocked, safeResults, selectedFiles.length, setSelectedFiles, storageKey]);
 
   useEffect(() => {
     autoPickedRef.current = false;
@@ -120,6 +140,9 @@ export function DesignInspirationResults({
       if (randomPin?.image) {
         autoPickedRef.current = true;
         setSelectedFiles([randomPin.image]);
+        if (storageKey) {
+          window.localStorage.setItem(storageKey, randomPin.image);
+        }
       }
       return;
     }
@@ -136,6 +159,7 @@ export function DesignInspirationResults({
     isLocked,
     safeResults,
     setSelectedFiles,
+    storageKey,
   ]);
 
   // Sync carousel position when dialog opens
