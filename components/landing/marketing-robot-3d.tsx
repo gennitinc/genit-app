@@ -29,7 +29,7 @@ export function MarketingRobot3D() {
         }`}
         aria-hidden='true'
       >
-        <LoadingFileLoader size={14}/>
+        <LoadingFileLoader size={16}/>
       </div>
       <iframe
         title='Interactive 3D robot'
