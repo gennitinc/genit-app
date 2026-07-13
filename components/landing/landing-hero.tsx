@@ -504,7 +504,7 @@ const LandingHero = () => {
             </AnimatedShinyText>
 
             {/* Heading */}
-            <h1 className='font-bricolage text-foreground text-5xl leading-[1.05] font-bold tracking-tight sm:text-6xl'>
+            <h1 className='font-bricolage text-foreground text-4xl leading-[1.05] font-bold tracking-tight sm:text-6xl'>
               Marketing Agents
               <br />
               <span className='text-muted-foreground font-medium'>
