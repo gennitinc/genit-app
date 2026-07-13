@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingFileLoader } from "@/utils/Loading";
 import { useEffect, useRef, useState } from "react";
 
 export function MarketingRobot3D() {
@@ -28,10 +29,7 @@ export function MarketingRobot3D() {
         }`}
         aria-hidden='true'
       >
-        <div className='bg-muted h-56 w-40 animate-pulse rounded-[40%] opacity-50 blur-2xl motion-reduce:animate-none sm:h-72 sm:w-52' />
-        <span className='text-muted-foreground absolute text-xs'>
-          Loading interactive 3D…
-        </span>
+        <LoadingFileLoader size={12}/>
       </div>
       <iframe
         title='Interactive 3D robot'
