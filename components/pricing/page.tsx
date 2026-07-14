@@ -471,7 +471,7 @@ export default function PricingComponent({
                       className='fill-gray-300 dark:fill-neutral-700'
                     />
                   </svg>
-                  <span className='mt-3 inline-block rounded-full bg-blue-600 px-2.5 py-1 text-[11px] leading-5 font-semibold whitespace-nowrap text-white uppercase'>
+                  <span className='mt-3 inline-block rounded-full bg-indigo-600 px-2.5 py-1 text-[11px] leading-5 font-semibold whitespace-nowrap text-white uppercase'>
                     Save up to 30%
                   </span>
                 </span>
