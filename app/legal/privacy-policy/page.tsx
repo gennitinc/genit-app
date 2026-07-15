@@ -46,7 +46,7 @@ export default function About2() {
                 </span>
               </h1>
               <p className='text-gray-9 mt-2 text-start text-sm leading-[1.6] font-normal text-neutral-600 dark:text-neutral-400'>
-                Last update: <time dateTime='2026-08-01'>August 1st, 2026</time>
+                Last update: <time dateTime='2026-07-15'>July 15th, 2026</time>
               </p>
             </div>
             <h2
@@ -430,6 +430,104 @@ export default function About2() {
               </li>
               <li>for any other purpose with your consent.</li>
             </ol>
+            <h2
+              id='google-api-services-user-data'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
+            >
+              <a href='#google-api-services-user-data' className='relative'>
+                Google API Services User Data
+              </a>
+            </h2>
+            <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              Genit accesses Google user data only after you choose to connect a
+              Google service and grant permission through Google's OAuth consent
+              flow. The data accessed depends on the integrations and features
+              you enable and may include:
+            </p>
+            <ul className='my-5 flex list-disc flex-col gap-3 pl-5 text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+              <li>
+                your Google Account email address, name, profile image, and
+                account identifiers so we can identify and display the connected
+                account;
+              </li>
+              <li>
+                Gmail messages, threads, headers, attachments, labels, and
+                sending information used to display the unified inbox, provide
+                conversation context, send messages you approve or configure,
+                and organize messages;
+              </li>
+              <li>
+                Google Calendar lists and event information, including titles,
+                descriptions, dates, times, attendees, and availability, used to
+                display schedules and create, update, or delete marketing events
+                at your direction;
+              </li>
+              <li>
+                Google Drive and Workspace files, folders, content, and metadata
+                that you open with Genit or ask Genit to create, used to import
+                marketing assets and save or manage generated content;
+              </li>
+              <li>
+                YouTube channel information, videos, playlists, comments, and
+                analytics used to publish and manage channel content, respond to
+                comments, and report performance; and
+              </li>
+              <li>
+                Google Ads account, campaign, advertisement, and performance
+                information used to create, manage, and report on advertising
+                activity you request.
+              </li>
+            </ul>
+            <h3 className='mt-8 mb-2 text-lg font-semibold text-neutral-950 dark:text-white'>
+              How we use and share Google user data
+            </h3>
+            <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              We use Google user data only to provide or improve the user-facing
+              integration you request. We do not sell Google user data, use it
+              for advertising or retargeting, or use it to train generalized or
+              foundation AI models. When an AI-assisted feature requires
+              processing Google user data, we and our contracted service
+              providers process only the data needed to produce the output you
+              requested. Service providers may process Google user data solely
+              on our behalf under confidentiality and data protection
+              obligations. We may also disclose data when you direct us to do so
+              or when required by law.
+            </p>
+            <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              Genit's use and transfer to any other app of information received
+              from Google APIs will adhere to the Google API Services User Data
+              Policy, including the Limited Use requirements.
+            </p>
+            <h3 className='mt-8 mb-2 text-lg font-semibold text-neutral-950 dark:text-white'>
+              Storage, protection, retention, and deletion
+            </h3>
+            <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              We may store connected-account identifiers, encrypted OAuth
+              credentials, integration settings and synchronization state, and
+              Google content needed to provide an enabled feature. We protect
+              Google user data using access controls, encryption in transit,
+              encryption of stored OAuth credentials, and monitoring designed to
+              prevent unauthorized access, disclosure, alteration, or loss.
+            </p>
+            <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              We retain Google user data only while your integration is active
+              and for as long as needed to provide the requested feature, comply
+              with law, resolve disputes, or maintain security. You can
+              disconnect a Google integration from your Genit settings or revoke
+              Genit's access through your Google Account. Disconnecting stops
+              future access and removes the authorization credentials from the
+              active integration. You may also request deletion of Google user
+              data associated with your account by emailing{" "}
+              <a
+                className='border-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
+                href='mailto:team@trygenit.com'
+              >
+                team@trygenit.com
+              </a>
+              . We delete or de-identify retained copies when they are no longer
+              required, subject to limited backup, security, fraud-prevention,
+              and legal-retention obligations.
+            </p>
             <h2
               id='6-retention-of-data'
               className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'

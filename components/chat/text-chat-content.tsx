@@ -354,7 +354,7 @@ export function TextChatContent() {
       <div className='min-w-0 flex-1 overflow-hidden px-2 md:px-6'>
         <Conversation
           contextRef={conversationContextRef}
-          className='scroll-container custom-scrollbar m-0 h-full px-0'
+          className='chat-scrollbar scroll-container m-0 h-full px-0'
         >
           <ConversationContent className='m-0 min-h-full space-y-4 overflow-x-hidden px-0 pb-10'>
             {allItems.map((item, index) => {
