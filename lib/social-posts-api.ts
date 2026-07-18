@@ -74,6 +74,32 @@ export type SocialPostsPage = {
   };
 };
 
+export type SocialPostStats = {
+  drafted: number;
+  activeProjects: number;
+  engagement: number;
+  activity: Array<{
+    date: string;
+    drafted: number;
+    published: number;
+    projects: number;
+    engagement: number;
+  }>;
+};
+
+export async function getSocialPostStats(input: {
+  from: string;
+  to: string;
+  timeZone: string;
+}): Promise<SocialPostStats> {
+  const params = new URLSearchParams(input);
+  const { data } = await apiResponse.get<{ stats: SocialPostStats }>(
+    `/social-posts/stats?${params}`,
+    { timeout: 15_000 }
+  );
+  return data.stats;
+}
+
 export async function listSocialPostsPage({
   page = 1,
   limit = 50,

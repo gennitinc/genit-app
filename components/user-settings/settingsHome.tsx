@@ -26,14 +26,19 @@ import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
+  Bot,
   Check,
   ChevronRight,
   CreditCard,
   Edit3,
   Loader2,
   Palette,
+  Plus,
+  RefreshCw,
   Save,
   Shield,
+  Target,
+  Trash2,
   User as UserIcon,
 } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -42,7 +47,7 @@ import React, { useEffect, useState } from "react";
 const SettingsHome = () => {
   const [activeTab, setActiveTab] = useState("account");
   const [isEditing, setIsEditing] = useState(false);
-  const { user, updateUserPreferences, fetchCurrentUser } = useUserContext();
+  const { user, updateOrganization, updateUserPreferences } = useUserContext();
   const currentOrg: Organization | null =
     user?.currentOrganization && typeof user.currentOrganization === "object"
       ? user.currentOrganization
@@ -57,6 +62,50 @@ const SettingsHome = () => {
     useAccountActions();
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [billingHistory, setBillingHistory] = useState<any[]>([]);
+  const [savingAuto, setSavingAuto] = useState(false);
+  const [automationRuns, setAutomationRuns] = useState<any[]>([]);
+  const [autoInsights, setAutoInsights] = useState<any>(null);
+  const [autoCampaigns, setAutoCampaigns] = useState<any[]>([]);
+  const [autoMissions, setAutoMissions] = useState<any[]>([]);
+  const [autoDrafts, setAutoDrafts] = useState<any[]>([]);
+  const [publishingIntegrations, setPublishingIntegrations] = useState<any[]>([]);
+  const [missionEdits, setMissionEdits] = useState<Record<string, string>>({});
+  const [draftEdits, setDraftEdits] = useState<Record<string, string>>({});
+  const [missionDraftAccounts, setMissionDraftAccounts] = useState<
+    Record<string, string>
+  >({});
+  const [draftRunAt, setDraftRunAt] = useState<Record<string, string>>({});
+  const [loadingRuns, setLoadingRuns] = useState(false);
+  const [goalTitle, setGoalTitle] = useState("");
+  const [goalMetric, setGoalMetric] = useState<
+    "impressions" | "clicks" | "conversions" | "conversionValue" | "roi"
+  >("clicks");
+  const [goalTarget, setGoalTarget] = useState(100);
+  const [experimentTitle, setExperimentTitle] = useState("");
+  const [experimentMetric, setExperimentMetric] = useState<
+    "impressions" | "clicks" | "conversions" | "conversionValue" | "roi"
+  >("clicks");
+  const [variantA, setVariantA] = useState("");
+  const [variantB, setVariantB] = useState("");
+  const [experimentLift, setExperimentLift] = useState(10);
+
+  const fetchAutomationRuns = async () => {
+    if (!currentOrg?._id) return;
+    setLoadingRuns(true);
+    try {
+      const response = await apiResponse.get("/apps/automation/actions/runs");
+      setAutomationRuns(response.data?.runs || []);
+      setAutoInsights(response.data?.autonomy || null);
+      setAutoCampaigns(response.data?.campaigns || []);
+      setAutoMissions(response.data?.missions || []);
+      setAutoDrafts(response.data?.drafts || []);
+      setPublishingIntegrations(response.data?.publishingIntegrations || []);
+    } catch {
+      setAutomationRuns([]);
+    } finally {
+      setLoadingRuns(false);
+    }
+  };
 
   useEffect(() => {
     const fetchBilling = async () => {
@@ -71,11 +120,28 @@ const SettingsHome = () => {
     if (activeTab === "billing") fetchBilling();
   }, [activeTab]);
 
+  useEffect(() => {
+    if (activeTab === "automation") void fetchAutomationRuns();
+  }, [activeTab, currentOrg?._id]);
+
+  useEffect(() => {
+    if (activeTab !== "automation" || !currentOrg?._id) return;
+    const interval = window.setInterval(() => void fetchAutomationRuns(), 15000);
+    return () => window.clearInterval(interval);
+  }, [activeTab, currentOrg?._id]);
+
   // Sync active tab with ?tab= URL param.
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get("tab");
-    const valid = ["account", "brand", "billing", "security", "preferences"];
+    const valid = [
+      "account",
+      "brand",
+      "automation",
+      "billing",
+      "security",
+      "preferences",
+    ];
     if (tab && valid.includes(tab)) {
       setActiveTab(tab);
     }
@@ -117,9 +183,314 @@ const SettingsHome = () => {
     }
   };
 
+  const saveAutoSettings = async (updates: Partial<Organization>) => {
+    if (!currentOrg?._id) return false;
+    setSavingAuto(true);
+    try {
+      await updateOrganization(currentOrg._id, updates);
+      toast({
+        title: "Genit Auto updated",
+        description:
+          updates.autoModeEnabled === false
+            ? "The marketing loop has stopped."
+            : "Your marketing loop schedule has been saved.",
+      });
+      return true;
+    } catch {
+      toast({
+        title: "Error",
+        description: "Could not update Genit Auto.",
+        variant: "destructive",
+      });
+      return false;
+    } finally {
+      setSavingAuto(false);
+    }
+  };
+
+  const decideAutomationRun = async (
+    runId: string,
+    decision: "approve" | "reject" | "retry"
+  ) => {
+    try {
+      await apiResponse.post(
+        `/apps/automation/actions/runs/${runId}/${decision}`
+      );
+      await fetchAutomationRuns();
+      toast({
+        title:
+          decision === "approve"
+            ? "Action approved"
+            : decision === "retry"
+              ? "Action queued again"
+              : "Action rejected",
+        description:
+          decision === "approve" || decision === "retry"
+            ? "The action has returned to the execution queue."
+            : "The action will not run.",
+      });
+    } catch {
+      toast({
+        title: "Could not update action",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const addAutoGoal = async () => {
+    if (!goalTitle.trim() || !Number.isFinite(goalTarget) || goalTarget < 0) {
+      toast({
+        title: "Goal needs a title and target",
+        variant: "destructive",
+      });
+      return;
+    }
+    const saved = await saveAutoSettings({
+      autoModeGoals: [
+        ...(currentOrg?.autoModeGoals || []),
+        {
+          id: crypto.randomUUID(),
+          title: goalTitle.trim(),
+          metric: goalMetric,
+          target: goalTarget,
+          status: "active",
+        },
+      ],
+    });
+    if (saved) setGoalTitle("");
+  };
+
+  const removeAutoGoal = (goalId: string) =>
+    saveAutoSettings({
+      autoModeGoals: (currentOrg?.autoModeGoals || []).filter(
+        (goal) => goal.id !== goalId
+      ),
+    });
+
+  const addAutoExperiment = async () => {
+    if (
+      !experimentTitle.trim() ||
+      !variantA ||
+      !variantB ||
+      variantA === variantB ||
+      !Number.isFinite(experimentLift) ||
+      experimentLift < 0 ||
+      experimentLift > 100
+    ) {
+      toast({
+        title: "Choose two different campaigns",
+        variant: "destructive",
+      });
+      return;
+    }
+    const saved = await saveAutoSettings({
+      autoModeExperiments: [
+        ...(autoInsights?.experiments || currentOrg?.autoModeExperiments || []),
+        {
+          id: crypto.randomUUID(),
+          title: experimentTitle.trim(),
+          metric: experimentMetric,
+          minimumLiftPercent: experimentLift,
+          samples: 0,
+          status: "running",
+          variantA: { campaignId: variantA },
+          variantB: { campaignId: variantB },
+        },
+      ],
+    });
+    if (!saved) return;
+    setExperimentTitle("");
+    await fetchAutomationRuns();
+  };
+
+  const removeAutoExperiment = async (experimentId: string) => {
+    const saved = await saveAutoSettings({
+      autoModeExperiments: (
+        autoInsights?.experiments ||
+        currentOrg?.autoModeExperiments ||
+        []
+      ).filter((experiment: any) => experiment.id !== experimentId),
+    });
+    if (saved) await fetchAutomationRuns();
+  };
+
+  const applyAutoAllocation = async () => {
+    try {
+      await apiResponse.post("/apps/automation/auto/allocation/apply");
+      await fetchAutomationRuns();
+      toast({
+        title: "Allocation applied",
+        description: "The planned GTM campaign budgets were updated.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Could not apply allocation",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const acknowledgeAutoAlert = async (alertId: string) => {
+    try {
+      await apiResponse.post(
+        `/apps/automation/auto/alerts/${alertId}/acknowledge`
+      );
+      await fetchAutomationRuns();
+    } catch {
+      toast({ title: "Could not acknowledge alert", variant: "destructive" });
+    }
+  };
+
+  const compileAutoMissions = async () => {
+    try {
+      await apiResponse.post("/apps/automation/auto/missions/compile");
+      await fetchAutomationRuns();
+      toast({ title: "Missions compiled", description: "Review and approve each mission before it runs." });
+    } catch (error: any) {
+      toast({
+        title: "Could not compile missions",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const decideAutoMission = async (
+    missionId: string,
+    decision: "approve" | "retry"
+  ) => {
+    try {
+      await apiResponse.post(
+        `/apps/automation/auto/missions/${missionId}/${decision}`
+      );
+      await fetchAutomationRuns();
+      toast({
+        title: decision === "approve" ? "Mission approved" : "Mission retried",
+        description: "The next specialist step is queued.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Could not update mission",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const missionAction = async (
+    missionId: string,
+    action: "outputs/approve" | "cancel"
+  ) => {
+    try {
+      await apiResponse.post(
+        `/apps/automation/auto/missions/${missionId}/${action}`
+      );
+      await fetchAutomationRuns();
+      toast({
+        title: action === "cancel" ? "Mission cancelled" : "Outputs approved",
+        description:
+          action === "cancel"
+            ? "Queued specialist work was stopped."
+            : "Curated outputs were added to Brand Brain.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Could not update mission",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const saveMissionOutput = async (
+    missionId: string,
+    stepId: string,
+    fallback: string
+  ) => {
+    try {
+      await apiResponse.patch(
+        `/apps/automation/auto/missions/${missionId}/steps/${stepId}`,
+        { content: missionEdits[stepId] ?? fallback }
+      );
+      await fetchAutomationRuns();
+      toast({ title: "Mission output saved" });
+    } catch (error: any) {
+      toast({
+        title: "Could not save output",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const createMissionDraft = async (missionId: string) => {
+    const integrationId = missionDraftAccounts[missionId];
+    if (!integrationId) {
+      toast({ title: "Choose a publishing account", variant: "destructive" });
+      return;
+    }
+    try {
+      await apiResponse.post(
+        `/apps/automation/auto/missions/${missionId}/drafts`,
+        { integrationId }
+      );
+      await fetchAutomationRuns();
+      toast({ title: "Channel draft created" });
+    } catch (error: any) {
+      toast({
+        title: "Could not create draft",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const saveMissionDraft = async (missionId: string, draft: any) => {
+    try {
+      await apiResponse.patch(
+        `/apps/automation/auto/missions/${missionId}/drafts/${draft._id}`,
+        { content: draftEdits[draft._id] ?? draft.content }
+      );
+      await fetchAutomationRuns();
+      toast({ title: "Draft saved" });
+    } catch (error: any) {
+      toast({
+        title: "Could not save draft",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const publishMissionDraft = async (
+    missionId: string,
+    draftId: string,
+    scheduled: boolean
+  ) => {
+    try {
+      await apiResponse.post(
+        `/apps/automation/auto/missions/${missionId}/drafts/${draftId}/schedule`,
+        { runAt: scheduled ? draftRunAt[draftId] : undefined }
+      );
+      await fetchAutomationRuns();
+      toast({
+        title: scheduled ? "Publishing scheduled" : "Publishing approved",
+        description: "The external action is now in the governed run ledger.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Could not queue publishing",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   const settingsTabs = [
     { id: "account", label: "Account", icon: UserIcon },
     { id: "brand", label: "Brand", icon: Palette },
+    { id: "automation", label: "Genit Auto", icon: Bot },
     { id: "billing", label: "Billing", icon: CreditCard },
     { id: "security", label: "Security", icon: Shield },
     { id: "preferences", label: "Preferences", icon: Palette },
@@ -314,6 +685,1007 @@ const SettingsHome = () => {
 
             {/* Brand Settings */}
             {activeTab === "brand" && <BrandSettings />}
+
+            {activeTab === "automation" && (
+              <Card className='relative overflow-hidden'>
+                <GradientFrame />
+                <CardHeader>
+                  <CardTitle className='flex items-center gap-2'>
+                    <Bot className='h-5 w-5' />
+                    Genit Auto marketing loop
+                  </CardTitle>
+                  <CardDescription>
+                    Continuously reviews active campaigns and performance data,
+                    then refreshes recommendations until you turn Auto off.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className='space-y-6'>
+                  <div className='flex items-center justify-between gap-6'>
+                    <div>
+                      <h4 className='font-medium'>Run autonomously</h4>
+                      <p className='text-muted-foreground text-sm'>
+                        Uses your brand, GTM campaigns, posts, email activity,
+                        attribution, and connected marketing data.
+                      </p>
+                    </div>
+                    <Switch
+                      checked={currentOrg?.autoModeEnabled ?? false}
+                      disabled={
+                        savingAuto ||
+                        (user?.userPlan !== Plan.ENTERPRISE &&
+                          !currentOrg?.autoModeEnabled)
+                      }
+                      onCheckedChange={(checked) =>
+                        saveAutoSettings({ autoModeEnabled: checked })
+                      }
+                    />
+                  </div>
+
+                  {user?.userPlan !== Plan.ENTERPRISE &&
+                    !currentOrg?.autoModeEnabled && (
+                      <p className='text-muted-foreground rounded-lg border p-3 text-sm'>
+                        Genit Auto is available on Enterprise. {" "}
+                        <a
+                          className='font-medium text-indigo-600 hover:underline'
+                          href='/pricing'
+                        >
+                          View plans
+                        </a>
+                      </p>
+                    )}
+
+                  <Separator />
+
+                  <div className='space-y-4'>
+                    <div>
+                      <h4 className='flex items-center gap-2 font-medium'>
+                        <Target className='h-4 w-4' /> Goals, plan & learning
+                      </h4>
+                      <p className='text-muted-foreground text-sm'>
+                        Give Genit a measurable target. Each loop evaluates
+                        progress, adjusts the plan, and remembers the result.
+                      </p>
+                    </div>
+
+                    <div className='grid gap-2 sm:grid-cols-[1fr_150px_110px_auto]'>
+                      <Input
+                        aria-label='Goal title'
+                        placeholder='e.g. Reach 500 campaign clicks'
+                        value={goalTitle}
+                        onChange={(event) => setGoalTitle(event.target.value)}
+                      />
+                      <select
+                        aria-label='Goal metric'
+                        className='border-input bg-background h-9 rounded-md border px-3 text-sm'
+                        value={goalMetric}
+                        onChange={(event) =>
+                          setGoalMetric(event.target.value as typeof goalMetric)
+                        }
+                      >
+                        <option value='impressions'>Impressions</option>
+                        <option value='clicks'>Clicks</option>
+                        <option value='conversions'>Conversions</option>
+                        <option value='conversionValue'>Conversion value</option>
+                        <option value='roi'>ROI</option>
+                      </select>
+                      <Input
+                        aria-label='Goal target'
+                        type='number'
+                        min={0}
+                        value={goalTarget}
+                        onChange={(event) =>
+                          setGoalTarget(Number(event.target.value))
+                        }
+                      />
+                      <Button
+                        onClick={addAutoGoal}
+                        disabled={
+                          savingAuto || (currentOrg?.autoModeGoals?.length || 0) >= 10
+                        }
+                      >
+                        <Plus className='mr-2 h-4 w-4' /> Add
+                      </Button>
+                    </div>
+
+                    {(currentOrg?.autoModeGoals || []).length > 0 && (
+                      <div className='divide-y rounded-lg border'>
+                        {currentOrg?.autoModeGoals?.map((goal) => {
+                          const latest = (
+                            autoInsights?.latestEvaluation ||
+                            currentOrg.autoModeEvaluations?.[
+                              (currentOrg.autoModeEvaluations?.length || 1) - 1
+                            ]
+                          )?.goals.find((item: any) => item.id === goal.id);
+                          return (
+                            <div
+                              key={goal.id}
+                              className='flex items-center justify-between gap-3 p-3'
+                            >
+                              <div>
+                                <div className='flex flex-wrap items-center gap-2'>
+                                  <p className='text-sm font-medium'>{goal.title}</p>
+                                  <Badge variant='secondary'>{goal.status}</Badge>
+                                </div>
+                                <p className='text-muted-foreground text-xs'>
+                                  {latest
+                                    ? `${latest.current.toLocaleString()} / ${goal.target.toLocaleString()} ${goal.metric} · ${latest.progress}% · ${latest.trend}`
+                                    : `Target: ${goal.target.toLocaleString()} ${goal.metric}`}
+                                </p>
+                              </div>
+                              <Button
+                                size='icon'
+                                variant='ghost'
+                                aria-label={`Remove ${goal.title}`}
+                                onClick={() => removeAutoGoal(goal.id)}
+                              >
+                                <Trash2 className='h-4 w-4' />
+                              </Button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {(autoInsights?.currentPlan ||
+                      currentOrg?.autoModeCurrentPlan) && (
+                      <div className='rounded-lg border p-4'>
+                        <p className='text-sm font-medium'>Current plan</p>
+                        <p className='text-muted-foreground mt-1 text-xs'>
+                          {(autoInsights?.currentPlan ||
+                            currentOrg?.autoModeCurrentPlan)?.objective}
+                        </p>
+                        {(autoInsights?.currentPlan ||
+                          currentOrg?.autoModeCurrentPlan)?.correction && (
+                          <p className='mt-2 text-xs text-amber-600'>
+                            {
+                              (autoInsights?.currentPlan ||
+                                currentOrg?.autoModeCurrentPlan)?.correction
+                            }
+                          </p>
+                        )}
+                        <ol className='mt-3 space-y-2'>
+                          {(
+                            autoInsights?.currentPlan ||
+                            currentOrg?.autoModeCurrentPlan
+                          )?.steps
+                            .slice(0, 5)
+                            .map((step: any, index: number) => (
+                              <li key={`${step.title}-${index}`} className='text-sm'>
+                                <span className='font-medium'>
+                                  {index + 1}. {step.title}
+                                </span>
+                                <span className='text-muted-foreground'>
+                                  {` — ${step.action}`}
+                                </span>
+                              </li>
+                            ))}
+                        </ol>
+                      </div>
+                    )}
+                  </div>
+
+                  <Separator />
+
+                  <div className='space-y-4'>
+                    <div>
+                      <h4 className='font-medium'>Controlled experiments</h4>
+                      <p className='text-muted-foreground text-sm'>
+                        Compare two active campaigns for at least three cycles.
+                        A winner needs at least 10% measured lift.
+                      </p>
+                    </div>
+                    <div className='grid gap-2 sm:grid-cols-[1fr_130px_90px_1fr_1fr_auto]'>
+                      <Input
+                        aria-label='Experiment title'
+                        placeholder='e.g. CTA campaign test'
+                        value={experimentTitle}
+                        onChange={(event) =>
+                          setExperimentTitle(event.target.value)
+                        }
+                      />
+                      <select
+                        aria-label='Experiment metric'
+                        className='border-input bg-background h-9 rounded-md border px-3 text-sm'
+                        value={experimentMetric}
+                        onChange={(event) =>
+                          setExperimentMetric(
+                            event.target.value as typeof experimentMetric
+                          )
+                        }
+                      >
+                        <option value='impressions'>Impressions</option>
+                        <option value='clicks'>Clicks</option>
+                        <option value='conversions'>Conversions</option>
+                        <option value='conversionValue'>Value</option>
+                        <option value='roi'>ROI</option>
+                      </select>
+                      <Input
+                        aria-label='Minimum lift percent'
+                        title='Minimum lift percent'
+                        type='number'
+                        min={0}
+                        max={100}
+                        value={experimentLift}
+                        onChange={(event) =>
+                          setExperimentLift(Number(event.target.value))
+                        }
+                      />
+                      <select
+                        aria-label='Variant A campaign'
+                        className='border-input bg-background h-9 rounded-md border px-3 text-sm'
+                        value={variantA}
+                        onChange={(event) => setVariantA(event.target.value)}
+                      >
+                        <option value=''>Variant A</option>
+                        {autoCampaigns.map((campaign) => (
+                          <option key={campaign._id} value={campaign._id}>
+                            {campaign.name}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        aria-label='Variant B campaign'
+                        className='border-input bg-background h-9 rounded-md border px-3 text-sm'
+                        value={variantB}
+                        onChange={(event) => setVariantB(event.target.value)}
+                      >
+                        <option value=''>Variant B</option>
+                        {autoCampaigns.map((campaign) => (
+                          <option key={campaign._id} value={campaign._id}>
+                            {campaign.name}
+                          </option>
+                        ))}
+                      </select>
+                      <Button
+                        onClick={addAutoExperiment}
+                        disabled={savingAuto || autoCampaigns.length < 2}
+                      >
+                        <Plus className='mr-2 h-4 w-4' /> Test
+                      </Button>
+                    </div>
+                    {autoCampaigns.length < 2 && (
+                      <p className='text-muted-foreground text-xs'>
+                        Activate at least two GTM campaigns to run an experiment.
+                      </p>
+                    )}
+                    {(autoInsights?.experiments ||
+                      currentOrg?.autoModeExperiments ||
+                      []).length > 0 && (
+                      <div className='divide-y rounded-lg border'>
+                        {(
+                          autoInsights?.experiments ||
+                          currentOrg?.autoModeExperiments ||
+                          []
+                        ).map((experiment: any) => (
+                          <div
+                            key={experiment.id}
+                            className='flex items-center justify-between gap-3 p-3'
+                          >
+                            <div>
+                              <div className='flex flex-wrap items-center gap-2'>
+                                <p className='text-sm font-medium'>
+                                  {experiment.title}
+                                </p>
+                                <Badge variant='secondary'>
+                                  {experiment.status}
+                                </Badge>
+                              </div>
+                              <p className='text-muted-foreground text-xs'>
+                                {experiment.variantA?.campaignName || "A"}: {" "}
+                                {experiment.variantA?.value ?? "—"} vs {" "}
+                                {experiment.variantB?.campaignName || "B"}: {" "}
+                                {experiment.variantB?.value ?? "—"} · {" "}
+                                {experiment.samples || 0}/3 cycles
+                                {experiment.winner
+                                  ? ` · Winner ${experiment.winner} (${experiment.liftPercent}% lift)`
+                                  : ""}
+                              </p>
+                            </div>
+                            <Button
+                              size='icon'
+                              variant='ghost'
+                              aria-label={`Remove ${experiment.title}`}
+                              onClick={() =>
+                                removeAutoExperiment(experiment.id)
+                              }
+                            >
+                              <Trash2 className='h-4 w-4' />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <Separator />
+
+                  {(autoInsights?.allocation ||
+                    currentOrg?.autoModeAllocation)?.campaigns?.length > 0 && (
+                    <div className='space-y-3'>
+                      <div className='flex items-center justify-between gap-4'>
+                        <div>
+                          <h4 className='font-medium'>Adaptive allocation</h4>
+                          <p className='text-muted-foreground text-sm'>
+                            Proposed GTM budget split from performance and
+                            experiment winners. Applying updates campaign plans,
+                            not provider ad spend.
+                          </p>
+                        </div>
+                        <Button
+                          size='sm'
+                          variant='outline'
+                          onClick={applyAutoAllocation}
+                          disabled={
+                            !(autoInsights?.allocation ||
+                              currentOrg?.autoModeAllocation)?.totalBudget
+                          }
+                        >
+                          Apply allocation
+                        </Button>
+                      </div>
+                      <div className='grid gap-2 sm:grid-cols-2'>
+                        {(
+                          autoInsights?.allocation ||
+                          currentOrg?.autoModeAllocation
+                        )?.campaigns.map((campaign: any) => (
+                          <div
+                            key={campaign.campaignId}
+                            className='rounded-lg border p-3'
+                          >
+                            <div className='flex items-center justify-between'>
+                              <p className='text-sm font-medium'>
+                                {campaign.campaignName}
+                              </p>
+                              <Badge variant='secondary'>
+                                {campaign.share}%
+                              </Badge>
+                            </div>
+                            <p className='text-muted-foreground mt-1 text-xs'>
+                              Planned budget {campaign.suggestedBudget.toLocaleString()} · {" "}
+                              {campaign.reason}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {(autoInsights?.simulation ||
+                    currentOrg?.autoModeSimulation) && (
+                    <>
+                      <Separator />
+                      <div className='space-y-3'>
+                        <div className='flex items-center justify-between gap-3'>
+                          <div>
+                            <h4 className='font-medium'>Scenario simulation</h4>
+                            <p className='text-muted-foreground text-sm'>
+                              Linear forecast if the proposed allocation is applied.
+                            </p>
+                          </div>
+                          <Badge variant='secondary'>
+                            {(autoInsights?.simulation ||
+                              currentOrg?.autoModeSimulation)?.confidence}{" "}
+                            confidence
+                          </Badge>
+                        </div>
+                        <div className='grid gap-2 sm:grid-cols-3'>
+                          {(["clicks", "conversions", "conversionValue"] as const).map(
+                            (metric) => {
+                              const simulation =
+                                autoInsights?.simulation ||
+                                currentOrg?.autoModeSimulation;
+                              return (
+                                <div key={metric} className='rounded-lg border p-3'>
+                                  <p className='text-muted-foreground text-xs capitalize'>
+                                    {metric === "conversionValue"
+                                      ? "Conversion value"
+                                      : metric}
+                                  </p>
+                                  <p className='text-lg font-semibold'>
+                                    {simulation.projected[metric].toLocaleString()}
+                                  </p>
+                                  <p className='text-muted-foreground text-xs'>
+                                    {simulation.baseline[metric].toLocaleString()} baseline · {" "}
+                                    {simulation.uplift[metric] >= 0 ? "+" : ""}
+                                    {simulation.uplift[metric]}%
+                                  </p>
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  <Separator />
+
+                  <div className='space-y-3'>
+                    <div className='flex items-center justify-between gap-4'>
+                      <div>
+                        <h4 className='font-medium'>Specialist missions</h4>
+                        <p className='text-muted-foreground text-sm'>
+                          Turn the current plan into strategist, creator, and analyst work. Approval never includes publishing.
+                        </p>
+                      </div>
+                      <Button
+                        size='sm'
+                        variant='outline'
+                        onClick={compileAutoMissions}
+                        disabled={!(autoInsights?.currentPlan || currentOrg?.autoModeCurrentPlan)}
+                      >
+                        Compile plan
+                      </Button>
+                    </div>
+                    {autoMissions.length === 0 ? (
+                      <p className='text-muted-foreground text-sm'>
+                        Compile a completed Auto plan to create missions.
+                      </p>
+                    ) : (
+                      <div className='space-y-2'>
+                        {autoMissions.map((mission) => {
+                          const drafts = autoDrafts.filter(
+                            (draft) => draft.metadata?.missionId === mission._id
+                          );
+                          return (
+                            <div
+                              key={mission._id}
+                              className='space-y-3 rounded-lg border p-3'
+                            >
+                              <div className='flex items-start justify-between gap-3'>
+                                <div>
+                                  <div className='flex flex-wrap items-center gap-2'>
+                                    <p className='text-sm font-medium'>
+                                      {mission.title}
+                                    </p>
+                                    <Badge variant='secondary'>
+                                      {mission.status}
+                                    </Badge>
+                                    {mission.memoryWrittenAt && (
+                                      <Badge variant='outline'>In Brand Brain</Badge>
+                                    )}
+                                  </div>
+                                  <p className='text-muted-foreground mt-1 text-xs'>
+                                    {mission.steps
+                                      .map(
+                                        (step: any) =>
+                                          `${step.role}: ${step.status}`
+                                      )
+                                      .join(" · ")}
+                                  </p>
+                                </div>
+                                <div className='flex flex-wrap gap-2'>
+                                  {mission.status === "proposed" && (
+                                    <Button
+                                      size='sm'
+                                      onClick={() =>
+                                        decideAutoMission(mission._id, "approve")
+                                      }
+                                    >
+                                      Approve mission
+                                    </Button>
+                                  )}
+                                  {mission.status === "failed" && (
+                                    <Button
+                                      size='sm'
+                                      variant='outline'
+                                      onClick={() =>
+                                        decideAutoMission(mission._id, "retry")
+                                      }
+                                    >
+                                      Retry
+                                    </Button>
+                                  )}
+                                  {["proposed", "running", "review", "failed"].includes(
+                                    mission.status
+                                  ) && (
+                                    <Button
+                                      size='sm'
+                                      variant='ghost'
+                                      onClick={() =>
+                                        missionAction(mission._id, "cancel")
+                                      }
+                                    >
+                                      Cancel
+                                    </Button>
+                                  )}
+                                </div>
+                              </div>
+
+                              {mission.steps.some(
+                                (step: any) => step.result?.content
+                              ) && (
+                                <div className='space-y-2'>
+                                  {mission.steps
+                                    .filter((step: any) => step.result?.content)
+                                    .map((step: any) => {
+                                      const content = step.result.content;
+                                      return (
+                                        <div key={step.id} className='space-y-2'>
+                                          <Label htmlFor={`mission-${step.id}`}>
+                                            {step.title}
+                                          </Label>
+                                          <textarea
+                                            id={`mission-${step.id}`}
+                                            className='border-input bg-background min-h-28 w-full rounded-md border px-3 py-2 text-sm'
+                                            value={
+                                              missionEdits[step.id] ?? content
+                                            }
+                                            readOnly={mission.status !== "review"}
+                                            onChange={(event) =>
+                                              setMissionEdits((current) => ({
+                                                ...current,
+                                                [step.id]: event.target.value,
+                                              }))
+                                            }
+                                          />
+                                          {mission.status === "review" && (
+                                            <Button
+                                              size='sm'
+                                              variant='outline'
+                                              onClick={() =>
+                                                saveMissionOutput(
+                                                  mission._id,
+                                                  step.id,
+                                                  content
+                                                )
+                                              }
+                                            >
+                                              Save output
+                                            </Button>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
+                                </div>
+                              )}
+
+                              {mission.status === "review" && (
+                                <Button
+                                  size='sm'
+                                  onClick={() =>
+                                    missionAction(
+                                      mission._id,
+                                      "outputs/approve"
+                                    )
+                                  }
+                                >
+                                  Approve outputs and remember
+                                </Button>
+                              )}
+
+                              {mission.status === "completed" && (
+                                <div className='space-y-3 border-t pt-3'>
+                                  <div className='flex flex-wrap gap-2'>
+                                    <select
+                                      aria-label='Publishing account'
+                                      className='border-input bg-background h-9 min-w-52 rounded-md border px-3 text-sm'
+                                      value={
+                                        missionDraftAccounts[mission._id] || ""
+                                      }
+                                      onChange={(event) =>
+                                        setMissionDraftAccounts((current) => ({
+                                          ...current,
+                                          [mission._id]: event.target.value,
+                                        }))
+                                      }
+                                    >
+                                      <option value=''>Choose account</option>
+                                      {publishingIntegrations.map(
+                                        (integration) => (
+                                          <option
+                                            key={integration._id}
+                                            value={integration._id}
+                                          >
+                                            {integration.platform} · {" "}
+                                            {integration.accountName}
+                                          </option>
+                                        )
+                                      )}
+                                    </select>
+                                    <Button
+                                      size='sm'
+                                      variant='outline'
+                                      onClick={() =>
+                                        createMissionDraft(mission._id)
+                                      }
+                                    >
+                                      Create channel draft
+                                    </Button>
+                                  </div>
+
+                                  {drafts.map((draft) => (
+                                    <div
+                                      key={draft._id}
+                                      className='space-y-2 rounded-md bg-muted/40 p-3'
+                                    >
+                                      <div className='flex items-center gap-2'>
+                                        <Badge variant='outline'>
+                                          {draft.platform}
+                                        </Badge>
+                                        <Badge variant='secondary'>
+                                          {draft.status}
+                                        </Badge>
+                                        <span className='text-muted-foreground text-xs'>
+                                          {draft.accountName}
+                                        </span>
+                                      </div>
+                                      <textarea
+                                        aria-label={`${draft.platform} draft`}
+                                        className='border-input bg-background min-h-24 w-full rounded-md border px-3 py-2 text-sm'
+                                        value={
+                                          draftEdits[draft._id] ?? draft.content
+                                        }
+                                        readOnly={
+                                          !["draft", "failed"].includes(
+                                            draft.status
+                                          )
+                                        }
+                                        onChange={(event) =>
+                                          setDraftEdits((current) => ({
+                                            ...current,
+                                            [draft._id]: event.target.value,
+                                          }))
+                                        }
+                                      />
+                                      {["draft", "failed"].includes(
+                                        draft.status
+                                      ) && (
+                                        <div className='flex flex-wrap gap-2'>
+                                          <Button
+                                            size='sm'
+                                            variant='outline'
+                                            onClick={() =>
+                                              saveMissionDraft(
+                                                mission._id,
+                                                draft
+                                              )
+                                            }
+                                          >
+                                            Save draft
+                                          </Button>
+                                          <Button
+                                            size='sm'
+                                            onClick={() =>
+                                              publishMissionDraft(
+                                                mission._id,
+                                                draft._id,
+                                                false
+                                              )
+                                            }
+                                          >
+                                            Approve and publish
+                                          </Button>
+                                          <Input
+                                            aria-label='Schedule publishing time'
+                                            type='datetime-local'
+                                            className='w-auto'
+                                            value={draftRunAt[draft._id] || ""}
+                                            onChange={(event) =>
+                                              setDraftRunAt((current) => ({
+                                                ...current,
+                                                [draft._id]: event.target.value,
+                                              }))
+                                            }
+                                          />
+                                          <Button
+                                            size='sm'
+                                            variant='outline'
+                                            disabled={!draftRunAt[draft._id]}
+                                            onClick={() =>
+                                              publishMissionDraft(
+                                                mission._id,
+                                                draft._id,
+                                                true
+                                              )
+                                            }
+                                          >
+                                            Schedule
+                                          </Button>
+                                        </div>
+                                      )}
+                                      {draft.metadata?.publishError && (
+                                        <p className='text-destructive text-xs'>
+                                          {draft.metadata.publishError}
+                                        </p>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+
+                              {mission.outcome && (
+                                <p className='text-muted-foreground border-t pt-2 text-xs'>
+                                  Learned outcome: {mission.outcome.publishedAssets}{" "}
+                                  assets · {mission.outcome.metrics?.clicks || 0}{" "}
+                                  clicks · {mission.outcome.conversions || 0}{" "}
+                                  conversions
+                                </p>
+                              )}
+                              {mission.steps.some(
+                                (step: any) => step.error
+                              ) && (
+                                <p className='text-destructive text-xs'>
+                                  {
+                                    mission.steps.find(
+                                      (step: any) => step.error
+                                    )?.error
+                                  }
+                                </p>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {(autoInsights?.alerts ||
+                    currentOrg?.autoModeAlerts?.filter(
+                      (alert) => alert.status === "open"
+                    ) ||
+                    []).length > 0 && (
+                    <>
+                      <Separator />
+                      <div className='space-y-3'>
+                        <h4 className='font-medium'>Auto alerts</h4>
+                        {(
+                          autoInsights?.alerts ||
+                          currentOrg?.autoModeAlerts?.filter(
+                            (alert) => alert.status === "open"
+                          ) ||
+                          []
+                        ).map((alert: any) => (
+                          <div
+                            key={alert.id}
+                            className='flex items-center justify-between gap-3 rounded-lg border p-3'
+                          >
+                            <div>
+                              <div className='flex items-center gap-2'>
+                                <Badge variant='secondary'>
+                                  {alert.severity}
+                                </Badge>
+                                <p className='text-sm font-medium'>
+                                  {alert.title}
+                                </p>
+                              </div>
+                              <p className='text-muted-foreground mt-1 text-xs'>
+                                {alert.message}
+                              </p>
+                            </div>
+                            <Button
+                              size='sm'
+                              variant='ghost'
+                              onClick={() =>
+                                acknowledgeAutoAlert(alert.id)
+                              }
+                            >
+                              Acknowledge
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  <Separator />
+
+                  <div className='space-y-4'>
+                    <div>
+                      <h4 className='flex items-center gap-2 font-medium'>
+                        <Shield className='h-4 w-4' /> Action guardrails
+                      </h4>
+                      <p className='text-muted-foreground text-sm'>
+                        Control which autonomous actions need a person and how
+                        much one cycle may use.
+                      </p>
+                    </div>
+                    <div className='grid gap-4 sm:grid-cols-3'>
+                      <div className='space-y-2'>
+                        <Label htmlFor='approval-policy'>Require approval</Label>
+                        <select
+                          id='approval-policy'
+                          className='border-input bg-background h-9 w-full rounded-md border px-3 text-sm'
+                          value={
+                            currentOrg?.automationApprovalPolicy ??
+                            "destructive"
+                          }
+                          disabled={savingAuto}
+                          onChange={(event) =>
+                            saveAutoSettings({
+                              automationApprovalPolicy: event.target.value as
+                                | "destructive"
+                                | "external"
+                                | "all",
+                            })
+                          }
+                        >
+                          <option value='destructive'>Destructive actions</option>
+                          <option value='external'>All external actions</option>
+                          <option value='all'>Every action</option>
+                        </select>
+                      </div>
+                      <div className='space-y-2'>
+                        <Label htmlFor='daily-action-limit'>Daily actions</Label>
+                        <Input
+                          id='daily-action-limit'
+                          type='number'
+                          min={1}
+                          max={1000}
+                          defaultValue={
+                            currentOrg?.automationDailyActionLimit ?? 100
+                          }
+                          disabled={savingAuto}
+                          onBlur={(event) =>
+                            saveAutoSettings({
+                              automationDailyActionLimit: Number(
+                                event.target.value
+                              ),
+                            })
+                          }
+                        />
+                      </div>
+                      <div className='space-y-2'>
+                        <Label htmlFor='run-credit-limit'>Credits per run</Label>
+                        <Input
+                          id='run-credit-limit'
+                          type='number'
+                          min={0}
+                          max={10000}
+                          defaultValue={
+                            currentOrg?.automationMaxCreditsPerRun ?? 50
+                          }
+                          disabled={savingAuto}
+                          onBlur={(event) =>
+                            saveAutoSettings({
+                              automationMaxCreditsPerRun: Number(
+                                event.target.value
+                              ),
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  <div className='space-y-3'>
+                    <div className='flex items-center justify-between'>
+                      <div>
+                        <h4 className='font-medium'>Approvals & run history</h4>
+                        <p className='text-muted-foreground text-sm'>
+                          The latest governed actions for this organization.
+                        </p>
+                      </div>
+                      <Button
+                        size='sm'
+                        variant='outline'
+                        disabled={loadingRuns}
+                        onClick={fetchAutomationRuns}
+                      >
+                        <RefreshCw
+                          className={`mr-2 h-4 w-4 ${loadingRuns ? "animate-spin" : ""}`}
+                        />
+                        Refresh
+                      </Button>
+                    </div>
+                    {automationRuns.length === 0 ? (
+                      <p className='text-muted-foreground rounded-lg border p-4 text-sm'>
+                        {loadingRuns ? "Loading runs…" : "No automation runs yet."}
+                      </p>
+                    ) : (
+                      <div className='divide-y rounded-lg border'>
+                        {automationRuns.slice(0, 10).map((run) => (
+                          <div
+                            key={run._id}
+                            className='flex flex-col justify-between gap-3 p-4 sm:flex-row sm:items-center'
+                          >
+                            <div className='min-w-0'>
+                              <div className='flex flex-wrap items-center gap-2'>
+                                <p className='truncate text-sm font-medium'>
+                                  {run.action?.label || run.taskType}
+                                </p>
+                                <Badge variant='secondary'>
+                                  {String(run.status).replaceAll("_", " ")}
+                                </Badge>
+                              </div>
+                              <p className='text-muted-foreground mt-1 text-xs'>
+                                {run.error ||
+                                  run.approvalReason ||
+                                  `${run.attempts || 0} execution attempt${run.attempts === 1 ? "" : "s"}`}
+                                {run.createdAt
+                                  ? ` · ${new Date(run.createdAt).toLocaleString()}`
+                                  : ""}
+                              </p>
+                            </div>
+                            {run.status === "awaiting_approval" && (
+                              <div className='flex gap-2'>
+                                <Button
+                                  size='sm'
+                                  variant='outline'
+                                  onClick={() =>
+                                    decideAutomationRun(run._id, "reject")
+                                  }
+                                >
+                                  Reject
+                                </Button>
+                                <Button
+                                  size='sm'
+                                  onClick={() =>
+                                    decideAutomationRun(run._id, "approve")
+                                  }
+                                >
+                                  Approve
+                                </Button>
+                              </div>
+                            )}
+                            {run.status === "failed" && (
+                              <Button
+                                size='sm'
+                                variant='outline'
+                                onClick={() =>
+                                  decideAutomationRun(run._id, "retry")
+                                }
+                              >
+                                Retry
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <Separator />
+
+                  <div className='flex flex-col justify-between gap-3 sm:flex-row sm:items-center'>
+                    <div>
+                      <h4 className='flex items-center gap-2 font-medium'>
+                        <RefreshCw className='h-4 w-4' /> Loop timer
+                      </h4>
+                      <p className='text-muted-foreground text-sm'>
+                        Choose how often Genit starts a new marketing cycle.
+                      </p>
+                    </div>
+                    <select
+                      aria-label='Marketing loop timer'
+                      className='border-input bg-background h-9 rounded-md border px-3 text-sm'
+                      value={currentOrg?.autoModeIntervalMinutes ?? 1440}
+                      disabled={savingAuto || !currentOrg?.autoModeEnabled}
+                      onChange={(event) =>
+                        saveAutoSettings({
+                          autoModeIntervalMinutes: Number(event.target.value),
+                        })
+                      }
+                    >
+                      <option value={10}>Every 10 minutes</option>
+                      <option value={30}>Every 30 minutes</option>
+                      <option value={60}>Every hour</option>
+                      <option value={360}>Every 6 hours</option>
+                      <option value={1440}>Every day</option>
+                      <option value={10080}>Every week</option>
+                    </select>
+                  </div>
+
+                  {currentOrg?.autoModeLastRunAt && (
+                    <p className='text-muted-foreground text-xs'>
+                      Last cycle:{" "}
+                      {new Date(
+                        currentOrg.autoModeLastRunAt
+                      ).toLocaleString()}
+                      {currentOrg.autoModeLastError
+                        ? ` · ${currentOrg.autoModeLastError}`
+                        : " · Completed successfully"}
+                    </p>
+                  )}
+                  <p className='text-muted-foreground text-xs'>
+                    Genit Auto analyzes and recommends. Publishing, sending,
+                    and destructive changes follow the guardrails above.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Billing Settings */}
             {activeTab === "billing" && (

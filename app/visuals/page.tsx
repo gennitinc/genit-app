@@ -17,7 +17,7 @@ import {
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { useIntegrations } from "@/hooks/use-integrations";
 import { isMetaSurface } from "@/lib/integrations-api";
-import { listSocialPosts } from "@/lib/social-posts-api";
+import { getSocialPostStats } from "@/lib/social-posts-api";
 import { useQuery } from "@tanstack/react-query";
 import {
   BarChart3,
@@ -46,7 +46,10 @@ import React, { useMemo, useState } from "react";
 const dayMs = 86_400_000;
 
 function isoDate(date: Date) {
-  return date.toISOString().slice(0, 10);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function dateFromIso(value: string) {
@@ -159,11 +162,12 @@ export default function VisualsHomePage() {
   );
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
-  const { byPlatform, identityBySurface, integrations } = useIntegrations();
-  const postsQuery = useQuery({
-    queryKey: ["social-posts"],
-    queryFn: listSocialPosts,
-  });
+  const {
+    byPlatform,
+    identityBySurface,
+    integrations,
+    isLoading: integrationsLoading,
+  } = useIntegrations();
   const { user } = useUserContext();
 
   const organizations = useMemo<Organization[]>(() => {
@@ -184,79 +188,60 @@ export default function VisualsHomePage() {
     return organizations[0] || null;
   }, [organizations, user?.currentOrganization]);
 
-  const posts = postsQuery.data || [];
-  const filteredPosts = useMemo(() => {
+  const statsRange = useMemo(() => {
     const start = new Date(
       rangeStart.getFullYear(),
       rangeStart.getMonth(),
       rangeStart.getDate()
-    ).getTime();
+    );
     const end = new Date(
       rangeEnd.getFullYear(),
       rangeEnd.getMonth(),
       rangeEnd.getDate(),
       23,
       59,
-      59
-    ).getTime();
-    return posts.filter((post) => {
-      const time = new Date(
-        post.publishedAt || post.scheduledFor || post.createdAt
-      ).getTime();
-      return time >= start && time <= end;
-    });
-  }, [posts, rangeEnd, rangeStart]);
+      59,
+      999
+    );
+    return {
+      from: start.toISOString(),
+      to: end.toISOString(),
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+    };
+  }, [rangeEnd, rangeStart]);
+  const statsQuery = useQuery({
+    queryKey: ["social-post-stats", statsRange],
+    queryFn: () => getSocialPostStats(statsRange),
+  });
+  const stats = statsQuery.data;
 
   const connectedChannels = integrations.filter(
     (item) => item.status === "active" && POST_PLATFORMS.includes(item.platform)
   ).length;
-  const activeProjects = new Set(
-    filteredPosts.map((post) => post.project).filter(Boolean)
-  ).size;
-  const totalEngagement = filteredPosts.reduce(
-    (sum, post) =>
-      sum +
-      (post.metrics?.likes || 0) +
-      (post.metrics?.comments || 0) +
-      (post.metrics?.shares || 0) +
-      (post.metrics?.clicks || 0),
-    0
-  );
   const activityData = useMemo(() => {
+    const byDate = new Map(
+      (stats?.activity || []).map((day) => [day.date, day])
+    );
     const days =
       Math.round((rangeEnd.getTime() - rangeStart.getTime()) / dayMs) + 1;
     return Array.from({ length: Math.max(1, days) }, (_, index) => {
-      const date = new Date(rangeStart.getTime() + dayMs * index);
+      const date = new Date(rangeStart);
+      date.setDate(rangeStart.getDate() + index);
       const key = isoDate(date);
-      const dayPosts = filteredPosts.filter(
-        (post) =>
-          isoDate(
-            new Date(post.publishedAt || post.scheduledFor || post.createdAt)
-          ) === key
-      );
+      const day = byDate.get(key);
       return {
         name: date.toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
         }),
-        Drafted: dayPosts.filter((post) => post.status === "draft").length,
-        Published: dayPosts.filter((post) => post.status === "published")
-          .length,
-        Projects: new Set(dayPosts.map((post) => post.project).filter(Boolean))
-          .size,
+        Drafted: day?.drafted || 0,
+        Published: day?.published || 0,
+        Projects: day?.projects || 0,
         Channels: connectedChannels,
-        Engagement: dayPosts.reduce(
-          (sum, post) =>
-            sum +
-            (post.metrics?.likes || 0) +
-            (post.metrics?.comments || 0) +
-            (post.metrics?.shares || 0) +
-            (post.metrics?.clicks || 0),
-          0
-        ),
+        Engagement: day?.engagement || 0,
       };
     });
-  }, [connectedChannels, filteredPosts, rangeEnd, rangeStart]);
+  }, [connectedChannels, rangeEnd, rangeStart, stats?.activity]);
 
   const connectedIntegrations = useMemo(() => {
     return INTEGRATIONS.filter((integration) => {
@@ -297,7 +282,7 @@ export default function VisualsHomePage() {
   const statCards = [
     {
       label: "Posts drafted",
-      value: filteredPosts.filter((post) => post.status === "draft").length,
+      value: stats?.drafted ?? "—",
       detail: "In selected range",
       Icon: PenLine,
       dataKey: "Drafted",
@@ -305,15 +290,15 @@ export default function VisualsHomePage() {
     },
     {
       label: "Active projects",
-      value: activeProjects,
-      detail: "With content activity",
+      value: stats?.activeProjects ?? "—",
+      detail: "Updated in selected range",
       Icon: Folder,
       dataKey: "Projects",
       color: "#60a5fa",
     },
     {
       label: "Engagement",
-      value: totalEngagement,
+      value: stats?.engagement ?? "—",
       detail: "Likes, replies, shares, clicks",
       Icon: BarChart3,
       dataKey: "Engagement",
@@ -321,7 +306,7 @@ export default function VisualsHomePage() {
     },
     {
       label: "Channels",
-      value: connectedChannels,
+      value: integrationsLoading ? "—" : connectedChannels,
       detail: "Ready to publish",
       Icon: Layers3,
       dataKey: "Channels",

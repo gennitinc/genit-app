@@ -51,6 +51,97 @@ export interface Organization {
   members?: { user: string; role: string; joinedAt?: string }[];
   derivedFromOnboarding?: boolean;
   autoModeEnabled?: boolean;
+  autoModeIntervalMinutes?: number;
+  autoModeLastRunAt?: string;
+  autoModeLastError?: string;
+  automationApprovalPolicy?: "destructive" | "external" | "all";
+  automationDailyActionLimit?: number;
+  automationMaxCreditsPerRun?: number;
+  autoModeGoals?: Array<{
+    id: string;
+    title: string;
+    metric: "impressions" | "clicks" | "conversions" | "conversionValue" | "roi";
+    target: number;
+    deadline?: string;
+    status: "active" | "achieved" | "paused";
+  }>;
+  autoModeCurrentPlan?: {
+    generatedAt: string;
+    objective: string;
+    correction?: string;
+    steps: Array<{
+      title: string;
+      action: string;
+      priority: "high" | "medium" | "low";
+      status: string;
+    }>;
+  };
+  autoModeEvaluations?: Array<{
+    evaluatedAt: string;
+    metrics: Record<string, number>;
+    goals: Array<{
+      id: string;
+      current: number;
+      target: number;
+      progress: number;
+      trend: "improving" | "declining" | "flat";
+      status: string;
+    }>;
+  }>;
+  autoModeExperiments?: Array<{
+    id: string;
+    title: string;
+    metric: "impressions" | "clicks" | "conversions" | "conversionValue" | "roi";
+    minimumLiftPercent: number;
+    samples: number;
+    status: "running" | "paused" | "completed";
+    winner?: "A" | "B";
+    liftPercent?: number;
+    variantA: { campaignId: string; campaignName?: string; value?: number };
+    variantB: { campaignId: string; campaignName?: string; value?: number };
+  }>;
+  autoModeAllocation?: {
+    generatedAt: string;
+    totalBudget: number;
+    appliedAt?: string;
+    campaigns: Array<{
+      campaignId: string;
+      campaignName: string;
+      share: number;
+      suggestedBudget: number;
+      reason: string;
+    }>;
+  };
+  autoModeSimulation?: {
+    generatedAt: string;
+    model: string;
+    confidence: "low" | "medium";
+    baseline: {
+      clicks: number;
+      conversions: number;
+      conversionValue: number;
+      budget: number;
+    };
+    projected: {
+      clicks: number;
+      conversions: number;
+      conversionValue: number;
+      budget: number;
+    };
+    uplift: {
+      clicks: number;
+      conversions: number;
+      conversionValue: number;
+    };
+  };
+  autoModeAlerts?: Array<{
+    id: string;
+    severity: "success" | "warning" | "critical";
+    title: string;
+    message: string;
+    status: "open" | "acknowledged";
+    createdAt: string;
+  }>;
   createdAt?: string;
   updatedAt?: string;
   // Legacy fields kept for back-compat with existing settings UI
