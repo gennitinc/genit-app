@@ -278,9 +278,9 @@ export const INTEGRATIONS: Integration[] = [
   },
   {
     platform: "telegram",
-    name: "Telegram",
+    name: "Telegram Business",
     description:
-      "Deploy bots, broadcast updates and engage community channels conversationally.",
+      "Manage customer chats from your Telegram Business account with an authorized AI or human agent.",
     category: "Messaging",
     icon: TelegramBrand,
     baseStatus: "available",

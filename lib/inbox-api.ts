@@ -75,6 +75,15 @@ export interface InboxAttachment {
   providerAttachmentId?: string;
 }
 
+export interface WhatsAppTemplate {
+  id: string;
+  name: string;
+  status?: string;
+  language?: string;
+  category?: string;
+  components?: Array<{ type?: string; text?: string }>;
+}
+
 export interface InboxFilters {
   platform?: string;
   integrationId?: string;
@@ -162,6 +171,26 @@ export async function sendMessage(
   const res = await apiResponse.post(
     `/inbox/conversations/${conversationId}/messages`,
     { content, attachments }
+  );
+  return res.data.message;
+}
+
+export async function fetchConversationWhatsAppTemplates(
+  conversationId: string
+): Promise<WhatsAppTemplate[]> {
+  const res = await apiResponse.get(
+    `/inbox/conversations/${conversationId}/whatsapp-templates`
+  );
+  return res.data.templates;
+}
+
+export async function sendConversationWhatsAppTemplate(
+  conversationId: string,
+  input: { name: string; language: string; components?: unknown[] }
+): Promise<InboxMessage> {
+  const res = await apiResponse.post(
+    `/inbox/conversations/${conversationId}/whatsapp-templates`,
+    input
   );
   return res.data.message;
 }

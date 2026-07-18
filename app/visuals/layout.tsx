@@ -1,4 +1,3 @@
-import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { Toaster } from "@/components/ui/toaster";
 import { VisualsSidebar } from "@/components/visuals/visuals-sidebar";
@@ -11,7 +10,6 @@ export default function VisualsLayout({
   return (
     <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>
       <Toaster />
-      <AppSidebar />
       <div className='scroll-container flex flex-1 flex-col overflow-x-hidden overflow-y-auto will-change-scroll'>
         <TopNavWithAurora />
 

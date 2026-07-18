@@ -148,7 +148,7 @@ function targetLabel(platform: IntegrationPlatform): string {
   if (platform === "meta_ads") return "Ad account";
   if (platform === "whatsapp") return "Phone number";
   if (platform === "gmail") return "Mailbox";
-  if (platform === "telegram") return "Bot";
+  if (platform === "telegram") return "Business account";
   return "Target";
 }
 
@@ -176,7 +176,7 @@ const PLATFORM_SETTINGS_URL: Partial<Record<IntegrationPlatform, string>> = {
   mailchimp: "https://us1.admin.mailchimp.com/account/api/",
   brevo: "https://app.brevo.com/security/login_session",
   whatsapp: "https://business.facebook.com/wa/manage/",
-  telegram: "https://my.telegram.org/auth",
+  telegram: "https://t.me/BotFather",
   google_calendar: "https://myaccount.google.com/permissions",
   google_drive: "https://myaccount.google.com/permissions",
   google_meet: "https://myaccount.google.com/permissions",
@@ -383,6 +383,13 @@ export function ManageDialog({
                   const expiresAt = formatDate(conn.expiresAt);
                   const connectedAt = formatDate(conn.createdAt);
                   const isConfirming = confirmDisconnectId === conn._id;
+                  const telegramBusinessPending = Boolean(
+                    platform === "telegram" &&
+                      conn.metadata?.telegramMode === "business_bot" &&
+                      !conn.metadata?.businessConnectionReady
+                  );
+                  const connectionActive =
+                    conn.status === "active" && !telegramBusinessPending;
 
                   return (
                     <div
@@ -418,21 +425,33 @@ export function ManageDialog({
                         </div>
                         <span
                           className={
-                            conn.status === "active"
+                            connectionActive
                               ? "ml-auto inline-flex shrink-0 items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 text-xs text-emerald-700 ring-1 ring-emerald-500/30 dark:text-emerald-300"
                               : "ml-auto inline-flex shrink-0 items-center gap-1 rounded-md bg-amber-500/10 px-2 py-1 text-xs text-amber-700 ring-1 ring-amber-500/30 dark:text-amber-300"
                           }
                         >
                           <span
                             className={
-                              conn.status === "active"
+                              connectionActive
                                 ? "h-1.5 w-1.5 rounded-full bg-emerald-500"
                                 : "h-1.5 w-1.5 rounded-full bg-amber-500"
                             }
                           />
-                          {conn.status === "active" ? "Active" : conn.status}
+                          {connectionActive
+                            ? "Active"
+                            : telegramBusinessPending
+                              ? "Authorization pending"
+                              : conn.status}
                         </span>
                       </div>
+
+                      {telegramBusinessPending && (
+                        <div className='mt-3 rounded-md border border-sky-500/30 bg-sky-500/5 px-3 py-2 text-[11px] text-sky-800 dark:text-sky-200'>
+                          In Telegram, open Settings → Telegram Business →
+                          Chatbots and authorize this bot to read and reply to
+                          customer messages.
+                        </div>
+                      )}
 
                       <dl className='mt-3 grid grid-cols-2 gap-2 text-[11px]'>
                         {connectedAt && (
@@ -499,7 +518,10 @@ export function ManageDialog({
                               conn.metadata?.inboxAutoReplyEnabled ||
                                 conn.metadata?.telegramAutoReplyEnabled
                             )}
-                            disabled={updateInboxSettings.isPending}
+                            disabled={
+                              updateInboxSettings.isPending ||
+                              telegramBusinessPending
+                            }
                             onCheckedChange={(checked) =>
                               handleAutoReply(conn._id, checked)
                             }

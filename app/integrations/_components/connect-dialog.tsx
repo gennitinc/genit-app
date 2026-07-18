@@ -264,8 +264,8 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
     "Workspace admins may need to allow third-party Gmail apps for the domain",
   ],
   telegram: [
-    "Create a bot in @BotFather and copy the API token (format: <id>:<secret>)",
-    "Users must /start your bot before it can DM them — group/channel admins must add it",
+    "Create a bot in @BotFather, enable Business Mode, then copy its API token",
+    "After saving, connect the bot under Telegram Settings → Telegram Business → Chatbots",
   ],
   x: [
     "Your X developer app must have OAuth 2.0 enabled with the User authentication settings",
@@ -346,12 +346,13 @@ const CREDENTIAL_INPUT: Partial<
   Record<IntegrationPlatform, CredentialInputConfig>
 > = {
   telegram: {
-    label: "Bot API token",
+    label: "Business Bot API token",
     placeholder: "123456789:ABCdefGHIjklMNOpqrSTUvwxYZ",
     autoComplete: "off",
     helpUrl: "https://t.me/BotFather",
     helpUrlLabel: "@BotFather",
-    helpSuffix: ". We'll encrypt it before storing.",
+    helpSuffix:
+      ". Enable Business Mode first; we'll encrypt the token before storing.",
   },
   brevo: {
     label: "Brevo API key",
@@ -659,8 +660,14 @@ export function ConnectDialog({
         const result = await connectTelegramWithToken(value);
         name = result.username ? `@${result.username}` : `Bot ${result.botId}`;
         if (result.warning) {
-          toast.warning("Telegram bot saved, but webhook needs attention", {
-            description: result.warning,
+          toast.warning(
+            "Telegram Business Bot saved, but webhook needs attention",
+            { description: result.warning }
+          );
+        } else if (!result.businessReady) {
+          toast.info("Authorize the bot in Telegram Business", {
+            description:
+              "Open Telegram Settings → Telegram Business → Chatbots and connect this bot. Genit will detect the authorization automatically.",
           });
         }
       } else if (platform === "brevo") {

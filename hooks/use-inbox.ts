@@ -15,6 +15,7 @@ import {
   markAllConversationsAsRead,
   markConversationAsRead,
   retryInboxMessage,
+  sendConversationWhatsAppTemplate,
   sendMessage,
   syncInbox,
   updateConversation,
@@ -102,6 +103,8 @@ export function useInboxRealtime(activeConversationId?: string) {
       if (event.organizationId !== organizationId) return;
 
       qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
+      if (event.type === "integration.updated")
+        qc.invalidateQueries({ queryKey: ["integrations"] });
       if (event.conversationId) {
         qc.invalidateQueries({
           queryKey: inboxMessagesQueryKey(event.conversationId),
@@ -160,6 +163,34 @@ export function useSendMessage() {
       });
       qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
     },
+    onSettled: (_data, _error, variables) => {
+      qc.invalidateQueries({
+        queryKey: inboxMessagesQueryKey(variables.conversationId),
+      });
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
+    },
+  });
+}
+
+export function useSendWhatsAppTemplate() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      conversationId,
+      name,
+      language,
+      components,
+    }: {
+      conversationId: string;
+      name: string;
+      language: string;
+      components?: unknown[];
+    }) =>
+      sendConversationWhatsAppTemplate(conversationId, {
+        name,
+        language,
+        components,
+      }),
     onSettled: (_data, _error, variables) => {
       qc.invalidateQueries({
         queryKey: inboxMessagesQueryKey(variables.conversationId),

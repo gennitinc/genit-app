@@ -817,6 +817,7 @@ export interface TelegramConnectResult {
   botId: number;
   username?: string;
   warning?: string;
+  businessReady?: boolean;
 }
 
 export async function connectTelegramWithToken(
@@ -828,12 +829,14 @@ export async function connectTelegramWithToken(
     botId: number;
     username?: string;
     warning?: string;
+    businessReady?: boolean;
   }>(`/integrations/telegram/connect-with-token`, { botToken });
   return {
     integrationId: data.integrationId,
     botId: data.botId,
     username: data.username,
     warning: data.warning,
+    businessReady: data.businessReady,
   };
 }
 
@@ -848,6 +851,7 @@ export interface SendTelegramMessageInput {
   parseMode?: "HTML" | "MarkdownV2";
   disableNotification?: boolean;
   replyToMessageId?: number;
+  businessConnectionId?: string;
 }
 
 export async function sendTelegramMessage(

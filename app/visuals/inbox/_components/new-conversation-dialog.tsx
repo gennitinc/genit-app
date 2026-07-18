@@ -89,6 +89,8 @@ export function NewConversationDialog({
                   ? "name@example.com"
                   : account?.platform === "telegram"
                     ? "Telegram chat ID"
+                    : account?.platform === "whatsapp"
+                      ? "WhatsApp number, e.g. 2348012345678"
                     : account?.platform === "x"
                       ? "X user ID"
                       : "Provider recipient ID"

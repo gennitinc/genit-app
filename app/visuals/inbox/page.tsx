@@ -54,6 +54,7 @@ import {
   useMarkConversationAsRead,
   useRetryInboxMessage,
   useSendMessage,
+  useSendWhatsAppTemplate,
   useSyncInbox,
   useUpdateConversation,
   useUpdateConversationStatus,
@@ -64,7 +65,9 @@ import {
   type InboxAttachment,
   type InboxConversation,
   type InboxFilters,
+  type WhatsAppTemplate,
   downloadInboxAttachment,
+  fetchConversationWhatsAppTemplates,
   generateInboxDraft,
   uploadInboxAttachment,
 } from "@/lib/inbox-api";
@@ -130,7 +133,7 @@ const PLATFORM_LABELS: Record<string, string> = {
   outlook: "Outlook",
   whatsapp: "WhatsApp",
   messenger: "Messenger",
-  telegram: "Telegram",
+  telegram: "Telegram Business",
 };
 
 const QUICK_EMOJIS = [
@@ -189,6 +192,28 @@ function relativeTime(value: string) {
   return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
+function whatsappTemplateBody(template?: WhatsAppTemplate) {
+  return template?.components?.find(
+    (component) => component.type?.toUpperCase() === "BODY"
+  )?.text || "";
+}
+
+function templateVariableCount(text: string) {
+  return Math.max(
+    0,
+    ...Array.from(text.matchAll(/\{\{(\d+)\}\}/g), (match) => Number(match[1]))
+  );
+}
+
+function whatsappTemplateVariableSections(template?: WhatsAppTemplate) {
+  return (template?.components || [])
+    .map((component) => ({
+      type: component.type?.toLowerCase() || "body",
+      count: templateVariableCount(component.text || ""),
+    }))
+    .filter((component) => component.count > 0);
+}
+
 function AccountAvatar({ account }: { account: IntegrationConnection }) {
   return (
     <div className='relative h-10 w-10 shrink-0'>
@@ -223,6 +248,12 @@ export default function InboxPage() {
   const [showEmoji, setShowEmoji] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isWriting, setIsWriting] = useState(false);
+  const [whatsappTemplates, setWhatsAppTemplates] = useState<
+    WhatsAppTemplate[]
+  >([]);
+  const [selectedTemplateId, setSelectedTemplateId] = useState("");
+  const [templateValues, setTemplateValues] = useState<string[]>([]);
+  const [templatesLoading, setTemplatesLoading] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<InboxConversation | null>(
     null
   );
@@ -359,9 +390,10 @@ export default function InboxPage() {
     () =>
       accounts.filter(
         (account) =>
-          ["gmail", "email", "outlook", "telegram"].includes(
-            account.platform
-          ) ||
+          ["gmail", "email", "outlook"].includes(account.platform) ||
+          (account.platform === "telegram" &&
+            account.metadata?.telegramMode !== "business_bot") ||
+          account.platform === "whatsapp" ||
           (account.platform === "x" && account.scopes.includes("dm.write"))
       ),
     [accounts]
@@ -398,6 +430,7 @@ export default function InboxPage() {
   );
   useInboxRealtime(activeId || undefined);
   const sendMutation = useSendMessage();
+  const sendTemplateMutation = useSendWhatsAppTemplate();
   const retryMutation = useRetryInboxMessage();
   const markReadMutation = useMarkConversationAsRead();
   const markAllMutation = useMarkAllConversationsAsRead();
@@ -425,7 +458,40 @@ export default function InboxPage() {
         Date.parse(String(activeConversation.metadata.lastInboundAt)) >
         24 * 60 * 60 * 1000)
   );
-  const providerReplyUnavailable = false;
+  const telegramBusinessReplyWindowClosed = Boolean(
+    activeConversation?.platform === "telegram" &&
+      activeConversation.metadata?.telegramBusiness &&
+      (!activeConversation.metadata?.lastInboundAt ||
+        Date.now() -
+          Date.parse(String(activeConversation.metadata.lastInboundAt)) >
+          24 * 60 * 60 * 1000)
+  );
+  const selectedTemplate = whatsappTemplates.find(
+    (template) => template.id === selectedTemplateId
+  );
+  const selectedTemplateBody = whatsappTemplateBody(selectedTemplate);
+  const selectedTemplateVariableSections = whatsappTemplateVariableSections(
+    selectedTemplate
+  );
+  const selectedTemplateVariableCount =
+    selectedTemplateVariableSections.reduce(
+      (total, section) => total + section.count,
+      0
+    );
+  const activeConversationAccount = accounts.find(
+    (account) => account._id === activeConversation?.integration
+  );
+  const activeTelegramBusinessConnection = (
+    activeConversationAccount?.metadata?.businessConnections || []
+  ).find(
+    (connection: any) =>
+      connection.id === activeConversation?.metadata?.businessConnectionId
+  );
+  const providerReplyUnavailable = Boolean(
+    activeConversation?.metadata?.telegramBusiness &&
+      (!activeTelegramBusinessConnection?.isEnabled ||
+        !activeTelegramBusinessConnection?.rights?.can_reply)
+  );
   const syncableAccounts = accounts.filter((account) =>
     [
       "gmail",
@@ -549,6 +615,34 @@ export default function InboxPage() {
     setShowEmoji(false);
   }, [activeId]);
 
+  useEffect(() => {
+    setWhatsappTemplates([]);
+    setSelectedTemplateId("");
+    setTemplateValues([]);
+    if (!activeId || !whatsappReplyWindowClosed) return;
+    let cancelled = false;
+    setTemplatesLoading(true);
+    fetchConversationWhatsAppTemplates(activeId)
+      .then((templates) => {
+        if (cancelled) return;
+        setWhatsappTemplates(templates);
+        setSelectedTemplateId(templates[0]?.id || "");
+      })
+      .catch((error: any) => {
+        if (!cancelled)
+          toast.error(
+            error?.response?.data?.message ||
+              "WhatsApp templates could not be loaded"
+          );
+      })
+      .finally(() => {
+        if (!cancelled) setTemplatesLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [activeId, whatsappReplyWindowClosed]);
+
   const sendReply = () => {
     const content = reply.trim();
     if ((!content && attachments.length === 0) || !activeId) return;
@@ -562,6 +656,45 @@ export default function InboxPage() {
         onError: (error: any) =>
           toast.error(
             error?.response?.data?.message || "Your reply could not be sent"
+          ),
+      }
+    );
+  };
+
+  const sendWhatsAppTemplate = () => {
+    if (!activeId || !selectedTemplate) return;
+    const values = templateValues
+      .slice(0, selectedTemplateVariableCount)
+      .map((value) => value.trim());
+    if (values.some((value) => !value)) {
+      toast.error("Complete every template variable before sending");
+      return;
+    }
+    sendTemplateMutation.mutate(
+      {
+        conversationId: activeId,
+        name: selectedTemplate.name,
+        language: selectedTemplate.language || "en_US",
+        components: values.length
+          ? selectedTemplateVariableSections.map((section, index) => {
+              const offset = selectedTemplateVariableSections
+                .slice(0, index)
+                .reduce((total, item) => total + item.count, 0);
+              return {
+                type: section.type,
+                parameters: values
+                  .slice(offset, offset + section.count)
+                  .map((text) => ({ type: "text", text })),
+              };
+            })
+          : undefined,
+      },
+      {
+        onSuccess: () => toast.success("WhatsApp template sent"),
+        onError: (error: any) =>
+          toast.error(
+            error?.response?.data?.message ||
+              "WhatsApp template could not be sent"
           ),
       }
     );
@@ -1340,14 +1473,81 @@ export default function InboxPage() {
                   </div>
                 ) : providerReplyUnavailable ? (
                   <div className='text-muted-foreground mx-auto max-w-3xl rounded-2xl bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
-                    Replies are not available for this provider connection yet.
-                    You can still review, label, and resolve the conversation.
+                    Telegram Business reply access is not active. Reauthorize
+                    the Business Bot with permission to read and reply to
+                    messages. You can still review, label, and resolve this
+                    conversation.
                   </div>
                 ) : whatsappReplyWindowClosed ? (
-                  <div className='text-muted-foreground mx-auto max-w-3xl rounded-2xl bg-amber-50 p-4 text-sm text-amber-900 dark:bg-amber-950/40 dark:text-amber-200'>
-                    WhatsApp’s 24-hour reply window has closed. Send an approved
-                    template through your WhatsApp campaign tools; normal
-                    replies will become available after the customer responds.
+                  <div className='mx-auto max-w-3xl space-y-3 rounded-2xl bg-amber-50 p-4 text-sm text-amber-950 dark:bg-amber-950/40 dark:text-amber-100'>
+                    <p>
+                      WhatsApp’s 24-hour reply window has closed. Send an
+                      approved template here; normal replies become available
+                      after the customer responds.
+                    </p>
+                    {templatesLoading ? (
+                      <div className='flex items-center gap-2'>
+                        <Loader2 className='h-4 w-4 animate-spin' /> Loading
+                        templates…
+                      </div>
+                    ) : whatsappTemplates.length ? (
+                      <div className='space-y-3'>
+                        <select
+                          className='bg-background h-10 w-full rounded-md border px-3 text-foreground'
+                          value={selectedTemplateId}
+                          onChange={(event) => {
+                            setSelectedTemplateId(event.target.value);
+                            setTemplateValues([]);
+                          }}
+                        >
+                          {whatsappTemplates.map((template) => (
+                            <option key={template.id} value={template.id}>
+                              {template.name} · {template.language}
+                            </option>
+                          ))}
+                        </select>
+                        {selectedTemplateBody && (
+                          <p className='rounded-lg bg-white/70 p-3 whitespace-pre-wrap dark:bg-black/20'>
+                            {selectedTemplateBody}
+                          </p>
+                        )}
+                        {Array.from(
+                          { length: selectedTemplateVariableCount },
+                          (_, index) => (
+                            <Input
+                              key={index}
+                              value={templateValues[index] || ""}
+                              onChange={(event) =>
+                                setTemplateValues((current) => {
+                                  const next = [...current];
+                                  next[index] = event.target.value;
+                                  return next;
+                                })
+                              }
+                              placeholder={`Value for {{${index + 1}}}`}
+                              className='bg-background text-foreground'
+                            />
+                          )
+                        )}
+                        <Button
+                          onClick={sendWhatsAppTemplate}
+                          disabled={sendTemplateMutation.isPending}
+                        >
+                          {sendTemplateMutation.isPending && (
+                            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                          )}
+                          Send template
+                        </Button>
+                      </div>
+                    ) : (
+                      <p>No approved WhatsApp templates are available.</p>
+                    )}
+                  </div>
+                ) : telegramBusinessReplyWindowClosed ? (
+                  <div className='mx-auto max-w-3xl rounded-2xl bg-amber-50 p-4 text-sm text-amber-950 dark:bg-amber-950/40 dark:text-amber-100'>
+                    Telegram Business replies are available for 24 hours after
+                    the customer&apos;s latest message. Wait for the customer to
+                    message the business account again before replying.
                   </div>
                 ) : (
                   <div className='relative mx-auto max-w-3xl rounded-2xl border border-black/10 bg-zinc-50 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/10 dark:border-white/10 dark:bg-zinc-900'>
@@ -1386,6 +1586,7 @@ export default function InboxPage() {
                       </div>
                     )}
                     <textarea
+                      rows={1}
                       value={reply}
                       onChange={(event) => setReply(event.target.value)}
                       onKeyDown={(event) => {
@@ -1402,7 +1603,7 @@ export default function InboxPage() {
                           ? 280
                           : undefined
                       }
-                      className='min-h-20 w-full resize-none bg-transparent px-2 py-2 text-sm outline-none'
+                      className='field-sizing-content max-h-32 min-h-10 w-full resize-none bg-transparent px-3 py-2.5 text-sm leading-5 outline-none'
                     />
                     <div className='flex items-center justify-between gap-2 px-3 pb-3'>
                       <div className='relative flex items-center gap-1'>
@@ -1526,9 +1727,9 @@ export default function InboxPage() {
             </>
           ) : (
             <div className='flex h-full flex-col items-center justify-center p-8 text-center'>
-              <span className='mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-white shadow-sm ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10'>
+              <span className='mb-5 flex h-fit w-20 items-center justify-center rounded-3xl bg-white shadow-sm ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10'>
                 <Image
-                  src='/gennit2.png'
+                  src='/chat.svg'
                   height='200'
                   width='200'
                   alt='logo'
