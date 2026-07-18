@@ -43,8 +43,11 @@ export default function TopNavWithAurora({
     >
       <div className='flex w-full items-center justify-between px-4 py-1.5'>
         <div className='z-20 flex flex-1 items-center'>
-          {!isVisualsPage && (!isChatIdPage || isMobile) && (
-            <SidebarTrigger className='z-20 -ml-2' />
+          {(!isChatIdPage || isMobile) && (
+            <SidebarTrigger
+              className='z-20 -ml-2'
+              disabled={isVisualsPage}
+            />
           )}
           <Link href='/' className='flex items-center gap-1 lg:hidden'>
             <Logo className='h-9 w-9' />
