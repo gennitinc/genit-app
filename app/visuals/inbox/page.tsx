@@ -1732,7 +1732,7 @@ export default function InboxPage() {
                   src='/chat.svg'
                   height='200'
                   width='200'
-                  alt='logo'
+                  alt='chat logo'
                   className=''
                 />
               </span>
