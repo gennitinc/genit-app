@@ -31,6 +31,7 @@ export default function TopNavWithAurora({
 
   const params = useParams();
   const isChatIdPage = !!params.id && pathName.startsWith("/chat");
+  const isVisualsPage = pathName.startsWith("/visuals");
 
   return (
     <header
@@ -42,7 +43,7 @@ export default function TopNavWithAurora({
     >
       <div className='flex w-full items-center justify-between px-4 py-1.5'>
         <div className='z-20 flex flex-1 items-center'>
-          {(!isChatIdPage || isMobile) && (
+          {!isVisualsPage && (!isChatIdPage || isMobile) && (
             <SidebarTrigger className='z-20 -ml-2' />
           )}
           <Link href='/' className='flex items-center gap-1 lg:hidden'>
