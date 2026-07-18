@@ -616,7 +616,7 @@ export default function InboxPage() {
   }, [activeId]);
 
   useEffect(() => {
-    setWhatsappTemplates([]);
+    setWhatsAppTemplates([]);
     setSelectedTemplateId("");
     setTemplateValues([]);
     if (!activeId || !whatsappReplyWindowClosed) return;
@@ -625,7 +625,7 @@ export default function InboxPage() {
     fetchConversationWhatsAppTemplates(activeId)
       .then((templates) => {
         if (cancelled) return;
-        setWhatsappTemplates(templates);
+        setWhatsAppTemplates(templates);
         setSelectedTemplateId(templates[0]?.id || "");
       })
       .catch((error: any) => {
