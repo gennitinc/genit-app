@@ -60,6 +60,7 @@ interface TriggerNodeData {
   scheduleTime?: string;
   filterField?: string;
   filterValue?: string;
+  senderFilter?: string;
   webhookUrl?: string;
   isActive?: boolean;
   isTesting?: boolean;
@@ -245,9 +246,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                   <label className={labelCls}>From</label>
                   <input
                     type='text'
-                    value={data.filterField || ""}
+                    value={data.senderFilter || ""}
                     onChange={(e) =>
-                      data.onNodeDataChange(id, { filterField: e.target.value })
+                      data.onNodeDataChange(id, { senderFilter: e.target.value })
                     }
                     className={inputCls}
                     placeholder='sender@example.com'
