@@ -89,6 +89,7 @@
     "date-fns": "^4.1.0",
     "emailjs": "^4.0.3",
     "embla-carousel-react": "^8.6.0",
+    "emoji-picker-react": "^4.19.1",
     "framer-motion": "^12.23.12",
     "fs": "^0.0.1-security",
     "html2canvas": "^1.4.1",

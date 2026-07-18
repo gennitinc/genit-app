@@ -14,10 +14,12 @@ import { RefObject, useEffect, useState } from "react";
 
 interface TopNavWithAuroraProps {
   scrollContainerRef?: RefObject<HTMLDivElement>;
+  isPreviewOpen?: boolean;
 }
 
 export default function TopNavWithAurora({
   scrollContainerRef: _scrollContainerRef,
+  isPreviewOpen = false,
 }: TopNavWithAuroraProps) {
   const { theme, setTheme } = useTheme();
   const pathName = usePathname();
@@ -43,7 +45,7 @@ export default function TopNavWithAurora({
     >
       <div className='flex w-full items-center justify-between px-4 py-1.5'>
         <div className='z-20 flex flex-1 items-center'>
-          {(!isChatIdPage || isMobile) && (
+          {(!isChatIdPage || isMobile || !isPreviewOpen) && (
             <SidebarTrigger
               className='z-20 -ml-2'
               disabled={isVisualsPage}

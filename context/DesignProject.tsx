@@ -35,7 +35,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [project, setProject] = useState<IDesignProject | null>(null);
-  const [artifactPreview, setArtifactPreview] = useState<
+  const [artifactPreview, setArtifactPreviewState] = useState<
     IProjectDesignContext["artifactPreview"]
   >(null);
   const router = useRouter();
@@ -97,9 +97,20 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const projectIdRef = useRef<string | null>(null);
   const isHydratingRef = useRef<boolean>(false);
   const messagesRef = useRef<any[]>([]);
-  const [focusedGenerationId, setFocusedGenerationId] = useState<string | null>(
-    null
-  );
+  const [focusedGenerationId, setFocusedGenerationIdState] = useState<
+    string | null
+  >(null);
+  const setArtifactPreview: IProjectDesignContext["setArtifactPreview"] =
+    useCallback((value) => {
+      setArtifactPreviewState(value);
+      if (value && typeof value !== "function") {
+        setFocusedGenerationIdState(null);
+      }
+    }, []);
+  const setFocusedGenerationId = useCallback((id: string | null) => {
+    setFocusedGenerationIdState(id);
+    if (id) setArtifactPreviewState(null);
+  }, []);
   const [selectedColorScales, setSelectedColorScales] = useState<
     Array<{
       base: string;
@@ -247,6 +258,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsGeneratingImage(false);
       setGeneratingForMessageId(null);
       setArtifactPreview(null);
+      setFocusedGenerationIdState(null);
 
       // Update the processed draft ref so new project can process its own draft
       hasProcessedDraftRef.current = false;

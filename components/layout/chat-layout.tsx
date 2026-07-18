@@ -7,9 +7,18 @@ import TopNavWithAurora from "./top-nav-with-aurora";
 import { useSidebar } from "@/components/ui/sidebar";
 import {
   AgentRunsProvider,
+  useAgentRunsContext,
 } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import {
+  AUTOMATION_PREVIEW_ID,
+  CanvasPreviewType,
+  WORKFLOW_PREVIEW_ID,
+  getItemPreviewType,
+  getLatestAgentPreview,
+  getLatestMessagePreview,
+} from "@/lib/chat-preview";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -18,7 +27,7 @@ import {
   PanelRightClose,
   PanelRightOpen,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import React from "react";
 
 export function ChatLayout() {
@@ -36,31 +45,88 @@ function ChatLayoutInner() {
 
   const {
     artifactPreview,
+    setArtifactPreview,
     isGeneratingImage,
     liveNodes,
     messages,
     project,
     isGenerating,
+    focusedGenerationId,
+    setFocusedGenerationId,
   } = useProjectDesign();
+  const { runs } = useAgentRunsContext();
   const { setOpen: setSidebarOpen } = useSidebar();
 
   const isGenerationActive =
     Boolean(isGeneratingImage) ||
     (liveNodes?.length ?? 0) > 0;
 
+  const latestMessagePreview = useMemo(
+    () => getLatestMessagePreview(messages),
+    [messages]
+  );
+  const latestAgentPreview = useMemo(
+    () => getLatestAgentPreview(runs),
+    [runs]
+  );
+  const latestPreview = [latestMessagePreview, latestAgentPreview]
+    .filter((value) => value !== null)
+    .sort((a, b) => a.createdAt - b.createdAt)
+    .at(-1);
+  const focusedPreviewType = useMemo(() => {
+    if (!focusedGenerationId) return null;
+    if (focusedGenerationId === AUTOMATION_PREVIEW_ID) return "automation";
+    if (focusedGenerationId === WORKFLOW_PREVIEW_ID) return "workflow";
+    for (const message of messages || []) {
+      for (const group of message.generationGroups || []) {
+        const item = (group.items || []).find(
+          (entry: any) =>
+            entry.id === focusedGenerationId ||
+            entry.filePath === focusedGenerationId ||
+            entry.url === focusedGenerationId
+        );
+        if (item) return getItemPreviewType(item);
+      }
+    }
+    // Agent-generated designs use their result id/url and are not duplicated
+    // into the legacy generation groups.
+    return "graphics";
+  }, [focusedGenerationId, messages]);
+  const categoryPreviewType: CanvasPreviewType | "website" | null =
+    project?.category === "automation"
+      ? "automation"
+      : project?.category === "workflow"
+        ? "workflow"
+        : project?.category?.includes("website") ||
+            project?.category?.includes("landing")
+          ? "website"
+          : null;
+  const previewType =
+    focusedPreviewType || latestPreview?.type || categoryPreviewType;
+
   const hasAnyPreview =
     isGenerationActive ||
     Boolean(artifactPreview) ||
-    // Design projects: open when there are generated images
-    (messages?.some((m: any) => (m.generationGroups?.length ?? 0) > 0) ??
-      false);
+    Boolean(previewType);
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const prevActiveRef = useRef(false);
   const initialOpenForProjectRef = useRef<string | null>(null);
+  const latestPreviewKeyRef = useRef<string | null>(null);
 
-  // A project category alone is not evidence that a useful preview exists.
+  // New results take control of the preview; manual selection remains stable
+  // until another result is generated.
+  useEffect(() => {
+    if (!latestPreview || latestPreviewKeyRef.current === latestPreview.key)
+      return;
+    latestPreviewKeyRef.current = latestPreview.key;
+    setArtifactPreview(null);
+    setFocusedGenerationId(latestPreview.itemId || null);
+    setIsPreviewOpen(true);
+  }, [latestPreview, setArtifactPreview, setFocusedGenerationId]);
+
+  // Open once when the project first exposes any useful preview.
   useEffect(() => {
     const pid = project?._id?.toString?.() ?? null;
     if (!pid) return;
@@ -109,6 +175,7 @@ function ChatLayoutInner() {
             scrollContainerRef={
               scrollContainerRef as React.RefObject<HTMLDivElement>
             }
+            isPreviewOpen={isPreviewOpen}
           />
         </div>
 
@@ -189,6 +256,7 @@ function ChatLayoutInner() {
                     className='relative h-full w-full'
                   >
                     <PreviewPanel
+                      previewType={previewType}
                       isFullscreen={isFullscreen}
                       onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
                     />

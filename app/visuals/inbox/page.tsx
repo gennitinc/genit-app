@@ -42,6 +42,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
   useCreateConversation,
@@ -107,9 +112,13 @@ import {
   XCircle,
 } from "lucide-react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import type { EmojiClickData, Theme as EmojiTheme } from "emoji-picker-react";
+
+const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
 const INBOX_PLATFORMS = new Set<IntegrationPlatform>([
   "instagram",
@@ -135,21 +144,6 @@ const PLATFORM_LABELS: Record<string, string> = {
   messenger: "Messenger",
   telegram: "Telegram Business",
 };
-
-const QUICK_EMOJIS = [
-  "😀",
-  "😊",
-  "🙏",
-  "❤️",
-  "👍",
-  "🎉",
-  "✨",
-  "😂",
-  "🤝",
-  "✅",
-  "🔥",
-  "💡",
-];
 
 function PlatformIcon({
   platform,
@@ -265,6 +259,7 @@ export default function InboxPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const replyInputRef = useRef<HTMLTextAreaElement>(null);
 
   /* Lock parent layout ancestors to viewport height so only the
      messages column scrolls – uses inline styles because dynamically
@@ -451,6 +446,12 @@ export default function InboxPage() {
   const supportsAttachments = activeConversation
     ? !["x", "twitter"].includes(activeConversation.platform)
     : true;
+  const replyMaxLength =
+    activeConversation &&
+    ["x", "twitter"].includes(activeConversation.platform) &&
+    activeConversation.metadata?.kind !== "dm"
+      ? 280
+      : undefined;
   const whatsappReplyWindowClosed = Boolean(
     activeConversation?.platform === "whatsapp" &&
     (!activeConversation.metadata?.lastInboundAt ||
@@ -659,6 +660,20 @@ export default function InboxPage() {
           ),
       }
     );
+  };
+
+  const insertEmoji = ({ emoji }: EmojiClickData) => {
+    const input = replyInputRef.current;
+    const start = input?.selectionStart ?? reply.length;
+    const end = input?.selectionEnd ?? start;
+    const next = reply.slice(0, start) + emoji + reply.slice(end);
+    if (replyMaxLength && next.length > replyMaxLength) return;
+    setReply(next);
+    setShowEmoji(false);
+    requestAnimationFrame(() => {
+      input?.focus();
+      input?.setSelectionRange(start + emoji.length, start + emoji.length);
+    });
   };
 
   const sendWhatsAppTemplate = () => {
@@ -1586,6 +1601,7 @@ export default function InboxPage() {
                       </div>
                     )}
                     <textarea
+                      ref={replyInputRef}
                       rows={1}
                       value={reply}
                       onChange={(event) => setReply(event.target.value)}
@@ -1596,13 +1612,7 @@ export default function InboxPage() {
                         }
                       }}
                       placeholder={`Reply to ${activeConversation.customerName}…`}
-                      maxLength={
-                        ["x", "twitter"].includes(
-                          activeConversation.platform
-                        ) && activeConversation.metadata?.kind !== "dm"
-                          ? 280
-                          : undefined
-                      }
+                      maxLength={replyMaxLength}
                       className='field-sizing-content max-h-32 min-h-10 w-full resize-none bg-transparent px-3 py-2.5 text-sm leading-5 outline-none'
                     />
                     <div className='flex items-center justify-between gap-2 px-3 pb-3'>
@@ -1638,33 +1648,36 @@ export default function InboxPage() {
                             <Paperclip className='h-4 w-4' />
                           )}
                         </Button>
-                        <Button
-                          type='button'
-                          variant='ghost'
-                          size='icon'
-                          className='h-8 w-8 rounded-full'
-                          onClick={() => setShowEmoji((open) => !open)}
-                          aria-label='Add emoji'
-                        >
-                          <Smile className='h-4 w-4' />
-                        </Button>
-                        {showEmoji && (
-                          <div className='bg-popover text-popover-foreground absolute bottom-11 left-0 z-20 grid w-48 grid-cols-6 gap-1 rounded-xl border p-2 shadow-lg'>
-                            {QUICK_EMOJIS.map((emoji) => (
-                              <button
-                                key={emoji}
-                                type='button'
-                                className='hover:bg-muted rounded-md p-1 text-lg'
-                                onClick={() => {
-                                  setReply((current) => current + emoji);
-                                  setShowEmoji(false);
-                                }}
-                              >
-                                {emoji}
-                              </button>
-                            ))}
-                          </div>
-                        )}
+                        <Popover open={showEmoji} onOpenChange={setShowEmoji}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              type='button'
+                              variant='ghost'
+                              size='icon'
+                              className='h-8 w-8 rounded-full'
+                              aria-label='Add emoji'
+                            >
+                              <Smile className='h-4 w-4' />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            side='top'
+                            align='start'
+                            collisionPadding={12}
+                            className='w-auto max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-xl border-0 bg-transparent p-0 shadow-xl'
+                          >
+                            <EmojiPicker
+                              onEmojiClick={insertEmoji}
+                              autoFocusSearch
+                              lazyLoadEmojis
+                              searchPlaceholder='Search emojis'
+                              theme={"auto" as EmojiTheme}
+                              width='min(350px, calc(100vw - 1.5rem))'
+                              height={420}
+                              previewConfig={{ showPreview: false }}
+                            />
+                          </PopoverContent>
+                        </Popover>
                         <Button
                           type='button'
                           variant='ghost'

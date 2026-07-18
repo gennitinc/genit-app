@@ -1,6 +1,9 @@
 "use client";
 
 import { AgentCard } from "./agent-card";
+import { Button } from "@/components/ui/button";
+import { useProjectDesign } from "@/context/DesignProject";
+import { AUTOMATION_PREVIEW_ID } from "@/lib/chat-preview";
 import {
   ArrowRight,
   Bell,
@@ -14,6 +17,7 @@ import {
   Globe,
   Image,
   Link2,
+  LayoutGrid,
   Mail,
   MessageSquare,
   Mic,
@@ -184,6 +188,7 @@ const CONTENT_TYPE_LABELS: Record<string, string> = {
 // ─── Node Created Card ───
 
 export function AutomationNodeCreatedCard({ data }: { data: any }) {
+  const { setFocusedGenerationId } = useProjectDesign();
   const nodeType = data?.type || "action";
   const config = NODE_TYPE_CONFIG[nodeType] || NODE_TYPE_CONFIG.action;
 
@@ -260,6 +265,15 @@ export function AutomationNodeCreatedCard({ data }: { data: any }) {
             </span>
           </div>
         )}
+        <Button
+          variant='outline'
+          size='sm'
+          className='h-7 gap-1.5 px-2 text-xs'
+          onClick={() => setFocusedGenerationId(AUTOMATION_PREVIEW_ID)}
+        >
+          <LayoutGrid className='h-3 w-3' />
+          View canvas
+        </Button>
       </div>
     </AgentCard>
   );
@@ -268,6 +282,7 @@ export function AutomationNodeCreatedCard({ data }: { data: any }) {
 // ─── Nodes Connected Card ───
 
 export function AutomationNodesConnectedCard({ data }: { data: any }) {
+  const { setFocusedGenerationId } = useProjectDesign();
   const sourceLabel = data?.sourceId
     ? data.sourceId.replace(/-\d+$/, "").replace(/_/g, " ")
     : "Source";
@@ -283,7 +298,7 @@ export function AutomationNodesConnectedCard({ data }: { data: any }) {
       title='Nodes connected'
       tone='success'
     >
-      <div className='flex items-center gap-2 text-[12.5px]'>
+      <div className='flex flex-wrap items-center gap-2 text-[12.5px]'>
         <span className='bg-foreground/[0.05] text-foreground inline-flex items-center gap-1 rounded-md px-2 py-1 font-medium dark:bg-white/[0.06]'>
           {sourceLabel}
         </span>
@@ -296,6 +311,15 @@ export function AutomationNodesConnectedCard({ data }: { data: any }) {
             {data.sourceHandle}
           </span>
         )}
+        <Button
+          variant='outline'
+          size='sm'
+          className='ml-auto h-7 gap-1.5 px-2 text-xs'
+          onClick={() => setFocusedGenerationId(AUTOMATION_PREVIEW_ID)}
+        >
+          <LayoutGrid className='h-3 w-3' />
+          View canvas
+        </Button>
       </div>
     </AgentCard>
   );
