@@ -265,7 +265,7 @@ export default function InboxPage() {
      messages column scrolls – uses inline styles because dynamically
      added Tailwind classes aren't compiled into the CSS bundle. */
   useEffect(() => {
-    const mql = window.matchMedia("(min-width: 1024px)");
+    const mql = window.matchMedia("(min-width: 1280px)");
 
     const targets = () => ({
       scrollContainer: document.querySelector(
@@ -781,10 +781,10 @@ export default function InboxPage() {
 
   return (
     <div
-      className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100vh-8rem)] w-full flex-col gap-5 duration-500'
+      className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100dvh-8rem)] w-full min-w-0 flex-col gap-5 duration-500'
       style={{ height: "100%", minHeight: 0, gap: "1rem", overflow: "hidden" }}
     >
-      <header className='flex items-end justify-between lg:items-end'>
+      <header className='flex flex-wrap items-end justify-between gap-3'>
         <div>
           <h1 className='text-foreground text-2xl font-bold tracking-tight'>
             Unified Inbox
@@ -903,9 +903,9 @@ export default function InboxPage() {
         </div>
       </header>
 
-      <div className='grid min-h-0 flex-1 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm lg:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(420px,1fr)_280px] dark:border-white/10 dark:bg-zinc-950'>
+      <div className='grid min-h-0 min-w-0 flex-1 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(420px,1fr)_280px] dark:border-white/10 dark:bg-zinc-950'>
         <aside
-          className={`${activeId ? "hidden lg:flex" : "flex"} min-h-0 flex-col border-r border-black/5 dark:border-white/10`}
+          className={`${activeId ? "hidden xl:flex" : "flex"} min-h-0 min-w-0 flex-col border-r border-black/5 dark:border-white/10`}
         >
           <div className='border-b border-black/5 px-4 py-2 dark:border-white/10'>
             <div className='flex items-center gap-2'>
@@ -1158,16 +1158,16 @@ export default function InboxPage() {
         </aside>
 
         <main
-          className={`${activeId ? "flex" : "hidden lg:flex"} min-h-0 min-w-0 flex-col bg-zinc-50/40 dark:bg-black/20`}
+          className={`${activeId ? "flex" : "hidden xl:flex"} min-h-0 min-w-0 flex-col bg-zinc-50/40 dark:bg-black/20`}
         >
           {activeConversation ? (
             <>
               <div className='flex h-14 shrink-0 items-center justify-between gap-3 border-b border-black/5 bg-white/80 px-4 backdrop-blur sm:px-6 dark:border-white/10 dark:bg-zinc-950/80'>
-                <div className='flex min-w-0 items-center gap-2'>
+                <div className='flex min-w-0 flex-1 items-center gap-2'>
                   <Button
                     variant='ghost'
                     size='icon'
-                    className='shrink-0 rounded-full lg:hidden'
+                    className='shrink-0 rounded-full xl:hidden'
                     onClick={() => setActiveId(null)}
                   >
                     <ChevronLeft className='h-5 w-5' />
@@ -1183,12 +1183,12 @@ export default function InboxPage() {
                       {activeConversation.customerName.charAt(0)}
                     </span>
                   )}
-                  <div className='min-w-0'>
-                    <div className='flex flex-row items-center gap-2'>
-                      <h2 className='w-fit max-w-14 truncate text-sm font-semibold'>
+                  <div className='min-w-0 flex-1'>
+                    <div className='flex min-w-0 items-center gap-2'>
+                      <h2 className='max-w-28 truncate text-sm font-semibold sm:max-w-48'>
                         {activeConversation.customerName}
                       </h2>
-                      <p className='text-muted-foreground flex w-48 min-w-0 items-center gap-1.5 text-xs'>
+                      <p className='text-muted-foreground hidden min-w-0 flex-1 items-center gap-1.5 text-xs sm:flex'>
                         <PlatformIcon
                           platform={activeConversation.platform}
                           className='h-3 w-3 flex-shrink-0'
@@ -1673,7 +1673,7 @@ export default function InboxPage() {
                               searchPlaceholder='Search emojis'
                               theme={"auto" as EmojiTheme}
                               width='min(350px, calc(100vw - 1.5rem))'
-                              height={420}
+                              height='min(420px, calc(100dvh - 7rem))'
                               previewConfig={{ showPreview: false }}
                             />
                           </PopoverContent>
