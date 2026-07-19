@@ -17,6 +17,25 @@ import React from "react";
 
 const CATEGORIES = [
   { id: "home", label: "Home", icon: Home, href: "/visuals" },
+   {
+    id: "posts",
+    label: "Posts",
+    icon: Layers,
+    href: "/visuals/posts",
+  }, 
+  { id: "inbox", label: "Inbox", icon: Inbox, href: "/visuals/inbox" },
+  {
+    id: "library",
+    label: "Media Library",
+    icon: Library,
+    href: "/visuals/library",
+  },
+   {
+    id: "automation",
+    label: "Automation",
+    icon: Workflow,
+    href: "/visuals/automation",
+  },
   {
     id: "calendar",
     label: "Calendar",
@@ -24,29 +43,10 @@ const CATEGORIES = [
     href: "/visuals/calendar",
   },
   {
-    id: "library",
-    label: "Media Library",
-    icon: Library,
-    href: "/visuals/library",
-  },
-  {
-    id: "posts",
-    label: "Posts",
-    icon: Layers,
-    href: "/visuals/posts",
-  },
-  {
     id: "campaigns",
     label: "Campaigns",
     icon: Megaphone,
     href: "/visuals/campaigns",
-  },
-  { id: "inbox", label: "Unified Inbox", icon: Inbox, href: "/visuals/inbox" },
-  {
-    id: "automation",
-    label: "Automation",
-    icon: Workflow,
-    href: "/visuals/automation",
   },
 ];
 
