@@ -31,6 +31,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -332,6 +339,11 @@ export default function InboxPage() {
     messageId: string;
     conversationId: string;
   } | null>(null);
+  const [selectedConversationIds, setSelectedConversationIds] = useState(
+    () => new Set<string>()
+  );
+  const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+  const [bulkBusy, setBulkBusy] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showNewConversation, setShowNewConversation] = useState(false);
   const [createdConversation, setCreatedConversation] =
@@ -871,6 +883,57 @@ export default function InboxPage() {
     });
   };
 
+  const toggleConversationSelection = (conversationId: string) => {
+    setSelectedConversationIds((current) => {
+      const next = new Set(current);
+      if (next.has(conversationId)) next.delete(conversationId);
+      else next.add(conversationId);
+      return next;
+    });
+  };
+
+  const runBulkAction = async (
+    action: "read" | InboxConversation["status"] | "delete"
+  ) => {
+    const ids = [...selectedConversationIds];
+    if (!ids.length) return;
+    setBulkBusy(true);
+    try {
+      if (action === "read")
+        await Promise.all(ids.map((id) => markReadMutation.mutateAsync(id)));
+      else if (action === "delete")
+        await Promise.all(ids.map((id) => deleteMutation.mutateAsync(id)));
+      else
+        await Promise.all(
+          ids.map((conversationId) =>
+            statusMutation.mutateAsync({ conversationId, status: action })
+          )
+        );
+      if (
+        action === "delete" &&
+        activeId &&
+        selectedConversationIds.has(activeId)
+      )
+        setActiveId(null);
+      toast.success(
+        action === "read"
+          ? "Selected conversations marked as read"
+          : action === "delete"
+            ? "Selected conversations deleted"
+            : `Selected conversations marked ${action}`
+      );
+      setSelectedConversationIds(new Set());
+    } catch (error: any) {
+      toast.error(
+        error?.response?.data?.message ||
+          "Some selected conversations could not be updated"
+      );
+    } finally {
+      setBulkBusy(false);
+      setBulkDeleteOpen(false);
+    }
+  };
+
   return (
     <div
       className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100dvh-8rem)] w-full min-w-0 flex-col gap-5 duration-500'
@@ -1161,6 +1224,80 @@ export default function InboxPage() {
                 </div>
               )}
             </div>
+            {selectedConversationIds.size > 0 && (
+              <div className='mt-2 flex flex-wrap items-center gap-2 border-t border-black/5 pt-2 dark:border-white/10'>
+                <label className='flex cursor-pointer items-center gap-2 text-xs font-medium'>
+                  <Checkbox
+                    checked={
+                      selectedConversationIds.size === conversations.length
+                        ? true
+                        : "indeterminate"
+                    }
+                    onCheckedChange={(checked) =>
+                      setSelectedConversationIds(
+                        checked
+                          ? new Set(conversations.map(({ _id }) => _id))
+                          : new Set()
+                      )
+                    }
+                    aria-label='Select all loaded conversations'
+                  />
+                  Select all · {selectedConversationIds.size} selected
+                </label>
+                <span className='flex-1' />
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  disabled={bulkBusy}
+                  onClick={() => runBulkAction("read")}
+                  title='Mark as read'
+                  aria-label='Mark selected conversations as read'
+                >
+                  <CheckCheck className='h-4 w-4' />
+                </Button>
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  disabled={bulkBusy}
+                  onClick={() => runBulkAction("resolved")}
+                  title='Resolve'
+                  aria-label='Resolve selected conversations'
+                >
+                  <CheckCircle className='h-4 w-4' />
+                </Button>
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  disabled={bulkBusy}
+                  onClick={() => runBulkAction("snoozed")}
+                  title='Snooze'
+                  aria-label='Snooze selected conversations'
+                >
+                  <Clock3 className='h-4 w-4' />
+                </Button>
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  disabled={bulkBusy}
+                  onClick={() => setBulkDeleteOpen(true)}
+                  className='text-red-600 hover:text-red-700'
+                  title='Delete'
+                  aria-label='Delete selected conversations'
+                >
+                  <Trash2 className='h-4 w-4' />
+                </Button>
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  disabled={bulkBusy}
+                  onClick={() => setSelectedConversationIds(new Set())}
+                  title='Cancel selection'
+                  aria-label='Cancel conversation selection'
+                >
+                  <XCircle className='h-4 w-4' />
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className='flex-1 overflow-y-auto p-2'>
@@ -1183,63 +1320,106 @@ export default function InboxPage() {
             ) : (
               <>
                 {conversations.map((conversation) => (
-                  <button
-                    key={conversation._id}
-                    onClick={() => setActiveId(conversation._id)}
-                    className={`mb-1 flex w-full gap-3 rounded-2xl p-3 text-left transition ${activeId === conversation._id ? "bg-zinc-100 dark:bg-zinc-900" : "hover:bg-zinc-50 dark:hover:bg-white/[0.03]"}`}
-                  >
-                    <div className='relative shrink-0'>
-                      {conversation.customerAvatar ? (
-                        <img
-                          src={conversation.customerAvatar}
-                          alt=''
-                          className='h-11 w-11 rounded-full object-cover'
-                        />
-                      ) : (
-                        <span className='flex h-11 w-11 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'>
-                          {conversation.customerName.charAt(0).toUpperCase()}
-                        </span>
-                      )}
-                      <span className='absolute -right-0.5 -bottom-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-white ring-2 ring-white dark:bg-zinc-950 dark:ring-zinc-950'>
-                        <PlatformIcon
-                          platform={conversation.platform}
-                          className='h-3 w-3'
-                        />
-                      </span>
-                    </div>
-                    <span className='min-w-0 flex-1'>
-                      <span className='flex items-center justify-between gap-2'>
-                        <span
-                          className={`truncate text-sm ${conversation.unreadCount ? "font-bold" : "font-medium"}`}
-                        >
-                          {conversation.customerName}
-                        </span>
-                        <span
-                          className={`text-[10px] ${conversation.unreadCount ? "font-semibold text-indigo-600" : "text-muted-foreground"}`}
-                        >
-                          {relativeTime(conversation.lastMessageAt)}
-                        </span>
-                      </span>
-                      <span className='mt-0.5 flex items-center gap-2'>
-                        <span
-                          className={`min-w-0 flex-1 truncate text-xs ${conversation.unreadCount ? "text-foreground font-medium" : "text-muted-foreground"}`}
-                        >
-                          {conversation.lastMessage}
-                        </span>
-                        {conversation.unreadCount > 0 && (
-                          <span className='flex h-5 min-w-5 items-center justify-center rounded-full bg-indigo-600 px-1 text-[10px] font-bold text-white'>
-                            {conversation.unreadCount}
-                          </span>
+                  <ContextMenu key={conversation._id}>
+                    <ContextMenuTrigger asChild>
+                      <div
+                        role='button'
+                        tabIndex={0}
+                        onClick={() =>
+                          selectedConversationIds.size
+                            ? toggleConversationSelection(conversation._id)
+                            : setActiveId(conversation._id)
+                        }
+                        onKeyDown={(event) => {
+                          if (event.key !== "Enter" && event.key !== " ")
+                            return;
+                          event.preventDefault();
+                          selectedConversationIds.size
+                            ? toggleConversationSelection(conversation._id)
+                            : setActiveId(conversation._id);
+                        }}
+                        className={`mb-1 flex w-full cursor-pointer gap-3 rounded-2xl p-3 text-left transition ${selectedConversationIds.has(conversation._id) || activeId === conversation._id ? "bg-zinc-100 dark:bg-zinc-900" : "hover:bg-zinc-50 dark:hover:bg-white/[0.03]"}`}
+                      >
+                        {selectedConversationIds.size > 0 && (
+                          <Checkbox
+                            checked={selectedConversationIds.has(
+                              conversation._id
+                            )}
+                            onClick={(event) => event.stopPropagation()}
+                            onCheckedChange={() =>
+                              toggleConversationSelection(conversation._id)
+                            }
+                            aria-label={`Select conversation with ${conversation.customerName}`}
+                            className='mt-3'
+                          />
                         )}
-                      </span>
-                      <span className='text-muted-foreground mt-1.5 flex items-center gap-1 text-[10px] capitalize'>
-                        <Circle
-                          className={`h-1.5 w-1.5 fill-current ${conversation.status === "open" ? "text-indigo-500" : conversation.status === "snoozed" ? "text-amber-500" : "text-zinc-400"}`}
-                        />
-                        {conversation.status}
-                      </span>
-                    </span>
-                  </button>
+                        <div className='relative shrink-0'>
+                          {conversation.customerAvatar ? (
+                            <img
+                              src={conversation.customerAvatar}
+                              alt=''
+                              className='h-11 w-11 rounded-full object-cover'
+                            />
+                          ) : (
+                            <span className='flex h-11 w-11 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'>
+                              {conversation.customerName
+                                .charAt(0)
+                                .toUpperCase()}
+                            </span>
+                          )}
+                          <span className='absolute -right-0.5 -bottom-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-white ring-2 ring-white dark:bg-zinc-950 dark:ring-zinc-950'>
+                            <PlatformIcon
+                              platform={conversation.platform}
+                              className='h-3 w-3'
+                            />
+                          </span>
+                        </div>
+                        <span className='min-w-0 flex-1'>
+                          <span className='flex items-center justify-between gap-2'>
+                            <span
+                              className={`truncate text-sm ${conversation.unreadCount ? "font-bold" : "font-medium"}`}
+                            >
+                              {conversation.customerName}
+                            </span>
+                            <span
+                              className={`text-[10px] ${conversation.unreadCount ? "font-semibold text-indigo-600" : "text-muted-foreground"}`}
+                            >
+                              {relativeTime(conversation.lastMessageAt)}
+                            </span>
+                          </span>
+                          <span className='mt-0.5 flex items-center gap-2'>
+                            <span
+                              className={`min-w-0 flex-1 truncate text-xs ${conversation.unreadCount ? "text-foreground font-medium" : "text-muted-foreground"}`}
+                            >
+                              {conversation.lastMessage}
+                            </span>
+                            {conversation.unreadCount > 0 && (
+                              <span className='flex h-5 min-w-5 items-center justify-center rounded-full bg-indigo-600 px-1 text-[10px] font-bold text-white'>
+                                {conversation.unreadCount}
+                              </span>
+                            )}
+                          </span>
+                          <span className='text-muted-foreground mt-1.5 flex items-center gap-1 text-[10px] capitalize'>
+                            <Circle
+                              className={`h-1.5 w-1.5 fill-current ${conversation.status === "open" ? "text-indigo-500" : conversation.status === "snoozed" ? "text-amber-500" : "text-zinc-400"}`}
+                            />
+                            {conversation.status}
+                          </span>
+                        </span>
+                      </div>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent className='w-48'>
+                      <ContextMenuCheckboxItem
+                        checked={selectedConversationIds.has(conversation._id)}
+                        onSelect={(event) => event.preventDefault()}
+                        onCheckedChange={() =>
+                          toggleConversationSelection(conversation._id)
+                        }
+                      >
+                        Select
+                      </ContextMenuCheckboxItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
                 ))}
                 <div
                   ref={loadMoreRef}
@@ -1935,6 +2115,28 @@ export default function InboxPage() {
               className='bg-red-600 text-white hover:bg-red-700'
             >
               {deleteMutation.isPending ? "Deleting…" : "Delete conversation"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={bulkDeleteOpen} onOpenChange={setBulkDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete selected conversations?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes {selectedConversationIds.size}{" "}
+              conversations and their message history. This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={bulkBusy}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => runBulkAction("delete")}
+              disabled={bulkBusy}
+              className='bg-red-600 text-white hover:bg-red-700'
+            >
+              {bulkBusy ? "Deleting…" : "Delete selected"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
