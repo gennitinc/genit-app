@@ -111,6 +111,7 @@ import {
   Trash2,
   XCircle,
 } from "lucide-react";
+import DOMPurify from "dompurify";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -119,6 +120,84 @@ import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import type { EmojiClickData, Theme as EmojiTheme } from "emoji-picker-react";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
+
+function EmailMessageBody({
+  html,
+  fallback,
+}: {
+  html: string;
+  fallback: string;
+}) {
+  const [safeHtml, setSafeHtml] = useState("");
+  const [loadRemoteImages, setLoadRemoteImages] = useState(false);
+  const [height, setHeight] = useState(120);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
+
+  useEffect(() => {
+    const sanitized = DOMPurify.sanitize(html, {
+      ADD_ATTR: ["target"],
+      FORBID_TAGS: ["base", "form", "iframe", "object", "embed"],
+    });
+    const parsed = new DOMParser().parseFromString(sanitized, "text/html");
+    parsed.querySelectorAll("a").forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      if (!/^(https?:|mailto:|tel:)/i.test(href)) link.removeAttribute("href");
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+    });
+    setSafeHtml(parsed.body.innerHTML);
+  }, [html]);
+
+  useEffect(() => () => resizeObserverRef.current?.disconnect(), []);
+
+  const srcDoc = safeHtml
+    ? `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${loadRemoteImages ? "https: http: data:" : "data:"}; style-src 'unsafe-inline'; font-src ${loadRemoteImages ? "https: http: data:" : "data:"};"><base target="_blank"><style>html{background:#fff;color:#18181b}body{box-sizing:border-box;margin:0;padding:20px;font:14px/1.55 Arial,sans-serif;overflow-wrap:anywhere}img{max-width:100%;height:auto}table{max-width:100%}a{color:#4f46e5}</style></head><body>${safeHtml}</body></html>`
+    : "";
+
+  if (!safeHtml)
+    return (
+      <div className='px-4 py-3 wrap-anywhere whitespace-pre-wrap'>
+        {fallback}
+      </div>
+    );
+
+  return (
+    <div className='min-w-0 overflow-hidden bg-white text-zinc-900'>
+      <iframe
+        title='Email message body'
+        srcDoc={srcDoc}
+        sandbox='allow-popups allow-popups-to-escape-sandbox allow-same-origin'
+        referrerPolicy='no-referrer'
+        className='block w-full border-0 bg-white'
+        style={{ height }}
+        onLoad={(event) => {
+          const document = event.currentTarget.contentDocument;
+          if (!document) return;
+          const resize = () =>
+            setHeight(
+              Math.min(
+                6000,
+                Math.max(120, document.documentElement.scrollHeight)
+              )
+            );
+          resizeObserverRef.current?.disconnect();
+          resizeObserverRef.current = new ResizeObserver(resize);
+          resizeObserverRef.current.observe(document.documentElement);
+          resize();
+        }}
+      />
+      {!loadRemoteImages && /<img[^>]+src=["']https?:/i.test(safeHtml) && (
+        <button
+          type='button'
+          onClick={() => setLoadRemoteImages(true)}
+          className='border-t px-4 py-2 text-xs font-medium text-indigo-600 transition-transform duration-150 active:scale-[0.98]'
+        >
+          Load remote images
+        </button>
+      )}
+    </div>
+  );
+}
 
 const INBOX_PLATFORMS = new Set<IntegrationPlatform>([
   "instagram",
@@ -1292,16 +1371,22 @@ export default function InboxPage() {
                   <div className='mx-auto max-w-3xl space-y-5'>
                     {messages.map((message) => {
                       const inbound = message.senderType === "customer";
+                      const emailHtml =
+                        ["gmail", "email", "outlook"].includes(
+                          activeConversation.platform
+                        ) && typeof message.metadata?.contentHtml === "string"
+                          ? message.metadata.contentHtml
+                          : "";
                       return (
                         <div
                           key={message._id}
                           className={`flex flex-col ${inbound ? "items-start" : "items-end"}`}
                         >
                           <div
-                            className={`group/message flex max-w-[90%] items-center gap-1 sm:max-w-[82%] ${inbound ? "flex-row" : "flex-row-reverse"}`}
+                            className={`group/message flex items-center gap-1 ${emailHtml ? "w-full max-w-full" : "max-w-[90%] sm:max-w-[82%]"} ${inbound ? "flex-row" : "flex-row-reverse"}`}
                           >
                             <div
-                              className={`rounded-2xl text-sm leading-6 shadow-sm ${inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-600 text-white" : "rounded-tr-md bg-indigo-600 text-white"}`}
+                              className={`min-w-0 overflow-hidden rounded-2xl text-sm leading-6 shadow-sm ${emailHtml ? "w-full max-w-3xl bg-white ring-1 ring-black/5 dark:ring-white/10" : inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-600 text-white" : "rounded-tr-md bg-indigo-600 text-white"}`}
                             >
                               {message.attachments?.map((attachment) => (
                                 <div
@@ -1357,11 +1442,17 @@ export default function InboxPage() {
                                   )}
                                 </div>
                               ))}
-                              {message.content && (
-                                <div className='px-4 py-3 wrap-anywhere whitespace-pre-wrap'>
-                                  {message.content}
-                                </div>
-                              )}
+                              {message.content &&
+                                (emailHtml ? (
+                                  <EmailMessageBody
+                                    html={emailHtml}
+                                    fallback={message.content}
+                                  />
+                                ) : (
+                                  <div className='px-4 py-3 wrap-anywhere whitespace-pre-wrap'>
+                                    {message.content}
+                                  </div>
+                                ))}
                             </div>
                             {!inbound &&
                               (!message.platformMessageId ||
