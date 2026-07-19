@@ -1218,11 +1218,11 @@ export default function InboxPage() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {isFetching && (
+              {/* {isFetching && (
                 <div className=''>
                   <LoadingFileLoader size={16} />
                 </div>
-              )}
+              )} */}
             </div>
             {selectedConversationIds.size > 0 && (
               <div className='mt-2 flex flex-wrap items-center gap-2 border-t border-black/5 pt-2 dark:border-white/10'>
