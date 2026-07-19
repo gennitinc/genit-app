@@ -2014,7 +2014,7 @@ export default function InboxPage() {
             </>
           ) : (
             <div className='flex h-full flex-col items-center justify-center p-8 text-center'>
-              <span className='mb-5 flex h-fit w-20 items-center justify-center rounded-3xl bg-white shadow-sm ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10'>
+              <span className='mb-5 flex h-52 w-auto items-center justify-center rounded-3xl shadow-sm ring-1 ring-black/5 bg-zinc-200 dark:ring-white/10'>
                 <Image
                   src='/chat.svg'
                   height='200'
