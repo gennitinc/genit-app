@@ -952,7 +952,166 @@ export default function InboxPage() {
           </h1>
         </div>
         <div className='flex flex-wrap gap-2'>
-           <DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant='outline'
+                size='icon'
+                className='relative rounded-md'
+                aria-label='Select connected brand'
+                title='Connected brand'
+              >
+                {selectedAccount ? (
+                  <PlatformIcon
+                    platform={selectedAccount.platform}
+                    className='h-4 w-4'
+                  />
+                ) : (
+                  <Shapes className='h-4 w-4' />
+                )}
+                {selectedAccountId !== "all" && (
+                  <CheckCircle className='absolute top-1 right-1 size-[12px] rounded-full bg-indigo-500' />
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end' className='w-64'>
+              <DropdownMenuLabel>Connected brand</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup
+                value={selectedAccountId}
+                onValueChange={setSelectedAccountId}
+              >
+                <DropdownMenuRadioItem value='all'>
+                  <Inbox className='mr-2 h-4 w-4' />
+                  <span className='flex min-w-0 flex-col'>
+                    <span>All accounts</span>
+                    <span className='text-muted-foreground text-[10px]'>
+                      Every connected channel
+                    </span>
+                  </span>
+                </DropdownMenuRadioItem>
+                {accounts.map((account) => (
+                  <DropdownMenuRadioItem key={account._id} value={account._id}>
+                    <PlatformIcon
+                      platform={account.platform}
+                      className='mr-2 h-4 w-4'
+                    />
+                    <span className='min-w-0 flex-1 truncate'>
+                      {account.accountName || PLATFORM_LABELS[account.platform]}
+                    </span>
+                    {account.isPrimary && (
+                      <span className='text-muted-foreground text-[9px]'>
+                        Primary
+                      </span>
+                    )}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+              {!integrationsLoading && accounts.length === 0 && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href='/plugin'>
+                      <Plus className='mr-2 h-4 w-4' />
+                      Connect a channel
+                    </Link>
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant='outline'
+                size='icon'
+                className='relative rounded-md'
+                aria-label='Conversation view options'
+                title='View options'
+              >
+                <ListFilter className='h-4 w-4' />
+                {(status !== "all" ||
+                  sort !== "newest" ||
+                  folder !== "inbox") && (
+                  <span className='absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-indigo-500' />
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end' className='w-52'>
+              <DropdownMenuLabel>Show conversations</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup
+                value={status || "all"}
+                onValueChange={(value) =>
+                  setStatus(value as InboxFilters["status"])
+                }
+              >
+                <DropdownMenuRadioItem value='all'>
+                  All conversations
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value='open'>Open</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value='resolved'>
+                  Resolved
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value='snoozed'>
+                  Snoozed
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+              {selectedAccount &&
+                ["gmail", "email", "outlook"].includes(
+                  selectedAccount.platform
+                ) && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel>Mailbox</DropdownMenuLabel>
+                    <DropdownMenuRadioGroup
+                      value={folder}
+                      onValueChange={setFolder}
+                    >
+                      {[
+                        ["inbox", "Inbox"],
+                        ["primary", "Primary"],
+                        ["promotions", "Promotions"],
+                        ["social", "Social"],
+                        ["updates", "Updates"],
+                        ["forums", "Forums"],
+                        ["sent", "Sent"],
+                        ["archive", "Archive"],
+                        ["spam", "Spam"],
+                        ["trash", "Trash"],
+                        ["drafts", "Drafts"],
+                      ].map(([value, label]) => (
+                        <DropdownMenuRadioItem key={value} value={value}>
+                          {label}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuRadioGroup>
+                  </>
+                )}
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup
+                value={sort}
+                onValueChange={(value) =>
+                  setSort(value as NonNullable<InboxFilters["sort"]>)
+                }
+              >
+                <DropdownMenuRadioItem value='newest'>
+                  Newest first
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value='oldest'>
+                  Oldest first
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value='unread'>
+                  Unread first
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant='outline'
@@ -1061,7 +1220,6 @@ export default function InboxPage() {
               })}
             </DropdownMenuContent>
           </DropdownMenu>
-         
         </div>
       </header>
 
@@ -1081,79 +1239,6 @@ export default function InboxPage() {
                 />
               </div>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant='outline'
-                    size='icon'
-                    className='relative h-10 w-10 shrink-0 rounded-xl'
-                    aria-label='Select connected brand'
-                    title='Connected brand'
-                  >
-                    {selectedAccount ? (
-                      <PlatformIcon
-                        platform={selectedAccount.platform}
-                        className='h-4 w-4'
-                      />
-                    ) : (
-                      <Shapes className='h-4 w-4' />
-                    )}
-                    {selectedAccountId !== "all" && (
-                      <CheckCircle className='absolute top-1.5 right-1 size-[12px] rounded-full bg-indigo-500' />
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align='end' className='w-64'>
-                  <DropdownMenuLabel>Connected brand</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuRadioGroup
-                    value={selectedAccountId}
-                    onValueChange={setSelectedAccountId}
-                  >
-                    <DropdownMenuRadioItem value='all'>
-                      <Inbox className='mr-2 h-4 w-4' />
-                      <span className='flex min-w-0 flex-col'>
-                        <span>All accounts</span>
-                        <span className='text-muted-foreground text-[10px]'>
-                          Every connected channel
-                        </span>
-                      </span>
-                    </DropdownMenuRadioItem>
-                    {accounts.map((account) => (
-                      <DropdownMenuRadioItem
-                        key={account._id}
-                        value={account._id}
-                      >
-                        <PlatformIcon
-                          platform={account.platform}
-                          className='mr-2 h-4 w-4'
-                        />
-                        <span className='min-w-0 flex-1 truncate'>
-                          {account.accountName ||
-                            PLATFORM_LABELS[account.platform]}
-                        </span>
-                        {account.isPrimary && (
-                          <span className='text-muted-foreground text-[9px]'>
-                            Primary
-                          </span>
-                        )}
-                      </DropdownMenuRadioItem>
-                    ))}
-                  </DropdownMenuRadioGroup>
-                  {!integrationsLoading && accounts.length === 0 && (
-                    <>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link href='/plugin'>
-                          <Plus className='mr-2 h-4 w-4' />
-                          Connect a channel
-                        </Link>
-                      </DropdownMenuItem>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
               <Button
                 variant='outline'
                 size='icon'
@@ -1165,98 +1250,6 @@ export default function InboxPage() {
               >
                 <Plus className='h-4 w-4' />
               </Button>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant='outline'
-                    size='icon'
-                    className='relative h-10 w-10 shrink-0 rounded-xl'
-                    aria-label='Conversation view options'
-                    title='View options'
-                  >
-                    <ListFilter className='h-4 w-4' />
-                    {(status !== "all" ||
-                      sort !== "newest" ||
-                      folder !== "inbox") && (
-                      <span className='absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-indigo-500' />
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align='end' className='w-52'>
-                  <DropdownMenuLabel>Show conversations</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuRadioGroup
-                    value={status || "all"}
-                    onValueChange={(value) =>
-                      setStatus(value as InboxFilters["status"])
-                    }
-                  >
-                    <DropdownMenuRadioItem value='all'>
-                      All conversations
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='open'>
-                      Open
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='resolved'>
-                      Resolved
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='snoozed'>
-                      Snoozed
-                    </DropdownMenuRadioItem>
-                  </DropdownMenuRadioGroup>
-                  {selectedAccount &&
-                    ["gmail", "email", "outlook"].includes(
-                      selectedAccount.platform
-                    ) && (
-                      <>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuLabel>Mailbox</DropdownMenuLabel>
-                        <DropdownMenuRadioGroup
-                          value={folder}
-                          onValueChange={setFolder}
-                        >
-                          {[
-                            ["inbox", "Inbox"],
-                            ["primary", "Primary"],
-                            ["promotions", "Promotions"],
-                            ["social", "Social"],
-                            ["updates", "Updates"],
-                            ["forums", "Forums"],
-                            ["sent", "Sent"],
-                            ["archive", "Archive"],
-                            ["spam", "Spam"],
-                            ["trash", "Trash"],
-                            ["drafts", "Drafts"],
-                          ].map(([value, label]) => (
-                            <DropdownMenuRadioItem key={value} value={value}>
-                              {label}
-                            </DropdownMenuRadioItem>
-                          ))}
-                        </DropdownMenuRadioGroup>
-                      </>
-                    )}
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel>Sort by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuRadioGroup
-                    value={sort}
-                    onValueChange={(value) =>
-                      setSort(value as NonNullable<InboxFilters["sort"]>)
-                    }
-                  >
-                    <DropdownMenuRadioItem value='newest'>
-                      Newest first
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='oldest'>
-                      Oldest first
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='unread'>
-                      Unread first
-                    </DropdownMenuRadioItem>
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
 
               {/* {isFetching && (
                 <div className=''>
