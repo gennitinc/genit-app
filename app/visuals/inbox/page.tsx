@@ -150,7 +150,7 @@ function EmailMessageBody({
   useEffect(() => () => resizeObserverRef.current?.disconnect(), []);
 
   const srcDoc = safeHtml
-    ? `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: http: data:; style-src 'unsafe-inline'; font-src https: http: data:;"><base target="_blank"><style>html{background:#fff;color:#18181b}body{box-sizing:border-box;margin:0;padding:20px;font:14px/1.55 Arial,sans-serif;overflow-wrap:anywhere}img{max-width:100%;height:auto}table{max-width:100%}a{color:#4f46e5}</style></head><body>${safeHtml}</body></html>`
+    ? `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: http: data:; style-src 'unsafe-inline'; font-src https: http: data:;"><base target="_blank"><style>html{background:#fff;color:#18181b}html,body{overflow:hidden}body{box-sizing:border-box;margin:0;padding:20px;font:14px/1.55 Arial,sans-serif;overflow-wrap:anywhere}img{max-width:100%;height:auto}table{max-width:100%}a{color:#4f46e5}</style></head><body>${safeHtml}</body></html>`
     : "";
 
   if (!safeHtml)
@@ -167,21 +167,27 @@ function EmailMessageBody({
         srcDoc={srcDoc}
         sandbox='allow-popups allow-popups-to-escape-sandbox allow-same-origin'
         referrerPolicy='no-referrer'
+        scrolling='no'
         className='block w-full border-0 bg-white'
         style={{ height }}
         onLoad={(event) => {
           const document = event.currentTarget.contentDocument;
           if (!document) return;
-          const resize = () =>
+          const resize = () => {
+            const body = document.body;
             setHeight(
-              Math.min(
-                6000,
-                Math.max(120, document.documentElement.scrollHeight)
+              Math.max(
+                120,
+                document.documentElement.scrollHeight,
+                body.scrollHeight,
+                body.offsetHeight
               )
             );
+          };
           resizeObserverRef.current?.disconnect();
           resizeObserverRef.current = new ResizeObserver(resize);
           resizeObserverRef.current.observe(document.documentElement);
+          resizeObserverRef.current.observe(document.body);
           resize();
         }}
       />
