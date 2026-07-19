@@ -542,7 +542,7 @@ export default function InboxPage() {
     0
   );
   const supportsAttachments = activeConversation
-    ? !["x", "twitter"].includes(activeConversation.platform)
+    ? !["x", "twitter", "linkedin"].includes(activeConversation.platform)
     : true;
   const replyMaxLength =
     activeConversation &&
@@ -1952,7 +1952,7 @@ export default function InboxPage() {
                           aria-label={
                             supportsAttachments
                               ? "Attach files"
-                              : "Attachments are unavailable for X replies"
+                              : "Attachments are unavailable for this provider"
                           }
                         >
                           {isUploading ? (

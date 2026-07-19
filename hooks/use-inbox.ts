@@ -1,5 +1,6 @@
 "use client";
 
+import { useUserContext } from "@/context/AuthenticatedContext";
 import {
   type CreateConversationInput,
   type InboxAttachment,
@@ -9,8 +10,8 @@ import {
   createConversation,
   deleteConversation,
   deleteInboxMessage,
-  fetchConversations,
   fetchConversationPage,
+  fetchConversations,
   fetchMessages,
   markAllConversationsAsRead,
   markConversationAsRead,
@@ -22,7 +23,6 @@ import {
   updateConversationStatus,
   updateInboxMessage,
 } from "@/lib/inbox-api";
-import { useUserContext } from "@/context/AuthenticatedContext";
 import { serverUrlSocket } from "@/utils/apiResponse";
 import {
   useInfiniteQuery,
@@ -31,7 +31,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import cookie from "js-cookie";
-import { io, type Socket } from "socket.io-client";
+import { type Socket, io } from "socket.io-client";
 import { useEffect, useState } from "react";
 
 export function inboxConversationsQueryKey(filters: InboxFilters = {}) {
@@ -102,21 +102,26 @@ export function useInboxRealtime(activeConversationId?: string) {
     const refreshInbox = (event: InboxRealtimeEvent) => {
       if (event.organizationId !== organizationId) return;
 
-      qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
+      void qc.invalidateQueries(
+        { queryKey: ["inbox_conversations"] },
+        { cancelRefetch: false }
+      );
       if (event.type === "integration.updated")
         qc.invalidateQueries({ queryKey: ["integrations"] });
       if (event.conversationId) {
-        qc.invalidateQueries({
-          queryKey: inboxMessagesQueryKey(event.conversationId),
-        });
+        void qc.invalidateQueries(
+          { queryKey: inboxMessagesQueryKey(event.conversationId) },
+          { cancelRefetch: false }
+        );
       }
       if (
         activeConversationId &&
         (!event.conversationId || event.conversationId === activeConversationId)
       ) {
-        qc.invalidateQueries({
-          queryKey: inboxMessagesQueryKey(activeConversationId),
-        });
+        void qc.invalidateQueries(
+          { queryKey: inboxMessagesQueryKey(activeConversationId) },
+          { cancelRefetch: false }
+        );
       }
     };
 

@@ -52,5 +52,7 @@ export const clientUrl =
 
 export const serverUrlSocket =
   process.env.NODE_ENV === "production"
-    ? process.env.NEXT_PUBLIC_LIVE_SOCKET_URL
-    : process.env.NEXT_PUBLIC_LOCAL_SOCKET_URL;
+    ? process.env.NEXT_PUBLIC_LIVE_SOCKET_URL ||
+      API_BASE_URL.replace(/\/api\/v1\/?$/, "")
+    : process.env.NEXT_PUBLIC_LOCAL_SOCKET_URL ||
+      API_BASE_URL.replace(/\/api\/v1\/?$/, "");
