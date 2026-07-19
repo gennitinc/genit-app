@@ -1928,7 +1928,7 @@ export default function InboxPage() {
                       maxLength={replyMaxLength}
                       className='field-sizing-content max-h-32 min-h-10 w-full resize-none bg-transparent px-3 py-2.5 text-sm leading-5 outline-none'
                     />
-                    <div className='flex items-center justify-between gap-2 px-3 pb-3'>
+                    <div className='flex items-baseline justify-between gap-2 px-3 pb-3'>
                       <div className='relative flex items-center gap-1'>
                         <input
                           ref={fileInputRef}
