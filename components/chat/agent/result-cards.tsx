@@ -678,12 +678,7 @@ export function GeneratedDesignCard({ data }: { data: any }) {
                 if (data.id && data.generationGroupId) {
                   handleSetAsActive(data.id, data.generationGroupId);
                 }
-                if (setFocusedGenerationId) {
-                  setFocusedGenerationId(null);
-                  setTimeout(() => {
-                    setFocusedGenerationId(cleanId);
-                  }, 10);
-                }
+                setFocusedGenerationId?.(cleanId);
               }}
               className='border-primary/30 text-primary flex h-7 w-fit gap-1.5 px-2 text-xs hover:bg-indigo-600 hover:bg-indigo-700/5'
             >

@@ -27,8 +27,9 @@ import {
   PanelRightClose,
   PanelRightOpen,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import React from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export function ChatLayout() {
   return (
@@ -39,6 +40,7 @@ export function ChatLayout() {
 }
 
 function ChatLayoutInner() {
+  const searchParams = useSearchParams();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery("(max-width: 767px)");
   const isDesktop = useMediaQuery("(min-width: 1024px)");
@@ -98,7 +100,10 @@ function ChatLayoutInner() {
     return "graphics";
   }, [focusedGenerationId, messages]);
   const categoryPreviewType: CanvasPreviewType | "website" | null =
-    project?.category === "workflow"
+    project?.category === "automation" &&
+    searchParams.get("preview") === "automation"
+      ? "automation"
+      : project?.category === "workflow"
         ? "workflow"
         : project?.category?.includes("website") ||
             project?.category?.includes("landing")

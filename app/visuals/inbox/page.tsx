@@ -129,7 +129,6 @@ function EmailMessageBody({
   fallback: string;
 }) {
   const [safeHtml, setSafeHtml] = useState("");
-  const [loadRemoteImages, setLoadRemoteImages] = useState(false);
   const [height, setHeight] = useState(120);
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
@@ -151,7 +150,7 @@ function EmailMessageBody({
   useEffect(() => () => resizeObserverRef.current?.disconnect(), []);
 
   const srcDoc = safeHtml
-    ? `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${loadRemoteImages ? "https: http: data:" : "data:"}; style-src 'unsafe-inline'; font-src ${loadRemoteImages ? "https: http: data:" : "data:"};"><base target="_blank"><style>html{background:#fff;color:#18181b}body{box-sizing:border-box;margin:0;padding:20px;font:14px/1.55 Arial,sans-serif;overflow-wrap:anywhere}img{max-width:100%;height:auto}table{max-width:100%}a{color:#4f46e5}</style></head><body>${safeHtml}</body></html>`
+    ? `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: http: data:; style-src 'unsafe-inline'; font-src https: http: data:;"><base target="_blank"><style>html{background:#fff;color:#18181b}body{box-sizing:border-box;margin:0;padding:20px;font:14px/1.55 Arial,sans-serif;overflow-wrap:anywhere}img{max-width:100%;height:auto}table{max-width:100%}a{color:#4f46e5}</style></head><body>${safeHtml}</body></html>`
     : "";
 
   if (!safeHtml)
@@ -186,15 +185,6 @@ function EmailMessageBody({
           resize();
         }}
       />
-      {!loadRemoteImages && /<img[^>]+src=["']https?:/i.test(safeHtml) && (
-        <button
-          type='button'
-          onClick={() => setLoadRemoteImages(true)}
-          className='border-t px-4 py-2 text-xs font-medium text-indigo-600 transition-transform duration-150 active:scale-[0.98]'
-        >
-          Load remote images
-        </button>
-      )}
     </div>
   );
 }

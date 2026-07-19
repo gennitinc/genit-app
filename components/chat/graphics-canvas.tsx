@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "../ui/button";
+import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { DesignNode } from "@/nodes/design-node";
@@ -66,6 +67,7 @@ const GraphicsCanvasContent = ({
     isGeneratingImage,
     aiStatus,
   } = useProjectDesign();
+  const { runs } = useAgentRunsContext();
   const { fitView } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -91,14 +93,15 @@ const GraphicsCanvasContent = ({
         let groupItemCount = 0;
 
         group.items?.forEach((item: any) => {
+          const mediaUrl = item.filePath || item.url;
           if (
             (item.type === "image" ||
               item.type?.startsWith("image/") ||
               item.type === "video" ||
               item.type?.startsWith("video/")) &&
-            item.filePath
+            mediaUrl
           ) {
-            const nodeId = `node-${item.id || item.filePath}`;
+            const nodeId = `node-${item.id || mediaUrl}`;
 
             // Check if node already exists in the current state to preserve its position
             const existingNode = nodes.find((n) => n.id === nodeId);
@@ -113,13 +116,13 @@ const GraphicsCanvasContent = ({
                 type: "design",
                 selected:
                   item.id === focusedGenerationId ||
-                  item.filePath === focusedGenerationId,
+                  mediaUrl === focusedGenerationId,
                 position: existingNode?.position || {
                   x: xOffset + (groupItemCount % itemsPerRow) * colGap,
                   y: yOffset + rowIndex * rowGap,
                 },
                 data: {
-                  url: item.filePath,
+                  url: mediaUrl,
                   type: item.type,
                   title: `v${rowIndex + 1} - ${cleanTitle}`,
                   instruction: item.name || group.title || "AI Generation",
@@ -137,6 +140,43 @@ const GraphicsCanvasContent = ({
         if (groupItemCount > 0) {
           rowIndex++;
         }
+      });
+    });
+
+    // Agent results are available immediately and may not exist in legacy
+    // message generation groups until the project is refreshed.
+    runs.forEach((run) => {
+      run.toolCalls.forEach((call) => {
+        if (call.render !== "generated_design" || !call.result?.ok) return;
+        const item = call.result.data as any;
+        const mediaUrl = item?.url || item?.filePath;
+        if (!mediaUrl) return;
+        const itemId = item.id || mediaUrl;
+        const nodeId = `node-${itemId}`;
+        if (newNodes.some((node) => node.id === nodeId)) return;
+        const existingNode = nodes.find((node) => node.id === nodeId);
+        newNodes.push({
+          id: nodeId,
+          type: "design",
+          selected:
+            itemId === focusedGenerationId ||
+            mediaUrl === focusedGenerationId,
+          position: existingNode?.position || {
+            x: xOffset + (imageCount % itemsPerRow) * colGap,
+            y: yOffset + rowIndex * rowGap,
+          },
+          data: {
+            url: mediaUrl,
+            type:
+              item.type ||
+              (mediaUrl.endsWith(".mp4") ? "video/mp4" : "image/png"),
+            title: item.name || "Generated design",
+            instruction: item.prompt || item.message || "AI Generation",
+            status: "public",
+            generationGroupId: item.generationGroupId,
+          },
+        });
+        imageCount++;
       });
     });
 
@@ -184,7 +224,7 @@ const GraphicsCanvasContent = ({
     if (hasIdChanges || hasSelectionChanges) {
       setNodes(newNodes);
     }
-  }, [messages, liveNodes, setNodes, nodes.length, focusedGenerationId]);
+  }, [messages, runs, liveNodes, setNodes, nodes.length, focusedGenerationId]);
 
   // Handle focusing on the set generation
   useEffect(() => {

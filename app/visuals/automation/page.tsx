@@ -371,7 +371,7 @@ export default function AutomationPage() {
         "automation"
       );
       if (result.type && result.id) {
-        router.push(`/chat/${result.id}`);
+        router.push(`/chat/${result.id}?preview=automation`);
         return;
       }
       toast.error(result.message || "Could not create automation");
@@ -698,7 +698,9 @@ export default function AutomationPage() {
                   <Button
                     size='sm'
                     type='button'
-                    onClick={() => router.push(`/chat/${automation._id}`)}
+                    onClick={() =>
+                      router.push(`/chat/${automation._id}?preview=automation`)
+                    }
                     className='rounded-lg'
                   >
                     <span>Configure</span>
