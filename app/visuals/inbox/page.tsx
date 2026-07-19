@@ -52,9 +52,9 @@ import {
   useCreateConversation,
   useDeleteConversation,
   useDeleteInboxMessage,
-  useInfiniteInboxConversations,
   useInboxMessages,
   useInboxRealtime,
+  useInfiniteInboxConversations,
   useMarkAllConversationsAsRead,
   useMarkConversationAsRead,
   useRetryInboxMessage,
@@ -82,6 +82,8 @@ import {
   isMetaSurface,
 } from "@/lib/integrations-api";
 import { LoadingFileLoader } from "@/utils/Loading";
+import DOMPurify from "dompurify";
+import type { EmojiClickData, Theme as EmojiTheme } from "emoji-picker-react";
 import {
   Archive,
   Check,
@@ -111,13 +113,11 @@ import {
   Trash2,
   XCircle,
 } from "lucide-react";
-import DOMPurify from "dompurify";
-import Image from "next/image";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
-import type { EmojiClickData, Theme as EmojiTheme } from "emoji-picker-react";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
@@ -262,9 +262,11 @@ function relativeTime(value: string) {
 }
 
 function whatsappTemplateBody(template?: WhatsAppTemplate) {
-  return template?.components?.find(
-    (component) => component.type?.toUpperCase() === "BODY"
-  )?.text || "";
+  return (
+    template?.components?.find(
+      (component) => component.type?.toUpperCase() === "BODY"
+    )?.text || ""
+  );
 }
 
 function templateVariableCount(text: string) {
@@ -326,6 +328,10 @@ export default function InboxPage() {
   const [deleteTarget, setDeleteTarget] = useState<InboxConversation | null>(
     null
   );
+  const [deleteMessageTarget, setDeleteMessageTarget] = useState<{
+    messageId: string;
+    conversationId: string;
+  } | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showNewConversation, setShowNewConversation] = useState(false);
   const [createdConversation, setCreatedConversation] =
@@ -491,8 +497,7 @@ export default function InboxPage() {
     isFetchingNextPage,
   } = useInfiniteInboxConversations(filters);
   const conversations = useMemo(
-    () =>
-      conversationPages?.pages.flatMap((page) => page.conversations) ?? [],
+    () => conversationPages?.pages.flatMap((page) => page.conversations) ?? [],
     [conversationPages]
   );
   const { data: messages = [], isLoading: messagesLoading } = useInboxMessages(
@@ -536,24 +541,22 @@ export default function InboxPage() {
   );
   const telegramBusinessReplyWindowClosed = Boolean(
     activeConversation?.platform === "telegram" &&
-      activeConversation.metadata?.telegramBusiness &&
-      (!activeConversation.metadata?.lastInboundAt ||
-        Date.now() -
-          Date.parse(String(activeConversation.metadata.lastInboundAt)) >
-          24 * 60 * 60 * 1000)
+    activeConversation.metadata?.telegramBusiness &&
+    (!activeConversation.metadata?.lastInboundAt ||
+      Date.now() -
+        Date.parse(String(activeConversation.metadata.lastInboundAt)) >
+        24 * 60 * 60 * 1000)
   );
   const selectedTemplate = whatsappTemplates.find(
     (template) => template.id === selectedTemplateId
   );
   const selectedTemplateBody = whatsappTemplateBody(selectedTemplate);
-  const selectedTemplateVariableSections = whatsappTemplateVariableSections(
-    selectedTemplate
+  const selectedTemplateVariableSections =
+    whatsappTemplateVariableSections(selectedTemplate);
+  const selectedTemplateVariableCount = selectedTemplateVariableSections.reduce(
+    (total, section) => total + section.count,
+    0
   );
-  const selectedTemplateVariableCount =
-    selectedTemplateVariableSections.reduce(
-      (total, section) => total + section.count,
-      0
-    );
   const activeConversationAccount = accounts.find(
     (account) => account._id === activeConversation?.integration
   );
@@ -565,8 +568,8 @@ export default function InboxPage() {
   );
   const providerReplyUnavailable = Boolean(
     activeConversation?.metadata?.telegramBusiness &&
-      (!activeTelegramBusinessConnection?.isEnabled ||
-        !activeTelegramBusinessConnection?.rights?.can_reply)
+    (!activeTelegramBusinessConnection?.isEnabled ||
+      !activeTelegramBusinessConnection?.rights?.can_reply)
   );
   const syncableAccounts = accounts.filter((account) =>
     [
@@ -851,6 +854,20 @@ export default function InboxPage() {
         toast.success("Conversation deleted");
       },
       onError: () => toast.error("Conversation could not be deleted"),
+    });
+  };
+
+  const confirmDeleteMessage = () => {
+    if (!deleteMessageTarget) return;
+    deleteMessageMutation.mutate(deleteMessageTarget, {
+      onSuccess: () => {
+        setDeleteMessageTarget(null);
+        toast.success("Message deleted");
+      },
+      onError: (error: any) =>
+        toast.error(
+          error?.response?.data?.message || "Message could not be deleted"
+        ),
     });
   };
 
@@ -1224,7 +1241,10 @@ export default function InboxPage() {
                     </span>
                   </button>
                 ))}
-                <div ref={loadMoreRef} className='flex h-10 items-center justify-center'>
+                <div
+                  ref={loadMoreRef}
+                  className='flex h-10 items-center justify-center'
+                >
                   {isFetchingNextPage && <LoadingFileLoader size={16} />}
                 </div>
               </>
@@ -1496,26 +1516,13 @@ export default function InboxPage() {
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                       className='text-red-600 focus:text-red-600'
-                                      onClick={() => {
-                                        if (
-                                          window.confirm("Delete this message?")
-                                        )
-                                          deleteMessageMutation.mutate(
-                                            {
-                                              messageId: message._id,
-                                              conversationId:
-                                                activeConversation._id,
-                                            },
-                                            {
-                                              onError: (error: any) =>
-                                                toast.error(
-                                                  error?.response?.data
-                                                    ?.message ||
-                                                    "Message could not be deleted"
-                                                ),
-                                            }
-                                          );
-                                      }}
+                                      onClick={() =>
+                                        setDeleteMessageTarget({
+                                          messageId: message._id,
+                                          conversationId:
+                                            activeConversation._id,
+                                        })
+                                      }
                                     >
                                       <Trash2 className='mr-2 h-4 w-4' /> Delete
                                     </DropdownMenuItem>
@@ -1595,7 +1602,7 @@ export default function InboxPage() {
                     ) : whatsappTemplates.length ? (
                       <div className='space-y-3'>
                         <select
-                          className='bg-background h-10 w-full rounded-md border px-3 text-foreground'
+                          className='bg-background text-foreground h-10 w-full rounded-md border px-3'
                           value={selectedTemplateId}
                           onChange={(event) => {
                             setSelectedTemplateId(event.target.value);
@@ -1928,6 +1935,31 @@ export default function InboxPage() {
               className='bg-red-600 text-white hover:bg-red-700'
             >
               {deleteMutation.isPending ? "Deleting…" : "Delete conversation"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={Boolean(deleteMessageTarget)}
+        onOpenChange={(open) => !open && setDeleteMessageTarget(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this message?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes the message from Genit. This cannot be
+              undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDeleteMessage}
+              disabled={deleteMessageMutation.isPending}
+              className='bg-red-600 text-white hover:bg-red-700'
+            >
+              {deleteMessageMutation.isPending ? "Deleting…" : "Delete message"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
