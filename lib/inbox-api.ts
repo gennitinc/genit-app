@@ -90,6 +90,7 @@ export interface InboxFilters {
   status?: "all" | "open" | "resolved" | "snoozed";
   search?: string;
   sort?: "newest" | "oldest" | "unread";
+  folder?: string;
   limit?: number;
   offset?: number;
 }

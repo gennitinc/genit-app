@@ -319,6 +319,7 @@ export default function InboxPage() {
   const [selectedAccountId, setSelectedAccountId] = useState("all");
   const [status, setStatus] = useState<InboxFilters["status"]>("all");
   const [sort, setSort] = useState<NonNullable<InboxFilters["sort"]>>("newest");
+  const [folder, setFolder] = useState("inbox");
   const [search, setSearch] = useState("");
   const [activeId, setActiveId] = useState<string | null>(null);
   const [reply, setReply] = useState("");
@@ -496,8 +497,13 @@ export default function InboxPage() {
       status,
       search: deferredSearch || undefined,
       sort,
+      folder:
+        selectedAccount &&
+        ["gmail", "email", "outlook"].includes(selectedAccount.platform)
+          ? folder
+          : undefined,
     }),
-    [deferredSearch, selectedAccount, sort, status]
+    [deferredSearch, folder, selectedAccount, sort, status]
   );
 
   const {
@@ -1169,7 +1175,9 @@ export default function InboxPage() {
                     title='View options'
                   >
                     <ListFilter className='h-4 w-4' />
-                    {(status !== "all" || sort !== "newest") && (
+                    {(status !== "all" ||
+                      sort !== "newest" ||
+                      folder !== "inbox") && (
                       <span className='absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-indigo-500' />
                     )}
                   </Button>
@@ -1196,6 +1204,37 @@ export default function InboxPage() {
                       Snoozed
                     </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
+                  {selectedAccount &&
+                    ["gmail", "email", "outlook"].includes(
+                      selectedAccount.platform
+                    ) && (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuLabel>Mailbox</DropdownMenuLabel>
+                        <DropdownMenuRadioGroup
+                          value={folder}
+                          onValueChange={setFolder}
+                        >
+                          {[
+                            ["inbox", "Inbox"],
+                            ["primary", "Primary"],
+                            ["promotions", "Promotions"],
+                            ["social", "Social"],
+                            ["updates", "Updates"],
+                            ["forums", "Forums"],
+                            ["sent", "Sent"],
+                            ["archive", "Archive"],
+                            ["spam", "Spam"],
+                            ["trash", "Trash"],
+                            ["drafts", "Drafts"],
+                          ].map(([value, label]) => (
+                            <DropdownMenuRadioItem key={value} value={value}>
+                              {label}
+                            </DropdownMenuRadioItem>
+                          ))}
+                        </DropdownMenuRadioGroup>
+                      </>
+                    )}
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel>Sort by</DropdownMenuLabel>
                   <DropdownMenuSeparator />
