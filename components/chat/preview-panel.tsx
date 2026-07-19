@@ -78,11 +78,8 @@ const PreviewPanelContent = ({
 
   if (isLoadingProject) {
     return (
-      <div className='border-border/50 bg-background/80 rounded-3xl text-foreground hover:bg-accent absolute top-4 right-4 z-50 flex h-8 w-8 items-center justify-center border shadow-sm backdrop-blur'>
-        <LoadingFileLoader size={14} />
-        <p className='text-muted-foreground animate-pulse text-sm'>
-          Loading preview...
-        </p>
+      <div className='bg-muted/90 flex h-full w-full items-center justify-center rounded-3xl border border-zinc-200 shadow-2xl dark:border-zinc-800/50'>
+        <LoadingFileLoader />
       </div>
     );
   }

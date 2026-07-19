@@ -56,6 +56,11 @@ function ChatLayoutInner() {
   } = useProjectDesign();
   const { runs } = useAgentRunsContext();
   const { setOpen: setSidebarOpen } = useSidebar();
+  const setSidebarOpenRef = useRef(setSidebarOpen);
+
+  useEffect(() => {
+    setSidebarOpenRef.current = setSidebarOpen;
+  }, [setSidebarOpen]);
 
   const isGenerationActive =
     Boolean(isGeneratingImage) ||
@@ -93,9 +98,7 @@ function ChatLayoutInner() {
     return "graphics";
   }, [focusedGenerationId, messages]);
   const categoryPreviewType: CanvasPreviewType | "website" | null =
-    project?.category === "automation"
-      ? "automation"
-      : project?.category === "workflow"
+    project?.category === "workflow"
         ? "workflow"
         : project?.category?.includes("website") ||
             project?.category?.includes("landing")
@@ -160,8 +163,8 @@ function ChatLayoutInner() {
   // re-expand it when the preview closes.
   useEffect(() => {
     if (!isDesktop) return;
-    setSidebarOpen(!isPreviewOpen);
-  }, [isPreviewOpen, isDesktop, setSidebarOpen]);
+    setSidebarOpenRef.current(!isPreviewOpen);
+  }, [isPreviewOpen, isDesktop]);
 
   return (
     <div className='relative flex h-[100dvh] w-full overflow-hidden'>
