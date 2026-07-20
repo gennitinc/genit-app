@@ -13,10 +13,12 @@ export function ContactDetails({
   conversation,
   saving,
   onSave,
+  onCancel,
 }: {
   conversation: InboxConversation;
   saving: boolean;
   onSave: (input: UpdateConversationInput) => void;
+  onCancel?: () => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(conversation.customerName);
@@ -48,13 +50,15 @@ export function ContactDetails({
 
   return (
     <div className='bg-background flex h-full min-h-0 flex-col overflow-y-auto'>
-      <div className='flex h-16 shrink-0 items-center justify-between border-b px-4'>
+      <div className='flex h-16 shrink-0 items-center gap-2 border-b px-4'>
         <h3 className='font-semibold'>Contact details</h3>
         <Button
-          variant='ghost'
+          variant='outline'
           size='icon'
+          className='rounded-2xl'
           onClick={() => (editing ? save() : setEditing(true))}
           disabled={saving}
+          aria-label={editing ? "Save contact details" : "Edit contact details"}
         >
           {editing ? (
             <Check className='h-4 w-4' />
@@ -62,6 +66,15 @@ export function ContactDetails({
             <Pencil className='h-4 w-4' />
           )}
         </Button>
+        {onCancel && (
+          <Button
+            variant='ghost'
+            className='ml-auto rounded-xl'
+            onClick={onCancel}
+          >
+            Cancel
+          </Button>
+        )}
       </div>
       <div className='space-y-6 p-4 text-sm'>
         <div className='flex items-center gap-3'>

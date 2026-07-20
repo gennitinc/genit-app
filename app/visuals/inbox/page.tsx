@@ -54,7 +54,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import {
   useCreateConversation,
   useDeleteConversation,
@@ -2097,11 +2102,19 @@ export default function InboxPage() {
       </div>
 
       <Sheet open={showDetails} onOpenChange={setShowDetails}>
-        <SheetContent side='right' className='w-[92vw] p-0 sm:max-w-sm'>
+        <SheetContent
+          side='top'
+          className='h-dvh w-full gap-0 p-0 data-[state=closed]:duration-150 data-[state=open]:duration-200 [&>button]:hidden'
+        >
+          <SheetTitle className='sr-only'>Contact details</SheetTitle>
+          <SheetDescription className='sr-only'>
+            View and edit this conversation&apos;s contact information.
+          </SheetDescription>
           {activeConversation && (
             <ContactDetails
               conversation={activeConversation}
               saving={updateConversationMutation.isPending}
+              onCancel={() => setShowDetails(false)}
               onSave={(input) =>
                 updateConversationMutation.mutate(
                   { conversationId: activeConversation._id, input },
