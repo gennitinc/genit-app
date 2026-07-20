@@ -93,6 +93,7 @@ import DOMPurify from "dompurify";
 import type { EmojiClickData, Theme as EmojiTheme } from "emoji-picker-react";
 import {
   Archive,
+  Cable,
   Check,
   CheckCheck,
   CheckCircle,
@@ -123,6 +124,7 @@ import {
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
@@ -176,7 +178,7 @@ function EmailMessageBody({
         referrerPolicy='no-referrer'
         scrolling='no'
         className='block w-full border-0 bg-white'
-        style={{ height }}
+        style={{ height, minHeight: "60dvh" }}
         onLoad={(event) => {
           const document = event.currentTarget.contentDocument;
           if (!document) return;
@@ -314,6 +316,7 @@ function AccountAvatar({ account }: { account: IntegrationConnection }) {
 }
 
 export default function InboxPage() {
+  const router = useRouter();
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
   const [selectedAccountId, setSelectedAccountId] = useState("all");
@@ -942,16 +945,25 @@ export default function InboxPage() {
 
   return (
     <div
-      className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100dvh-8rem)] w-full min-w-0 flex-col gap-5 duration-500'
-      style={{ height: "100%", minHeight: 0, gap: "1rem", overflow: "hidden" }}
+      className='animate-in fade-in slide-in-from-bottom-4 flex h-full min-h-[calc(100dvh-8rem)] w-full min-w-0 flex-col gap-4 overflow-hidden duration-500 max-xl:fixed max-xl:inset-0 max-xl:z-50 max-xl:h-dvh max-xl:min-h-0 max-xl:gap-0 max-xl:bg-background max-xl:pt-[env(safe-area-inset-top)] max-xl:pb-[env(safe-area-inset-bottom)] max-xl:animate-none'
     >
-      <header className='flex flex-wrap items-end justify-between gap-3'>
-        <div>
+      <header className='flex flex-wrap items-end justify-between gap-3 max-xl:h-14 max-xl:shrink-0 max-xl:flex-nowrap max-xl:items-center max-xl:border-b max-xl:border-black/5 max-xl:px-3 dark:max-xl:border-white/10'>
+        <div className='flex min-w-0 items-center gap-1'>
+          <Button
+            variant='ghost'
+            size='icon'
+            className='shrink-0 rounded-full active:scale-[0.97]'
+            onClick={() => router.back()}
+            aria-label='Go back'
+            title='Go back'
+          >
+            <ChevronLeft className='h-5 w-5' />
+          </Button>
           <h1 className='text-foreground text-2xl font-bold tracking-tight'>
             Inbox
           </h1>
         </div>
-        <div className='flex flex-wrap gap-2'>
+        <div className='flex flex-nowrap gap-2 max-xl:gap-1'>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -1171,8 +1183,10 @@ export default function InboxPage() {
           </DropdownMenu>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className='rounded-md bg-indigo-600 text-white hover:bg-indigo-700'>
-                Channel <ChevronDown className='h-4 w-4' />
+              <Button className='rounded-md bg-indigo-600 px-3 text-white hover:bg-indigo-700 max-sm:size-9 max-sm:p-0'>
+                <Cable className='h-4 w-4 sm:hidden' />
+                <span className='max-sm:sr-only'>Channel</span>
+                <ChevronDown className='h-4 w-4 max-sm:hidden' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-64'>
@@ -1223,7 +1237,7 @@ export default function InboxPage() {
         </div>
       </header>
 
-      <div className='grid min-h-0 min-w-0 flex-1 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(420px,1fr)_280px] dark:border-white/10 dark:bg-zinc-950'>
+      <div className='grid min-h-0 min-w-0 flex-1 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm max-xl:rounded-none max-xl:border-0 max-xl:shadow-none xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(420px,1fr)_280px] dark:border-white/10 dark:bg-zinc-950'>
         <aside
           className={`${activeId ? "hidden xl:flex" : "flex"} min-h-0 min-w-0 flex-col border-r border-black/5 dark:border-white/10`}
         >
