@@ -29,6 +29,10 @@ export interface InboxConversation {
   lastMessageAt: string;
   unreadCount: number;
   status: "open" | "resolved" | "snoozed";
+  isPinned: boolean;
+  isMuted: boolean;
+  isBlocked: boolean;
+  clearedAt?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -115,6 +119,9 @@ export type UpdateConversationInput = Partial<
     | "subject"
     | "labels"
     | "notes"
+    | "isPinned"
+    | "isMuted"
+    | "isBlocked"
   >
 >;
 
@@ -294,4 +301,20 @@ export async function deleteConversation(
   conversationId: string
 ): Promise<void> {
   await apiResponse.delete(`/inbox/conversations/${conversationId}`);
+}
+
+export async function clearConversation(
+  conversationId: string
+): Promise<void> {
+  await apiResponse.delete(`/inbox/conversations/${conversationId}/messages`);
+}
+
+export async function exportConversation(
+  conversationId: string
+): Promise<Blob> {
+  const res = await apiResponse.get(
+    `/inbox/conversations/${conversationId}/export`,
+    { responseType: "blob" }
+  );
+  return res.data;
 }

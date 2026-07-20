@@ -1,14 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import type { CreateConversationInput } from "@/lib/inbox-api";
 import type { IntegrationConnection } from "@/lib/integrations-api";
@@ -45,101 +37,107 @@ export function NewConversationDialog({
     setSubject("");
   }, [open]);
 
+  if (!open) return null;
+
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        side='top'
-        className='h-dvh w-full gap-0 p-0 data-[state=closed]:duration-150 data-[state=open]:duration-200 [&>button]:hidden'
-      >
-        <div className='flex h-full min-h-0 flex-col'>
-          <SheetHeader className='shrink-0 border-b px-5 py-4 text-left'>
-            <SheetTitle>New conversation</SheetTitle>
-            <SheetDescription>
-              Start a thread through one of your connected channels.
-            </SheetDescription>
-          </SheetHeader>
-          <div className='min-h-0 flex-1 overflow-y-auto px-5 py-6'>
-            <div className='mx-auto w-full max-w-2xl space-y-4'>
-              <label className='block text-sm font-medium'>
-                Channel
-                <select
-                  className='bg-background mt-2 h-10 w-full rounded-md border px-3'
-                  value={integrationId}
-                  onChange={(event) => setIntegrationId(event.target.value)}
-                >
-                  {accounts.map((item) => (
-                    <option key={item._id} value={item._id}>
-                      {item.accountName || item.platform} · {item.platform}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className='block text-sm font-medium'>
-                Contact name
-                <Input
-                  className='mt-2'
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                  placeholder='Jane Doe'
-                />
-              </label>
-              <label className='block text-sm font-medium'>
-                Recipient
-                <Input
-                  className='mt-2'
-                  value={recipient}
-                  onChange={(event) => setRecipient(event.target.value)}
-                  placeholder={
-                    account?.platform === "gmail" ||
-                    account?.platform === "outlook"
-                      ? "name@example.com"
-                      : account?.platform === "telegram"
-                        ? "Telegram chat ID"
-                        : account?.platform === "whatsapp"
-                          ? "WhatsApp number, e.g. 2348012345678"
-                          : account?.platform === "x"
-                            ? "X user ID"
-                            : "Provider recipient ID"
-                  }
-                />
-              </label>
-              {account &&
-                ["gmail", "email", "outlook"].includes(account.platform) && (
-                  <label className='block text-sm font-medium'>
-                    Subject (optional)
-                    <Input
-                      className='mt-2'
-                      value={subject}
-                      onChange={(event) => setSubject(event.target.value)}
-                    />
-                  </label>
-                )}
-            </div>
-          </div>
-          <SheetFooter className='shrink-0 gap-2 border-t px-5 py-4 sm:space-x-0'>
-            <Button variant='outline' onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button
-              disabled={pending || !account || !name.trim() || !recipient.trim()}
-              onClick={() =>
-                account &&
-                onCreate({
-                  integrationId: account._id,
-                  platform:
-                    account.platform as CreateConversationInput["platform"],
-                  customerName: name.trim(),
-                  customerId: recipient.trim(),
-                  customerHandle: recipient.trim(),
-                  subject: subject.trim() || undefined,
-                })
-              }
+    <div
+      role='dialog'
+      aria-modal='true'
+      aria-labelledby='new-conversation-title'
+      aria-describedby='new-conversation-description'
+      className='bg-background animate-in slide-in-from-top-4 absolute inset-0 z-20 flex min-h-0 flex-col duration-200'
+    >
+      <div className='shrink-0 border-b px-5 py-4 text-left'>
+        <h2 id='new-conversation-title' className='font-semibold'>
+          New conversation
+        </h2>
+        <p
+          id='new-conversation-description'
+          className='text-muted-foreground mt-1 text-sm'
+        >
+          Start a thread through one of your connected channels.
+        </p>
+      </div>
+      <div className='min-h-0 flex-1 overflow-y-auto px-5 py-6'>
+        <div className='mx-auto w-full max-w-2xl space-y-4'>
+          <label className='block text-sm font-medium'>
+            Channel
+            <select
+              className='bg-background mt-2 h-10 w-full rounded-md border px-3'
+              value={integrationId}
+              onChange={(event) => setIntegrationId(event.target.value)}
             >
-              Create conversation
-            </Button>
-          </SheetFooter>
+              {accounts.map((item) => (
+                <option key={item._id} value={item._id}>
+                  {item.accountName || item.platform} · {item.platform}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className='block text-sm font-medium'>
+            Contact name
+            <Input
+              className='mt-2'
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder='Jane Doe'
+            />
+          </label>
+          <label className='block text-sm font-medium'>
+            Recipient
+            <Input
+              className='mt-2'
+              value={recipient}
+              onChange={(event) => setRecipient(event.target.value)}
+              placeholder={
+                account?.platform === "gmail" ||
+                account?.platform === "outlook"
+                  ? "name@example.com"
+                  : account?.platform === "telegram"
+                    ? "Telegram chat ID"
+                    : account?.platform === "whatsapp"
+                      ? "WhatsApp number, e.g. 2348012345678"
+                      : account?.platform === "x"
+                        ? "X user ID"
+                        : "Provider recipient ID"
+              }
+            />
+          </label>
+          {account &&
+            ["gmail", "email", "outlook"].includes(account.platform) && (
+              <label className='block text-sm font-medium'>
+                Subject (optional)
+                <Input
+                  className='mt-2'
+                  value={subject}
+                  onChange={(event) => setSubject(event.target.value)}
+                />
+              </label>
+            )}
         </div>
-      </SheetContent>
-    </Sheet>
+      </div>
+      <div className='flex shrink-0 flex-col-reverse gap-2 border-t px-5 py-4 sm:flex-row sm:justify-end'>
+        <Button variant='outline' onClick={() => onOpenChange(false)}>
+          Cancel
+        </Button>
+        <Button
+          disabled={pending || !account || !name.trim() || !recipient.trim()}
+          onClick={() =>
+            account &&
+            onCreate({
+              integrationId: account._id,
+              platform:
+                account.platform as CreateConversationInput["platform"],
+              customerName: name.trim(),
+              customerId: recipient.trim(),
+              customerHandle: recipient.trim(),
+              subject: subject.trim() || undefined,
+            })
+          }
+        >
+          Create conversation
+        </Button>
+      </div>
+    </div>
   );
 }

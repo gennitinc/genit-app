@@ -34,8 +34,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   ContextMenu,
-  ContextMenuCheckboxItem,
   ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import {
@@ -55,13 +56,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import {
   useCreateConversation,
+  useClearConversation,
   useDeleteConversation,
   useDeleteInboxMessage,
   useInboxMessages,
@@ -82,8 +78,10 @@ import {
   type InboxAttachment,
   type InboxConversation,
   type InboxFilters,
+  type UpdateConversationInput,
   type WhatsAppTemplate,
   downloadInboxAttachment,
+  exportConversation,
   fetchConversationWhatsAppTemplates,
   generateInboxDraft,
   uploadInboxAttachment,
@@ -98,6 +96,8 @@ import DOMPurify from "dompurify";
 import type { EmojiClickData, Theme as EmojiTheme } from "emoji-picker-react";
 import {
   Archive,
+  Ban,
+  BellOff,
   Cable,
   Check,
   CheckCheck,
@@ -107,6 +107,8 @@ import {
   Circle,
   CircleFadingArrowUp,
   Clock3,
+  Download,
+  Eraser,
   Inbox,
   ListFilter,
   Loader2,
@@ -115,6 +117,8 @@ import {
   PanelRight,
   Paperclip,
   Pencil,
+  Pin,
+  PinOff,
   Plus,
   RefreshCw,
   Search,
@@ -344,6 +348,7 @@ export default function InboxPage() {
   const [deleteTarget, setDeleteTarget] = useState<InboxConversation | null>(
     null
   );
+  const [clearTarget, setClearTarget] = useState<InboxConversation | null>(null);
   const [deleteMessageTarget, setDeleteMessageTarget] = useState<{
     messageId: string;
     conversationId: string;
@@ -537,6 +542,7 @@ export default function InboxPage() {
   const markAllMutation = useMarkAllConversationsAsRead();
   const statusMutation = useUpdateConversationStatus();
   const deleteMutation = useDeleteConversation();
+  const clearMutation = useClearConversation();
   const createConversationMutation = useCreateConversation();
   const syncMutation = useSyncInbox();
   const updateConversationMutation = useUpdateConversation();
@@ -880,6 +886,53 @@ export default function InboxPage() {
         toast.success("Conversation deleted");
       },
       onError: () => toast.error("Conversation could not be deleted"),
+    });
+  };
+
+  const updateConversationFlag = (
+    conversation: InboxConversation,
+    flag: "isPinned" | "isMuted" | "isBlocked",
+    label: string
+  ) => {
+    const enabled = !conversation[flag];
+    const input: UpdateConversationInput = { [flag]: enabled };
+    updateConversationMutation.mutate(
+      { conversationId: conversation._id, input },
+      {
+        onSuccess: () =>
+          toast.success(`${label} ${enabled ? "enabled" : "disabled"}`),
+        onError: () => toast.error(`${label} could not be updated`),
+      }
+    );
+  };
+
+  const exportChat = async (conversation: InboxConversation) => {
+    try {
+      const blob = await exportConversation(conversation._id);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${conversation.customerName.replace(/[^a-z0-9_-]+/gi, "-") || "conversation"}-chat.txt`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 0);
+      toast.success("Conversation exported");
+    } catch (error: any) {
+      toast.error(
+        error?.response?.data?.message || "Conversation could not be exported"
+      );
+    }
+  };
+
+  const confirmClear = () => {
+    if (!clearTarget) return;
+    clearMutation.mutate(clearTarget._id, {
+      onSuccess: () => {
+        setClearTarget(null);
+        toast.success("Conversation cleared");
+      },
+      onError: () => toast.error("Conversation could not be cleared"),
     });
   };
 
@@ -1244,7 +1297,7 @@ export default function InboxPage() {
 
       <div className='grid min-h-0 min-w-0 flex-1 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm max-xl:rounded-none max-xl:border-0 max-xl:shadow-none xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(420px,1fr)_280px] dark:border-white/10 dark:bg-zinc-950'>
         <aside
-          className={`${activeId ? "hidden xl:flex" : "flex"} min-h-0 min-w-0 flex-col border-r border-black/5 dark:border-white/10`}
+          className={`${activeId ? "hidden xl:flex" : "flex"} relative min-h-0 min-w-0 flex-col border-r border-black/5 dark:border-white/10`}
         >
           <div className='border-b border-black/5 px-4 py-2 dark:border-white/10'>
             <div className='flex items-center gap-2'>
@@ -1277,8 +1330,8 @@ export default function InboxPage() {
               )} */}
             </div>
             {selectedConversationIds.size > 0 && (
-              <div className='mt-2 flex flex-wrap items-center gap-2 border-t border-black/5 pt-2 dark:border-white/10'>
-                <label className='flex cursor-pointer items-center gap-2 text-xs font-medium'>
+              <div className='mt-2 flex min-w-0 items-center gap-2 border-t border-black/5 pt-2 dark:border-white/10'>
+                <label className='flex min-w-0 cursor-pointer items-center gap-2 text-xs font-medium'>
                   <Checkbox
                     checked={
                       selectedConversationIds.size === conversations.length
@@ -1294,60 +1347,60 @@ export default function InboxPage() {
                     }
                     aria-label='Select all loaded conversations'
                   />
-                  Select all · {selectedConversationIds.size} selected
+                  <span className='truncate'>Select all</span>
+                  <span className='bg-muted text-muted-foreground shrink-0 rounded-full px-2 py-0.5 text-[10px] tabular-nums'>
+                    {selectedConversationIds.size}
+                  </span>
                 </label>
-                <span className='flex-1' />
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  disabled={bulkBusy}
-                  onClick={() => runBulkAction("read")}
-                  title='Mark as read'
-                  aria-label='Mark selected conversations as read'
-                >
-                  <CheckCheck className='h-4 w-4' />
-                </Button>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  disabled={bulkBusy}
-                  onClick={() => runBulkAction("resolved")}
-                  title='Resolve'
-                  aria-label='Resolve selected conversations'
-                >
-                  <CheckCircle className='h-4 w-4' />
-                </Button>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  disabled={bulkBusy}
-                  onClick={() => runBulkAction("snoozed")}
-                  title='Snooze'
-                  aria-label='Snooze selected conversations'
-                >
-                  <Clock3 className='h-4 w-4' />
-                </Button>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  disabled={bulkBusy}
-                  onClick={() => setBulkDeleteOpen(true)}
-                  className='text-red-600 hover:text-red-700'
-                  title='Delete'
-                  aria-label='Delete selected conversations'
-                >
-                  <Trash2 className='h-4 w-4' />
-                </Button>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  disabled={bulkBusy}
-                  onClick={() => setSelectedConversationIds(new Set())}
-                  title='Cancel selection'
-                  aria-label='Cancel conversation selection'
-                >
-                  <XCircle className='h-4 w-4' />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      className='ml-auto shrink-0 rounded-xl'
+                      disabled={bulkBusy}
+                    >
+                      <MoreHorizontal className='mr-1.5 h-4 w-4' />
+                      More
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align='end' className='w-56'>
+                    <DropdownMenuItem onSelect={() => runBulkAction("read")}>
+                      <CheckCheck className='mr-2 h-4 w-4' />
+                      Mark as read
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => runBulkAction("open")}>
+                      <Inbox className='mr-2 h-4 w-4' />
+                      Mark open
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => runBulkAction("resolved")}
+                    >
+                      <CheckCircle className='mr-2 h-4 w-4' />
+                      Resolve
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => runBulkAction("snoozed")}
+                    >
+                      <Clock3 className='mr-2 h-4 w-4' />
+                      Snooze
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onSelect={() => setSelectedConversationIds(new Set())}
+                    >
+                      <XCircle className='mr-2 h-4 w-4' />
+                      Cancel selection
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className='text-red-600 focus:text-red-600'
+                      onSelect={() => setBulkDeleteOpen(true)}
+                    >
+                      <Trash2 className='mr-2 h-4 w-4' />
+                      Delete selected
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             )}
           </div>
@@ -1456,20 +1509,136 @@ export default function InboxPage() {
                               className={`h-1.5 w-1.5 fill-current ${conversation.status === "open" ? "text-indigo-500" : conversation.status === "snoozed" ? "text-amber-500" : "text-zinc-400"}`}
                             />
                             {conversation.status}
+                            {conversation.isPinned && (
+                              <Pin className='ml-1 h-3 w-3' aria-label='Pinned' />
+                            )}
+                            {conversation.isMuted && (
+                              <BellOff className='ml-1 h-3 w-3' aria-label='Muted' />
+                            )}
+                            {conversation.isBlocked && (
+                              <Ban className='ml-1 h-3 w-3 text-red-500' aria-label='Blocked' />
+                            )}
                           </span>
                         </span>
                       </div>
                     </ContextMenuTrigger>
-                    <ContextMenuContent className='w-48'>
-                      <ContextMenuCheckboxItem
-                        checked={selectedConversationIds.has(conversation._id)}
-                        onSelect={(event) => event.preventDefault()}
-                        onCheckedChange={() =>
+                    <ContextMenuContent className='w-56'>
+                      <ContextMenuItem
+                        onSelect={() =>
                           toggleConversationSelection(conversation._id)
                         }
                       >
-                        Select
-                      </ContextMenuCheckboxItem>
+                        <CheckCircle className='mr-2 h-4 w-4' />
+                        {selectedConversationIds.has(conversation._id)
+                          ? "Deselect"
+                          : "Select"}
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        disabled={!conversation.unreadCount}
+                        onSelect={() =>
+                          markReadMutation.mutate(conversation._id)
+                        }
+                      >
+                        <CheckCheck className='mr-2 h-4 w-4' />
+                        Mark as read
+                      </ContextMenuItem>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem
+                        onSelect={() =>
+                          statusMutation.mutate(
+                            {
+                              conversationId: conversation._id,
+                              status:
+                                conversation.status === "resolved"
+                                  ? "open"
+                                  : "resolved",
+                            },
+                            {
+                              onError: () =>
+                                toast.error(
+                                  "Conversation could not be archived"
+                                ),
+                            }
+                          )
+                        }
+                      >
+                        <Archive className='mr-2 h-4 w-4' />
+                        {conversation.status === "resolved"
+                          ? "Unarchive"
+                          : "Archive"}
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        onSelect={() =>
+                          updateConversationFlag(
+                            conversation,
+                            "isPinned",
+                            "Pin"
+                          )
+                        }
+                      >
+                        {conversation.isPinned ? (
+                          <PinOff className='mr-2 h-4 w-4' />
+                        ) : (
+                          <Pin className='mr-2 h-4 w-4' />
+                        )}
+                        {conversation.isPinned ? "Unpin" : "Pin"}
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        onSelect={() =>
+                          updateConversationFlag(
+                            conversation,
+                            "isBlocked",
+                            "Block"
+                          )
+                        }
+                      >
+                        <Ban className='mr-2 h-4 w-4' />
+                        <span className='truncate'>
+                          {conversation.isBlocked ? "Unblock" : "Block"}{" "}
+                          {conversation.customerName}
+                        </span>
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        onSelect={() =>
+                          updateConversationFlag(
+                            conversation,
+                            "isMuted",
+                            "Mute"
+                          )
+                        }
+                      >
+                        <BellOff className='mr-2 h-4 w-4' />
+                        {conversation.isMuted ? "Unmute" : "Mute"}
+                      </ContextMenuItem>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem
+                        onSelect={() => {
+                          setActiveId(conversation._id);
+                          setShowDetails(true);
+                        }}
+                      >
+                        <PanelRight className='mr-2 h-4 w-4' />
+                        Contact details
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        onSelect={() => void exportChat(conversation)}
+                      >
+                        <Download className='mr-2 h-4 w-4' />
+                        Export chat
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        onSelect={() => setClearTarget(conversation)}
+                      >
+                        <Eraser className='mr-2 h-4 w-4' />
+                        Clear chat
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        className='text-red-600 focus:text-red-600'
+                        onSelect={() => setDeleteTarget(conversation)}
+                      >
+                        <Trash2 className='mr-2 h-4 w-4' />
+                        Delete conversation
+                      </ContextMenuItem>
                     </ContextMenuContent>
                   </ContextMenu>
                 ))}
@@ -1482,10 +1651,31 @@ export default function InboxPage() {
               </>
             )}
           </div>
+          <NewConversationDialog
+            open={showNewConversation}
+            onOpenChange={setShowNewConversation}
+            accounts={startableAccounts}
+            pending={createConversationMutation.isPending}
+            onCreate={(input) =>
+              createConversationMutation.mutate(input, {
+                onSuccess: (conversation) => {
+                  setShowNewConversation(false);
+                  setCreatedConversation(conversation);
+                  setActiveId(conversation._id);
+                  toast.success("Conversation created");
+                },
+                onError: (error: any) =>
+                  toast.error(
+                    error?.response?.data?.message ||
+                      "Conversation could not be created"
+                  ),
+              })
+            }
+          />
         </aside>
 
         <main
-          className={`${activeId ? "flex" : "hidden xl:flex"} min-h-0 min-w-0 flex-col bg-zinc-50/40 dark:bg-black/20`}
+          className={`${activeId ? "flex" : "hidden xl:flex"} relative min-h-0 min-w-0 flex-col bg-zinc-50/40 dark:bg-black/20`}
         >
           {activeConversation ? (
             <>
@@ -1579,25 +1769,84 @@ export default function InboxPage() {
                         <MoreHorizontal className='h-5 w-5' />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align='end'>
-                      <DropdownMenuItem onClick={() => changeStatus("open")}>
+                    <DropdownMenuContent align='end' className='w-56'>
+                      <DropdownMenuItem onSelect={() => changeStatus("open")}>
                         <Inbox className='mr-2 h-4 w-4' />
                         Mark open
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => changeStatus("snoozed")}>
+                      <DropdownMenuItem
+                        onSelect={() => changeStatus("snoozed")}
+                      >
                         <Clock3 className='mr-2 h-4 w-4' />
                         Snooze
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => changeStatus("resolved")}
+                        onSelect={() => changeStatus("resolved")}
                       >
                         <Check className='mr-2 h-4 w-4' />
                         Resolve
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
+                        onSelect={() =>
+                          updateConversationFlag(
+                            activeConversation,
+                            "isPinned",
+                            "Pin"
+                          )
+                        }
+                      >
+                        {activeConversation.isPinned ? (
+                          <PinOff className='mr-2 h-4 w-4' />
+                        ) : (
+                          <Pin className='mr-2 h-4 w-4' />
+                        )}
+                        {activeConversation.isPinned ? "Unpin" : "Pin"}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() =>
+                          updateConversationFlag(
+                            activeConversation,
+                            "isBlocked",
+                            "Block"
+                          )
+                        }
+                      >
+                        <Ban className='mr-2 h-4 w-4' />
+                        {activeConversation.isBlocked ? "Unblock" : "Block"}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() =>
+                          updateConversationFlag(
+                            activeConversation,
+                            "isMuted",
+                            "Mute"
+                          )
+                        }
+                      >
+                        <BellOff className='mr-2 h-4 w-4' />
+                        {activeConversation.isMuted ? "Unmute" : "Mute"}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onSelect={() => setShowDetails(true)}>
+                        <PanelRight className='mr-2 h-4 w-4' />
+                        Contact details
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => void exportChat(activeConversation)}
+                      >
+                        <Download className='mr-2 h-4 w-4' />
+                        Export chat
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => setClearTarget(activeConversation)}
+                      >
+                        <Eraser className='mr-2 h-4 w-4' />
+                        Clear chat
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
                         className='text-red-600 focus:text-red-600'
-                        onClick={() => setDeleteTarget(activeConversation)}
+                        onSelect={() => setDeleteTarget(activeConversation)}
                       >
                         <Trash2 className='mr-2 h-4 w-4' />
                         Delete conversation
@@ -1801,7 +2050,24 @@ export default function InboxPage() {
               </div>
 
               <div className='shrink-0 border-t border-black/5 bg-white p-2 dark:border-white/10 dark:bg-zinc-950'>
-                {activeConversation.status === "resolved" ? (
+                {activeConversation.isBlocked ? (
+                  <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
+                    <Ban className='h-4 w-4 text-red-500' />
+                    This contact is blocked.{" "}
+                    <button
+                      className='font-semibold text-indigo-700 hover:underline dark:text-indigo-400'
+                      onClick={() =>
+                        updateConversationFlag(
+                          activeConversation,
+                          "isBlocked",
+                          "Block"
+                        )
+                      }
+                    >
+                      Unblock to reply
+                    </button>
+                  </div>
+                ) : activeConversation.status === "resolved" ? (
                   <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
                     <Check className='h-4 w-4' />
                     This conversation is resolved.{" "}
@@ -2080,6 +2346,33 @@ export default function InboxPage() {
               </h2>
             </div>
           )}
+          {showDetails && activeConversation && (
+            <div
+              role='dialog'
+              aria-modal='true'
+              aria-label='Contact details'
+              className='bg-background animate-in slide-in-from-top-4 absolute inset-0 z-30 min-h-0 duration-200'
+            >
+              <ContactDetails
+                conversation={activeConversation}
+                saving={updateConversationMutation.isPending}
+                onCancel={() => setShowDetails(false)}
+                onSave={(input) =>
+                  updateConversationMutation.mutate(
+                    { conversationId: activeConversation._id, input },
+                    {
+                      onSuccess: () => {
+                        toast.success("Contact details updated");
+                        setShowDetails(false);
+                      },
+                      onError: () =>
+                        toast.error("Contact details could not be updated"),
+                    }
+                  )
+                }
+              />
+            </div>
+          )}
         </main>
         <aside className='hidden min-h-0 border-l 2xl:block'>
           {activeConversation && (
@@ -2101,60 +2394,6 @@ export default function InboxPage() {
         </aside>
       </div>
 
-      <Sheet open={showDetails} onOpenChange={setShowDetails}>
-        <SheetContent
-          side='top'
-          className='h-dvh w-full gap-0 p-0 data-[state=closed]:duration-150 data-[state=open]:duration-200 [&>button]:hidden'
-        >
-          <SheetTitle className='sr-only'>Contact details</SheetTitle>
-          <SheetDescription className='sr-only'>
-            View and edit this conversation&apos;s contact information.
-          </SheetDescription>
-          {activeConversation && (
-            <ContactDetails
-              conversation={activeConversation}
-              saving={updateConversationMutation.isPending}
-              onCancel={() => setShowDetails(false)}
-              onSave={(input) =>
-                updateConversationMutation.mutate(
-                  { conversationId: activeConversation._id, input },
-                  {
-                    onSuccess: () => {
-                      toast.success("Contact details updated");
-                      setShowDetails(false);
-                    },
-                    onError: () =>
-                      toast.error("Contact details could not be updated"),
-                  }
-                )
-              }
-            />
-          )}
-        </SheetContent>
-      </Sheet>
-
-      <NewConversationDialog
-        open={showNewConversation}
-        onOpenChange={setShowNewConversation}
-        accounts={startableAccounts}
-        pending={createConversationMutation.isPending}
-        onCreate={(input) =>
-          createConversationMutation.mutate(input, {
-            onSuccess: (conversation) => {
-              setShowNewConversation(false);
-              setCreatedConversation(conversation);
-              setActiveId(conversation._id);
-              toast.success("Conversation created");
-            },
-            onError: (error: any) =>
-              toast.error(
-                error?.response?.data?.message ||
-                  "Conversation could not be created"
-              ),
-          })
-        }
-      />
-
       <AlertDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
@@ -2175,6 +2414,34 @@ export default function InboxPage() {
               className='bg-red-600 text-white hover:bg-red-700'
             >
               {deleteMutation.isPending ? "Deleting…" : "Delete conversation"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={Boolean(clearTarget)}
+        onOpenChange={(open) => !open && setClearTarget(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Clear this conversation?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This removes the current message history with{" "}
+              {clearTarget?.customerName} from Genit. New messages will still
+              appear normally. This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={clearMutation.isPending}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmClear}
+              disabled={clearMutation.isPending}
+              className='bg-red-600 text-white hover:bg-red-700'
+            >
+              {clearMutation.isPending ? "Clearing…" : "Clear chat"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

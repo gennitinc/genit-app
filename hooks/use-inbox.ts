@@ -7,6 +7,7 @@ import {
   type InboxConversation,
   type InboxFilters,
   type UpdateConversationInput,
+  clearConversation,
   createConversation,
   deleteConversation,
   deleteInboxMessage,
@@ -339,6 +340,17 @@ export function useDeleteConversation() {
     mutationFn: deleteConversation,
     onSuccess: (_data, conversationId) => {
       qc.removeQueries({ queryKey: inboxMessagesQueryKey(conversationId) });
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
+    },
+  });
+}
+
+export function useClearConversation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: clearConversation,
+    onSuccess: (_data, conversationId) => {
+      qc.setQueryData(inboxMessagesQueryKey(conversationId), []);
       qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
     },
   });
