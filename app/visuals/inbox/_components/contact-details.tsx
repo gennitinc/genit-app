@@ -50,7 +50,7 @@ export function ContactDetails({
 
   return (
     <div className='bg-background flex h-full min-h-0 flex-col overflow-y-auto'>
-      <div className='flex h-16 shrink-0 items-center gap-2 border-b px-4'>
+      <div className='flex h-fit py-2 shrink-0 items-center gap-2 border-b px-4'>
         <h3 className='font-semibold'>Contact details</h3>
         <Button
           variant='outline'
