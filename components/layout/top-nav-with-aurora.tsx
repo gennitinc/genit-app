@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { SidebarTrigger } from "../ui/sidebar";
 import UserPopOver from "../user/userPopOver";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -30,6 +31,7 @@ export default function TopNavWithAurora({
   }, []);
 
   const isMobile = useIsMobile();
+  const isTablet = useMediaQuery("(max-width: 1024px)");
 
   const params = useParams();
   const isChatIdPage = !!params.id && pathName.startsWith("/chat");
@@ -48,7 +50,7 @@ export default function TopNavWithAurora({
           {(!isChatIdPage || isMobile || !isPreviewOpen) && (
             <SidebarTrigger
               className='z-20 -ml-2'
-              disabled={isVisualsPage}
+              disabled={isVisualsPage && !isTablet}
             />
           )}
           <Link href='/' className='flex items-center gap-1 lg:hidden'>
