@@ -24,6 +24,12 @@ const CATEGORIES = [
     href: "/visuals/posts",
   }, 
   { id: "inbox", label: "Inbox", icon: Inbox, href: "/visuals/inbox" },
+   {
+    id: "calendar",
+    label: "Calendar",
+    icon: CalendarFold,
+    href: "/visuals/calendar",
+  },
   {
     id: "library",
     label: "Media Library",
@@ -35,12 +41,6 @@ const CATEGORIES = [
     label: "Automation",
     icon: Workflow,
     href: "/visuals/automation",
-  },
-  {
-    id: "calendar",
-    label: "Calendar",
-    icon: CalendarFold,
-    href: "/visuals/calendar",
   },
   {
     id: "campaigns",
