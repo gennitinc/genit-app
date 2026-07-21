@@ -199,10 +199,11 @@ function EmailMessageBody({
   fallback: string;
 }) {
   const [safeHtml, setSafeHtml] = useState("");
-  const [height, setHeight] = useState(120);
+  const [height, setHeight] = useState<number | null>(null);
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
   useEffect(() => {
+    setHeight(null);
     const sanitized = DOMPurify.sanitize(html, {
       ADD_ATTR: ["target"],
       FORBID_TAGS: ["base", "form", "iframe", "object", "embed"],
@@ -213,6 +214,9 @@ function EmailMessageBody({
       if (!/^(https?:|mailto:|tel:)/i.test(href)) link.removeAttribute("href");
       link.target = "_blank";
       link.rel = "noopener noreferrer";
+    });
+    parsed.querySelectorAll("img").forEach((image) => {
+      image.loading = "eager";
     });
     setSafeHtml(parsed.body.innerHTML);
   }, [html]);
@@ -231,15 +235,29 @@ function EmailMessageBody({
     );
 
   return (
-    <div className='min-w-0 overflow-hidden bg-white text-zinc-900'>
+    <div className='relative min-w-0 overflow-hidden bg-white text-zinc-900'>
+      {height === null && (
+        <div
+          role='status'
+          aria-label='Loading email content'
+          className='absolute inset-0 z-10 space-y-4 bg-white p-5'
+        >
+          <Skeleton className='h-6 w-1/3 motion-reduce:animate-none' />
+          <Skeleton className='h-4 w-4/5 motion-reduce:animate-none' />
+          <Skeleton className='h-48 w-full motion-reduce:animate-none' />
+          <Skeleton className='h-4 w-2/3 motion-reduce:animate-none' />
+        </div>
+      )}
       <iframe
         title='Email message body'
         srcDoc={srcDoc}
         sandbox='allow-popups allow-popups-to-escape-sandbox allow-same-origin'
         referrerPolicy='no-referrer'
         scrolling='no'
-        className='block w-full border-0 bg-white'
-        style={{ height, minHeight: "60dvh" }}
+        aria-hidden={height === null}
+        tabIndex={height === null ? -1 : undefined}
+        className={`block w-full border-0 bg-white ${height === null ? "invisible" : "visible"}`}
+        style={{ height: height ?? "60dvh" }}
         onLoad={(event) => {
           const document = event.currentTarget.contentDocument;
           if (!document) return;
