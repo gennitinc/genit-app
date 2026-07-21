@@ -136,7 +136,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
@@ -200,10 +207,18 @@ function EmailMessageBody({
 }) {
   const [safeHtml, setSafeHtml] = useState("");
   const [height, setHeight] = useState<number | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
+  const initializedDocumentRef = useRef<Document | null>(null);
+  const restoreImagesFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
     setHeight(null);
+    initializedDocumentRef.current = null;
+    resizeObserverRef.current?.disconnect();
+    if (restoreImagesFrameRef.current !== null)
+      cancelAnimationFrame(restoreImagesFrameRef.current);
+
     const sanitized = DOMPurify.sanitize(html, {
       ADD_ATTR: ["target"],
       FORBID_TAGS: ["base", "form", "iframe", "object", "embed"],
@@ -216,15 +231,94 @@ function EmailMessageBody({
       link.rel = "noopener noreferrer";
     });
     parsed.querySelectorAll("img").forEach((image) => {
-      image.loading = "eager";
+      const src = image.getAttribute("src");
+      const srcset = image.getAttribute("srcset");
+      if (src) image.setAttribute("data-email-src", src);
+      if (srcset) image.setAttribute("data-email-srcset", srcset);
+      image.removeAttribute("src");
+      image.removeAttribute("srcset");
+      image.decoding = "async";
+      if (src || srcset) image.setAttribute("data-email-image-pending", "");
+    });
+    parsed.querySelectorAll("picture source[srcset]").forEach((source) => {
+      source.setAttribute("data-email-srcset", source.getAttribute("srcset")!);
+      source.removeAttribute("srcset");
     });
     setSafeHtml(parsed.body.innerHTML);
   }, [html]);
 
-  useEffect(() => () => resizeObserverRef.current?.disconnect(), []);
+  const initializeFrame = useCallback((iframe: HTMLIFrameElement) => {
+    const document = iframe.contentDocument;
+    if (!document?.body || initializedDocumentRef.current === document)
+      return;
+
+    initializedDocumentRef.current = document;
+    const resize = () => {
+      const body = document.body;
+      setHeight(
+        Math.max(
+          120,
+          document.documentElement.scrollHeight,
+          body.scrollHeight,
+          body.offsetHeight
+        )
+      );
+    };
+
+    resizeObserverRef.current?.disconnect();
+    resizeObserverRef.current = new ResizeObserver(resize);
+    resizeObserverRef.current.observe(document.documentElement);
+    resizeObserverRef.current.observe(document.body);
+    resize();
+
+    restoreImagesFrameRef.current = requestAnimationFrame(() => {
+      document
+        .querySelectorAll<HTMLSourceElement>("source[data-email-srcset]")
+        .forEach((source) => {
+          source.srcset = source.dataset.emailSrcset || "";
+          source.removeAttribute("data-email-srcset");
+        });
+      document
+        .querySelectorAll<HTMLImageElement>(
+          "img[data-email-src], img[data-email-srcset]"
+        )
+        .forEach((image) => {
+          const finish = () =>
+            image.removeAttribute("data-email-image-pending");
+          image.addEventListener("load", finish, { once: true });
+          image.addEventListener("error", finish, { once: true });
+          if (image.dataset.emailSrcset) {
+            image.srcset = image.dataset.emailSrcset;
+            image.removeAttribute("data-email-srcset");
+          }
+          if (image.dataset.emailSrc) {
+            image.src = image.dataset.emailSrc;
+            image.removeAttribute("data-email-src");
+          }
+          if (image.complete) finish();
+        });
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!safeHtml) return;
+    const revealTimer = window.setTimeout(() => {
+      if (iframeRef.current) initializeFrame(iframeRef.current);
+    }, 200);
+    return () => window.clearTimeout(revealTimer);
+  }, [initializeFrame, safeHtml]);
+
+  useEffect(
+    () => () => {
+      resizeObserverRef.current?.disconnect();
+      if (restoreImagesFrameRef.current !== null)
+        cancelAnimationFrame(restoreImagesFrameRef.current);
+    },
+    []
+  );
 
   const srcDoc = safeHtml
-    ? `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: http: data:; style-src 'unsafe-inline'; font-src https: http: data:;"><base target="_blank"><style>html{background:#fff;color:#18181b}html,body{overflow:hidden}body{box-sizing:border-box;margin:0;padding:20px;font:14px/1.55 Arial,sans-serif;overflow-wrap:anywhere}img{max-width:100%;height:auto}table{max-width:100%}a{color:#4f46e5}</style></head><body>${safeHtml}</body></html>`
+    ? `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: http: data:; style-src 'unsafe-inline'; font-src https: http: data:;"><base target="_blank"><style>html{background:#fff;color:#18181b}html,body{overflow:hidden}body{box-sizing:border-box;margin:0;padding:20px;font:14px/1.55 Arial,sans-serif;overflow-wrap:anywhere}img{max-width:100%;height:auto}img[data-email-image-pending]{background:#f4f4f5}table{max-width:100%}a{color:#4f46e5}</style></head><body>${safeHtml}</body></html>`
     : "";
 
   if (!safeHtml)
@@ -249,6 +343,7 @@ function EmailMessageBody({
         </div>
       )}
       <iframe
+        ref={iframeRef}
         title='Email message body'
         srcDoc={srcDoc}
         sandbox='allow-popups allow-popups-to-escape-sandbox allow-same-origin'
@@ -258,26 +353,7 @@ function EmailMessageBody({
         tabIndex={height === null ? -1 : undefined}
         className={`block w-full border-0 bg-white ${height === null ? "invisible" : "visible"}`}
         style={{ height: height ?? "60dvh" }}
-        onLoad={(event) => {
-          const document = event.currentTarget.contentDocument;
-          if (!document) return;
-          const resize = () => {
-            const body = document.body;
-            setHeight(
-              Math.max(
-                120,
-                document.documentElement.scrollHeight,
-                body.scrollHeight,
-                body.offsetHeight
-              )
-            );
-          };
-          resizeObserverRef.current?.disconnect();
-          resizeObserverRef.current = new ResizeObserver(resize);
-          resizeObserverRef.current.observe(document.documentElement);
-          resizeObserverRef.current.observe(document.body);
-          resize();
-        }}
+        onLoad={(event) => initializeFrame(event.currentTarget)}
       />
     </div>
   );
