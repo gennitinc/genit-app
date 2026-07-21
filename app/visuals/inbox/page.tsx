@@ -55,6 +55,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   useCreateConversation,
   useClearConversation,
@@ -138,6 +139,57 @@ import { toast } from "sonner";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
+
+function ConversationListSkeleton() {
+  return (
+    <div role='status' aria-label='Loading conversations' className='space-y-1'>
+      <span className='sr-only'>Loading conversations</span>
+      {Array.from({ length: 7 }).map((_, index) => (
+        <div
+          key={index}
+          aria-hidden='true'
+          className='flex gap-3 rounded-2xl p-3'
+        >
+          <Skeleton className='h-11 w-11 shrink-0 rounded-full motion-reduce:animate-none' />
+          <div className='min-w-0 flex-1 space-y-2 pt-0.5'>
+            <div className='flex items-center justify-between gap-3'>
+              <Skeleton className='h-4 w-28 motion-reduce:animate-none' />
+              <Skeleton className='h-3 w-8 motion-reduce:animate-none' />
+            </div>
+            <Skeleton className='h-3 w-4/5 motion-reduce:animate-none' />
+            <Skeleton className='h-2.5 w-14 motion-reduce:animate-none' />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MessageThreadSkeleton() {
+  return (
+    <div
+      role='status'
+      aria-label='Loading messages'
+      className='mx-auto max-w-3xl space-y-5'
+    >
+      <span className='sr-only'>Loading messages</span>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div
+          key={index}
+          aria-hidden='true'
+          className={`flex ${index % 2 ? "justify-end" : "justify-start"}`}
+        >
+          <div className={`space-y-2 ${index % 2 ? "w-2/3" : "w-3/4"}`}>
+            <Skeleton className='h-16 w-full rounded-2xl motion-reduce:animate-none' />
+            <Skeleton
+              className={`h-2.5 w-14 motion-reduce:animate-none ${index % 2 ? "ml-auto" : ""}`}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function EmailMessageBody({
   html,
@@ -1407,9 +1459,7 @@ export default function InboxPage() {
 
           <div className='flex-1 overflow-y-auto p-2'>
             {isLoading ? (
-              <div className='text-muted-foreground mt-40 flex h-40 items-center justify-center text-sm'>
-                <LoadingFileLoader size={16} />
-              </div>
+              <ConversationListSkeleton />
             ) : conversations.length === 0 ? (
               <div className='flex h-full min-h-72 flex-col items-center justify-center px-8 text-center'>
                 <span className='mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-900'>
@@ -1858,12 +1908,7 @@ export default function InboxPage() {
 
               <div className='min-h-0 flex-1 overflow-y-auto p-4 sm:p-6'>
                 {messagesLoading ? (
-                  <div className='text-muted-foreground flex h-40 items-center justify-center text-sm'>
-                    <div className='mr-2'>
-                      <LoadingFileLoader size={16} />
-                    </div>
-                    Loading messages
-                  </div>
+                  <MessageThreadSkeleton />
                 ) : (
                   <div className='mx-auto max-w-3xl space-y-5'>
                     {messages.map((message) => {
