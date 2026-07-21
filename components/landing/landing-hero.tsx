@@ -588,8 +588,8 @@ const LandingHero = () => {
             <div className='mt-7 flex flex-col md:flex-row items-start  md:items-center gap-4'>
               <div className='flex items-center -space-x-2'>
                 <img
-                  src='https://i.pinimg.com/1200x/41/6b/46/416b461a424a22efc534945dc9116920.jpg'
-                  alt='Terso'
+                  src='https://i.pinimg.com/1200x/6b/fe/d8/6bfed887cb804dd9e6caee99dbe9dbe4.jpg'
+                  alt='Miavn'
                   className='ring-background h-12 w-12 rounded-full object-cover ring-2'
                 />
 
