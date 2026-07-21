@@ -588,24 +588,24 @@ const LandingHero = () => {
             <div className='mt-7 flex flex-col md:flex-row items-start  md:items-center gap-4'>
               <div className='flex items-center -space-x-2'>
                 <img
-                  src='https://www.terso.com.ng/images/terso-logo.png'
+                  src='https://i.pinimg.com/1200x/41/6b/46/416b461a424a22efc534945dc9116920.jpg'
                   alt='Terso'
-                  className='ring-background h-12 w-fit rounded-full object-cover ring-2'
+                  className='ring-background h-12 w-12 rounded-full object-cover ring-2'
                 />
 
                 <img
                   src='https://i.pinimg.com/736x/d5/ea/70/d5ea7077bc2c1775edfda58a8d50ae26.jpg'
                   alt='User'
-                  className='ring-background h-12 w-fit rounded-full object-cover ring-2'
+                  className='ring-background h-12 w-12 rounded-full object-cover ring-2'
                 />
 
                 <img
                   src='https://i.pinimg.com/736x/b2/ce/22/b2ce2290ea022f489ab3ca735a5b1a8b.jpg'
                   alt='User'
-                  className='ring-background h-12 w-fit rounded-full object-cover ring-2'
+                  className='ring-background h-12 w-12 rounded-full object-cover ring-2'
                 />
 
-                <div className='border-border bg-muted text-foreground ring-background flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-xs font-semibold ring-2'>
+                <div className='border-border bg-muted text-foreground ring-background flex h-12 w-12 shrink-0 items-center justify-center rounded-full border text-xs font-semibold ring-2'>
                   +12
                 </div>
               </div>
@@ -618,7 +618,7 @@ const LandingHero = () => {
             </div>
           </div>
           {/* Right: Showcase 3d */}
-          <div className='relative mx-auto w-full max-w-xl lg:ml-auto'>
+          <div className='relative mx-auto w-full max-w-xl lg:ml-auto ml-8 lg:ml-0'>
             <MarketingRobot3D />
           </div>
           {/* end 3d */}
