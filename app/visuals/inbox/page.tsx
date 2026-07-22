@@ -57,8 +57,8 @@ import {
 } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  useCreateConversation,
   useClearConversation,
+  useCreateConversation,
   useDeleteConversation,
   useDeleteInboxMessage,
   useInboxMessages,
@@ -136,6 +136,7 @@ import {
   Trash2,
   XCircle,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -254,8 +255,7 @@ function EmailMessageBody({
 
   const initializeFrame = useCallback((iframe: HTMLIFrameElement) => {
     const document = iframe.contentDocument;
-    if (!document?.body || initializedDocumentRef.current === document)
-      return;
+    if (!document?.body || initializedDocumentRef.current === document) return;
 
     initializedDocumentRef.current = document;
     const resize = () => {
@@ -476,6 +476,7 @@ function AccountAvatar({ account }: { account: IntegrationConnection }) {
 }
 
 export default function InboxPage() {
+  const { resolvedTheme } = useTheme();
   const router = useRouter();
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
@@ -522,7 +523,9 @@ export default function InboxPage() {
   const [deleteTarget, setDeleteTarget] = useState<InboxConversation | null>(
     null
   );
-  const [clearTarget, setClearTarget] = useState<InboxConversation | null>(null);
+  const [clearTarget, setClearTarget] = useState<InboxConversation | null>(
+    null
+  );
   const [deleteMessageTarget, setDeleteMessageTarget] = useState<{
     messageId: string;
     conversationId: string;
@@ -1174,9 +1177,7 @@ export default function InboxPage() {
   };
 
   return (
-    <div
-      className='animate-in fade-in slide-in-from-bottom-4 flex h-full min-h-[calc(100dvh-8rem)] w-full min-w-0 flex-col gap-4 overflow-hidden duration-500 max-xl:fixed max-xl:inset-0 max-xl:z-50 max-xl:h-dvh max-xl:min-h-0 max-xl:gap-0 max-xl:bg-background max-xl:pt-[env(safe-area-inset-top)] max-xl:pb-[env(safe-area-inset-bottom)] max-xl:animate-none'
-    >
+    <div className='animate-in fade-in slide-in-from-bottom-4 max-xl:bg-background flex h-full min-h-[calc(100dvh-8rem)] w-full min-w-0 flex-col gap-4 overflow-hidden duration-500 max-xl:fixed max-xl:inset-0 max-xl:z-50 max-xl:h-dvh max-xl:min-h-0 max-xl:animate-none max-xl:gap-0 max-xl:pt-[env(safe-area-inset-top)] max-xl:pb-[env(safe-area-inset-bottom)]'>
       <header className='flex flex-wrap items-end justify-between gap-3 max-xl:h-14 max-xl:shrink-0 max-xl:flex-nowrap max-xl:items-center max-xl:border-b max-xl:border-black/5 max-xl:px-3 dark:max-xl:border-white/10'>
         <div className='flex min-w-0 items-center gap-1'>
           <Button
@@ -1551,9 +1552,7 @@ export default function InboxPage() {
                       <CheckCircle className='mr-2 h-4 w-4' />
                       Resolve
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={() => runBulkAction("snoozed")}
-                    >
+                    <DropdownMenuItem onSelect={() => runBulkAction("snoozed")}>
                       <Clock3 className='mr-2 h-4 w-4' />
                       Snooze
                     </DropdownMenuItem>
@@ -1680,13 +1679,22 @@ export default function InboxPage() {
                             />
                             {conversation.status}
                             {conversation.isPinned && (
-                              <Pin className='ml-1 h-3 w-3' aria-label='Pinned' />
+                              <Pin
+                                className='ml-1 h-3 w-3'
+                                aria-label='Pinned'
+                              />
                             )}
                             {conversation.isMuted && (
-                              <BellOff className='ml-1 h-3 w-3' aria-label='Muted' />
+                              <BellOff
+                                className='ml-1 h-3 w-3'
+                                aria-label='Muted'
+                              />
                             )}
                             {conversation.isBlocked && (
-                              <Ban className='ml-1 h-3 w-3 text-red-500' aria-label='Blocked' />
+                              <Ban
+                                className='ml-1 h-3 w-3 text-red-500'
+                                aria-label='Blocked'
+                              />
                             )}
                           </span>
                         </span>
@@ -2421,6 +2429,7 @@ export default function InboxPage() {
                             side='top'
                             align='start'
                             collisionPadding={12}
+                            onInteractOutside={() => setShowEmoji(false)}
                             className='w-auto max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-xl border-0 bg-transparent p-0 shadow-xl'
                           >
                             <EmojiPicker
@@ -2428,7 +2437,11 @@ export default function InboxPage() {
                               autoFocusSearch
                               lazyLoadEmojis
                               searchPlaceholder='Search emojis'
-                              theme={"auto" as EmojiTheme}
+                              theme={
+                                (resolvedTheme === "dark"
+                                  ? "dark"
+                                  : "light") as EmojiTheme
+                              }
                               width='min(350px, calc(100vw - 1.5rem))'
                               height='min(420px, calc(100dvh - 7rem))'
                               previewConfig={{ showPreview: false }}
@@ -2497,7 +2510,7 @@ export default function InboxPage() {
             </>
           ) : (
             <div className='flex h-full flex-col items-center justify-center p-8 text-center'>
-              <span className='mb-5 flex h-52 w-auto items-center justify-center rounded-3xl shadow-sm ring-1 ring-black/5 bg-zinc-200 dark:ring-white/10'>
+              <span className='mb-5 flex h-52 w-auto items-center justify-center rounded-3xl bg-zinc-200 shadow-sm ring-1 ring-black/5 dark:ring-white/10'>
                 <Image
                   src='/chat.svg'
                   height='200'
