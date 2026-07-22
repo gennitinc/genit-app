@@ -1627,15 +1627,12 @@ export default function InboxPage() {
                             className='mt-3'
                           />
                         )}
-                        <div className='relative shrink-0 cursor-pointer'
-                        onClick={() => setShowDetails(true)}
-                        >
+                        <div className='relative shrink-0 cursor-pointer'>
                           {conversation.customerAvatar ? (
                             <img
                               src={conversation.customerAvatar}
                               alt=''
                               className='h-11 w-11 rounded-full object-cover'
-                              
                             />
                           ) : (
                             <span className='flex h-11 w-11 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'>
@@ -1875,9 +1872,19 @@ export default function InboxPage() {
                       src={activeConversation.customerAvatar}
                       alt=''
                       className='h-9 w-9 rounded-full object-cover'
+                      onClick={() => {
+                        setActiveId(activeConversation._id);
+                        setShowDetails(true);
+                      }}
                     />
                   ) : (
-                    <span className='flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'>
+                    <span
+                      className='flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'
+                      onClick={() => {
+                        setActiveId(activeConversation._id);
+                        setShowDetails(true);
+                      }}
+                    >
                       {activeConversation.customerName.charAt(0)}
                     </span>
                   )}
