@@ -1871,7 +1871,7 @@ export default function InboxPage() {
                     <img
                       src={activeConversation.customerAvatar}
                       alt=''
-                      className='h-9 w-9 rounded-full object-cover'
+                      className='h-9 w-9 rounded-full object-cover cursor-pointer'
                       onClick={() => {
                         setActiveId(activeConversation._id);
                         setShowDetails(true);
@@ -1879,7 +1879,7 @@ export default function InboxPage() {
                     />
                   ) : (
                     <span
-                      className='flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'
+                      className='flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800 cursor-pointer'
                       onClick={() => {
                         setActiveId(activeConversation._id);
                         setShowDetails(true);
