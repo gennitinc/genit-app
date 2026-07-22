@@ -61,6 +61,7 @@ const plansDev = [
     },
     features: [
       "1,200 credits per month",
+      "5 GB organization media storage",
       "HD & 4K image generation",
       "Video & ad creation",
       "Brand kit access",
@@ -79,6 +80,7 @@ const plansDev = [
     },
     features: [
       "2,000 credits per month",
+      "10 GB organization media storage",
       "HD & 4K image generation",
       "Commercial video creation",
       "Priority support",
@@ -98,6 +100,7 @@ const plansDev = [
     },
     features: [
       "5,000 credits per month",
+      "25 GB organization media storage",
       "4K ultra exports",
       "Full commercial licensing",
       "Dedicated support",
@@ -117,6 +120,8 @@ const plansDev = [
     },
     features: [
       "Custom credit allowance",
+      "100 GB shared organization media storage",
+      "Members keep their personal plans",
       "Full API access",
       "Dedicated account manager",
       "SLA & custom contracts",
@@ -175,6 +180,7 @@ const plansProd = [
     },
     features: [
       "1,200 credits per month",
+      "5 GB organization media storage",
       "HD & 4K image generation",
       "Video & ad creation",
       "Brand kit access",
@@ -193,6 +199,7 @@ const plansProd = [
     },
     features: [
       "2,000 credits per month",
+      "10 GB organization media storage",
       "HD & 4K image generation",
       "Commercial video creation",
       "Priority support",
@@ -212,6 +219,7 @@ const plansProd = [
     },
     features: [
       "5,000 credits per month",
+      "25 GB organization media storage",
       "4K ultra exports",
       "Full commercial licensing",
       "Dedicated support",
@@ -231,6 +239,8 @@ const plansProd = [
     },
     features: [
       "Custom credit allowance",
+      "100 GB shared organization media storage",
+      "Members keep their personal plans",
       "Full API access",
       "Dedicated account manager",
       "SLA & custom contracts",

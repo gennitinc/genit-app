@@ -8,10 +8,13 @@ import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
+  Download,
   Eye,
+  File,
+  Grid2X2,
   Image as ImageIcon,
   Library,
-  Loader2,
+  List,
   Trash2,
   UploadIcon,
 } from "lucide-react";
@@ -19,7 +22,8 @@ import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
 
 const formatFileSize = (bytes?: number) => {
-  if (!bytes) return "Unknown";
+  if (bytes === undefined) return "Unknown";
+  if (bytes === 0) return "0 B";
   const units = ["B", "KB", "MB", "GB"];
   const unitIndex = Math.min(
     Math.floor(Math.log(bytes) / Math.log(1024)),
@@ -34,6 +38,17 @@ export default function BlogLibraryPage() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [scope, setScope] = useState<"organization" | "personal">("personal");
+  const [view, setView] = useState<"grid" | "list">("grid");
+  const [storage, setStorage] = useState<{
+    plan: string;
+    scope: "organization" | "personal";
+    billedTo: "organization-owner" | "user";
+    shared: boolean;
+    usedBytes: number;
+    limitBytes: number;
+    remainingBytes: number;
+    usagePercent: number;
+  } | null>(null);
   const [selectedAsset, setSelectedAsset] = useState<MediaAsset | null>(null);
   const [deleteAsset, setDeleteAsset] = useState<MediaAsset | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -55,6 +70,7 @@ export default function BlogLibraryPage() {
       const response = await apiResponse.get("/blog/library");
       setAssets(response.data.assets || []);
       setScope(response.data.scope || "personal");
+      setStorage(response.data.storage || null);
     } catch (error: any) {
       toast.error(
         error.response?.data?.message || "Could not load media library"
@@ -73,28 +89,29 @@ export default function BlogLibraryPage() {
     setUploading(true);
     try {
       const selectedFiles = Array.from(files);
-      const results = await Promise.allSettled(
-        selectedFiles.map((file) => {
+      let uploadedCount = 0;
+      let uploadError = "";
+      for (const file of selectedFiles) {
+        try {
           const data = new FormData();
           data.append("file", file);
-          return apiResponse.post("/blog/upload", data, {
+          await apiResponse.post("/blog/upload", data, {
             headers: { "Content-Type": "multipart/form-data" },
           });
-        })
-      );
-      const uploadedCount = results.filter(
-        (result) => result.status === "fulfilled"
-      ).length;
-      const failedCount = results.length - uploadedCount;
+          uploadedCount += 1;
+        } catch (error: any) {
+          uploadError = error.response?.data?.message || "Upload failed";
+          if (error.response?.status === 413) break;
+        }
+      }
+      const failedCount = selectedFiles.length - uploadedCount;
       if (uploadedCount) {
         toast.success(
           `${uploadedCount} media ${uploadedCount === 1 ? "item" : "items"} added`
         );
       }
       if (failedCount) {
-        toast.error(
-          `${failedCount} ${failedCount === 1 ? "upload" : "uploads"} failed`
-        );
+        toast.error(uploadError || `${failedCount} uploads failed`);
       }
       await loadAssets();
     } catch (error: any) {
@@ -108,12 +125,29 @@ export default function BlogLibraryPage() {
   const remove = async (asset: MediaAsset) => {
     try {
       await apiResponse.delete(`/blog/library/${asset._id}`);
-      setAssets((current) => current.filter((item) => item._id !== asset._id));
+      await loadAssets();
       toast.success("Media item deleted");
       return true;
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Delete failed");
       return false;
+    }
+  };
+
+  const download = async (asset: MediaAsset) => {
+    try {
+      const response = await apiResponse.get(
+        `/blog/library/${encodeURIComponent(asset._id)}/download`,
+        { responseType: "blob" }
+      );
+      const url = URL.createObjectURL(response.data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = asset.name;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Download failed");
     }
   };
 
@@ -150,7 +184,12 @@ export default function BlogLibraryPage() {
               }
             />
           ) : (
-            <ImageIcon className='h-12 w-12 text-zinc-500' />
+            <div className='flex flex-col items-center gap-3 text-zinc-500'>
+              <File className='h-14 w-14' />
+              <span className='max-w-48 truncate text-xs font-medium uppercase'>
+                {selectedAsset.mimeType.split("/")[1] || "File"}
+              </span>
+            </div>
           )}
         </div>
 
@@ -163,13 +202,22 @@ export default function BlogLibraryPage() {
                   {selectedAsset.source} {selectedAsset.mimeType.split("/")[0]}
                 </span>
               </span>
-              <button
-                type='button'
-                onClick={() => setDeleteAsset(selectedAsset)}
-                className='flex h-8 items-center justify-center gap-1.5 rounded-full bg-red-500/10 px-3 text-xs font-medium text-red-600 transition hover:bg-red-500/20 dark:text-red-400'
-              >
-                <Trash2 className='h-3.5 w-3.5' /> Delete
-              </button>
+              <div className='flex items-center gap-2'>
+                <button
+                  type='button'
+                  onClick={() => download(selectedAsset)}
+                  className='flex h-8 items-center justify-center gap-1.5 rounded-full bg-indigo-500/10 px-3 text-xs font-medium text-indigo-600 transition hover:bg-indigo-500/20 dark:text-indigo-300'
+                >
+                  <Download className='h-3.5 w-3.5' /> Download
+                </button>
+                <button
+                  type='button'
+                  onClick={() => setDeleteAsset(selectedAsset)}
+                  className='flex h-8 items-center justify-center gap-1.5 rounded-full bg-red-500/10 px-3 text-xs font-medium text-red-600 transition hover:bg-red-500/20 dark:text-red-400'
+                >
+                  <Trash2 className='h-3.5 w-3.5' /> Delete
+                </button>
+              </div>
             </div>
             <p className='text-foreground mt-4 text-xl font-semibold tracking-tight break-words dark:text-white'>
               {selectedAsset.name}
@@ -184,16 +232,19 @@ export default function BlogLibraryPage() {
                   {formatFileSize(selectedAsset.size)}
                 </span>
               </div>
-              <div className='flex items-center justify-between text-xs'>
-                <span className='text-muted-foreground dark:text-white/60'>
-                  Dimensions
-                </span>
-                <span className='text-foreground font-medium dark:text-white/90'>
-                  {dimensions
-                    ? `${dimensions.width} × ${dimensions.height}px`
-                    : "Loading…"}
-                </span>
-              </div>
+              {(selectedAsset.mimeType.startsWith("image") ||
+                selectedAsset.mimeType.startsWith("video")) && (
+                <div className='flex items-center justify-between text-xs'>
+                  <span className='text-muted-foreground dark:text-white/60'>
+                    Dimensions
+                  </span>
+                  <span className='text-foreground font-medium dark:text-white/90'>
+                    {dimensions
+                      ? `${dimensions.width} × ${dimensions.height}px`
+                      : "Loading…"}
+                  </span>
+                </div>
+              )}
               {selectedAsset.mimeType.startsWith("video") && (
                 <div className='flex items-center justify-between text-xs'>
                   <span className='text-muted-foreground dark:text-white/60'>
@@ -238,7 +289,7 @@ export default function BlogLibraryPage() {
 
   return (
     <div className='mx-auto max-w-6xl space-y-6'>
-      <div className='flex items-center justify-between pb-5'>
+      <div className='flex flex-wrap items-end justify-between gap-4 pb-2'>
         <div>
           <h1 className='text-foreground text-xl font-bold'>Media Library</h1>
           <p className='mt-1 text-xs text-zinc-400'>
@@ -247,11 +298,31 @@ export default function BlogLibraryPage() {
               : "Your personal uploads and generated media"}
           </p>
         </div>
-        <>
+        <div className='flex items-center gap-2'>
+          <div className='flex rounded-md bg-zinc-100 p-1 dark:bg-zinc-900'>
+            <button
+              type='button'
+              onClick={() => setView("grid")}
+              aria-label='Grid view'
+              aria-pressed={view === "grid"}
+              className={`rounded p-1.5 ${view === "grid" ? "bg-white shadow-sm dark:bg-zinc-800" : "text-zinc-500"}`}
+            >
+              <Grid2X2 className='h-4 w-4' />
+            </button>
+            <button
+              type='button'
+              onClick={() => setView("list")}
+              aria-label='List view'
+              aria-pressed={view === "list"}
+              className={`rounded p-1.5 ${view === "list" ? "bg-white shadow-sm dark:bg-zinc-800" : "text-zinc-500"}`}
+            >
+              <List className='h-4 w-4' />
+            </button>
+          </div>
           <input
             ref={inputRef}
             type='file'
-            accept='image/*,video/*'
+            accept='image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip'
             multiple
             className='hidden'
             onChange={(event) => upload(event.target.files)}
@@ -268,8 +339,34 @@ export default function BlogLibraryPage() {
             )}{" "}
             <span className='hidden lg:flex'>Upload</span>
           </button>
-        </>
+        </div>
       </div>
+      {storage && (
+        <div className='rounded-xl border border-black/5 bg-zinc-50 p-3 dark:border-white/10 dark:bg-zinc-900/60'>
+          <div className='mb-2 flex items-center justify-between gap-3 text-xs'>
+            <span className='font-medium'>
+              {storage.plan} {storage.shared ? "organization" : "personal"}{" "}
+              storage
+            </span>
+            <span className='text-muted-foreground'>
+              {formatFileSize(storage.usedBytes)} of{" "}
+              {formatFileSize(storage.limitBytes)}
+            </span>
+          </div>
+          <div className='h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800'>
+            <div
+              className='h-full rounded-full bg-indigo-500 transition-[width]'
+              style={{ width: `${storage.usagePercent}%` }}
+            />
+          </div>
+          {storage.shared && (
+            <p className='text-muted-foreground mt-2 text-xs'>
+              Shared by all organization members and billed to the organization
+              owner.
+            </p>
+          )}
+        </div>
+      )}
       {loading ? (
         <div className='flex h-64 items-center justify-center'>
           <LoadingFileLoader />
@@ -288,38 +385,103 @@ export default function BlogLibraryPage() {
             Media Gallery
           </h2>
           <div className='mx-auto max-w-7xl'>
-            <div className='columns-2 space-y-4 md:columns-3 lg:columns-4'>
-              {assets.map((asset) => (
-                <div
-                  key={asset._id}
-                  className='group relative block w-full break-inside-avoid overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-900'
-                >
-                  {asset.mimeType.startsWith("image") ? (
-                    <img
-                      src={asset.url}
-                      alt={asset.name}
-                      loading='lazy'
-                      className='h-auto max-w-full object-cover object-top transition-transform duration-300 group-hover:scale-105'
-                    />
-                  ) : asset.mimeType.startsWith("video") ? (
-                    <div className='relative aspect-video overflow-hidden'>
-                      <video
+            {view === "grid" ? (
+              <div className='columns-2 space-y-4 md:columns-3 lg:columns-4'>
+                {assets.map((asset) => (
+                  <div
+                    key={asset._id}
+                    className='group relative block w-full break-inside-avoid overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-900'
+                  >
+                    {asset.mimeType.startsWith("image") ? (
+                      <img
                         src={asset.url}
-                        muted
-                        playsInline
-                        preload='metadata'
-                        className='h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-105'
+                        alt={asset.name}
+                        loading='lazy'
+                        className='h-auto max-w-full object-cover object-top transition-transform duration-300 group-hover:scale-105'
                       />
-                      <span className='absolute bottom-2 left-2 rounded-full bg-black/65 px-2 py-1 text-[10px] font-medium text-white backdrop-blur-sm'>
-                        Video
-                      </span>
+                    ) : asset.mimeType.startsWith("video") ? (
+                      <div className='relative aspect-video overflow-hidden'>
+                        <video
+                          src={asset.url}
+                          muted
+                          playsInline
+                          preload='metadata'
+                          className='h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-105'
+                        />
+                        <span className='absolute bottom-2 left-2 rounded-full bg-black/65 px-2 py-1 text-[10px] font-medium text-white backdrop-blur-sm'>
+                          Video
+                        </span>
+                      </div>
+                    ) : (
+                      <div className='flex aspect-square flex-col items-center justify-center gap-2 p-4 text-center'>
+                        <File className='h-9 w-9 text-zinc-400' />
+                        <span className='line-clamp-2 text-xs font-medium text-zinc-600 dark:text-zinc-300'>
+                          {asset.name}
+                        </span>
+                      </div>
+                    )}
+                    <div className='absolute inset-0 flex items-center justify-center gap-2 bg-black/0 opacity-0 transition duration-200 group-focus-within:bg-black/45 group-focus-within:opacity-100 group-hover:bg-black/45 group-hover:opacity-100'>
+                      <button
+                        type='button'
+                        aria-label={`Preview ${asset.name}`}
+                        onClick={() => {
+                          setDimensions(null);
+                          setSelectedAsset(asset);
+                        }}
+                        className='rounded-full bg-white/95 p-2.5 text-zinc-900 shadow-lg transition hover:scale-105 hover:bg-white focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:outline-none'
+                      >
+                        <Eye className='h-4 w-4' />
+                      </button>
+                      <button
+                        type='button'
+                        aria-label={`Delete ${asset.name}`}
+                        onClick={() => setDeleteAsset(asset)}
+                        className='rounded-full bg-white/95 p-2.5 text-red-600 shadow-lg transition hover:scale-105 hover:bg-red-50 focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:outline-none'
+                      >
+                        <Trash2 className='h-4 w-4' />
+                      </button>
                     </div>
-                  ) : (
-                    <div className='flex aspect-square items-center justify-center'>
-                      <ImageIcon className='h-8 w-8 text-zinc-400' />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className='overflow-hidden rounded-xl border border-black/5 dark:border-white/10'>
+                {assets.map((asset) => (
+                  <div
+                    key={asset._id}
+                    className='flex items-center gap-3 border-b border-black/5 p-3 last:border-b-0 dark:border-white/10'
+                  >
+                    <div className='flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-900'>
+                      {asset.mimeType.startsWith("image") ? (
+                        <img
+                          src={asset.url}
+                          alt=''
+                          loading='lazy'
+                          className='h-full w-full object-cover'
+                        />
+                      ) : asset.mimeType.startsWith("video") ? (
+                        <video
+                          src={asset.url}
+                          muted
+                          playsInline
+                          preload='metadata'
+                          className='h-full w-full object-cover'
+                        />
+                      ) : (
+                        <File className='h-5 w-5 text-zinc-400' />
+                      )}
                     </div>
-                  )}
-                  <div className='absolute inset-0 flex items-center justify-center gap-2 bg-black/0 opacity-0 transition duration-200 group-focus-within:bg-black/45 group-focus-within:opacity-100 group-hover:bg-black/45 group-hover:opacity-100'>
+                    <div className='min-w-0 flex-1'>
+                      <p className='truncate text-sm font-medium'>
+                        {asset.name}
+                      </p>
+                      <p className='text-muted-foreground mt-0.5 text-xs'>
+                        {asset.mimeType} · {formatFileSize(asset.size)} ·{" "}
+                        {new Intl.DateTimeFormat(undefined, {
+                          dateStyle: "medium",
+                        }).format(new Date(asset.createdAt))}
+                      </p>
+                    </div>
                     <button
                       type='button'
                       aria-label={`Preview ${asset.name}`}
@@ -327,22 +489,30 @@ export default function BlogLibraryPage() {
                         setDimensions(null);
                         setSelectedAsset(asset);
                       }}
-                      className='rounded-full bg-white/95 p-2.5 text-zinc-900 shadow-lg transition hover:scale-105 hover:bg-white focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:outline-none'
+                      className='rounded-full p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900'
                     >
                       <Eye className='h-4 w-4' />
                     </button>
                     <button
                       type='button'
+                      aria-label={`Download ${asset.name}`}
+                      onClick={() => download(asset)}
+                      className='rounded-full p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900'
+                    >
+                      <Download className='h-4 w-4' />
+                    </button>
+                    <button
+                      type='button'
                       aria-label={`Delete ${asset.name}`}
                       onClick={() => setDeleteAsset(asset)}
-                      className='rounded-full bg-white/95 p-2.5 text-red-600 shadow-lg transition hover:scale-105 hover:bg-red-50 focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:outline-none'
+                      className='rounded-full p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30'
                     >
                       <Trash2 className='h-4 w-4' />
                     </button>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       )}

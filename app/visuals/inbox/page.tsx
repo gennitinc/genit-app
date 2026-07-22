@@ -88,6 +88,11 @@ import {
   uploadInboxAttachment,
 } from "@/lib/inbox-api";
 import {
+  EMPTY_INBOX_DRAFT,
+  type InboxDrafts,
+  updateInboxDraft,
+} from "@/lib/inbox-drafts";
+import {
   type IntegrationConnection,
   type IntegrationPlatform,
   isMetaSurface,
@@ -480,8 +485,31 @@ export default function InboxPage() {
   const [folder, setFolder] = useState("inbox");
   const [search, setSearch] = useState("");
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [reply, setReply] = useState("");
-  const [attachments, setAttachments] = useState<InboxAttachment[]>([]);
+  const [drafts, setDrafts] = useState<InboxDrafts>({});
+  const { reply, attachments } = activeId
+    ? (drafts[activeId] ?? EMPTY_INBOX_DRAFT)
+    : EMPTY_INBOX_DRAFT;
+  const setReply = (reply: string) => {
+    const conversationId = activeId;
+    if (!conversationId) return;
+    setDrafts((current) =>
+      updateInboxDraft(current, conversationId, { reply })
+    );
+  };
+  const setAttachments = (
+    next:
+      | InboxAttachment[]
+      | ((attachments: InboxAttachment[]) => InboxAttachment[])
+  ) => {
+    const conversationId = activeId;
+    if (!conversationId) return;
+    setDrafts((current) => {
+      const attachments = current[conversationId]?.attachments ?? [];
+      return updateInboxDraft(current, conversationId, {
+        attachments: typeof next === "function" ? next(attachments) : next,
+      });
+    });
+  };
   const [showEmoji, setShowEmoji] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isWriting, setIsWriting] = useState(false);
@@ -867,8 +895,6 @@ export default function InboxPage() {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   useEffect(() => {
-    setReply("");
-    setAttachments([]);
     setShowEmoji(false);
   }, [activeId]);
 
