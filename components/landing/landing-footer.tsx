@@ -328,7 +328,7 @@ export function LandingFooter() {
                   </span>
                 </Link>
                 <p className='mb-1 w-full text-gray-400 md:max-w-[60vw] lg:max-w-60'>
-                  Brand tailored media just got easier and faster
+                  Autonomous AI marketing agents that work 24/7, so you don't have to.
                 </p>
                 <div className='mt-8 mb-6 flex items-center gap-3'>
                   <a
