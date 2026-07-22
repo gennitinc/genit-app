@@ -124,8 +124,9 @@ export default function BlogLibraryPage() {
 
   const remove = async (asset: MediaAsset) => {
     try {
-      await apiResponse.delete(`/blog/library/${asset._id}`);
-      await loadAssets();
+      const response = await apiResponse.delete(`/blog/library/${asset._id}`);
+      setAssets((current) => current.filter((item) => item._id !== asset._id));
+      if (response.data.storage) setStorage(response.data.storage);
       toast.success("Media item deleted");
       return true;
     } catch (error: any) {
