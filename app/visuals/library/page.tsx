@@ -29,7 +29,7 @@ const formatFileSize = (bytes?: number) => {
     Math.floor(Math.log(bytes) / Math.log(1024)),
     units.length - 1
   );
-  return `${(bytes / 1024 ** unitIndex).toFixed(unitIndex ? 1 : 0)} ${units[unitIndex]}`;
+  return `${(bytes / 1024 ** unitIndex).toFixed(unitIndex >= 2 ? 2 : unitIndex)} ${units[unitIndex]}`;
 };
 
 export default function BlogLibraryPage() {
@@ -95,9 +95,13 @@ export default function BlogLibraryPage() {
         try {
           const data = new FormData();
           data.append("file", file);
-          await apiResponse.post("/blog/upload", data, {
+          const response = await apiResponse.post("/blog/upload", data, {
             headers: { "Content-Type": "multipart/form-data" },
           });
+          if (response.data.asset) {
+            setAssets((current) => [response.data.asset, ...current]);
+          }
+          if (response.data.storage) setStorage(response.data.storage);
           uploadedCount += 1;
         } catch (error: any) {
           uploadError = error.response?.data?.message || "Upload failed";
@@ -113,7 +117,6 @@ export default function BlogLibraryPage() {
       if (failedCount) {
         toast.error(uploadError || `${failedCount} uploads failed`);
       }
-      await loadAssets();
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Upload failed");
     } finally {
