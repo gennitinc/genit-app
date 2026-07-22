@@ -1633,6 +1633,7 @@ export default function InboxPage() {
                               src={conversation.customerAvatar}
                               alt=''
                               className='h-11 w-11 rounded-full object-cover'
+                              onClick={() => setShowDetails(true)}
                             />
                           ) : (
                             <span className='flex h-11 w-11 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'>
