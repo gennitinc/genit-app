@@ -262,7 +262,7 @@ function EmailMessageBody({
       const body = document.body;
       setHeight(
         Math.max(
-          120,
+          1,
           document.documentElement.scrollHeight,
           body.scrollHeight,
           body.offsetHeight
@@ -357,7 +357,7 @@ function EmailMessageBody({
         aria-hidden={height === null}
         tabIndex={height === null ? -1 : undefined}
         className={`block w-full border-0 bg-white ${height === null ? "invisible" : "visible"}`}
-        style={{ height: height ?? "60dvh" }}
+        style={{ height: height ?? 1 }}
         onLoad={(event) => initializeFrame(event.currentTarget)}
       />
     </div>
