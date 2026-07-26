@@ -11,6 +11,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import BrandSettings from "@/components/user-settings/brand-settings";
@@ -807,24 +814,32 @@ const SettingsHome = () => {
                         <Label htmlFor='auto-goal-metric' className='text-xs'>
                           Metric
                         </Label>
-                        <select
-                          id='auto-goal-metric'
-                          className='border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-[3px]'
+                        <Select
                           value={goalMetric}
-                          onChange={(event) =>
-                            setGoalMetric(
-                              event.target.value as typeof goalMetric
-                            )
+                          onValueChange={(value) =>
+                            setGoalMetric(value as typeof goalMetric)
                           }
                         >
-                          <option value='impressions'>Impressions</option>
-                          <option value='clicks'>Clicks</option>
-                          <option value='conversions'>Conversions</option>
-                          <option value='conversionValue'>
-                            Conversion value
-                          </option>
-                          <option value='roi'>ROI</option>
-                        </select>
+                          <SelectTrigger
+                            id='auto-goal-metric'
+                            className='bg-background h-10 w-full'
+                          >
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value='impressions'>
+                              Impressions
+                            </SelectItem>
+                            <SelectItem value='clicks'>Clicks</SelectItem>
+                            <SelectItem value='conversions'>
+                              Conversions
+                            </SelectItem>
+                            <SelectItem value='conversionValue'>
+                              Conversion value
+                            </SelectItem>
+                            <SelectItem value='roi'>ROI</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className='space-y-1.5'>
                         <Label htmlFor='auto-goal-target' className='text-xs'>
@@ -986,22 +1001,34 @@ const SettingsHome = () => {
                         >
                           Success metric
                         </Label>
-                        <select
-                          id='auto-experiment-metric'
-                          className='border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-[3px]'
+                        <Select
                           value={experimentMetric}
-                          onChange={(event) =>
+                          onValueChange={(value) =>
                             setExperimentMetric(
-                              event.target.value as typeof experimentMetric
+                              value as typeof experimentMetric
                             )
                           }
                         >
-                          <option value='impressions'>Impressions</option>
-                          <option value='clicks'>Clicks</option>
-                          <option value='conversions'>Conversions</option>
-                          <option value='conversionValue'>Value</option>
-                          <option value='roi'>ROI</option>
-                        </select>
+                          <SelectTrigger
+                            id='auto-experiment-metric'
+                            className='bg-background h-10 w-full'
+                          >
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value='impressions'>
+                              Impressions
+                            </SelectItem>
+                            <SelectItem value='clicks'>Clicks</SelectItem>
+                            <SelectItem value='conversions'>
+                              Conversions
+                            </SelectItem>
+                            <SelectItem value='conversionValue'>
+                              Conversion value
+                            </SelectItem>
+                            <SelectItem value='roi'>ROI</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className='space-y-1.5'>
                         <Label
@@ -1026,37 +1053,47 @@ const SettingsHome = () => {
                         <Label htmlFor='auto-variant-a' className='text-xs'>
                           Variant A
                         </Label>
-                        <select
-                          id='auto-variant-a'
-                          className='border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-[3px]'
-                          value={variantA}
-                          onChange={(event) => setVariantA(event.target.value)}
-                        >
-                          <option value=''>Choose campaign</option>
-                          {autoCampaigns.map((campaign) => (
-                            <option key={campaign._id} value={campaign._id}>
-                              {campaign.name}
-                            </option>
-                          ))}
-                        </select>
+                        <Select value={variantA} onValueChange={setVariantA}>
+                          <SelectTrigger
+                            id='auto-variant-a'
+                            className='bg-background h-10 w-full'
+                          >
+                            <SelectValue placeholder='Choose campaign' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {autoCampaigns.map((campaign) => (
+                              <SelectItem
+                                key={campaign._id}
+                                value={campaign._id}
+                              >
+                                {campaign.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className='space-y-1.5'>
                         <Label htmlFor='auto-variant-b' className='text-xs'>
                           Variant B
                         </Label>
-                        <select
-                          id='auto-variant-b'
-                          className='border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-[3px]'
-                          value={variantB}
-                          onChange={(event) => setVariantB(event.target.value)}
-                        >
-                          <option value=''>Choose campaign</option>
-                          {autoCampaigns.map((campaign) => (
-                            <option key={campaign._id} value={campaign._id}>
-                              {campaign.name}
-                            </option>
-                          ))}
-                        </select>
+                        <Select value={variantB} onValueChange={setVariantB}>
+                          <SelectTrigger
+                            id='auto-variant-b'
+                            className='bg-background h-10 w-full'
+                          >
+                            <SelectValue placeholder='Choose campaign' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {autoCampaigns.map((campaign) => (
+                              <SelectItem
+                                key={campaign._id}
+                                value={campaign._id}
+                              >
+                                {campaign.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                       <Button
                         className='active:scale-[0.97] md:col-span-2 md:justify-self-end'
