@@ -40,6 +40,8 @@ export function AppSidebar({
 
   const isChatIdPage = !!params.id && pathname.startsWith("/chat");
   const isVisualsPage = pathname.startsWith("/visuals");
+  const keepsDesktopSidebarCollapsed =
+    isVisualsPage || pathname.startsWith("/user/settings");
 
   const lastCheckedPathname = useRef<string | null>(null);
 
@@ -49,7 +51,7 @@ export function AppSidebar({
     if (pathname !== lastCheckedPathname.current) {
       lastCheckedPathname.current = pathname;
 
-      if (isVisualsPage && !isMobile) {
+      if (keepsDesktopSidebarCollapsed && !isMobile) {
         setOpen(false);
       } else if (isChatIdPage && !isMobile && !isLargeDesktop) {
         setOpen(false);
@@ -57,7 +59,7 @@ export function AppSidebar({
     }
   }, [
     pathname,
-    isVisualsPage,
+    keepsDesktopSidebarCollapsed,
     isChatIdPage,
     isMobile,
     isLargeDesktop,
