@@ -822,19 +822,18 @@ const SettingsHome = () => {
 
             {activeTab === "automation" && (
               <Card className='relative overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
-                <CardHeader className='border-b border-zinc-200 bg-zinc-50/60 p-5 sm:p-6 dark:border-white/10 dark:bg-white/[0.02]'>
+                <CardHeader className='border-b border-zinc-200 bg-zinc-50/60 p-5 sm:p-6 py-2 sm-py-2 dark:border-white/10 dark:bg-white/[0.02]'>
                   <div className='flex items-start justify-between gap-4'>
                     <div className='flex min-w-0 items-start gap-3'>
                       <div className='bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-xl'>
-                        <Bot className='h-5 w-5' />
+                        <ArrowDownUp className='h-5 w-5' />
                       </div>
                       <div>
                         <CardTitle className='text-xl'>
                           Genit Auto marketing loop
                         </CardTitle>
                         <CardDescription className='mt-1 max-w-2xl text-sm leading-6'>
-                          Reviews active campaigns and performance, then
-                          improves recommendations until you turn Auto off.
+                          Reviews active campaigns and performance
                         </CardDescription>
                       </div>
                     </div>
