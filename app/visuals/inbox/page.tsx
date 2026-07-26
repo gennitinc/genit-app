@@ -76,6 +76,10 @@ import {
 } from "@/hooks/use-inbox";
 import { useIntegrations } from "@/hooks/use-integrations";
 import {
+  findQuotedTextStart,
+  isOutlookQuoteHeader,
+} from "@/lib/email-quoted-content";
+import {
   type InboxAttachment,
   type InboxConversation,
   type InboxFilters,
@@ -230,6 +234,45 @@ function EmailMessageBody({
       FORBID_TAGS: ["base", "form", "iframe", "object", "embed"],
     });
     const parsed = new DOMParser().parseFromString(sanitized, "text/html");
+    const collapseQuote = (nodes: Element[]) => {
+      const first = nodes[0];
+      if (!first || first.closest("details[data-email-quote]")) return;
+      const details = parsed.createElement("details");
+      details.setAttribute("data-email-quote", "");
+      const summary = parsed.createElement("summary");
+      summary.textContent = "Show quoted text";
+      first.before(details);
+      details.append(summary, ...nodes);
+    };
+    const quoteSelector = ".gmail_quote, blockquote[type='cite']";
+    Array.from(parsed.querySelectorAll(quoteSelector))
+      .filter((quote) => !quote.parentElement?.closest(quoteSelector))
+      .forEach((quote) => collapseQuote([quote]));
+
+    const outlookMarker = parsed.querySelector(
+      "#divRplyFwdMsg, .OutlookMessageHeader"
+    );
+    const outlookDivider = outlookMarker?.previousElementSibling?.matches("hr")
+      ? outlookMarker.previousElementSibling
+      : Array.from(parsed.querySelectorAll("hr")).find((divider) =>
+          isOutlookQuoteHeader(
+            Array.from(divider.parentElement?.children || [])
+              .slice(
+                Array.from(divider.parentElement?.children || []).indexOf(
+                  divider
+                ) + 1
+              )
+              .map((node) => node.textContent || "")
+              .join("\n")
+              .slice(0, 1_000)
+          )
+        );
+    const outlookStart = outlookDivider || outlookMarker;
+    if (outlookStart?.parentElement) {
+      const siblings = Array.from(outlookStart.parentElement.children);
+      collapseQuote(siblings.slice(siblings.indexOf(outlookStart)));
+    }
+
     parsed.querySelectorAll("a").forEach((link) => {
       const href = link.getAttribute("href") || "";
       if (!/^(https?:|mailto:|tel:)/i.test(href)) link.removeAttribute("href");
@@ -323,15 +366,33 @@ function EmailMessageBody({
   );
 
   const srcDoc = safeHtml
-    ? `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: http: data:; style-src 'unsafe-inline'; font-src https: http: data:;"><base target="_blank"><style>html{background:#fff;color:#18181b}html,body{overflow:hidden}body{box-sizing:border-box;margin:0;padding:20px;font:14px/1.55 Arial,sans-serif;overflow-wrap:anywhere}img{max-width:100%;height:auto}img[data-email-image-pending]{background:#f4f4f5}table{max-width:100%}a{color:#4f46e5}</style></head><body>${safeHtml}</body></html>`
+    ? `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: http: data:; style-src 'unsafe-inline'; font-src https: http: data:;"><base target="_blank"><style>html{background:#fff;color:#18181b}html,body{overflow:hidden}body{box-sizing:border-box;margin:0;padding:20px;font:14px/1.55 Arial,sans-serif;overflow-wrap:anywhere}img{max-width:100%;height:auto}img[data-email-image-pending]{background:#f4f4f5}table{max-width:100%}a{color:#4f46e5}details[data-email-quote]{margin-top:12px;border-top:1px solid #e4e4e7;padding-top:8px}details[data-email-quote]>summary{cursor:pointer;color:#71717a;font-size:12px;font-weight:600;user-select:none}details[data-email-quote][open]>summary{margin-bottom:8px}</style></head><body>${safeHtml}</body></html>`
     : "";
 
-  if (!safeHtml)
+  if (!safeHtml) {
+    const quotedTextStart = findQuotedTextStart(fallback);
+    const visibleText =
+      quotedTextStart >= 0
+        ? fallback.slice(0, quotedTextStart).trim()
+        : fallback;
+    const quotedText =
+      quotedTextStart >= 0 ? fallback.slice(quotedTextStart).trim() : "";
     return (
       <div className='px-4 py-3 wrap-anywhere whitespace-pre-wrap'>
-        {fallback}
+        {visibleText}
+        {quotedText && (
+          <details className='text-muted-foreground mt-3 border-t pt-2 text-xs'>
+            <summary className='cursor-pointer font-semibold'>
+              Show quoted text
+            </summary>
+            <div className='text-foreground mt-2 whitespace-pre-wrap'>
+              {quotedText}
+            </div>
+          </details>
+        )}
       </div>
     );
+  }
 
   return (
     <div className='relative min-w-0 overflow-hidden bg-white text-zinc-900'>
