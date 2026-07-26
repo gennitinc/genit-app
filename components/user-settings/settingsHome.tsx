@@ -713,28 +713,48 @@ const SettingsHome = () => {
             {activeTab === "brand" && <BrandSettings />}
 
             {activeTab === "automation" && (
-              <Card className='relative overflow-hidden'>
+              <Card className='border-border/70 bg-card/70 relative overflow-hidden shadow-sm'>
                 <GradientFrame />
-                <CardHeader>
-                  <CardTitle className='flex items-center gap-2'>
-                    <Bot className='h-5 w-5' />
-                    Genit Auto marketing loop
-                  </CardTitle>
-                  <CardDescription>
-                    Continuously reviews active campaigns and performance data,
-                    then refreshes recommendations until you turn Auto off.
-                  </CardDescription>
+                <CardHeader className='bg-muted/20 border-b p-5 sm:p-6'>
+                  <div className='flex items-start justify-between gap-4'>
+                    <div className='flex min-w-0 items-start gap-3'>
+                      <div className='bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-xl'>
+                        <Bot className='h-5 w-5' />
+                      </div>
+                      <div>
+                        <CardTitle className='text-xl'>
+                          Genit Auto marketing loop
+                        </CardTitle>
+                        <CardDescription className='mt-1 max-w-2xl text-sm leading-6'>
+                          Reviews active campaigns and performance, then
+                          improves recommendations until you turn Auto off.
+                        </CardDescription>
+                      </div>
+                    </div>
+                    <Badge
+                      variant={
+                        currentOrg?.autoModeEnabled ? "secondary" : "outline"
+                      }
+                      className='shrink-0'
+                    >
+                      {currentOrg?.autoModeEnabled ? "Running" : "Paused"}
+                    </Badge>
+                  </div>
                 </CardHeader>
-                <CardContent className='space-y-6'>
-                  <div className='flex items-center justify-between gap-6'>
-                    <div>
-                      <h4 className='font-medium'>Run autonomously</h4>
-                      <p className='text-muted-foreground text-sm'>
-                        Uses your brand, GTM campaigns, posts, email activity,
+                <CardContent className='space-y-4 p-4 sm:p-6'>
+                  <div className='bg-background/60 flex items-center justify-between gap-5 rounded-xl border p-4'>
+                    <div className='min-w-0'>
+                      <h4 className='text-sm font-semibold'>
+                        Run autonomously
+                      </h4>
+                      <p className='text-muted-foreground mt-0.5 max-w-2xl text-sm leading-5'>
+                        Uses your brand, campaigns, posts, email activity,
                         attribution, and connected marketing data.
                       </p>
                     </div>
                     <Switch
+                      aria-label='Run Genit Auto autonomously'
+                      className='active:scale-[0.97]'
                       checked={currentOrg?.autoModeEnabled ?? false}
                       disabled={
                         savingAuto ||
@@ -749,10 +769,10 @@ const SettingsHome = () => {
 
                   {(!user || user.userPlan === Plan.BASIC) &&
                     !currentOrg?.autoModeEnabled && (
-                      <p className='text-muted-foreground rounded-lg border p-3 text-sm'>
+                      <p className='border-primary/20 bg-primary/5 text-muted-foreground rounded-xl border p-3 text-sm'>
                         Genit Auto is available on every paid plan.{" "}
                         <a
-                          className='font-medium text-indigo-600 hover:underline'
+                          className='text-primary font-medium hover:underline'
                           href='/pricing'
                         >
                           View plans
@@ -760,64 +780,85 @@ const SettingsHome = () => {
                       </p>
                     )}
 
-                  <Separator />
-
-                  <div className='space-y-4'>
-                    <div>
-                      <h4 className='flex items-center gap-2 font-medium'>
-                        <Target className='h-4 w-4' /> Goals, plan & learning
-                      </h4>
-                      <p className='text-muted-foreground text-sm'>
-                        Give Genit a measurable target. Each loop evaluates
-                        progress, adjusts the plan, and remembers the result.
-                      </p>
+                  <section className='bg-background/60 space-y-5 rounded-xl border p-4 sm:p-5'>
+                    <div className='flex items-start gap-3'>
+                      <div className='bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-lg'>
+                        <Target className='h-4 w-4' />
+                      </div>
+                      <div>
+                        <h4 className='font-semibold'>Goals & learning</h4>
+                        <p className='text-muted-foreground mt-0.5 text-sm leading-5'>
+                          Set a measurable target. Each loop evaluates progress,
+                          adjusts the plan, and remembers the result.
+                        </p>
+                      </div>
                     </div>
 
-                    <div className='grid gap-2 sm:grid-cols-[1fr_150px_110px_auto]'>
-                      <Input
-                        aria-label='Goal title'
-                        placeholder='e.g. Reach 500 campaign clicks'
-                        value={goalTitle}
-                        onChange={(event) => setGoalTitle(event.target.value)}
-                      />
-                      <select
-                        aria-label='Goal metric'
-                        className='border-input bg-background h-9 rounded-md border px-3 text-sm'
-                        value={goalMetric}
-                        onChange={(event) =>
-                          setGoalMetric(event.target.value as typeof goalMetric)
-                        }
-                      >
-                        <option value='impressions'>Impressions</option>
-                        <option value='clicks'>Clicks</option>
-                        <option value='conversions'>Conversions</option>
-                        <option value='conversionValue'>
-                          Conversion value
-                        </option>
-                        <option value='roi'>ROI</option>
-                      </select>
-                      <Input
-                        aria-label='Goal target'
-                        type='number'
-                        min={0}
-                        value={goalTarget}
-                        onChange={(event) =>
-                          setGoalTarget(Number(event.target.value))
-                        }
-                      />
+                    <div className='bg-muted/30 grid gap-3 rounded-xl border p-3 md:grid-cols-2'>
+                      <div className='space-y-1.5 md:col-span-2'>
+                        <Label htmlFor='auto-goal-title' className='text-xs'>
+                          Goal
+                        </Label>
+                        <Input
+                          id='auto-goal-title'
+                          placeholder='e.g. Reach 500 campaign clicks'
+                          value={goalTitle}
+                          onChange={(event) => setGoalTitle(event.target.value)}
+                          className='bg-background hover:bg-background h-10'
+                        />
+                      </div>
+                      <div className='space-y-1.5'>
+                        <Label htmlFor='auto-goal-metric' className='text-xs'>
+                          Metric
+                        </Label>
+                        <select
+                          id='auto-goal-metric'
+                          className='border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-[3px]'
+                          value={goalMetric}
+                          onChange={(event) =>
+                            setGoalMetric(
+                              event.target.value as typeof goalMetric
+                            )
+                          }
+                        >
+                          <option value='impressions'>Impressions</option>
+                          <option value='clicks'>Clicks</option>
+                          <option value='conversions'>Conversions</option>
+                          <option value='conversionValue'>
+                            Conversion value
+                          </option>
+                          <option value='roi'>ROI</option>
+                        </select>
+                      </div>
+                      <div className='space-y-1.5'>
+                        <Label htmlFor='auto-goal-target' className='text-xs'>
+                          Target
+                        </Label>
+                        <Input
+                          id='auto-goal-target'
+                          type='number'
+                          min={0}
+                          value={goalTarget}
+                          onChange={(event) =>
+                            setGoalTarget(Number(event.target.value))
+                          }
+                          className='bg-background hover:bg-background h-10'
+                        />
+                      </div>
                       <Button
+                        className='active:scale-[0.97] md:col-span-2 md:justify-self-end'
                         onClick={addAutoGoal}
                         disabled={
                           savingAuto ||
                           (currentOrg?.autoModeGoals?.length || 0) >= 10
                         }
                       >
-                        <Plus className='mr-2 h-4 w-4' /> Add
+                        <Plus className='h-4 w-4' /> Add goal
                       </Button>
                     </div>
 
                     {(currentOrg?.autoModeGoals || []).length > 0 && (
-                      <div className='divide-y rounded-lg border'>
+                      <div className='divide-y overflow-hidden rounded-xl border'>
                         {currentOrg?.autoModeGoals?.map((goal) => {
                           const latest = (
                             autoInsights?.latestEvaluation ||
@@ -828,7 +869,7 @@ const SettingsHome = () => {
                           return (
                             <div
                               key={goal.id}
-                              className='flex items-center justify-between gap-3 p-3'
+                              className='hover:bg-muted/30 flex items-center justify-between gap-3 p-3 transition-colors'
                             >
                               <div>
                                 <div className='flex flex-wrap items-center gap-2'>
@@ -861,7 +902,7 @@ const SettingsHome = () => {
 
                     {(autoInsights?.currentPlan ||
                       currentOrg?.autoModeCurrentPlan) && (
-                      <div className='rounded-lg border p-4'>
+                      <div className='bg-muted/20 rounded-xl border p-4'>
                         <p className='text-sm font-medium'>Current plan</p>
                         <p className='text-muted-foreground mt-1 text-xs'>
                           {
@@ -906,89 +947,132 @@ const SettingsHome = () => {
                         </ol>
                       </div>
                     )}
-                  </div>
+                  </section>
 
-                  <Separator />
-
-                  <div className='space-y-4'>
-                    <div>
-                      <h4 className='font-medium'>Controlled experiments</h4>
-                      <p className='text-muted-foreground text-sm'>
-                        Compare two active campaigns for at least three cycles.
-                        A winner needs at least 10% measured lift.
-                      </p>
+                  <section className='bg-background/60 space-y-5 rounded-xl border p-4 sm:p-5'>
+                    <div className='flex items-start gap-3'>
+                      <div className='bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-lg'>
+                        <RefreshCw className='h-4 w-4' />
+                      </div>
+                      <div>
+                        <h4 className='font-semibold'>
+                          Controlled experiments
+                        </h4>
+                        <p className='text-muted-foreground mt-0.5 text-sm leading-5'>
+                          Compare two active campaigns for at least three
+                          cycles. A winner needs at least 10% measured lift.
+                        </p>
+                      </div>
                     </div>
-                    <div className='grid gap-2 sm:grid-cols-[1fr_130px_90px_1fr_1fr_auto]'>
-                      <Input
-                        aria-label='Experiment title'
-                        placeholder='e.g. CTA campaign test'
-                        value={experimentTitle}
-                        onChange={(event) =>
-                          setExperimentTitle(event.target.value)
-                        }
-                      />
-                      <select
-                        aria-label='Experiment metric'
-                        className='border-input bg-background h-9 rounded-md border px-3 text-sm'
-                        value={experimentMetric}
-                        onChange={(event) =>
-                          setExperimentMetric(
-                            event.target.value as typeof experimentMetric
-                          )
-                        }
-                      >
-                        <option value='impressions'>Impressions</option>
-                        <option value='clicks'>Clicks</option>
-                        <option value='conversions'>Conversions</option>
-                        <option value='conversionValue'>Value</option>
-                        <option value='roi'>ROI</option>
-                      </select>
-                      <Input
-                        aria-label='Minimum lift percent'
-                        title='Minimum lift percent'
-                        type='number'
-                        min={0}
-                        max={100}
-                        value={experimentLift}
-                        onChange={(event) =>
-                          setExperimentLift(Number(event.target.value))
-                        }
-                      />
-                      <select
-                        aria-label='Variant A campaign'
-                        className='border-input bg-background h-9 rounded-md border px-3 text-sm'
-                        value={variantA}
-                        onChange={(event) => setVariantA(event.target.value)}
-                      >
-                        <option value=''>Variant A</option>
-                        {autoCampaigns.map((campaign) => (
-                          <option key={campaign._id} value={campaign._id}>
-                            {campaign.name}
-                          </option>
-                        ))}
-                      </select>
-                      <select
-                        aria-label='Variant B campaign'
-                        className='border-input bg-background h-9 rounded-md border px-3 text-sm'
-                        value={variantB}
-                        onChange={(event) => setVariantB(event.target.value)}
-                      >
-                        <option value=''>Variant B</option>
-                        {autoCampaigns.map((campaign) => (
-                          <option key={campaign._id} value={campaign._id}>
-                            {campaign.name}
-                          </option>
-                        ))}
-                      </select>
+
+                    <div className='bg-muted/30 grid gap-3 rounded-xl border p-3 md:grid-cols-2'>
+                      <div className='space-y-1.5 md:col-span-2'>
+                        <Label
+                          htmlFor='auto-experiment-title'
+                          className='text-xs'
+                        >
+                          Experiment name
+                        </Label>
+                        <Input
+                          id='auto-experiment-title'
+                          placeholder='e.g. Homepage CTA test'
+                          value={experimentTitle}
+                          onChange={(event) =>
+                            setExperimentTitle(event.target.value)
+                          }
+                          className='bg-background hover:bg-background h-10'
+                        />
+                      </div>
+                      <div className='space-y-1.5'>
+                        <Label
+                          htmlFor='auto-experiment-metric'
+                          className='text-xs'
+                        >
+                          Success metric
+                        </Label>
+                        <select
+                          id='auto-experiment-metric'
+                          className='border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-[3px]'
+                          value={experimentMetric}
+                          onChange={(event) =>
+                            setExperimentMetric(
+                              event.target.value as typeof experimentMetric
+                            )
+                          }
+                        >
+                          <option value='impressions'>Impressions</option>
+                          <option value='clicks'>Clicks</option>
+                          <option value='conversions'>Conversions</option>
+                          <option value='conversionValue'>Value</option>
+                          <option value='roi'>ROI</option>
+                        </select>
+                      </div>
+                      <div className='space-y-1.5'>
+                        <Label
+                          htmlFor='auto-experiment-lift'
+                          className='text-xs'
+                        >
+                          Minimum lift (%)
+                        </Label>
+                        <Input
+                          id='auto-experiment-lift'
+                          type='number'
+                          min={0}
+                          max={100}
+                          value={experimentLift}
+                          onChange={(event) =>
+                            setExperimentLift(Number(event.target.value))
+                          }
+                          className='bg-background hover:bg-background h-10'
+                        />
+                      </div>
+                      <div className='space-y-1.5'>
+                        <Label htmlFor='auto-variant-a' className='text-xs'>
+                          Variant A
+                        </Label>
+                        <select
+                          id='auto-variant-a'
+                          className='border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-[3px]'
+                          value={variantA}
+                          onChange={(event) => setVariantA(event.target.value)}
+                        >
+                          <option value=''>Choose campaign</option>
+                          {autoCampaigns.map((campaign) => (
+                            <option key={campaign._id} value={campaign._id}>
+                              {campaign.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className='space-y-1.5'>
+                        <Label htmlFor='auto-variant-b' className='text-xs'>
+                          Variant B
+                        </Label>
+                        <select
+                          id='auto-variant-b'
+                          className='border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-10 w-full rounded-md border px-3 text-sm outline-none focus-visible:ring-[3px]'
+                          value={variantB}
+                          onChange={(event) => setVariantB(event.target.value)}
+                        >
+                          <option value=''>Choose campaign</option>
+                          {autoCampaigns.map((campaign) => (
+                            <option key={campaign._id} value={campaign._id}>
+                              {campaign.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                       <Button
+                        className='active:scale-[0.97] md:col-span-2 md:justify-self-end'
                         onClick={addAutoExperiment}
                         disabled={savingAuto || autoCampaigns.length < 2}
                       >
-                        <Plus className='mr-2 h-4 w-4' /> Test
+                        <Plus className='h-4 w-4' /> Create experiment
                       </Button>
                     </div>
                     {autoCampaigns.length < 2 && (
-                      <p className='text-muted-foreground text-xs'>
+                      <p className='text-muted-foreground flex items-center gap-2 text-xs'>
+                        <span className='bg-muted-foreground/60 size-1.5 rounded-full' />
                         Activate at least two GTM campaigns to run an
                         experiment.
                       </p>
@@ -998,7 +1082,7 @@ const SettingsHome = () => {
                       currentOrg?.autoModeExperiments ||
                       []
                     ).length > 0 && (
-                      <div className='divide-y rounded-lg border'>
+                      <div className='divide-y overflow-hidden rounded-xl border'>
                         {(
                           autoInsights?.experiments ||
                           currentOrg?.autoModeExperiments ||
@@ -1006,7 +1090,7 @@ const SettingsHome = () => {
                         ).map((experiment: any) => (
                           <div
                             key={experiment.id}
-                            className='flex items-center justify-between gap-3 p-3'
+                            className='hover:bg-muted/30 flex items-center justify-between gap-3 p-3 transition-colors'
                           >
                             <div>
                               <div className='flex flex-wrap items-center gap-2'>
@@ -1042,13 +1126,11 @@ const SettingsHome = () => {
                         ))}
                       </div>
                     )}
-                  </div>
-
-                  <Separator />
+                  </section>
 
                   {(autoInsights?.allocation || currentOrg?.autoModeAllocation)
                     ?.campaigns?.length > 0 && (
-                    <div className='space-y-3'>
+                    <section className='bg-background/60 space-y-3 rounded-xl border p-4 sm:p-5'>
                       <div className='flex items-center justify-between gap-4'>
                         <div>
                           <h4 className='font-medium'>Adaptive allocation</h4>
@@ -1097,86 +1179,78 @@ const SettingsHome = () => {
                           </div>
                         ))}
                       </div>
-                    </div>
+                    </section>
                   )}
 
                   {(autoInsights?.simulation ||
                     currentOrg?.autoModeSimulation) && (
-                    <>
-                      <Separator />
-                      <div className='space-y-3'>
-                        <div className='flex items-center justify-between gap-3'>
-                          <div>
-                            <h4 className='font-medium'>Scenario simulation</h4>
-                            <p className='text-muted-foreground text-sm'>
-                              Linear forecast if the proposed allocation is
-                              applied.
-                            </p>
-                          </div>
-                          <Badge variant='secondary'>
-                            {
-                              (
-                                autoInsights?.simulation ||
-                                currentOrg?.autoModeSimulation
-                              )?.confidence
-                            }{" "}
-                            confidence
-                          </Badge>
+                    <section className='bg-background/60 space-y-3 rounded-xl border p-4 sm:p-5'>
+                      <div className='flex items-center justify-between gap-3'>
+                        <div>
+                          <h4 className='font-medium'>Scenario simulation</h4>
+                          <p className='text-muted-foreground text-sm'>
+                            Linear forecast if the proposed allocation is
+                            applied.
+                          </p>
                         </div>
-                        <div className='grid gap-2 sm:grid-cols-3'>
-                          {(
-                            [
-                              "clicks",
-                              "conversions",
-                              "conversionValue",
-                            ] as const
-                          ).map((metric) => {
-                            const simulation =
+                        <Badge variant='secondary'>
+                          {
+                            (
                               autoInsights?.simulation ||
-                              currentOrg?.autoModeSimulation;
-                            return (
-                              <div
-                                key={metric}
-                                className='rounded-lg border p-3'
-                              >
-                                <p className='text-muted-foreground text-xs capitalize'>
-                                  {metric === "conversionValue"
-                                    ? "Conversion value"
-                                    : metric}
-                                </p>
-                                <p className='text-lg font-semibold'>
-                                  {simulation.projected[
-                                    metric
-                                  ].toLocaleString()}
-                                </p>
-                                <p className='text-muted-foreground text-xs'>
-                                  {simulation.baseline[metric].toLocaleString()}{" "}
-                                  baseline ·{" "}
-                                  {simulation.uplift[metric] >= 0 ? "+" : ""}
-                                  {simulation.uplift[metric]}%
-                                </p>
-                              </div>
-                            );
-                          })}
-                        </div>
+                              currentOrg?.autoModeSimulation
+                            )?.confidence
+                          }{" "}
+                          confidence
+                        </Badge>
                       </div>
-                    </>
+                      <div className='grid gap-2 sm:grid-cols-3'>
+                        {(
+                          ["clicks", "conversions", "conversionValue"] as const
+                        ).map((metric) => {
+                          const simulation =
+                            autoInsights?.simulation ||
+                            currentOrg?.autoModeSimulation;
+                          return (
+                            <div key={metric} className='rounded-lg border p-3'>
+                              <p className='text-muted-foreground text-xs capitalize'>
+                                {metric === "conversionValue"
+                                  ? "Conversion value"
+                                  : metric}
+                              </p>
+                              <p className='text-lg font-semibold'>
+                                {simulation.projected[metric].toLocaleString()}
+                              </p>
+                              <p className='text-muted-foreground text-xs'>
+                                {simulation.baseline[metric].toLocaleString()}{" "}
+                                baseline ·{" "}
+                                {simulation.uplift[metric] >= 0 ? "+" : ""}
+                                {simulation.uplift[metric]}%
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </section>
                   )}
 
-                  <Separator />
-
-                  <div className='space-y-3'>
-                    <div className='flex items-center justify-between gap-4'>
-                      <div>
-                        <h4 className='font-medium'>Specialist missions</h4>
-                        <p className='text-muted-foreground text-sm'>
-                          Turn the current plan into strategist, creator, and
-                          analyst work. Approval never includes publishing.
-                        </p>
+                  <section className='bg-background/60 space-y-4 rounded-xl border p-4 sm:p-5'>
+                    <div className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
+                      <div className='flex items-start gap-3'>
+                        <div className='bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-lg'>
+                          <Bot className='h-4 w-4' />
+                        </div>
+                        <div>
+                          <h4 className='font-semibold'>Specialist missions</h4>
+                          <p className='text-muted-foreground mt-0.5 max-w-xl text-sm leading-5'>
+                            Turn the current plan into strategist, creator, and
+                            analyst work. Approval never includes publishing.
+                          </p>
+                        </div>
                       </div>
                       <Button
                         size='sm'
                         variant='outline'
+                        className='shrink-0 active:scale-[0.97]'
                         onClick={compileAutoMissions}
                         disabled={
                           !(
@@ -1189,9 +1263,18 @@ const SettingsHome = () => {
                       </Button>
                     </div>
                     {autoMissions.length === 0 ? (
-                      <p className='text-muted-foreground text-sm'>
-                        Compile a completed Auto plan to create missions.
-                      </p>
+                      <div className='bg-muted/20 flex flex-col items-center rounded-xl border border-dashed px-4 py-7 text-center'>
+                        <div className='bg-muted text-muted-foreground flex size-9 items-center justify-center rounded-full'>
+                          <Bot className='h-4 w-4' />
+                        </div>
+                        <p className='mt-3 text-sm font-medium'>
+                          No missions yet
+                        </p>
+                        <p className='text-muted-foreground mt-1 max-w-sm text-xs leading-5'>
+                          Complete an Auto plan, then compile it into specialist
+                          work.
+                        </p>
+                      </div>
                     ) : (
                       <div className='space-y-2'>
                         {autoMissions.map((mission) => {
@@ -1503,7 +1586,7 @@ const SettingsHome = () => {
                         })}
                       </div>
                     )}
-                  </div>
+                  </section>
 
                   {(
                     autoInsights?.alerts ||
