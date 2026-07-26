@@ -33,6 +33,7 @@ import { useToast } from "@/hooks/use-toast";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
+  ArrowDownUp,
   Bell,
   Bot,
   Check,
@@ -603,9 +604,9 @@ const SettingsHome = () => {
     },
     {
       id: "automation",
-      label: "Genit Auto",
+      label: "Marketing Loop",
       description: "Goals, experiments, and runs",
-      icon: Bot,
+      icon: ArrowDownUp,
     },
     {
       id: "billing",
