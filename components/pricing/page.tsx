@@ -5,7 +5,7 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { Button } from "@/components/ui/button";
 import { Spotlight } from "@/components/ui/spotlight-new";
 import { trackEvent, trackExperimentExposure } from "@/lib/mixpanelClient";
-import { formatUsdPrice, type PricingCurrency } from "@/lib/pricing-currency";
+import { type PricingCurrency, formatUsdPrice } from "@/lib/pricing-currency";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
@@ -263,10 +263,13 @@ const plans = process.env.NODE_ENV == "production" ? plansProd : plansDev;
 
 export default function PricingComponent({
   pricingCurrency,
+  embedded = false,
 }: {
   pricingCurrency: PricingCurrency;
+  embedded?: boolean;
 }) {
-  const [localPricingCurrency, setLocalPricingCurrency] = useState(pricingCurrency);
+  const [localPricingCurrency, setLocalPricingCurrency] =
+    useState(pricingCurrency);
   const [isYearly, setIsYearly] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
@@ -297,7 +300,8 @@ export default function PricingComponent({
         if (currency) params.set("currency", currency);
 
         const currencyResponse = await fetch(`/api/pricing-currency?${params}`);
-        const nextPricingCurrency = (await currencyResponse.json()) as PricingCurrency;
+        const nextPricingCurrency =
+          (await currencyResponse.json()) as PricingCurrency;
 
         if (nextPricingCurrency.currency !== "USD") {
           setLocalPricingCurrency(nextPricingCurrency);
@@ -382,22 +386,29 @@ export default function PricingComponent({
 
   return (
     <section className='relative' id='pricing'>
-      <div className='mx-auto max-w-7xl px-0 py-24 md:px-6 md:py-32 lg:px-8'>
+      <div
+        className={cn(
+          "mx-auto max-w-7xl px-0",
+          embedded ? "py-2" : "py-24 md:px-6 md:py-32 lg:px-8"
+        )}
+      >
         {/* Header */}
-        <div className='animate-fadeInUp text-center'>
-          <h1 className='text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl'>
-            Choose Your{" "}
-            <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
-              Plan
-            </span>
-          </h1>
-          <p
-            className='text-muted-foreground animate-fadeInUp my-5 text-sm md:text-lg'
-            style={{ animationDelay: "0.2s" }}
-          >
-            Flexible pricing options designed for you.
-          </p>
-        </div>
+        {!embedded && (
+          <div className='animate-fadeInUp text-center'>
+            <h1 className='text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl'>
+              Choose Your{" "}
+              <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
+                Plan
+              </span>
+            </h1>
+            <p
+              className='text-muted-foreground animate-fadeInUp my-5 text-sm md:text-lg'
+              style={{ animationDelay: "0.2s" }}
+            >
+              Flexible pricing options designed for you.
+            </p>
+          </div>
+        )}
 
         {/* Billing toggle */}
         {/* <div className="flex justify-center mb-20">
@@ -500,7 +511,12 @@ export default function PricingComponent({
         </>
 
         {/* Cards Container */}
-        <div className='relative grid w-full grid-cols-1 gap-6 overflow-hidden p-4 sm:gap-8 md:grid-cols-2 md:p-8 lg:grid-cols-4'>
+        <div
+          className={cn(
+            "relative grid w-full grid-cols-1 gap-6 overflow-hidden sm:gap-8 md:grid-cols-2",
+            embedded ? "py-4" : "p-4 md:p-8 lg:grid-cols-4"
+          )}
+        >
           {plans.map((plan) => {
             const displayPrice = isYearly
               ? plan.yearlyPrice / 12

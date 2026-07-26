@@ -234,7 +234,6 @@ const UserPopOver = () => {
       <CreditTopUpModal
         open={isTopUpOpen}
         onClose={() => setIsTopUpOpen(false)}
-        onSuccess={() => {}}
       />
     </Popover>
   );

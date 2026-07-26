@@ -1,4 +1,5 @@
 import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
+import PricingComponent from "@/components/pricing/page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +31,7 @@ import {
   Check,
   ChevronRight,
   CreditCard,
+  Download,
   Edit3,
   Loader2,
   Palette,
@@ -62,13 +64,16 @@ const SettingsHome = () => {
     useAccountActions();
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [billingHistory, setBillingHistory] = useState<any[]>([]);
+  const [openingBillingPortal, setOpeningBillingPortal] = useState(false);
   const [savingAuto, setSavingAuto] = useState(false);
   const [automationRuns, setAutomationRuns] = useState<any[]>([]);
   const [autoInsights, setAutoInsights] = useState<any>(null);
   const [autoCampaigns, setAutoCampaigns] = useState<any[]>([]);
   const [autoMissions, setAutoMissions] = useState<any[]>([]);
   const [autoDrafts, setAutoDrafts] = useState<any[]>([]);
-  const [publishingIntegrations, setPublishingIntegrations] = useState<any[]>([]);
+  const [publishingIntegrations, setPublishingIntegrations] = useState<any[]>(
+    []
+  );
   const [missionEdits, setMissionEdits] = useState<Record<string, string>>({});
   const [draftEdits, setDraftEdits] = useState<Record<string, string>>({});
   const [missionDraftAccounts, setMissionDraftAccounts] = useState<
@@ -126,7 +131,10 @@ const SettingsHome = () => {
 
   useEffect(() => {
     if (activeTab !== "automation" || !currentOrg?._id) return;
-    const interval = window.setInterval(() => void fetchAutomationRuns(), 15000);
+    const interval = window.setInterval(
+      () => void fetchAutomationRuns(),
+      15000
+    );
     return () => window.clearInterval(interval);
   }, [activeTab, currentOrg?._id]);
 
@@ -180,6 +188,22 @@ const SettingsHome = () => {
         description: "Failed to update preference.",
         variant: "destructive",
       });
+    }
+  };
+
+  const openBillingPortal = async () => {
+    setOpeningBillingPortal(true);
+    try {
+      const response = await apiResponse.get("/payment/portal");
+      window.location.assign(response.data.customerPortalUrl);
+    } catch {
+      toast({
+        title: "Could not open billing portal",
+        description: "Please try again in a moment.",
+        variant: "destructive",
+      });
+    } finally {
+      setOpeningBillingPortal(false);
     }
   };
 
@@ -346,7 +370,10 @@ const SettingsHome = () => {
     try {
       await apiResponse.post("/apps/automation/auto/missions/compile");
       await fetchAutomationRuns();
-      toast({ title: "Missions compiled", description: "Review and approve each mission before it runs." });
+      toast({
+        title: "Missions compiled",
+        description: "Review and approve each mission before it runs.",
+      });
     } catch (error: any) {
       toast({
         title: "Could not compile missions",
@@ -525,8 +552,7 @@ const SettingsHome = () => {
                       <Button
                         size='sm'
                         variant='ghost'
-                        // onClick={() => setIsTopUpOpen(true)}
-                        className='cursor-not-allowed'
+                        onClick={() => setIsTopUpOpen(true)}
                       >
                         Top up
                       </Button>
@@ -765,7 +791,9 @@ const SettingsHome = () => {
                         <option value='impressions'>Impressions</option>
                         <option value='clicks'>Clicks</option>
                         <option value='conversions'>Conversions</option>
-                        <option value='conversionValue'>Conversion value</option>
+                        <option value='conversionValue'>
+                          Conversion value
+                        </option>
                         <option value='roi'>ROI</option>
                       </select>
                       <Input
@@ -780,7 +808,8 @@ const SettingsHome = () => {
                       <Button
                         onClick={addAutoGoal}
                         disabled={
-                          savingAuto || (currentOrg?.autoModeGoals?.length || 0) >= 10
+                          savingAuto ||
+                          (currentOrg?.autoModeGoals?.length || 0) >= 10
                         }
                       >
                         <Plus className='mr-2 h-4 w-4' /> Add
@@ -803,8 +832,12 @@ const SettingsHome = () => {
                             >
                               <div>
                                 <div className='flex flex-wrap items-center gap-2'>
-                                  <p className='text-sm font-medium'>{goal.title}</p>
-                                  <Badge variant='secondary'>{goal.status}</Badge>
+                                  <p className='text-sm font-medium'>
+                                    {goal.title}
+                                  </p>
+                                  <Badge variant='secondary'>
+                                    {goal.status}
+                                  </Badge>
                                 </div>
                                 <p className='text-muted-foreground text-xs'>
                                   {latest
@@ -831,15 +864,23 @@ const SettingsHome = () => {
                       <div className='rounded-lg border p-4'>
                         <p className='text-sm font-medium'>Current plan</p>
                         <p className='text-muted-foreground mt-1 text-xs'>
-                          {(autoInsights?.currentPlan ||
-                            currentOrg?.autoModeCurrentPlan)?.objective}
+                          {
+                            (
+                              autoInsights?.currentPlan ||
+                              currentOrg?.autoModeCurrentPlan
+                            )?.objective
+                          }
                         </p>
-                        {(autoInsights?.currentPlan ||
-                          currentOrg?.autoModeCurrentPlan)?.correction && (
+                        {(
+                          autoInsights?.currentPlan ||
+                          currentOrg?.autoModeCurrentPlan
+                        )?.correction && (
                           <p className='mt-2 text-xs text-amber-600'>
                             {
-                              (autoInsights?.currentPlan ||
-                                currentOrg?.autoModeCurrentPlan)?.correction
+                              (
+                                autoInsights?.currentPlan ||
+                                currentOrg?.autoModeCurrentPlan
+                              )?.correction
                             }
                           </p>
                         )}
@@ -850,7 +891,10 @@ const SettingsHome = () => {
                           )?.steps
                             .slice(0, 5)
                             .map((step: any, index: number) => (
-                              <li key={`${step.title}-${index}`} className='text-sm'>
+                              <li
+                                key={`${step.title}-${index}`}
+                                className='text-sm'
+                              >
                                 <span className='font-medium'>
                                   {index + 1}. {step.title}
                                 </span>
@@ -945,12 +989,15 @@ const SettingsHome = () => {
                     </div>
                     {autoCampaigns.length < 2 && (
                       <p className='text-muted-foreground text-xs'>
-                        Activate at least two GTM campaigns to run an experiment.
+                        Activate at least two GTM campaigns to run an
+                        experiment.
                       </p>
                     )}
-                    {(autoInsights?.experiments ||
+                    {(
+                      autoInsights?.experiments ||
                       currentOrg?.autoModeExperiments ||
-                      []).length > 0 && (
+                      []
+                    ).length > 0 && (
                       <div className='divide-y rounded-lg border'>
                         {(
                           autoInsights?.experiments ||
@@ -971,10 +1018,10 @@ const SettingsHome = () => {
                                 </Badge>
                               </div>
                               <p className='text-muted-foreground text-xs'>
-                                {experiment.variantA?.campaignName || "A"}: {" "}
-                                {experiment.variantA?.value ?? "—"} vs {" "}
-                                {experiment.variantB?.campaignName || "B"}: {" "}
-                                {experiment.variantB?.value ?? "—"} · {" "}
+                                {experiment.variantA?.campaignName || "A"}:{" "}
+                                {experiment.variantA?.value ?? "—"} vs{" "}
+                                {experiment.variantB?.campaignName || "B"}:{" "}
+                                {experiment.variantB?.value ?? "—"} ·{" "}
                                 {experiment.samples || 0}/3 cycles
                                 {experiment.winner
                                   ? ` · Winner ${experiment.winner} (${experiment.liftPercent}% lift)`
@@ -999,8 +1046,8 @@ const SettingsHome = () => {
 
                   <Separator />
 
-                  {(autoInsights?.allocation ||
-                    currentOrg?.autoModeAllocation)?.campaigns?.length > 0 && (
+                  {(autoInsights?.allocation || currentOrg?.autoModeAllocation)
+                    ?.campaigns?.length > 0 && (
                     <div className='space-y-3'>
                       <div className='flex items-center justify-between gap-4'>
                         <div>
@@ -1016,8 +1063,10 @@ const SettingsHome = () => {
                           variant='outline'
                           onClick={applyAutoAllocation}
                           disabled={
-                            !(autoInsights?.allocation ||
-                              currentOrg?.autoModeAllocation)?.totalBudget
+                            !(
+                              autoInsights?.allocation ||
+                              currentOrg?.autoModeAllocation
+                            )?.totalBudget
                           }
                         >
                           Apply allocation
@@ -1041,7 +1090,8 @@ const SettingsHome = () => {
                               </Badge>
                             </div>
                             <p className='text-muted-foreground mt-1 text-xs'>
-                              Planned budget {campaign.suggestedBudget.toLocaleString()} · {" "}
+                              Planned budget{" "}
+                              {campaign.suggestedBudget.toLocaleString()} ·{" "}
                               {campaign.reason}
                             </p>
                           </div>
@@ -1059,40 +1109,55 @@ const SettingsHome = () => {
                           <div>
                             <h4 className='font-medium'>Scenario simulation</h4>
                             <p className='text-muted-foreground text-sm'>
-                              Linear forecast if the proposed allocation is applied.
+                              Linear forecast if the proposed allocation is
+                              applied.
                             </p>
                           </div>
                           <Badge variant='secondary'>
-                            {(autoInsights?.simulation ||
-                              currentOrg?.autoModeSimulation)?.confidence}{" "}
+                            {
+                              (
+                                autoInsights?.simulation ||
+                                currentOrg?.autoModeSimulation
+                              )?.confidence
+                            }{" "}
                             confidence
                           </Badge>
                         </div>
                         <div className='grid gap-2 sm:grid-cols-3'>
-                          {(["clicks", "conversions", "conversionValue"] as const).map(
-                            (metric) => {
-                              const simulation =
-                                autoInsights?.simulation ||
-                                currentOrg?.autoModeSimulation;
-                              return (
-                                <div key={metric} className='rounded-lg border p-3'>
-                                  <p className='text-muted-foreground text-xs capitalize'>
-                                    {metric === "conversionValue"
-                                      ? "Conversion value"
-                                      : metric}
-                                  </p>
-                                  <p className='text-lg font-semibold'>
-                                    {simulation.projected[metric].toLocaleString()}
-                                  </p>
-                                  <p className='text-muted-foreground text-xs'>
-                                    {simulation.baseline[metric].toLocaleString()} baseline · {" "}
-                                    {simulation.uplift[metric] >= 0 ? "+" : ""}
-                                    {simulation.uplift[metric]}%
-                                  </p>
-                                </div>
-                              );
-                            }
-                          )}
+                          {(
+                            [
+                              "clicks",
+                              "conversions",
+                              "conversionValue",
+                            ] as const
+                          ).map((metric) => {
+                            const simulation =
+                              autoInsights?.simulation ||
+                              currentOrg?.autoModeSimulation;
+                            return (
+                              <div
+                                key={metric}
+                                className='rounded-lg border p-3'
+                              >
+                                <p className='text-muted-foreground text-xs capitalize'>
+                                  {metric === "conversionValue"
+                                    ? "Conversion value"
+                                    : metric}
+                                </p>
+                                <p className='text-lg font-semibold'>
+                                  {simulation.projected[
+                                    metric
+                                  ].toLocaleString()}
+                                </p>
+                                <p className='text-muted-foreground text-xs'>
+                                  {simulation.baseline[metric].toLocaleString()}{" "}
+                                  baseline ·{" "}
+                                  {simulation.uplift[metric] >= 0 ? "+" : ""}
+                                  {simulation.uplift[metric]}%
+                                </p>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     </>
@@ -1105,14 +1170,20 @@ const SettingsHome = () => {
                       <div>
                         <h4 className='font-medium'>Specialist missions</h4>
                         <p className='text-muted-foreground text-sm'>
-                          Turn the current plan into strategist, creator, and analyst work. Approval never includes publishing.
+                          Turn the current plan into strategist, creator, and
+                          analyst work. Approval never includes publishing.
                         </p>
                       </div>
                       <Button
                         size='sm'
                         variant='outline'
                         onClick={compileAutoMissions}
-                        disabled={!(autoInsights?.currentPlan || currentOrg?.autoModeCurrentPlan)}
+                        disabled={
+                          !(
+                            autoInsights?.currentPlan ||
+                            currentOrg?.autoModeCurrentPlan
+                          )
+                        }
                       >
                         Compile plan
                       </Button>
@@ -1142,7 +1213,9 @@ const SettingsHome = () => {
                                       {mission.status}
                                     </Badge>
                                     {mission.memoryWrittenAt && (
-                                      <Badge variant='outline'>In Brand Brain</Badge>
+                                      <Badge variant='outline'>
+                                        In Brand Brain
+                                      </Badge>
                                     )}
                                   </div>
                                   <p className='text-muted-foreground mt-1 text-xs'>
@@ -1159,7 +1232,10 @@ const SettingsHome = () => {
                                     <Button
                                       size='sm'
                                       onClick={() =>
-                                        decideAutoMission(mission._id, "approve")
+                                        decideAutoMission(
+                                          mission._id,
+                                          "approve"
+                                        )
                                       }
                                     >
                                       Approve mission
@@ -1176,9 +1252,12 @@ const SettingsHome = () => {
                                       Retry
                                     </Button>
                                   )}
-                                  {["proposed", "running", "review", "failed"].includes(
-                                    mission.status
-                                  ) && (
+                                  {[
+                                    "proposed",
+                                    "running",
+                                    "review",
+                                    "failed",
+                                  ].includes(mission.status) && (
                                     <Button
                                       size='sm'
                                       variant='ghost'
@@ -1201,7 +1280,10 @@ const SettingsHome = () => {
                                     .map((step: any) => {
                                       const content = step.result.content;
                                       return (
-                                        <div key={step.id} className='space-y-2'>
+                                        <div
+                                          key={step.id}
+                                          className='space-y-2'
+                                        >
                                           <Label htmlFor={`mission-${step.id}`}>
                                             {step.title}
                                           </Label>
@@ -1211,7 +1293,9 @@ const SettingsHome = () => {
                                             value={
                                               missionEdits[step.id] ?? content
                                             }
-                                            readOnly={mission.status !== "review"}
+                                            readOnly={
+                                              mission.status !== "review"
+                                            }
                                             onChange={(event) =>
                                               setMissionEdits((current) => ({
                                                 ...current,
@@ -1277,7 +1361,7 @@ const SettingsHome = () => {
                                             key={integration._id}
                                             value={integration._id}
                                           >
-                                            {integration.platform} · {" "}
+                                            {integration.platform} ·{" "}
                                             {integration.accountName}
                                           </option>
                                         )
@@ -1297,7 +1381,7 @@ const SettingsHome = () => {
                                   {drafts.map((draft) => (
                                     <div
                                       key={draft._id}
-                                      className='space-y-2 rounded-md bg-muted/40 p-3'
+                                      className='bg-muted/40 space-y-2 rounded-md p-3'
                                     >
                                       <div className='flex items-center gap-2'>
                                         <Badge variant='outline'>
@@ -1396,9 +1480,10 @@ const SettingsHome = () => {
 
                               {mission.outcome && (
                                 <p className='text-muted-foreground border-t pt-2 text-xs'>
-                                  Learned outcome: {mission.outcome.publishedAssets}{" "}
-                                  assets · {mission.outcome.metrics?.clicks || 0}{" "}
-                                  clicks · {mission.outcome.conversions || 0}{" "}
+                                  Learned outcome:{" "}
+                                  {mission.outcome.publishedAssets} assets ·{" "}
+                                  {mission.outcome.metrics?.clicks || 0} clicks
+                                  · {mission.outcome.conversions || 0}{" "}
                                   conversions
                                 </p>
                               )}
@@ -1420,11 +1505,13 @@ const SettingsHome = () => {
                     )}
                   </div>
 
-                  {(autoInsights?.alerts ||
+                  {(
+                    autoInsights?.alerts ||
                     currentOrg?.autoModeAlerts?.filter(
                       (alert) => alert.status === "open"
                     ) ||
-                    []).length > 0 && (
+                    []
+                  ).length > 0 && (
                     <>
                       <Separator />
                       <div className='space-y-3'>
@@ -1456,9 +1543,7 @@ const SettingsHome = () => {
                             <Button
                               size='sm'
                               variant='ghost'
-                              onClick={() =>
-                                acknowledgeAutoAlert(alert.id)
-                              }
+                              onClick={() => acknowledgeAutoAlert(alert.id)}
                             >
                               Acknowledge
                             </Button>
@@ -1482,7 +1567,9 @@ const SettingsHome = () => {
                     </div>
                     <div className='grid gap-4 sm:grid-cols-3'>
                       <div className='space-y-2'>
-                        <Label htmlFor='approval-policy'>Require approval</Label>
+                        <Label htmlFor='approval-policy'>
+                          Require approval
+                        </Label>
                         <select
                           id='approval-policy'
                           className='border-input bg-background h-9 w-full rounded-md border px-3 text-sm'
@@ -1494,19 +1581,21 @@ const SettingsHome = () => {
                           onChange={(event) =>
                             saveAutoSettings({
                               automationApprovalPolicy: event.target.value as
-                                | "destructive"
-                                | "external"
-                                | "all",
+                                "destructive" | "external" | "all",
                             })
                           }
                         >
-                          <option value='destructive'>Destructive actions</option>
+                          <option value='destructive'>
+                            Destructive actions
+                          </option>
                           <option value='external'>All external actions</option>
                           <option value='all'>Every action</option>
                         </select>
                       </div>
                       <div className='space-y-2'>
-                        <Label htmlFor='daily-action-limit'>Daily actions</Label>
+                        <Label htmlFor='daily-action-limit'>
+                          Daily actions
+                        </Label>
                         <Input
                           id='daily-action-limit'
                           type='number'
@@ -1526,7 +1615,9 @@ const SettingsHome = () => {
                         />
                       </div>
                       <div className='space-y-2'>
-                        <Label htmlFor='run-credit-limit'>Credits per run</Label>
+                        <Label htmlFor='run-credit-limit'>
+                          Credits per run
+                        </Label>
                         <Input
                           id='run-credit-limit'
                           type='number'
@@ -1572,7 +1663,9 @@ const SettingsHome = () => {
                     </div>
                     {automationRuns.length === 0 ? (
                       <p className='text-muted-foreground rounded-lg border p-4 text-sm'>
-                        {loadingRuns ? "Loading runs…" : "No automation runs yet."}
+                        {loadingRuns
+                          ? "Loading runs…"
+                          : "No automation runs yet."}
                       </p>
                     ) : (
                       <div className='divide-y rounded-lg border'>
@@ -1671,17 +1764,15 @@ const SettingsHome = () => {
                   {currentOrg?.autoModeLastRunAt && (
                     <p className='text-muted-foreground text-xs'>
                       Last cycle:{" "}
-                      {new Date(
-                        currentOrg.autoModeLastRunAt
-                      ).toLocaleString()}
+                      {new Date(currentOrg.autoModeLastRunAt).toLocaleString()}
                       {currentOrg.autoModeLastError
                         ? ` · ${currentOrg.autoModeLastError}`
                         : " · Completed successfully"}
                     </p>
                   )}
                   <p className='text-muted-foreground text-xs'>
-                    Genit Auto analyzes and recommends. Publishing, sending,
-                    and destructive changes follow the guardrails above.
+                    Genit Auto analyzes and recommends. Publishing, sending, and
+                    destructive changes follow the guardrails above.
                   </p>
                 </CardContent>
               </Card>
@@ -1750,10 +1841,7 @@ const SettingsHome = () => {
                         </Button>
                       </div> */}
                       <div className='mt-4'>
-                        <Button
-                          // onClick={() => setIsTopUpOpen(true)}
-                          className='cursor-not-allowed'
-                        >
+                        <Button onClick={() => setIsTopUpOpen(true)}>
                           Top up credits
                         </Button>
                       </div>
@@ -1763,11 +1851,24 @@ const SettingsHome = () => {
 
                 <Card className='relative overflow-hidden'>
                   <GradientFrame />
-                  <CardHeader>
-                    <CardTitle>Billing History</CardTitle>
-                    <CardDescription>
-                      View your past invoices and payments
-                    </CardDescription>
+                  <CardHeader className='gap-3 sm:flex-row sm:items-start sm:justify-between'>
+                    <div>
+                      <CardTitle>Billing History</CardTitle>
+                      <CardDescription>
+                        View your past invoices and payments
+                      </CardDescription>
+                    </div>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      onClick={openBillingPortal}
+                      disabled={openingBillingPortal}
+                    >
+                      {openingBillingPortal && (
+                        <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                      )}
+                      Invoices & receipts
+                    </Button>
                   </CardHeader>
                   <CardContent>
                     <div className='space-y-3'>
@@ -1782,11 +1883,26 @@ const SettingsHome = () => {
                             className='flex items-center justify-between rounded-lg border p-4'
                           >
                             <div>
-                              <p className='font-medium'>
-                                {rec.invoiceNumber
-                                  ? `Invoice #${rec.invoiceNumber}`
-                                  : rec.description || rec.type}
-                              </p>
+                              <div className='flex items-center gap-2'>
+                                <p className='font-medium'>
+                                  {rec.invoiceNumber
+                                    ? `Invoice #${rec.invoiceNumber}`
+                                    : rec.description ||
+                                      (rec.type === "credit_topup"
+                                        ? "Credit top up"
+                                        : "Subscription")}
+                                </p>
+                                <Badge
+                                  variant={
+                                    rec.status === "paid"
+                                      ? "secondary"
+                                      : "outline"
+                                  }
+                                  className='capitalize'
+                                >
+                                  {rec.status}
+                                </Badge>
+                              </div>
                               <p className='text-muted-foreground text-sm'>
                                 {rec.billingPeriodStart
                                   ? new Date(
@@ -1810,19 +1926,37 @@ const SettingsHome = () => {
                                   rel='noreferrer'
                                 >
                                   <Button variant='outline' size='sm'>
-                                    View invoice
+                                    <Download className='mr-2 h-4 w-4' />
+                                    Download invoice
                                   </Button>
                                 </a>
-                              ) : (
-                                <Button variant='outline' size='sm'>
-                                  View
-                                </Button>
-                              )}
+                              ) : null}
                             </div>
                           </div>
                         ))
                       )}
                     </div>
+                  </CardContent>
+                </Card>
+
+                <Card className='relative overflow-hidden'>
+                  <GradientFrame />
+                  <CardHeader>
+                    <CardTitle>Plans & pricing</CardTitle>
+                    <CardDescription>
+                      Upgrade your monthly credit allowance at any time.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <PricingComponent
+                      embedded
+                      pricingCurrency={{
+                        country: "US",
+                        currency: "USD",
+                        locale: "en-US",
+                        rate: 1,
+                      }}
+                    />
                   </CardContent>
                 </Card>
               </div>
@@ -2074,7 +2208,6 @@ const SettingsHome = () => {
       <CreditTopUpModal
         open={isTopUpOpen}
         onClose={() => setIsTopUpOpen(false)}
-        onSuccess={() => {}}
       />
     </div>
   );
