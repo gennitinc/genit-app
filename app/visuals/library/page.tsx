@@ -24,7 +24,7 @@ import { useEffect, useRef, useState } from "react";
 const formatFileSize = (bytes?: number) => {
   if (bytes === undefined) return "Unknown";
   if (bytes === 0) return "0 B";
-  const units = ["B", "KB", "MB", "GB"];
+  const units = ["B", "KB", "MB", "GB", "TB"];
   const unitIndex = Math.min(
     Math.floor(Math.log(bytes) / Math.log(1024)),
     units.length - 1

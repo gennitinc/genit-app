@@ -53,17 +53,18 @@ const plansDev = [
   {
     id: "studio",
     name: "Studio",
-    monthlyPrice: 12,
-    yearlyPrice: 96,
+    monthlyPrice: 19,
+    yearlyPrice: 190,
     productIds: {
       monthly: "ADD_STUDIO_MONTHLY_ID",
       yearly: "ADD_STUDIO_YEARLY_ID",
     },
     features: [
       "1,200 credits per month",
-      "5 GB organization media storage",
+      "25 GB organization media storage",
       "HD & 4K image generation",
       "Video & ad creation",
+      "Genit Auto",
       "Brand kit access",
       "Priority rendering",
     ],
@@ -72,17 +73,18 @@ const plansDev = [
   {
     id: "pro-studio",
     name: "Pro Studio",
-    monthlyPrice: 19,
-    yearlyPrice: 120,
+    monthlyPrice: 39,
+    yearlyPrice: 390,
     productIds: {
       monthly: "1e641980-d7f2-4a21-8c8f-7af81795bcf0",
       yearly: "c1897be5-2126-4cc7-aac4-e769250780f3",
     },
     features: [
       "2,000 credits per month",
-      "10 GB organization media storage",
+      "100 GB organization media storage",
       "HD & 4K image generation",
       "Commercial video creation",
+      "Genit Auto",
       "Priority support",
       "Advanced brand kit",
       "Social media optimized exports",
@@ -92,16 +94,17 @@ const plansDev = [
   {
     id: "agency",
     name: "Agency",
-    monthlyPrice: 25,
-    yearlyPrice: 190,
+    monthlyPrice: 79,
+    yearlyPrice: 790,
     productIds: {
       monthly: "f60b7ec7-26f1-4311-87ca-03fcaab02dc0",
       yearly: "4952b33d-2654-44f7-9645-bdac62b008c3",
     },
     features: [
       "5,000 credits per month",
-      "25 GB organization media storage",
+      "500 GB organization media storage",
       "4K ultra exports",
+      "Genit Auto",
       "Full commercial licensing",
       "Dedicated support",
       "Team collaboration",
@@ -120,7 +123,8 @@ const plansDev = [
     },
     features: [
       "Custom credit allowance",
-      "100 GB shared organization media storage",
+      "1 TB shared organization media storage",
+      "Genit Auto with custom controls",
       "Members keep their personal plans",
       "Full API access",
       "Dedicated account manager",
@@ -172,17 +176,18 @@ const plansProd = [
   {
     id: "studio",
     name: "Studio",
-    monthlyPrice: 12,
-    yearlyPrice: 96,
+    monthlyPrice: 19,
+    yearlyPrice: 190,
     productIds: {
       monthly: "efd95591-37f9-4759-9664-332df51a2723",
       yearly: "881b3661-dcdf-4f7c-802d-5d1d67792b65",
     },
     features: [
       "1,200 credits per month",
-      "5 GB organization media storage",
+      "25 GB organization media storage",
       "HD & 4K image generation",
       "Video & ad creation",
+      "Genit Auto",
       "Brand kit access",
       "Priority rendering",
     ],
@@ -191,17 +196,18 @@ const plansProd = [
   {
     id: "pro-studio",
     name: "Pro Studio",
-    monthlyPrice: 19,
-    yearlyPrice: 120,
+    monthlyPrice: 39,
+    yearlyPrice: 390,
     productIds: {
       monthly: "e6020f20-000e-4ca4-b9f2-69e1168cf5aa",
       yearly: "ade34b2b-4e67-4d93-bd15-ef0ca62d7f8d",
     },
     features: [
       "2,000 credits per month",
-      "10 GB organization media storage",
+      "100 GB organization media storage",
       "HD & 4K image generation",
       "Commercial video creation",
+      "Genit Auto",
       "Priority support",
       "Advanced brand kit",
       "Social media optimized exports",
@@ -211,16 +217,17 @@ const plansProd = [
   {
     id: "agency",
     name: "Agency",
-    monthlyPrice: 25,
-    yearlyPrice: 190,
+    monthlyPrice: 79,
+    yearlyPrice: 790,
     productIds: {
       monthly: "b70d97f1-7633-4139-abb3-e1d19abd8729",
       yearly: "b4c7e616-e50e-4b34-9c07-55be1a485f53",
     },
     features: [
       "5,000 credits per month",
-      "25 GB organization media storage",
+      "500 GB organization media storage",
       "4K ultra exports",
+      "Genit Auto",
       "Full commercial licensing",
       "Dedicated support",
       "Team collaboration",
@@ -239,7 +246,8 @@ const plansProd = [
     },
     features: [
       "Custom credit allowance",
-      "100 GB shared organization media storage",
+      "1 TB shared organization media storage",
+      "Genit Auto with custom controls",
       "Members keep their personal plans",
       "Full API access",
       "Dedicated account manager",
@@ -482,7 +490,7 @@ export default function PricingComponent({
                     />
                   </svg>
                   <span className='mt-3 inline-block rounded-full bg-indigo-600 px-2.5 py-1 text-[11px] leading-5 font-semibold whitespace-nowrap text-white uppercase'>
-                    Save up to 30%
+                    Save 17%
                   </span>
                 </span>
               </span>
@@ -495,7 +503,7 @@ export default function PricingComponent({
         <div className='relative grid w-full grid-cols-1 gap-6 overflow-hidden p-4 sm:gap-8 md:grid-cols-2 md:p-8 lg:grid-cols-4'>
           {plans.map((plan) => {
             const displayPrice = isYearly
-              ? Math.floor(plan.yearlyPrice / 12)
+              ? plan.yearlyPrice / 12
               : plan.monthlyPrice;
 
             return (
@@ -613,11 +621,23 @@ export default function PricingComponent({
                         </span>
                       )}
                     </div>
-                    {plan.monthlyPrice !== -1 && (
-                      <span className='text-muted-foreground text-sm'>
-                        per month
-                      </span>
-                    )}
+                    {/* {plan.monthlyPrice !== -1 && (
+                      <>
+                        <span className='text-muted-foreground text-sm'>
+                          per month
+                        </span>
+                        {isYearly && (
+                          <p className='text-muted-foreground mt-1 text-xs'>
+                            Billed{" "}
+                            {formatUsdPrice(
+                              plan.yearlyPrice,
+                              localPricingCurrency
+                            )}{" "}
+                            yearly
+                          </p>
+                        )}
+                      </>
+                    )} */}
                   </div>
 
                   <button

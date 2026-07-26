@@ -42,7 +42,7 @@ import {
   useState,
 } from "react";
 
-const EnterpriseAutoReplyDialog = ({
+const AutoReplyUpgradeDialog = ({
   open,
   onOpenChange,
 }: {
@@ -58,7 +58,7 @@ const EnterpriseAutoReplyDialog = ({
       <div className='relative min-h-[220px] w-full flex-shrink-0 md:min-h-full md:w-1/2'>
         <img
           src='/genit-auto.png'
-          alt='Enterprise AI auto-replies'
+          alt='AI auto-replies'
           className='absolute inset-0 h-full w-full object-cover object-[center_12%] lg:object-cover lg:object-[center_80%]'
         />
         <div className='absolute inset-0 z-0 bg-gradient-to-t from-white/30 to-transparent md:bg-gradient-to-l dark:from-black/30' />
@@ -75,10 +75,10 @@ const EnterpriseAutoReplyDialog = ({
         </div>
 
         <h3 className='text-foreground relative z-10 mt-6 text-xl font-semibold tracking-tight md:text-2xl dark:text-white'>
-          Upgrade to Enterprise
+          Upgrade to unlock auto-replies
         </h3>
         <p className='text-muted-foreground relative z-10 mt-2 text-sm font-normal dark:text-white/70'>
-          AI auto-replies are exclusive to the Enterprise plan.
+          AI auto-replies are available on every paid plan.
         </p>
 
         <div className='relative z-10 mt-8 flex justify-end gap-3'>
@@ -262,7 +262,7 @@ export function ManageDialog({
   }
 
   async function handleAutoReply(id: string, enabled: boolean) {
-    if (enabled && String(user?.userPlan) !== "Enterprise") {
+    if (enabled && (!user || String(user.userPlan) === "Basic")) {
       setEnterpriseDialogOpen(true);
       return;
     }
@@ -684,7 +684,7 @@ export function ManageDialog({
           </div>
         </div>
       </DialogContent>
-      <EnterpriseAutoReplyDialog
+      <AutoReplyUpgradeDialog
         open={enterpriseDialogOpen}
         onOpenChange={setEnterpriseDialogOpen}
       />

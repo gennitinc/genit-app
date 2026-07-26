@@ -392,7 +392,7 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
   );
 };
 
-const EnterpriseAutoDialog = ({
+const AutoUpgradeDialog = ({
   isOpen,
   onOpenChange,
 }: {
@@ -410,7 +410,7 @@ const EnterpriseAutoDialog = ({
       <div className='relative min-h-[220px] w-full flex-shrink-0 md:min-h-full md:w-1/2'>
         <img
           src='/genit-auto.png'
-          alt='Enterprise AI Auto Mode'
+          alt='AI Auto Mode'
           className='absolute inset-0 h-full w-full object-cover object-[center_12%] lg:object-cover lg:object-[center_80%]'
         />
         <div className='absolute inset-0 z-0 bg-gradient-to-t from-white/30 to-transparent md:bg-gradient-to-l dark:from-black/30'></div>
@@ -460,12 +460,12 @@ const EnterpriseAutoDialog = ({
         </div>
 
         <h3 className='text-foreground relative z-10 mt-6 text-xl font-semibold tracking-tight md:text-2xl dark:text-white'>
-          Upgrade to Enterprise
+          Upgrade to unlock Auto
         </h3>
         <p className='text-muted-foreground relative z-10 mt-2 text-sm font-normal dark:text-white/70'>
-          Auto mode is exclusive to the Enterprise plan. Let our AI handle
-          content creation, scheduling, ad sponsoring, and ticket resolution
-          entirely on its own.
+          Auto mode is available on every paid plan. Upgrade to let our AI
+          handle content creation, scheduling, ad sponsoring, and ticket
+          resolution entirely on its own.
         </p>
 
         <div className='relative z-10 mt-8 flex justify-end gap-3'>
@@ -603,13 +603,18 @@ export function IdeaSection() {
 
   useEffect(() => {
     if (user?.currentOrganization) {
-      setMode(user.currentOrganization.autoModeEnabled ? "auto" : "chat");
+      setMode(
+        user.userPlan !== "Basic" &&
+          user.currentOrganization.autoModeEnabled
+          ? "auto"
+          : "chat"
+      );
     }
-  }, [user?.currentOrganization?.autoModeEnabled]);
+  }, [user?.currentOrganization?.autoModeEnabled, user?.userPlan]);
 
   const [beamPosition, setBeamPosition] = useState({ x: 50, y: 50 });
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
-  const [isEnterpriseDialogOpen, setIsEnterpriseDialogOpen] = useState(false);
+  const [isAutoUpgradeDialogOpen, setIsAutoUpgradeDialogOpen] = useState(false);
   const [inputError, setInputError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedDesignTypeId, setSelectedDesignTypeId] =
@@ -1319,8 +1324,11 @@ export function IdeaSection() {
                             <button
                               type='button'
                               onClick={async () => {
-                                if (String(user?.userPlan) !== "Enterprise") {
-                                  setIsEnterpriseDialogOpen(true);
+                                if (
+                                  !user ||
+                                  String(user.userPlan) === "Basic"
+                                ) {
+                                  setIsAutoUpgradeDialogOpen(true);
                                   return;
                                 }
                                 setMode("auto");
@@ -1730,9 +1738,9 @@ export function IdeaSection() {
         </div> */}
       </div>
 
-      <EnterpriseAutoDialog
-        isOpen={isEnterpriseDialogOpen}
-        onOpenChange={setIsEnterpriseDialogOpen}
+      <AutoUpgradeDialog
+        isOpen={isAutoUpgradeDialogOpen}
+        onOpenChange={setIsAutoUpgradeDialogOpen}
       />
       <BrandIdentityDialog
         isOpen={isBrandSettingsOpen}

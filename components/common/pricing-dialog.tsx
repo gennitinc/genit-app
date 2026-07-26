@@ -27,46 +27,46 @@ interface PricingTier {
 
 const tiers: PricingTier[] = [
   {
-    name: "Starter",
-    monthlyPrice: 0,
-    yearlyPrice: 0,
-    description: "For individuals getting started.",
+    name: "Studio",
+    monthlyPrice: 19,
+    yearlyPrice: 190,
+    description: "Professional tools for serious builders.",
     features: [
-      "5 AI Generations/mo",
-      "1 Team Member",
-      "Basic Analytics",
-      "Community Support",
-      "Basic Templates",
+      "1,200 credits per month",
+      "25 GB organization storage",
+      "HD & 4K image generation",
+      "Video & ad creation",
+      "Genit Auto",
+      "Brand kit access",
     ],
   },
   {
-    name: "Pro",
-    monthlyPrice: 10,
-    yearlyPrice: 100,
-    description: "For professionals and small teams.",
+    name: "Pro Studio",
+    monthlyPrice: 39,
+    yearlyPrice: 390,
+    description: "High-volume production for scaling teams.",
     features: [
-      "Unlimited AI Generations",
-      "5 Team Members",
-      "Advanced Analytics",
+      "2,000 credits per month",
+      "100 GB organization storage",
+      "Commercial video creation",
+      "Genit Auto",
       "Priority Support",
-      "Custom Templates",
-      "API Access",
+      "Advanced brand kit",
     ],
     popular: true,
   },
   {
-    name: "Enterprise",
-    monthlyPrice: 25,
-    yearlyPrice: 250,
-    description: "For large teams and organizations.",
+    name: "Agency",
+    monthlyPrice: 79,
+    yearlyPrice: 790,
+    description: "Full control and collaboration for agencies.",
     features: [
-      "Everything in Pro",
-      "Unlimited Team Members",
-      "Custom AI Training",
-      "Dedicated Account Manager",
-      "SLA Support",
-      "White-label Solutions",
-      "Advanced Security",
+      "5,000 credits per month",
+      "500 GB organization storage",
+      "4K ultra exports",
+      "Genit Auto",
+      "Team collaboration",
+      "Dedicated support",
     ],
   },
 ];
@@ -140,6 +140,7 @@ function PricingCard({
           )}
         </div>
         <Button
+          asChild
           className={cn(
             "mb-6 w-full transition-all duration-300",
             tier.popular
@@ -147,8 +148,10 @@ function PricingCard({
               : "bg-zinc-800 text-white hover:bg-zinc-700"
           )}
         >
-          <span>Start for $0</span>
-          <ArrowRight className='ml-1 h-4 w-4' />
+          <Link href='/pricing'>
+            <span>Choose {tier.name}</span>
+            <ArrowRight className='ml-1 h-4 w-4' />
+          </Link>
         </Button>
         <div className='space-y-3'>
           {tier.features.map((feature) => (

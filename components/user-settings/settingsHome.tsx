@@ -712,7 +712,7 @@ const SettingsHome = () => {
                       checked={currentOrg?.autoModeEnabled ?? false}
                       disabled={
                         savingAuto ||
-                        (user?.userPlan !== Plan.ENTERPRISE &&
+                        ((!user || user.userPlan === Plan.BASIC) &&
                           !currentOrg?.autoModeEnabled)
                       }
                       onCheckedChange={(checked) =>
@@ -721,10 +721,10 @@ const SettingsHome = () => {
                     />
                   </div>
 
-                  {user?.userPlan !== Plan.ENTERPRISE &&
+                  {(!user || user.userPlan === Plan.BASIC) &&
                     !currentOrg?.autoModeEnabled && (
                       <p className='text-muted-foreground rounded-lg border p-3 text-sm'>
-                        Genit Auto is available on Enterprise. {" "}
+                        Genit Auto is available on every paid plan.{" "}
                         <a
                           className='font-medium text-indigo-600 hover:underline'
                           href='/pricing'
