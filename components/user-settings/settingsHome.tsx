@@ -641,7 +641,7 @@ const SettingsHome = () => {
             Settings
           </h1>
           <p className='mt-1 text-sm text-zinc-500 dark:text-zinc-400'>
-            Manage your account, brand, automation, and billing.
+            Manage your account, brand, and billing.
           </p>
         </div>
 
@@ -700,7 +700,7 @@ const SettingsHome = () => {
           </aside>
 
           <main className='min-w-0 flex-1 [&_input]:rounded-xl [&_textarea]:rounded-xl'>
-            <div className='mb-5 flex items-start gap-3'>
+            {/* <div className='mb-5 flex items-start gap-3'>
               <div className='flex size-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-600 ring-1 ring-sky-100 dark:bg-sky-500/10 dark:text-sky-400 dark:ring-sky-400/15'>
                 <ActiveTabIcon className='size-5' />
               </div>
@@ -712,7 +712,7 @@ const SettingsHome = () => {
                   {activeTabDetails.description}
                 </p>
               </div>
-            </div>
+            </div> */}
 
             {activeTab === "account" && (
               <div className='space-y-5'>
