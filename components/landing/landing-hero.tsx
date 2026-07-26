@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/dialog";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import Loading from "@/utils/Loading";
-import { ChevronRight, Play, SendIcon, X, ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, ChevronRight, Play, SendIcon, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
@@ -521,7 +521,7 @@ const LandingHero = () => {
             <div className='mt-8 flex flex-wrap items-center gap-3'>
               <a
                 href={user ? "/chat" : "/signup"}
-                className='group inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 font-medium text-white transition hover:bg-indigo-700 active:translate-y-px'
+                className='group inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-3 font-medium text-white transition hover:bg-indigo-700 active:translate-y-px'
               >
                 Get started
                 <svg
@@ -543,7 +543,7 @@ const LandingHero = () => {
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <button className='border-border bg-background text-foreground hover:bg-muted inline-flex items-center gap-2 rounded-2xl border px-5 py-3 transition active:scale-[0.98]'>
+                  <button className='border-border bg-background text-foreground hover:bg-muted inline-flex items-center gap-2 rounded-lg border px-5 py-3 transition active:scale-[0.98]'>
                     <Play className='h-4 w-4 fill-current opacity-30' />
                     Watch Demo
                   </button>
@@ -555,7 +555,7 @@ const LandingHero = () => {
                 >
                   {/* <div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.18),transparent_42%),radial-gradient(circle_at_bottom_right,rgba(99,102,241,0.12),transparent_38%)]' /> */}
 
-                  <div className='border-border relative m-2 overflow-hidden rounded-2xl border shadow-2xl'>
+                  <div className='border-border relative m-2 overflow-hidden rounded-lg border shadow-2xl'>
                     <iframe
                       title='Genit product demo'
                       src='https://www.youtube-nocookie.com/embed/IjS9eTpmhgk?autoplay=1&rel=0'
@@ -585,7 +585,7 @@ const LandingHero = () => {
             </h2>
 
             {/* Social proof */}
-            <div className='mt-7 flex flex-col md:flex-row items-start  md:items-center gap-4'>
+            <div className='mt-7 flex flex-col items-start gap-4 md:flex-row md:items-center'>
               <div className='flex items-center -space-x-2'>
                 <img
                   src='https://i.pinimg.com/1200x/6b/fe/d8/6bfed887cb804dd9e6caee99dbe9dbe4.jpg'
@@ -618,7 +618,7 @@ const LandingHero = () => {
             </div>
           </div>
           {/* Right: Showcase 3d */}
-          <div className='relative mx-auto w-full max-w-xl lg:ml-auto ml-8 lg:ml-0'>
+          <div className='relative mx-auto ml-8 w-full max-w-xl lg:ml-0 lg:ml-auto'>
             <MarketingRobot3D />
           </div>
           {/* end 3d */}
@@ -1014,12 +1014,12 @@ const LandingHero = () => {
                     className={`flex ${isUser ? "justify-end" : "justify-start"} animate-in fade-in duration-300`}
                   >
                     {isUser ? (
-                      <div className='bg-foreground/80 text-primary-foreground max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-sm'>
+                      <div className='bg-foreground/80 text-primary-foreground max-w-[80%] rounded-lg rounded-tr-sm px-4 py-2.5 shadow-sm'>
                         <p className='text-sm'>{message.text}</p>
                       </div>
                     ) : (
                       <div className='max-w-[80%] space-y-2'>
-                        <div className='rounded-2xl rounded-tl-sm border border-neutral-200 bg-white px-4 py-2.5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800'>
+                        <div className='rounded-lg rounded-tl-sm border border-neutral-200 bg-white px-4 py-2.5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800'>
                           <p className='text-sm text-neutral-700 dark:text-neutral-200'>
                             {displayText}
                             {isStreaming && (
@@ -1071,7 +1071,7 @@ const LandingHero = () => {
               {/* Typing Indicator */}
               {isTyping && (
                 <div className='animate-in fade-in flex justify-start duration-300'>
-                  <div className='max-w-[80%] rounded-2xl rounded-tl-sm border border-neutral-200 bg-white px-4 py-3 shadow-sm dark:border-neutral-700 dark:bg-neutral-800'>
+                  <div className='max-w-[80%] rounded-lg rounded-tl-sm border border-neutral-200 bg-white px-4 py-3 shadow-sm dark:border-neutral-700 dark:bg-neutral-800'>
                     <div className='flex gap-1'>
                       <div
                         className='h-2 w-2 animate-bounce rounded-full bg-neutral-400 dark:bg-neutral-500'

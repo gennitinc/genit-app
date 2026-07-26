@@ -194,10 +194,10 @@ export function CalendarEventPanel({
         <div className='relative max-h-[65vh] overflow-y-auto pr-1'>
           {!editing && event ? (
             <div className='space-y-5'>
-              <div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-600 ring-1 ring-violet-500/15 dark:text-violet-300'>
+              <div className='flex h-11 w-11 items-center justify-center rounded-lg bg-violet-500/10 text-violet-600 ring-1 ring-violet-500/15 dark:text-violet-300'>
                 <CalendarDays className='h-5 w-5' />
               </div>
-              <div className='space-y-3 rounded-2xl bg-black/[0.025] p-4 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
+              <div className='space-y-3 rounded-lg bg-black/[0.025] p-4 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
                 <div className='flex gap-3 text-sm'>
                   <Clock3 className='mt-0.5 h-4 w-4 shrink-0 text-violet-500' />
                   <span>{readableDate(event)}</span>
@@ -244,7 +244,7 @@ export function CalendarEventPanel({
                 </Button>
               </div>
               {confirmDelete && (
-                <div className='relative mt-4 overflow-hidden rounded-2xl bg-neutral-50 px-4 py-4 ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
+                <div className='relative mt-4 overflow-hidden rounded-lg bg-neutral-50 px-4 py-4 ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
                   <GradientFrame />
                   <div className='relative z-10'>
                     <p className='text-foreground text-sm font-medium dark:text-white'>
@@ -503,7 +503,7 @@ export function CalendarEventPanel({
   const panelUI = (
     <div className='group relative mx-auto w-full max-w-xl overflow-hidden rounded-3xl bg-black/[0.02] p-4 ring-1 ring-black/5 md:p-6 dark:bg-white/[0.04] dark:ring-white/10'>
       <GradientFrame />
-      <div className='relative z-10 flex flex-col gap-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
+      <div className='relative z-10 flex flex-col gap-4 rounded-lg bg-white p-5 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
         <div className='flex flex-col gap-1 border-b border-black/5 pb-4 dark:border-white/10'>
           <DialogTitle className='text-foreground text-xl font-semibold tracking-tight dark:text-white'>
             {title}

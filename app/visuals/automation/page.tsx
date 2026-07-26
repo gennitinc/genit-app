@@ -468,7 +468,7 @@ export default function AutomationPage() {
   ).length;
 
   return (
-    <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-zinc-50 p-2 text-zinc-950 duration-500 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
+    <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-lg bg-zinc-50 p-2 text-zinc-950 duration-500 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
       <section className='p-1'>
         <div className='grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] lg:items-center'>
           <div className='flex min-w-0 flex-col items-start justify-center py-1'>
@@ -504,7 +504,7 @@ export default function AutomationPage() {
           </div>
 
           <div className='flex min-w-0 flex-col gap-3'>
-            <div className='hidden rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:block dark:border-white/10 dark:bg-[#0c0c0c] dark:shadow-none'>
+            <div className='hidden rounded-lg border border-zinc-200 bg-white p-4 shadow-sm sm:block dark:border-white/10 dark:bg-[#0c0c0c] dark:shadow-none'>
               <div className='flex items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-white/10'>
                 <div className='flex min-w-0 items-center gap-3'>
                   <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 dark:bg-white/10'>
@@ -547,13 +547,13 @@ export default function AutomationPage() {
       </section>
 
       {loading ? (
-        <div className='flex min-h-64 items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white dark:border-white/10 dark:bg-white/[0.035]'>
+        <div className='flex min-h-64 items-center justify-center rounded-lg border border-dashed border-zinc-200 bg-white dark:border-white/10 dark:bg-white/[0.035]'>
           <div className='flex items-center gap-2.5 text-sm font-medium text-zinc-500 dark:text-white/50'>
             <LoadingFileLoader />
           </div>
         </div>
       ) : visibleAutomations.length === 0 ? (
-        <div className='flex min-h-72 flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white px-6 py-10 text-center dark:border-white/10 dark:bg-white/[0.035]'>
+        <div className='flex min-h-72 flex-col items-center justify-center rounded-lg border border-dashed border-zinc-200 bg-white px-6 py-10 text-center dark:border-white/10 dark:bg-white/[0.035]'>
           <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 dark:bg-white/[0.06] dark:text-white/50'>
             <Workflow className='h-5 w-5' />
           </div>
@@ -594,7 +594,7 @@ export default function AutomationPage() {
             return (
               <article
                 key={automation._id}
-                className='group flex flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition-colors duration-200 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none dark:hover:bg-white/[0.055]'
+                className='group flex flex-col rounded-lg border border-zinc-200 bg-white p-5 shadow-sm transition-colors duration-200 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none dark:hover:bg-white/[0.055]'
               >
                 {/* Header: status + actions */}
                 <div className='mb-3 flex items-center justify-between gap-3'>
@@ -714,7 +714,7 @@ export default function AutomationPage() {
       )}
 
       {/* Automation Templates */}
-      <section className='mt-3 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+      <section className='mt-3 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
         <div className='mb-5'>
           <h2 className='text-base font-semibold'>Templates</h2>
           <p className='mt-0.5 text-xs text-zinc-500 dark:text-white/50'>
@@ -728,7 +728,7 @@ export default function AutomationPage() {
             return (
               <div
                 key={idx}
-                className='group flex flex-col rounded-2xl border border-zinc-200 bg-zinc-50 p-5 transition-colors duration-200 hover:bg-white dark:border-white/10 dark:bg-[#0c0c0c] dark:hover:bg-white/[0.05]'
+                className='group flex flex-col rounded-lg border border-zinc-200 bg-zinc-50 p-5 transition-colors duration-200 hover:bg-white dark:border-white/10 dark:bg-[#0c0c0c] dark:hover:bg-white/[0.05]'
               >
                 <div className='mb-3 flex items-center gap-2'>
                   <div className='flex h-9 w-9 items-center justify-center rounded-lg bg-white text-zinc-600 ring-1 ring-zinc-200 dark:bg-white/10 dark:text-white/70 dark:ring-0'>

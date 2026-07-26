@@ -101,7 +101,7 @@ function PricingCard({
   return (
     <div
       className={cn(
-        "border-border bg-background relative rounded-2xl border transition-all duration-300",
+        "border-border bg-background relative rounded-lg border transition-all duration-300",
         "hover:border-border hover:shadow-lg hover:shadow-blue-500/10",
         tier.popular && "border-blue-500/20 shadow-lg shadow-blue-500/10",
         className
@@ -245,7 +245,7 @@ function PricingContent({
           </Link>
         </div>
 
-        {/* <div className="mt-8 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/50">
+        {/* <div className="mt-8 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/50">
           <div className="p-6">
             <h3 className="mb-4 text-base font-semibold text-white">Compare all features</h3>
             <div className="grid">

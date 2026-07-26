@@ -7,14 +7,15 @@ import {
   FacebookBrand,
   GmailBrand,
   GoogleCalendarBrand,
+  GoogleDocsBrand,
   GoogleDriveBrand,
+  GoogleFormsBrand,
   GoogleMeetBrand,
   GoogleSheetsBrand,
   GoogleSlidesBrand,
-  GoogleDocsBrand,
-  GoogleFormsBrand,
   InstagramBrand,
   LinkedinBrand,
+  MailChimpBrand,
   MessengerBrand,
   MicrosoftOutlookBrand,
   PinterestBrand,
@@ -24,7 +25,6 @@ import {
   WhatsAppBrand,
   XBrand,
   YoutubeBrand,
-  MailChimpBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { useIntegrations } from "@/hooks/use-integrations";
 import {
@@ -41,9 +41,9 @@ import {
   CheckCircle2,
   Cog,
   Megaphone,
+  MoreHorizontal,
   Search,
   TrendingUp,
-  MoreHorizontal,
 } from "lucide-react";
 import {
   type CSSProperties,
@@ -400,55 +400,58 @@ function IntegrationCard({
 }) {
   const Icon = integration.icon;
   return (
-    <div className="flex items-center justify-between py-4 group border-b border-zinc-100/40 dark:border-zinc-900/50 last:border-b-0">
-      <div className="flex items-center min-w-0 flex-1">
+    <div className='group flex items-center justify-between border-b border-zinc-100/40 py-4 last:border-b-0 dark:border-zinc-900/50'>
+      <div className='flex min-w-0 flex-1 items-center'>
         {/* Brand Icon wrapper */}
-        <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-2xl bg-zinc-50 border border-zinc-200/60 dark:bg-zinc-950 dark:border-zinc-800/80 shadow-xs">
-          <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-zinc-800 dark:text-zinc-200" />
+        <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg border border-zinc-200/60 bg-zinc-50 shadow-xs sm:h-14 sm:w-14 dark:border-zinc-800/80 dark:bg-zinc-950'>
+          <Icon className='h-6 w-6 text-zinc-800 sm:h-7 sm:w-7 dark:text-zinc-200' />
         </div>
 
         {/* Text Area */}
-        <div className="flex-1 min-w-0 pl-4 pr-3 flex flex-col justify-center">
-          <div className="flex items-center gap-1.5">
-            <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 text-sm sm:text-base tracking-tight truncate">
+        <div className='flex min-w-0 flex-1 flex-col justify-center pr-3 pl-4'>
+          <div className='flex items-center gap-1.5'>
+            <h3 className='truncate text-sm font-semibold tracking-tight text-zinc-900 sm:text-base dark:text-zinc-100'>
               {integration.name}
             </h3>
             {status === "partial" && (
-              <span className="inline-flex items-center text-amber-500" title="Setup incomplete">
-                <AlertTriangle className="h-3.5 w-3.5" />
+              <span
+                className='inline-flex items-center text-amber-500'
+                title='Setup incomplete'
+              >
+                <AlertTriangle className='h-3.5 w-3.5' />
               </span>
             )}
           </div>
-          <p className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm line-clamp-2 leading-snug mt-0.5">
+          <p className='mt-0.5 line-clamp-2 text-xs leading-snug text-zinc-500 sm:text-sm dark:text-zinc-400'>
             {integration.description}
           </p>
         </div>
       </div>
 
       {/* Action Area */}
-      <div className="flex-shrink-0 ml-3">
+      <div className='ml-3 flex-shrink-0'>
         {status === "soon" ? (
           <button
-            type="button"
+            type='button'
             disabled
-            className="px-3 py-1 bg-zinc-100 dark:bg-zinc-900/40 text-zinc-400 dark:text-zinc-500 border border-zinc-200 dark:border-zinc-800 rounded-full text-xs font-semibold select-none cursor-not-allowed"
+            className='cursor-not-allowed rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-400 select-none dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-500'
           >
             Soon
           </button>
         ) : status === "connected" || status === "partial" ? (
           <button
-            type="button"
+            type='button'
             onClick={onManage}
-            className="p-2 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-full transition-all active:scale-95"
+            className='rounded-full p-2 text-zinc-500 transition-all hover:bg-zinc-100 hover:text-zinc-900 active:scale-95 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-200'
             title={`Manage ${integration.name}`}
           >
-            <MoreHorizontal className="h-5 w-5" />
+            <MoreHorizontal className='h-5 w-5' />
           </button>
         ) : (
           <button
-            type="button"
+            type='button'
             onClick={onConnect}
-            className="px-3 py-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-900 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-800 rounded-full text-xs font-semibold transition-all active:scale-95"
+            className='rounded-full border border-zinc-200/80 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-900 transition-all hover:bg-zinc-200 active:scale-95 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800'
           >
             Add
           </button>
@@ -481,7 +484,7 @@ export function IntegrationsExplorer() {
 
   const grouped = useMemo(() => {
     const q = query.trim().toLowerCase();
-    
+
     // First query filter
     let filtered = q
       ? INTEGRATIONS.filter(
@@ -517,32 +520,34 @@ export function IntegrationsExplorer() {
     <>
       {/* "Added" plugins section */}
       {connectedIntegrations.length > 0 && (
-        <div className="mb-10">
-          <div className="flex justify-between items-baseline mb-4">
-            <h3 className="text-zinc-500 dark:text-zinc-400 font-semibold text-xs uppercase tracking-wider">Added</h3>
+        <div className='mb-10'>
+          <div className='mb-4 flex items-baseline justify-between'>
+            <h3 className='text-xs font-semibold tracking-wider text-zinc-500 uppercase dark:text-zinc-400'>
+              Added
+            </h3>
             <button
-              type="button"
+              type='button'
               onClick={() => {
                 if (connectedIntegrations[0]) {
                   setManageFor(connectedIntegrations[0]);
                 }
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300 transition-colors"
+              className='text-xs text-zinc-400 transition-colors hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300'
             >
               Manage
             </button>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className='flex flex-wrap gap-3'>
             {connectedIntegrations.map((integration) => {
               const Icon = integration.icon;
               return (
                 <button
                   key={`added-${integration.platform}`}
                   onClick={() => setManageFor(integration)}
-                  className="w-12 h-12 flex items-center justify-center rounded-2xl bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-950 dark:hover:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/80 transition-all active:scale-95 shadow-xs"
+                  className='flex h-12 w-12 items-center justify-center rounded-lg border border-zinc-200/60 bg-zinc-50 shadow-xs transition-all hover:bg-zinc-100 active:scale-95 dark:border-zinc-800/80 dark:bg-zinc-950 dark:hover:bg-zinc-900'
                   title={`Manage ${integration.name}`}
                 >
-                  <Icon className="h-6 w-6 text-zinc-800 dark:text-zinc-200" />
+                  <Icon className='h-6 w-6 text-zinc-800 dark:text-zinc-200' />
                 </button>
               );
             })}
@@ -551,37 +556,37 @@ export function IntegrationsExplorer() {
       )}
 
       {/* Search and filter slider bar */}
-      <div className="flex gap-3 mb-8 items-center">
-        <div className="relative flex-1">
-          <Search className="text-zinc-400 pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
+      <div className='mb-8 flex items-center gap-3'>
+        <div className='relative flex-1'>
+          <Search className='pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-zinc-400' />
           <input
-            type="search"
+            type='search'
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search plugins and skills"
-            className="w-full rounded-full border border-zinc-200 bg-zinc-50/50 py-2.5 pr-4 pl-10 text-sm placeholder:text-zinc-400 text-zinc-900 focus:border-zinc-300 focus:outline-none dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-700/80 transition-colors shadow-xs"
+            placeholder='Search plugins and skills'
+            className='w-full rounded-full border border-zinc-200 bg-zinc-50/50 py-2.5 pr-4 pl-10 text-sm text-zinc-900 shadow-xs transition-colors placeholder:text-zinc-400 focus:border-zinc-300 focus:outline-none dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-700/80'
           />
         </div>
         <button
-          type="button"
+          type='button'
           onClick={() => {
             setQuery("");
             setSelectedCategory("All");
           }}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50/50 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800 dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition-all active:scale-95 shadow-xs"
-          title="Clear search and filters"
+          className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50/50 text-zinc-500 shadow-xs transition-all hover:bg-zinc-100 hover:text-zinc-800 active:scale-95 dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200'
+          title='Clear search and filters'
         >
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-4 w-4"
+            xmlns='http://www.w3.org/2000/svg'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            className='h-4 w-4'
           >
-            <line x1="4" y1='21' x2='4' y2='14' />
+            <line x1='4' y1='21' x2='4' y2='14' />
             <line x1='4' y1='10' x2='4' y2='3' />
             <line x1='12' y1='21' x2='12' y2='12' />
             <line x1='12' y1='8' x2='12' y2='3' />
@@ -595,19 +600,24 @@ export function IntegrationsExplorer() {
       </div>
 
       {/* Categories Tabs Bar */}
-      <div className="flex gap-2 overflow-x-auto pb-2 mb-8 no-scrollbar scroll-smooth">
+      <div className='no-scrollbar mb-8 flex gap-2 overflow-x-auto scroll-smooth pb-2'>
         {categories.map((cat) => {
           const isActive = selectedCategory === cat;
-          const displayLabel = cat === "Ads Campaigns" ? "Ads" : cat === "Email Campaigns" ? "Email" : cat;
+          const displayLabel =
+            cat === "Ads Campaigns"
+              ? "Ads"
+              : cat === "Email Campaigns"
+                ? "Email"
+                : cat;
           return (
             <button
               key={cat}
-              type="button"
+              type='button'
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 select-none whitespace-nowrap ${
+              className={`rounded-lg px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-all duration-200 select-none sm:text-sm ${
                 isActive
                   ? "bg-zinc-900 text-white dark:bg-zinc-800 dark:text-zinc-100"
-                  : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:text-zinc-200 dark:hover:bg-zinc-900/60"
+                  : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-900/60 dark:hover:text-zinc-200"
               }`}
             >
               {displayLabel}
@@ -618,7 +628,7 @@ export function IntegrationsExplorer() {
 
       {grouped.length === 0 ? (
         <div className='py-16 text-center'>
-          <p className='text-zinc-500 dark:text-zinc-400 text-sm'>
+          <p className='text-sm text-zinc-500 dark:text-zinc-400'>
             No plugins match &ldquo;{query}&rdquo;.
           </p>
         </div>
@@ -626,12 +636,12 @@ export function IntegrationsExplorer() {
         <div className='space-y-12'>
           {grouped.map(([category, items]) => (
             <section key={category}>
-              <div className='mb-2 border-b border-zinc-100/80 dark:border-zinc-900/80 pb-3'>
-                <h3 className='text-zinc-900 dark:text-zinc-100 font-semibold tracking-tight text-sm uppercase tracking-wider'>
+              <div className='mb-2 border-b border-zinc-100/80 pb-3 dark:border-zinc-900/80'>
+                <h3 className='text-sm font-semibold tracking-tight tracking-wider text-zinc-900 uppercase dark:text-zinc-100'>
                   {category}
                 </h3>
               </div>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-1'>
+              <div className='grid grid-cols-1 gap-x-12 gap-y-1 md:grid-cols-2'>
                 {items.map((integration) => {
                   const connections = byPlatform.get(integration.platform);
                   const hasIdentityForSurface = isMetaSurface(

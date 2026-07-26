@@ -337,7 +337,7 @@ export default function CalendarPage() {
   const eventCount = eventsQuery.data?.events.length || 0;
 
   return (
-    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-zinc-50 p-2 text-zinc-950 duration-500 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
+    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-lg bg-zinc-50 p-2 text-zinc-950 duration-500 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
       <section className='p-1'>
         <div className='grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-stretch'>
           <div className='flex min-w-0 flex-col justify-end py-1'>
@@ -381,7 +381,7 @@ export default function CalendarPage() {
             </div>
           </div>
 
-          <div className='hidden rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:block sm:p-5 dark:border-white/10 dark:bg-[#0c0c0c] dark:shadow-none'>
+          <div className='hidden rounded-lg border border-zinc-200 bg-white p-4 shadow-sm sm:block sm:p-5 dark:border-white/10 dark:bg-[#0c0c0c] dark:shadow-none'>
             <div className='flex items-center justify-between gap-3 border-b border-zinc-200 pb-4 dark:border-white/10'>
               <div className='flex min-w-0 items-center gap-3'>
                 <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 dark:bg-white/10'>
@@ -433,7 +433,7 @@ export default function CalendarPage() {
         </div>
       </section>
 
-      <section className='calendar-shell overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+      <section className='calendar-shell overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
         <div className='grid gap-2 border-b border-zinc-200 p-2.5 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-3 dark:border-white/10'>
           <div className='flex min-w-0 items-center gap-2'>
             <div className='flex rounded-lg bg-zinc-100 p-0.5 dark:bg-white/[0.06]'>
@@ -569,7 +569,7 @@ export default function CalendarPage() {
 
           {!integrationsLoading && !activeConnection && (
             <div className='absolute inset-0 z-20 flex items-center justify-center bg-white/70 p-5 text-center backdrop-blur-[2px] dark:bg-black/55'>
-              <div className='relative w-full max-w-sm overflow-hidden rounded-2xl bg-white p-6 ring-1 ring-zinc-200 dark:bg-[#0c0c0c] dark:ring-white/10'>
+              <div className='relative w-full max-w-sm overflow-hidden rounded-lg bg-white p-6 ring-1 ring-zinc-200 dark:bg-[#0c0c0c] dark:ring-white/10'>
                 <h3 className='relative text-lg font-semibold'>
                   Bring your schedule into Genit
                 </h3>

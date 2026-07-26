@@ -326,7 +326,7 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
       >
         <div
           className={cn(
-            "relative flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-300",
+            "relative flex h-14 w-14 items-center justify-center rounded-lg transition-all duration-300",
             "overflow-hidden shadow-md",
             "group-hover:shadow-lg"
           )}
@@ -344,7 +344,7 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
           <div className='pointer-events-none absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-60 dark:opacity-30' />
 
           {/* Border: visible in light, subtle in dark */}
-          <div className='absolute inset-0 rounded-2xl ring-1 ring-black/[0.07] ring-inset dark:ring-white/[0.06]' />
+          <div className='absolute inset-0 rounded-lg ring-1 ring-black/[0.07] ring-inset dark:ring-white/[0.06]' />
 
           {isImage ? (
             <img
@@ -418,7 +418,7 @@ const AutoUpgradeDialog = ({
 
       {/* Content Container */}
       <div className='relative z-10 flex w-full flex-col justify-center bg-white/70 p-5 backdrop-blur-md md:w-1/2 md:bg-transparent md:p-8 md:backdrop-blur-none dark:bg-black/70 md:dark:bg-transparent'>
-        <div className='relative z-10 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-none dark:ring-white/10'>
+        <div className='relative z-10 rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-none dark:ring-white/10'>
           <div className='flex items-center justify-between'>
             <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
               <Workflow className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
@@ -604,8 +604,7 @@ export function IdeaSection() {
   useEffect(() => {
     if (user?.currentOrganization) {
       setMode(
-        user.userPlan !== "Basic" &&
-          user.currentOrganization.autoModeEnabled
+        user.userPlan !== "Basic" && user.currentOrganization.autoModeEnabled
           ? "auto"
           : "chat"
       );
@@ -1093,11 +1092,11 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Marketing Agents 
+              Marketing Agents
               {/* <span>Humans</span> */}
             </motion.h1>
             <motion.h1
-              className='text-foreground xs:text-5xl mb-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight  sm:text-6xl md:mb-2.5 md:justify-start md:gap-x-1 md:text-left md:text-2xl lg:text-5xl'
+              className='text-foreground xs:text-5xl mb-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight sm:text-6xl md:mb-2.5 md:justify-start md:gap-x-1 md:text-left md:text-2xl lg:text-5xl'
               custom={1}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -1125,9 +1124,7 @@ export function IdeaSection() {
                 pointerClassName='text-blue-500 h-2.5 w-2.5 sm:h-3 sm:w-3'
                 containerClassName='inline-flex items-center'
               >
-                <span className='relative z-10 px-1 sm:px-2'>
-                   Sleep
-                </span>
+                <span className='relative z-10 px-1 sm:px-2'>Sleep</span>
               </PointerHighlight>
               {/* <span>Humans</span> */}
             </motion.h1>

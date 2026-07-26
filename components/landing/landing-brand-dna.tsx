@@ -70,7 +70,7 @@ export const LandingBrandDNA = () => {
         <div className='grid grid-cols-1 gap-4 md:grid-cols-12'>
           {/* Left Column: Visuals */}
           <div className='col-span-1 space-y-4 md:col-span-5'>
-            <div className='relative overflow-hidden rounded-2xl bg-black/[0.02] p-5 ring-1 ring-black/5 dark:bg-white/[0.02] dark:ring-white/10'>
+            <div className='relative overflow-hidden rounded-lg bg-black/[0.02] p-5 ring-1 ring-black/5 dark:bg-white/[0.02] dark:ring-white/10'>
               <div className='absolute top-0 right-0 p-4 opacity-[0.03] dark:opacity-10'>
                 <Palette className='h-24 w-24 text-black dark:text-white' />
               </div>
@@ -131,7 +131,7 @@ export const LandingBrandDNA = () => {
               </div>
             </div>
 
-            <div className='flex items-center justify-between rounded-2xl bg-black/[0.02] p-5 ring-1 ring-black/5 dark:bg-white/[0.02] dark:ring-white/10'>
+            <div className='flex items-center justify-between rounded-lg bg-black/[0.02] p-5 ring-1 ring-black/5 dark:bg-white/[0.02] dark:ring-white/10'>
               <div className='flex items-center gap-3'>
                 <ImageIcon className='text-muted-foreground h-8 w-8 dark:text-white/40' />
                 <div>
@@ -150,14 +150,14 @@ export const LandingBrandDNA = () => {
           {/* Right Column: Voice & Profile */}
           <div className='col-span-1 flex flex-col gap-4 md:col-span-7 lg:flex-row'>
             {/* Brand Logo & Verification Card */}
-            <div className='flex w-full flex-col items-center justify-center rounded-2xl bg-black/[0.02] p-6 ring-1 ring-black/5 lg:w-[35%] dark:bg-white/[0.02] dark:ring-white/10'>
+            <div className='flex w-full flex-col items-center justify-center rounded-lg bg-black/[0.02] p-6 ring-1 ring-black/5 lg:w-[35%] dark:bg-white/[0.02] dark:ring-white/10'>
               <div className='relative mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-black/5 dark:bg-neutral-900 dark:ring-white/10'>
                 <Image
                   src='/brandlogo1.png'
                   alt='Brand Logo'
                   width={64}
                   height={64}
-                  className='h-16 w-16 rounded-2xl object-cover'
+                  className='h-16 w-16 rounded-lg object-cover'
                 />
               </div>
               <div className='flex flex-col items-center gap-1.5'>
@@ -180,7 +180,7 @@ export const LandingBrandDNA = () => {
             </div>
 
             {/* Tone of Voice Profile */}
-            <div className='relative flex h-full w-full flex-col overflow-hidden rounded-2xl bg-black/[0.02] p-5 ring-1 ring-black/5 lg:w-[65%] dark:bg-white/[0.02] dark:ring-white/10'>
+            <div className='relative flex h-full w-full flex-col overflow-hidden rounded-lg bg-black/[0.02] p-5 ring-1 ring-black/5 lg:w-[65%] dark:bg-white/[0.02] dark:ring-white/10'>
               <div className='absolute right-0 bottom-0 p-4 opacity-[0.03] dark:opacity-5'>
                 <Fingerprint className='h-48 w-48 text-black dark:text-white' />
               </div>

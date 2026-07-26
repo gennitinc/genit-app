@@ -137,7 +137,7 @@ export default function AdminDocsPage() {
           </p>
         </div>
       ) : (
-        <div className='overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40 shadow-xl'>
+        <div className='overflow-hidden rounded-lg border border-zinc-800/80 bg-zinc-900/40 shadow-xl'>
           <div className='overflow-x-auto'>
             <table className='w-full border-collapse text-left text-sm'>
               <thead>

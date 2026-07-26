@@ -630,7 +630,7 @@ const Page = () => {
                 Step 1
               </div>
               <div className='mb-6 flex gap-3'>
-                <div className='h-24 w-24 overflow-hidden rounded-2xl'>
+                <div className='h-24 w-24 overflow-hidden rounded-lg'>
                   <Image
                     src='https://ext.same-assets.com/3322540528/3139708538.png'
                     alt='Person 1'
@@ -639,7 +639,7 @@ const Page = () => {
                     className='h-full w-full object-cover'
                   />
                 </div>
-                <div className='h-24 w-24 overflow-hidden rounded-2xl'>
+                <div className='h-24 w-24 overflow-hidden rounded-lg'>
                   <Image
                     src='https://ext.same-assets.com/3322540528/490832111.png'
                     alt='Person 2'
@@ -694,7 +694,7 @@ const Page = () => {
               <div className='mb-6 inline-flex items-center gap-2 rounded-full bg-pink-900/40 px-3 py-1 text-xs text-pink-400'>
                 Step 3
               </div>
-              <div className='mb-6 rounded-2xl bg-gray-800/50 p-4'>
+              <div className='mb-6 rounded-lg bg-gray-800/50 p-4'>
                 <div className='mb-2 flex items-center gap-3'>
                   <div className='h-8 w-8 rounded-full bg-gray-600' />
                   <div className='flex-1'>
@@ -926,7 +926,7 @@ const Page = () => {
           {/* Quotes Grid */}
           <div className='mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2'>
             {quotes.map((quote, index) => (
-              <div key={index} className='rounded-2xl bg-[#141414] p-6'>
+              <div key={index} className='rounded-lg bg-[#141414] p-6'>
                 <div className='mb-4 text-2xl text-gray-500'>"</div>
                 <p className='mb-6 text-sm leading-relaxed text-white'>
                   {quote.quote}

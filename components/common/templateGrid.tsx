@@ -750,7 +750,7 @@ export default function TemplateGrid() {
               )}
               <div
                 ref={chatContainerRef}
-                className="before:bg-radial-gradient relative flex h-full min-h-0 w-full flex-1 overflow-hidden rounded-2xl p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh]"
+                className="before:bg-radial-gradient relative flex h-full min-h-0 w-full flex-1 overflow-hidden rounded-lg p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh]"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
@@ -847,7 +847,7 @@ export default function TemplateGrid() {
                               fontFamily: "inherit",
                               minHeight: "60px",
                             }}
-                            className='scrollbar-thumb-rounded w-full resize-none scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent overflow-y-auto rounded-2xl border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 hover:scrollbar-thumb-gray-400 focus:placeholder:text-gray-400 md:p-4 dark:scrollbar-thumb-[#888] dark:text-white dark:placeholder:text-gray-400 dark:hover:scrollbar-thumb-[#555] dark:focus:placeholder:text-[#363636]'
+                            className='scrollbar-thumb-rounded w-full resize-none scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent overflow-y-auto rounded-lg border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 hover:scrollbar-thumb-gray-400 focus:placeholder:text-gray-400 md:p-4 dark:scrollbar-thumb-[#888] dark:text-white dark:placeholder:text-gray-400 dark:hover:scrollbar-thumb-[#555] dark:focus:placeholder:text-[#363636]'
                             aria-label='Enter your prompt'
                             aria-describedby={
                               inputError ? "input-error" : undefined
@@ -1019,7 +1019,7 @@ export default function TemplateGrid() {
               )}
               <div
                 ref={chatContainerRef}
-                className="before:bg-radial-gradient relative flex h-full min-h-0 w-full flex-1 overflow-hidden rounded-2xl p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh]"
+                className="before:bg-radial-gradient relative flex h-full min-h-0 w-full flex-1 overflow-hidden rounded-lg p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh]"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
@@ -1116,7 +1116,7 @@ export default function TemplateGrid() {
                               fontFamily: "inherit",
                               minHeight: "60px",
                             }}
-                            className='scrollbar-thumb-rounded w-full resize-none scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent overflow-y-auto rounded-2xl border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 hover:scrollbar-thumb-gray-400 focus:placeholder:text-gray-400 md:p-4 dark:scrollbar-thumb-[#888] dark:text-white dark:placeholder:text-gray-400 dark:hover:scrollbar-thumb-[#555] dark:focus:placeholder:text-[#363636]'
+                            className='scrollbar-thumb-rounded w-full resize-none scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent overflow-y-auto rounded-lg border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 hover:scrollbar-thumb-gray-400 focus:placeholder:text-gray-400 md:p-4 dark:scrollbar-thumb-[#888] dark:text-white dark:placeholder:text-gray-400 dark:hover:scrollbar-thumb-[#555] dark:focus:placeholder:text-[#363636]'
                             aria-label='Enter your prompt'
                             aria-describedby={
                               inputError ? "input-error" : undefined
@@ -1286,7 +1286,7 @@ export default function TemplateGrid() {
               )}
               <div
                 ref={chatContainerRef}
-                className="before:bg-radial-gradient relative flex h-full min-h-0 w-full flex-1 overflow-hidden rounded-2xl p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh]"
+                className="before:bg-radial-gradient relative flex h-full min-h-0 w-full flex-1 overflow-hidden rounded-lg p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh]"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
@@ -1383,7 +1383,7 @@ export default function TemplateGrid() {
                               fontFamily: "inherit",
                               minHeight: "60px",
                             }}
-                            className='scrollbar-thumb-rounded w-full resize-none scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent overflow-y-auto rounded-2xl border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 hover:scrollbar-thumb-gray-400 focus:placeholder:text-gray-400 md:p-4 dark:scrollbar-thumb-[#888] dark:text-white dark:placeholder:text-gray-400 dark:hover:scrollbar-thumb-[#555] dark:focus:placeholder:text-[#363636]'
+                            className='scrollbar-thumb-rounded w-full resize-none scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent overflow-y-auto rounded-lg border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 hover:scrollbar-thumb-gray-400 focus:placeholder:text-gray-400 md:p-4 dark:scrollbar-thumb-[#888] dark:text-white dark:placeholder:text-gray-400 dark:hover:scrollbar-thumb-[#555] dark:focus:placeholder:text-[#363636]'
                             aria-label='Enter your prompt'
                             aria-describedby={
                               inputError ? "input-error" : undefined

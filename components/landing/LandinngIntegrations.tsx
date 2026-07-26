@@ -9,6 +9,7 @@ import {
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
   Activity,
+  ArrowRight,
   BarChart3,
   Boxes,
   Calendar,
@@ -29,10 +30,9 @@ import {
   Target,
   UserPlus,
   Workflow,
-  ArrowRight,
 } from "lucide-react";
-import React from "react";
 import Link from "next/link";
+import React from "react";
 
 const TEAM_MEMBERS = [
   "https://i.pinimg.com/736x/a0/cb/f8/a0cbf895e3e033b27a823ef8bb5b6a31.jpg",
@@ -53,14 +53,14 @@ const LandinngIntegrations = () => {
         streamlines your entire workflow.
       </p>
 
-         {/* Call to Action */}
-      <div className="flex justify-center mb-12 mt-12">
+      {/* Call to Action */}
+      <div className='mt-12 mb-12 flex justify-center'>
         <Link
-          href="/signup"
-          className="relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all duration-200 active:scale-95 shadow-md"
+          href='/signup'
+          className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
           <span>Connect your stack</span>
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className='h-4 w-4' />
         </Link>
       </div>
 
@@ -74,7 +74,7 @@ const LandinngIntegrations = () => {
           <GradientFrame />
 
           {/* Inset UI preview */}
-          <div className='rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
+          <div className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='text-foreground mb-3 flex items-center gap-2 text-sm dark:text-white/80'>
               <BarChart3 className='text-foreground h-4 w-4 dark:text-white' />
               <span className='font-medium'>Campaign Monitor</span>
@@ -161,7 +161,7 @@ const LandinngIntegrations = () => {
           <GradientFrame />
 
           {/* Inset UI preview */}
-          <div className='rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
+          <div className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='flex items-center justify-between'>
               <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
                 <Globe2 className='h-4 w-4 text-indigo-500 dark:text-indigo-300' />
@@ -413,7 +413,7 @@ const LandinngIntegrations = () => {
         >
           <GradientFrame />
 
-          <div className='rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
+          <div className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
               <Boxes className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
               <span className='font-medium'>Connects with your stack</span>
@@ -512,7 +512,7 @@ const LandinngIntegrations = () => {
         >
           <GradientFrame />
 
-          <div className='rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
+          <div className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='flex items-center justify-between'>
               <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
                 <Calendar className='h-4 w-4 text-fuchsia-500 dark:text-fuchsia-300' />
@@ -654,7 +654,7 @@ const LandinngIntegrations = () => {
 
             {/* Right: Card UI */}
             <div className='relative z-10 w-full'>
-              <div className='relative h-[350px] overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-2xl dark:ring-white/10'>
+              <div className='relative h-[350px] overflow-hidden rounded-lg bg-white shadow-xl ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-2xl dark:ring-white/10'>
                 {/* Mock Header */}
                 <div className='flex items-center justify-between border-b border-black/5 bg-black/[0.02] px-4 py-3 dark:border-white/10 dark:bg-white/[0.02]'>
                   <div className='flex items-center gap-3'>
@@ -742,8 +742,6 @@ const LandinngIntegrations = () => {
           </div>
         </section>
       </div>
-
-   
     </section>
   );
 };

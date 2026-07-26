@@ -218,7 +218,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
           <div className='mt-8 h-fit w-full lg:mt-0'>
             <div className='relative flex flex-col items-center justify-center overflow-hidden py-4 sm:py-6 lg:py-12'>
               <div
-                className={`relative w-full max-w-md overflow-hidden rounded-xl border p-4 py-3 pt-4 sm:rounded-2xl sm:p-5 sm:pt-5 md:w-fit lg:max-w-xl ${
+                className={`relative w-full max-w-md overflow-hidden rounded-xl border p-4 py-3 pt-4 sm:rounded-lg sm:p-5 sm:pt-5 md:w-fit lg:max-w-xl ${
                   isDark
                     ? "border-neutral-800 bg-neutral-900"
                     : "border-gray-200 bg-white"

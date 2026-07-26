@@ -193,7 +193,7 @@ const LogoAnimationPage = () => {
           <section className='relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-center gap-6 gap-y-6 px-4 sm:px-2 md:grid-cols-[1fr_1.4fr] lg:gap-16 lg:px-8 lg:py-10'>
             {/* Left Column: Controls */}
             <div className='flex flex-col gap-4 lg:gap-5'>
-              <div className='flex flex-col gap-6 overflow-hidden rounded-2xl border border-black/5 bg-white/80 p-6 shadow-2xl backdrop-blur-xl dark:border-white/5 dark:bg-[#141415]/80'>
+              <div className='flex flex-col gap-6 overflow-hidden rounded-lg border border-black/5 bg-white/80 p-6 shadow-2xl backdrop-blur-xl dark:border-white/5 dark:bg-[#141415]/80'>
                 <div className='space-y-6'>
                   {/* Upload Section */}
                   <div className='space-y-2'>
@@ -298,7 +298,7 @@ const LogoAnimationPage = () => {
             </div>
 
             {/* Right Column: Preview/Result */}
-            <div className='relative flex min-h-[50vh] flex-col items-stretch overflow-hidden rounded-2xl border border-black/5 bg-black dark:border-white/5'>
+            <div className='relative flex min-h-[50vh] flex-col items-stretch overflow-hidden rounded-lg border border-black/5 bg-black dark:border-white/5'>
               <div className='z-20 flex h-16 shrink-0 items-center justify-between border-b border-white/5 bg-[#0A0A0A]/50 px-8 backdrop-blur'>
                 <div className='flex items-center gap-3'>
                   <span className='text-base font-bold text-white'>Result</span>
@@ -324,7 +324,7 @@ const LogoAnimationPage = () => {
                       <img
                         src='https://i.pinimg.com/originals/46/5b/c4/465bc4bc137942ccd0a2a8ecb96387e8.gif'
                         alt='Demo'
-                        className='max-h-[55vh] w-fit rounded-2xl object-cover'
+                        className='max-h-[55vh] w-fit rounded-lg object-cover'
                       />
                     </div>
                     <div className='space-y-1'>
@@ -356,7 +356,7 @@ const LogoAnimationPage = () => {
                 )}
 
                 {!isGenerating && generatedVideoUrl && (
-                  <div className='relative aspect-square w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-black/40 shadow-2xl'>
+                  <div className='relative aspect-square w-full max-w-lg overflow-hidden rounded-lg border border-white/10 bg-black/40 shadow-2xl'>
                     <video
                       src={generatedVideoUrl}
                       controls

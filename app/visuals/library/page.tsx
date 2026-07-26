@@ -159,7 +159,7 @@ export default function BlogLibraryPage() {
     <div className='group relative mx-auto w-full max-w-3xl overflow-hidden rounded-3xl p-2 ring-1 ring-black/5 lg:p-6 lg:px-0 dark:bg-white/[0.04] dark:ring-white/10'>
       <GradientFrame />
 
-      <div className='relative z-10 flex flex-col gap-5 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 md:flex-row dark:bg-[#0a0a0a] dark:ring-white/10'>
+      <div className='relative z-10 flex flex-col gap-5 rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 md:flex-row dark:bg-[#0a0a0a] dark:ring-white/10'>
         <div className='relative flex min-h-[300px] w-full items-center justify-center overflow-hidden rounded-xl bg-black/[0.02] ring-1 ring-black/5 md:w-1/2 dark:bg-white/[0.04] dark:ring-white/10'>
           {selectedAsset.mimeType.startsWith("image") ? (
             <img
@@ -376,7 +376,7 @@ export default function BlogLibraryPage() {
           <LoadingFileLoader />
         </div>
       ) : assets.length === 0 ? (
-        <div className='flex h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-800 text-zinc-500'>
+        <div className='flex h-64 flex-col items-center justify-center rounded-lg border border-dashed border-zinc-800 text-zinc-500'>
           <Library className='mb-3 h-9 w-9' />
           <p className='text-sm'>No media yet</p>
         </div>
@@ -553,7 +553,7 @@ export default function BlogLibraryPage() {
       >
         <DialogContent className='max-w-md overflow-hidden rounded-3xl border-0 bg-black/[0.02] p-5 shadow-none ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
           <GradientFrame />
-          <div className='relative z-10 flex flex-col gap-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
+          <div className='relative z-10 flex flex-col gap-4 rounded-lg bg-white p-5 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
             <div className='flex items-start gap-4'>
               <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-neutral-100 dark:bg-neutral-800'>
                 <Trash2 className='h-5 w-5' />

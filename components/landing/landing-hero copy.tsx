@@ -479,9 +479,9 @@ const LandingHero = () => {
     <section className='relative w-full overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
       <div className='relative flex w-full flex-col items-center justify-center'>
         {/* <IdeaSection /> */}
-        <div className='mt-14 mb-40 grid grid-cols-1 items-center gap-16 lg:grid-cols-2 w-full'>
+        <div className='mt-14 mb-40 grid w-full grid-cols-1 items-center gap-16 lg:grid-cols-2'>
           {/* Left: Content */}
-          <div className='max-w-2xl w-full'>
+          <div className='w-full max-w-2xl'>
             <div className='mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-neutral-300'>
               <span className='inline-flex h-1.5 w-1.5 rounded-full bg-lime-300' />
               Marketing that never sleeps.
@@ -497,19 +497,19 @@ const LandingHero = () => {
             </p>
             {/* Tags / mini metrics */}
             {/* <div className='mt-7 flex flex-wrap gap-3'>
-              <div className='rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-neutral-200'>
+              <div className='rounded-lg border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-neutral-200'>
                 <span className='text-neutral-400'>Level:</span>
                 Moderate
               </div>
-              <div className='rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-neutral-200'>
+              <div className='rounded-lg border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-neutral-200'>
                 <span className='text-neutral-400'>Duration:</span>
                 6.5 h
               </div>
-              <div className='rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-neutral-200'>
+              <div className='rounded-lg border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-neutral-200'>
                 <span className='text-neutral-400'>Distance:</span>
                 14.2 km
               </div>
-              <div className='rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-neutral-200'>
+              <div className='rounded-lg border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-neutral-200'>
                 <span className='text-neutral-400'>Group:</span>8 people
               </div>
             </div> */}
@@ -688,25 +688,25 @@ const LandingHero = () => {
                           </button>
                         </div>
                         <div className='mt-3 grid grid-cols-2 gap-2'>
-                          <div className='rounded-2xl bg-white/15 px-3 py-2 text-white/90 backdrop-blur'>
+                          <div className='rounded-lg bg-white/15 px-3 py-2 text-white/90 backdrop-blur'>
                             <p className='text-[11px] text-white/70'>
                               Elevation
                             </p>
                             <p className='text-sm'>+400m</p>
                           </div>
-                          <div className='rounded-2xl bg-white/15 px-3 py-2 text-white/90 backdrop-blur'>
+                          <div className='rounded-lg bg-white/15 px-3 py-2 text-white/90 backdrop-blur'>
                             <p className='text-[11px] text-white/70'>
                               Duration
                             </p>
                             <p className='text-sm'>6.5 h</p>
                           </div>
-                          <div className='rounded-2xl bg-white/15 px-3 py-2 text-white/90 backdrop-blur'>
+                          <div className='rounded-lg bg-white/15 px-3 py-2 text-white/90 backdrop-blur'>
                             <p className='text-[11px] text-white/70'>
                               Distance
                             </p>
                             <p className='text-sm'>14.2 km</p>
                           </div>
-                          <div className='rounded-2xl bg-white/15 px-3 py-2 text-white/90 backdrop-blur'>
+                          <div className='rounded-lg bg-white/15 px-3 py-2 text-white/90 backdrop-blur'>
                             <p className='text-[11px] text-white/70'>Hikers</p>
                             <p className='text-sm'>8</p>
                           </div>
@@ -801,7 +801,7 @@ const LandingHero = () => {
                       Starting in 2h 15m
                     </p>
                   </div>
-                  <div className='relative mx-4 mt-3 h-[240px] overflow-hidden rounded-2xl bg-gradient-to-b from-neutral-900 to-black ring-1 ring-white/10'>
+                  <div className='relative mx-4 mt-3 h-[240px] overflow-hidden rounded-lg bg-gradient-to-b from-neutral-900 to-black ring-1 ring-white/10'>
                     {/* Stylized topo lines */}
                     <svg
                       viewBox='0 0 400 300'
@@ -910,7 +910,7 @@ const LandingHero = () => {
                     </div>
                   </div>
                   <div className='mt-4 px-4'>
-                    <div className='rounded-2xl border border-white/10 bg-white/[0.04] p-4'>
+                    <div className='rounded-lg border border-white/10 bg-white/[0.04] p-4'>
                       <div className='mb-3 flex items-center justify-between'>
                         <div className='text-xs text-white/60'>Trail stats</div>
                         <div className='text-xs text-lime-300'>Moderate</div>
@@ -1061,7 +1061,7 @@ const LandingHero = () => {
                     </div>
                   </div>
                   <div className='mt-4 px-4'>
-                    <div className='rounded-2xl border border-white/10 bg-white/[0.04] p-3'>
+                    <div className='rounded-lg border border-white/10 bg-white/[0.04] p-3'>
                       <div className='flex items-center gap-3'>
                         <div className='flex-1'>
                           <div className='mb-1 flex items-center justify-between'>
@@ -1475,12 +1475,12 @@ const LandingHero = () => {
                     className={`flex ${isUser ? "justify-end" : "justify-start"} animate-in fade-in duration-300`}
                   >
                     {isUser ? (
-                      <div className='bg-foreground/80 text-primary-foreground max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-sm'>
+                      <div className='bg-foreground/80 text-primary-foreground max-w-[80%] rounded-lg rounded-tr-sm px-4 py-2.5 shadow-sm'>
                         <p className='text-sm'>{message.text}</p>
                       </div>
                     ) : (
                       <div className='max-w-[80%] space-y-2'>
-                        <div className='rounded-2xl rounded-tl-sm border border-neutral-200 bg-white px-4 py-2.5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800'>
+                        <div className='rounded-lg rounded-tl-sm border border-neutral-200 bg-white px-4 py-2.5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800'>
                           <p className='text-sm text-neutral-700 dark:text-neutral-200'>
                             {displayText}
                             {isStreaming && (
@@ -1532,7 +1532,7 @@ const LandingHero = () => {
               {/* Typing Indicator */}
               {isTyping && (
                 <div className='animate-in fade-in flex justify-start duration-300'>
-                  <div className='max-w-[80%] rounded-2xl rounded-tl-sm border border-neutral-200 bg-white px-4 py-3 shadow-sm dark:border-neutral-700 dark:bg-neutral-800'>
+                  <div className='max-w-[80%] rounded-lg rounded-tl-sm border border-neutral-200 bg-white px-4 py-3 shadow-sm dark:border-neutral-700 dark:bg-neutral-800'>
                     <div className='flex gap-1'>
                       <div
                         className='h-2 w-2 animate-bounce rounded-full bg-neutral-400 dark:bg-neutral-500'

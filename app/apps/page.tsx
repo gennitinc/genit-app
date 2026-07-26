@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation";
 import { Toaster } from "sonner";
 import React, { useMemo, useState } from "react";
 
-  const FARMNET_EMAIL = "farmnetent@gmail.com";
+const FARMNET_EMAIL = "farmnetent@gmail.com";
 const GOOGLE_FLOW_URL = "https://labs.google/fx/tools/flow";
 
 const AppCard = ({
@@ -43,7 +43,7 @@ const AppCard = ({
     <div className='group flex items-center justify-between border-b border-zinc-100/40 py-4 last:border-b-0 dark:border-zinc-900/50'>
       <div className='flex min-w-0 flex-1 items-center'>
         {/* Brand Icon wrapper */}
-        <div className='flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-zinc-200/60 bg-zinc-50 shadow-xs dark:border-zinc-800/80 dark:bg-zinc-950'>
+        <div className='flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-zinc-200/60 bg-zinc-50 shadow-xs dark:border-zinc-800/80 dark:bg-zinc-950'>
           {app.imageSrc ? (
             <img
               src={app.imageSrc}

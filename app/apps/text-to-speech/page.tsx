@@ -980,7 +980,7 @@ function TextToSpeechPage() {
                               setSelectedVoice(voice);
                               setIsVoiceSelectorOpen(false);
                             }}
-                            className='group bg-muted border-border/50 hover:border-primary/40 relative aspect-[4/3] cursor-pointer overflow-hidden rounded-2xl border transition-all'
+                            className='group bg-muted border-border/50 hover:border-primary/40 relative aspect-[4/3] cursor-pointer overflow-hidden rounded-lg border transition-all'
                           >
                             {voice.imageUrl ? (
                               <img
@@ -1022,7 +1022,7 @@ function TextToSpeechPage() {
                         .map((voice) => (
                           <div
                             key={voice._id}
-                            className='group bg-muted/30 border-border/40 hover:border-primary/30 flex gap-4 rounded-2xl border p-4 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]'
+                            className='group bg-muted/30 border-border/40 hover:border-primary/30 flex gap-4 rounded-lg border p-4 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]'
                           >
                             <div className='bg-muted relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl'>
                               {voice.imageUrl ? (

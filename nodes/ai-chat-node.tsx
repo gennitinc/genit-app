@@ -168,7 +168,7 @@ export function AIChatNode({
                     }`}
                   >
                     <div
-                      className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm ${
+                      className={`max-w-[85%] rounded-lg px-4 py-2 text-sm shadow-sm ${
                         msg.role === "user"
                           ? "text-primary-foreground rounded-tr-none bg-indigo-600 hover:bg-indigo-700"
                           : "bg-muted text-foreground border-border/50 rounded-tl-none border"
@@ -180,7 +180,7 @@ export function AIChatNode({
                 ))}
                 {isTyping && (
                   <div className='flex justify-start'>
-                    <div className='bg-muted text-foreground border-border/50 rounded-2xl rounded-tl-none border px-4 py-2 text-sm shadow-sm'>
+                    <div className='bg-muted text-foreground border-border/50 rounded-lg rounded-tl-none border px-4 py-2 text-sm shadow-sm'>
                       <div className='flex h-4 items-center space-x-1'>
                         <div
                           className='bg-foreground/50 h-1.5 w-1.5 animate-bounce rounded-full'

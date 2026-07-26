@@ -195,7 +195,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
           />
         </div>
         <div className='flex-1'>
-          <div className='relative rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800/60 dark:bg-zinc-900'>
+          <div className='relative rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800/60 dark:bg-zinc-900'>
             <div className='mb-2 flex items-start justify-between'>
               <div className='flex items-center gap-2'>
                 <span className='text-sm font-semibold text-black dark:text-white'>
@@ -379,7 +379,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
               if (!user)
                 router.push(`/signin?redirect=${encodeURIComponent(pathname)}`);
             }}
-            className='w-full resize-none rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm transition-colors focus:border-cyan-500 focus:bg-white focus:outline-none dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:text-white dark:focus:bg-black'
+            className='w-full resize-none rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-sm transition-colors focus:border-cyan-500 focus:bg-white focus:outline-none dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:text-white dark:focus:bg-black'
             rows={3}
           />
           <div className='mt-3 flex justify-end'>

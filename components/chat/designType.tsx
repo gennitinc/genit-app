@@ -106,7 +106,7 @@ const DesignType: React.FC<Props> = ({
                   <div
                     className={`h-14 w-14 rounded-full md:h-16 md:w-16 ${item.bg} grid place-items-center shadow-md transition-transform duration-200 group-active:scale-95`}
                   >
-                    <div className='grid h-10 w-10 place-items-center rounded-2xl bg-white/15 md:h-12 md:w-12'>
+                    <div className='grid h-10 w-10 place-items-center rounded-lg bg-white/15 md:h-12 md:w-12'>
                       {item.icon}
                     </div>
                   </div>

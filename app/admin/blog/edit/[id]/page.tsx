@@ -225,7 +225,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
       {/* Finalize Edit Dialog Overlay */}
       {isModalOpen && (
         <div className='animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm duration-200'>
-          <div className='animate-in zoom-in-95 max-h-[90vh] w-full max-w-xl space-y-6 overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-950 p-6 shadow-2xl duration-200'>
+          <div className='animate-in zoom-in-95 max-h-[90vh] w-full max-w-xl space-y-6 overflow-y-auto rounded-lg border border-zinc-800 bg-zinc-950 p-6 shadow-2xl duration-200'>
             {/* Modal Header */}
             <div className='flex items-center justify-between pb-3'>
               <div>

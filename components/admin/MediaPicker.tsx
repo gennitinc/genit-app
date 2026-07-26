@@ -236,7 +236,7 @@ export function MediaPicker({
 
       {open && (
         <div className='fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm'>
-          <div className='max-h-[82vh] w-full max-w-4xl overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl'>
+          <div className='max-h-[82vh] w-full max-w-4xl overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950 shadow-2xl'>
             <div className='flex items-center justify-between p-5'>
               <div>
                 <h3 className='font-bold text-white'>Media library</h3>

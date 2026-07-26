@@ -128,7 +128,7 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
   return (
     <div
       className={cn(
-        "relative w-[240px] overflow-hidden rounded-2xl border border-zinc-200 bg-white text-zinc-800 shadow-xl transition-all duration-200 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200",
+        "relative w-[240px] overflow-hidden rounded-lg border border-zinc-200 bg-white text-zinc-800 shadow-xl transition-all duration-200 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200",
         isEdit
           ? "border-zinc-300 ring-2 ring-blue-500/40 dark:border-neutral-700"
           : ""

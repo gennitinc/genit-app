@@ -440,7 +440,7 @@ export default function LandingContact() {
                               <div className='flex flex-col gap-2'>
                                 <div
                                   className={cn(
-                                    "group/upload relative flex h-32 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-500",
+                                    "group/upload relative flex h-32 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed transition-all duration-500",
                                     selectedFile
                                       ? "border-primary bg-indigo-600 shadow-[0_0_20px_rgba(var(--primary),0.1)] hover:bg-indigo-700/5"
                                       : "border-muted-foreground/20 hover:border-primary/50 hover:bg-indigo-600 hover:bg-indigo-700/5"

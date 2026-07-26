@@ -325,7 +325,7 @@ export default function VisualsHomePage() {
   const chartGridColor = "var(--border)";
 
   return (
-    <div className='min-h-[calc(100dvh-7rem)] rounded-2xl bg-zinc-50 p-2 text-zinc-950 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
+    <div className='min-h-[calc(100dvh-7rem)] rounded-lg bg-zinc-50 p-2 text-zinc-950 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
       <div className='mb-8 flex flex-col gap-4 md:flex-row md:items-start md:justify-between'>
         <div>
           <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight sm:text-3xl'>
@@ -346,7 +346,7 @@ export default function VisualsHomePage() {
             ))}
             <Link
               href='/plugin'
-              className='relative -ml-2 flex h-10 w-10 items-center justify-center rounded-2xl border border-zinc-50 bg-white text-zinc-700 shadow-sm ring-1 ring-zinc-200 transition hover:bg-zinc-100 dark:border-[#070707] dark:bg-[#151515] dark:text-white dark:ring-white/10 dark:hover:bg-white/10'
+              className='relative -ml-2 flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-50 bg-white text-zinc-700 shadow-sm ring-1 ring-zinc-200 transition hover:bg-zinc-100 dark:border-[#070707] dark:bg-[#151515] dark:text-white dark:ring-white/10 dark:hover:bg-white/10'
               style={{ zIndex: 0 }}
               title='Add plugin'
               aria-label='Add plugin'
@@ -373,7 +373,7 @@ export default function VisualsHomePage() {
           </PopoverTrigger>
           <PopoverContent
             align='end'
-            className='w-[min(calc(100vw-2rem),760px)] rounded-2xl border-zinc-200 bg-white p-4 text-zinc-950 dark:border-white/10 dark:bg-[#0b0b0b] dark:text-white'
+            className='w-[min(calc(100vw-2rem),760px)] rounded-lg border-zinc-200 bg-white p-4 text-zinc-950 dark:border-white/10 dark:bg-[#0b0b0b] dark:text-white'
           >
             <div className='mb-4 flex items-center justify-between'>
               <button
@@ -418,7 +418,7 @@ export default function VisualsHomePage() {
         {statCards.map(({ label, value, detail, Icon, dataKey, color }) => (
           <section
             key={label}
-            className='rounded-2xl border border-zinc-200 bg-white p-3.5 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'
+            className='rounded-lg border border-zinc-200 bg-white p-3.5 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'
           >
             <div className='flex items-start justify-between gap-3'>
               <div>
@@ -489,7 +489,7 @@ export default function VisualsHomePage() {
       </div>
 
       <div className='mt-5'>
-        <section className='rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+        <section className='rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
           <div className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
             <div>
               <h2 className='text-base font-semibold'>Content activity</h2>
@@ -583,7 +583,7 @@ export default function VisualsHomePage() {
         </section>
       </div>
 
-      <section className='mt-5 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+      <section className='mt-5 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
         <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
           <div>
             <h2 className='text-base font-semibold'>Plugins</h2>
@@ -599,7 +599,7 @@ export default function VisualsHomePage() {
           </Link>
         </div>
 
-        <div className='mt-4 grid gap-3 grid-cols-2 xl:grid-cols-4'>
+        <div className='mt-4 grid grid-cols-2 gap-3 xl:grid-cols-4'>
           {pluginCards.map((integration) => {
             const connections = byPlatform.get(integration.platform);
             const hasIdentityForSurface = isMetaSurface(integration.platform)
@@ -624,7 +624,7 @@ export default function VisualsHomePage() {
             return (
               <article
                 key={integration.name}
-                className='rounded-2xl border border-zinc-200 bg-zinc-50 p-4 dark:border-white/10 dark:bg-[#0c0c0c]'
+                className='rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-white/10 dark:bg-[#0c0c0c]'
               >
                 <div className='flex items-start justify-between gap-3'>
                   <span className='flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white ring-1 ring-zinc-200 dark:bg-white/10 dark:ring-white/10'>

@@ -448,7 +448,7 @@ export function HomeCommandCenter({
                   <button
                     key={post._id}
                     onClick={() => openEdit(post)}
-                    className='flex w-full items-start gap-3 rounded-2xl bg-white/[0.06] p-3 text-left ring-1 ring-white/10 transition hover:bg-white/[0.1]'
+                    className='flex w-full items-start gap-3 rounded-lg bg-white/[0.06] p-3 text-left ring-1 ring-white/10 transition hover:bg-white/[0.1]'
                   >
                     <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-500/20 text-xs font-bold text-indigo-200'>
                       {index + 1}
@@ -465,7 +465,7 @@ export function HomeCommandCenter({
                   </button>
                 ))}
                 {!scheduled.length && (
-                  <div className='rounded-2xl border border-dashed border-white/15 p-6 text-center'>
+                  <div className='rounded-lg border border-dashed border-white/15 p-6 text-center'>
                     <CalendarClock className='mx-auto h-6 w-6 text-white/35' />
                     <p className='mt-3 text-sm font-medium'>
                       No posts scheduled

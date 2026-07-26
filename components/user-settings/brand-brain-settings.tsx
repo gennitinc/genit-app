@@ -464,7 +464,7 @@ export function BrandBrainSettings({
 
   return (
     <div className='space-y-5'>
-      <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+      <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
         <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
           <div className='flex flex-col gap-3 md:flex-row md:items-start md:justify-between'>
             <div>
@@ -586,7 +586,7 @@ export function BrandBrainSettings({
         </CardContent>
       </Card>
 
-      <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+      <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
         <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
           <CardTitle className='text-base'>Search brain</CardTitle>
           <CardDescription>

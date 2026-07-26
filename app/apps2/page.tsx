@@ -85,7 +85,7 @@ const AppCard = ({
         href={href}
         style={{ touchAction: "pan-x pan-y pinch-zoom" }}
       >
-        <div className='group !bg-page-primary border-separator-card hover:border-separator-card hover:!bg-surface-primary flex h-full w-full !min-w-0 flex-1 cursor-pointer flex-col overflow-hidden rounded-2xl border border-transparent shadow-[inset_2px_2px_2px_rgba(255,255,255,0.02)] transition-all duration-200'>
+        <div className='group !bg-page-primary border-separator-card hover:border-separator-card hover:!bg-surface-primary flex h-full w-full !min-w-0 flex-1 cursor-pointer flex-col overflow-hidden rounded-lg border border-transparent shadow-[inset_2px_2px_2px_rgba(255,255,255,0.02)] transition-all duration-200'>
           <div
             className='relative overflow-hidden rounded-xl rounded-t-xl'
             style={{ aspectRatio: "1.03333 / 1" }}
@@ -105,7 +105,7 @@ const AppCard = ({
               </div>
             )}
             <figure
-              className='group relative h-full rounded-2xl'
+              className='group relative h-full rounded-lg'
               style={{ aspectRatio: "1.03333 / 1" }}
             >
               {videoSrc ? (

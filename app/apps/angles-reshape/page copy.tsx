@@ -1021,7 +1021,7 @@ const AnglesReshapePage = () => {
             </div>
 
             {/* Right: Result Panel */}
-            <div className='relative flex min-h-[40vh] flex-col items-stretch overflow-hidden rounded-2xl border border-black/5 bg-black dark:border-white/5 dark:bg-black'>
+            <div className='relative flex min-h-[40vh] flex-col items-stretch overflow-hidden rounded-lg border border-black/5 bg-black dark:border-white/5 dark:bg-black'>
               {/* Header */}
               <div className='flex h-fit shrink-0 items-center justify-between border-b border-white/5 bg-[#0A0A0A]/50 px-8 backdrop-blur'>
                 <div className='flex items-center gap-2'>
@@ -1092,11 +1092,11 @@ const AnglesReshapePage = () => {
               ) : previewUrl ? (
                 /* Live preview (pre-generation) */
                 <div className='flex flex-1 flex-col items-center justify-center gap-4 border-2 border-dashed border-gray-200 p-6 dark:border-white/10'>
-                  <div className='relative w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 shadow-2xl'>
+                  <div className='relative w-full max-w-lg overflow-hidden rounded-lg border border-white/10 shadow-2xl'>
                     <img
                       src={previewUrl}
                       alt='Live preview'
-                      className='max-h-[55vh] w-full rounded-2xl object-contain'
+                      className='max-h-[55vh] w-full rounded-lg object-contain'
                       style={{
                         transform: `perspective(1200px) rotateY(${(rotation - 180) * 0.06}deg) rotateX(${tilt * 0.06}deg) scale(${0.88 + zoom * 0.02})`,
                         transition: "transform 0.12s ease-out",
@@ -1118,7 +1118,7 @@ const AnglesReshapePage = () => {
                   <img
                     src='https://i.pinimg.com/736x/1d/e5/29/1de52947cf871b610fb4276053dd137f.jpg'
                     alt='Demo preview'
-                    className='max-h-[55vh] w-full rounded-2xl object-cover'
+                    className='max-h-[55vh] w-full rounded-lg object-cover'
                     style={{
                       transform: `perspective(1200px) rotateY(${(rotation - 180) * 0.06}deg) rotateX(${tilt * 0.06}deg) scale(${0.88 + zoom * 0.02})`,
                       transition: "transform 0.12s ease-out",

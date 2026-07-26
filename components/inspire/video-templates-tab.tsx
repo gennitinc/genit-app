@@ -304,7 +304,7 @@ export function VideoTemplatesTab({
                 </DialogHeader>
                 {selectedCategory.templates.length === 0 ? (
                   <div className='flex min-h-[40vh] flex-col items-center justify-center p-8 text-center'>
-                    <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-100 to-blue-100 dark:from-cyan-900/30 dark:to-blue-900/30'>
+                    <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-100 to-blue-100 dark:from-cyan-900/30 dark:to-blue-900/30'>
                       <IconTemplate className='h-8 w-8 text-cyan-500 dark:text-cyan-400' />
                     </div>
                     <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>

@@ -595,12 +595,12 @@ const SkinEnhancerPage = () => {
                             <img
                               src={previewUrl}
                               alt='Skin preview'
-                              className='size-full rounded-2xl border border-white/10 object-cover shadow-2xl'
+                              className='size-full rounded-lg border border-white/10 object-cover shadow-2xl'
                             />
                           ) : (
                             <label
                               htmlFor='skinUploadFile'
-                              className='flex size-full cursor-pointer items-center justify-center rounded-2xl border border-black/10 bg-gradient-to-br from-rose-200/60 via-amber-100/50 to-orange-200/40 shadow-2xl transition-colors hover:border-blue-400 dark:border-white/10 dark:from-rose-400/20 dark:via-amber-200/15 dark:to-orange-300/10'
+                              className='flex size-full cursor-pointer items-center justify-center rounded-lg border border-black/10 bg-gradient-to-br from-rose-200/60 via-amber-100/50 to-orange-200/40 shadow-2xl transition-colors hover:border-blue-400 dark:border-white/10 dark:from-rose-400/20 dark:via-amber-200/15 dark:to-orange-300/10'
                             >
                               <div className='flex flex-col items-center gap-1'>
                                 <Sparkles className='text-muted-foreground size-5' />
@@ -877,7 +877,7 @@ const SkinEnhancerPage = () => {
                 </div>
 
                 {/* Right: Result Panel */}
-                <div className='relative flex min-h-[40vh] flex-col items-stretch overflow-hidden rounded-2xl border border-black/5 bg-black dark:border-white/5 dark:bg-black'>
+                <div className='relative flex min-h-[40vh] flex-col items-stretch overflow-hidden rounded-lg border border-black/5 bg-black dark:border-white/5 dark:bg-black'>
                   {/* Header */}
                   <div className='flex h-fit shrink-0 items-center justify-between border-b border-white/5 bg-[#0A0A0A]/50 px-8 py-2 backdrop-blur'>
                     <div className='flex items-center gap-3'>
@@ -926,11 +926,11 @@ const SkinEnhancerPage = () => {
                     />
                   ) : previewUrl ? (
                     <div className='flex flex-1 flex-col items-center justify-center gap-4 border-2 border-dashed border-gray-200 p-6 dark:border-white/10'>
-                      <div className='relative w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 shadow-2xl'>
+                      <div className='relative w-full max-w-lg overflow-hidden rounded-lg border border-white/10 shadow-2xl'>
                         <img
                           src={previewUrl}
                           alt='Uploaded preview'
-                          className='max-h-[55vh] w-full rounded-2xl object-contain'
+                          className='max-h-[55vh] w-full rounded-lg object-contain'
                         />
                       </div>
                       <div className='flex flex-col items-center gap-1'>

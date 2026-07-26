@@ -24,7 +24,7 @@ export function HomeInfoGrid() {
           width={500}
           height={500}
           alt='linear demo image'
-          className='absolute -right-4 -bottom-10 rounded-2xl object-contain filter lg:-right-[10%]'
+          className='absolute -right-4 -bottom-10 rounded-lg object-contain filter lg:-right-[10%]'
         />
       </WobbleCard>
       <WobbleCard containerClassName='col-span-1 min-h-[300px]'>
@@ -51,7 +51,7 @@ export function HomeInfoGrid() {
           width={500}
           height={500}
           alt="linear demo image"
-          className="absolute -right-10 md:-right-[40%] lg:-right-[5%] -bottom-10 object-contain rounded-2xl"
+          className="absolute -right-10 md:-right-[40%] lg:-right-[5%] -bottom-10 object-contain rounded-lg"
         />
       </WobbleCard> */}
     </div>

@@ -88,7 +88,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
   return (
     <div
       className={cn(
-        "relative w-[240px] overflow-hidden rounded-2xl border border-zinc-200 bg-white text-zinc-800 shadow-xl transition-all duration-200 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200",
+        "relative w-[240px] overflow-hidden rounded-lg border border-zinc-200 bg-white text-zinc-800 shadow-xl transition-all duration-200 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200",
         isEdit
           ? "border-zinc-300 ring-2 ring-amber-500/40 dark:border-neutral-700"
           : ""
@@ -248,7 +248,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                     type='text'
                     value={data.senderFilter || ""}
                     onChange={(e) =>
-                      data.onNodeDataChange(id, { senderFilter: e.target.value })
+                      data.onNodeDataChange(id, {
+                        senderFilter: e.target.value,
+                      })
                     }
                     className={inputCls}
                     placeholder='sender@example.com'

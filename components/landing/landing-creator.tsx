@@ -16,10 +16,10 @@ const LandingCreator = () => {
         </p>
         <Link
           href='/creators-program'
-          className="relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all duration-200 active:scale-95 shadow-md"
+          className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
           <span>Get Started</span>
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className='h-4 w-4' />
         </Link>
       </div>
       <div className='relative flex w-full items-center justify-center px-2 md:px-12 lg:px-20 xl:px-24'>
@@ -102,11 +102,11 @@ const LandingCreator = () => {
                 className='absolute top-[calc(var(--offset)/2*-1)] right-0 left-auto z-30 h-[calc(100%+var(--offset))] w-[var(--width)] bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] [background-size:var(--width)_var(--height)] [mask-composite:exclude] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),_linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),_linear-gradient(black,black)] dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)]'
               ></div>
               <div>
-                <div className='border-border absolute top-5 -right-24 z-20 flex h-16 w-[350px] items-center gap-4 rounded-2xl border bg-white px-5 shadow-[0px_4px_8px_0px_#0000001a,0px_15px_15px_0px_#00000017,0px_34px_20px_0px_#0000000d,0px_60px_24px_0px_#00000003,0px_93px_26px_0px_#00000000] dark:border-neutral-800 dark:bg-neutral-900'>
+                <div className='border-border absolute top-5 -right-24 z-20 flex h-16 w-[350px] items-center gap-4 rounded-lg border bg-white px-5 shadow-[0px_4px_8px_0px_#0000001a,0px_15px_15px_0px_#00000017,0px_34px_20px_0px_#0000000d,0px_60px_24px_0px_#00000003,0px_93px_26px_0px_#00000000] dark:border-neutral-800 dark:bg-neutral-900'>
                   <span>✅</span>
                   <span className='text-foreground'>Creators Vibe</span>
                 </div>
-                <div className='border-border absolute top-10 -right-[115px] z-10 flex h-16 w-[350px] items-center gap-4 rounded-2xl border bg-white px-5 shadow-[0px_4px_8px_0px_#0000001a,0px_15px_15px_0px_#00000017,0px_34px_20px_0px_#0000000d,0px_60px_24px_0px_#00000003,0px_93px_26px_0px_#00000000] dark:border-neutral-800 dark:bg-neutral-900' />
+                <div className='border-border absolute top-10 -right-[115px] z-10 flex h-16 w-[350px] items-center gap-4 rounded-lg border bg-white px-5 shadow-[0px_4px_8px_0px_#0000001a,0px_15px_15px_0px_#00000017,0px_34px_20px_0px_#0000000d,0px_60px_24px_0px_#00000003,0px_93px_26px_0px_#00000000] dark:border-neutral-800 dark:bg-neutral-900' />
               </div>
               <div>
                 <div className='border-border relative h-[275px] overflow-hidden rounded-3xl border border-solid bg-white lg:w-[532px] dark:border-neutral-800 dark:bg-neutral-900 [&>*]:scale-[0.6] lg:[&>*]:scale-[0.8]'>

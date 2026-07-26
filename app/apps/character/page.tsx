@@ -237,7 +237,7 @@ const PresenterPage = () => {
 
               <section className='relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-start gap-8 px-4 py-10 md:grid-cols-[1fr_1.4fr] lg:gap-16'>
                 {/* Left: Controls */}
-                <div className='space-y-6 overflow-hidden rounded-2xl border border-black/5 bg-white/80 p-6 shadow-sm backdrop-blur-xl dark:border-white/5 dark:bg-[#141415]/80'>
+                <div className='space-y-6 overflow-hidden rounded-lg border border-black/5 bg-white/80 p-6 shadow-sm backdrop-blur-xl dark:border-white/5 dark:bg-[#141415]/80'>
                   <div className='space-y-4'>
                     <div className='space-y-2'>
                       <label className='text-muted-foreground text-xs font-bold uppercase'>
@@ -290,11 +290,11 @@ const PresenterPage = () => {
                     </TabsList>
 
                     <TabsContent value='upload' className='space-y-4'>
-                      <label className='hover:border-primary/50 flex h-48 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-black/10 bg-black/5 transition-colors dark:border-white/10 dark:bg-white/5'>
+                      <label className='hover:border-primary/50 flex h-48 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-black/10 bg-black/5 transition-colors dark:border-white/10 dark:bg-white/5'>
                         {previewUrl ? (
                           <img
                             src={previewUrl}
-                            className='h-full w-full rounded-2xl object-cover'
+                            className='h-full w-full rounded-lg object-cover'
                             alt=''
                           />
                         ) : (
@@ -397,7 +397,7 @@ const PresenterPage = () => {
                         [1, 2, 3].map((i) => (
                           <div
                             key={i}
-                            className='aspect-square animate-pulse rounded-2xl bg-black/5 dark:bg-white/5'
+                            className='aspect-square animate-pulse rounded-lg bg-black/5 dark:bg-white/5'
                           />
                         ))
                       ) : presenters.length > 0 ? (

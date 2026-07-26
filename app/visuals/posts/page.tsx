@@ -1005,7 +1005,7 @@ export default function PostsPage() {
   const chartHover = isDark ? "rgba(255,255,255,0.04)" : "rgba(79,70,229,0.08)";
 
   return (
-    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-2xl bg-zinc-50 p-2 pb-14 text-zinc-950 duration-500 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
+    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-lg bg-zinc-50 p-2 pb-14 text-zinc-950 duration-500 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
       <header className='p-1'>
         <div className='grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-center'>
           <div className='flex min-w-0 flex-col items-start justify-center py-1'>
@@ -1026,7 +1026,7 @@ export default function PostsPage() {
             </Button>
           </div>
 
-          <div className='hidden rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:block dark:border-white/10 dark:bg-[#0c0c0c] dark:shadow-none'>
+          <div className='hidden rounded-lg border border-zinc-200 bg-white p-4 shadow-sm sm:block dark:border-white/10 dark:bg-[#0c0c0c] dark:shadow-none'>
             <div className='flex items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-white/10'>
               <div className='flex min-w-0 items-center gap-3'>
                 <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 dark:bg-white/10'>
@@ -1085,7 +1085,7 @@ export default function PostsPage() {
         </div>
       </header>
 
-      <section className='overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+      <section className='overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
         <div className='flex flex-col gap-4 border-b border-zinc-200 p-3 md:flex-row md:items-center md:justify-between dark:border-white/10'>
           <div className='inline-flex w-fit rounded-xl bg-zinc-100 p-1 dark:bg-white/[0.06]'>
             {(
@@ -1160,7 +1160,7 @@ export default function PostsPage() {
           </div>
         ) : visible.length === 0 ? (
           <div className='flex min-h-72 flex-col items-center justify-center px-6 text-center'>
-            <div className='flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-white/[0.06]'>
+            <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-zinc-100 dark:bg-white/[0.06]'>
               {view === "drafts" ? (
                 <FileText className='h-5 w-5 text-zinc-500 dark:text-white/50' />
               ) : view === "scheduled" ? (
@@ -1201,7 +1201,7 @@ export default function PostsPage() {
             {visible.map((post) => (
               <article
                 key={post._id}
-                className='group relative mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 align-top transition hover:-translate-y-0.5 hover:bg-white dark:border-white/10 dark:bg-[#0c0c0c] dark:hover:bg-white/[0.05]'
+                className='group relative mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 align-top transition hover:-translate-y-0.5 hover:bg-white dark:border-white/10 dark:bg-[#0c0c0c] dark:hover:bg-white/[0.05]'
               >
                 {(!post.remote ||
                   post.platform === "facebook" ||
@@ -1346,7 +1346,7 @@ export default function PostsPage() {
       >
         <DialogContent className='max-w-md overflow-hidden rounded-3xl border-0 bg-black/[0.02] p-5 shadow-none ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
           <GradientFrame />
-          <div className='relative z-10 flex flex-col gap-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
+          <div className='relative z-10 flex flex-col gap-4 rounded-lg bg-white p-5 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
             <div className='flex items-start gap-4'>
               <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-neutral-100 dark:bg-neutral-800'>
                 <Trash2 className='h-5 w-5' />
@@ -1394,7 +1394,7 @@ export default function PostsPage() {
         onOpenChange={(open) => !open && setAnalyticsPost(null)}
       >
         <DialogContent
-          className='bg-background text-foreground flex max-h-[88vh] flex-col gap-0 overflow-hidden rounded-2xl border border-black/10 p-0 shadow-2xl sm:max-w-3xl dark:border-white/[0.08] dark:bg-[#0c0c0e] dark:text-white'
+          className='bg-background text-foreground flex max-h-[88vh] flex-col gap-0 overflow-hidden rounded-lg border border-black/10 p-0 shadow-2xl sm:max-w-3xl dark:border-white/[0.08] dark:bg-[#0c0c0e] dark:text-white'
           hideDialogClose
         >
           <DialogHeader className='relative border-b border-black/5 px-5 pt-4 pb-3 text-left dark:border-white/[0.05]'>

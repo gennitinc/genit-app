@@ -202,7 +202,7 @@ export function StepImport({
         <div className='flex w-full flex-col items-center gap-3'>
           <button
             onClick={() => setMode("manual")}
-            className='mx-auto inline-flex h-fit w-fit items-center justify-center gap-2 rounded-2xl border border-dashed border-cyan-300/30 px-4 py-2 text-base text-neutral-500 transition-colors hover:bg-cyan-400/10 dark:text-neutral-400'
+            className='mx-auto inline-flex h-fit w-fit items-center justify-center gap-2 rounded-lg border border-dashed border-cyan-300/30 px-4 py-2 text-base text-neutral-500 transition-colors hover:bg-cyan-400/10 dark:text-neutral-400'
           >
             <Plus className='h-5 w-5' />
             Add brand manually
@@ -476,7 +476,7 @@ function ManualSetup({
           <button
             type='button'
             onClick={() => fileRef.current?.click()}
-            className='relative flex aspect-[3/1] w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-neutral-200 transition-colors hover:border-cyan-300/60 hover:bg-cyan-400/5 dark:border-white/15'
+            className='relative flex aspect-[3/1] w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-neutral-200 transition-colors hover:border-cyan-300/60 hover:bg-cyan-400/5 dark:border-white/15'
           >
             {logoPreview ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -499,7 +499,7 @@ function ManualSetup({
               </>
             )}
             {isUploading && (
-              <div className='absolute inset-0 flex items-center justify-center rounded-2xl bg-white backdrop-blur-sm dark:bg-neutral-950/60'>
+              <div className='absolute inset-0 flex items-center justify-center rounded-lg bg-white backdrop-blur-sm dark:bg-neutral-950/60'>
                 <LoadingFileLoader size={16} />
               </div>
             )}

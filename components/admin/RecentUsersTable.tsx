@@ -38,7 +38,7 @@ export const RecentUsersTable = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className='bg-card border-border/50 mt-8 rounded-2xl border p-6'
+      className='bg-card border-border/50 mt-8 rounded-lg border p-6'
     >
       <div className='mb-6 flex items-center justify-between'>
         <h3 className='text-lg font-semibold'>Recent Signups</h3>

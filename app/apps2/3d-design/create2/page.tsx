@@ -125,7 +125,7 @@ const FloatingSegment = ({
 }) => (
   <div
     className={cn(
-      "flex items-center gap-1 rounded-2xl border border-white/10 bg-[#1a1a1a]/80 p-1 shadow-2xl backdrop-blur-xl",
+      "flex items-center gap-1 rounded-lg border border-white/10 bg-[#1a1a1a]/80 p-1 shadow-2xl backdrop-blur-xl",
       className
     )}
   >
@@ -349,7 +349,7 @@ const DesignerV2 = () => {
 
                   {/* Recent Colors */}
                   <div className='flex flex-wrap gap-2 pb-2'>
-                    <div className='size-16 rounded-2xl bg-purple-500 shadow-xl shadow-purple-500/20' />
+                    <div className='size-16 rounded-lg bg-purple-500 shadow-xl shadow-purple-500/20' />
                     <div className='flex flex-grow flex-wrap content-start gap-2'>
                       {[
                         "#ffffff",
@@ -451,10 +451,10 @@ const DesignerV2 = () => {
         {/* Play & Action */}
         <div className='pointer-events-auto flex flex-col items-center gap-2'>
           <div className='flex gap-2'>
-            <button className='group flex size-12 items-center justify-center rounded-2xl border border-white/10 bg-[#1a1a1a] transition-all hover:border-white/30'>
+            <button className='group flex size-12 items-center justify-center rounded-lg border border-white/10 bg-[#1a1a1a] transition-all hover:border-white/30'>
               <Play className='size-5 fill-white/10 text-white/40 group-hover:text-white' />
             </button>
-            <button className='group flex size-12 items-center justify-center rounded-2xl border border-white/10 bg-[#1a1a1a] transition-all hover:border-white/30'>
+            <button className='group flex size-12 items-center justify-center rounded-lg border border-white/10 bg-[#1a1a1a] transition-all hover:border-white/30'>
               <Video className='size-5 text-white/40 group-hover:text-white' />
             </button>
           </div>

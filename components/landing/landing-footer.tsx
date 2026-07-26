@@ -280,7 +280,7 @@ export function LandingFooter() {
                   href='/signup'
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='hover:shadow-button border-primary/20 shadow-primary/10 relative inline-flex h-10 items-center justify-center gap-0 rounded-2xl border-[2px] bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                  className='hover:shadow-button border-primary/20 shadow-primary/10 relative inline-flex h-10 items-center justify-center gap-0 rounded-lg border-[2px] bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                 >
                   Start for $0
                   <svg
@@ -328,7 +328,8 @@ export function LandingFooter() {
                   </span>
                 </Link>
                 <p className='mb-1 w-full text-gray-400 md:max-w-[60vw] lg:max-w-60'>
-                  Autonomous AI marketing agents that work 24/7, so you don't have to.
+                  Autonomous AI marketing agents that work 24/7, so you don't
+                  have to.
                 </p>
                 <div className='mt-8 mb-6 flex items-center gap-3'>
                   <a

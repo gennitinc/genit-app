@@ -224,7 +224,7 @@ function TextToSpeechPage() {
 
           {/* Pricing Card */}
           <div className='mt-auto pt-6'>
-            <div className='rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] p-4 shadow-sm dark:border-[#2D3139] dark:bg-[#1C1F26]'>
+            <div className='rounded-lg border border-[#E5E7EB] bg-[#FFFFFF] p-4 shadow-sm dark:border-[#2D3139] dark:bg-[#1C1F26]'>
               <div className='mb-3 flex items-center justify-between'>
                 <h4 className='flex items-center gap-1 text-sm font-bold text-[#1F2937] dark:text-white'>
                   Running on Fumes! ⚡

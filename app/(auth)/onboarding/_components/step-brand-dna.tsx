@@ -189,12 +189,12 @@ export function StepBrandDna({
       </div>
 
       {/* Header / source preview */}
-      <div className='onb-animate-in onb-stagger-2 mb-6 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 md:p-6 dark:border-white/10 dark:bg-white/[0.03]'>
+      <div className='onb-animate-in onb-stagger-2 mb-6 rounded-lg border border-neutral-200 bg-neutral-50 p-5 md:p-6 dark:border-white/10 dark:bg-white/[0.03]'>
         <div className='flex flex-col items-start gap-6 md:flex-row'>
           <button
             type='button'
             onClick={() => logoRef.current?.click()}
-            className='flex size-28 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-neutral-200 bg-neutral-50 transition-colors hover:border-cyan-300/50 md:size-32 dark:border-white/15 dark:bg-white/[0.02]'
+            className='flex size-28 shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-neutral-200 bg-neutral-50 transition-colors hover:border-cyan-300/50 md:size-32 dark:border-white/15 dark:bg-white/[0.02]'
           >
             {brand.brandLogo ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -396,7 +396,7 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className='rounded-2xl border border-neutral-200 bg-neutral-50 p-5 dark:border-white/10 dark:bg-white/[0.03]'>
+    <div className='rounded-lg border border-neutral-200 bg-neutral-50 p-5 dark:border-white/10 dark:bg-white/[0.03]'>
       <Label className='mb-3 block text-[10px] tracking-widest text-neutral-500 uppercase dark:text-neutral-400'>
         {title}
       </Label>

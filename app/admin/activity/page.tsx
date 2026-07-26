@@ -40,7 +40,7 @@ export default function ActivityPage() {
     <div className='mx-auto max-w-7xl p-8 pb-20'>
       <div className='mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-center'>
         <div className='flex items-center gap-4'>
-          <div className='text-primary rounded-2xl bg-indigo-600 p-3 hover:bg-indigo-700/10'>
+          <div className='text-primary rounded-lg bg-indigo-600 p-3 hover:bg-indigo-700/10'>
             <Activity className='h-6 w-6' />
           </div>
           <div>

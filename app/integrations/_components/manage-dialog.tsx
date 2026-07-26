@@ -64,7 +64,7 @@ const AutoReplyUpgradeDialog = ({
         <div className='absolute inset-0 z-0 bg-gradient-to-t from-white/30 to-transparent md:bg-gradient-to-l dark:from-black/30' />
       </div>
       <div className='relative z-10 flex w-full flex-col justify-center bg-white/70 p-5 backdrop-blur-md md:w-1/2 md:bg-transparent md:p-8 md:backdrop-blur-none dark:bg-black/70 md:dark:bg-transparent'>
-        <div className='relative z-10 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-none dark:ring-white/10'>
+        <div className='relative z-10 rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-none dark:ring-white/10'>
           <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
             <CheckCircle2 className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
             <span className='font-medium'>AI inbox automation</span>
@@ -385,8 +385,8 @@ export function ManageDialog({
                   const isConfirming = confirmDisconnectId === conn._id;
                   const telegramBusinessPending = Boolean(
                     platform === "telegram" &&
-                      conn.metadata?.telegramMode === "business_bot" &&
-                      !conn.metadata?.businessConnectionReady
+                    conn.metadata?.telegramMode === "business_bot" &&
+                    !conn.metadata?.businessConnectionReady
                   );
                   const connectionActive =
                     conn.status === "active" && !telegramBusinessPending;
@@ -503,31 +503,32 @@ export function ManageDialog({
                           "messenger",
                           "telegram",
                         ].includes(platform) && (
-                        <div className='mt-3 flex items-center justify-between gap-3 rounded-md border border-black/5 bg-white/70 px-3 py-2 dark:border-white/10 dark:bg-white/5'>
-                          <div className='min-w-0'>
-                            <p className='text-foreground text-xs font-medium'>
-                              AI auto-replies
-                            </p>
-                            <p className='text-muted-foreground mt-0.5 text-[11px]'>
-                              New inbound messages land in Unified Inbox and
-                              get a Genit AI reply. Turn off for manual admin response.
-                            </p>
-                          </div>
-                          <Switch
-                            checked={Boolean(
-                              conn.metadata?.inboxAutoReplyEnabled ||
+                          <div className='mt-3 flex items-center justify-between gap-3 rounded-md border border-black/5 bg-white/70 px-3 py-2 dark:border-white/10 dark:bg-white/5'>
+                            <div className='min-w-0'>
+                              <p className='text-foreground text-xs font-medium'>
+                                AI auto-replies
+                              </p>
+                              <p className='text-muted-foreground mt-0.5 text-[11px]'>
+                                New inbound messages land in Unified Inbox and
+                                get a Genit AI reply. Turn off for manual admin
+                                response.
+                              </p>
+                            </div>
+                            <Switch
+                              checked={Boolean(
+                                conn.metadata?.inboxAutoReplyEnabled ||
                                 conn.metadata?.telegramAutoReplyEnabled
-                            )}
-                            disabled={
-                              updateInboxSettings.isPending ||
-                              telegramBusinessPending
-                            }
-                            onCheckedChange={(checked) =>
-                              handleAutoReply(conn._id, checked)
-                            }
-                          />
-                        </div>
-                      )}
+                              )}
+                              disabled={
+                                updateInboxSettings.isPending ||
+                                telegramBusinessPending
+                              }
+                              onCheckedChange={(checked) =>
+                                handleAutoReply(conn._id, checked)
+                              }
+                            />
+                          </div>
+                        )}
 
                       {isConfirming && (
                         <div className='mt-3 rounded-md border border-red-500/30 bg-red-500/5 px-3 py-2'>

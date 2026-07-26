@@ -420,7 +420,7 @@ function ImageGenerationPage() {
               </Drawer>
             </div>
             <div className='relative grid min-h-0 w-full flex-1 grid-cols-1 gap-6 md:grid-cols-[27rem_1fr]'>
-              <div className='flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-neutral-100 bg-white pt-4 shadow-sm dark:border-neutral-800 dark:bg-black/20'>
+              <div className='flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-neutral-100 bg-white pt-4 shadow-sm dark:border-neutral-800 dark:bg-black/20'>
                 <div className='hide-scrollbar flex-1 shrink-0 space-y-4 overflow-y-auto px-4 pb-4'>
                   <div className='space-y-2'>
                     <PremiumInput

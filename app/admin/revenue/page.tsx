@@ -81,7 +81,7 @@ export default function RevenuePage() {
           </p>
         </div>
         <div className='flex gap-3'>
-          <Button className='shadow-primary/20 h-auto gap-2 rounded-2xl bg-indigo-600 px-6 py-6 shadow-lg hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90'>
+          <Button className='shadow-primary/20 h-auto gap-2 rounded-lg bg-indigo-600 px-6 py-6 shadow-lg hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90'>
             <TrendingUp className='h-5 w-5' /> Detailed Report
           </Button>
         </div>
@@ -123,7 +123,7 @@ export default function RevenuePage() {
             className='bg-card border-border/50 rounded-[2rem] border p-6 shadow-sm transition-all duration-300 hover:shadow-md'
           >
             <div
-              className={`bg-muted/50 mb-4 w-fit rounded-2xl p-2.5 ${stat.color}`}
+              className={`bg-muted/50 mb-4 w-fit rounded-lg p-2.5 ${stat.color}`}
             >
               <stat.icon className='h-5 w-5' />
             </div>

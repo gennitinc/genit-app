@@ -53,7 +53,7 @@ export const StatsCards = ({ stats }: StatsCardsProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
-          className='bg-card border-border/50 hover:border-primary/20 group relative overflow-hidden rounded-2xl border p-6 transition-all'
+          className='bg-card border-border/50 hover:border-primary/20 group relative overflow-hidden rounded-lg border p-6 transition-all'
         >
           <div className='mb-4 flex items-start justify-between'>
             <div className={`rounded-xl p-3 ${card.bgColor} ${card.color}`}>

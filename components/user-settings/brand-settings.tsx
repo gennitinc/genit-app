@@ -341,7 +341,7 @@ export default function BrandSettings() {
         </div>
       )}
       <fieldset disabled={isReadOnly} className='contents'>
-        <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+        <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
           <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
             <CardTitle className='flex items-center gap-2 text-base'>
               <Palette className='h-5 w-5' />
@@ -357,7 +357,7 @@ export default function BrandSettings() {
               <button
                 type='button'
                 onClick={() => logoRef.current?.click()}
-                className='border-border bg-muted/40 relative flex size-28 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-colors hover:border-cyan-400/50 md:size-32'
+                className='border-border bg-muted/40 relative flex size-28 shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 border-dashed transition-colors hover:border-cyan-400/50 md:size-32'
               >
                 {form.brandLogo ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -429,7 +429,7 @@ export default function BrandSettings() {
           </CardContent>
         </Card>
 
-        <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+        <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
           <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
             <CardTitle className='text-base'>Visual style</CardTitle>
             <CardDescription>
@@ -475,7 +475,7 @@ export default function BrandSettings() {
           </CardContent>
         </Card>
 
-        <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+        <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
           <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
             <CardTitle className='text-base'>Brand DNA</CardTitle>
             <CardDescription>
@@ -540,7 +540,7 @@ export default function BrandSettings() {
           </CardContent>
         </Card>
 
-        <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+        <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
           <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
             <CardTitle className='text-base'>Social profiles</CardTitle>
             <CardDescription>Where can people find you online?</CardDescription>

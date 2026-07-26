@@ -873,7 +873,7 @@ export function IdeaSection() {
               </div>
               <div
                 ref={chatContainerRef}
-                className="before:bg-radial-gradient relative flex w-full overflow-hidden rounded-2xl bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh] dark:from-[#7e7e7e] dark:via-[#363636] dark:to-[#363636]"
+                className="before:bg-radial-gradient relative flex w-full overflow-hidden rounded-lg bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 p-[1.5px] shadow-lg before:absolute before:top-[-10px] before:left-[-10px] before:h-[30px] before:blur-[1px] before:content-[''] md:before:w-[40vh] dark:from-[#7e7e7e] dark:via-[#363636] dark:to-[#363636]"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
@@ -1007,7 +1007,7 @@ export function IdeaSection() {
                             minHeight: "20px",
                             maxHeight: "300px",
                           }}
-                          className='scrollbar-thumb-rounded min-h-[40px] w-full resize-none scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent overflow-y-auto rounded-2xl border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 hover:scrollbar-thumb-gray-400 focus:placeholder:text-gray-400 md:p-4 dark:scrollbar-thumb-[#888] dark:text-white dark:placeholder:text-gray-400 dark:hover:scrollbar-thumb-[#555] dark:focus:placeholder:text-[#363636]'
+                          className='scrollbar-thumb-rounded min-h-[40px] w-full resize-none scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent overflow-y-auto rounded-lg border-none bg-transparent p-2 font-sans text-base font-normal text-gray-800 outline-none placeholder:text-gray-500 placeholder:transition-all placeholder:duration-300 hover:scrollbar-thumb-gray-400 focus:placeholder:text-gray-400 md:p-4 dark:scrollbar-thumb-[#888] dark:text-white dark:placeholder:text-gray-400 dark:hover:scrollbar-thumb-[#555] dark:focus:placeholder:text-[#363636]'
                           aria-label='Enter your prompt'
                           aria-describedby={
                             inputError ? "input-error" : undefined

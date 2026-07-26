@@ -17,9 +17,9 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { toast } from "@/hooks/use-toast";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { templateApi } from "@/utils/inspire-api";
-import { LoadingFileLoader } from "@/utils/Loading";
 import {
   BarChart3,
   CheckCircle2,
@@ -543,18 +543,13 @@ export function GeneratedDesignCard({ data }: { data: any }) {
         const templatePayload = {
           id: response.data?.id || data.id || downloadUrl,
           src: downloadUrl,
-          alt:
-            data.name ||
-            data.prompt ||
-            data.message ||
-            "Generated design",
+          alt: data.name || data.prompt || data.message || "Generated design",
           category: response.data?.category || "generic_design",
           userId: {
             _id: (user as any)?._id || (user as any)?.id,
             username: (user as any)?.username,
             email: (user as any)?.email,
-            profilePic:
-              (user as any)?.userdp || (user as any)?.profilePic,
+            profilePic: (user as any)?.userdp || (user as any)?.profilePic,
             isVerified: (user as any)?.isVerified,
           },
           author: (user as any)?.username,
@@ -771,7 +766,7 @@ export function DesignInspirationCard({ data }: { data: any }) {
           </Carousel>
 
           <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-            <DialogContent className='flex h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-black p-0 shadow-2xl'>
+            <DialogContent className='flex h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-lg border border-white/10 bg-black p-0 shadow-2xl'>
               <Carousel
                 opts={{ loop: true, align: "center", startIndex: previewIndex }}
                 className='flex min-h-0 flex-1 flex-col'
@@ -822,10 +817,15 @@ export function GtmCampaignCard({ data }: { data: any }) {
       icon={<Target className='h-3.5 w-3.5' />}
       title={campaigns.length > 1 ? "GTM campaigns" : "GTM campaign"}
       tone='success'
-      meta={campaigns.length > 1 ? `${campaigns.length} total` : campaign?.status}
+      meta={
+        campaigns.length > 1 ? `${campaigns.length} total` : campaign?.status
+      }
     >
       {campaigns.slice(0, 4).map((item: any) => (
-        <div key={item._id || item.name} className='border-border/70 border-b py-2 last:border-b-0 dark:border-white/10'>
+        <div
+          key={item._id || item.name}
+          className='border-border/70 border-b py-2 last:border-b-0 dark:border-white/10'
+        >
           <div className='text-foreground text-[13.5px] font-medium'>
             {item.name}
           </div>
@@ -848,7 +848,9 @@ export function GtmLeadsCard({ data }: { data: any }) {
       tone='success'
     >
       {leads.length === 0 ? (
-        <div className='text-muted-foreground text-[12.5px]'>No leads found.</div>
+        <div className='text-muted-foreground text-[12.5px]'>
+          No leads found.
+        </div>
       ) : (
         <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {leads.slice(0, 6).map((lead, i) => (
@@ -857,7 +859,9 @@ export function GtmLeadsCard({ data }: { data: any }) {
                 {lead.fullName || lead.email}
               </div>
               <div className='text-muted-foreground mt-0.5 text-[12px]'>
-                {[lead.title, lead.company, lead.email].filter(Boolean).join(" · ")}
+                {[lead.title, lead.company, lead.email]
+                  .filter(Boolean)
+                  .join(" · ")}
               </div>
             </li>
           ))}
@@ -877,7 +881,8 @@ export function GtmOutboundCard({ data }: { data: any }) {
       tone='success'
     >
       <p className='text-muted-foreground text-[12.5px]'>
-        Personalized sequence jobs were queued. Suppressed, unsubscribed, and invalid leads were skipped.
+        Personalized sequence jobs were queued. Suppressed, unsubscribed, and
+        invalid leads were skipped.
       </p>
     </AgentCard>
   );
@@ -885,7 +890,8 @@ export function GtmOutboundCard({ data }: { data: any }) {
 
 export function GtmAttributionCard({ data }: { data: any }) {
   const metrics = data?.metrics || data?.attribution?.metrics || {};
-  const conversionValue = data?.conversionValue ?? data?.attribution?.conversionValue ?? 0;
+  const conversionValue =
+    data?.conversionValue ?? data?.attribution?.conversionValue ?? 0;
   const roi = data?.roi ?? data?.attribution?.roi;
   return (
     <AgentCard
@@ -979,7 +985,12 @@ export function GtmPdfReportCard({ data }: { data: any }) {
               <ExternalLink className='h-3 w-3' />
               View
             </Button>
-            <Button asChild variant='outline' size='sm' className='h-7 px-2 text-xs'>
+            <Button
+              asChild
+              variant='outline'
+              size='sm'
+              className='h-7 px-2 text-xs'
+            >
               <a href={url} download>
                 <Download className='h-3 w-3' />
                 Download
@@ -1030,7 +1041,12 @@ export function ResearchReportCard({ data }: { data: any }) {
           </Button>
         )}
         {pdfUrl && (
-          <Button asChild variant='outline' size='sm' className='h-7 px-2 text-xs'>
+          <Button
+            asChild
+            variant='outline'
+            size='sm'
+            className='h-7 px-2 text-xs'
+          >
             <a href={pdfUrl} download={report?.fileName}>
               <Download className='h-3 w-3' />
               Download PDF
@@ -1044,7 +1060,9 @@ export function ResearchReportCard({ data }: { data: any }) {
 
 export function DocumentArtifactCard({ data }: { data: any }) {
   const artifact = data?.artifact || data;
-  const previewUrl = getFullUrl(artifact?.previewUrl || artifact?.fileUrl || "");
+  const previewUrl = getFullUrl(
+    artifact?.previewUrl || artifact?.fileUrl || ""
+  );
   const fileUrl = getFullUrl(artifact?.fileUrl || "");
   const { setArtifactPreview } = useProjectDesign();
   const showPreview = () =>
@@ -1069,13 +1087,23 @@ export function DocumentArtifactCard({ data }: { data: any }) {
     >
       <div className='flex flex-wrap items-center gap-2'>
         {previewUrl && (
-          <Button variant='outline' size='sm' className='h-7 px-2 text-xs' onClick={showPreview}>
+          <Button
+            variant='outline'
+            size='sm'
+            className='h-7 px-2 text-xs'
+            onClick={showPreview}
+          >
             <ExternalLink className='h-3 w-3' />
             View
           </Button>
         )}
         {fileUrl && (
-          <Button asChild variant='outline' size='sm' className='h-7 px-2 text-xs'>
+          <Button
+            asChild
+            variant='outline'
+            size='sm'
+            className='h-7 px-2 text-xs'
+          >
             <a href={fileUrl} download={artifact?.fileName}>
               <Download className='h-3 w-3' />
               Download
@@ -1090,11 +1118,20 @@ export function DocumentArtifactCard({ data }: { data: any }) {
 export function DocumentListCard({ data }: { data: any }) {
   const artifacts: any[] = data?.artifacts || [];
   return (
-    <AgentCard icon={<FileText className='h-3.5 w-3.5' />} title='Documents' meta={`${artifacts.length} recent`}>
+    <AgentCard
+      icon={<FileText className='h-3.5 w-3.5' />}
+      title='Documents'
+      meta={`${artifacts.length} recent`}
+    >
       <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
         {artifacts.slice(0, 10).map((artifact) => (
-          <li key={artifact._id} className='flex items-center justify-between gap-3 px-3.5 py-2.5'>
-            <span className='min-w-0 truncate text-[12.5px] font-medium'>{artifact.title}</span>
+          <li
+            key={artifact._id}
+            className='flex items-center justify-between gap-3 px-3.5 py-2.5'
+          >
+            <span className='min-w-0 truncate text-[12.5px] font-medium'>
+              {artifact.title}
+            </span>
             <span className='text-muted-foreground shrink-0 text-[11px] uppercase'>
               {artifact.format} · v{artifact.version}
             </span>

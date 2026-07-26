@@ -5,7 +5,7 @@ import { Rocket } from "lucide-react";
 export default function CampaignsPage() {
   return (
     <div className='bg-muted/90 flex min-h-[calc(100dvh-7rem)] flex-col items-center justify-center rounded-3xl border border-zinc-200 p-2 text-center shadow-2xl lg:p-6 dark:border-zinc-800/50 dark:bg-[#070707]'>
-      <article className='group relative w-full max-w-[420px] overflow-hidden rounded-2xl bg-[url(https://images.unsplash.com/photo-1724525647065-f948fc102e68?w=1080&q=80)] bg-cover shadow-xl lg:rounded-3xl'>
+      <article className='group relative w-full max-w-[420px] overflow-hidden rounded-lg bg-[url(https://images.unsplash.com/photo-1724525647065-f948fc102e68?w=1080&q=80)] bg-cover shadow-xl lg:rounded-3xl'>
         <div className='relative z-10 flex h-full min-h-[320px] flex-col items-start justify-between bg-black/20 p-6 lg:min-h-[400px] lg:p-2'>
           {/* Top */}
           <div className='flex w-full items-start justify-between'>

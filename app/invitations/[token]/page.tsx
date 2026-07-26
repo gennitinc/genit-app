@@ -140,7 +140,7 @@ export default function AcceptInvitationPage() {
 
   return (
     <main className='flex min-h-[80vh] items-center justify-center px-4 py-12'>
-      <div className='border-border w-full max-w-md rounded-2xl border bg-white p-8 shadow-sm dark:bg-zinc-900'>
+      <div className='border-border w-full max-w-md rounded-lg border bg-white p-8 shadow-sm dark:bg-zinc-900'>
         <div className='flex flex-col items-center text-center'>
           <Avatar className='h-16 w-16 rounded-xl'>
             {invitation.organization.businessLogo ? (

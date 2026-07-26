@@ -991,7 +991,7 @@ function VideoGenerationPage() {
                   </Drawer>
                 </div>
 
-                <div className='relative z-10 flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-neutral-100 bg-white pt-4 shadow-sm dark:border-neutral-800 dark:bg-black/20'>
+                <div className='relative z-10 flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-neutral-100 bg-white pt-4 shadow-sm dark:border-neutral-800 dark:bg-black/20'>
                   <div className='hide-scrollbar flex-1 shrink-0 space-y-3 overflow-y-auto px-4 pb-4'>
                     {generationMode === "video" && (
                       <PresetSlider currentSlide={0} onSlideChange={() => {}} />

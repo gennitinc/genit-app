@@ -36,6 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
@@ -53,7 +54,6 @@ import {
   listYouTubePlaylists,
 } from "@/lib/integrations-api";
 import type { SocialPostMedia, SocialPostStatus } from "@/lib/social-posts-api";
-import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
@@ -867,7 +867,7 @@ export function PostEditorDialog({
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent
-          className='flex max-h-[80vh] flex-col gap-0 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c0c0e] p-0 text-white shadow-2xl sm:max-w-3xl'
+          className='flex max-h-[80vh] flex-col gap-0 overflow-hidden rounded-lg border border-white/[0.08] bg-[#0c0c0e] p-0 text-white shadow-2xl sm:max-w-3xl'
           hideDialogClose
         >
           <DialogHeader className='relative border-b border-white/[0.05] px-5 pt-4 pb-3 text-left'>

@@ -168,7 +168,7 @@ export function PWAInstaller() {
 
   return (
     <Dialog open={showInstallPrompt} onOpenChange={setShowInstallPrompt}>
-      <DialogContent className='z-[100] !max-w-sm !rounded-2xl !p-6'>
+      <DialogContent className='z-[100] !max-w-sm !rounded-lg !p-6'>
         <div className='relative'>
           <GradientFrame />
           <div className='flex flex-col items-center space-y-4 text-center'>
@@ -179,7 +179,7 @@ export function PWAInstaller() {
               </DialogTitle>
               <DialogDescription className='text-muted-foreground text-sm'>
                 Get faster access, offline support, and a smoother experience
-                when you install the app. 
+                when you install the app.
               </DialogDescription>
             </div>
 

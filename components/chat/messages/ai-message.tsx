@@ -329,7 +329,7 @@ export function AIMessage({
                       <p className='mb-4'>Select Project Type</p>
                       <div
                         key={`${message.id}-${i}`}
-                        className='bg-muted/30 border-border/50 mt-4 rounded-2xl border p-4 backdrop-blur-sm'
+                        className='bg-muted/30 border-border/50 mt-4 rounded-lg border p-4 backdrop-blur-sm'
                       >
                         <RadioGroup
                           onValueChange={(value) =>

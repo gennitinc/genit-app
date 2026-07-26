@@ -648,7 +648,7 @@ const SettingsHome = () => {
 
         <div className='flex flex-col gap-8 md:flex-row md:items-start'>
           <aside className='top-14 z-10 min-w-0 md:sticky md:w-64 md:shrink-0'>
-            <div className='rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+            <div className='rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
               <div className='flex items-center justify-between gap-3'>
                 <div>
                   <p className='text-xs font-medium text-zinc-500 dark:text-zinc-400'>
@@ -717,7 +717,7 @@ const SettingsHome = () => {
 
             {activeTab === "account" && (
               <div className='space-y-5'>
-                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
                     <CardTitle className='text-base'>Account details</CardTitle>
                     <CardDescription>
@@ -780,7 +780,7 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
                     <CardTitle className='text-base'>Password</CardTitle>
                     <CardDescription>
@@ -821,8 +821,8 @@ const SettingsHome = () => {
             {activeTab === "brand" && <BrandSettings />}
 
             {activeTab === "automation" && (
-              <Card className='relative overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
-                <CardHeader className='border-b border-zinc-200 bg-zinc-50/60 p-5 sm:p-6 py-2 sm-py-2 dark:border-white/10 dark:bg-white/[0.02]'>
+              <Card className='relative overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                <CardHeader className='sm-py-2 border-b border-zinc-200 bg-zinc-50/60 p-5 py-2 sm:p-6 dark:border-white/10 dark:bg-white/[0.02]'>
                   <div className='flex items-start justify-between gap-4'>
                     <div className='flex min-w-0 items-start gap-3'>
                       <div className='bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-xl'>
@@ -2022,7 +2022,7 @@ const SettingsHome = () => {
             {activeTab === "billing" && (
               <div className='space-y-5'>
                 <div className='grid gap-4 sm:grid-cols-2'>
-                  <Card className='rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <Card className='rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                     <CardContent className='p-5'>
                       <div className='flex items-start justify-between gap-4'>
                         <div>
@@ -2045,7 +2045,7 @@ const SettingsHome = () => {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className='rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <Card className='rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                     <CardContent className='flex items-center justify-between gap-4 p-5'>
                       <div>
                         <p className='text-xs font-medium text-zinc-500 dark:text-zinc-400'>
@@ -2068,7 +2068,7 @@ const SettingsHome = () => {
                   </Card>
                 </div>
 
-                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='gap-4 border-b border-zinc-200 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-white/10'>
                     <div>
                       <CardTitle className='text-base'>
@@ -2163,7 +2163,7 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
                     <CardTitle className='text-base'>Plans & pricing</CardTitle>
                     <CardDescription>
@@ -2188,7 +2188,7 @@ const SettingsHome = () => {
             {/* Security Settings */}
             {activeTab === "security" && (
               <div className='space-y-5'>
-                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
                     <CardTitle className='text-base'>
                       Account protection
@@ -2254,7 +2254,7 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card className='rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                <Card className='rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardContent className='flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between'>
                     <div>
                       <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
@@ -2283,7 +2283,7 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card className='rounded-2xl border-red-200 bg-red-50/50 shadow-none dark:border-red-500/20 dark:bg-red-500/[0.06]'>
+                <Card className='rounded-lg border-red-200 bg-red-50/50 shadow-none dark:border-red-500/20 dark:bg-red-500/[0.06]'>
                   <CardContent className='flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between'>
                     <div>
                       <p className='text-sm font-medium text-red-900 dark:text-red-200'>
@@ -2318,7 +2318,7 @@ const SettingsHome = () => {
             {/* Preferences Settings */}
             {activeTab === "preferences" && (
               <div className='space-y-5'>
-                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
                     <CardTitle className='text-base'>Appearance</CardTitle>
                     <CardDescription>
@@ -2326,7 +2326,7 @@ const SettingsHome = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className='p-5'>
-                    <div className='grid grid-cols-3 gap-2 rounded-2xl bg-zinc-100 p-1.5 dark:bg-white/[0.05]'>
+                    <div className='grid grid-cols-3 gap-2 rounded-lg bg-zinc-100 p-1.5 dark:bg-white/[0.05]'>
                       {[
                         { value: "light", label: "Light", icon: Sun },
                         { value: "dark", label: "Dark", icon: Moon },
@@ -2361,7 +2361,7 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
                     <CardTitle className='text-base'>
                       Email preferences

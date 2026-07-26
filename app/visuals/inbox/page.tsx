@@ -165,7 +165,7 @@ function ConversationListSkeleton() {
         <div
           key={index}
           aria-hidden='true'
-          className='flex gap-3 rounded-2xl p-3'
+          className='flex gap-3 rounded-lg p-3'
         >
           <Skeleton className='h-11 w-11 shrink-0 rounded-full motion-reduce:animate-none' />
           <div className='min-w-0 flex-1 space-y-2 pt-0.5'>
@@ -198,7 +198,7 @@ function MessageThreadSkeleton() {
         >
           <div className={`space-y-2 ${index % 2 ? "w-2/3" : "w-3/4"}`}>
             <Skeleton
-              className={`h-16 w-full rounded-2xl motion-reduce:animate-none ${index % 2 ? "bg-indigo-200 dark:bg-indigo-950" : "bg-zinc-200 dark:bg-zinc-800"}`}
+              className={`h-16 w-full rounded-lg motion-reduce:animate-none ${index % 2 ? "bg-indigo-200 dark:bg-indigo-950" : "bg-zinc-200 dark:bg-zinc-800"}`}
             />
             <Skeleton
               className={`h-2.5 w-14 bg-zinc-300 motion-reduce:animate-none dark:bg-zinc-700 ${index % 2 ? "ml-auto" : ""}`}
@@ -1576,7 +1576,7 @@ export default function InboxPage() {
         </div>
       </header>
 
-      <div className='grid min-h-0 min-w-0 flex-1 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm max-xl:rounded-none max-xl:border-0 max-xl:shadow-none xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(420px,1fr)_280px] dark:border-white/10 dark:bg-zinc-950'>
+      <div className='grid min-h-0 min-w-0 flex-1 overflow-hidden rounded-lg border border-black/5 bg-white shadow-sm max-xl:rounded-none max-xl:border-0 max-xl:shadow-none xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(420px,1fr)_280px] dark:border-white/10 dark:bg-zinc-950'>
         <aside
           className={`${activeId ? "hidden xl:flex" : "flex"} relative min-h-0 min-w-0 flex-col border-r border-black/5 dark:border-white/10`}
         >
@@ -1689,7 +1689,7 @@ export default function InboxPage() {
               <ConversationListSkeleton />
             ) : conversations.length === 0 ? (
               <div className='flex h-full min-h-72 flex-col items-center justify-center px-8 text-center'>
-                <span className='mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-900'>
+                <span className='mb-4 flex h-14 w-14 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-900'>
                   <Inbox className='text-muted-foreground h-6 w-6' />
                 </span>
                 <h3 className='text-sm font-semibold'>No conversations here</h3>
@@ -1720,7 +1720,7 @@ export default function InboxPage() {
                             ? toggleConversationSelection(conversation._id)
                             : setActiveId(conversation._id);
                         }}
-                        className={`mb-1 flex w-full cursor-pointer gap-3 rounded-2xl p-3 text-left transition ${selectedConversationIds.has(conversation._id) || activeId === conversation._id ? "bg-zinc-100 dark:bg-zinc-900" : "hover:bg-zinc-50 dark:hover:bg-white/[0.03]"}`}
+                        className={`mb-1 flex w-full cursor-pointer gap-3 rounded-lg p-3 text-left transition ${selectedConversationIds.has(conversation._id) || activeId === conversation._id ? "bg-zinc-100 dark:bg-zinc-900" : "hover:bg-zinc-50 dark:hover:bg-white/[0.03]"}`}
                       >
                         {selectedConversationIds.size > 0 && (
                           <Checkbox
@@ -1979,7 +1979,7 @@ export default function InboxPage() {
                     <img
                       src={activeConversation.customerAvatar}
                       alt=''
-                      className='h-9 w-9 rounded-full object-cover cursor-pointer'
+                      className='h-9 w-9 cursor-pointer rounded-full object-cover'
                       onClick={() => {
                         setActiveId(activeConversation._id);
                         setShowDetails(true);
@@ -1987,7 +1987,7 @@ export default function InboxPage() {
                     />
                   ) : (
                     <span
-                      className='flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800 cursor-pointer'
+                      className='flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'
                       onClick={() => {
                         setActiveId(activeConversation._id);
                         setShowDetails(true);
@@ -2174,7 +2174,7 @@ export default function InboxPage() {
                             className={`group/message flex items-center gap-1 ${emailHtml ? "w-full max-w-full" : "max-w-[90%] sm:max-w-[82%]"} ${inbound ? "flex-row" : "flex-row-reverse"}`}
                           >
                             <div
-                              className={`min-w-0 overflow-hidden rounded-2xl text-sm leading-6 shadow-sm ${emailHtml ? "w-full max-w-3xl bg-white ring-1 ring-black/5 dark:ring-white/10" : inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-600 text-white" : "rounded-tr-md bg-indigo-600 text-white"}`}
+                              className={`min-w-0 overflow-hidden rounded-lg text-sm leading-6 shadow-sm ${emailHtml ? "w-full max-w-3xl bg-white ring-1 ring-black/5 dark:ring-white/10" : inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-600 text-white" : "rounded-tr-md bg-indigo-600 text-white"}`}
                             >
                               {message.attachments?.map((attachment) => (
                                 <div
@@ -2342,7 +2342,7 @@ export default function InboxPage() {
 
               <div className='shrink-0 border-t border-black/5 bg-white p-2 dark:border-white/10 dark:bg-zinc-950'>
                 {activeConversation.isBlocked ? (
-                  <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
+                  <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-lg bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
                     <Ban className='h-4 w-4 text-red-500' />
                     This contact is blocked.{" "}
                     <button
@@ -2359,7 +2359,7 @@ export default function InboxPage() {
                     </button>
                   </div>
                 ) : activeConversation.status === "resolved" ? (
-                  <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
+                  <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-lg bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
                     <Check className='h-4 w-4' />
                     This conversation is resolved.{" "}
                     <button
@@ -2370,14 +2370,14 @@ export default function InboxPage() {
                     </button>
                   </div>
                 ) : providerReplyUnavailable ? (
-                  <div className='text-muted-foreground mx-auto max-w-3xl rounded-2xl bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
+                  <div className='text-muted-foreground mx-auto max-w-3xl rounded-lg bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
                     Telegram Business reply access is not active. Reauthorize
                     the Business Bot with permission to read and reply to
                     messages. You can still review, label, and resolve this
                     conversation.
                   </div>
                 ) : whatsappReplyWindowClosed ? (
-                  <div className='mx-auto max-w-3xl space-y-3 rounded-2xl bg-amber-50 p-4 text-sm text-amber-950 dark:bg-amber-950/40 dark:text-amber-100'>
+                  <div className='mx-auto max-w-3xl space-y-3 rounded-lg bg-amber-50 p-4 text-sm text-amber-950 dark:bg-amber-950/40 dark:text-amber-100'>
                     <p>
                       WhatsApp’s 24-hour reply window has closed. Send an
                       approved template here; normal replies become available
@@ -2442,13 +2442,13 @@ export default function InboxPage() {
                     )}
                   </div>
                 ) : telegramBusinessReplyWindowClosed ? (
-                  <div className='mx-auto max-w-3xl rounded-2xl bg-amber-50 p-4 text-sm text-amber-950 dark:bg-amber-950/40 dark:text-amber-100'>
+                  <div className='mx-auto max-w-3xl rounded-lg bg-amber-50 p-4 text-sm text-amber-950 dark:bg-amber-950/40 dark:text-amber-100'>
                     Telegram Business replies are available for 24 hours after
                     the customer&apos;s latest message. Wait for the customer to
                     message the business account again before replying.
                   </div>
                 ) : (
-                  <div className='relative mx-auto max-w-3xl rounded-2xl border border-black/10 bg-zinc-50 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/10 dark:border-white/10 dark:bg-zinc-900'>
+                  <div className='relative mx-auto max-w-3xl rounded-lg border border-black/10 bg-zinc-50 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/10 dark:border-white/10 dark:bg-zinc-900'>
                     {attachments.length > 0 && (
                       <div className='flex gap-2 overflow-x-auto border-b border-black/5 p-3 dark:border-white/10'>
                         {attachments.map((attachment) => (

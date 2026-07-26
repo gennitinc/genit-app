@@ -16,14 +16,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   Check,
   CircleFadingArrowUp,
+  Globe2,
   Loader2,
   Pause,
-  Plus,
   Play,
+  Plus,
   Sparkles,
   X,
   ZoomIn,
-  Globe2,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -82,9 +82,7 @@ export function DesignInspirationResults({
   const isLocked = !!savedInspiration;
 
   // override local selections if locked
-  const effectiveSelectedFiles = isLocked
-    ? [savedInspiration]
-    : selectedFiles;
+  const effectiveSelectedFiles = isLocked ? [savedInspiration] : selectedFiles;
   const hasSelection = safeResults.some((pin) =>
     effectiveSelectedFiles?.includes(pin.image)
   );
@@ -115,7 +113,13 @@ export function DesignInspirationResults({
       autoPickedRef.current = true;
       setSelectedFiles([saved]);
     }
-  }, [isLocked, safeResults, selectedFiles.length, setSelectedFiles, storageKey]);
+  }, [
+    isLocked,
+    safeResults,
+    selectedFiles.length,
+    setSelectedFiles,
+    storageKey,
+  ]);
 
   useEffect(() => {
     autoPickedRef.current = false;
@@ -176,7 +180,7 @@ export function DesignInspirationResults({
       {/* ─── Header ─── */}
       <div className='flex items-center gap-2'>
         <Globe2 className='text-primary h-3 w-3 shrink-0' />
-        <p className='text-[11px] text-blue-500 line-clamp-1 truncate'>
+        <p className='line-clamp-1 truncate text-[11px] text-blue-500'>
           {isAutoSelected
             ? "AI Selected Foundation"
             : "Deep Internet Search Results"}{" "}
@@ -231,7 +235,7 @@ export function DesignInspirationResults({
                     className={cn(
                       "flex flex-col gap-1.5 transition-all duration-300",
                       selected
-                        ? "rounded-2xl border-2 border-blue-500/50 bg-blue-500/5 p-2 ring-4 ring-blue-500/10"
+                        ? "rounded-lg border-2 border-blue-500/50 bg-blue-500/5 p-2 ring-4 ring-blue-500/10"
                         : "border-2 border-transparent p-0"
                     )}
                   >
@@ -321,7 +325,7 @@ export function DesignInspirationResults({
 
       {/* ─── Preview Dialog ─── */}
       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <DialogContent className='flex h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-black p-0 shadow-2xl'>
+        <DialogContent className='flex h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-lg border border-white/10 bg-black p-0 shadow-2xl'>
           {/* Close */}
 
           <Carousel

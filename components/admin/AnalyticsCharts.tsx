@@ -42,7 +42,7 @@ export const AnalyticsCharts = ({
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className='bg-card border-border/50 rounded-2xl border p-6'
+          className='bg-card border-border/50 rounded-lg border p-6'
         >
           <h3 className='mb-6 flex items-center justify-between text-lg font-semibold'>
             Platform Growth
@@ -104,7 +104,7 @@ export const AnalyticsCharts = ({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1 }}
-        className='bg-card border-border/50 rounded-2xl border p-6'
+        className='bg-card border-border/50 rounded-lg border p-6'
       >
         <h3 className='mb-6 text-lg font-semibold'>Feature Distribution</h3>
         <div className='flex h-[300px] w-full items-center justify-center'>
