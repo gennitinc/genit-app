@@ -52,11 +52,15 @@ export function useInboxConversations(filters: InboxFilters = {}) {
   });
 }
 
-export function useInfiniteInboxConversations(filters: InboxFilters = {}) {
+export function useInfiniteInboxConversations(
+  filters: InboxFilters = {},
+  enabled = true
+) {
   return useInfiniteQuery({
     queryKey: inboxConversationsQueryKey(filters),
     queryFn: ({ pageParam = 0 }) =>
       fetchConversationPage({ ...filters, limit: 30, offset: pageParam }),
+    enabled,
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextOffset ?? undefined,
     staleTime: 5_000,

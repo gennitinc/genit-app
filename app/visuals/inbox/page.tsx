@@ -303,20 +303,16 @@ function EmailMessageBody({
     initializedDocumentRef.current = document;
     const resize = () => {
       const body = document.body;
-      setHeight(
-        Math.max(
-          1,
-          document.documentElement.scrollHeight,
-          body.scrollHeight,
-          body.offsetHeight
-        )
-      );
+      setHeight(Math.max(1, Math.ceil(body.getBoundingClientRect().height)));
     };
 
     resizeObserverRef.current?.disconnect();
     resizeObserverRef.current = new ResizeObserver(resize);
     resizeObserverRef.current.observe(document.documentElement);
     resizeObserverRef.current.observe(document.body);
+    document
+      .querySelectorAll("details[data-email-quote]")
+      .forEach((details) => details.addEventListener("toggle", resize));
     resize();
 
     restoreImagesFrameRef.current = requestAnimationFrame(() => {
@@ -541,7 +537,8 @@ export default function InboxPage() {
   const router = useRouter();
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
-  const [selectedAccountId, setSelectedAccountId] = useState("all");
+  const [selectedAccountId, setSelectedAccountIdState] = useState("all");
+  const [urlStateReady, setUrlStateReady] = useState(false);
   const [status, setStatus] = useState<InboxFilters["status"]>("all");
   const [sort, setSort] = useState<NonNullable<InboxFilters["sort"]>>("newest");
   const [folder, setFolder] = useState("inbox");
@@ -552,6 +549,15 @@ export default function InboxPage() {
     const url = new URL(window.location.href);
     if (conversationId) url.searchParams.set("conversation", conversationId);
     else url.searchParams.delete("conversation");
+    window.history.replaceState(window.history.state, "", url);
+  }, []);
+  const setSelectedAccountId = useCallback((accountId: string) => {
+    setSelectedAccountIdState(accountId);
+    setActiveIdState(null);
+    const url = new URL(window.location.href);
+    if (accountId === "all") url.searchParams.delete("account");
+    else url.searchParams.set("account", accountId);
+    url.searchParams.delete("conversation");
     window.history.replaceState(window.history.state, "", url);
   }, []);
   const [drafts, setDrafts] = useState<InboxDrafts>({});
@@ -711,6 +717,7 @@ export default function InboxPage() {
   }, []);
 
   const {
+    orgId,
     integrations,
     byPlatform,
     identityBySurface,
@@ -748,6 +755,11 @@ export default function InboxPage() {
   const selectedAccount = accounts.find(
     (account) => account._id === selectedAccountId
   );
+  const filtersReady =
+    urlStateReady &&
+    Boolean(orgId) &&
+    !integrationsLoading &&
+    (selectedAccountId === "all" || Boolean(selectedAccount));
   const filters = useMemo<InboxFilters>(
     () => ({
       integrationId: selectedAccount?._id,
@@ -767,15 +779,15 @@ export default function InboxPage() {
   const {
     data: conversationPages,
     isLoading,
-    isFetching,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteInboxConversations(filters);
+  } = useInfiniteInboxConversations(filters, filtersReady);
   const conversations = useMemo(
     () => conversationPages?.pages.flatMap((page) => page.conversations) ?? [],
     [conversationPages]
   );
+  const conversationsLoading = !filtersReady || isLoading;
   const { data: messages = [], isLoading: messagesLoading } = useInboxMessages(
     activeId || undefined
   );
@@ -867,8 +879,29 @@ export default function InboxPage() {
   );
 
   useEffect(() => {
-    setActiveId(new URL(window.location.href).searchParams.get("conversation"));
-  }, [setActiveId]);
+    const params = new URL(window.location.href).searchParams;
+    setSelectedAccountIdState(params.get("account") || "all");
+    setActiveIdState(params.get("conversation"));
+    setUrlStateReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (
+      urlStateReady &&
+      orgId &&
+      !integrationsLoading &&
+      selectedAccountId !== "all" &&
+      !selectedAccount
+    )
+      setSelectedAccountId("all");
+  }, [
+    integrationsLoading,
+    orgId,
+    selectedAccount,
+    selectedAccountId,
+    setSelectedAccountId,
+    urlStateReady,
+  ]);
 
   const syncChannels = (continueHistory = false) => {
     const selectedIsSyncable = Boolean(
@@ -936,8 +969,9 @@ export default function InboxPage() {
   };
 
   useEffect(() => {
-    if (!isLoading && activeId && !activeConversation) setActiveId(null);
-  }, [activeConversation, activeId, isLoading, setActiveId]);
+    if (!conversationsLoading && activeId && !activeConversation)
+      setActiveId(null);
+  }, [activeConversation, activeId, conversationsLoading, setActiveId]);
 
   useEffect(() => {
     if (
@@ -1649,7 +1683,7 @@ export default function InboxPage() {
           </div>
 
           <div className='flex-1 overflow-y-auto p-2'>
-            {isLoading ? (
+            {conversationsLoading ? (
               <ConversationListSkeleton />
             ) : conversations.length === 0 ? (
               <div className='flex h-full min-h-72 flex-col items-center justify-center px-8 text-center'>
