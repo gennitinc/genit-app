@@ -748,12 +748,21 @@ export function ConnectDialog({
         setConnectedAccount(first ? `@${first.username}` : null);
         setPhase("success");
         qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
-        toast.success(
-          `Connected ${result.provisioned.length} Instagram ${
-            result.provisioned.length === 1 ? "account" : "accounts"
-          }`,
-          { description: first ? `@${first.username}` : undefined }
-        );
+        const warning = result.provisioned.find(
+          (account) => account.warning
+        )?.warning;
+        const message = `Connected ${result.provisioned.length} Instagram ${
+          result.provisioned.length === 1 ? "account" : "accounts"
+        }`;
+        if (warning) {
+          toast.warning(`${message} with limited inbox access`, {
+            description: warning,
+          });
+        } else {
+          toast.success(message, {
+            description: first ? `@${first.username}` : undefined,
+          });
+        }
       }
     } catch (err: any) {
       const msg =

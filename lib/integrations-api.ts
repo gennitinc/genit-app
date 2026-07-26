@@ -157,6 +157,7 @@ export interface InstagramProvisionedTarget {
   integrationId: string;
   igUserId: string;
   username: string;
+  warning?: string;
 }
 export interface MetaAdsProvisionedTarget {
   integrationId: string;
