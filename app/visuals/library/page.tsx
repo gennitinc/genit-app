@@ -64,8 +64,8 @@ export default function BlogLibraryPage() {
     setDimensions(null);
   };
 
-  const loadAssets = async () => {
-    setLoading(true);
+  const loadAssets = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
     try {
       const response = await apiResponse.get("/blog/library");
       setAssets(response.data.assets || []);
@@ -76,12 +76,16 @@ export default function BlogLibraryPage() {
         error.response?.data?.message || "Could not load media library"
       );
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 
   useEffect(() => {
     loadAssets();
+
+    const refreshStorage = () => void loadAssets(false);
+    window.addEventListener("focus", refreshStorage);
+    return () => window.removeEventListener("focus", refreshStorage);
   }, []);
 
   const upload = async (files?: FileList | null) => {
