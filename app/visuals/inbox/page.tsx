@@ -485,7 +485,14 @@ export default function InboxPage() {
   const [sort, setSort] = useState<NonNullable<InboxFilters["sort"]>>("newest");
   const [folder, setFolder] = useState("inbox");
   const [search, setSearch] = useState("");
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeId, setActiveIdState] = useState<string | null>(null);
+  const setActiveId = useCallback((conversationId: string | null) => {
+    setActiveIdState(conversationId);
+    const url = new URL(window.location.href);
+    if (conversationId) url.searchParams.set("conversation", conversationId);
+    else url.searchParams.delete("conversation");
+    window.history.replaceState(window.history.state, "", url);
+  }, []);
   const [drafts, setDrafts] = useState<InboxDrafts>({});
   const { reply, attachments } = activeId
     ? (drafts[activeId] ?? EMPTY_INBOX_DRAFT)
@@ -798,6 +805,10 @@ export default function InboxPage() {
     )
   );
 
+  useEffect(() => {
+    setActiveId(new URL(window.location.href).searchParams.get("conversation"));
+  }, [setActiveId]);
+
   const syncChannels = (continueHistory = false) => {
     const selectedIsSyncable = Boolean(
       selectedAccount &&
@@ -864,8 +875,8 @@ export default function InboxPage() {
   };
 
   useEffect(() => {
-    if (activeId && !activeConversation) setActiveId(null);
-  }, [activeConversation, activeId]);
+    if (!isLoading && activeId && !activeConversation) setActiveId(null);
+  }, [activeConversation, activeId, isLoading, setActiveId]);
 
   useEffect(() => {
     if (
