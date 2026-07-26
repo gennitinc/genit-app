@@ -238,6 +238,7 @@
     background-size:
       auto,
       270px auto;
+    background-blend-mode: normal, difference;
   }
 
   .dark .inbox-chat-background {
@@ -245,6 +246,7 @@
     background-image:
       linear-gradient(rgb(9 9 11 / 0.86), rgb(9 9 11 / 0.86)),
       url("/images/inbox-chat-pattern.png");
+    background-blend-mode: normal;
   }
 }
 
