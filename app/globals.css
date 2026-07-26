@@ -229,6 +229,23 @@
   .chat-scrollbar::-webkit-scrollbar-button {
     display: none;
   }
+
+  .inbox-chat-background {
+    background-color: rgb(250 250 250);
+    background-image:
+      linear-gradient(rgb(250 250 250 / 0.92), rgb(250 250 250 / 0.92)),
+      url("/images/inbox-chat-pattern.png");
+    background-size:
+      auto,
+      270px auto;
+  }
+
+  .dark .inbox-chat-background {
+    background-color: rgb(9 9 11);
+    background-image:
+      linear-gradient(rgb(9 9 11 / 0.86), rgb(9 9 11 / 0.86)),
+      url("/images/inbox-chat-pattern.png");
+  }
 }
 
 /* From Uiverse.io by nawinasokan */
