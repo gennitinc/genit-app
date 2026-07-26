@@ -197,9 +197,11 @@ function MessageThreadSkeleton() {
           className={`flex ${index % 2 ? "justify-end" : "justify-start"}`}
         >
           <div className={`space-y-2 ${index % 2 ? "w-2/3" : "w-3/4"}`}>
-            <Skeleton className='h-16 w-full rounded-2xl motion-reduce:animate-none' />
             <Skeleton
-              className={`h-2.5 w-14 motion-reduce:animate-none ${index % 2 ? "ml-auto" : ""}`}
+              className={`h-16 w-full rounded-2xl motion-reduce:animate-none ${index % 2 ? "bg-indigo-200 dark:bg-indigo-950" : "bg-zinc-200 dark:bg-zinc-800"}`}
+            />
+            <Skeleton
+              className={`h-2.5 w-14 bg-zinc-300 motion-reduce:animate-none dark:bg-zinc-700 ${index % 2 ? "ml-auto" : ""}`}
             />
           </div>
         </div>
