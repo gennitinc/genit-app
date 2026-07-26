@@ -32,31 +32,36 @@ import { useAccountActions } from "@/hooks/use-account-actions";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import { GradientFrame } from "@/utils/gradient-frame";
 import {
+  Bell,
   Bot,
   Check,
-  ChevronRight,
   CreditCard,
   Download,
-  Edit3,
+  KeyRound,
   Loader2,
+  Monitor,
+  Moon,
   Palette,
   Plus,
   RefreshCw,
   Save,
   Shield,
+  SlidersHorizontal,
+  Sun,
   Target,
   Trash2,
   User as UserIcon,
 } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const SettingsHome = () => {
   const [activeTab, setActiveTab] = useState("account");
-  const [isEditing, setIsEditing] = useState(false);
-  const { user, updateOrganization, updateUserPreferences } = useUserContext();
+  const { user, setuser, updateOrganization, updateUserPreferences } =
+    useUserContext();
+  const router = useRouter();
   const currentOrg: Organization | null =
     user?.currentOrganization && typeof user.currentOrganization === "object"
       ? user.currentOrganization
@@ -100,6 +105,9 @@ const SettingsHome = () => {
   const [variantA, setVariantA] = useState("");
   const [variantB, setVariantB] = useState("");
   const [experimentLift, setExperimentLift] = useState(10);
+  const [username, setUsername] = useState("");
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [sendingPasswordReset, setSendingPasswordReset] = useState(false);
 
   const fetchAutomationRuns = async () => {
     if (!currentOrg?._id) return;
@@ -145,10 +153,7 @@ const SettingsHome = () => {
     return () => window.clearInterval(interval);
   }, [activeTab, currentOrg?._id]);
 
-  // Sync active tab with ?tab= URL param.
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tab = urlParams.get("tab");
     const valid = [
       "account",
       "brand",
@@ -157,10 +162,72 @@ const SettingsHome = () => {
       "security",
       "preferences",
     ];
-    if (tab && valid.includes(tab)) {
-      setActiveTab(tab);
-    }
+    const syncTab = () => {
+      const tab = new URLSearchParams(window.location.search).get("tab");
+      setActiveTab(tab && valid.includes(tab) ? tab : "account");
+    };
+    syncTab();
+    window.addEventListener("popstate", syncTab);
+    return () => window.removeEventListener("popstate", syncTab);
   }, []);
+
+  useEffect(() => setUsername(user?.username || ""), [user?.username]);
+
+  const selectTab = (tab: string) => {
+    setActiveTab(tab);
+    const url = new URL(window.location.href);
+    url.searchParams.set("tab", tab);
+    window.history.pushState({}, "", url);
+  };
+
+  const saveProfile = async () => {
+    const nextUsername = username.trim();
+    if (!user?._id || nextUsername.length < 2) {
+      toast({
+        title: "Enter a valid username",
+        description: "Use at least 2 characters.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setSavingProfile(true);
+    try {
+      const response = await apiResponse.post(`/user/profile/${user._id}`, {
+        username: nextUsername,
+      });
+      setuser((current) =>
+        current
+          ? { ...current, username: response.data.user.username }
+          : current
+      );
+      toast({ title: "Account updated" });
+    } catch (error: any) {
+      toast({
+        title: "Could not update account",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  const startPasswordReset = async () => {
+    if (!user?.email) return;
+    setSendingPasswordReset(true);
+    try {
+      await apiResponse.post("/auth/forgot-password", { email: user.email });
+      router.push(`/reset-password?email=${encodeURIComponent(user.email)}`);
+    } catch (error: any) {
+      toast({
+        title: "Could not send reset code",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    } finally {
+      setSendingPasswordReset(false);
+    }
+  };
 
   const handleThemeChange = async (newTheme: "light" | "dark" | "system") => {
     try {
@@ -522,192 +589,228 @@ const SettingsHome = () => {
   };
 
   const settingsTabs = [
-    { id: "account", label: "Account", icon: UserIcon },
-    { id: "brand", label: "Brand", icon: Palette },
-    { id: "automation", label: "Genit Auto", icon: Bot },
-    { id: "billing", label: "Billing", icon: CreditCard },
-    { id: "security", label: "Security", icon: Shield },
-    { id: "preferences", label: "Preferences", icon: Palette },
+    {
+      id: "account",
+      label: "Account",
+      description: "Personal details and password",
+      icon: UserIcon,
+    },
+    {
+      id: "brand",
+      label: "Brand",
+      description: "Identity, voice, and profiles",
+      icon: Palette,
+    },
+    {
+      id: "automation",
+      label: "Genit Auto",
+      description: "Goals, experiments, and runs",
+      icon: Bot,
+    },
+    {
+      id: "billing",
+      label: "Billing",
+      description: "Credits, invoices, and plans",
+      icon: CreditCard,
+    },
+    {
+      id: "security",
+      label: "Security",
+      description: "Sessions and account access",
+      icon: Shield,
+    },
+    {
+      id: "preferences",
+      label: "Preferences",
+      description: "Appearance and notifications",
+      icon: SlidersHorizontal,
+    },
   ];
+  const activeTabDetails =
+    settingsTabs.find((tab) => tab.id === activeTab) || settingsTabs[0];
+  const ActiveTabIcon = activeTabDetails.icon;
 
   return (
-    <div className='mx-auto min-h-screen max-w-6xl'>
-      <div className='container mx-auto max-w-6xl px-4 py-8'>
-        {/* Header */}
-        <div className='mb-8'>
-          <h1 className='text-foreground mb-2 text-3xl font-bold'>Settings</h1>
-          <p className='text-muted-foreground'>
-            Manage your account settings and preferences
+    <div className='mx-auto min-h-screen w-full max-w-[100rem] px-2 pb-16 sm:px-6'>
+      <div className='pt-5 sm:pt-8'>
+        <div className='mb-7'>
+          <p className='text-xs font-semibold tracking-[0.16em] text-zinc-500 uppercase dark:text-zinc-400'>
+            Workspace
+          </p>
+          <h1 className='mt-1 text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl dark:text-white'>
+            Settings
+          </h1>
+          <p className='mt-1 text-sm text-zinc-500 dark:text-zinc-400'>
+            Manage your account, brand, automation, and billing.
           </p>
         </div>
 
-        <div className='grid grid-cols-1 gap-8 lg:grid-cols-4'>
-          {/* Sidebar Navigation */}
-          <div className='lg:col-span-1'>
-            <Card className='sticky top-12 overflow-hidden'>
-              <CardContent className='p-0'>
-                <div className='border-border border-b p-4'>
-                  <div className='flex items-center justify-between'>
-                    <div>
-                      <p className='text-muted-foreground text-sm'>Credits</p>
-                      <p className='font-semibold'>
-                        {user?.creditsRemaining ?? 0}
-                      </p>
-                    </div>
-                    <div>
-                      <Button
-                        size='sm'
-                        variant='ghost'
-                        onClick={() => setIsTopUpOpen(true)}
-                      >
-                        Top up
-                      </Button>
-                    </div>
-                  </div>
+        <div className='flex flex-col gap-8 md:flex-row md:items-start'>
+          <aside className='top-14 z-10 min-w-0 md:sticky md:w-64 md:shrink-0'>
+            <div className='rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+              <div className='flex items-center justify-between gap-3'>
+                <div>
+                  <p className='text-xs font-medium text-zinc-500 dark:text-zinc-400'>
+                    Available credits
+                  </p>
+                  <p className='mt-0.5 text-xl font-semibold text-zinc-950 tabular-nums dark:text-white'>
+                    {(user?.creditsRemaining ?? 0).toLocaleString()}
+                  </p>
                 </div>
-                <nav className='space-y-1 p-4'>
-                  {settingsTabs.map((tab) => {
-                    const Icon = tab.icon;
-                    return (
-                      <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                          activeTab === tab.id
-                            ? "text-foreground"
-                            : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                        }`}
-                      >
-                        <Icon
-                          className={`size-4 ${
-                            activeTab === tab.id
-                              ? "text-indigo-600 hover:text-indigo-700"
-                              : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                          }`}
-                        />
-                        {tab.label}
-                        <ChevronRight className='ml-auto h-4 w-4' />
-                      </button>
-                    );
-                  })}
-                </nav>
-              </CardContent>
-            </Card>
-          </div>
+                <Button
+                  size='sm'
+                  onClick={() => setIsTopUpOpen(true)}
+                  className='rounded-xl active:scale-[0.97]'
+                >
+                  Top up
+                </Button>
+              </div>
+            </div>
+            <nav
+              aria-label='Settings'
+              className='scrollbar-hide mt-3 flex gap-1 overflow-x-auto border-b border-zinc-200 pb-2 md:flex-col md:overflow-visible md:border-0 md:pb-0 dark:border-white/10'
+            >
+              {settingsTabs.map((tab) => {
+                const Icon = tab.icon;
+                const selected = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type='button'
+                    aria-current={selected ? "page" : undefined}
+                    onClick={() => selectTab(tab.id)}
+                    className={`group flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-[background-color,color,box-shadow,transform] active:scale-[0.98] md:w-full ${
+                      selected
+                        ? "bg-white text-zinc-950 shadow-sm ring-1 ring-black/5 dark:bg-zinc-900 dark:text-white dark:ring-white/10"
+                        : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-white/[0.05] dark:hover:text-white"
+                    }`}
+                  >
+                    <Icon
+                      className={`size-4 ${
+                        selected
+                          ? "text-sky-600 dark:text-sky-400"
+                          : "text-zinc-400 group-hover:text-zinc-600 dark:text-zinc-500 dark:group-hover:text-zinc-300"
+                      }`}
+                    />
+                    <span className='whitespace-nowrap'>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </aside>
 
-          {/* Main Content */}
-          <div className='lg:col-span-3'>
-            {/* Account Settings */}
+          <main className='min-w-0 flex-1 [&_input]:rounded-xl [&_textarea]:rounded-xl'>
+            <div className='mb-5 flex items-start gap-3'>
+              <div className='flex size-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-600 ring-1 ring-sky-100 dark:bg-sky-500/10 dark:text-sky-400 dark:ring-sky-400/15'>
+                <ActiveTabIcon className='size-5' />
+              </div>
+              <div>
+                <h2 className='text-xl font-semibold tracking-tight text-zinc-950 dark:text-white'>
+                  {activeTabDetails.label}
+                </h2>
+                <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
+                  {activeTabDetails.description}
+                </p>
+              </div>
+            </div>
+
             {activeTab === "account" && (
-              <div className='space-y-6'>
-                <Card className='relative overflow-hidden'>
-                  <CardHeader>
-                    <CardTitle className='flex items-center gap-2'>
-                      <UserIcon className='h-5 w-5' />
-                      Account Information
-                    </CardTitle>
+              <div className='space-y-5'>
+                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+                    <CardTitle className='text-base'>Account details</CardTitle>
                     <CardDescription>
-                      Update your personal information and account details
+                      The identity used across your Genit workspace.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className='space-y-6'>
-                    <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                  <CardContent className='space-y-5 p-5'>
+                    <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
                       <div className='space-y-2'>
                         <Label htmlFor='username'>Username</Label>
                         <Input
                           id='username'
-                          defaultValue={user?.username || ""}
+                          value={username}
+                          onChange={(event) => setUsername(event.target.value)}
+                          className='h-10 rounded-xl border-zinc-200 bg-white hover:bg-white dark:border-white/10 dark:bg-white/[0.04] dark:hover:bg-white/[0.04]'
                         />
                       </div>
-                      {/* <div className="space-y-2">
-                        <Label htmlFor="businessName">Business Name</Label>
-                        <Input
-                          id="businessName"
-                          defaultValue={user?.business?.businessName || ""}
-                        />
-                      </div> */}
                       <div className='space-y-2'>
-                        <Label htmlFor='email'>Email Address</Label>
-                        <div className='flex items-center gap-2'>
-                          <Input
-                            id='email'
-                            defaultValue={user?.email || ""}
-                            className='flex-1'
-                          />
-                          <Button variant='outline' size='sm'>
-                            <Edit3 className='mr-2 h-4 w-4' />
-                            Change
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                    {/* <div className="space-y-2">
-                      <Label htmlFor="businessPhone">Business Phone</Label>
-                      <Input
-                        id="businessPhone"
-                        defaultValue={user?.business?.businessPhone || ""}
-                      />
-                    </div> */}
-                    <Separator />
-                    <div className='flex items-center justify-between'>
-                      <div>
-                        <h4 className='font-medium'>Account Status</h4>
-                        <p className='text-muted-foreground text-sm'>
-                          Your account is active and verified
+                        <Label htmlFor='email'>Email address</Label>
+                        <Input
+                          id='email'
+                          value={user?.email || ""}
+                          readOnly
+                          aria-describedby='email-help'
+                          className='h-10 rounded-xl border-zinc-200 bg-zinc-50 text-zinc-500 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/[0.025] dark:hover:bg-white/[0.025]'
+                        />
+                        <p
+                          id='email-help'
+                          className='text-xs text-zinc-500 dark:text-zinc-400'
+                        >
+                          Contact support to change your sign-in email.
                         </p>
                       </div>
-                      <Badge
-                        variant='secondary'
-                        className='bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                    </div>
+                    <div className='flex flex-col gap-3 border-t border-zinc-200 pt-5 sm:flex-row sm:items-center sm:justify-between dark:border-white/10'>
+                      <div className='flex items-center gap-2 text-sm'>
+                        <span className='flex size-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400'>
+                          <Check className='size-4' />
+                        </span>
+                        <span className='font-medium text-zinc-900 dark:text-zinc-100'>
+                          {user?.emailVerified
+                            ? "Email verified"
+                            : "Email verification pending"}
+                        </span>
+                      </div>
+                      <Button
+                        onClick={saveProfile}
+                        disabled={
+                          savingProfile ||
+                          username.trim() === (user?.username || "")
+                        }
+                        className='rounded-xl active:scale-[0.97]'
                       >
-                        <Check className='mr-1 h-3 w-3' />
-                        Verified
-                      </Badge>
+                        {savingProfile && (
+                          <Loader2 className='mr-2 size-4 animate-spin' />
+                        )}
+                        Save account
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className='relative overflow-hidden'>
-                  <CardHeader>
-                    <CardTitle>Password & Security</CardTitle>
+                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+                    <CardTitle className='text-base'>Password</CardTitle>
                     <CardDescription>
-                      Manage your password and security settings
+                      Reset your password through your verified email.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className='space-y-4'>
-                    <div className='space-y-2'>
-                      <Label htmlFor='currentPassword'>Current Password</Label>
-                      <Input
-                        id='currentPassword'
-                        type='password'
-                        placeholder='Enter current password'
-                      />
+                  <CardContent className='flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between'>
+                    <div className='flex items-start gap-3'>
+                      <span className='flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300'>
+                        <KeyRound className='size-4' />
+                      </span>
+                      <div>
+                        <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
+                          Secure reset
+                        </p>
+                        <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
+                          We’ll send a six-digit code to {user?.email}.
+                        </p>
+                      </div>
                     </div>
-                    <div className='space-y-2'>
-                      <Label htmlFor='newPassword'>New Password</Label>
-                      <Input
-                        id='newPassword'
-                        type='password'
-                        placeholder='Enter new password'
-                      />
-                    </div>
-                    <div className='space-y-2'>
-                      <Label htmlFor='confirmPassword'>
-                        Confirm New Password
-                      </Label>
-                      <Input
-                        id='confirmPassword'
-                        type='password'
-                        placeholder='Confirm new password'
-                      />
-                    </div>
-                    <div className='flex flex-col gap-2 space-y-2 lg:flex-row'>
-                      <Button>
-                        <Save className='mr-2 h-4 w-4' />
-                        Update Password
-                      </Button>
-                      <Button variant='outline'>Forgot Password?</Button>
-                    </div>
+                    <Button
+                      variant='outline'
+                      onClick={startPasswordReset}
+                      disabled={sendingPasswordReset}
+                      className='shrink-0 rounded-xl active:scale-[0.97]'
+                    >
+                      {sendingPasswordReset && (
+                        <Loader2 className='mr-2 size-4 animate-spin' />
+                      )}
+                      Reset password
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
@@ -717,8 +820,8 @@ const SettingsHome = () => {
             {activeTab === "brand" && <BrandSettings />}
 
             {activeTab === "automation" && (
-              <Card className='border-border/70 bg-card/70 relative overflow-hidden shadow-sm'>
-                <CardHeader className='bg-muted/20 border-b p-5 sm:p-6'>
+              <Card className='relative overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                <CardHeader className='border-b border-zinc-200 bg-zinc-50/60 p-5 sm:p-6 dark:border-white/10 dark:bg-white/[0.02]'>
                   <div className='flex items-start justify-between gap-4'>
                     <div className='flex min-w-0 items-start gap-3'>
                       <div className='bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-xl'>
@@ -1457,32 +1560,37 @@ const SettingsHome = () => {
                               {mission.status === "completed" && (
                                 <div className='space-y-3 border-t pt-3'>
                                   <div className='flex flex-wrap gap-2'>
-                                    <select
-                                      aria-label='Publishing account'
-                                      className='border-input bg-background h-9 min-w-52 rounded-md border px-3 text-sm'
+                                    <Select
                                       value={
                                         missionDraftAccounts[mission._id] || ""
                                       }
-                                      onChange={(event) =>
+                                      onValueChange={(value) =>
                                         setMissionDraftAccounts((current) => ({
                                           ...current,
-                                          [mission._id]: event.target.value,
+                                          [mission._id]: value,
                                         }))
                                       }
                                     >
-                                      <option value=''>Choose account</option>
-                                      {publishingIntegrations.map(
-                                        (integration) => (
-                                          <option
-                                            key={integration._id}
-                                            value={integration._id}
-                                          >
-                                            {integration.platform} ·{" "}
-                                            {integration.accountName}
-                                          </option>
-                                        )
-                                      )}
-                                    </select>
+                                      <SelectTrigger
+                                        aria-label='Publishing account'
+                                        className='h-9 min-w-52 rounded-xl border-zinc-200 bg-white dark:border-white/10 dark:bg-white/[0.04]'
+                                      >
+                                        <SelectValue placeholder='Choose account' />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {publishingIntegrations.map(
+                                          (integration) => (
+                                            <SelectItem
+                                              key={integration._id}
+                                              value={integration._id}
+                                            >
+                                              {integration.platform} ·{" "}
+                                              {integration.accountName}
+                                            </SelectItem>
+                                          )
+                                        )}
+                                      </SelectContent>
+                                    </Select>
                                     <Button
                                       size='sm'
                                       variant='outline'
@@ -1686,27 +1794,35 @@ const SettingsHome = () => {
                         <Label htmlFor='approval-policy'>
                           Require approval
                         </Label>
-                        <select
-                          id='approval-policy'
-                          className='border-input bg-background h-9 w-full rounded-md border px-3 text-sm'
+                        <Select
                           value={
                             currentOrg?.automationApprovalPolicy ??
                             "destructive"
                           }
                           disabled={savingAuto}
-                          onChange={(event) =>
+                          onValueChange={(value) =>
                             saveAutoSettings({
-                              automationApprovalPolicy: event.target.value as
+                              automationApprovalPolicy: value as
                                 "destructive" | "external" | "all",
                             })
                           }
                         >
-                          <option value='destructive'>
-                            Destructive actions
-                          </option>
-                          <option value='external'>All external actions</option>
-                          <option value='all'>Every action</option>
-                        </select>
+                          <SelectTrigger
+                            id='approval-policy'
+                            className='h-10 w-full rounded-xl border-zinc-200 bg-white dark:border-white/10 dark:bg-white/[0.04]'
+                          >
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value='destructive'>
+                              Destructive actions
+                            </SelectItem>
+                            <SelectItem value='external'>
+                              All external actions
+                            </SelectItem>
+                            <SelectItem value='all'>Every action</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className='space-y-2'>
                         <Label htmlFor='daily-action-limit'>
@@ -1857,24 +1973,32 @@ const SettingsHome = () => {
                         Choose how often Genit starts a new marketing cycle.
                       </p>
                     </div>
-                    <select
-                      aria-label='Marketing loop timer'
-                      className='border-input bg-background h-9 rounded-md border px-3 text-sm'
-                      value={currentOrg?.autoModeIntervalMinutes ?? 1440}
+                    <Select
+                      value={String(
+                        currentOrg?.autoModeIntervalMinutes ?? 1440
+                      )}
                       disabled={savingAuto || !currentOrg?.autoModeEnabled}
-                      onChange={(event) =>
+                      onValueChange={(value) =>
                         saveAutoSettings({
-                          autoModeIntervalMinutes: Number(event.target.value),
+                          autoModeIntervalMinutes: Number(value),
                         })
                       }
                     >
-                      <option value={10}>Every 10 minutes</option>
-                      <option value={30}>Every 30 minutes</option>
-                      <option value={60}>Every hour</option>
-                      <option value={360}>Every 6 hours</option>
-                      <option value={1440}>Every day</option>
-                      <option value={10080}>Every week</option>
-                    </select>
+                      <SelectTrigger
+                        aria-label='Marketing loop timer'
+                        className='h-10 w-full rounded-xl border-zinc-200 bg-white sm:w-48 dark:border-white/10 dark:bg-white/[0.04]'
+                      >
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value='10'>Every 10 minutes</SelectItem>
+                        <SelectItem value='30'>Every 30 minutes</SelectItem>
+                        <SelectItem value='60'>Every hour</SelectItem>
+                        <SelectItem value='360'>Every 6 hours</SelectItem>
+                        <SelectItem value='1440'>Every day</SelectItem>
+                        <SelectItem value='10080'>Every week</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   {currentOrg?.autoModeLastRunAt && (
@@ -1896,80 +2020,62 @@ const SettingsHome = () => {
 
             {/* Billing Settings */}
             {activeTab === "billing" && (
-              <div className='space-y-6'>
-                <Card className='relative overflow-hidden'>
-                  <CardHeader>
-                    <CardTitle className='flex items-center gap-2'>
-                      <CreditCard className='h-5 w-5' />
-                      Billing Information
-                    </CardTitle>
-                    <CardDescription>
-                      Manage your subscription and payment methods
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className='space-y-6'>
-                    <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-                      <div className='space-y-2'>
-                        <Label>Current Plan</Label>
-                        <div className='flex items-center justify-between rounded-lg border p-4'>
-                          <div>
-                            <h4 className='font-semibold'>
-                              {user?.userPlan || "Free Plan"}
-                            </h4>
-                            <p className='text-muted-foreground text-sm'>
-                              {user?.userPlan === Plan.BASIC
-                                ? "Free"
-                                : currentOrg?.businessPlan || "No plan"}
-                            </p>
-                          </div>
-                          <Badge variant='secondary'>Active</Badge>
-                        </div>
-                      </div>
-                      {/* <div className="space-y-2">
-                        <Label>Next Billing Date</Label>
-                        <div className="p-4 border rounded-lg">
-                          <p className="font-semibold">January 15, 2024</p>
-                          <p className="text-sm text-muted-foreground">
-                            Auto-renewal enabled
+              <div className='space-y-5'>
+                <div className='grid gap-4 sm:grid-cols-2'>
+                  <Card className='rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                    <CardContent className='p-5'>
+                      <div className='flex items-start justify-between gap-4'>
+                        <div>
+                          <p className='text-xs font-medium text-zinc-500 dark:text-zinc-400'>
+                            Current plan
+                          </p>
+                          <p className='mt-1 text-xl font-semibold text-zinc-950 dark:text-white'>
+                            {user?.userPlan || "Basic"}
+                          </p>
+                          <p className='mt-1 text-sm text-zinc-500 dark:text-zinc-400'>
+                            {user?.userPlan === Plan.BASIC
+                              ? "Free plan"
+                              : currentOrg?.businessPlan ||
+                                "Active subscription"}
                           </p>
                         </div>
-                      </div> */}
-                    </div>
-                    <Separator />
-                    <div className='space-y-4'>
-                      {/* <h4 className="font-semibold">Payment Method</h4>
-                      <div className="flex items-center justify-between p-4 border rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center justify-center w-8 h-6 text-xs font-bold text-white bg-blue-600 rounded">
-                            VISA
-                          </div>
-                          <div>
-                            <p className="font-medium">•••• •••• •••• 4532</p>
-                            <p className="text-sm text-muted-foreground">
-                              Expires 12/25
-                            </p>
-                          </div>
-                        </div>
-                        <Button variant="outline" size="sm">
-                          <Edit3 className="w-4 h-4 mr-2" />
-                          Update
-                        </Button>
-                      </div> */}
-                      <div className='mt-4'>
-                        <Button onClick={() => setIsTopUpOpen(true)}>
-                          Top up credits
-                        </Button>
+                        <Badge className='bg-emerald-50 text-emerald-700 hover:bg-emerald-50 dark:bg-emerald-500/10 dark:text-emerald-300'>
+                          Active
+                        </Badge>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                  <Card className='rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                    <CardContent className='flex items-center justify-between gap-4 p-5'>
+                      <div>
+                        <p className='text-xs font-medium text-zinc-500 dark:text-zinc-400'>
+                          Credit balance
+                        </p>
+                        <p className='mt-1 text-xl font-semibold text-zinc-950 tabular-nums dark:text-white'>
+                          {(user?.creditsRemaining ?? 0).toLocaleString()}
+                        </p>
+                        <p className='mt-1 text-sm text-zinc-500 dark:text-zinc-400'>
+                          Pay what you want from $10.
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => setIsTopUpOpen(true)}
+                        className='shrink-0 rounded-xl active:scale-[0.97]'
+                      >
+                        Top up
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
 
-                <Card className='relative overflow-hidden'>
-                  <CardHeader className='gap-3 sm:flex-row sm:items-start sm:justify-between'>
+                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <CardHeader className='gap-4 border-b border-zinc-200 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-white/10'>
                     <div>
-                      <CardTitle>Billing History</CardTitle>
-                      <CardDescription>
-                        View your past invoices and payments
+                      <CardTitle className='text-base'>
+                        Billing history
+                      </CardTitle>
+                      <CardDescription className='mt-1'>
+                        Payments, top-ups, invoices, and receipts.
                       </CardDescription>
                     </div>
                     <Button
@@ -1977,28 +2083,38 @@ const SettingsHome = () => {
                       size='sm'
                       onClick={openBillingPortal}
                       disabled={openingBillingPortal}
+                      className='rounded-xl active:scale-[0.97]'
                     >
                       {openingBillingPortal && (
-                        <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                        <Loader2 className='mr-2 size-4 animate-spin' />
                       )}
                       Invoices & receipts
                     </Button>
                   </CardHeader>
-                  <CardContent>
-                    <div className='space-y-3'>
-                      {billingHistory.length === 0 ? (
-                        <p className='text-muted-foreground text-sm'>
-                          No billing history yet.
+                  <CardContent className='p-0'>
+                    {billingHistory.length === 0 ? (
+                      <div className='flex flex-col items-center px-5 py-12 text-center'>
+                        <span className='flex size-10 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 dark:bg-white/[0.06] dark:text-zinc-400'>
+                          <CreditCard className='size-5' />
+                        </span>
+                        <p className='mt-3 text-sm font-medium text-zinc-900 dark:text-zinc-100'>
+                          No billing activity yet
                         </p>
-                      ) : (
-                        billingHistory.map((rec: any) => (
+                        <p className='mt-1 max-w-sm text-sm text-zinc-500 dark:text-zinc-400'>
+                          Completed subscriptions and credit top-ups will appear
+                          here.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className='divide-y divide-zinc-200 dark:divide-white/10'>
+                        {billingHistory.map((rec: any) => (
                           <div
                             key={rec._id || rec.invoiceId || rec.providerId}
-                            className='flex items-center justify-between rounded-lg border p-4'
+                            className='flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between'
                           >
-                            <div>
-                              <div className='flex items-center gap-2'>
-                                <p className='font-medium'>
+                            <div className='min-w-0'>
+                              <div className='flex flex-wrap items-center gap-2'>
+                                <p className='truncate text-sm font-medium text-zinc-900 dark:text-zinc-100'>
                                   {rec.invoiceNumber
                                     ? `Invoice #${rec.invoiceNumber}`
                                     : rec.description ||
@@ -2006,61 +2122,55 @@ const SettingsHome = () => {
                                         ? "Credit top up"
                                         : "Subscription")}
                                 </p>
-                                <Badge
-                                  variant={
-                                    rec.status === "paid"
-                                      ? "secondary"
-                                      : "outline"
-                                  }
-                                  className='capitalize'
-                                >
+                                <Badge variant='outline' className='capitalize'>
                                   {rec.status}
                                 </Badge>
                               </div>
-                              <p className='text-muted-foreground text-sm'>
-                                {rec.billingPeriodStart
-                                  ? new Date(
-                                      rec.billingPeriodStart
-                                    ).toLocaleDateString()
-                                  : new Date(
-                                      rec.createdAt
-                                    ).toLocaleDateString()}
+                              <p className='mt-1 text-xs text-zinc-500 dark:text-zinc-400'>
+                                {new Date(
+                                  rec.billingPeriodStart || rec.createdAt
+                                ).toLocaleDateString()}
                               </p>
                             </div>
-                            <div className='flex items-center gap-4'>
-                              <span className='font-semibold'>
+                            <div className='flex items-center justify-between gap-4 sm:justify-end'>
+                              <span className='text-sm font-semibold text-zinc-950 tabular-nums dark:text-white'>
                                 {rec.amount
                                   ? `$${rec.amount.toFixed ? rec.amount.toFixed(2) : rec.amount}`
                                   : "—"}
                               </span>
-                              {rec.invoicePdfUrl ? (
-                                <a
-                                  href={rec.invoicePdfUrl}
-                                  target='_blank'
-                                  rel='noreferrer'
+                              {rec.invoicePdfUrl && (
+                                <Button
+                                  asChild
+                                  variant='outline'
+                                  size='sm'
+                                  className='rounded-xl'
                                 >
-                                  <Button variant='outline' size='sm'>
-                                    <Download className='mr-2 h-4 w-4' />
-                                    Download invoice
-                                  </Button>
-                                </a>
-                              ) : null}
+                                  <a
+                                    href={rec.invoicePdfUrl}
+                                    target='_blank'
+                                    rel='noreferrer'
+                                  >
+                                    <Download className='mr-2 size-4' />
+                                    Download
+                                  </a>
+                                </Button>
+                              )}
                             </div>
                           </div>
-                        ))
-                      )}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
-                <Card className='relative overflow-hidden'>
-                  <CardHeader>
-                    <CardTitle>Plans & pricing</CardTitle>
+                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+                    <CardTitle className='text-base'>Plans & pricing</CardTitle>
                     <CardDescription>
                       Upgrade your monthly credit allowance at any time.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className='p-3 sm:p-5'>
                     <PricingComponent
                       embedded
                       pricingCurrency={{
@@ -2077,85 +2187,89 @@ const SettingsHome = () => {
 
             {/* Security Settings */}
             {activeTab === "security" && (
-              <div className='space-y-6'>
-                <Card className='relative overflow-hidden'>
-                  <CardHeader>
-                    <CardTitle className='flex items-center gap-2'>
-                      <Shield className='h-5 w-5' />
-                      Security Settings
+              <div className='space-y-5'>
+                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+                    <CardTitle className='text-base'>
+                      Account protection
                     </CardTitle>
                     <CardDescription>
-                      Manage your account security and privacy settings
+                      Security controls for your Genit account.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className='space-y-6'>
-                    <div className='space-y-4'>
-                      <div className='flex items-center justify-between'>
+                  <CardContent className='divide-y divide-zinc-200 p-0 dark:divide-white/10'>
+                    <div className='flex items-center justify-between gap-5 px-5 py-4'>
+                      <div className='flex min-w-0 items-start gap-3'>
+                        <span className='flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300'>
+                          <Bell className='size-4' />
+                        </span>
                         <div>
-                          <h4 className='font-medium'>
-                            Two-Factor Authentication
-                          </h4>
-                          <p className='text-muted-foreground text-sm'>
-                            Add an extra layer of security to your account
+                          <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
+                            Login notifications
+                          </p>
+                          <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
+                            Save your preference for account-access alerts.
                           </p>
                         </div>
-                        <Switch
-                          checked={user?.preferences?.twoFactorAuth ?? false}
-                          onCheckedChange={(checked) =>
-                            handlePreferenceChange("twoFactorAuth", checked)
-                          }
-                        />
                       </div>
-                      <div className='flex items-center justify-between'>
+                      <Switch
+                        checked={user?.preferences?.loginNotifications ?? true}
+                        onCheckedChange={(checked) =>
+                          handlePreferenceChange("loginNotifications", checked)
+                        }
+                      />
+                    </div>
+                    <div className='flex items-center justify-between gap-5 px-5 py-4'>
+                      <div className='flex min-w-0 items-start gap-3'>
+                        <span className='flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300'>
+                          <KeyRound className='size-4' />
+                        </span>
                         <div>
-                          <h4 className='font-medium'>Login Notifications</h4>
-                          <p className='text-muted-foreground text-sm'>
-                            Get notified when someone logs into your account
+                          <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
+                            Two-factor authentication
+                          </p>
+                          <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
+                            Additional verification is not available yet.
                           </p>
                         </div>
-                        <Switch
-                          checked={
-                            user?.preferences?.loginNotifications ?? true
-                          }
-                          onCheckedChange={(checked) =>
-                            handlePreferenceChange(
-                              "loginNotifications",
-                              checked
-                            )
-                          }
-                        />
                       </div>
-                      <div className='flex items-center justify-between'>
+                      <Badge variant='outline'>Coming soon</Badge>
+                    </div>
+                    <div className='flex items-center justify-between gap-5 px-5 py-4'>
+                      <div className='flex min-w-0 items-start gap-3'>
+                        <span className='flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300'>
+                          <Monitor className='size-4' />
+                        </span>
                         <div>
-                          <h4 className='font-medium'>Session Management</h4>
-                          <p className='text-muted-foreground text-sm'>
-                            Control active sessions across devices
+                          <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
+                            Device sessions
+                          </p>
+                          <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
+                            Multi-device session controls are not available yet.
                           </p>
                         </div>
-                        <Button variant='outline' size='sm'>
-                          Manage Sessions
-                        </Button>
                       </div>
+                      <Badge variant='outline'>Coming soon</Badge>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className='relative overflow-hidden'>
-                  <CardHeader>
-                    <CardTitle>Sign out</CardTitle>
-                    <CardDescription>
-                      End your current session on this device
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className='flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
-                    <p className='text-muted-foreground text-sm'>
-                      Signing out will require you to log back in to continue
-                      using genit.
-                    </p>
+                <Card className='rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <CardContent className='flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between'>
+                    <div>
+                      <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
+                        Sign out of this device
+                      </p>
+                      <p className='mt-1 text-sm text-zinc-500 dark:text-zinc-400'>
+                        Signing out will require you to log back in to continue
+                        using genit.
+                      </p>
+                    </div>
                     <Button
                       variant='outline'
                       onClick={() => setIsSignOutModalOpen(true)}
                       disabled={isSigningOut}
+                      className='shrink-0 rounded-xl active:scale-[0.97]'
                     >
                       {isSigningOut ? (
                         <>
@@ -2169,40 +2283,33 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card className='relative overflow-hidden'>
-                  <CardHeader>
-                    <CardTitle>Danger Zone</CardTitle>
-                    <CardDescription>
-                      Irreversible and destructive actions
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className='space-y-4'>
-                      <div className='rounded-lg border border-dashed p-4'>
-                        <h4 className='text-destructive font-medium'>
-                          Delete Account
-                        </h4>
-                        <p className='text-muted-foreground mb-4 text-xs'>
-                          Once you delete your account, there is no going back.
-                          Please be certain.
-                        </p>
-                        <Button
-                          variant='destructive'
-                          size='sm'
-                          onClick={() => setIsDeleteModalOpen(true)}
-                          disabled={isDeletingAccount}
-                        >
-                          {isDeletingAccount ? (
-                            <>
-                              <LoadingFileLoader size={16} />
-                              Deleting...
-                            </>
-                          ) : (
-                            "Delete Account"
-                          )}
-                        </Button>
-                      </div>
+                <Card className='rounded-2xl border-red-200 bg-red-50/50 shadow-none dark:border-red-500/20 dark:bg-red-500/[0.06]'>
+                  <CardContent className='flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between'>
+                    <div>
+                      <p className='text-sm font-medium text-red-900 dark:text-red-200'>
+                        Delete account
+                      </p>
+                      <p className='mt-1 max-w-xl text-sm text-red-700/80 dark:text-red-300/70'>
+                        Permanently remove your projects, assets, and history.
+                        This cannot be undone.
+                      </p>
                     </div>
+                    <Button
+                      variant='destructive'
+                      size='sm'
+                      onClick={() => setIsDeleteModalOpen(true)}
+                      disabled={isDeletingAccount}
+                      className='shrink-0 rounded-xl active:scale-[0.97]'
+                    >
+                      {isDeletingAccount ? (
+                        <>
+                          <LoadingFileLoader size={16} />
+                          Deleting...
+                        </>
+                      ) : (
+                        "Delete account"
+                      )}
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
@@ -2210,89 +2317,97 @@ const SettingsHome = () => {
 
             {/* Preferences Settings */}
             {activeTab === "preferences" && (
-              <div className='space-y-6'>
-                <Card className='relative overflow-hidden'>
-                  <CardHeader>
-                    <CardTitle className='flex items-center gap-2'>
-                      <Palette className='h-5 w-5' />
-                      Appearance & Preferences
-                    </CardTitle>
+              <div className='space-y-5'>
+                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+                    <CardTitle className='text-base'>Appearance</CardTitle>
                     <CardDescription>
-                      Customize your experience and interface preferences
+                      Choose how Genit looks on this device.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className='space-y-6'>
-                    <div className='space-y-4'>
-                      <div className='flex items-center justify-between'>
-                        <div>
-                          <h4 className='font-medium'>Theme</h4>
-                          <p className='text-muted-foreground text-sm'>
-                            Choose your preferred theme
-                          </p>
-                        </div>
-                        <div className='flex gap-2'>
-                          <Button
-                            variant={theme === "light" ? "default" : "outline"}
-                            size='sm'
-                            onClick={() => handleThemeChange("light")}
+                  <CardContent className='p-5'>
+                    <div className='grid grid-cols-3 gap-2 rounded-2xl bg-zinc-100 p-1.5 dark:bg-white/[0.05]'>
+                      {[
+                        { value: "light", label: "Light", icon: Sun },
+                        { value: "dark", label: "Dark", icon: Moon },
+                        { value: "system", label: "System", icon: Monitor },
+                      ].map((option) => {
+                        const Icon = option.icon;
+                        const selected = theme === option.value;
+                        return (
+                          <button
+                            key={option.value}
+                            type='button'
+                            aria-pressed={selected}
+                            onClick={() =>
+                              handleThemeChange(
+                                option.value as "light" | "dark" | "system"
+                              )
+                            }
+                            className={`flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-[background-color,color,box-shadow,transform] active:scale-[0.98] ${
+                              selected
+                                ? "bg-white text-zinc-950 shadow-sm dark:bg-zinc-800 dark:text-white"
+                                : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+                            }`}
                           >
-                            Light
-                          </Button>
-                          <Button
-                            variant={theme === "dark" ? "default" : "outline"}
-                            size='sm'
-                            onClick={() => handleThemeChange("dark")}
-                          >
-                            Dark
-                          </Button>
-                          <Button
-                            variant={theme === "system" ? "default" : "outline"}
-                            size='sm'
-                            onClick={() => handleThemeChange("system")}
-                          >
-                            System
-                          </Button>
-                        </div>
+                            <Icon className='size-4' />
+                            <span className='hidden sm:inline'>
+                              {option.label}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+                    <CardTitle className='text-base'>
+                      Email preferences
+                    </CardTitle>
+                    <CardDescription>
+                      Control the messages you receive from Genit.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className='divide-y divide-zinc-200 p-0 dark:divide-white/10'>
+                    <div className='flex items-center justify-between gap-5 px-5 py-4'>
+                      <div>
+                        <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
+                          Account updates
+                        </p>
+                        <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
+                          Product activity and important account messages.
+                        </p>
                       </div>
-                      <div className='flex items-center justify-between'>
-                        <div>
-                          <h4 className='font-medium'>Email Notifications</h4>
-                          <p className='text-muted-foreground text-sm'>
-                            Receive email updates about your account
-                          </p>
-                        </div>
-                        <Switch
-                          checked={
-                            user?.preferences?.emailNotifications ?? true
-                          }
-                          onCheckedChange={(checked) =>
-                            handlePreferenceChange(
-                              "emailNotifications",
-                              checked
-                            )
-                          }
-                        />
+                      <Switch
+                        checked={user?.preferences?.emailNotifications ?? true}
+                        onCheckedChange={(checked) =>
+                          handlePreferenceChange("emailNotifications", checked)
+                        }
+                      />
+                    </div>
+                    <div className='flex items-center justify-between gap-5 px-5 py-4'>
+                      <div>
+                        <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
+                          Product news
+                        </p>
+                        <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
+                          Tips, launches, and occasional offers.
+                        </p>
                       </div>
-                      <div className='flex items-center justify-between'>
-                        <div>
-                          <h4 className='font-medium'>Marketing Emails</h4>
-                          <p className='text-muted-foreground text-sm'>
-                            Receive promotional content and updates
-                          </p>
-                        </div>
-                        <Switch
-                          checked={user?.preferences?.marketingEmails ?? false}
-                          onCheckedChange={(checked) =>
-                            handlePreferenceChange("marketingEmails", checked)
-                          }
-                        />
-                      </div>
+                      <Switch
+                        checked={user?.preferences?.marketingEmails ?? false}
+                        onCheckedChange={(checked) =>
+                          handlePreferenceChange("marketingEmails", checked)
+                        }
+                      />
                     </div>
                   </CardContent>
                 </Card>
               </div>
             )}
-          </div>
+          </main>
         </div>
       </div>
       <AccountActionModal

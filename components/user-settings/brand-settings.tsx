@@ -18,6 +18,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { BrandBrainSettings } from "@/components/user-settings/brand-brain-settings";
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
@@ -334,9 +341,9 @@ export default function BrandSettings() {
         </div>
       )}
       <fieldset disabled={isReadOnly} className='contents'>
-        <Card>
-          <CardHeader>
-            <CardTitle className='flex items-center gap-2'>
+        <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+          <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+            <CardTitle className='flex items-center gap-2 text-base'>
               <Palette className='h-5 w-5' />
               Brand identity
             </CardTitle>
@@ -345,7 +352,7 @@ export default function BrandSettings() {
               during onboarding.
             </CardDescription>
           </CardHeader>
-          <CardContent className='space-y-6'>
+          <CardContent className='space-y-6 p-5'>
             <div className='flex flex-col gap-6 md:flex-row md:items-start'>
               <button
                 type='button'
@@ -422,15 +429,15 @@ export default function BrandSettings() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Visual style</CardTitle>
+        <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+          <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+            <CardTitle className='text-base'>Visual style</CardTitle>
             <CardDescription>
               Brand colors and font preferences. Used to generate on-brand
               assets.
             </CardDescription>
           </CardHeader>
-          <CardContent className='space-y-6'>
+          <CardContent className='space-y-6 p-5'>
             <div className='space-y-3'>
               <Label>Colors</Label>
               <div className='flex flex-wrap items-center gap-3'>
@@ -468,14 +475,14 @@ export default function BrandSettings() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Brand DNA</CardTitle>
+        <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+          <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+            <CardTitle className='text-base'>Brand DNA</CardTitle>
             <CardDescription>
               The narrative the AI uses when writing in your voice.
             </CardDescription>
           </CardHeader>
-          <CardContent className='space-y-4'>
+          <CardContent className='space-y-4 p-5'>
             <div className='space-y-2'>
               <Label htmlFor='aboutUs'>About us</Label>
               <Textarea
@@ -533,12 +540,12 @@ export default function BrandSettings() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Social profiles</CardTitle>
+        <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+          <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+            <CardTitle className='text-base'>Social profiles</CardTitle>
             <CardDescription>Where can people find you online?</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className='p-5'>
             <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
               {(Object.keys(SOCIAL_META) as SocialPlatform[]).map((key) => {
                 const meta = SOCIAL_META[key];
@@ -613,19 +620,18 @@ function FontSelect({
   return (
     <div className='space-y-2'>
       <Label>{label}</Label>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className='border-input dark:bg-input/30 h-10 w-full rounded-md border bg-transparent px-3 text-sm focus:ring-2 focus:ring-cyan-400/40 focus:outline-none'
-        style={{ fontFamily: value || "inherit" }}
-      >
-        <option value=''>Select font</option>
-        {options.map((f) => (
-          <option key={f} value={f} style={{ fontFamily: f }}>
-            {f}
-          </option>
-        ))}
-      </select>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger className='h-10 w-full rounded-xl border-zinc-200 bg-white dark:border-white/10 dark:bg-white/[0.04]'>
+          <SelectValue placeholder='Select font' />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((font) => (
+            <SelectItem key={font} value={font}>
+              {font}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

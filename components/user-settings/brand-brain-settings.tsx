@@ -10,6 +10,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Organization } from "@/context/AuthenticatedContext";
 import { useToast } from "@/hooks/use-toast";
@@ -324,22 +331,26 @@ export function BrandBrainSettings({
         </div>
         <div className='space-y-2'>
           <Label>Type</Label>
-          <select
+          <Select
             value={draft.type}
-            onChange={(e) =>
+            onValueChange={(value) =>
               setDraft((prev) => ({
                 ...prev,
-                type: e.target.value as BrandBrainItemType,
+                type: value as BrandBrainItemType,
               }))
             }
-            className='border-input dark:bg-input/30 h-10 w-full rounded-md border bg-transparent px-3 text-sm focus:ring-2 focus:ring-cyan-400/40 focus:outline-none'
           >
-            {typeOptions.map((type) => (
-              <option key={type.value} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className='h-10 w-full rounded-xl border-zinc-200 bg-white dark:border-white/10 dark:bg-white/[0.04]'>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {typeOptions.map((type) => (
+                <SelectItem key={type.value} value={type.value}>
+                  {type.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div className='space-y-2'>
@@ -453,11 +464,11 @@ export function BrandBrainSettings({
 
   return (
     <div className='space-y-5'>
-      <Card className='overflow-hidden'>
-        <CardHeader>
+      <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+        <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
           <div className='flex flex-col gap-3 md:flex-row md:items-start md:justify-between'>
             <div>
-              <CardTitle>Advanced brain</CardTitle>
+              <CardTitle className='text-base'>Advanced brain</CardTitle>
               <CardDescription>Organization details sync</CardDescription>
             </div>
             <div className='flex flex-wrap items-center gap-2'>
@@ -482,7 +493,7 @@ export function BrandBrainSettings({
             </div>
           </div>
         </CardHeader>
-        <CardContent className='space-y-5'>
+        <CardContent className='space-y-5 p-5'>
           <div className='space-y-2'>
             <div className='flex items-center justify-between'>
               <Label>Sources</Label>
@@ -575,14 +586,14 @@ export function BrandBrainSettings({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Search brain</CardTitle>
+      <Card className='overflow-hidden rounded-2xl border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+        <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+          <CardTitle className='text-base'>Search brain</CardTitle>
           <CardDescription>
             Test what agents retrieve from the saved sources.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className='p-5'>
           <div className='space-y-3'>
             <div className='flex gap-2'>
               <Input
