@@ -538,7 +538,6 @@ const SettingsHome = () => {
           {/* Sidebar Navigation */}
           <div className='lg:col-span-1'>
             <Card className='sticky top-12 overflow-hidden'>
-              <GradientFrame />
               <CardContent className='p-0'>
                 <div className='border-border border-b p-4'>
                   <div className='flex items-center justify-between'>
@@ -595,7 +594,6 @@ const SettingsHome = () => {
             {activeTab === "account" && (
               <div className='space-y-6'>
                 <Card className='relative overflow-hidden'>
-                  <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
                       <UserIcon className='h-5 w-5' />
@@ -663,7 +661,6 @@ const SettingsHome = () => {
                 </Card>
 
                 <Card className='relative overflow-hidden'>
-                  <GradientFrame />
                   <CardHeader>
                     <CardTitle>Password & Security</CardTitle>
                     <CardDescription>
@@ -714,7 +711,6 @@ const SettingsHome = () => {
 
             {activeTab === "automation" && (
               <Card className='border-border/70 bg-card/70 relative overflow-hidden shadow-sm'>
-                <GradientFrame />
                 <CardHeader className='bg-muted/20 border-b p-5 sm:p-6'>
                   <div className='flex items-start justify-between gap-4'>
                     <div className='flex min-w-0 items-start gap-3'>
@@ -1865,7 +1861,6 @@ const SettingsHome = () => {
             {activeTab === "billing" && (
               <div className='space-y-6'>
                 <Card className='relative overflow-hidden'>
-                  <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
                       <CreditCard className='h-5 w-5' />
@@ -1933,7 +1928,6 @@ const SettingsHome = () => {
                 </Card>
 
                 <Card className='relative overflow-hidden'>
-                  <GradientFrame />
                   <CardHeader className='gap-3 sm:flex-row sm:items-start sm:justify-between'>
                     <div>
                       <CardTitle>Billing History</CardTitle>
@@ -2023,7 +2017,6 @@ const SettingsHome = () => {
                 </Card>
 
                 <Card className='relative overflow-hidden'>
-                  <GradientFrame />
                   <CardHeader>
                     <CardTitle>Plans & pricing</CardTitle>
                     <CardDescription>
@@ -2049,7 +2042,6 @@ const SettingsHome = () => {
             {activeTab === "security" && (
               <div className='space-y-6'>
                 <Card className='relative overflow-hidden'>
-                  <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
                       <Shield className='h-5 w-5' />
@@ -2112,7 +2104,6 @@ const SettingsHome = () => {
                 </Card>
 
                 <Card className='relative overflow-hidden'>
-                  <GradientFrame />
                   <CardHeader>
                     <CardTitle>Sign out</CardTitle>
                     <CardDescription>
@@ -2142,7 +2133,6 @@ const SettingsHome = () => {
                 </Card>
 
                 <Card className='relative overflow-hidden'>
-                  <GradientFrame />
                   <CardHeader>
                     <CardTitle>Danger Zone</CardTitle>
                     <CardDescription>
@@ -2185,7 +2175,6 @@ const SettingsHome = () => {
             {activeTab === "preferences" && (
               <div className='space-y-6'>
                 <Card className='relative overflow-hidden'>
-                  <GradientFrame />
                   <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
                       <Palette className='h-5 w-5' />
