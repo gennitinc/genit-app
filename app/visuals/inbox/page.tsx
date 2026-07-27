@@ -2340,7 +2340,7 @@ export default function InboxPage() {
                 )}
               </div>
 
-              <div className='shrink-0 border-t border-black/5 bg-white p-2 dark:border-white/10 dark:bg-zinc-950'>
+              <div className='bg-background/85 border-border/60 relative z-20 shrink-0 border-t p-2 backdrop-blur-xl'>
                 {activeConversation.isBlocked ? (
                   <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-lg bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
                     <Ban className='h-4 w-4 text-red-500' />
@@ -2448,24 +2448,30 @@ export default function InboxPage() {
                     message the business account again before replying.
                   </div>
                 ) : (
-                  <div className='relative mx-auto max-w-3xl rounded-lg border border-black/10 bg-zinc-50 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/10 dark:border-white/10 dark:bg-zinc-900'>
+                  <div className='bg-background/80 border-border/70 focus-within:border-foreground/20 relative mx-auto max-w-3xl rounded-2xl border shadow-lg shadow-black/5 backdrop-blur-xl transition-[border-color,box-shadow] duration-200 ease-out focus-within:shadow-xl focus-within:shadow-black/10 dark:shadow-black/20'>
                     {attachments.length > 0 && (
-                      <div className='flex gap-2 overflow-x-auto border-b border-black/5 p-3 dark:border-white/10'>
+                      <div className='bg-background/70 border-border/60 absolute bottom-[calc(100%+8px)] left-0 z-30 flex max-w-full gap-2 overflow-x-auto rounded-2xl border p-1.5 shadow-lg shadow-black/10 backdrop-blur-xl dark:shadow-black/30'>
                         {attachments.map((attachment) => (
                           <div
                             key={attachment.url}
-                            className='relative flex h-14 min-w-fit items-center gap-2 rounded-xl bg-white p-2 text-xs shadow-sm dark:bg-zinc-800'
+                            className='bg-background/75 border-border/60 relative flex h-14 min-w-14 shrink-0 items-center gap-2 overflow-hidden rounded-xl border p-1.5'
                           >
                             {attachment.kind === "image" ? (
                               <img
                                 src={attachment.url}
                                 alt=''
-                                className='h-10 w-10 rounded-lg object-cover'
+                                className='h-full w-12 rounded-lg object-cover'
                               />
                             ) : (
-                              <Paperclip className='h-5 w-5 shrink-0' />
+                              <>
+                                <span className='bg-muted/70 text-muted-foreground flex h-10 w-10 shrink-0 items-center justify-center rounded-lg'>
+                                  <Paperclip className='h-4 w-4' />
+                                </span>
+                                <span className='text-muted-foreground max-w-28 truncate pr-5 text-[11px]'>
+                                  {attachment.name}
+                                </span>
+                              </>
                             )}
-                            {/* <span className='truncate line-clamp-1 w-[20px]'>{attachment.name}</span> */}
                             <button
                               onClick={() =>
                                 setAttachments((current) =>
@@ -2474,10 +2480,10 @@ export default function InboxPage() {
                                   )
                                 )
                               }
-                              className='text-muted-foreground bg-foreground absolute top-1.5 right-1.5 rounded-full'
+                              className='absolute top-1 right-1 rounded-full bg-black/60 text-white shadow-sm backdrop-blur-md transition-transform duration-150 ease-out active:scale-95'
                               aria-label={`Remove ${attachment.name}`}
                             >
-                              <XCircle className='h-4 w-4' />
+                              <XCircle className='h-4 w-4' strokeWidth={2} />
                             </button>
                           </div>
                         ))}
@@ -2496,9 +2502,9 @@ export default function InboxPage() {
                       }}
                       placeholder={`Reply to ${activeConversation.customerName}…`}
                       maxLength={replyMaxLength}
-                      className='field-sizing-content max-h-32 min-h-10 w-full resize-none bg-transparent px-3 py-2.5 text-sm leading-5 outline-none'
+                      className='placeholder:text-muted-foreground/70 field-sizing-content max-h-32 min-h-11 w-full resize-none bg-transparent px-4 pt-3 pb-2 text-[13px] leading-5 outline-none'
                     />
-                    <div className='flex items-baseline justify-between gap-2 px-3 pb-3'>
+                    <div className='flex items-end justify-between gap-2 px-2 pb-1'>
                       <div className='relative flex items-center gap-1'>
                         <input
                           ref={fileInputRef}
@@ -2512,7 +2518,7 @@ export default function InboxPage() {
                           type='button'
                           variant='ghost'
                           size='icon'
-                          className='h-8 w-8 rounded-full'
+                          className='text-muted-foreground hover:bg-muted hover:text-foreground h-8 w-8 rounded-full'
                           disabled={
                             !supportsAttachments ||
                             isUploading ||
@@ -2537,7 +2543,7 @@ export default function InboxPage() {
                               type='button'
                               variant='ghost'
                               size='icon'
-                              className='h-8 w-8 rounded-full'
+                              className='text-muted-foreground hover:bg-muted hover:text-foreground h-8 w-8 rounded-full'
                               aria-label='Add emoji'
                             >
                               <Smile className='h-4 w-4' />
@@ -2570,11 +2576,15 @@ export default function InboxPage() {
                           type='button'
                           variant='ghost'
                           size='sm'
-                          className='h-fit rounded-full border py-1 text-xs'
+                          className='text-muted-foreground hover:bg-muted hover:text-foreground h-8 gap-1.5 rounded-full px-2.5 text-[11px] font-medium'
                           disabled={isWriting}
                           onClick={writeWithAi}
                         >
-                          {isWriting ? <LoadingFileLoader size={16} /> : <></>}
+                          {isWriting ? (
+                            <LoadingFileLoader size={14} />
+                          ) : (
+                            <CircleFadingArrowUp className='h-3.5 w-3.5' />
+                          )}
                           AI Write
                         </Button>
                       </div>
@@ -2587,7 +2597,7 @@ export default function InboxPage() {
                           sendMutation.isPending ||
                           isUploading
                         }
-                        className='relative cursor-pointer rounded-[10px] bg-[linear-gradient(to_top,#292929,#555555,#292929)] p-[2px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)] transition-all duration-150 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50'
+                        className='relative cursor-pointer rounded-[10px] bg-[linear-gradient(to_top,#292929,#555555,#292929)] p-[2px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)] transition-all duration-150 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 b-2'
                       >
                         {/* Border effects behind content */}
                         <div className='absolute inset-0 overflow-hidden rounded-[10px]'>

@@ -1,3 +1,4 @@
+import { AutoModeDialog } from "@/components/common/auto-mode-dialog";
 import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
 import PricingComponent from "@/components/pricing/page";
 import { Badge } from "@/components/ui/badge";
@@ -79,6 +80,7 @@ const SettingsHome = () => {
   const [billingHistory, setBillingHistory] = useState<any[]>([]);
   const [openingBillingPortal, setOpeningBillingPortal] = useState(false);
   const [savingAuto, setSavingAuto] = useState(false);
+  const [isAutoModeDialogOpen, setIsAutoModeDialogOpen] = useState(false);
   const [automationRuns, setAutomationRuns] = useState<any[]>([]);
   const [autoInsights, setAutoInsights] = useState<any>(null);
   const [autoCampaigns, setAutoCampaigns] = useState<any[]>([]);
@@ -304,6 +306,12 @@ const SettingsHome = () => {
       return false;
     } finally {
       setSavingAuto(false);
+    }
+  };
+
+  const approveAutoMode = async () => {
+    if (await saveAutoSettings({ autoModeEnabled: true })) {
+      setIsAutoModeDialogOpen(false);
     }
   };
 
@@ -862,29 +870,13 @@ const SettingsHome = () => {
                       aria-label='Run Genit Auto autonomously'
                       className='active:scale-[0.97]'
                       checked={currentOrg?.autoModeEnabled ?? false}
-                      disabled={
-                        savingAuto ||
-                        ((!user || user.userPlan === Plan.BASIC) &&
-                          !currentOrg?.autoModeEnabled)
-                      }
-                      onCheckedChange={(checked) =>
-                        saveAutoSettings({ autoModeEnabled: checked })
-                      }
+                      disabled={savingAuto}
+                      onCheckedChange={(checked) => {
+                        if (checked) setIsAutoModeDialogOpen(true);
+                        else void saveAutoSettings({ autoModeEnabled: false });
+                      }}
                     />
                   </div>
-
-                  {(!user || user.userPlan === Plan.BASIC) &&
-                    !currentOrg?.autoModeEnabled && (
-                      <p className='border-primary/20 bg-primary/5 text-muted-foreground rounded-xl border p-3 text-sm'>
-                        Genit Auto is available on every paid plan.{" "}
-                        <a
-                          className='text-primary font-medium hover:underline'
-                          href='/pricing'
-                        >
-                          View plans
-                        </a>
-                      </p>
-                    )}
 
                   <section className='bg-background/60 space-y-5 rounded-xl border p-4 sm:p-5'>
                     <div className='flex items-start gap-3'>
@@ -2432,6 +2424,12 @@ const SettingsHome = () => {
       <CreditTopUpModal
         open={isTopUpOpen}
         onClose={() => setIsTopUpOpen(false)}
+      />
+      <AutoModeDialog
+        open={isAutoModeDialogOpen}
+        onOpenChange={setIsAutoModeDialogOpen}
+        onApprove={approveAutoMode}
+        approving={savingAuto}
       />
     </div>
   );

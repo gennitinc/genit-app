@@ -1,11 +1,39 @@
 const SPLINE_URL =
   "https://my.spline.design/genkubgreetingrobot-ojzcjWInavuKpZSt2luvgvjl/";
 
+const fallbackHtml = `<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>html,body,iframe{width:100%;height:100%;margin:0;border:0;overflow:hidden;background:transparent}</style>
+  </head>
+  <body>
+    <iframe title="Interactive 3D robot" src="${SPLINE_URL}" allow="fullscreen" onload="parent.postMessage({type:'spline-robot-ready'},'*')"></iframe>
+  </body>
+</html>`;
+
+function fallbackResponse() {
+  return new Response(fallbackHtml, {
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "no-store",
+    },
+  });
+}
+
 export async function GET() {
-  const response = await fetch(SPLINE_URL, { next: { revalidate: 86_400 } });
+  let response: Response;
+  try {
+    response = await fetch(SPLINE_URL, {
+      next: { revalidate: 86_400 },
+      signal: AbortSignal.timeout(8_000),
+    });
+  } catch {
+    return fallbackResponse();
+  }
 
   if (!response.ok) {
-    return new Response("Unable to load the 3D scene", { status: 502 });
+    return fallbackResponse();
   }
 
   const html = (await response.text())

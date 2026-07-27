@@ -2,6 +2,7 @@
 
 import { AIThinkingContent } from "../chat/messages";
 import { BrandIdentityPanel } from "../chat/messages/brand-identity-panel";
+import { AutoModeDialog } from "../common/auto-mode-dialog";
 import { BrandIndicator } from "../common/brand-indicator";
 import AnimatedTooltipPreview from "../common/homeAgentsTooltip";
 import { HomeInfoGrid } from "../common/homeInfoGrid";
@@ -30,7 +31,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useIsMobile } from "@/components/ui/use-mobile";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -81,7 +81,7 @@ import {
   Youtube,
   Zap,
 } from "lucide-react";
-import { Activity, Calendar, Layers, Megaphone, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -392,120 +392,6 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
   );
 };
 
-const AutoUpgradeDialog = ({
-  isOpen,
-  onOpenChange,
-}: {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-}) => {
-  const isMobile = useIsMobile();
-  const router = useRouter();
-
-  const content = (
-    <div className='group relative flex w-full flex-col overflow-hidden rounded-xs bg-black/[0.02] ring-1 ring-black/5 md:flex-row dark:bg-white/[0.04] dark:ring-white/10'>
-      <GradientFrame />
-
-      {/* Image Container */}
-      <div className='relative min-h-[220px] w-full flex-shrink-0 md:min-h-full md:w-1/2'>
-        <img
-          src='/genit-auto.png'
-          alt='AI Auto Mode'
-          className='absolute inset-0 h-full w-full object-cover object-[center_12%] lg:object-cover lg:object-[center_80%]'
-        />
-        <div className='absolute inset-0 z-0 bg-gradient-to-t from-white/30 to-transparent md:bg-gradient-to-l dark:from-black/30'></div>
-      </div>
-
-      {/* Content Container */}
-      <div className='relative z-10 flex w-full flex-col justify-center bg-white/70 p-5 backdrop-blur-md md:w-1/2 md:bg-transparent md:p-8 md:backdrop-blur-none dark:bg-black/70 md:dark:bg-transparent'>
-        <div className='relative z-10 rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-none dark:ring-white/10'>
-          <div className='flex items-center justify-between'>
-            <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
-              <Workflow className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
-              <span className='font-medium'>Autonomous Agents</span>
-            </div>
-          </div>
-
-          <div className='mt-3 grid grid-cols-4 gap-2 md:gap-3'>
-            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 ring-1 ring-black/5 md:p-3 dark:bg-white/[0.04] dark:ring-white/10'>
-              <MessageSquare className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
-              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>
-                Tickets
-              </span>
-            </div>
-            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 ring-1 ring-black/5 md:p-3 dark:bg-white/[0.04] dark:ring-white/10'>
-              <Megaphone className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
-              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>
-                Ads
-              </span>
-            </div>
-            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 ring-1 ring-black/5 md:p-3 dark:bg-white/[0.04] dark:ring-white/10'>
-              <Layers className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
-              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>
-                Publish
-              </span>
-            </div>
-            <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-2 ring-1 ring-black/5 md:p-3 dark:bg-white/[0.04] dark:ring-white/10'>
-              <Calendar className='text-foreground h-4 w-4 md:h-5 md:w-5 dark:text-white/80' />
-              <span className='text-muted-foreground text-[10px] md:text-xs dark:text-white/70'>
-                Schedule
-              </span>
-            </div>
-          </div>
-
-          <div className='mt-4 flex items-center gap-2 text-[11px] text-gray-600 dark:text-gray-400'>
-            <Activity className='h-3.5 w-3.5' />
-            AI handles workflow 24/7
-          </div>
-        </div>
-
-        <h3 className='text-foreground relative z-10 mt-6 text-xl font-semibold tracking-tight md:text-2xl dark:text-white'>
-          Upgrade to unlock Auto
-        </h3>
-        <p className='text-muted-foreground relative z-10 mt-2 text-sm font-normal dark:text-white/70'>
-          Auto mode is available on every paid plan. Upgrade to let our AI
-          handle content creation, scheduling, ad sponsoring, and ticket
-          resolution entirely on its own.
-        </p>
-
-        <div className='relative z-10 mt-8 flex justify-end gap-3'>
-          <Button
-            variant='outline'
-            className='border-none bg-transparent text-sm'
-            onClick={() => onOpenChange(false)}
-          >
-            Cancel
-          </Button>
-          <Button
-            className='rounded-sm bg-indigo-600 text-sm text-white hover:bg-indigo-700'
-            onClick={() => router.push("/pricing")}
-          >
-            Upgrade Now
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-
-  if (isMobile) {
-    return (
-      <Drawer open={isOpen} onOpenChange={onOpenChange}>
-        <DrawerContent className='border-none bg-transparent p-0 shadow-none'>
-          {content}
-        </DrawerContent>
-      </Drawer>
-    );
-  }
-
-  return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className='border-none bg-transparent p-0 shadow-none sm:max-w-3xl md:max-w-4xl [&>button]:hidden'>
-        {content}
-      </DialogContent>
-    </Dialog>
-  );
-};
-
 const BrandIdentityDialog = ({
   isOpen,
   onOpenChange,
@@ -603,17 +489,14 @@ export function IdeaSection() {
 
   useEffect(() => {
     if (user?.currentOrganization) {
-      setMode(
-        user.userPlan !== "Basic" && user.currentOrganization.autoModeEnabled
-          ? "auto"
-          : "chat"
-      );
+      setMode(user.currentOrganization.autoModeEnabled ? "auto" : "chat");
     }
-  }, [user?.currentOrganization?.autoModeEnabled, user?.userPlan]);
+  }, [user?.currentOrganization?.autoModeEnabled]);
 
   const [beamPosition, setBeamPosition] = useState({ x: 50, y: 50 });
   const [isPricingDialogOpen, setIsPricingDialogOpen] = useState(false);
-  const [isAutoUpgradeDialogOpen, setIsAutoUpgradeDialogOpen] = useState(false);
+  const [isAutoModeDialogOpen, setIsAutoModeDialogOpen] = useState(false);
+  const [isEnablingAuto, setIsEnablingAuto] = useState(false);
   const [inputError, setInputError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedDesignTypeId, setSelectedDesignTypeId] =
@@ -630,6 +513,23 @@ export function IdeaSection() {
   );
 
   const [initialInputValue, setInitialInputValue] = useState("");
+
+  const enableAutoMode = async () => {
+    if (!user?.currentOrganization?._id) return;
+    setIsEnablingAuto(true);
+    try {
+      await updateOrganization(user.currentOrganization._id, {
+        autoModeEnabled: true,
+      });
+      setMode("auto");
+      setIsAutoModeDialogOpen(false);
+    } catch (error) {
+      console.error("Failed to enable auto mode", error);
+      toast.error("Could not turn on Genit Auto");
+    } finally {
+      setIsEnablingAuto(false);
+    }
+  };
 
   const { isListening, startListening, stopListening, isSupported } =
     useSpeechToText({
@@ -1320,28 +1220,9 @@ export function IdeaSection() {
                             </button>
                             <button
                               type='button'
-                              onClick={async () => {
-                                if (
-                                  !user ||
-                                  String(user.userPlan) === "Basic"
-                                ) {
-                                  setIsAutoUpgradeDialogOpen(true);
-                                  return;
-                                }
-                                setMode("auto");
-                                if (user?.currentOrganization?._id) {
-                                  try {
-                                    await updateOrganization(
-                                      user.currentOrganization._id,
-                                      { autoModeEnabled: true }
-                                    );
-                                  } catch (err) {
-                                    console.error(
-                                      "Failed to enable auto mode",
-                                      err
-                                    );
-                                  }
-                                }
+                              onClick={() => {
+                                if (mode !== "auto")
+                                  setIsAutoModeDialogOpen(true);
                               }}
                               className={cn(
                                 "rounded-full px-2.5 py-0.5 text-[10px] font-medium transition-colors",
@@ -1735,9 +1616,11 @@ export function IdeaSection() {
         </div> */}
       </div>
 
-      <AutoUpgradeDialog
-        isOpen={isAutoUpgradeDialogOpen}
-        onOpenChange={setIsAutoUpgradeDialogOpen}
+      <AutoModeDialog
+        open={isAutoModeDialogOpen}
+        onOpenChange={setIsAutoModeDialogOpen}
+        onApprove={enableAutoMode}
+        approving={isEnablingAuto}
       />
       <BrandIdentityDialog
         isOpen={isBrandSettingsOpen}

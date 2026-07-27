@@ -372,7 +372,7 @@ const ReelsCarousel = () => {
           </div>
         </div>
         <div className='text-foreground mx-4 mt-2 mb-4 text-sm font-semibold'>
-          {reelsVideos[currentIndex].likes.toLocaleString()} likes
+          {reelsVideos[currentIndex].likes.toLocaleString("en-US")} likes
         </div>
       </div>
     </div>
