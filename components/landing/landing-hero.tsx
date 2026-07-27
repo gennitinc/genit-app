@@ -613,7 +613,7 @@ const LandingHero = () => {
               <p className='text-muted-foreground text-sm'>
                 Trusted by{" "}
                 <span className='text-foreground font-semibold'>600+</span>{" "}
-                brands worldwide.
+                teams worldwide.
               </p>
             </div>
           </div>
