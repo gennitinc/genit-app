@@ -795,6 +795,7 @@ export default function InboxPage() {
   );
   useInboxRealtime(activeId || undefined);
   const sendMutation = useSendMessage();
+  const sendLockRef = useRef(false);
   const sendTemplateMutation = useSendWhatsAppTemplate();
   const retryMutation = useRetryInboxMessage();
   const markReadMutation = useMarkConversationAsRead();
@@ -1038,8 +1039,10 @@ export default function InboxPage() {
   }, [activeId, whatsappReplyWindowClosed]);
 
   const sendReply = () => {
+    if (sendLockRef.current) return;
     const content = reply.trim();
     if ((!content && attachments.length === 0) || !activeId) return;
+    sendLockRef.current = true;
     sendMutation.mutate(
       { conversationId: activeId, content, attachments },
       {
@@ -1051,6 +1054,9 @@ export default function InboxPage() {
           toast.error(
             error?.response?.data?.message || "Your reply could not be sent"
           ),
+        onSettled: () => {
+          sendLockRef.current = false;
+        },
       }
     );
   };
@@ -2597,7 +2603,7 @@ export default function InboxPage() {
                           sendMutation.isPending ||
                           isUploading
                         }
-                        className='relative cursor-pointer rounded-[10px] bg-[linear-gradient(to_top,#292929,#555555,#292929)] p-[2px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)] transition-all duration-150 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 b-2'
+                        className='b-2 relative cursor-pointer rounded-[10px] bg-[linear-gradient(to_top,#292929,#555555,#292929)] p-[2px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)] transition-all duration-150 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50'
                       >
                         {/* Border effects behind content */}
                         <div className='absolute inset-0 overflow-hidden rounded-[10px]'>
