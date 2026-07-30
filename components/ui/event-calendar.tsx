@@ -55,6 +55,7 @@ interface EventCalendarProps {
     date?: Date;
     events?: CalendarEvent[];
     datesSet?: (info: CalendarDatesSetInfo) => void;
+    dayClick?: (info: { date: Date }) => void;
     eventClick?: (info: CalendarEventClickInfo) => void;
     eventDrop?: (info: CalendarEventDropInfo) => void;
     firstDay?: number;
@@ -354,7 +355,10 @@ export const EventCalendar = forwardRef<
         draggable={Boolean(options.editable)}
         onDragStart={(reactEvent) => onDragStart(reactEvent, event)}
         onDragEnd={() => setDraggedId(null)}
-        onClick={() => options.eventClick?.({ event })}
+        onClick={(reactEvent) => {
+          reactEvent.stopPropagation();
+          options.eventClick?.({ event });
+        }}
         className={cn(
           "gcal-event-card",
           variant === "time" && "gcal-event-card-time"
@@ -415,6 +419,7 @@ export const EventCalendar = forwardRef<
               const start = parseEventDate(event.start);
               return start ? sameDay(start, day) : false;
             });
+            const openDay = () => options.dayClick?.({ date: day });
             return (
               <div
                 key={dateKey(day)}
@@ -425,6 +430,7 @@ export const EventCalendar = forwardRef<
                   sameDay(day, today) && "gcal-today",
                   draggedId && "gcal-drop-ready"
                 )}
+                onClick={openDay}
                 onDragOver={(reactEvent) => {
                   if (options.editable) reactEvent.preventDefault();
                 }}
@@ -435,7 +441,17 @@ export const EventCalendar = forwardRef<
                   setDraggedId(null);
                 }}
               >
-                <div className='gcal-day-number'>{day.getDate()}</div>
+                <button
+                  type='button'
+                  className='gcal-day-number'
+                  onClick={(reactEvent) => {
+                    reactEvent.stopPropagation();
+                    openDay();
+                  }}
+                  aria-label={`Open ${day.toLocaleDateString()} in day view`}
+                >
+                  {day.getDate()}
+                </button>
                 <div className='gcal-day-events'>
                   {dayEvents.map((event) => renderEvent(event))}
                 </div>

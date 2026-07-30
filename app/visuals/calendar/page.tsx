@@ -259,6 +259,11 @@ export default function CalendarPage() {
       nowIndicator: true,
       firstDay: 1,
       dayHeaderFormat: { weekday: "short" },
+      dayClick: ({ date }: { date: Date }) => {
+        setCurrentView("timeGridDay");
+        calendarRef.current?.getApi().setOption("date", date);
+        calendarRef.current?.getApi().setOption("view", "timeGridDay");
+      },
       eventDrop: moveEvent,
       eventClick: (info: any) => {
         setSelectedEvent(info.event?.extendedProps?.sourceEvent || null);

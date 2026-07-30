@@ -92,6 +92,7 @@
   min-width: 0;
   overflow: hidden;
   flex-direction: column;
+  cursor: pointer;
   border-right: 1px solid var(--calendar-border);
   border-bottom: 1px solid var(--calendar-border);
   padding: 9px;
@@ -131,11 +132,17 @@
   display: inline-flex;
   min-width: 26px;
   height: 26px;
+  width: fit-content;
+  cursor: pointer;
   align-items: center;
   justify-content: center;
+  border: 0;
   border-radius: 8px;
+  background: transparent;
+  color: inherit;
   font-size: 0.76rem;
   font-weight: 700;
+  padding: 0;
 }
 
 .gcal-today .gcal-day-number,
