@@ -88,8 +88,10 @@
 
 .gcal-month-day {
   position: relative;
+  display: flex;
   min-width: 0;
   overflow: hidden;
+  flex-direction: column;
   border-right: 1px solid var(--calendar-border);
   border-bottom: 1px solid var(--calendar-border);
   padding: 9px;
@@ -147,25 +149,37 @@
   margin-top: 7px;
   display: flex;
   min-width: 0;
+  min-height: 0;
+  flex: 1;
   flex-direction: column;
   gap: 5px;
+  overflow-y: auto;
+  scrollbar-color: color-mix(in srgb, var(--calendar-muted) 35%, transparent)
+    transparent;
+  scrollbar-width: thin;
+}
+
+.gcal-day-events::-webkit-scrollbar {
+  width: 4px;
+}
+
+.gcal-day-events::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--calendar-muted) 35%, transparent);
 }
 
 .gcal-event-card {
   display: flex;
   width: 100%;
   min-width: 0;
+  flex: 0 0 auto;
   cursor: grab;
   align-items: center;
   gap: 7px;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--event-accent) 17%, transparent);
+  border: 1px solid color-mix(in srgb, var(--event-accent) 40%, transparent);
   border-radius: 8px;
-  background: color-mix(
-    in srgb,
-    var(--event-accent) 6%,
-    rgba(255, 255, 255, 0.86)
-  );
+  background: transparent;
   padding: 6px 8px;
   color: inherit;
   text-align: left;
@@ -179,8 +193,8 @@
 }
 
 .dark .gcal-event-card {
-  border-color: color-mix(in srgb, var(--event-accent) 28%, transparent);
-  background: color-mix(in srgb, var(--event-accent) 12%, rgba(9, 9, 11, 0.72));
+  border-color: color-mix(in srgb, var(--event-accent) 55%, transparent);
+  background: transparent;
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -454,8 +468,7 @@
     padding: 4px 5px;
   }
 
-  .gcal-event-time,
-  .gcal-event-dot {
+  .gcal-event-time {
     display: none;
   }
 

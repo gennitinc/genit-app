@@ -258,8 +258,6 @@ export default function CalendarPage() {
       editable: true,
       nowIndicator: true,
       firstDay: 1,
-      dayMaxEvents: 3,
-      moreLinkContent: (info: any) => `View ${info.num} more`,
       dayHeaderFormat: { weekday: "short" },
       eventDrop: moveEvent,
       eventClick: (info: any) => {

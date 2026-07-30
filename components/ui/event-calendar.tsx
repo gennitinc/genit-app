@@ -58,7 +58,6 @@ interface EventCalendarProps {
     eventClick?: (info: CalendarEventClickInfo) => void;
     eventDrop?: (info: CalendarEventDropInfo) => void;
     firstDay?: number;
-    dayMaxEvents?: number;
     slotMinTime?: string;
     slotMaxTime?: string;
     editable?: boolean;
@@ -416,8 +415,6 @@ export const EventCalendar = forwardRef<
               const start = parseEventDate(event.start);
               return start ? sameDay(start, day) : false;
             });
-            const visibleEvents = dayEvents.slice(0, options.dayMaxEvents ?? 4);
-            const overflow = dayEvents.length - visibleEvents.length;
             return (
               <div
                 key={dateKey(day)}
@@ -440,10 +437,7 @@ export const EventCalendar = forwardRef<
               >
                 <div className='gcal-day-number'>{day.getDate()}</div>
                 <div className='gcal-day-events'>
-                  {visibleEvents.map((event) => renderEvent(event))}
-                  {overflow > 0 && (
-                    <span className='gcal-more-events'>+{overflow} more</span>
-                  )}
+                  {dayEvents.map((event) => renderEvent(event))}
                 </div>
               </div>
             );
