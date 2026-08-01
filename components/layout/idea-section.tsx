@@ -976,26 +976,6 @@ export function IdeaSection() {
             </AnimatedShinyText>
 
             <motion.h1
-              className='text-foreground xs:text-5xl mt-6 mb-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight sm:mt-8 sm:mb-2 sm:text-6xl md:mb-2.5 md:justify-start md:gap-x-1 md:text-left md:text-2xl lg:text-5xl'
-              custom={1}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: (custom: number) => ({
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    delay: custom * 0.1,
-                    duration: 0.5,
-                  },
-                }),
-              }}
-              initial='hidden'
-              animate='visible'
-            >
-              Marketing Agents
-              {/* <span>Humans</span> */}
-            </motion.h1>
-            <motion.h1
               className='text-foreground xs:text-5xl mb-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight sm:text-6xl md:mb-2.5 md:justify-start md:gap-x-1 md:text-left md:text-2xl lg:text-5xl'
               custom={1}
               variants={{
@@ -1012,7 +992,7 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              That Never
+              Grow without
               <PointerHighlight
                 rectangleClassName='
       bg-blue-100 dark:bg-blue-900
@@ -1024,7 +1004,7 @@ export function IdeaSection() {
                 pointerClassName='text-blue-500 h-2.5 w-2.5 sm:h-3 sm:w-3'
                 containerClassName='inline-flex items-center'
               >
-                <span className='relative z-10 px-1 sm:px-2'>Sleep</span>
+                <span className='relative z-10 px-1 sm:px-2'>Hiring!</span>
               </PointerHighlight>
               {/* <span>Humans</span> */}
             </motion.h1>
