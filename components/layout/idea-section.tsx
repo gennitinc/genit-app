@@ -976,7 +976,7 @@ export function IdeaSection() {
             </AnimatedShinyText>
 
             <motion.h1
-              className='text-foreground xs:text-5xl mb-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight sm:text-6xl md:mb-2.5 md:justify-start md:gap-x-1 md:text-left md:text-2xl lg:text-5xl'
+              className='text-foreground xs:text-5xl mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight sm:text-6xl md:justify-start md:mt-5 md:gap-x-1 md:text-left md:text-2xl lg:text-5xl'
               custom={1}
               variants={{
                 hidden: { opacity: 0, y: 20 },
