@@ -965,7 +965,7 @@ export function IdeaSection() {
         <div className='mt4 space-y-2 text-center lg:mt-0 '>
           {/* <AnimatedTooltipPreview /> */}
           <motion.div
-            className='mt-2 mb-2 flex flex-col items-center justify-center md:mt-8 lg:mt-24 lg:mb-2'
+            className='mt-2 mb-2 flex flex-col items-center justify-center md:mt-8 lg:mt-24 lg:mb-2 '
             // initial={{ opacity: 0, y: 20 }}
             // animate={{ opacity: 1, y: 0 }}
             // transition={{ duration: 0.6 }}
