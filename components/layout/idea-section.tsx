@@ -962,7 +962,7 @@ export function IdeaSection() {
     <div className='w-full md:px-4'>
       <div className='mx-auto flex w-full flex-col items-center justify-center space-y-2 lg:space-y-6'>
         {/* Header */}
-        <div className='mt4 space-y-2 text-center lg:mt-0'>
+        <div className='mt4 space-y-2 text-center lg:mt-0 '>
           {/* <AnimatedTooltipPreview /> */}
           <motion.div
             className='mt-2 mb-2 flex flex-col items-center justify-center md:mt-8 lg:mt-24 lg:mb-2'
