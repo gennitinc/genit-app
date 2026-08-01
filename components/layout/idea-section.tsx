@@ -992,8 +992,8 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Grow without
-              <PointerHighlight
+              Grow without Hiring!
+              {/* <PointerHighlight
                 rectangleClassName='
       bg-blue-100 dark:bg-blue-900
       border-blue-300 dark:border-blue-700
@@ -1005,7 +1005,7 @@ export function IdeaSection() {
                 containerClassName='inline-flex items-center'
               >
                 <span className='relative z-10 px-1 sm:px-2'>Hiring!</span>
-              </PointerHighlight>
+              </PointerHighlight> */}
               {/* <span>Humans</span> */}
             </motion.h1>
 
