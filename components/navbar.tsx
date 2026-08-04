@@ -17,8 +17,8 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { cn } from "@/lib/utils";
-import appLogo from "@/resources/images/genit.svg";
 import cookie from "js-cookie";
+import appLogo from "@/resources/images/genit.svg";
 import {
   Book,
   Copy,

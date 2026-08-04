@@ -492,18 +492,15 @@ const LandingHero = () => {
   return (
     <section className='relative w-full overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
       <div className='relative flex w-full flex-col items-center justify-center'>
-        {/* <IdeaSection /> */}
-        <div className='mt-6 grid w-full grid-cols-1 items-center gap-16 px-2 md:px-4 lg:grid-cols-2 lg:px-0'>
-          {/* Left: Content */}
+        
+        <IdeaSection />
+        {/* <div className='mt-6 grid w-full grid-cols-1 items-center gap-16 px-2 md:px-4 lg:grid-cols-2 lg:px-0'>
           <div className='w-full max-w-2xl'>
-            {/* Badge */}
-
             <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400'>
               <span className='text-xs'>✨ Grow without Hiring</span>
               <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
             </AnimatedShinyText>
 
-            {/* Heading */}
             <h1 className='font-bricolage text-foreground text-5xl leading-[1.05] font-bold tracking-tight sm:text-6xl md:text-6xl'>
               Marketing Agents
               <br />
@@ -512,12 +509,10 @@ const LandingHero = () => {
               </span>
             </h1>
 
-            {/* Description */}
             <p className='text-muted-foreground mt-5 max-w-xl text-lg leading-7'>
               Autonomous AI agents that work 24/7, so you don't have to.
             </p>
 
-            {/* CTA */}
             <div className='mt-8 flex flex-wrap items-center gap-3'>
               <a
                 href={user ? "/chat" : "/signup"}
@@ -553,7 +548,7 @@ const LandingHero = () => {
                   hideDialogClose
                   className='border-border bg-background w-[calc(100%-1.5rem)] max-w-4xl gap-0 overflow-hidden rounded-4xl border p-0 shadow-2xl'
                 >
-                  {/* <div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.18),transparent_42%),radial-gradient(circle_at_bottom_right,rgba(99,102,241,0.12),transparent_38%)]' /> */}
+                 
 
                   <div className='border-border relative m-2 overflow-hidden rounded-lg border shadow-2xl'>
                     <iframe
@@ -568,7 +563,6 @@ const LandingHero = () => {
               </Dialog>
             </div>
 
-            {/* Plugins */}
             <h2 className='text-muted-foreground mt-6 text-sm tracking-tight md:text-base'>
               Works with over{" "}
               <span className='text-foreground font-semibold'>
@@ -584,7 +578,6 @@ const LandingHero = () => {
               </Link>
             </h2>
 
-            {/* Social proof */}
             <div className='mt-7 flex flex-col items-start gap-4 md:flex-row md:items-center'>
               <div className='flex items-center -space-x-2'>
                 <img
@@ -617,12 +610,24 @@ const LandingHero = () => {
               </p>
             </div>
           </div>
-          {/* Right: Showcase 3d */}
+
           <div className='relative mx-auto ml-8 w-full max-w-xl lg:ml-0 lg:ml-auto'>
             <MarketingRobot3D />
           </div>
-          {/* end 3d */}
-        </div>
+          <div className='mt-24 translate-x-12 perspective-near md:absolute md:top-40 md:-right-6 md:bottom-16 md:left-1/2 md:mt-0 md:translate-x-0'>
+            <div className='before:border-foreground/5 before:bg-foreground/5 relative h-full before:absolute before:-inset-x-4 before:top-0 before:bottom-7 before:skew-x-6 before:rounded-[calc(var(--radius)+1rem)] before:border'>
+              <div className='bg-background shadow-foreground/10 ring-foreground/5 relative h-full -translate-y-12 skew-x-6 overflow-hidden rounded-(--radius) border border-transparent shadow-md ring-1'>
+                <Image
+                  src='https://i.postimg.cc/SKcdVTr1/Dashboard2.png'
+                  alt='app screen'
+                  width={2880}
+                  height={1842}
+                  className='size-full object-cover object-top-left'
+                />
+              </div>
+            </div>
+          </div>
+        </div> */}
 
         <section className='relative mt-5 space-y-4 pt-6 pb-10 lg:mt-6'>
           {/* <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
@@ -635,7 +640,7 @@ const LandingHero = () => {
               Plugins
             </Link>
           </h2> */}
-          <div className='relative z-10 mx-auto max-w-5xl'>
+          {/* <div className='relative z-10 mx-auto max-w-5xl'>
             <div className='overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4'>
               <div className='animate-marquee flex w-max gap-10 hover:[animation-play-state:paused]'>
                 {[...INTEGRATION_BRANDS, ...INTEGRATION_BRANDS].map(
@@ -656,7 +661,7 @@ const LandingHero = () => {
                 )}
               </div>
             </div>
-          </div>
+          </div> */}
         </section>
       </div>
 

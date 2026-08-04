@@ -213,6 +213,7 @@ export function ManageDialog({
   const updateInboxSettings = useUpdateIntegrationInboxSettings();
   const { identityBySurface } = useIntegrations();
   const { user } = useUserContext();
+  const router = useRouter();
 
   // Each Meta surface (FB, IG, Meta Ads, WhatsApp) has its own identity row
   // now. Pull the one for THIS dialog's platform — revoking it should only
@@ -493,6 +494,10 @@ export function ManageDialog({
                       )}
 
                       {platform &&
+                        (conn.platform !== "pipedream" ||
+                          Boolean(
+                            conn.metadata?.pipedreamInbox?.replyActionId
+                          )) &&
                         [
                           "instagram",
                           "linkedin",
@@ -502,6 +507,7 @@ export function ManageDialog({
                           "whatsapp",
                           "messenger",
                           "telegram",
+                          "pipedream",
                         ].includes(platform) && (
                           <div className='mt-3 flex items-center justify-between gap-3 rounded-md border border-black/5 bg-white/70 px-3 py-2 dark:border-white/10 dark:bg-white/5'>
                             <div className='min-w-0'>
@@ -527,6 +533,31 @@ export function ManageDialog({
                                 handleAutoReply(conn._id, checked)
                               }
                             />
+                          </div>
+                        )}
+
+                      {conn.platform === "pipedream" &&
+                        !conn.metadata?.pipedreamInbox && (
+                          <div className='mt-3 rounded-md border border-violet-500/20 bg-violet-500/5 px-3 py-2'>
+                            <p className='text-foreground text-xs font-medium'>
+                              Add this plugin to Unified Inbox
+                            </p>
+                            <p className='text-muted-foreground mt-0.5 text-[11px]'>
+                              Open Chat and ask Genit to connect this plugin&apos;s
+                              incoming-message trigger and reply action.
+                            </p>
+                            <Button
+                              type='button'
+                              size='sm'
+                              variant='outline'
+                              className='mt-2 h-7 px-2 text-[11px]'
+                              onClick={() => {
+                                handleClose(false);
+                                router.push("/chat");
+                              }}
+                            >
+                              Set up in Chat
+                            </Button>
                           </div>
                         )}
 

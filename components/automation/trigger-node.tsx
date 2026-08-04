@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
   AtSign,
+  Blocks,
   CalendarDays,
   ClipboardList,
   Clock,
@@ -35,6 +36,7 @@ import { Handle, type NodeProps, Position } from "reactflow";
 import React from "react";
 
 const TRIGGER_ICONS: Record<TriggerSubtype, any> = {
+  pipedream: Blocks,
   schedule: Clock,
   webhook: Webhook,
   manual: Play,
@@ -216,6 +218,12 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                   {data.webhookUrl || "Generated on save"}
                 </div>
               </div>
+            )}
+
+            {data.triggerType === "pipedream" && (
+              <p className='rounded border border-blue-500/20 bg-blue-500/5 px-2.5 py-2 text-[10px] leading-4 text-zinc-600 dark:text-neutral-300'>
+                Ask Genit in chat to connect a plugin event to this trigger node.
+              </p>
             )}
 
             {(data.triggerType === "whatsapp_message" ||

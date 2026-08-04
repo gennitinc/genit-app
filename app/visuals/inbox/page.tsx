@@ -16,6 +16,7 @@ import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import { ManageDialog } from "@/app/integrations/_components/manage-dialog";
 import {
   INTEGRATIONS,
+  connectionsForIntegration,
   type Integration,
   resolveStatus,
 } from "@/app/integrations/integrations-explorer";
@@ -432,6 +433,7 @@ const INBOX_PLATFORMS = new Set<IntegrationPlatform>([
   "whatsapp",
   "messenger",
   "telegram",
+  "pipedream",
 ]);
 
 const PLATFORM_LABELS: Record<string, string> = {
@@ -446,6 +448,8 @@ const PLATFORM_LABELS: Record<string, string> = {
   whatsapp: "WhatsApp",
   messenger: "Messenger",
   telegram: "Telegram Business",
+  slack: "Slack",
+  pipedream: "Managed plugin",
 };
 
 function PlatformIcon({
@@ -733,12 +737,16 @@ export default function InboxPage() {
     []
   );
   const manageConnections = manageFor
-    ? (byPlatform.get(manageFor.platform) ?? [])
+    ? connectionsForIntegration(manageFor, byPlatform)
     : [];
   const accounts = useMemo(
     () =>
       integrations.filter(
-        (item) => INBOX_PLATFORMS.has(item.platform) && item.status === "active"
+        (item) =>
+          INBOX_PLATFORMS.has(item.platform) &&
+          item.status === "active" &&
+          (item.platform !== "pipedream" ||
+            Boolean(item.metadata?.pipedreamInbox))
       ),
     [integrations]
   );
@@ -750,6 +758,8 @@ export default function InboxPage() {
           (account.platform === "telegram" &&
             account.metadata?.telegramMode !== "business_bot") ||
           account.platform === "whatsapp" ||
+          (account.platform === "pipedream" &&
+            Boolean(account.metadata?.pipedreamInbox?.replyActionId)) ||
           (account.platform === "x" && account.scopes.includes("dm.write"))
       ),
     [accounts]
@@ -765,7 +775,10 @@ export default function InboxPage() {
   const filters = useMemo<InboxFilters>(
     () => ({
       integrationId: selectedAccount?._id,
-      platform: selectedAccount?.platform,
+      platform:
+        selectedAccount?.platform === "pipedream"
+          ? undefined
+          : selectedAccount?.platform,
       status,
       search: deferredSearch || undefined,
       sort,
@@ -1545,7 +1558,7 @@ export default function InboxPage() {
                   : false;
                 const integrationStatus = resolveStatus(
                   integration,
-                  byPlatform.get(integration.platform),
+                  connectionsForIntegration(integration, byPlatform),
                   hasIdentityForSurface
                 );
                 const isConnected =
@@ -2814,6 +2827,7 @@ export default function InboxPage() {
         platformDescription={connectFor?.description ?? ""}
         Icon={connectFor?.icon ?? (() => null)}
         glow={connectFor?.glow ?? "rgba(113,113,122,0.4)"}
+        appSlug={connectFor?.appSlug}
       />
 
       <ManageDialog

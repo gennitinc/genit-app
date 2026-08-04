@@ -13,9 +13,12 @@ import {
   XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { cn } from "@/lib/utils";
+import { useIntegrations } from "@/hooks/use-integrations";
+import { apiResponse } from "@/utils/apiResponse";
 import {
   Activity,
   AtSign,
+  Blocks,
   FileText,
   Image,
   ImagePlus,
@@ -32,9 +35,10 @@ import {
   Video,
 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
+  pipedream_action: Blocks,
   send_gmail: Mail,
   send_brevo_email: Mail,
   send_outlook_email: Mail,
@@ -104,6 +108,11 @@ interface ActionNodeData {
   categoryId?: string;
   tags?: string;
   privacyStatus?: string;
+  appSlug?: string;
+  actionId?: string;
+  integrationId?: string;
+  configuredProps?: Record<string, unknown>;
+  confirmed?: boolean;
   isEditMode: boolean;
   nodeId: string;
   onRemoveNode: (id: string) => void;
@@ -124,6 +133,36 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
   const isEdit = data.isEditMode;
   const subtypeConfig = ACTION_SUBTYPES.find((a) => a.id === data.actionType);
   const Icon = ACTION_ICONS[data.actionType];
+  const { integrations } = useIntegrations();
+  const pluginConnections = integrations.filter(
+    (item) => item.platform === "pipedream" && item.status === "active"
+  );
+  const [pluginActions, setPluginActions] = useState<
+    Array<{ key: string; name: string; annotations?: { destructiveHint?: boolean } }>
+  >([]);
+  const [pluginPropsText, setPluginPropsText] = useState(() =>
+    JSON.stringify(data.configuredProps || {}, null, 2)
+  );
+  const [pluginPropsError, setPluginPropsError] = useState("");
+
+  useEffect(() => {
+    if (data.actionType !== "pipedream_action" || !data.integrationId || !data.appSlug) {
+      setPluginActions([]);
+      return;
+    }
+    let active = true;
+    apiResponse
+      .get(`/integrations/pipedream/${data.integrationId}/actions`, {
+        params: { app: data.appSlug, limit: 100 },
+      })
+      .then(({ data: response }) => {
+        if (active) setPluginActions(response.actions || []);
+      })
+      .catch(() => active && setPluginActions([]));
+    return () => {
+      active = false;
+    };
+  }, [data.actionType, data.appSlug, data.integrationId]);
 
   return (
     <div
@@ -234,6 +273,115 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                 </optgroup>
               </select>
             </div>
+
+            {data.actionType === "pipedream_action" && (
+              <>
+                <div>
+                  <label className={labelCls}>Connected plugin</label>
+                  <select
+                    value={data.integrationId || ""}
+                    onChange={(event) => {
+                      const connection = pluginConnections.find(
+                        (item) => item._id === event.target.value
+                      );
+                      setPluginPropsText("{}");
+                      setPluginPropsError("");
+                      data.onNodeDataChange(id, {
+                        integrationId: connection?._id || "",
+                        appSlug: connection?.metadata?.appSlug || "",
+                        actionId: "",
+                        configuredProps: {},
+                        confirmed: false,
+                      });
+                    }}
+                    className={selectCls}
+                  >
+                    <option value=''>Select a plugin</option>
+                    {pluginConnections.map((connection) => (
+                      <option key={connection._id} value={connection._id}>
+                        {connection.metadata?.appName || connection.metadata?.appSlug} — {connection.accountName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className={labelCls}>Action</label>
+                  <select
+                    value={data.actionId || ""}
+                    onChange={(event) => {
+                      setPluginPropsText("{}");
+                      setPluginPropsError("");
+                      data.onNodeDataChange(id, {
+                        actionId: event.target.value,
+                        configuredProps: {},
+                        confirmed: false,
+                      });
+                    }}
+                    className={selectCls}
+                    disabled={!data.integrationId}
+                  >
+                    <option value=''>Select an action</option>
+                    {pluginActions.map((action) => (
+                      <option key={action.key} value={action.key}>
+                        {action.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className={labelCls}>Configured inputs (JSON)</label>
+                  <textarea
+                    value={pluginPropsText}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      setPluginPropsText(value);
+                      try {
+                        const configuredProps = JSON.parse(value || "{}");
+                        if (
+                          !configuredProps ||
+                          Array.isArray(configuredProps) ||
+                          typeof configuredProps !== "object"
+                        ) {
+                          throw new Error("Inputs must be a JSON object");
+                        }
+                        setPluginPropsError("");
+                        data.onNodeDataChange(id, { configuredProps });
+                      } catch (error: any) {
+                        setPluginPropsError(error?.message || "Invalid JSON");
+                      }
+                    }}
+                    className={cn(inputCls, "min-h-[72px] resize-y font-mono")}
+                    placeholder='{"channel":"C123","text":"Hello"}'
+                  />
+                  {pluginPropsError && (
+                    <p className='mt-1 text-[9px] text-red-500'>
+                      {pluginPropsError}
+                    </p>
+                  )}
+                  {!pluginPropsError && (
+                    <p className='text-muted-foreground mt-1 text-[9px]'>
+                      Event values can use {"{{event.field}}"}.
+                    </p>
+                  )}
+                </div>
+                {pluginActions.find((action) => action.key === data.actionId)
+                  ?.annotations?.destructiveHint && (
+                  <label className='flex items-start gap-2 text-[10px] text-zinc-600 dark:text-neutral-300'>
+                    <input
+                      type='checkbox'
+                      checked={data.confirmed === true}
+                      onChange={(event) =>
+                        data.onNodeDataChange(id, {
+                          confirmed: event.target.checked,
+                        })
+                      }
+                      className='mt-0.5'
+                    />
+                    I confirm this destructive action may modify or delete external data.
+                  </label>
+                )}
+              </>
+            )}
 
             {/* ── Send Email config ─────────────────────────── */}
             {(data.actionType === "send_gmail" ||

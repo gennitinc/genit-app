@@ -6,10 +6,10 @@ import {
   resetMixpanelUser,
   trackEvent,
 } from "@/lib/mixpanelClient";
+import cookie from "js-cookie";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import axios from "axios";
-import cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect, useState } from "react";
 
@@ -60,7 +60,8 @@ export interface Organization {
   autoModeGoals?: Array<{
     id: string;
     title: string;
-    metric: "impressions" | "clicks" | "conversions" | "conversionValue" | "roi";
+    metric:
+      "impressions" | "clicks" | "conversions" | "conversionValue" | "roi";
     target: number;
     deadline?: string;
     status: "active" | "achieved" | "paused";
@@ -91,7 +92,8 @@ export interface Organization {
   autoModeExperiments?: Array<{
     id: string;
     title: string;
-    metric: "impressions" | "clicks" | "conversions" | "conversionValue" | "roi";
+    metric:
+      "impressions" | "clicks" | "conversions" | "conversionValue" | "roi";
     minimumLiftPercent: number;
     samples: number;
     status: "running" | "paused" | "completed";

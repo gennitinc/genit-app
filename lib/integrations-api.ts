@@ -28,7 +28,8 @@ export type IntegrationPlatform =
   | "google_sheets"
   | "google_slides"
   | "google_docs"
-  | "google_forms";
+  | "google_forms"
+  | "pipedream";
 
 export type MetaSurface =
   "facebook" | "instagram" | "meta_ads" | "whatsapp" | "messenger";
@@ -105,6 +106,7 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "google_docs",
   "google_forms",
   "mailchimp",
+  "pipedream",
 ]);
 
 // Platforms that connect via a credential-entry form (no OAuth popup).
@@ -219,6 +221,38 @@ export async function requestConnectUrl(
     `/integrations/${platform}/connect-url`
   );
   return data;
+}
+
+export interface PipedreamApp {
+  id: string;
+  name_slug: string;
+  name: string;
+  description?: string;
+  img_src?: string;
+  auth_type?: string;
+  categories?: string[];
+  verifiedByGenit: boolean;
+}
+
+export async function requestPipedreamConnectUrl(
+  appSlug: string
+): Promise<ConnectUrlResponse> {
+  const { data } = await apiResponse.post<ConnectUrlResponse>(
+    "/integrations/pipedream/connect-url",
+    { appSlug }
+  );
+  return data;
+}
+
+export async function fetchPipedreamApps(
+  query = "",
+  limit = 30
+): Promise<PipedreamApp[]> {
+  const { data } = await apiResponse.get<{
+    success: true;
+    apps: PipedreamApp[];
+  }>("/integrations/pipedream/apps", { params: { q: query, limit } });
+  return data.apps;
 }
 
 export type GoogleWorkspacePlatform = Extract<

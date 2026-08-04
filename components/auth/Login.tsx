@@ -12,11 +12,11 @@ import {
 import { useUserContext } from "@/context/AuthenticatedContext";
 import withAuth from "@/helper/hoc/withAuth";
 import { identifyAndTrackAuth, trackEvent } from "@/lib/mixpanelClient";
+import cookie from "js-cookie";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/Regex";
 import { apiResponse } from "@/utils/apiResponse";
 import { useGoogleLogin } from "@react-oauth/google";
-import cookie from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

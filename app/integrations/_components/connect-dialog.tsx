@@ -28,6 +28,7 @@ import {
   provisionFacebookSelected,
   provisionInstagramSelected,
   requestConnectUrl,
+  requestPipedreamConnectUrl,
 } from "@/lib/integrations-api";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { GradientFrame } from "@/utils/gradient-frame";
@@ -89,6 +90,7 @@ interface ConnectDialogProps {
   platformDescription: string;
   Icon: ComponentType<{ className?: string; style?: CSSProperties }>;
   glow: string;
+  appSlug?: string;
 }
 
 // `select` = user must pick which IG account(s) to provision before any
@@ -233,6 +235,11 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
   google_slides: ["Create and read presentations", "Add and edit slides with batch updates", "Invite collaborators and manage their roles"],
   google_docs: ["Create and read documents", "Insert, replace and format document content", "Invite collaborators and manage their roles"],
   google_forms: ["Create surveys and quizzes", "Add and edit questions", "Read responses and invite collaborators"],
+  pipedream: [
+    "Connect the selected account through Pipedream's managed authentication",
+    "Let Genit discover and run the app's supported actions",
+    "Revoke the connection at any time from Genit",
+  ],
 };
 
 const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
@@ -422,6 +429,7 @@ export function ConnectDialog({
   platformDescription,
   Icon,
   glow,
+  appSlug,
 }: ConnectDialogProps) {
   const [phase, setPhase] = useState<Phase>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -485,6 +493,7 @@ export function ConnectDialog({
   useEffect(() => {
     if (!platform) return;
     function handleMessage(e: MessageEvent) {
+      if (e.origin !== window.location.origin) return;
       const data = e.data as PopupMessage | undefined;
       if (!data || typeof data !== "object") return;
       if (
@@ -526,6 +535,16 @@ export function ConnectDialog({
         setConnectedAccount(data.accountName || null);
         setPhase("success");
         qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+        // Managed providers persist from a server webhook, which can arrive a
+        // moment after the browser redirect. Recheck without blocking the UI.
+        window.setTimeout(
+          () => qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) }),
+          1_500
+        );
+        window.setTimeout(
+          () => qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) }),
+          4_000
+        );
         toast.success(`Connected ${platformName}`, {
           description: data.accountName ? `@${data.accountName}` : undefined,
         });
@@ -550,7 +569,9 @@ export function ConnectDialog({
 
     let response: ConnectUrlResponse;
     try {
-      response = await requestConnectUrl(platform);
+      response = appSlug
+        ? await requestPipedreamConnectUrl(appSlug)
+        : await requestConnectUrl(platform);
     } catch (err: any) {
       const msg =
         err?.response?.data?.message ||
@@ -642,7 +663,7 @@ export function ConnectDialog({
       setPhase("error");
       toast.error("Could not start connection", { description: msg });
     }
-  }, [platform, platformName, qc, orgId]);
+  }, [platform, platformName, appSlug, qc, orgId]);
 
   const handleCredentialSubmit = useCallback(async () => {
     if (!platform) return;
@@ -1051,7 +1072,7 @@ export function ConnectDialog({
               <div className='text-muted-foreground flex min-w-0 items-center gap-1.5 text-[11px]'>
                 <ShieldCheck className='h-3.5 w-3.5' />
                 <span className='min-w-0'>
-                  All tokens are securely encrypted
+                  Tokens are encrypted. Managed connections use Pipedream.
                 </span>
               </div>
 

@@ -10,6 +10,7 @@ import {
   disconnectIntegrationById,
   disconnectMetaIdentityById,
   fetchIntegrations,
+  fetchPipedreamApps,
   requestConnectUrl,
   setPrimaryIntegrationById,
   updateIntegrationInboxSettings,
@@ -20,6 +21,16 @@ import { useMemo } from "react";
 
 export function integrationsQueryKey(orgId?: string) {
   return ["integrations", orgId || "none"] as const;
+}
+
+export function usePipedreamApps(query: string) {
+  return useQuery({
+    queryKey: ["pipedream-apps", query],
+    queryFn: () => fetchPipedreamApps(query, 40),
+    enabled: query.trim().length >= 2,
+    staleTime: 5 * 60_000,
+    retry: false,
+  });
 }
 
 export function useIntegrations() {

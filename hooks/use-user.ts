@@ -1,7 +1,7 @@
 "use client";
+import cookie from "js-cookie";
 import { apiResponse } from "@/utils/apiResponse";
 import { useQuery } from "@tanstack/react-query";
-import cookie from "js-cookie";
 
 const genituToken = cookie.get("genituToken");
 

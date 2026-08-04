@@ -959,7 +959,7 @@ export function IdeaSection() {
   ];
 
   return (
-    <div className='w-full md:px-4'>
+    <div className='w-full md:px-4 mt-14'>
       <div className='mx-auto flex w-full flex-col items-center justify-center space-y-2 lg:space-y-6'>
         {/* Header */}
         <div className='mt4 space-y-2 text-center lg:mt-0 '>
@@ -1026,7 +1026,7 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Autonomous AI agents that work 24/7, so you don't have to.
+              Autonomous AI marketing agents that work 24/7, so you don't have to.
             </motion.p>
           </motion.div>
         </div>

@@ -3,9 +3,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import cookie from "js-cookie";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import cookie from "js-cookie";
 import { Building2, Loader2, MailWarning, Users } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";

@@ -24,6 +24,7 @@ import {
   updateConversationStatus,
   updateInboxMessage,
 } from "@/lib/inbox-api";
+import cookie from "js-cookie";
 import { serverUrlSocket } from "@/utils/apiResponse";
 import {
   useInfiniteQuery,
@@ -31,7 +32,6 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import cookie from "js-cookie";
 import { type Socket, io } from "socket.io-client";
 import { useEffect, useState } from "react";
 

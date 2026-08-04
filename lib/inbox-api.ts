@@ -15,7 +15,9 @@ export interface InboxConversation {
     | "outlook"
     | "whatsapp"
     | "messenger"
-    | "telegram";
+    | "telegram"
+    | "slack"
+    | "pipedream";
   platformConversationId: string;
   customerName: string;
   customerId?: string;

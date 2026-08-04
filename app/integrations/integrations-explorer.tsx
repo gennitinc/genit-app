@@ -26,7 +26,7 @@ import {
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
-import { useIntegrations } from "@/hooks/use-integrations";
+import { useIntegrations, usePipedreamApps } from "@/hooks/use-integrations";
 import {
   IntegrationConnection,
   IntegrationPlatform,
@@ -42,6 +42,8 @@ import {
   Cog,
   Megaphone,
   MoreHorizontal,
+  MessageSquare,
+  Blocks,
   Search,
   TrendingUp,
 } from "lucide-react";
@@ -73,6 +75,8 @@ export type Integration = {
   icon: IntegrationIcon;
   baseStatus: BaseStatus;
   glow: string;
+  appSlug?: string;
+  remoteIcon?: string;
 };
 
 export const INTEGRATIONS: Integration[] = [
@@ -356,6 +360,17 @@ export const INTEGRATIONS: Integration[] = [
     baseStatus: "available",
     glow: "rgba(103, 58, 183, 0.8)",
   },
+  {
+    platform: "pipedream",
+    appSlug: "slack",
+    name: "Slack",
+    description:
+      "Read channels, send messages, create reminders and let Genit act in your workspace.",
+    category: "Productivity",
+    icon: MessageSquare,
+    baseStatus: "available",
+    glow: "rgba(99, 102, 241, 0.8)",
+  },
 ];
 
 const CATEGORY_ORDER = [
@@ -364,6 +379,7 @@ const CATEGORY_ORDER = [
   "Email Campaigns",
   "Messaging",
   "Productivity",
+  "More Plugins",
 ];
 
 export function resolveStatus(
@@ -387,6 +403,23 @@ export function resolveStatus(
   return integration.baseStatus;
 }
 
+export function connectionsForIntegration(
+  integration: Integration,
+  byPlatform: Map<IntegrationPlatform, IntegrationConnection[]>
+): IntegrationConnection[] {
+  const connections = byPlatform.get(integration.platform) ?? [];
+  if (integration.appSlug) {
+    return connections.filter(
+        (connection) => connection.metadata?.appSlug === integration.appSlug
+      );
+  }
+  const managed = (byPlatform.get("pipedream") ?? []).filter(
+    (connection) =>
+      connection.metadata?.nativePlatform === integration.platform
+  );
+  return [...connections, ...managed];
+}
+
 function IntegrationCard({
   integration,
   status,
@@ -404,7 +437,15 @@ function IntegrationCard({
       <div className='flex min-w-0 flex-1 items-center'>
         {/* Brand Icon wrapper */}
         <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg border border-zinc-200/60 bg-zinc-50 shadow-xs sm:h-14 sm:w-14 dark:border-zinc-800/80 dark:bg-zinc-950'>
-          <Icon className='h-6 w-6 text-zinc-800 sm:h-7 sm:w-7 dark:text-zinc-200' />
+          {integration.remoteIcon ? (
+            <img
+              src={integration.remoteIcon}
+              alt=''
+              className='h-7 w-7 rounded object-contain'
+            />
+          ) : (
+            <Icon className='h-6 w-6 text-zinc-800 sm:h-7 sm:w-7 dark:text-zinc-200' />
+          )}
         </div>
 
         {/* Text Area */}
@@ -466,19 +507,60 @@ export function IntegrationsExplorer() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
-  const { byPlatform, identityBySurface } = useIntegrations();
+  const { byPlatform, identityBySurface, integrations } = useIntegrations();
+  const normalizedQuery = query.trim();
+  const { data: discoveredApps = [] } = usePipedreamApps(normalizedQuery);
+
+  const catalog = useMemo(() => {
+    const items = [...INTEGRATIONS];
+    const known = new Set(items.map((item) => item.appSlug).filter(Boolean));
+    for (const connection of integrations) {
+      if (connection.platform !== "pipedream") continue;
+      const slug = String(connection.metadata?.appSlug || "");
+      if (!slug || known.has(slug)) continue;
+      known.add(slug);
+      items.push({
+        platform: "pipedream",
+        appSlug: slug,
+        name: String(connection.metadata?.appName || slug),
+        description: `Use ${connection.metadata?.appName || slug} actions from your Genit agent.`,
+        category: "More Plugins",
+        icon: Blocks,
+        remoteIcon: connection.accountAvatar,
+        baseStatus: "available",
+        glow: "rgba(99, 102, 241, 0.7)",
+      });
+    }
+    for (const app of discoveredApps) {
+      if (known.has(app.name_slug)) continue;
+      known.add(app.name_slug);
+      items.push({
+        platform: "pipedream",
+        appSlug: app.name_slug,
+        name: app.name,
+        description:
+          app.description || `Connect ${app.name} and use its actions from Genit.`,
+        category: "More Plugins",
+        icon: Blocks,
+        remoteIcon: app.img_src,
+        baseStatus: "available",
+        glow: "rgba(99, 102, 241, 0.7)",
+      });
+    }
+    return items;
+  }, [discoveredApps, integrations]);
 
   // Find all active/connected integrations to show in the "Added" bar
   const connectedIntegrations = useMemo(() => {
-    return INTEGRATIONS.filter((integration) => {
-      const connections = byPlatform.get(integration.platform);
+    return catalog.filter((integration) => {
+      const connections = connectionsForIntegration(integration, byPlatform);
       const hasIdentity = isMetaSurface(integration.platform)
         ? identityBySurface.has(integration.platform)
         : false;
       const status = resolveStatus(integration, connections, hasIdentity);
       return status === "connected" || status === "partial";
     });
-  }, [byPlatform, identityBySurface]);
+  }, [byPlatform, identityBySurface, catalog]);
 
   const categories = useMemo(() => ["All", ...CATEGORY_ORDER], []);
 
@@ -487,13 +569,13 @@ export function IntegrationsExplorer() {
 
     // First query filter
     let filtered = q
-      ? INTEGRATIONS.filter(
+      ? catalog.filter(
           (i) =>
             i.name.toLowerCase().includes(q) ||
             i.description.toLowerCase().includes(q) ||
             i.category.toLowerCase().includes(q)
         )
-      : INTEGRATIONS;
+      : catalog;
 
     // Second category tab filter
     if (selectedCategory !== "All") {
@@ -510,10 +592,10 @@ export function IntegrationsExplorer() {
     return CATEGORY_ORDER.filter((c) => byCategory.has(c)).map(
       (c) => [c, byCategory.get(c) as Integration[]] as const
     );
-  }, [query, selectedCategory]);
+  }, [query, selectedCategory, catalog]);
 
   const manageConnections = manageFor
-    ? (byPlatform.get(manageFor.platform) ?? [])
+    ? connectionsForIntegration(manageFor, byPlatform)
     : [];
 
   return (
@@ -542,12 +624,20 @@ export function IntegrationsExplorer() {
               const Icon = integration.icon;
               return (
                 <button
-                  key={`added-${integration.platform}`}
+                  key={`added-${integration.platform}-${integration.appSlug || integration.name}`}
                   onClick={() => setManageFor(integration)}
                   className='flex h-12 w-12 items-center justify-center rounded-lg border border-zinc-200/60 bg-zinc-50 shadow-xs transition-all hover:bg-zinc-100 active:scale-95 dark:border-zinc-800/80 dark:bg-zinc-950 dark:hover:bg-zinc-900'
                   title={`Manage ${integration.name}`}
                 >
-                  <Icon className='h-6 w-6 text-zinc-800 dark:text-zinc-200' />
+                  {integration.remoteIcon ? (
+                    <img
+                      src={integration.remoteIcon}
+                      alt=''
+                      className='h-6 w-6 rounded object-contain'
+                    />
+                  ) : (
+                    <Icon className='h-6 w-6 text-zinc-800 dark:text-zinc-200' />
+                  )}
                 </button>
               );
             })}
@@ -643,7 +733,10 @@ export function IntegrationsExplorer() {
               </div>
               <div className='grid grid-cols-1 gap-x-12 gap-y-1 md:grid-cols-2'>
                 {items.map((integration) => {
-                  const connections = byPlatform.get(integration.platform);
+                  const connections = connectionsForIntegration(
+                    integration,
+                    byPlatform
+                  );
                   const hasIdentityForSurface = isMetaSurface(
                     integration.platform
                   )
@@ -656,7 +749,7 @@ export function IntegrationsExplorer() {
                   );
                   return (
                     <IntegrationCard
-                      key={integration.name}
+                      key={`${integration.platform}-${integration.appSlug || integration.name}`}
                       integration={integration}
                       status={status}
                       onConnect={() => setConnectFor(integration)}
@@ -678,6 +771,7 @@ export function IntegrationsExplorer() {
         platformDescription={connectFor?.description ?? ""}
         Icon={connectFor?.icon ?? (() => null)}
         glow={connectFor?.glow ?? "rgba(113,113,122,0.4)"}
+        appSlug={connectFor?.appSlug}
       />
 
       <ManageDialog

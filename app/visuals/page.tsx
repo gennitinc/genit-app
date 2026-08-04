@@ -5,6 +5,7 @@ import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import { ManageDialog } from "@/app/integrations/_components/manage-dialog";
 import {
   INTEGRATIONS,
+  connectionsForIntegration,
   type Integration,
   resolveStatus,
 } from "@/app/integrations/integrations-explorer";
@@ -251,16 +252,19 @@ export default function VisualsHomePage() {
       return (
         resolveStatus(
           integration,
-          byPlatform.get(integration.platform),
+          connectionsForIntegration(integration, byPlatform),
           hasIdentity
         ) === "connected"
       );
     });
   }, [byPlatform, identityBySurface]);
 
-  const pluginCards = useMemo(() => INTEGRATIONS.slice(0, 8), []);
+  const pluginCards = useMemo(() => {
+    const slack = INTEGRATIONS.find((item) => item.appSlug === "slack");
+    return [...INTEGRATIONS.slice(0, 7), ...(slack ? [slack] : [])];
+  }, []);
   const manageConnections = manageFor
-    ? (byPlatform.get(manageFor.platform) ?? [])
+    ? connectionsForIntegration(manageFor, byPlatform)
     : [];
 
   const selectRangeDate = (date: Date) => {
@@ -601,7 +605,10 @@ export default function VisualsHomePage() {
 
         <div className='mt-4 grid grid-cols-2 gap-3 xl:grid-cols-4'>
           {pluginCards.map((integration) => {
-            const connections = byPlatform.get(integration.platform);
+            const connections = connectionsForIntegration(
+              integration,
+              byPlatform
+            );
             const hasIdentityForSurface = isMetaSurface(integration.platform)
               ? identityBySurface.has(integration.platform)
               : false;
@@ -672,6 +679,7 @@ export default function VisualsHomePage() {
         platformDescription={connectFor?.description ?? ""}
         Icon={connectFor?.icon ?? (() => null)}
         glow={connectFor?.glow ?? "rgba(96,165,250,0.5)"}
+        appSlug={connectFor?.appSlug}
       />
 
       <ManageDialog
