@@ -520,6 +520,12 @@ export function IntegrationsExplorer() {
       const slug = String(connection.metadata?.appSlug || "");
       if (!slug || known.has(slug)) continue;
       known.add(slug);
+      const nativePlatform = connection.metadata?.nativePlatform;
+      if (
+        nativePlatform &&
+        items.some((item) => item.platform === nativePlatform)
+      )
+        continue;
       items.push({
         platform: "pipedream",
         appSlug: slug,
