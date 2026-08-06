@@ -20,6 +20,7 @@ import {
   MicrosoftOutlookBrand,
   PinterestBrand,
   SnapchatBrand,
+  SlackBrand,
   TelegramBrand,
   TikTokBrand,
   WhatsAppBrand,
@@ -367,7 +368,7 @@ export const INTEGRATIONS: Integration[] = [
     description:
       "Read channels, send messages, create reminders and let Genit act in your workspace.",
     category: "Productivity",
-    icon: MessageSquare,
+    icon: SlackBrand,
     baseStatus: "available",
     glow: "rgba(99, 102, 241, 0.8)",
   },

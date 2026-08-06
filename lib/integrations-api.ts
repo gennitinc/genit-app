@@ -255,6 +255,24 @@ export async function fetchPipedreamApps(
   return data.apps;
 }
 
+export async function runPipedreamApiRequest<T = unknown>(
+  integrationId: string,
+  input: {
+    appSlug: string;
+    url: string;
+    method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+    headers?: Record<string, string>;
+    body?: unknown;
+    confirmed?: boolean;
+  }
+): Promise<T> {
+  const { data } = await apiResponse.post<{ success: true; result: T }>(
+    `/integrations/pipedream/${integrationId}/proxy`,
+    input
+  );
+  return data.result;
+}
+
 export type GoogleWorkspacePlatform = Extract<
   IntegrationPlatform,
   "google_meet" | "google_sheets" | "google_slides" | "google_docs" | "google_forms"

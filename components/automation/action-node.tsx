@@ -112,6 +112,10 @@ interface ActionNodeData {
   actionId?: string;
   integrationId?: string;
   configuredProps?: Record<string, unknown>;
+  proxyUrl?: string;
+  proxyMethod?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  proxyHeaders?: Record<string, string>;
+  proxyBody?: unknown;
   confirmed?: boolean;
   isEditMode: boolean;
   nodeId: string;
@@ -144,6 +148,12 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
     JSON.stringify(data.configuredProps || {}, null, 2)
   );
   const [pluginPropsError, setPluginPropsError] = useState("");
+  const [proxyBodyText, setProxyBodyText] = useState(() =>
+    JSON.stringify(data.proxyBody || {}, null, 2)
+  );
+  const [proxyHeadersText, setProxyHeadersText] = useState(() =>
+    JSON.stringify(data.proxyHeaders || {}, null, 2)
+  );
 
   useEffect(() => {
     if (data.actionType !== "pipedream_action" || !data.integrationId || !data.appSlug) {
@@ -291,6 +301,10 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                         appSlug: connection?.metadata?.appSlug || "",
                         actionId: "",
                         configuredProps: {},
+                        proxyUrl: undefined,
+                        proxyMethod: "GET",
+                        proxyHeaders: {},
+                        proxyBody: {},
                         confirmed: false,
                       });
                     }}
@@ -305,14 +319,19 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                   </select>
                 </div>
                 <div>
-                  <label className={labelCls}>Action</label>
+                  <label className={labelCls}>Execution mode</label>
                   <select
-                    value={data.actionId || ""}
+                    value={data.proxyUrl !== undefined && !data.actionId ? "api" : "action"}
                     onChange={(event) => {
                       setPluginPropsText("{}");
+                      setProxyBodyText("{}");
                       setPluginPropsError("");
                       data.onNodeDataChange(id, {
-                        actionId: event.target.value,
+                        actionId: "",
+                        proxyUrl: event.target.value === "api" ? "" : undefined,
+                        proxyMethod: "GET",
+                        proxyHeaders: {},
+                        proxyBody: {},
                         configuredProps: {},
                         confirmed: false,
                       });
@@ -320,39 +339,125 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                     className={selectCls}
                     disabled={!data.integrationId}
                   >
-                    <option value=''>Select an action</option>
-                    {pluginActions.map((action) => (
-                      <option key={action.key} value={action.key}>
-                        {action.name}
-                      </option>
-                    ))}
+                    <option value='action'>Prebuilt action</option>
+                    <option value='api'>Custom API request</option>
                   </select>
                 </div>
+                {data.proxyUrl === undefined || data.actionId ? (
+                  <>
+                    <div>
+                      <label className={labelCls}>Action</label>
+                      <select
+                        value={data.actionId || ""}
+                        onChange={(event) => {
+                          setPluginPropsText("{}");
+                          setPluginPropsError("");
+                          data.onNodeDataChange(id, {
+                            actionId: event.target.value,
+                            configuredProps: {},
+                            confirmed: false,
+                          });
+                        }}
+                        className={selectCls}
+                        disabled={!data.integrationId}
+                      >
+                        <option value=''>Select an action</option>
+                        {pluginActions.map((action) => (
+                          <option key={action.key} value={action.key}>
+                            {action.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className={labelCls}>Configured inputs (JSON)</label>
+                      <textarea
+                        value={pluginPropsText}
+                        onChange={(event) => {
+                          const value = event.target.value;
+                          setPluginPropsText(value);
+                          try {
+                            const configuredProps = JSON.parse(value || "{}");
+                            if (!configuredProps || Array.isArray(configuredProps) || typeof configuredProps !== "object")
+                              throw new Error("Inputs must be a JSON object");
+                            setPluginPropsError("");
+                            data.onNodeDataChange(id, { configuredProps });
+                          } catch (error: any) {
+                            setPluginPropsError(error?.message || "Invalid JSON");
+                          }
+                        }}
+                        className={cn(inputCls, "min-h-[72px] resize-y font-mono")}
+                        placeholder='{"channel":"C123","text":"Hello"}'
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className='grid grid-cols-[72px_1fr] gap-2'>
+                      <div>
+                        <label className={labelCls}>Method</label>
+                        <select
+                          value={data.proxyMethod || "GET"}
+                          onChange={(event) => data.onNodeDataChange(id, { proxyMethod: event.target.value, confirmed: false })}
+                          className={selectCls}
+                        >
+                          {['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].map((method) => <option key={method}>{method}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <label className={labelCls}>Provider API URL</label>
+                        <input
+                          type='url'
+                          value={data.proxyUrl || ""}
+                          onChange={(event) => data.onNodeDataChange(id, { proxyUrl: event.target.value })}
+                          className={inputCls}
+                          placeholder='https://api.provider.com/v1/...'
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className={labelCls}>Headers (JSON, optional)</label>
+                      <textarea
+                        value={proxyHeadersText}
+                        onChange={(event) => {
+                          const value = event.target.value;
+                          setProxyHeadersText(value);
+                          try {
+                            const proxyHeaders = JSON.parse(value || "{}");
+                            if (!proxyHeaders || Array.isArray(proxyHeaders) || typeof proxyHeaders !== "object")
+                              throw new Error("Headers must be a JSON object");
+                            setPluginPropsError("");
+                            data.onNodeDataChange(id, { proxyHeaders });
+                          } catch (error: any) {
+                            setPluginPropsError(error?.message || "Invalid JSON");
+                          }
+                        }}
+                        className={cn(inputCls, "min-h-[52px] resize-y font-mono")}
+                        placeholder='{"content-type":"application/json"}'
+                      />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Request body (JSON)</label>
+                      <textarea
+                        value={proxyBodyText}
+                        onChange={(event) => {
+                          const value = event.target.value;
+                          setProxyBodyText(value);
+                          try {
+                            const proxyBody = JSON.parse(value || "{}");
+                            setPluginPropsError("");
+                            data.onNodeDataChange(id, { proxyBody });
+                          } catch (error: any) {
+                            setPluginPropsError(error?.message || "Invalid JSON");
+                          }
+                        }}
+                        className={cn(inputCls, "min-h-[72px] resize-y font-mono")}
+                        placeholder='{"message":"{{event.text}}"}'
+                      />
+                    </div>
+                  </>
+                )}
                 <div>
-                  <label className={labelCls}>Configured inputs (JSON)</label>
-                  <textarea
-                    value={pluginPropsText}
-                    onChange={(event) => {
-                      const value = event.target.value;
-                      setPluginPropsText(value);
-                      try {
-                        const configuredProps = JSON.parse(value || "{}");
-                        if (
-                          !configuredProps ||
-                          Array.isArray(configuredProps) ||
-                          typeof configuredProps !== "object"
-                        ) {
-                          throw new Error("Inputs must be a JSON object");
-                        }
-                        setPluginPropsError("");
-                        data.onNodeDataChange(id, { configuredProps });
-                      } catch (error: any) {
-                        setPluginPropsError(error?.message || "Invalid JSON");
-                      }
-                    }}
-                    className={cn(inputCls, "min-h-[72px] resize-y font-mono")}
-                    placeholder='{"channel":"C123","text":"Hello"}'
-                  />
                   {pluginPropsError && (
                     <p className='mt-1 text-[9px] text-red-500'>
                       {pluginPropsError}
@@ -364,8 +469,8 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                     </p>
                   )}
                 </div>
-                {pluginActions.find((action) => action.key === data.actionId)
-                  ?.annotations?.destructiveHint && (
+                {(pluginActions.find((action) => action.key === data.actionId)
+                  ?.annotations?.destructiveHint || data.proxyMethod === "DELETE") && (
                   <label className='flex items-start gap-2 text-[10px] text-zinc-600 dark:text-neutral-300'>
                     <input
                       type='checkbox'

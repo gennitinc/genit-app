@@ -496,7 +496,8 @@ export function ManageDialog({
                       {platform &&
                         (conn.platform !== "pipedream" ||
                           Boolean(
-                            conn.metadata?.pipedreamInbox?.replyActionId
+                            conn.metadata?.pipedreamInbox?.replyActionId ||
+                              conn.metadata?.pipedreamInbox?.replyProxyRequest?.url
                           )) &&
                         [
                           "instagram",

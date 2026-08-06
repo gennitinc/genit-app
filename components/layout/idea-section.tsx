@@ -959,7 +959,7 @@ export function IdeaSection() {
   ];
 
   return (
-    <div className='w-full md:px-4 mt-10'>
+    <div className='w-full md:px-4 mt-0'>
       <div className='mx-auto flex w-full flex-col items-center justify-center space-y-2 lg:space-y-6'>
         {/* Header */}
         <div className='mt4 space-y-2 text-center lg:mt-0 '>

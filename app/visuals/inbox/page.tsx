@@ -759,7 +759,10 @@ export default function InboxPage() {
             account.metadata?.telegramMode !== "business_bot") ||
           account.platform === "whatsapp" ||
           (account.platform === "pipedream" &&
-            Boolean(account.metadata?.pipedreamInbox?.replyActionId)) ||
+            Boolean(
+              account.metadata?.pipedreamInbox?.replyActionId ||
+                account.metadata?.pipedreamInbox?.replyProxyRequest?.url
+            )) ||
           (account.platform === "x" && account.scopes.includes("dm.write"))
       ),
     [accounts]

@@ -435,6 +435,7 @@ export function ConnectDialog({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
   const [credentialValue, setCredentialValue] = useState("");
+  const [useNativeCredentials, setUseNativeCredentials] = useState(false);
   // Instagram selection flow: candidates discovered by the server, the IDs
   // the user picks, and the in-flight POST state.
   const [igCandidates, setIgCandidates] = useState<InstagramCandidate[]>([]);
@@ -480,6 +481,7 @@ export function ConnectDialog({
       setErrorMessage(null);
       setConnectedAccount(null);
       setCredentialValue("");
+      setUseNativeCredentials(false);
       // NOTE: we intentionally do NOT reset connectionResolvedRef here.
       // It is only reset when a new connection attempt starts (handleConnect).
       // Resetting here would allow a stale setTimeout from the poll to
@@ -487,7 +489,9 @@ export function ConnectDialog({
     }
   }, [open, closePopup]);
 
-  const isCredentialMode = platform ? isCredentialPlatform(platform) : false;
+  const isCredentialMode = platform
+    ? isCredentialPlatform(platform) && useNativeCredentials
+    : false;
   const credentialConfig = platform ? CREDENTIAL_INPUT[platform] : undefined;
 
   useEffect(() => {
@@ -573,6 +577,16 @@ export function ConnectDialog({
         ? await requestPipedreamConnectUrl(appSlug)
         : await requestConnectUrl(platform);
     } catch (err: any) {
+      if (
+        platform &&
+        isCredentialPlatform(platform) &&
+        !appSlug &&
+        err?.response?.status === 404
+      ) {
+        setUseNativeCredentials(true);
+        setPhase("idle");
+        return;
+      }
       const msg =
         err?.response?.data?.message ||
         err?.message ||
