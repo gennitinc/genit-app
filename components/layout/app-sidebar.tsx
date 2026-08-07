@@ -11,6 +11,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { trackEvent } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
@@ -31,6 +32,7 @@ export function AppSidebar({
   className,
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const { t } = useLanguage();
   const { state, isMobile, setOpen } = useSidebar();
   const user = useUserContext().user;
   const isTablet = useMediaQuery("(max-width: 1024px)");
@@ -145,7 +147,9 @@ export function AppSidebar({
                     <div className='text-xs font-semibold text-white'>
                       Pro Plan
                     </div>
-                    <div className='text-xs text-white/70'>Design Credits</div>
+                    <div className='text-xs text-white/70'>
+                      {t("Design Credits")}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -153,7 +157,9 @@ export function AppSidebar({
               {/* Usage Stats now */}
               <div className='space-y-2'>
                 <div className='flex items-center justify-between'>
-                  <span className='text-xs text-white/80'>This month</span>
+                  <span className='text-xs text-white/80'>
+                    {t("This month")}
+                  </span>
                   <span className='text-xs font-semibold text-white'>
                     {usedCreditsDisplay.toLocaleString()} /{" "}
                     {totalCredits.toLocaleString()}
@@ -173,7 +179,9 @@ export function AppSidebar({
                 <div className='flex items-center justify-between text-xs'>
                   <div className='flex items-center gap-1 text-white/70'>
                     <TrendingUp className='h-3 w-3' strokeWidth={1.5} />
-                    <span>{currentCredits.toLocaleString()} left</span>
+                    <span>
+                      {currentCredits.toLocaleString()} {t("left")}
+                    </span>
                   </div>
                   <div className='flex items-center gap-1 text-white/70'>
                     <Sparkles className='h-3 w-3' strokeWidth={1.5} />
@@ -204,8 +212,8 @@ export function AppSidebar({
                   {user?.userPlan === "Basic" &&
                   user?.creditsRemaining &&
                   user?.creditsRemaining <= 20
-                    ? "Upgrade Account"
-                    : "Get More Credits"}
+                    ? t("Upgrade Account")
+                    : t("Get More Credits")}
                 </button>
               </div>
               <GradientFrame />

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
 import { ArrowRight, PanelRight } from "lucide-react";
 import {
@@ -35,6 +36,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export function LandingNavbar() {
+  const { t } = useLanguage();
   const FARMNET_EMAIL = "farmnetent@gmail.com";
   const { theme, setTheme } = useTheme();
   const user = useUserContext().user;
@@ -44,16 +46,16 @@ export function LandingNavbar() {
   const isFarmnetUser = currentUser?.email?.toLowerCase() === FARMNET_EMAIL;
 
   const navigation = [
-    { name: "Chat", href: "/chat" },
-    { name: "Plugin", href: "/plugin" },
-    { name: "Visual Flow", href: "/visuals" },
-    ...(isFarmnetUser ? [{ name: "Apps", href: "/apps" }] : []),
+    { name: t("Chat"), href: "/chat" },
+    { name: t("Plugin"), href: "/plugin" },
+    { name: t("Visual Flow"), href: "/visuals" },
+    ...(isFarmnetUser ? [{ name: t("Apps"), href: "/apps" }] : []),
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
-    { name: "Community", href: "/community" },
-    { name: "Blog", href: "/blog" },
-    { name: "History", href: currentUser ? "/chat/history" : "/signin" },
+    { name: t("Community"), href: "/community" },
+    { name: t("Blog"), href: "/blog" },
+    { name: t("History"), href: currentUser ? "/chat/history" : "/signin" },
     {
-      name: "Creator Program",
+      name: t("Creator Program"),
       href: currentUser ? `/user/referral` : "/creators-program",
     },
     // currentUser && {
@@ -61,11 +63,11 @@ export function LandingNavbar() {
     //   href: `/creator/${currentUser?.username}`,
     // },
     {
-      name: currentUser ? "Billing" : "Pricing",
+      name: currentUser ? t("Billing") : t("Pricing"),
       href: currentUser ? "/user/settings?tab=billing" : "/pricing",
     },
-    { name: "Company", href: "/company" },
-    { name: "Contact", href: "/contact" },
+    { name: t("Company"), href: "/company" },
+    { name: t("Contact"), href: "/contact" },
   ];
 
   useEffect(() => {
@@ -93,26 +95,26 @@ export function LandingNavbar() {
                   className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                   href='/chat'
                 >
-                  Chat
+                  {t("Chat")}
                 </Link>
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1100px]:inline-flex'
                   href='/plugin'
                 >
-                  Plugin
+                  {t("Plugin")}
                 </Link>
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'
                   href='/visuals'
                 >
-                  Visual Flow
+                  {t("Visual Flow")}
                 </Link>
                 {isFarmnetUser && (
                   <Link
                     className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'
                     href='/apps'
                   >
-                    Apps
+                    {t("Apps")}
                   </Link>
                 )}
                 <Link
@@ -120,20 +122,20 @@ export function LandingNavbar() {
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'
                   href='/community'
                 >
-                  Community
+                  {t("Community")}
                 </Link>
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1360px]:inline-flex'
                   href='/blog'
                 >
-                  Blog
+                  {t("Blog")}
                 </Link>
                 <Link
                   target='__blank'
                   className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                   href={currentUser ? "/user/settings?tab=billing" : "/pricing"}
                 >
-                  {currentUser ? "Billing" : "Pricing"}
+                  {currentUser ? t("Billing") : t("Pricing")}
                 </Link>
                 {currentUser && (
                   <Link
@@ -141,7 +143,7 @@ export function LandingNavbar() {
                     className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'
                     href='/chat/history'
                   >
-                    History
+                    {t("History")}
                   </Link>
                 )}
                 <Link
@@ -216,13 +218,13 @@ export function LandingNavbar() {
                     data-state='closed'
                     href='/signin'
                   >
-                    Sign in
+                    {t("Sign in")}
                   </Link>
                   <Link
                     className='hover:shadow-button shadow-primary/10 relative inline-flex h-10 items-center justify-center gap-0 rounded-lg bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-700 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                     href='/signup'
                   >
-                    <span>Start for $0</span>
+                    <span>{t("Start for $0")}</span>
                     <ArrowRight className='ml-1 h-4 w-4' />
                   </Link>
                 </div>
@@ -241,13 +243,13 @@ export function LandingNavbar() {
                   data-state='closed'
                   href='/signin'
                 >
-                  Sign in
+                  {t("Sign in")}
                 </Link>
                 <Link
                   className='hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-lg border border-indigo-400/60 bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-[0_6px_20px_rgba(79,70,229,0.28)] outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-700 focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                   href='/signup'
                 >
-                  <span>Start for $0</span>
+                  <span>{t("Start for $0")}</span>
                   <ArrowRight className='ml-1 h-4 w-4' />
                 </Link>
               </div>
@@ -257,7 +259,7 @@ export function LandingNavbar() {
               <SheetTrigger asChild>
                 <Button variant='ghost' size='icon' className='z-50'>
                   <PanelRight className='text-muted-foreground size-4 h-4 w-4' />
-                  <span className='sr-only'>Toggle menu</span>
+                  <span className='sr-only'>{t("Toggle menu")}</span>
                 </Button>
               </SheetTrigger>
               <SheetContent side='right'>
@@ -302,13 +304,13 @@ export function LandingNavbar() {
                         data-state='closed'
                         href='/signin'
                       >
-                        Sign in
+                        {t("Sign in")}
                       </Link>
                       <Link
                         className='text-foreground not-disabled:hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-lg border-[2px] border-white/5 bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] bg-origin-border px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none after:pointer-events-none after:absolute after:top-[-2px] after:left-[-2px] after:h-[calc(100%+4px)] after:w-[calc(100%+4px)] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat not-disabled:hover:bg-white/90 not-disabled:hover:text-black focus-visible:bg-white/90 focus-visible:text-black focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:text-white/50 disabled:opacity-30'
                         href='/signup'
                       >
-                        <span>Start for $0</span>
+                        <span>{t("Start for $0")}</span>
                         <ArrowRight className='ml-1 h-4 w-4' />
                       </Link>
                     </div>

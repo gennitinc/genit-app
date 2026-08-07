@@ -11,6 +11,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthenticatedContextProvider } from "@/context/AuthenticatedContext";
 import { ProjectProvider } from "@/context/DesignProject";
+import { LanguageProvider } from "@/context/LanguageContext";
 import MixpanelProvider from "@/provider/MixpanelProver";
 import Loading from "@/utils/Loading";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -519,27 +520,29 @@ export default function RootLayout({
               }
             >
               <AuthenticatedContextProvider>
-                <ThemeProvider
-                  attribute='class'
-                  defaultTheme='dark'
-                  enableSystem
-                  disableTransitionOnChange
-                  storageKey='genit-theme'
-                >
-                  <ProjectProvider>
-                    <Suspense
-                    // fallback={
-                    //   <div className='flex h-screen flex-col items-center justify-center bg-white dark:bg-black'>
-                    //     <Loading />
-                    //   </div>
-                    // }
-                    >
-                      <Wrapper>
-                        <MixpanelProvider>{children}</MixpanelProvider>
-                      </Wrapper>
-                    </Suspense>
-                  </ProjectProvider>
-                </ThemeProvider>
+                <LanguageProvider>
+                  <ThemeProvider
+                    attribute='class'
+                    defaultTheme='dark'
+                    enableSystem
+                    disableTransitionOnChange
+                    storageKey='genit-theme'
+                  >
+                    <ProjectProvider>
+                      <Suspense
+                      // fallback={
+                      //   <div className='flex h-screen flex-col items-center justify-center bg-white dark:bg-black'>
+                      //     <Loading />
+                      //   </div>
+                      // }
+                      >
+                        <Wrapper>
+                          <MixpanelProvider>{children}</MixpanelProvider>
+                        </Wrapper>
+                      </Suspense>
+                    </ProjectProvider>
+                  </ThemeProvider>
+                </LanguageProvider>
                 <Toaster />
               </AuthenticatedContextProvider>
             </GoogleOAuthProvider>

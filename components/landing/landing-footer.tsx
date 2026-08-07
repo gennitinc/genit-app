@@ -1,17 +1,11 @@
 "use client";
 
+import { LanguageSelect } from "@/components/language-select";
 import { Logo } from "@/components/logo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -20,6 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
 import {
   ArrowUp,
@@ -50,13 +45,7 @@ export function LandingFooter() {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const { theme, setTheme } = useTheme();
-  const [selected, setSelected] = useState("en");
-
-  const languages = [
-    { code: "en", label: "English", flag: "🇺🇸" },
-    { code: "es", label: "Spanish", flag: "🇪🇸" },
-    { code: "fr", label: "French", flag: "🇫🇷" },
-  ];
+  const { t } = useLanguage();
 
   // For demo purposes - in a real app, this would be connected to your theme provider
   const toggleTheme = () => {
@@ -305,11 +294,13 @@ export function LandingFooter() {
                   rel='noopener noreferrer'
                   className='ring-offset-background focus-visible:ring-ring inline-flex h-12 items-center justify-center gap-2 rounded-full px-8 text-base font-medium whitespace-nowrap text-gray-400 transition-colors hover:text-gray-100 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0'
                 >
-                  Get in touch
+                  {t("Get in touch")}
                 </Link>
               </div>
               <p className='mt-8 text-sm text-gray-400'>
-                No credit card required · Free plan available · Setup in minutes
+                {t(
+                  "No credit card required · Free plan available · Setup in minutes"
+                )}
               </p>
             </div>
           </div>
@@ -328,8 +319,9 @@ export function LandingFooter() {
                   </span>
                 </Link>
                 <p className='mb-1 w-full text-gray-400 md:max-w-[60vw] lg:max-w-60'>
-                  Autonomous AI marketing agents that work 24/7, so you don't
-                  have to.
+                  {t(
+                    "Autonomous AI marketing agents that work 24/7, so you don't have to."
+                  )}
                 </p>
                 <div className='mt-8 mb-6 flex items-center gap-3'>
                   <a
@@ -415,91 +407,62 @@ export function LandingFooter() {
                 </div>
               </div>
 
-              <div className='mt-6 flex flex-col gap-2 md:gap-6'>
-                {/* <div className="flex items-center justify-between gap-4 mb-2">
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Language
-                  </span>
-
-                  <Select
-                    value={selected}
-                    onValueChange={(value) => setSelected(value)}
-                    disabled
-                  >
-                    <SelectTrigger className="w-fit text-sm bg-background border border-border rounded-md px-2 py-1 text-foreground">
-                      <SelectValue placeholder="Select language">
-                        <div className="flex items-center gap-2 w-fit">
-                          <span>
-                            {languages.find((l) => l.code === selected)?.flag}
-                          </span>
-                          <span>
-                            {languages.find((l) => l.code === selected)?.label}
-                          </span>
-                        </div>
-                      </SelectValue>
-                    </SelectTrigger>
-
-                    <SelectContent>
-                      {languages.map((lang) => (
-                        <SelectItem key={lang.code} value={lang.code}>
-                          <div className="flex items-center gap-2">
-                            <span>{lang.flag}</span>
-                            <span>{lang.label}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div> */}
+              <div className='mt-6 flex items-center justify-between gap-4 md:max-w-64'>
+                <span className='text-muted-foreground text-sm font-medium'>
+                  {t("Language")}
+                </span>
+                <LanguageSelect className='h-9' />
               </div>
             </div>
             <div className='grid grid-cols-2 gap-8 sm:grid-cols-4 lg:gap-16'>
               <div>
-                <h4 className='text-foreground mb-4 font-semibold'>Company</h4>
+                <h4 className='text-foreground mb-4 font-semibold'>
+                  {t("Company")}
+                </h4>
                 <ul className='flex flex-col space-y-3'>
                   <Link
                     href='/company'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    About
+                    {t("About")}
                   </Link>
                   <Link
                     href='/teams'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    Team
+                    {t("Team")}
                   </Link>
                   <Link
                     href='/legal/privacy-policy'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    Privacy Policy
+                    {t("Privacy Policy")}
                   </Link>
                   <Link
                     href='/legal/terms-of-service'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    Terms of Service
+                    {t("Terms of Service")}
                   </Link>
                   <Link
                     href='/contact'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    Support
+                    {t("Support")}
                   </Link>
                 </ul>
               </div>
 
               <div>
                 <h4 className='text-foreground mb-4 font-semibold'>
-                  Platform Pages
+                  {t("Platform Pages")}
                 </h4>
                 <ul className='flex flex-col space-y-3'>
                   <Link
                     href='/'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    Home
+                    {t("Home")}
                   </Link>
                   {/* <Link
                 href="/inspirations"
@@ -511,42 +474,44 @@ export function LandingFooter() {
                     href='/pricing'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    Pricing
+                    {t("Pricing")}
                   </Link>
                   <Link
                     href='/plugin'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    Plugin
+                    {t("Plugin")}
                   </Link>
                   <Link
                     href='/creators-program'
                     className='text-muted-foreground hover:text-foreground transition-colors'
                   >
-                    Creators Program
+                    {t("Creators Program")}
                   </Link>
                   <Link
                     href='/community'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    Community
+                    {t("Community")}
                   </Link>
                   <Link
                     href='/creators-program'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    Inspirations
+                    {t("Inspirations")}
                   </Link>
                   <Link
                     href='/contact'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    Contact
+                    {t("Contact")}
                   </Link>
                 </ul>
               </div>
               <div>
-                <h4 className='text-foreground mb-4 font-semibold'>Apps</h4>
+                <h4 className='text-foreground mb-4 font-semibold'>
+                  {t("Apps")}
+                </h4>
                 <ul className='space-y-3'>
                   {/* <li>
                     <Link
@@ -578,7 +543,7 @@ export function LandingFooter() {
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                       href='/logo-animation'
                     >
-                      Logo Animation
+                      {t("Logo Animation")}
                     </Link>
                   </li>
                   <li>
@@ -586,7 +551,7 @@ export function LandingFooter() {
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                       href='/face-swap'
                     >
-                      Face Swap
+                      {t("Face Swap")}
                     </Link>
                   </li>
                   <li>
@@ -594,7 +559,7 @@ export function LandingFooter() {
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                       href='/relight'
                     >
-                      Glow Control
+                      {t("Glow Control")}
                     </Link>
                   </li>
                   {/* <li>
@@ -609,7 +574,7 @@ export function LandingFooter() {
               </div>
               <div>
                 <h4 className='text-foreground mb-4 font-semibold'>
-                  Learn More
+                  {t("Learn More")}
                 </h4>
                 <ul className='space-y-3'>
                   <li>
@@ -617,7 +582,7 @@ export function LandingFooter() {
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                       href='/#'
                     >
-                      Video Tutorials
+                      {t("Video Tutorials")}
                     </Link>
                   </li>
                   <li>
@@ -625,7 +590,7 @@ export function LandingFooter() {
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                       href='/blog'
                     >
-                      Blog
+                      {t("Blog")}
                     </Link>
                   </li>
                   <li>
@@ -633,7 +598,7 @@ export function LandingFooter() {
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                       href='/#'
                     >
-                      Creator Resources
+                      {t("Creator Resources")}
                     </Link>
                   </li>
                 </ul>
@@ -643,7 +608,7 @@ export function LandingFooter() {
           <div className='border-border mt-10 flex flex-col items-start justify-between border-t pt-4 lg:flex-row lg:items-center'>
             <div className='flex items-center gap-2 py-2'>
               <span className='text-muted-foreground text-sm font-medium'>
-                Theme
+                {t("Theme")}
               </span>
 
               <div className='bg-muted/60 border-border flex items-center rounded-full border p-1'>
@@ -676,7 +641,7 @@ export function LandingFooter() {
             <p className='text-muted-foreground text-sm'>
               ©{currentYear},{" "}
               <span className='text-foreground ml-1 font-medium'>genit</span>{" "}
-              All Rights Reserved.
+              {t("All Rights Reserved.")}
             </p>
           </div>
         </div>

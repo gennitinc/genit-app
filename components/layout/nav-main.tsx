@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { trackAppOpened, trackFeatureUsed } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import {
@@ -35,6 +36,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 export function NavMain() {
+  const { t } = useLanguage();
   const { state, setOpenMobile, isMobile } = useSidebar();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -45,18 +47,18 @@ export function NavMain() {
   const isFarmnetUser = user?.email?.toLowerCase() === FARMNET_EMAIL;
   const navItems = [
     {
-      title: "Chat",
+      title: t("Chat"),
       icon: SquarePen,
       href: "/chat",
     },
     {
-      title: "Visual Flow",
+      title: t("Visual Flow"),
       icon: GalleryHorizontal,
       href: "/visuals",
-      badge: "New",
+      badge: t("New"),
     },
     {
-      title: "Plugin",
+      title: t("Plugin"),
       icon: GitBranchPlus,
       href: "/plugin",
       // badge: "New",
@@ -64,29 +66,29 @@ export function NavMain() {
     ...(isFarmnetUser
       ? [
           {
-            title: "Apps",
+            title: t("Apps"),
             icon: Grid2X2Plus,
             href: "/apps",
           },
         ]
       : []),
     {
-      title: "Community",
+      title: t("Community"),
       icon: Users,
       href: "/community",
     },
     {
-      title: "History",
+      title: t("History"),
       icon: History,
       href: "/chat/history",
     },
     {
-      title: "Creator Program",
+      title: t("Creator Program"),
       icon: Gift,
       href: `/user/referral`,
     },
     {
-      title: "Profile",
+      title: t("Profile"),
       icon: UserPlus,
       href: `/creator/${user?.username}`,
     },
@@ -94,22 +96,22 @@ export function NavMain() {
 
   const secondaryNavItems = [
     {
-      title: "Pricing",
+      title: t("Pricing"),
       icon: CreditCard,
       href: "/pricing",
     },
     {
-      title: "Blog",
+      title: t("Blog"),
       icon: BookMarked,
       href: "/blog",
     },
     {
-      title: "Settings",
+      title: t("Settings"),
       icon: Cog,
       href: "/user/settings",
     },
     {
-      title: "Help",
+      title: t("Help"),
       icon: HelpCircle,
       href: "/contact",
     },

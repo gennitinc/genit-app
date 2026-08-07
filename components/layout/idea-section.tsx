@@ -959,13 +959,13 @@ export function IdeaSection() {
   ];
 
   return (
-    <div className='w-full md:px-4 mt-0'>
+    <div className='mt-0 w-full md:px-4'>
       <div className='mx-auto flex w-full flex-col items-center justify-center space-y-2 lg:space-y-6'>
         {/* Header */}
-        <div className='mt4 space-y-2 text-center lg:mt-0 '>
+        <div className='mt4 space-y-2 text-center lg:mt-0'>
           {/* <AnimatedTooltipPreview /> */}
           <motion.div
-            className='mt-2 mb-2 flex flex-col items-center justify-center md:mt-8 lg:mt-24 lg:mb-2 '
+            className='mt-2 mb-2 flex flex-col items-center justify-center md:mt-8 lg:mt-24 lg:mb-2'
             // initial={{ opacity: 0, y: 20 }}
             // animate={{ opacity: 1, y: 0 }}
             // transition={{ duration: 0.6 }}
@@ -976,7 +976,7 @@ export function IdeaSection() {
             </AnimatedShinyText>
 
             <motion.h1
-              className='text-foreground xs:text-5xl mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight sm:text-6xl md:justify-start md:mt-5 md:gap-x-1 md:text-left md:text-2xl lg:text-5xl'
+              className='text-foreground xs:text-5xl mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-center text-4xl leading-[0.95] font-semibold tracking-tight sm:text-3xl md:text-5xl'
               custom={1}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -993,7 +993,8 @@ export function IdeaSection() {
               animate='visible'
             >
               Grow without Hiring!
-              {/* <PointerHighlight
+            </motion.h1>
+            {/* <PointerHighlight
                 rectangleClassName='
       bg-blue-100 dark:bg-blue-900
       border-blue-300 dark:border-blue-700
@@ -1006,8 +1007,7 @@ export function IdeaSection() {
               >
                 <span className='relative z-10 px-1 sm:px-2'>Hiring!</span>
               </PointerHighlight> */}
-              {/* <span>Humans</span> */}
-            </motion.h1>
+            {/* <span>Humans</span> */}
 
             <motion.p
               className='text-foreground/80 mt-2 mb-6 max-w-full text-center text-sm lg:text-base'
@@ -1026,7 +1026,8 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Autonomous AI marketing agents that work 24/7, so you don't have to.
+              Autonomous AI marketing agents that work 24/7, so you don't have
+              to.
             </motion.p>
           </motion.div>
         </div>

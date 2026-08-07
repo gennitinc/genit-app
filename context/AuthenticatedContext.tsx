@@ -6,10 +6,10 @@ import {
   resetMixpanelUser,
   trackEvent,
 } from "@/lib/mixpanelClient";
-import cookie from "js-cookie";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import axios from "axios";
+import cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect, useState } from "react";
 
@@ -195,6 +195,7 @@ export interface User {
   };
   preferences?: {
     theme: "light" | "dark" | "system";
+    language: "en" | "es" | "fr";
     emailNotifications: boolean;
     marketingEmails: boolean;
     twoFactorAuth: boolean;

@@ -1,5 +1,6 @@
 import { AutoModeDialog } from "@/components/common/auto-mode-dialog";
 import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
+import { LanguageSelect } from "@/components/language-select";
 import PricingComponent from "@/components/pricing/page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ import {
   User,
   useUserContext,
 } from "@/context/AuthenticatedContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { useAccountActions } from "@/hooks/use-account-actions";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -60,6 +62,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const SettingsHome = () => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState("account");
   const { user, setuser, updateOrganization, updateUserPreferences } =
     useUserContext();
@@ -600,37 +603,37 @@ const SettingsHome = () => {
   const settingsTabs = [
     {
       id: "account",
-      label: "Account",
+      label: t("Account"),
       description: "Personal details and password",
       icon: UserIcon,
     },
     {
       id: "brand",
-      label: "Brand",
+      label: t("Brand"),
       description: "Identity, voice, and profiles",
       icon: Palette,
     },
     {
       id: "automation",
-      label: "Marketing Loop",
+      label: t("Marketing Loop"),
       description: "Goals, experiments, and runs",
       icon: ArrowDownUp,
     },
     {
       id: "billing",
-      label: "Billing",
+      label: t("Billing"),
       description: "Credits, invoices, and plans",
       icon: CreditCard,
     },
     {
       id: "security",
-      label: "Security",
+      label: t("Security"),
       description: "Sessions and account access",
       icon: Shield,
     },
     {
       id: "preferences",
-      label: "Preferences",
+      label: t("Preferences"),
       description: "Appearance and notifications",
       icon: SlidersHorizontal,
     },
@@ -644,13 +647,13 @@ const SettingsHome = () => {
       <div className='pt-5 sm:pt-8'>
         <div className='mb-7'>
           <p className='text-xs font-semibold tracking-[0.16em] text-zinc-500 uppercase dark:text-zinc-400'>
-            Workspace
+            {t("Workspace")}
           </p>
           <h1 className='mt-1 text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl dark:text-white'>
-            Settings
+            {t("Settings")}
           </h1>
           <p className='mt-1 text-sm text-zinc-500 dark:text-zinc-400'>
-            Manage your account, brand, and billing.
+            {t("Manage your account, brand, and billing.")}
           </p>
         </div>
 
@@ -660,7 +663,7 @@ const SettingsHome = () => {
               <div className='flex items-center justify-between gap-3'>
                 <div>
                   <p className='text-xs font-medium text-zinc-500 dark:text-zinc-400'>
-                    Available credits
+                    {t("Available credits")}
                   </p>
                   <p className='mt-0.5 text-xl font-semibold text-zinc-950 tabular-nums dark:text-white'>
                     {(user?.creditsRemaining ?? 0).toLocaleString()}
@@ -671,7 +674,7 @@ const SettingsHome = () => {
                   onClick={() => setIsTopUpOpen(true)}
                   className='rounded-xl active:scale-[0.97]'
                 >
-                  Top up
+                  {t("Top up")}
                 </Button>
               </div>
             </div>
@@ -727,15 +730,17 @@ const SettingsHome = () => {
               <div className='space-y-5'>
                 <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
-                    <CardTitle className='text-base'>Account details</CardTitle>
+                    <CardTitle className='text-base'>
+                      {t("Account details")}
+                    </CardTitle>
                     <CardDescription>
-                      The identity used across your Genit workspace.
+                      {t("The identity used across your Genit workspace.")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className='space-y-5 p-5'>
                     <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
                       <div className='space-y-2'>
-                        <Label htmlFor='username'>Username</Label>
+                        <Label htmlFor='username'>{t("Username")}</Label>
                         <Input
                           id='username'
                           value={username}
@@ -744,7 +749,7 @@ const SettingsHome = () => {
                         />
                       </div>
                       <div className='space-y-2'>
-                        <Label htmlFor='email'>Email address</Label>
+                        <Label htmlFor='email'>{t("Email address")}</Label>
                         <Input
                           id='email'
                           value={user?.email || ""}
@@ -756,7 +761,7 @@ const SettingsHome = () => {
                           id='email-help'
                           className='text-xs text-zinc-500 dark:text-zinc-400'
                         >
-                          Contact support to change your sign-in email.
+                          {t("Contact support to change your sign-in email.")}
                         </p>
                       </div>
                     </div>
@@ -2312,17 +2317,33 @@ const SettingsHome = () => {
               <div className='space-y-5'>
                 <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
-                    <CardTitle className='text-base'>Appearance</CardTitle>
+                    <CardTitle className='text-base'>
+                      {t("Interface language")}
+                    </CardTitle>
                     <CardDescription>
-                      Choose how Genit looks on this device.
+                      {t("Choose the language used throughout Genit.")}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className='p-5'>
+                    <LanguageSelect className='w-full sm:w-56' />
+                  </CardContent>
+                </Card>
+
+                <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+                    <CardTitle className='text-base'>
+                      {t("Appearance")}
+                    </CardTitle>
+                    <CardDescription>
+                      {t("Choose how Genit looks on this device.")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className='p-5'>
                     <div className='grid grid-cols-3 gap-2 rounded-lg bg-zinc-100 p-1.5 dark:bg-white/[0.05]'>
                       {[
-                        { value: "light", label: "Light", icon: Sun },
-                        { value: "dark", label: "Dark", icon: Moon },
-                        { value: "system", label: "System", icon: Monitor },
+                        { value: "light", label: t("Light"), icon: Sun },
+                        { value: "dark", label: t("Dark"), icon: Moon },
+                        { value: "system", label: t("System"), icon: Monitor },
                       ].map((option) => {
                         const Icon = option.icon;
                         const selected = theme === option.value;
@@ -2356,20 +2377,22 @@ const SettingsHome = () => {
                 <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
                     <CardTitle className='text-base'>
-                      Email preferences
+                      {t("Email preferences")}
                     </CardTitle>
                     <CardDescription>
-                      Control the messages you receive from Genit.
+                      {t("Control the messages you receive from Genit.")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className='divide-y divide-zinc-200 p-0 dark:divide-white/10'>
                     <div className='flex items-center justify-between gap-5 px-5 py-4'>
                       <div>
                         <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
-                          Account updates
+                          {t("Account updates")}
                         </p>
                         <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
-                          Product activity and important account messages.
+                          {t(
+                            "Product activity and important account messages."
+                          )}
                         </p>
                       </div>
                       <Switch
@@ -2382,10 +2405,10 @@ const SettingsHome = () => {
                     <div className='flex items-center justify-between gap-5 px-5 py-4'>
                       <div>
                         <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
-                          Product news
+                          {t("Product news")}
                         </p>
                         <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
-                          Tips, launches, and occasional offers.
+                          {t("Tips, launches, and occasional offers.")}
                         </p>
                       </div>
                       <Switch
