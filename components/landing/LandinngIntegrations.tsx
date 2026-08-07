@@ -1,3 +1,5 @@
+"use client";
+
 import {
   BrevoBrand,
   FacebookBrand,
@@ -6,6 +8,7 @@ import {
   TikTokBrand,
   XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { useLanguage } from "@/context/LanguageContext";
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
   Activity,
@@ -42,15 +45,17 @@ const TEAM_MEMBERS = [
 ];
 
 const LandinngIntegrations = () => {
+  const { t } = useLanguage();
   return (
     <section className='mr-auto ml-auto max-w-6xl px-2 pt-20 md:px-6 md:pt-5'>
       {/* Heading */}
       <h1 className='text-foreground mt-6 text-center text-4xl font-semibold tracking-tight md:text-6xl dark:text-white'>
-        Scaling just got easier
+        {t("Scaling just got easier")}
       </h1>
       <p className='text-muted-foreground mx-auto mt-5 max-w-2xl text-center text-base font-normal md:text-lg dark:text-white/70'>
-        From content creation and scheduling to ads and analytics, Genit
-        streamlines your entire workflow.
+        {t(
+          "From content creation and scheduling to ads and analytics, Genit streamlines your entire workflow."
+        )}
       </p>
 
       {/* Call to Action */}
@@ -59,7 +64,7 @@ const LandinngIntegrations = () => {
           href='/signup'
           className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
-          <span>Connect your stack</span>
+          <span>{t("Connect your stack")}</span>
           <ArrowRight className='h-4 w-4' />
         </Link>
       </div>
@@ -77,7 +82,7 @@ const LandinngIntegrations = () => {
           <div className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='text-foreground mb-3 flex items-center gap-2 text-sm dark:text-white/80'>
               <BarChart3 className='text-foreground h-4 w-4 dark:text-white' />
-              <span className='font-medium'>Campaign Monitor</span>
+              <span className='font-medium'>{t("Campaign Monitor")}</span>
             </div>
 
             <div className='space-y-3'>
@@ -90,10 +95,10 @@ const LandinngIntegrations = () => {
                   <div className='flex-1'>
                     <div className='flex items-center justify-between'>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        Meta Ads
+                        {t("Meta Ads")}
                       </p>
                       <p className='text-muted-foreground text-xs dark:text-white/60'>
-                        24.5k Clicks
+                        {t("24.5k Clicks")}
                       </p>
                     </div>
                     <div className='mt-2 h-2 w-full overflow-hidden rounded-full bg-black/5 dark:bg-white/10'>
@@ -102,7 +107,7 @@ const LandinngIntegrations = () => {
                   </div>
                 </div>
                 <p className='text-muted-foreground mt-2 text-[11px] dark:text-white/50'>
-                  Summer Promo Campaign
+                  {t("Summer Promo Campaign")}
                 </p>
               </div>
 
@@ -115,10 +120,10 @@ const LandinngIntegrations = () => {
                   <div className='flex-1'>
                     <div className='flex items-center justify-between'>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        TikTok Ads
+                        {t("TikTok Ads")}
                       </p>
                       <p className='text-muted-foreground text-xs dark:text-white/60'>
-                        12.8k Clicks
+                        {t("12.8k Clicks")}
                       </p>
                     </div>
                     <div className='mt-2 h-2 w-full overflow-hidden rounded-full bg-black/5 dark:bg-white/10'>
@@ -127,7 +132,7 @@ const LandinngIntegrations = () => {
                   </div>
                 </div>
                 <p className='text-muted-foreground mt-2 text-[11px] dark:text-white/50'>
-                  Product Launch Video
+                  {t("Product Launch Video")}
                 </p>
               </div>
             </div>
@@ -135,21 +140,22 @@ const LandinngIntegrations = () => {
             <div className='mt-4 flex items-center justify-between'>
               <button className='inline-flex items-center gap-2 rounded-full bg-black px-3 py-1.5 text-xs text-white ring-1 ring-black/10 transition hover:bg-black/80 dark:bg-white dark:text-black dark:ring-white/10 dark:hover:bg-white/90'>
                 <Target className='h-4 w-4' />
-                Optimize Ads
+                {t("Optimize Ads")}
               </button>
               <div className='text-muted-foreground flex items-center gap-2 text-[11px] dark:text-white/50'>
                 <Activity className='h-3.5 w-3.5 text-emerald-500 dark:text-emerald-300' />
-                Live
+                {t("Live")}
               </div>
             </div>
           </div>
 
           <h3 className='text-foreground mt-5 text-xl font-semibold tracking-tight md:text-2xl dark:text-white'>
-            Track Campaign Performance
+            {t("Track Campaign Performance")}
           </h3>
           <p className='text-muted-foreground mt-1.5 text-sm dark:text-white/70'>
-            Monitor your ad spend, clicks, and conversions across Meta, Google,
-            and TikTok in real-time.
+            {t(
+              "Monitor your ad spend, clicks, and conversions across Meta, Google, and TikTok in real-time."
+            )}
           </p>
         </section>
 
@@ -165,11 +171,13 @@ const LandinngIntegrations = () => {
             <div className='flex items-center justify-between'>
               <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
                 <Globe2 className='h-4 w-4 text-indigo-500 dark:text-indigo-300' />
-                <span className='font-medium'>Cross-Platform Publishing</span>
+                <span className='font-medium'>
+                  {t("Cross-Platform Publishing")}
+                </span>
               </div>
               <div className='flex items-center gap-2'>
                 <span className='text-muted-foreground text-[11px] dark:text-white/60'>
-                  Auto-sync
+                  {t("Auto-sync")}
                 </span>
                 <Repeat className='text-muted-foreground h-4 w-4 dark:text-white/40' />
               </div>
@@ -199,10 +207,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        Instagram Story
+                        {t("Instagram Story")}
                       </p>
                       <p className='text-[11px] text-emerald-600 dark:text-emerald-400'>
-                        Published • 2m ago
+                        {t("Published • 2m ago")}
                       </p>
                     </div>
                   </div>
@@ -215,10 +223,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        LinkedIn Post
+                        {t("LinkedIn Post")}
                       </p>
                       <p className='text-[11px] text-sky-600 dark:text-sky-400'>
-                        Scheduled • Tomorrow
+                        {t("Scheduled • Tomorrow")}
                       </p>
                     </div>
                   </div>
@@ -231,10 +239,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        X (Twitter) Thread
+                        {t("X (Twitter) Thread")}
                       </p>
                       <p className='text-[11px] text-amber-600 dark:text-amber-400'>
-                        Draft • Pending review
+                        {t("Draft • Pending review")}
                       </p>
                     </div>
                   </div>
@@ -249,10 +257,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        Facebook Page
+                        {t("Facebook Page")}
                       </p>
                       <p className='text-[11px] text-emerald-600 dark:text-emerald-400'>
-                        Published • 1h ago
+                        {t("Published • 1h ago")}
                       </p>
                     </div>
                   </div>
@@ -265,10 +273,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        TikTok Video
+                        {t("TikTok Video")}
                       </p>
                       <p className='text-[11px] text-sky-600 dark:text-sky-400'>
-                        Scheduled • Wed, 3 PM
+                        {t("Scheduled • Wed, 3 PM")}
                       </p>
                     </div>
                   </div>
@@ -281,10 +289,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        Email Newsletter
+                        {t("Email Newsletter")}
                       </p>
                       <p className='text-[11px] text-amber-600 dark:text-amber-400'>
-                        Draft • Editing
+                        {t("Draft • Editing")}
                       </p>
                     </div>
                   </div>
@@ -299,10 +307,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        Instagram Story
+                        {t("Instagram Story")}
                       </p>
                       <p className='text-[11px] text-emerald-600 dark:text-emerald-400'>
-                        Published • 2m ago
+                        {t("Published • 2m ago")}
                       </p>
                     </div>
                   </div>
@@ -315,10 +323,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        LinkedIn Post
+                        {t("LinkedIn Post")}
                       </p>
                       <p className='text-[11px] text-sky-600 dark:text-sky-400'>
-                        Scheduled • Tomorrow
+                        {t("Scheduled • Tomorrow")}
                       </p>
                     </div>
                   </div>
@@ -331,10 +339,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        X (Twitter) Thread
+                        {t("X (Twitter) Thread")}
                       </p>
                       <p className='text-[11px] text-amber-600 dark:text-amber-400'>
-                        Draft • Pending review
+                        {t("Draft • Pending review")}
                       </p>
                     </div>
                   </div>
@@ -347,10 +355,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        Facebook Page
+                        {t("Facebook Page")}
                       </p>
                       <p className='text-[11px] text-emerald-600 dark:text-emerald-400'>
-                        Published • 1h ago
+                        {t("Published • 1h ago")}
                       </p>
                     </div>
                   </div>
@@ -363,10 +371,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        TikTok Video
+                        {t("TikTok Video")}
                       </p>
                       <p className='text-[11px] text-sky-600 dark:text-sky-400'>
-                        Scheduled • Wed, 3 PM
+                        {t("Scheduled • Wed, 3 PM")}
                       </p>
                     </div>
                   </div>
@@ -379,10 +387,10 @@ const LandinngIntegrations = () => {
                     </div>
                     <div>
                       <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                        Email Newsletter
+                        {t("Email Newsletter")}
                       </p>
                       <p className='text-[11px] text-amber-600 dark:text-amber-400'>
-                        Draft • Editing
+                        {t("Draft • Editing")}
                       </p>
                     </div>
                   </div>
@@ -393,16 +401,17 @@ const LandinngIntegrations = () => {
 
             <div className='text-muted-foreground relative z-10 mt-4 flex items-center gap-2 pt-1 text-[11px] dark:text-white/60'>
               <Layers className='h-3.5 w-3.5' />
-              Format once, publish everywhere
+              {t("Format once, publish everywhere")}
             </div>
           </div>
 
           <h3 className='text-foreground mt-5 text-xl font-semibold tracking-tight md:text-2xl dark:text-white'>
-            Publish Anywhere
+            {t("Publish Anywhere")}
           </h3>
           <p className='text-muted-foreground mt-1.5 text-sm dark:text-white/70'>
-            Generate tailored content for each platform and schedule it to
-            publish directly to your social accounts.
+            {t(
+              "Generate tailored content for each platform and schedule it to publish directly to your social accounts."
+            )}
           </p>
         </section>
 
@@ -416,32 +425,34 @@ const LandinngIntegrations = () => {
           <div className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
               <Boxes className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
-              <span className='font-medium'>Connects with your stack</span>
+              <span className='font-medium'>
+                {t("Connects with your stack")}
+              </span>
             </div>
 
             <div className='mt-3 grid grid-cols-4 gap-3'>
               <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
                 <Database className='text-foreground h-5 w-5 dark:text-white/80' />
                 <span className='text-muted-foreground text-xs dark:text-white/70'>
-                  Products
+                  {t("Products")}
                 </span>
               </div>
               <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
                 <ImageIcon className='text-foreground h-5 w-5 dark:text-white/80' />
                 <span className='text-muted-foreground text-xs dark:text-white/70'>
-                  Assets
+                  {t("Assets")}
                 </span>
               </div>
               <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
                 <Mail className='text-foreground h-5 w-5 dark:text-white/80' />
                 <span className='text-muted-foreground text-xs dark:text-white/70'>
-                  Email
+                  {t("Email")}
                 </span>
               </div>
               <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
                 <Megaphone className='text-foreground h-5 w-5 dark:text-white/80' />
                 <span className='text-muted-foreground text-xs dark:text-white/70'>
-                  Ads
+                  {t("Ads")}
                 </span>
               </div>
             </div>
@@ -490,18 +501,19 @@ const LandinngIntegrations = () => {
                   />
                 </div>
                 <span className='text-muted-foreground ml-2 text-[11px] dark:text-white/60'>
-                  Synced across tools
+                  {t("Synced across tools")}
                 </span>
               </div>
             </div>
           </div>
 
           <h3 className='text-foreground mt-5 text-xl font-semibold tracking-tight md:text-2xl dark:text-white'>
-            Connect Your Stack
+            {t("Connect Your Stack")}
           </h3>
           <p className='text-muted-foreground mt-1.5 text-sm dark:text-white/70'>
-            Integrate with the tools you already use. Pull products from
-            Shopify, sync with Google Drive, and publish directly.
+            {t(
+              "Integrate with the tools you already use. Pull products from Shopify, sync with Google Drive, and publish directly."
+            )}
           </p>
         </section>
 
@@ -516,23 +528,23 @@ const LandinngIntegrations = () => {
             <div className='flex items-center justify-between'>
               <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
                 <Calendar className='h-4 w-4 text-fuchsia-500 dark:text-fuchsia-300' />
-                <span className='font-medium'>Content Calendar</span>
+                <span className='font-medium'>{t("Content Calendar")}</span>
               </div>
               <button className='text-foreground inline-flex items-center gap-1 rounded-full bg-black/5 px-2 py-1 text-[11px] ring-1 ring-black/5 transition hover:bg-black/10 dark:bg-white/5 dark:text-white/80 dark:ring-white/10 dark:hover:bg-white/10'>
                 <Calendar className='h-3.5 w-3.5' />
-                View All
+                {t("View All")}
               </button>
             </div>
 
             <div className='mt-3 flex items-center gap-2 text-xs'>
               <button className='text-foreground rounded-full bg-black/5 px-2 py-1 ring-1 ring-black/5 dark:bg-white/10 dark:text-white/90 dark:ring-white/10'>
-                Today
+                {t("Today")}
               </button>
               <button className='text-muted-foreground rounded-full bg-transparent px-2 py-1 ring-1 ring-black/5 dark:text-white/60 dark:ring-white/10'>
-                Tomorrow
+                {t("Tomorrow")}
               </button>
               <button className='text-muted-foreground rounded-full bg-transparent px-2 py-1 ring-1 ring-black/5 dark:text-white/60 dark:ring-white/10'>
-                Next Week
+                {t("Next Week")}
               </button>
             </div>
 
@@ -540,13 +552,13 @@ const LandinngIntegrations = () => {
               {/* Calendar Grid */}
               <div className='rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
                 <div className='text-muted-foreground mb-2 grid grid-cols-7 gap-1 text-center text-[10px] font-medium dark:text-white/50'>
-                  <div>Mo</div>
-                  <div>Tu</div>
-                  <div>We</div>
-                  <div>Th</div>
-                  <div>Fr</div>
-                  <div>Sa</div>
-                  <div>Su</div>
+                  <div>{t("Mo")}</div>
+                  <div>{t("Tu")}</div>
+                  <div>{t("We")}</div>
+                  <div>{t("Th")}</div>
+                  <div>{t("Fr")}</div>
+                  <div>{t("Sa")}</div>
+                  <div>{t("Su")}</div>
                 </div>
                 <div className='text-foreground grid grid-cols-7 gap-1 text-center text-xs dark:text-white/80'>
                   <div className='p-1 opacity-20'>28</div>
@@ -609,27 +621,28 @@ const LandinngIntegrations = () => {
                   </div>
                   <div>
                     <p className='text-foreground text-sm dark:text-white/90'>
-                      Summer Promo Video
+                      {t("Summer Promo Video")}
                     </p>
                     <p className='text-muted-foreground text-[11px] dark:text-white/50'>
-                      TikTok • 10:00 AM
+                      {t("TikTok • 10:00 AM")}
                     </p>
                   </div>
                 </div>
                 <div className='flex items-center gap-2 text-[11px] text-sky-600 dark:text-sky-400'>
                   <Clock className='h-3.5 w-3.5' />
-                  Scheduled
+                  {t("Scheduled")}
                 </div>
               </div>
             </div>
           </div>
 
           <h3 className='text-foreground mt-5 text-xl font-semibold tracking-tight md:text-2xl dark:text-white'>
-            Automated Workflows
+            {t("Automated Workflows")}
           </h3>
           <p className='text-muted-foreground mt-1.5 text-sm dark:text-white/70'>
-            Schedule weeks of content in advance. Our agents handle the
-            publishing, ad management, and email sending automatically.
+            {t(
+              "Schedule weeks of content in advance. Our agents handle the publishing, ad management, and email sending automatically."
+            )}
           </p>
         </section>
 
@@ -644,11 +657,12 @@ const LandinngIntegrations = () => {
             {/* Left: Text */}
             <div className='relative z-10 flex flex-col text-left md:px-4'>
               <h3 className='text-foreground text-2xl leading-tight font-semibold tracking-tight md:text-4xl dark:text-white'>
-                Import your team
+                {t("Import your team")}
               </h3>
               <p className='text-muted-foreground mt-4 max-w-xl text-sm font-normal md:text-base dark:text-white/70'>
-                Bring your entire team together. Review drafts, leave comments,
-                and approve campaigns in real-time.
+                {t(
+                  "Bring your entire team together. Review drafts, leave comments, and approve campaigns in real-time."
+                )}
               </p>
             </div>
 
@@ -678,7 +692,7 @@ const LandinngIntegrations = () => {
                     </div>
                     <button className='flex items-center gap-1.5 rounded-full bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition hover:bg-indigo-700'>
                       <UserPlus className='h-3.5 w-3.5' />
-                      Invite
+                      {t("Invite")}
                     </button>
                   </div>
                 </div>
@@ -698,7 +712,7 @@ const LandinngIntegrations = () => {
                   <div className='absolute top-[25%] left-[15%] animate-[bounce_4s_infinite]'>
                     <MousePointer2 className='h-5 w-5 rotate-[-15deg] fill-emerald-500 text-emerald-500' />
                     <div className='mt-1 ml-4 rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-medium text-white shadow-sm'>
-                      Sarah J.
+                      {t("Sarah J.")}
                     </div>
                   </div>
 
@@ -712,21 +726,22 @@ const LandinngIntegrations = () => {
                         <div className='relative z-20 flex w-52 flex-col gap-2 rounded-xl rounded-tl-none bg-white p-3 shadow-xl ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10'>
                           <div className='flex items-center justify-between'>
                             <span className='text-foreground text-[11px] font-semibold dark:text-white'>
-                              Alex M.
+                              {t("Alex M.")}
                             </span>
                             <span className='text-muted-foreground text-[9px] dark:text-white/50'>
-                              Just now
+                              {t("Just now")}
                             </span>
                           </div>
                           <p className='text-muted-foreground text-[11px] dark:text-white/70'>
-                            Let's change this copy to be more punchy.
+                            {t("Let's change this copy to be more punchy.")}
                           </p>
                           <div className='mt-1 flex items-center gap-2'>
                             <button className='flex h-6 items-center justify-center rounded bg-emerald-500/10 px-2 text-[10px] font-medium text-emerald-600 transition hover:bg-emerald-500/20 dark:text-emerald-400'>
-                              <CheckCircle2 className='mr-1 h-3 w-3' /> Resolve
+                              <CheckCircle2 className='mr-1 h-3 w-3' />{" "}
+                              {t("Resolve")}
                             </button>
                             <button className='text-muted-foreground flex h-6 items-center justify-center rounded bg-black/5 px-2 text-[10px] transition hover:bg-black/10 dark:bg-white/10 dark:text-white/70 dark:hover:bg-white/20'>
-                              Reply
+                              {t("Reply")}
                             </button>
                           </div>
                         </div>

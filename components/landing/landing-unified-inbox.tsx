@@ -10,6 +10,7 @@ import {
   WhatsAppBrand,
   XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { useLanguage } from "@/context/LanguageContext";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { ArrowRight } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -29,6 +30,7 @@ const messagingPlatforms = [
 ];
 
 const LandingUnifiedInbox = () => {
+  const { t } = useLanguage();
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const isDarkMode = resolvedTheme === "dark";
@@ -41,10 +43,12 @@ const LandingUnifiedInbox = () => {
     <section className='mt-14 mr-auto ml-auto max-w-6xl px-2 pt-20 md:px-6 md:pt-5'>
       {/* Heading */}
       <h1 className='text-foreground mt-6 text-center text-4xl font-semibold tracking-tight md:text-6xl dark:text-white'>
-        Unified Inbox
+        {t("Unified Inbox")}
       </h1>
       <p className='text-muted-foreground mx-auto mt-5 max-w-2xl text-center text-base font-normal md:text-lg dark:text-white/70'>
-        Bring all your DMs together, reply to all and never miss a conversation
+        {t(
+          "Bring all your DMs together, reply to all and never miss a conversation"
+        )}
       </p>
 
       <div className='mt-8 mb-12 flex justify-center'>
@@ -52,13 +56,13 @@ const LandingUnifiedInbox = () => {
           href='/signup'
           className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
-          <span>Get your unified inbox</span>
+          <span>{t("Get your unified inbox")}</span>
           <ArrowRight className='h-4 w-4' />
         </Link>
       </div>
       <div
         className='mt-7 flex items-center justify-center -space-x-2.5'
-        aria-label='Supported messaging platforms'
+        aria-label={t("Supported messaging platforms")}
       >
         {messagingPlatforms.map(({ name, Icon }) => (
           <span
@@ -82,7 +86,9 @@ const LandingUnifiedInbox = () => {
             <Image
               key='unified-inbox-dark'
               src='/dm2.png'
-              alt='Unified social media DM dashboard for managing brand conversations in dark mode'
+              alt={t(
+                "Unified social media DM dashboard for managing brand conversations in dark mode"
+              )}
               width={1555}
               height={1012}
               sizes='(min-width: 1024px) 960px, calc(100vw - 32px)'
@@ -93,7 +99,9 @@ const LandingUnifiedInbox = () => {
             <Image
               key='unified-inbox-light'
               src='/dm1.png'
-              alt='Unified social media DM dashboard for managing brand conversations'
+              alt={t(
+                "Unified social media DM dashboard for managing brand conversations"
+              )}
               width={1554}
               height={1012}
               sizes='(min-width: 1024px) 960px, calc(100vw - 32px)'

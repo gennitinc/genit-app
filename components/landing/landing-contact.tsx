@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import emailjs from "@emailjs/browser";
@@ -49,25 +50,31 @@ import * as z from "zod";
 import React, { useState } from "react";
 
 // Define the schema for form validation
-const formSchema = z.object({
-  fullName: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters" }),
-  phone: z.string().min(6, { message: "Please enter a valid phone number" }),
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  country: z.string().min(1, { message: "Please select your country" }),
-  message: z.string().optional(),
-  referral: z.string().optional(),
-  attachment: z.any().optional(),
-});
+const createFormSchema = (t: (text: string) => string) =>
+  z.object({
+    fullName: z
+      .string()
+      .min(2, { message: t("Name must be at least 2 characters") }),
+    phone: z
+      .string()
+      .min(6, { message: t("Please enter a valid phone number") }),
+    email: z
+      .string()
+      .email({ message: t("Please enter a valid email address") }),
+    country: z.string().min(1, { message: t("Please select your country") }),
+    message: z.string().optional(),
+    referral: z.string().optional(),
+    attachment: z.any().optional(),
+  });
 
 // Define the type for the form data
-type ContactFormData = z.infer<typeof formSchema>;
+type ContactFormData = z.infer<ReturnType<typeof createFormSchema>>;
 
 export default function LandingContact() {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const form = useForm<ContactFormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createFormSchema(t)),
     defaultValues: {
       fullName: "",
       phone: "",
@@ -136,13 +143,13 @@ export default function LandingContact() {
       });
 
       if (response.status === 200) {
-        toast.success("Form submitted successfully");
+        toast.success(t("Form submitted successfully"));
         form.reset();
       }
       setLoading(false);
     } catch (error) {
       console.error("❌ Email failed:", error);
-      toast.error("Failed to send message. Please try again later.");
+      toast.error(t("Failed to send message. Please try again later."));
       setLoading(false);
     }
   };
@@ -157,17 +164,16 @@ export default function LandingContact() {
           <div className='w-full pb-10 md:space-y-10 md:pb-0'>
             <div className='space-y-6 md:max-w-[40rem]'>
               <h1 className='text-4xl font-extrabold md:text-xl lg:text-5xl'>
-                Ready. Set.{" "}
+                {t("Ready. Set.")}{" "}
                 <span className='from-primary via-accent to-primary animate-gradient-x bg-gradient-to-r bg-clip-text text-transparent'>
-                  Design
+                  {t("Design")}
                 </span>
               </h1>
 
               <div className='text-muted-foreground max-w-2xl text-sm lg:leading-relaxed'>
-                genit is your AI-powered media designer. Create stunning flyers,
-                logos, posters, and social media graphics in seconds — no design
-                skills required. Just describe what you want and let AI do the
-                work.
+                {t(
+                  "genit is your AI-powered media designer. Create stunning flyers, logos, posters, and social media graphics in seconds — no design skills required. Just describe what you want and let AI do the work."
+                )}
               </div>
             </div>
 
@@ -190,12 +196,12 @@ export default function LandingContact() {
                           </div>
                         ))}
                         <div className='border-background text-primary-foreground flex size-10 items-center justify-center rounded-full border-2 bg-indigo-600 text-[10px] font-bold hover:bg-indigo-700'>
-                          50k+
+                          {t("50k+")}
                         </div>
                       </div>
                       <div className='text-sm font-medium'>
                         <span className='text-primary font-bold'>5000+</span>{" "}
-                        creators trust us
+                        {t("creators trust us")}
                       </div>
                     </div>
                     <div className='flex flex-col space-y-2'>
@@ -207,16 +213,18 @@ export default function LandingContact() {
                           />
                         ))}
                         <span className='text-foreground/80 ml-2 text-sm font-semibold italic'>
-                          "Absolutely life-changing for my small business"
+                          {t(
+                            '"Absolutely life-changing for my small business"'
+                          )}
                         </span>
                       </div>
                       <p className='text-muted-foreground text-xs'>
-                        Average 4.9/5 rating across all platforms
+                        {t("Average 4.9/5 rating across all platforms")}
                       </p>
                     </div>
                     <div className='space-y-6'>
                       <p className='from-foreground to-foreground/60 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent'>
-                        Why creators choose genit
+                        {t("Why creators choose genit")}
                       </p>
 
                       <div className='grid gap-6'>
@@ -234,7 +242,7 @@ export default function LandingContact() {
                               <Check className='text-primary size-4' />
                             </div>
                             <p className='text-muted-foreground group-hover:text-foreground text-sm font-medium transition-colors'>
-                              {benefit}
+                              {t(benefit)}
                             </p>
                           </div>
                         ))}
@@ -253,9 +261,9 @@ export default function LandingContact() {
             <Card className='bg-background/40 relative flex h-fit w-full max-w-[32rem] min-w-80 flex-col items-center overflow-visible border-white/10 shadow-2xl ring-1 ring-white/10 backdrop-blur-xl dark:bg-neutral-900'>
               <CardContent className='w-full px-4 py-8 lg:px-10'>
                 <div className='mb-8 space-y-2'>
-                  <h3 className='text-2xl font-bold'>Contact Us</h3>
+                  <h3 className='text-2xl font-bold'>{t("Contact Us")}</h3>
                   <p className='text-muted-foreground text-sm'>
-                    We usually respond within a few hours.
+                    {t("We usually respond within a few hours.")}
                   </p>
                 </div>
                 <Form {...form}>
@@ -269,7 +277,7 @@ export default function LandingContact() {
                         name='fullName'
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Full name</FormLabel>
+                            <FormLabel>{t("Full name")}</FormLabel>
                             <FormControl>
                               <Input placeholder='John Doe' {...field} />
                             </FormControl>
@@ -284,7 +292,7 @@ export default function LandingContact() {
                           name='email'
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Email</FormLabel>
+                              <FormLabel>{t("Email")}</FormLabel>
                               <FormControl>
                                 <Input
                                   type='email'
@@ -302,7 +310,7 @@ export default function LandingContact() {
                           name='phone'
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Phone number</FormLabel>
+                              <FormLabel>{t("Phone number")}</FormLabel>
                               <FormControl>
                                 <Input
                                   placeholder='+1 (555) 000-0000'
@@ -321,7 +329,7 @@ export default function LandingContact() {
                           name='country'
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Country</FormLabel>
+                              <FormLabel>{t("Country")}</FormLabel>
                               <Select
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
@@ -333,27 +341,51 @@ export default function LandingContact() {
                                 </FormControl>
                                 <SelectContent>
                                   <SelectItem value='us'>
-                                    United States
+                                    {t("United States")}
                                   </SelectItem>
                                   <SelectItem value='uk'>
-                                    United Kingdom
+                                    {t("United Kingdom")}
                                   </SelectItem>
-                                  <SelectItem value='ca'>Canada</SelectItem>
-                                  <SelectItem value='au'>Australia</SelectItem>
-                                  <SelectItem value='ie'>Ireland</SelectItem>
-                                  <SelectItem value='de'>Germany</SelectItem>
-                                  <SelectItem value='fr'>France</SelectItem>
-                                  <SelectItem value='jp'>Japan</SelectItem>
-                                  <SelectItem value='ng'>Nigeria</SelectItem>
-                                  <SelectItem value='gh'>Ghana</SelectItem>
-                                  <SelectItem value='ke'>Kenya</SelectItem>
+                                  <SelectItem value='ca'>
+                                    {t("Canada")}
+                                  </SelectItem>
+                                  <SelectItem value='au'>
+                                    {t("Australia")}
+                                  </SelectItem>
+                                  <SelectItem value='ie'>
+                                    {t("Ireland")}
+                                  </SelectItem>
+                                  <SelectItem value='de'>
+                                    {t("Germany")}
+                                  </SelectItem>
+                                  <SelectItem value='fr'>
+                                    {t("France")}
+                                  </SelectItem>
+                                  <SelectItem value='jp'>
+                                    {t("Japan")}
+                                  </SelectItem>
+                                  <SelectItem value='ng'>
+                                    {t("Nigeria")}
+                                  </SelectItem>
+                                  <SelectItem value='gh'>
+                                    {t("Ghana")}
+                                  </SelectItem>
+                                  <SelectItem value='ke'>
+                                    {t("Kenya")}
+                                  </SelectItem>
                                   <SelectItem value='za'>
-                                    South Africa
+                                    {t("South Africa")}
                                   </SelectItem>
-                                  <SelectItem value='ug'>Uganda</SelectItem>
-                                  <SelectItem value='rw'>Rwanda</SelectItem>
+                                  <SelectItem value='ug'>
+                                    {t("Uganda")}
+                                  </SelectItem>
+                                  <SelectItem value='rw'>
+                                    {t("Rwanda")}
+                                  </SelectItem>
 
-                                  <SelectItem value='other'>Other</SelectItem>
+                                  <SelectItem value='other'>
+                                    {t("Other")}
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                               <FormMessage />
@@ -366,7 +398,7 @@ export default function LandingContact() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>
-                                How did you hear about us?{" "}
+                                {t("How did you hear about us?")}{" "}
                                 {/* <span className="text-muted-foreground">
                                   (Optional)
                                 </span> */}
@@ -382,21 +414,23 @@ export default function LandingContact() {
                                 </FormControl>
                                 <SelectContent className='w-full'>
                                   <SelectItem value='search'>
-                                    Search Engine
+                                    {t("Search Engine")}
                                   </SelectItem>
                                   <SelectItem value='social'>
-                                    Social Media
+                                    {t("Social Media")}
                                   </SelectItem>
                                   <SelectItem value='friend'>
-                                    Friend/Colleague
+                                    {t("Friend/Colleague")}
                                   </SelectItem>
                                   <SelectItem value='conference'>
-                                    Conference/Event
+                                    {t("Conference/Event")}
                                   </SelectItem>
                                   <SelectItem value='advertisement'>
-                                    Advertisement
+                                    {t("Advertisement")}
                                   </SelectItem>
-                                  <SelectItem value='other'>Other</SelectItem>
+                                  <SelectItem value='other'>
+                                    {t("Other")}
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                               <FormMessage />
@@ -411,9 +445,9 @@ export default function LandingContact() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>
-                              What are you looking to achieve?{" "}
+                              {t("What are you looking to achieve?")}{" "}
                               <span className='text-muted-foreground'>
-                                (Optional)
+                                {t("(Optional)")}
                               </span>
                             </FormLabel>
                             <FormControl>
@@ -434,7 +468,7 @@ export default function LandingContact() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className='text-muted-foreground/80 text-xs font-bold tracking-wider uppercase'>
-                              Attachment (Optional)
+                              {t("Attachment (Optional)")}
                             </FormLabel>
                             <FormControl>
                               <div className='flex flex-col gap-2'>
@@ -479,7 +513,7 @@ export default function LandingContact() {
                                             (selectedFile as File).size /
                                             (1024 * 1024)
                                           ).toFixed(2)}{" "}
-                                          MB
+                                          {t("MB")}
                                         </span>
                                       </div>
                                     ) : (
@@ -488,7 +522,7 @@ export default function LandingContact() {
                                           <Paperclip className='text-muted-foreground group-hover/upload:text-primary size-8 transition-colors' />
                                         </div>
                                         <span className='text-foreground/70 group-hover/upload:text-primary text-sm font-medium'>
-                                          Click to attach a file
+                                          {t("Click to attach a file")}
                                         </span>
                                       </div>
                                     )}
@@ -514,11 +548,11 @@ export default function LandingContact() {
                                 </div>
                                 <div className='flex items-center justify-between px-1'>
                                   <span className='text-muted-foreground/60 text-[10px] font-medium'>
-                                    PDF, DOCX, PNG, JPG (Max 5MB)
+                                    {t("PDF, DOCX, PNG, JPG (Max 5MB)")}
                                   </span>
                                   {selectedFile && (
                                     <span className='text-primary animate-pulse text-[10px] font-bold'>
-                                      File Ready
+                                      {t("File Ready")}
                                     </span>
                                   )}
                                 </div>
@@ -539,33 +573,33 @@ export default function LandingContact() {
                         {loading ? (
                           <div className='flex items-center justify-center text-sm'>
                             <div className='mr-3 size-5 animate-spin rounded-full border-2 border-white/20 border-t-white' />
-                            Sending Inquiry...
+                            {t("Sending Inquiry...")}
                           </div>
                         ) : (
                           <div className='flex flex-row items-center gap-2 text-sm'>
                             {" "}
-                            Send Message
+                            {t("Send Message")}
                             <ArrowRight className='size-5 transition-all group-hover:translate-x-2' />
                           </div>
                         )}
                       </Button>
 
                       <div className='text-muted-foreground text-center text-xs'>
-                        By continuing, you agree to our{" "}
+                        {t("By continuing, you agree to our")}{" "}
                         <Link
                           href='/legal/terms-of-service'
                           target='_blank'
                           className='text-primary hover:underline'
                         >
-                          Terms
+                          {t("Terms")}
                         </Link>{" "}
-                        and{" "}
+                        {t("and")}{" "}
                         <Link
                           href='/legal/privacy-policy'
                           target='_blank'
                           className='text-primary hover:underline'
                         >
-                          Privacy Policy
+                          {t("Privacy Policy")}
                         </Link>
                         .
                       </div>

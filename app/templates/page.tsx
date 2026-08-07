@@ -5,11 +5,13 @@ import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLanguage } from "@/context/LanguageContext";
 import { Image as ImageIcon, Video } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function TemplatesPage() {
+  const { t } = useLanguage();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"video" | "image">("video");
 
@@ -42,13 +44,13 @@ export default function TemplatesPage() {
           <div className='mx-auto mt-20 w-full px-4 py-8 sm:px-6'>
             <div className='ml-2 flex flex-col space-y-4 md:mx-4 lg:mx-8'>
               <h1 className='max-w-xl text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl'>
-                Browse templates,{" "}
+                {t("Browse templates,")}{" "}
                 <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
-                  start creating
+                  {t("start creating")}
                 </span>
               </h1>
               <p className='text-normal text-muted-foreground max-w-2xl text-sm leading-relaxed'>
-                Choose from professionally crafted templates.
+                {t("Choose from professionally crafted templates.")}
               </p>
             </div>
           </div>
@@ -62,10 +64,10 @@ export default function TemplatesPage() {
           >
             <TabsList className='mt-2 mb-6 ml-4 grid w-fit max-w-md grid-cols-2'>
               <TabsTrigger value='video' className='flex items-center gap-2'>
-                Videos
+                {t("Videos")}
               </TabsTrigger>
               <TabsTrigger value='image' className='flex items-center gap-2'>
-                Images
+                {t("Images")}
               </TabsTrigger>
             </TabsList>
 

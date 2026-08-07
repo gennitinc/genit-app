@@ -1,3 +1,6 @@
+"use client";
+
+import { useLanguage } from "@/context/LanguageContext";
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
   ArrowRight,
@@ -15,16 +18,18 @@ import Link from "next/link";
 import React from "react";
 
 export const LandingBrandDNA = () => {
+  const { t } = useLanguage();
   return (
     <section className='relative mr-auto ml-auto max-w-6xl px-2 py-16 pb-20 md:px-6 md:pt-10'>
       {/* Header */}
       <div className='relative z-10 mb-6 flex flex-col items-center'>
         <h2 className='text-foreground mt-6 text-center text-4xl font-semibold tracking-tight md:text-6xl dark:text-white'>
-          One URL - Full Brand DNA.
+          {t("One URL - Full Brand DNA.")}
         </h2>
         <p className='text-muted-foreground mx-auto mt-5 max-w-2xl text-center text-base font-normal md:text-lg dark:text-white/60'>
-          Just paste your website and our AI instantly extracts your visual
-          identity, tone of voice, and core assets in seconds.
+          {t(
+            "Just paste your website and our AI instantly extracts your visual identity, tone of voice, and core assets in seconds."
+          )}
         </p>
       </div>
 
@@ -33,7 +38,7 @@ export const LandingBrandDNA = () => {
           href='/signup'
           className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
-          <span>Scan your brand now</span>
+          <span>{t("Scan your brand now")}</span>
           <ArrowRight className='h-4 w-4' />
         </Link>
       </div>
@@ -56,12 +61,12 @@ export const LandingBrandDNA = () => {
             <Globe className='text-muted-foreground h-4 w-4 shrink-0 dark:text-white/40' />
 
             <span className='text-foreground min-w-0 flex-1 truncate font-mono text-xs tracking-tight sm:text-sm dark:text-white/80'>
-              https://your-brand.com
+              {t("https://your-brand.com")}
             </span>
 
             <div className='flex shrink-0 items-center rounded-full bg-gray-800 px-2 py-1 text-[10px] text-gray-200 ring-1 ring-gray-400'>
               <Search className='h-3 w-3 animate-pulse' />
-              <span className='ml-1.5 hidden sm:inline'>Scanning</span>
+              <span className='ml-1.5 hidden sm:inline'>{t("Scanning")}</span>
             </div>
           </div>
         </div>
@@ -76,28 +81,28 @@ export const LandingBrandDNA = () => {
               </div>
               <h3 className='text-foreground mb-4 flex items-center gap-2 text-lg font-medium dark:text-white/90'>
                 <Palette className='h-4 w-4 text-orange-600 dark:text-orange-400' />
-                Visual Identity
+                {t("Visual Identity")}
               </h3>
 
               <div className='space-y-5'>
                 <div>
                   <p className='text-muted-foreground mb-2 text-xs font-semibold tracking-wider uppercase dark:text-white/50'>
-                    Exact Hex Codes
+                    {t("Exact Hex Codes")}
                   </p>
                   <div className='flex gap-2'>
                     <div className='group relative flex h-12 w-12 items-center justify-center rounded-full bg-[#FF4500] shadow-sm ring-2 ring-white transition-transform hover:scale-110 dark:ring-white/10'>
                       <span className='text-muted-foreground absolute -bottom-6 text-[9px] opacity-0 transition-opacity group-hover:opacity-100 dark:text-white/60'>
-                        #FF4500
+                        {t("#FF4500")}
                       </span>
                     </div>
                     <div className='group relative flex h-12 w-12 items-center justify-center rounded-full bg-[#1A1A1A] shadow-sm ring-2 ring-white transition-transform hover:scale-110 dark:ring-white/10'>
                       <span className='text-muted-foreground absolute -bottom-6 text-[9px] opacity-0 transition-opacity group-hover:opacity-100 dark:text-white/60'>
-                        #1A1A1A
+                        {t("#1A1A1A")}
                       </span>
                     </div>
                     <div className='group relative flex h-12 w-12 items-center justify-center rounded-full bg-[#F5F5F5] shadow-sm ring-2 ring-black/10 transition-transform hover:scale-110 dark:ring-white/10'>
                       <span className='text-muted-foreground absolute -bottom-6 text-[9px] opacity-0 transition-opacity group-hover:opacity-100 dark:text-white/60'>
-                        #F5F5F5
+                        {t("#F5F5F5")}
                       </span>
                     </div>
                   </div>
@@ -106,24 +111,24 @@ export const LandingBrandDNA = () => {
                 <div className='grid grid-cols-2 gap-4'>
                   <div>
                     <p className='text-muted-foreground mb-2 text-xs font-semibold tracking-wider uppercase dark:text-white/50'>
-                      Typography
+                      {t("Typography")}
                     </p>
                     <div className='flex flex-col'>
                       <span className='text-foreground font-serif text-2xl leading-none dark:text-white'>
-                        Inter
+                        {t("Inter")}
                       </span>
                       <span className='text-muted-foreground text-[10px] dark:text-white/40'>
-                        Primary Font
+                        {t("Primary Font")}
                       </span>
                     </div>
                   </div>
                   <div>
                     <p className='text-muted-foreground mb-2 text-xs font-semibold tracking-wider uppercase dark:text-white/50'>
-                      Logo Vector
+                      {t("Logo Vector")}
                     </p>
                     <div className='flex h-8 items-center'>
                       <span className='text-foreground text-xl font-black tracking-tighter dark:text-white'>
-                        BRAND.
+                        {t("BRAND.")}
                       </span>
                     </div>
                   </div>
@@ -136,10 +141,10 @@ export const LandingBrandDNA = () => {
                 <ImageIcon className='text-muted-foreground h-8 w-8 dark:text-white/40' />
                 <div>
                   <p className='text-foreground text-sm font-medium dark:text-white/90'>
-                    Asset Auto-Sync
+                    {t("Asset Auto-Sync")}
                   </p>
                   <p className='text-muted-foreground text-[11px] dark:text-white/50'>
-                    124 images extracted
+                    {t("124 images extracted")}
                   </p>
                 </div>
               </div>
@@ -154,7 +159,7 @@ export const LandingBrandDNA = () => {
               <div className='relative mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-black/5 dark:bg-neutral-900 dark:ring-white/10'>
                 <Image
                   src='/brandlogo1.png'
-                  alt='Brand Logo'
+                  alt={t("Brand Logo")}
                   width={64}
                   height={64}
                   className='h-16 w-16 rounded-lg object-cover'
@@ -163,18 +168,18 @@ export const LandingBrandDNA = () => {
               <div className='flex flex-col items-center gap-1.5'>
                 <div className='flex items-center gap-1.5'>
                   <span className='text-foreground text-xl leading-tight font-semibold antialiased dark:text-white'>
-                    Your Brand
+                    {t("Your Brand")}
                   </span>
                   <Image
                     src='https://ext.same-assets.com/3322540528/871220803.png'
-                    alt='Verified'
+                    alt={t("Verified")}
                     width={18}
                     height={18}
                     className='shrink-0'
                   />
                 </div>
                 <span className='text-muted-foreground text-xs dark:text-white/60'>
-                  Verified Brand Profile
+                  {t("Verified Brand Profile")}
                 </span>
               </div>
             </div>
@@ -187,41 +192,40 @@ export const LandingBrandDNA = () => {
 
               <h3 className='text-foreground mb-4 flex items-center gap-2 text-lg font-medium dark:text-white/90'>
                 <LayoutTemplate className='h-4 w-4 text-amber-700 dark:text-amber-700' />
-                Tone of Voice Profile
+                {t("Tone of Voice Profile")}
               </h3>
 
               <div className='grid flex-1 grid-cols-1 gap-6 md:grid-cols-2'>
                 <div className='space-y-4'>
                   <div>
                     <p className='text-muted-foreground mb-2 text-xs font-semibold tracking-wider uppercase dark:text-white/50'>
-                      Voice Traits
+                      {t("Voice Traits")}
                     </p>
                     <div className='flex flex-wrap gap-2'>
                       <span className='inline-flex rounded-md px-2.5 py-1 text-xs ring-3 ring-amber-200 dark:ring-amber-500/20'>
-                        Authoritative
+                        {t("Authoritative")}
                       </span>
                       <span className='text-foreground inline-flex rounded-md bg-black/5 px-2.5 py-1 text-xs ring-1 ring-black/5 dark:bg-white/5 dark:text-white/70 dark:ring-white/10'>
-                        Witty
+                        {t("Witty")}
                       </span>
                       <span className='text-foreground inline-flex rounded-md bg-black/5 px-2.5 py-1 text-xs ring-1 ring-black/5 dark:bg-white/5 dark:text-white/70 dark:ring-white/10'>
-                        Direct
+                        {t("Direct")}
                       </span>
                       <span className='text-foreground inline-flex rounded-md bg-black/5 px-2.5 py-1 text-xs ring-1 ring-black/5 dark:bg-white/5 dark:text-white/70 dark:ring-white/10'>
-                        Modern
+                        {t("Modern")}
                       </span>
                     </div>
                   </div>
 
                   <div>
                     <p className='text-muted-foreground mb-2 text-xs font-semibold tracking-wider uppercase dark:text-white/50'>
-                      Analysis Source
+                      {t("Analysis Source")}
                     </p>
                     <div className='rounded-lg bg-black/5 p-3 ring-1 ring-black/5 dark:bg-black/40 dark:ring-white/5'>
                       <p className='text-muted-foreground line-clamp-3 text-xs italic dark:text-white/60'>
-                        &quot;We build tools that get out of your way. Our
-                        software empowers creators to focus on the art, while we
-                        handle the boring stuff. Stop manually updating
-                        spreadsheets and start scaling your vision.&quot;
+                        {t(
+                          "&quot;We build tools that get out of your way. Our software empowers creators to focus on the art, while we handle the boring stuff. Stop manually updating spreadsheets and start scaling your vision.&quot;"
+                        )}
                       </p>
                     </div>
                   </div>
@@ -231,10 +235,10 @@ export const LandingBrandDNA = () => {
                   <div className='pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-t from-amber-500/5 to-transparent' />
                   <LayoutTemplate className='mb-3 h-6 w-6 text-amber-700 dark:text-amber-700' />
                   <p className='text-foreground text-sm font-medium dark:text-white'>
-                    Ready for Generation
+                    {t("Ready for Generation")}
                   </p>
                   <p className='text-muted-foreground relative z-10 mt-1 text-xs dark:text-white/50'>
-                    Your entire brand DNA is now saved as an Organization
+                    {t("Your entire brand DNA is now saved as an Organization")}
                   </p>
                   <div className='relative z-10 mt-4 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10'>
                     <div className='h-full w-full bg-gray-800 dark:bg-gray-600' />

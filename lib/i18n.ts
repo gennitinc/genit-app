@@ -102,6 +102,316 @@ const es: Record<string, string> = {
     "Sin tarjeta de crédito · Plan gratuito · Configuración en minutos",
   "Autonomous AI marketing agents that work 24/7, so you don't have to.":
     "Agentes autónomos de marketing con IA que trabajan 24/7 por ti.",
+  "Run targeted ads to Meta, Google, and TikTok via chat":
+    "Publica anuncios segmentados en Meta, Google y TikTok desde el chat",
+  likes: "Me gusta",
+  "Generate brand tailored visuals": "Genera imágenes adaptadas a tu marca",
+  "Chat with AI to create stunning visuals that match your brand. Describe your vision and get professional images instantly.":
+    "Habla con la IA para crear imágenes que reflejen tu marca. Describe tu idea y obtén resultados profesionales al instante.",
+  "Autonomous marketing agents in your chat":
+    "Agentes de marketing autónomos en tu chat",
+  "Unleash your brand's full potential with AI agents without lifting a finger.":
+    "Libera todo el potencial de tu marca con agentes de IA sin esfuerzo.",
+  "Describe your product image...": "Describe la imagen de tu producto...",
+  "Create a product image for wireless headphones":
+    "Crea una imagen de producto para auriculares inalámbricos",
+  "Generate a promotional video for my brand":
+    "Genera un vídeo promocional para mi marca",
+  "Design a social media post with AI":
+    "Diseña una publicación para redes sociales con IA",
+  "Make an animated logo for my startup":
+    "Crea un logotipo animado para mi startup",
+  "Create product images with different backgrounds":
+    "Crea imágenes de producto con distintos fondos",
+  "One URL - Full Brand DNA.": "Una URL. Todo el ADN de tu marca.",
+  "Just paste your website and our AI instantly extracts your visual identity, tone of voice, and core assets in seconds.":
+    "Pega tu sitio web y nuestra IA extraerá en segundos tu identidad visual, tono de voz y recursos principales.",
+  "Scan your brand now": "Analiza tu marca ahora",
+  Scanning: "Analizando",
+  "Visual Identity": "Identidad visual",
+  "Exact Hex Codes": "Códigos hexadecimales exactos",
+  Typography: "Tipografía",
+  "Primary Font": "Fuente principal",
+  "Logo Vector": "Logotipo vectorial",
+  "Asset Auto-Sync": "Sincronización automática de recursos",
+  "124 images extracted": "124 imágenes extraídas",
+  "Your Brand": "Tu marca",
+  "Verified Brand Profile": "Perfil de marca verificado",
+  "Tone of Voice Profile": "Perfil de tono de voz",
+  "Voice Traits": "Rasgos de voz",
+  Authoritative: "Con autoridad",
+  Witty: "Ingenioso",
+  Direct: "Directo",
+  Modern: "Moderno",
+  "Analysis Source": "Fuente del análisis",
+  "Ready for Generation": "Listo para generar",
+  "Your entire brand DNA is now saved as an Organization":
+    "Todo el ADN de tu marca se ha guardado como una organización",
+  "Scaling just got easier": "Escalar ahora es más fácil",
+  "From content creation and scheduling to ads and analytics, Genit streamlines your entire workflow.":
+    "Desde la creación y programación de contenido hasta anuncios y análisis, Genit optimiza todo tu flujo de trabajo.",
+  "Connect your stack": "Conecta tus herramientas",
+  "Track Campaign Performance": "Mide el rendimiento de tus campañas",
+  "Monitor your ad spend, clicks, and conversions across Meta, Google, and TikTok in real-time.":
+    "Supervisa en tiempo real la inversión, los clics y las conversiones en Meta, Google y TikTok.",
+  "Cross-Platform Publishing": "Publicación multiplataforma",
+  "Auto-sync": "Sincronización automática",
+  Published: "Publicado",
+  Scheduled: "Programado",
+  Draft: "Borrador",
+  Tomorrow: "Mañana",
+  "Pending review": "Pendiente de revisión",
+  Editing: "Editando",
+  "Format once, publish everywhere":
+    "Da formato una vez y publica en todas partes",
+  "Publish Anywhere": "Publica donde quieras",
+  "Generate tailored content for each platform and schedule it to publish directly to your social accounts.":
+    "Genera contenido adaptado a cada plataforma y prográmalo directamente en tus redes sociales.",
+  "Connects with your stack": "Se conecta con tus herramientas",
+  Products: "Productos",
+  Assets: "Recursos",
+  Email: "Correo",
+  Ads: "Anuncios",
+  "Synced across tools": "Sincronizado entre herramientas",
+  "Connect Your Stack": "Conecta tus herramientas",
+  "Integrate with the tools you already use. Pull products from Shopify, sync with Google Drive, and publish directly.":
+    "Integra las herramientas que ya utilizas. Importa productos de Shopify, sincroniza Google Drive y publica directamente.",
+  "Content Calendar": "Calendario de contenido",
+  "View All": "Ver todo",
+  Today: "Hoy",
+  "Next Week": "Próxima semana",
+  "Automated Workflows": "Flujos de trabajo automatizados",
+  "Schedule weeks of content in advance. Our agents handle the publishing, ad management, and email sending automatically.":
+    "Programa semanas de contenido. Nuestros agentes publican, gestionan anuncios y envían correos automáticamente.",
+  "Import your team": "Incorpora a tu equipo",
+  "Bring your entire team together. Review drafts, leave comments, and approve campaigns in real-time.":
+    "Reúne a todo tu equipo. Revisa borradores, comenta y aprueba campañas en tiempo real.",
+  Invite: "Invitar",
+  "Just now": "Ahora mismo",
+  "Let's change this copy to be more punchy.":
+    "Hagamos que este texto sea más impactante.",
+  Resolve: "Resolver",
+  Reply: "Responder",
+  "Unified Inbox": "Bandeja de entrada unificada",
+  "Bring all your DMs together, reply to all and never miss a conversation":
+    "Reúne todos tus mensajes, responde desde un solo lugar y no pierdas ninguna conversación",
+  "Get your unified inbox": "Obtén tu bandeja unificada",
+  "Supported messaging platforms": "Plataformas de mensajería compatibles",
+  "Tired of typing? Voice it": "¿Cansado de escribir? Dilo en voz alta",
+  "Skip the keyboard. Speak your ideas naturally and let Genit instantly turn your voice into perfectly formatted prompt.":
+    "Olvida el teclado. Expresa tus ideas y deja que Genit convierta tu voz en un prompt bien estructurado.",
+  "Voice your prompt": "Di tu prompt",
+  "Refer and earn": "Recomienda y gana",
+  "Join the creators program and start earning money by referring others.":
+    "Únete al programa de creadores y gana dinero invitando a otros.",
+  "Get Started": "Comenzar",
+  "Creators Vibe": "Estilo de creadores",
+  "Referral Tracker": "Seguimiento de referidos",
+  Track: "Controla",
+  "referrals,": "tus referidos",
+  effortlessly: "sin esfuerzo",
+  "Visualize your referral performance with detailed analytics and insights":
+    "Visualiza el rendimiento de tus referidos con análisis detallados",
+  "video views": "visualizaciones de vídeo",
+  Testimonials: "Testimonios",
+  "Real teams, real results. See how Genit is transforming modern marketing.":
+    "Equipos reales, resultados reales. Descubre cómo Genit transforma el marketing moderno.",
+  "Start for free today": "Empieza gratis hoy",
+  "Ready to up you brand Marketing?":
+    "¿Listo para mejorar el marketing de tu marca?",
+  "Get started today": "Empieza hoy",
+  "We've helped thousands of": "Hemos ayudado a miles de",
+  "creators and businesses": "creadores y empresas",
+  "generate professional media content with AI, and we can help you too.":
+    "a crear contenido profesional con IA, y también podemos ayudarte.",
+  "Start creating": "Empieza a crear",
+  "Advisory Board Member": "Miembro del consejo asesor",
+  "Ready? Set, Genit.": "¿Listo? Genit.",
+  "Join a community of Creatives who have created":
+    "Únete a una comunidad de creativos que ya han creado",
+  "Light mode": "Modo claro",
+  "Dark mode": "Modo oscuro",
+  "System theme": "Tema del sistema",
+  "We replaced three separate marketing tools with Genit. The unified dashboard alone saved our team 15 hours a week. Campaign launches went from days to minutes.":
+    "Sustituimos tres herramientas de marketing por Genit. El panel unificado ahorra 15 horas semanales al equipo y los lanzamientos ahora tardan minutos.",
+  "The brand DNA extractor is magical. It learned our exact tone of voice and color palette in seconds. Our generated ads perform 3x better than our manual ones.":
+    "El extractor de ADN de marca aprendió nuestro tono y colores en segundos. Los anuncios generados rinden tres veces mejor que los manuales.",
+  "Cross-platform scheduling used to take us days of manual formatting. With Genit, we generate and schedule weeks of content in one click. Absolutely game-changing.":
+    "La programación multiplataforma nos llevaba días. Con Genit generamos y programamos semanas de contenido con un clic.",
+  "Genit's autonomous agents handle everything from ad copy to email sequences. It's like having a full-time marketing team that never sleeps and never makes a mistake.":
+    "Los agentes autónomos de Genit gestionan desde anuncios hasta secuencias de correo. Es como tener un equipo de marketing que nunca duerme.",
+  "Weekly time saved": "Tiempo ahorrado por semana",
+  "Campaign launch": "Lanzamiento de campaña",
+  "Higher ROAS": "Mayor ROAS",
+  "Brand alignment": "Coherencia de marca",
+  "Multi-platform sync": "Sincronización multiplataforma",
+  "Content output": "Producción de contenido",
+  "Autonomous execution": "Ejecución autónoma",
+  "Manual oversight": "Supervisión manual",
+  "genit transformed how we create content. The AI-generated images and videos are incredibly professional, and we've cut our design time by 80%. It's like having a design team at your fingertips.":
+    "Genit transformó nuestra forma de crear contenido. Las imágenes y vídeos con IA son profesionales y redujimos el tiempo de diseño un 80 %.",
+  "Generate a brand-tailored promotional visual for our upcoming product launch.":
+    "Genera una imagen promocional adaptada a nuestra marca para el próximo lanzamiento.",
+  "Here's your promotional visual, perfectly aligned with your brand identity and color palette!":
+    "Aquí tienes la imagen promocional, alineada con la identidad y los colores de tu marca.",
+  "Looks amazing! Resize it for an Instagram story and schedule it to publish tomorrow.":
+    "¡Se ve genial! Adáptala a una historia de Instagram y prográmala para mañana.",
+  "Done! The visual is resized for Instagram Stories and scheduled to post tomorrow at 10:00 AM via your connected account.":
+    "Listo. La imagen está adaptada y programada para mañana a las 10:00 en tu cuenta conectada.",
+  "Awesome. Let's also set up a Facebook ad campaign using this visual with a $50 daily budget.":
+    "Perfecto. Crea también una campaña en Facebook con esta imagen y un presupuesto diario de 50 $.",
+  "Campaign created! Your Facebook ad is now configured with the visual, optimized for maximum conversions, and running at $50/day.":
+    "Campaña creada. El anuncio de Facebook está optimizado para conversiones con 50 $ al día.",
+  "Perfect. Now generate engaging captions for X and LinkedIn.":
+    "Perfecto. Ahora genera textos atractivos para X y LinkedIn.",
+  "Publish both of those posts right now.": "Publica ambas entradas ahora.",
+  "Published! The posts are now live on your connected X and LinkedIn integrations.":
+    "Publicado. Las entradas ya están activas en X y LinkedIn.",
+  "Great! Let's wrap up by sending an announcement email to our subscribers via Brevo.":
+    "Terminemos enviando un correo de anuncio a nuestros suscriptores mediante Brevo.",
+  "I've drafted a stunning newsletter template in Brevo featuring the new visual. The campaign is queued and ready to send to your mailing list!":
+    "He preparado un boletín en Brevo con la nueva imagen. La campaña está lista para enviarse.",
+  "Brand Logo": "Logotipo de la marca",
+  Verified: "Verificado",
+  "Product image": "Imagen de producto",
+  "product image": "imagen de producto",
+  "Instagram Ad": "Anuncio de Instagram",
+  "Tiktok Ad": "Anuncio de TikTok",
+  "Facebook Ad": "Anuncio de Facebook",
+  'Here you go!\n\nX: "We\'re thrilled to announce our latest launch! 🚀 Discover innovation like never before."\n\nLinkedIn: "We are excited to unveil our newest product line, designed to bring unparalleled value to our customers."':
+    "Aquí tienes.\n\nX: «Nos emociona anunciar nuestro último lanzamiento. 🚀 Descubre la innovación como nunca antes».\n\nLinkedIn: «Presentamos nuestra nueva línea de productos, diseñada para aportar un valor excepcional».\n",
+  "Unified social media DM dashboard for managing brand conversations in dark mode":
+    "Panel unificado de mensajes para gestionar conversaciones de marca en modo oscuro",
+  "Unified social media DM dashboard for managing brand conversations":
+    "Panel unificado de mensajes para gestionar conversaciones de marca",
+  "AI Agent": "Agente de IA",
+  "Marketing Platform": "Plataforma de marketing",
+  "Bringing an AI marketing team to every business":
+    "Un equipo de marketing con IA para cada empresa",
+  "AI Agents": "Agentes de IA",
+  "Marketing Automation": "Automatización de marketing",
+  "Brand Workspace": "Espacio de trabajo de marca",
+  "Free Plan": "Plan gratuito",
+  "Meet the team Shaping the future.": "Conoce al equipo que diseña el futuro.",
+  "Our diverse team of engineers and designers are dedicated to building AI agents that simplify work and empower businesses.":
+    "Nuestro equipo de ingeniería y diseño crea agentes de IA que simplifican el trabajo e impulsan a las empresas.",
+  "Join our team": "Únete al equipo",
+  "Our team": "Nuestro equipo",
+  "Creative people": "Personas creativas",
+  "Founder / CEO": "Fundador / CEO",
+  "UI/UX Designer": "Diseñador UI/UX",
+  "Support Consultant": "Consultor de soporte",
+  "Director of sales": "Director de ventas",
+  "Front-end Developer": "Desarrollador frontend",
+  "Project Manager": "Gestor de proyectos",
+  "Product Designer": "Diseñador de producto",
+  "Want to work with us?": "¿Quieres trabajar con nosotros?",
+  "We are hiring": "Estamos contratando",
+  "Browse templates,": "Explora plantillas,",
+  "start creating": "empieza a crear",
+  "Choose from professionally crafted templates.":
+    "Elige entre plantillas creadas por profesionales.",
+  Videos: "Vídeos",
+  Images: "Imágenes",
+  "Explore community creations,": "Explora las creaciones de la comunidad,",
+  "Discover amazing AI-generated videos and images created by our community.":
+    "Descubre vídeos e imágenes increíbles creados con IA por nuestra comunidad.",
+  "Oops!": "¡Vaya!",
+  "It seems like you've taken a wrong turn": "Parece que te has desviado.",
+  "Switch back to the right page.": "Vuelve a la página correcta.",
+  "Contact Us": "Contáctanos",
+  "We usually respond within a few hours.":
+    "Normalmente respondemos en unas horas.",
+  "Full name": "Nombre completo",
+  "Phone number": "Número de teléfono",
+  Country: "País",
+  "How did you hear about us?": "¿Cómo nos conociste?",
+  "Search Engine": "Buscador",
+  "Social Media": "Redes sociales",
+  "Friend/Colleague": "Amigo o compañero",
+  "Conference/Event": "Conferencia o evento",
+  Advertisement: "Publicidad",
+  Other: "Otro",
+  "What are you looking to achieve?": "¿Qué quieres conseguir?",
+  "(Optional)": "(Opcional)",
+  "Attachment (Optional)": "Archivo adjunto (opcional)",
+  "Click to attach a file": "Haz clic para adjuntar un archivo",
+  "File Ready": "Archivo listo",
+  "Sending Inquiry...": "Enviando consulta...",
+  "Send Message": "Enviar mensaje",
+  "By continuing, you agree to our": "Al continuar, aceptas nuestros",
+  Terms: "Términos",
+  and: "y",
+  "Ready. Set.": "Preparados.",
+  Design: "Diseña",
+  "Why creators choose genit": "Por qué los creadores eligen Genit",
+  "creators trust us": "creadores confían en nosotros",
+  "Name must be at least 2 characters":
+    "El nombre debe tener al menos 2 caracteres",
+  "Please enter a valid phone number": "Introduce un número de teléfono válido",
+  "Please enter a valid email address":
+    "Introduce un correo electrónico válido",
+  "Please select your country": "Selecciona tu país",
+  "Form submitted successfully": "Formulario enviado correctamente",
+  "Failed to send message. Please try again later.":
+    "No se pudo enviar el mensaje. Inténtalo de nuevo más tarde.",
+  "Create flyers, logos & social media designs in seconds":
+    "Crea folletos, logotipos y diseños para redes en segundos",
+  "Thousands of design inspirations built-in":
+    "Miles de ideas de diseño incluidas",
+  "No design skills or experience needed": "No necesitas experiencia en diseño",
+  "Perfect for businesses, creators & marketers":
+    "Ideal para empresas, creadores y especialistas en marketing",
+  "At genit, our mission is to give every business its own AI marketing team that can help plan, create, and execute growth activities at scale. genit is an AI agent platform that helps businesses manage and grow their brand from a single workspace. Businesses can connect their website, and genit learns about their products, audience, brand voice, and goals. From there, AI agents can create content, design marketing assets, plan content calendars, schedule and publish posts, send emails, generate insights, and automate marketing workflows across multiple platforms.":
+    "En Genit queremos que cada empresa tenga su propio equipo de marketing con IA para planificar, crear y ejecutar su crecimiento. Genit aprende de sus productos, público, voz y objetivos para crear contenido, diseñar recursos, programar publicaciones, enviar correos, generar análisis y automatizar flujos desde un único espacio.",
+  "Unlike traditional AI tools that only generate content, genit is designed to take action. It combines AI agents with":
+    "A diferencia de las herramientas que solo generan contenido, Genit está diseñado para actuar. Combina agentes de IA con",
+  "+ plugins to help businesses execute marketing tasks end-to-end, reducing the need to switch between multiple tools or hire large marketing teams.":
+    "+ plugins para ejecutar tareas de marketing de principio a fin sin alternar entre herramientas ni contratar grandes equipos.",
+  "AI agents executing end-to-end marketing activities from a single workspace.":
+    "Agentes de IA que ejecutan actividades de marketing completas desde un único espacio.",
+  "As businesses adopt genit, they experience the power of having a full-scale marketing execution engine operating 24/7. Whether it is planning campaigns, scheduling social posts, designing brand-consistent assets, or generating deep analytics, our platform takes the busywork out of growth so that teams can focus on strategic decisions rather than administrative friction.":
+    "Con Genit, las empresas cuentan con un motor de marketing operativo 24/7. La plataforma planifica campañas, programa publicaciones, diseña recursos coherentes y genera análisis para que los equipos se centren en la estrategia.",
+  "We believe that professional marketing should not be restricted by budget or size. Our platform makes advanced execution tools available to everyone. From small teams to large enterprises, genit provides a collaborative workspace where AI agents integrate seamlessly with your brand assets, messaging, and 23+ daily tools.":
+    "Creemos que el marketing profesional no debe depender del presupuesto ni del tamaño. Genit ofrece a cualquier equipo un espacio colaborativo donde los agentes de IA se integran con la marca, los mensajes y más de 23 herramientas.",
+  "Small teams and individual creators need tools where they can launch campaigns quickly, both for themselves and for the clients they support. genit allows you to collaborate seamlessly, creating a centralized workspace for brand-consistent marketing assets, automated scheduling, and email dispatch. As your business grows, genit scales your marketing execution alongside it.":
+    "Los equipos pequeños y creadores necesitan lanzar campañas con rapidez. Genit centraliza recursos coherentes con la marca, programación automática y correo, y escala junto a tu negocio.",
+  "genit is your AI-powered media designer. Create stunning flyers, logos, posters, and social media graphics in seconds — no design skills required. Just describe what you want and let AI do the work.":
+    "Genit es tu diseñador con IA. Crea folletos, logotipos, carteles y gráficos para redes en segundos, sin experiencia de diseño.",
+  "Average 4.9/5 rating across all platforms":
+    "Valoración media de 4,9/5 en todas las plataformas",
+  "Absolutely life-changing for my small business":
+    "Ha transformado por completo mi pequeña empresa",
+  "1.9k video views": "1,9 mil visualizaciones de vídeo",
+  "Published • 2m ago": "Publicado • hace 2 min",
+  "Published • 1h ago": "Publicado • hace 1 h",
+  "Scheduled • Tomorrow": "Programado • mañana",
+  "Scheduled • Wed, 3 PM": "Programado • mié., 15:00",
+  "Draft • Pending review": "Borrador • pendiente de revisión",
+  "Draft • Editing": "Borrador • editando",
+  "TikTok • 10:00 AM": "TikTok • 10:00",
+  Mon: "Lun",
+  Tue: "Mar",
+  Wed: "Mié",
+  Thu: "Jue",
+  Fri: "Vie",
+  Sat: "Sáb",
+  Sun: "Dom",
+  "United States": "Estados Unidos",
+  "United Kingdom": "Reino Unido",
+  Germany: "Alemania",
+  Japan: "Japón",
+  Nigeria: "Nigeria",
+  Ghana: "Ghana",
+  Kenya: "Kenia",
+  "South Africa": "Sudáfrica",
+  "We release updates swiftly. Be sure to check out the changelogs page!":
+    "Publicamos mejoras rápidamente. Consulta la página de cambios.",
+  "We release updates swiftly.": "Publicamos mejoras rápidamente.",
+  "View Details": "Ver detalles",
+  "View changelogs": "Ver cambios",
+  "Browse variety of inspirations,": "Explora todo tipo de inspiración,",
+  "fliers and ideas": "folletos e ideas",
 };
 
 const fr: Record<string, string> = {
@@ -197,6 +507,318 @@ const fr: Record<string, string> = {
     "Sans carte bancaire · Offre gratuite · Installation en quelques minutes",
   "Autonomous AI marketing agents that work 24/7, so you don't have to.":
     "Des agents marketing IA autonomes travaillent 24 h/24 à votre place.",
+  "Run targeted ads to Meta, Google, and TikTok via chat":
+    "Lancez des publicités ciblées sur Meta, Google et TikTok depuis le chat",
+  likes: "J’aime",
+  "Generate brand tailored visuals": "Créez des visuels adaptés à votre marque",
+  "Chat with AI to create stunning visuals that match your brand. Describe your vision and get professional images instantly.":
+    "Échangez avec l’IA pour créer des visuels fidèles à votre marque. Décrivez votre idée et obtenez des images professionnelles immédiatement.",
+  "Autonomous marketing agents in your chat":
+    "Des agents marketing autonomes dans votre chat",
+  "Unleash your brand's full potential with AI agents without lifting a finger.":
+    "Libérez tout le potentiel de votre marque grâce aux agents IA, sans effort.",
+  "Describe your product image...": "Décrivez l’image de votre produit…",
+  "Create a product image for wireless headphones":
+    "Créez une image produit pour des écouteurs sans fil",
+  "Generate a promotional video for my brand":
+    "Créez une vidéo promotionnelle pour ma marque",
+  "Design a social media post with AI":
+    "Concevez une publication pour les réseaux sociaux avec l’IA",
+  "Make an animated logo for my startup": "Créez un logo animé pour ma startup",
+  "Create product images with different backgrounds":
+    "Créez des images produit avec différents arrière-plans",
+  "One URL - Full Brand DNA.": "Une URL. Tout l’ADN de votre marque.",
+  "Just paste your website and our AI instantly extracts your visual identity, tone of voice, and core assets in seconds.":
+    "Collez votre site et notre IA extrait en quelques secondes votre identité visuelle, votre ton et vos ressources principales.",
+  "Scan your brand now": "Analyser votre marque",
+  Scanning: "Analyse en cours",
+  "Visual Identity": "Identité visuelle",
+  "Exact Hex Codes": "Codes hexadécimaux exacts",
+  Typography: "Typographie",
+  "Primary Font": "Police principale",
+  "Logo Vector": "Logo vectoriel",
+  "Asset Auto-Sync": "Synchronisation automatique des ressources",
+  "124 images extracted": "124 images extraites",
+  "Your Brand": "Votre marque",
+  "Verified Brand Profile": "Profil de marque vérifié",
+  "Tone of Voice Profile": "Profil du ton de voix",
+  "Voice Traits": "Traits de voix",
+  Authoritative: "Assuré",
+  Witty: "Spirituel",
+  Direct: "Direct",
+  Modern: "Moderne",
+  "Analysis Source": "Source de l’analyse",
+  "Ready for Generation": "Prêt pour la génération",
+  "Your entire brand DNA is now saved as an Organization":
+    "Tout l’ADN de votre marque est enregistré comme organisation",
+  "Scaling just got easier": "La croissance devient plus simple",
+  "From content creation and scheduling to ads and analytics, Genit streamlines your entire workflow.":
+    "De la création et la planification aux publicités et analyses, Genit simplifie tout votre flux de travail.",
+  "Connect your stack": "Connectez vos outils",
+  "Track Campaign Performance": "Suivez les performances de vos campagnes",
+  "Monitor your ad spend, clicks, and conversions across Meta, Google, and TikTok in real-time.":
+    "Suivez en temps réel vos dépenses, clics et conversions sur Meta, Google et TikTok.",
+  "Cross-Platform Publishing": "Publication multiplateforme",
+  "Auto-sync": "Synchronisation automatique",
+  Published: "Publié",
+  Scheduled: "Planifié",
+  Draft: "Brouillon",
+  Tomorrow: "Demain",
+  "Pending review": "En attente de validation",
+  Editing: "Modification",
+  "Format once, publish everywhere": "Formatez une fois, publiez partout",
+  "Publish Anywhere": "Publiez partout",
+  "Generate tailored content for each platform and schedule it to publish directly to your social accounts.":
+    "Créez du contenu adapté à chaque plateforme et programmez sa publication sur vos réseaux sociaux.",
+  "Connects with your stack": "Se connecte à vos outils",
+  Products: "Produits",
+  Assets: "Ressources",
+  Email: "E-mail",
+  Ads: "Publicités",
+  "Synced across tools": "Synchronisé entre vos outils",
+  "Connect Your Stack": "Connectez vos outils",
+  "Integrate with the tools you already use. Pull products from Shopify, sync with Google Drive, and publish directly.":
+    "Intégrez vos outils actuels. Importez les produits Shopify, synchronisez Google Drive et publiez directement.",
+  "Content Calendar": "Calendrier de contenu",
+  "View All": "Tout voir",
+  Today: "Aujourd’hui",
+  "Next Week": "Semaine prochaine",
+  "Automated Workflows": "Flux de travail automatisés",
+  "Schedule weeks of content in advance. Our agents handle the publishing, ad management, and email sending automatically.":
+    "Planifiez plusieurs semaines de contenu. Nos agents gèrent automatiquement la publication, les publicités et les e-mails.",
+  "Import your team": "Invitez votre équipe",
+  "Bring your entire team together. Review drafts, leave comments, and approve campaigns in real-time.":
+    "Rassemblez votre équipe. Relisez les brouillons, commentez et validez les campagnes en temps réel.",
+  Invite: "Inviter",
+  "Just now": "À l’instant",
+  "Let's change this copy to be more punchy.":
+    "Rendons ce texte plus percutant.",
+  Resolve: "Résoudre",
+  Reply: "Répondre",
+  "Unified Inbox": "Boîte de réception unifiée",
+  "Bring all your DMs together, reply to all and never miss a conversation":
+    "Regroupez tous vos messages, répondez depuis un seul endroit et ne manquez aucune conversation",
+  "Get your unified inbox": "Obtenir votre boîte unifiée",
+  "Supported messaging platforms": "Plateformes de messagerie compatibles",
+  "Tired of typing? Voice it": "Marre de taper ? Dictez vos idées",
+  "Skip the keyboard. Speak your ideas naturally and let Genit instantly turn your voice into perfectly formatted prompt.":
+    "Laissez le clavier. Exprimez naturellement vos idées et Genit transforme votre voix en prompt bien structuré.",
+  "Voice your prompt": "Dictez votre prompt",
+  "Refer and earn": "Recommandez et gagnez",
+  "Join the creators program and start earning money by referring others.":
+    "Rejoignez le programme créateurs et gagnez de l’argent en invitant d’autres personnes.",
+  "Get Started": "Commencer",
+  "Creators Vibe": "Univers des créateurs",
+  "Referral Tracker": "Suivi des recommandations",
+  Track: "Suivez",
+  "referrals,": "vos recommandations",
+  effortlessly: "sans effort",
+  "Visualize your referral performance with detailed analytics and insights":
+    "Visualisez les performances de vos recommandations grâce à des analyses détaillées",
+  "video views": "vues vidéo",
+  Testimonials: "Témoignages",
+  "Real teams, real results. See how Genit is transforming modern marketing.":
+    "Des équipes réelles, des résultats concrets. Découvrez comment Genit transforme le marketing moderne.",
+  "Start for free today": "Commencez gratuitement aujourd’hui",
+  "Ready to up you brand Marketing?":
+    "Prêt à améliorer le marketing de votre marque ?",
+  "Get started today": "Commencez aujourd’hui",
+  "We've helped thousands of": "Nous avons aidé des milliers de",
+  "creators and businesses": "créateurs et entreprises",
+  "generate professional media content with AI, and we can help you too.":
+    "à créer du contenu professionnel avec l’IA, et nous pouvons aussi vous aider.",
+  "Start creating": "Commencer à créer",
+  "Advisory Board Member": "Membre du conseil consultatif",
+  "Ready? Set, Genit.": "Prêt ? Genit.",
+  "Join a community of Creatives who have created":
+    "Rejoignez une communauté de créatifs qui ont déjà créé",
+  "Light mode": "Mode clair",
+  "Dark mode": "Mode sombre",
+  "System theme": "Thème du système",
+  "We replaced three separate marketing tools with Genit. The unified dashboard alone saved our team 15 hours a week. Campaign launches went from days to minutes.":
+    "Nous avons remplacé trois outils marketing par Genit. Le tableau de bord fait gagner 15 heures par semaine et les lancements ne prennent plus que quelques minutes.",
+  "The brand DNA extractor is magical. It learned our exact tone of voice and color palette in seconds. Our generated ads perform 3x better than our manual ones.":
+    "L’extracteur d’ADN de marque a appris notre ton et nos couleurs en quelques secondes. Les publicités générées sont trois fois plus performantes.",
+  "Cross-platform scheduling used to take us days of manual formatting. With Genit, we generate and schedule weeks of content in one click. Absolutely game-changing.":
+    "La planification multiplateforme nous prenait des jours. Avec Genit, nous générons et planifions des semaines de contenu en un clic.",
+  "Genit's autonomous agents handle everything from ad copy to email sequences. It's like having a full-time marketing team that never sleeps and never makes a mistake.":
+    "Les agents autonomes de Genit gèrent tout, des publicités aux séquences e-mail. C’est comme une équipe marketing disponible en permanence.",
+  "Weekly time saved": "Temps gagné par semaine",
+  "Campaign launch": "Lancement de campagne",
+  "Higher ROAS": "ROAS supérieur",
+  "Brand alignment": "Cohérence de marque",
+  "Multi-platform sync": "Synchronisation multiplateforme",
+  "Content output": "Production de contenu",
+  "Autonomous execution": "Exécution autonome",
+  "Manual oversight": "Supervision manuelle",
+  "genit transformed how we create content. The AI-generated images and videos are incredibly professional, and we've cut our design time by 80%. It's like having a design team at your fingertips.":
+    "Genit a transformé notre création de contenu. Les images et vidéos IA sont professionnelles et notre temps de conception a diminué de 80 %.",
+  "Generate a brand-tailored promotional visual for our upcoming product launch.":
+    "Créez un visuel promotionnel adapté à notre marque pour le prochain lancement.",
+  "Here's your promotional visual, perfectly aligned with your brand identity and color palette!":
+    "Voici votre visuel promotionnel, parfaitement aligné sur votre identité et vos couleurs.",
+  "Looks amazing! Resize it for an Instagram story and schedule it to publish tomorrow.":
+    "Superbe ! Adaptez-le en story Instagram et programmez-le pour demain.",
+  "Done! The visual is resized for Instagram Stories and scheduled to post tomorrow at 10:00 AM via your connected account.":
+    "C’est fait. Le visuel est adapté et programmé demain à 10 h sur votre compte connecté.",
+  "Awesome. Let's also set up a Facebook ad campaign using this visual with a $50 daily budget.":
+    "Parfait. Créons aussi une campagne Facebook avec ce visuel et un budget quotidien de 50 $.",
+  "Campaign created! Your Facebook ad is now configured with the visual, optimized for maximum conversions, and running at $50/day.":
+    "Campagne créée. La publicité Facebook est optimisée pour les conversions avec 50 $ par jour.",
+  "Perfect. Now generate engaging captions for X and LinkedIn.":
+    "Parfait. Générez maintenant des textes engageants pour X et LinkedIn.",
+  "Publish both of those posts right now.":
+    "Publiez ces deux publications maintenant.",
+  "Published! The posts are now live on your connected X and LinkedIn integrations.":
+    "Publié. Les publications sont en ligne sur X et LinkedIn.",
+  "Great! Let's wrap up by sending an announcement email to our subscribers via Brevo.":
+    "Terminons en envoyant un e-mail d’annonce à nos abonnés avec Brevo.",
+  "I've drafted a stunning newsletter template in Brevo featuring the new visual. The campaign is queued and ready to send to your mailing list!":
+    "J’ai préparé une newsletter Brevo avec le nouveau visuel. La campagne est prête à être envoyée.",
+  "Brand Logo": "Logo de la marque",
+  Verified: "Vérifié",
+  "Product image": "Image produit",
+  "product image": "image produit",
+  "Instagram Ad": "Publicité Instagram",
+  "Tiktok Ad": "Publicité TikTok",
+  "Facebook Ad": "Publicité Facebook",
+  'Here you go!\n\nX: "We\'re thrilled to announce our latest launch! 🚀 Discover innovation like never before."\n\nLinkedIn: "We are excited to unveil our newest product line, designed to bring unparalleled value to our customers."':
+    "Voici.\n\nX : « Nous sommes ravis d’annoncer notre dernier lancement ! 🚀 Découvrez l’innovation autrement. »\n\nLinkedIn : « Nous dévoilons notre nouvelle gamme, conçue pour offrir une valeur exceptionnelle. »",
+  "Unified social media DM dashboard for managing brand conversations in dark mode":
+    "Tableau de bord unifié des messages pour gérer les conversations de marque en mode sombre",
+  "Unified social media DM dashboard for managing brand conversations":
+    "Tableau de bord unifié des messages pour gérer les conversations de marque",
+  "AI Agent": "Agent IA",
+  "Marketing Platform": "Plateforme marketing",
+  "Bringing an AI marketing team to every business":
+    "Une équipe marketing IA pour chaque entreprise",
+  "AI Agents": "Agents IA",
+  "Marketing Automation": "Automatisation marketing",
+  "Brand Workspace": "Espace de marque",
+  "Free Plan": "Offre gratuite",
+  "Meet the team Shaping the future.":
+    "Découvrez l’équipe qui façonne l’avenir.",
+  "Our diverse team of engineers and designers are dedicated to building AI agents that simplify work and empower businesses.":
+    "Notre équipe d’ingénieurs et de designers crée des agents IA qui simplifient le travail et donnent plus de moyens aux entreprises.",
+  "Join our team": "Rejoignez notre équipe",
+  "Our team": "Notre équipe",
+  "Creative people": "Talents créatifs",
+  "Founder / CEO": "Fondateur / CEO",
+  "UI/UX Designer": "Designer UI/UX",
+  "Support Consultant": "Consultant support",
+  "Director of sales": "Directeur commercial",
+  "Front-end Developer": "Développeur front-end",
+  "Project Manager": "Chef de projet",
+  "Product Designer": "Designer produit",
+  "Want to work with us?": "Vous souhaitez nous rejoindre ?",
+  "We are hiring": "Nous recrutons",
+  "Browse templates,": "Parcourez les modèles,",
+  "start creating": "commencez à créer",
+  "Choose from professionally crafted templates.":
+    "Choisissez parmi des modèles conçus par des professionnels.",
+  Videos: "Vidéos",
+  Images: "Images",
+  "Explore community creations,": "Explorez les créations de la communauté,",
+  "Discover amazing AI-generated videos and images created by our community.":
+    "Découvrez les superbes vidéos et images IA créées par notre communauté.",
+  "Oops!": "Oups !",
+  "It seems like you've taken a wrong turn":
+    "Il semble que vous ayez pris la mauvaise direction.",
+  "Switch back to the right page.": "Retournez à la bonne page.",
+  "Contact Us": "Contactez-nous",
+  "We usually respond within a few hours.":
+    "Nous répondons généralement en quelques heures.",
+  "Full name": "Nom complet",
+  "Phone number": "Numéro de téléphone",
+  Country: "Pays",
+  "How did you hear about us?": "Comment nous avez-vous connus ?",
+  "Search Engine": "Moteur de recherche",
+  "Social Media": "Réseaux sociaux",
+  "Friend/Colleague": "Ami ou collègue",
+  "Conference/Event": "Conférence ou événement",
+  Advertisement: "Publicité",
+  Other: "Autre",
+  "What are you looking to achieve?": "Quel est votre objectif ?",
+  "(Optional)": "(Facultatif)",
+  "Attachment (Optional)": "Pièce jointe (facultative)",
+  "Click to attach a file": "Cliquez pour joindre un fichier",
+  "File Ready": "Fichier prêt",
+  "Sending Inquiry...": "Envoi de la demande…",
+  "Send Message": "Envoyer le message",
+  "By continuing, you agree to our": "En continuant, vous acceptez nos",
+  Terms: "Conditions",
+  and: "et",
+  "Ready. Set.": "Prêts.",
+  Design: "Créez",
+  "Why creators choose genit": "Pourquoi les créateurs choisissent Genit",
+  "creators trust us": "créateurs nous font confiance",
+  "Name must be at least 2 characters":
+    "Le nom doit comporter au moins 2 caractères",
+  "Please enter a valid phone number":
+    "Saisissez un numéro de téléphone valide",
+  "Please enter a valid email address": "Saisissez une adresse e-mail valide",
+  "Please select your country": "Sélectionnez votre pays",
+  "Form submitted successfully": "Formulaire envoyé",
+  "Failed to send message. Please try again later.":
+    "Impossible d’envoyer le message. Réessayez plus tard.",
+  "Create flyers, logos & social media designs in seconds":
+    "Créez affiches, logos et visuels sociaux en quelques secondes",
+  "Thousands of design inspirations built-in":
+    "Des milliers d’idées de design intégrées",
+  "No design skills or experience needed":
+    "Aucune expérience en design nécessaire",
+  "Perfect for businesses, creators & marketers":
+    "Idéal pour les entreprises, créateurs et spécialistes marketing",
+  "At genit, our mission is to give every business its own AI marketing team that can help plan, create, and execute growth activities at scale. genit is an AI agent platform that helps businesses manage and grow their brand from a single workspace. Businesses can connect their website, and genit learns about their products, audience, brand voice, and goals. From there, AI agents can create content, design marketing assets, plan content calendars, schedule and publish posts, send emails, generate insights, and automate marketing workflows across multiple platforms.":
+    "Chez Genit, nous voulons offrir à chaque entreprise sa propre équipe marketing IA pour planifier, créer et développer ses activités. Genit apprend vos produits, votre public, votre voix et vos objectifs afin de créer du contenu, concevoir des ressources, programmer des publications, envoyer des e-mails et automatiser vos flux depuis un seul espace.",
+  "Unlike traditional AI tools that only generate content, genit is designed to take action. It combines AI agents with":
+    "Contrairement aux outils qui se limitent à générer du contenu, Genit est conçu pour agir. Il associe des agents IA à",
+  "+ plugins to help businesses execute marketing tasks end-to-end, reducing the need to switch between multiple tools or hire large marketing teams.":
+    "+ plugins pour exécuter les tâches marketing de bout en bout sans multiplier les outils ni agrandir les équipes.",
+  "AI agents executing end-to-end marketing activities from a single workspace.":
+    "Des agents IA exécutent vos activités marketing de bout en bout depuis un seul espace.",
+  "As businesses adopt genit, they experience the power of having a full-scale marketing execution engine operating 24/7. Whether it is planning campaigns, scheduling social posts, designing brand-consistent assets, or generating deep analytics, our platform takes the busywork out of growth so that teams can focus on strategic decisions rather than administrative friction.":
+    "Avec Genit, les entreprises disposent d’un moteur marketing opérationnel 24 h/24. La plateforme planifie les campagnes, programme les publications, conçoit des ressources cohérentes et produit des analyses pour laisser les équipes se concentrer sur la stratégie.",
+  "We believe that professional marketing should not be restricted by budget or size. Our platform makes advanced execution tools available to everyone. From small teams to large enterprises, genit provides a collaborative workspace where AI agents integrate seamlessly with your brand assets, messaging, and 23+ daily tools.":
+    "Le marketing professionnel ne devrait dépendre ni du budget ni de la taille. Genit offre à chaque équipe un espace collaboratif où les agents IA s’intègrent à la marque, aux messages et à plus de 23 outils.",
+  "Small teams and individual creators need tools where they can launch campaigns quickly, both for themselves and for the clients they support. genit allows you to collaborate seamlessly, creating a centralized workspace for brand-consistent marketing assets, automated scheduling, and email dispatch. As your business grows, genit scales your marketing execution alongside it.":
+    "Les petites équipes et les créateurs doivent lancer rapidement leurs campagnes. Genit centralise les ressources de marque, la planification automatique et les e-mails, puis évolue avec votre activité.",
+  "genit is your AI-powered media designer. Create stunning flyers, logos, posters, and social media graphics in seconds — no design skills required. Just describe what you want and let AI do the work.":
+    "Genit est votre designer propulsé par l’IA. Créez affiches, logos et visuels sociaux en quelques secondes, sans compétence en design.",
+  "Average 4.9/5 rating across all platforms":
+    "Note moyenne de 4,9/5 sur toutes les plateformes",
+  "Absolutely life-changing for my small business":
+    "Une vraie transformation pour ma petite entreprise",
+  "1.9k video views": "1,9 k vues vidéo",
+  "Published • 2m ago": "Publié • il y a 2 min",
+  "Published • 1h ago": "Publié • il y a 1 h",
+  "Scheduled • Tomorrow": "Planifié • demain",
+  "Scheduled • Wed, 3 PM": "Planifié • mer., 15 h",
+  "Draft • Pending review": "Brouillon • validation en attente",
+  "Draft • Editing": "Brouillon • modification",
+  "TikTok • 10:00 AM": "TikTok • 10 h 00",
+  Mon: "Lun",
+  Tue: "Mar",
+  Wed: "Mer",
+  Thu: "Jeu",
+  Fri: "Ven",
+  Sat: "Sam",
+  Sun: "Dim",
+  "United States": "États-Unis",
+  "United Kingdom": "Royaume-Uni",
+  Germany: "Allemagne",
+  Japan: "Japon",
+  Nigeria: "Nigeria",
+  Ghana: "Ghana",
+  Kenya: "Kenya",
+  "South Africa": "Afrique du Sud",
+  "We release updates swiftly. Be sure to check out the changelogs page!":
+    "Nous publions rapidement des améliorations. Consultez la page des nouveautés.",
+  "We release updates swiftly.": "Nous publions rapidement des améliorations.",
+  "View Details": "Voir les détails",
+  "View changelogs": "Voir les nouveautés",
+  "Browse variety of inspirations,": "Explorez toutes sortes d’inspirations,",
+  "fliers and ideas": "affiches et idées",
 };
 
 export const translations: Record<

@@ -259,10 +259,10 @@ export function LandingFooter() {
             </div>
             <div className='mx-auto max-w-3xl text-center'>
               <h2 className='mb-6 font-serif text-4xl leading-tight font-bold tracking-tight text-gray-200 sm:text-5xl lg:text-6xl'>
-                Ready? Set, Genit.
+                {t("Ready? Set, Genit.")}
               </h2>
               <p className='mx-auto mb-10 max-w-xl text-lg leading-relaxed text-gray-400'>
-                Join a community of Creatives who have created
+                {t("Join a community of Creatives who have created")}
               </p>
               <div className='flex flex-col items-center justify-center gap-4 sm:flex-row'>
                 <Link
@@ -271,7 +271,7 @@ export function LandingFooter() {
                   rel='noopener noreferrer'
                   className='hover:shadow-button border-primary/20 shadow-primary/10 relative inline-flex h-10 items-center justify-center gap-0 rounded-lg border-[2px] bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                 >
-                  Start for $0
+                  {t("Start for $0")}
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width={18}
@@ -315,7 +315,7 @@ export function LandingFooter() {
                 <Link href='/' className='z-40 mb-1 flex items-center'>
                   <Logo className='h-12 w-12 flex-shrink-0' />
                   <span className='text-foreground text-xl font-semibold transition-colors duration-300'>
-                    Genit
+                    {t("Genit")}
                   </span>
                 </Link>
                 <p className='mb-1 w-full text-gray-400 md:max-w-[60vw] lg:max-w-60'>
@@ -615,7 +615,7 @@ export function LandingFooter() {
                 <button
                   onClick={() => setTheme("light")}
                   className={`flex size-7 items-center justify-center rounded-full transition-all ${isLoaded && theme === "light" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
-                  title='Light mode'
+                  title={t("Light mode")}
                 >
                   <Sun className='h-3.5 w-3.5' />
                 </button>
@@ -623,7 +623,7 @@ export function LandingFooter() {
                 <button
                   onClick={() => setTheme("dark")}
                   className={`flex size-7 items-center justify-center rounded-full transition-all ${isLoaded && theme === "dark" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
-                  title='Dark mode'
+                  title={t("Dark mode")}
                 >
                   <Moon className='h-3.5 w-3.5' />
                 </button>
@@ -631,7 +631,7 @@ export function LandingFooter() {
                 <button
                   onClick={() => setTheme("system")}
                   className={`flex size-7 items-center justify-center rounded-full transition-all ${isLoaded && theme === "system" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
-                  title='System theme'
+                  title={t("System theme")}
                 >
                   <Monitor className='h-3.5 w-3.5' />
                 </button>
@@ -640,7 +640,9 @@ export function LandingFooter() {
 
             <p className='text-muted-foreground text-sm'>
               ©{currentYear},{" "}
-              <span className='text-foreground ml-1 font-medium'>genit</span>{" "}
+              <span className='text-foreground ml-1 font-medium'>
+                {t("genit")}
+              </span>{" "}
               {t("All Rights Reserved.")}
             </p>
           </div>

@@ -4,10 +4,12 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import PricingComponent from "@/components/pricing/page";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/context/LanguageContext";
 import { Check } from "lucide-react";
 import React, { useState } from "react";
 
 export default function Pricing() {
+  const { t } = useLanguage();
   return (
     <div className='bg-background min-h-screen'>
       <style jsx>{`
@@ -118,12 +120,12 @@ export default function Pricing() {
         <div className='mt-5 block text-center'>
           <h5 className='mb-1.5 text-lg leading-8 font-medium text-gray-900 md:text-xl dark:text-gray-100'>
             <span className='font-semibold text-indigo-600 dark:text-indigo-400'>
-              Oops!
+              {t("Oops!")}
             </span>
-            It seems like you've taken a wrong turn
+            {t("It seems like you've taken a wrong turn")}
           </h5>
           <p className='text-sm text-gray-500 dark:text-gray-400'>
-            Switch back to the right page.
+            {t("Switch back to the right page.")}
           </p>
         </div>
       </div>

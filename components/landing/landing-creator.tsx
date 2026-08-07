@@ -1,24 +1,28 @@
 "use client";
+import { useLanguage } from "@/context/LanguageContext";
 import { ArrowRight, ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 const LandingCreator = () => {
+  const { t } = useLanguage();
   return (
     <div>
       <div className='mt-24 mb-12 space-y-4 text-center md:mb-16'>
         <h2 className='text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl'>
-          Refer and earn
+          {t("Refer and earn")}
         </h2>
         <p className='text-muted-foreground mx-auto w-[90%] max-w-2xl text-base md:w-full md:text-base'>
-          Join the creators program and start earning money by referring others.
+          {t(
+            "Join the creators program and start earning money by referring others."
+          )}
         </p>
         <Link
           href='/creators-program'
           className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
-          <span>Get Started</span>
+          <span>{t("Get Started")}</span>
           <ArrowRight className='h-4 w-4' />
         </Link>
       </div>
@@ -104,7 +108,7 @@ const LandingCreator = () => {
               <div>
                 <div className='border-border absolute top-5 -right-24 z-20 flex h-16 w-[350px] items-center gap-4 rounded-lg border bg-white px-5 shadow-[0px_4px_8px_0px_#0000001a,0px_15px_15px_0px_#00000017,0px_34px_20px_0px_#0000000d,0px_60px_24px_0px_#00000003,0px_93px_26px_0px_#00000000] dark:border-neutral-800 dark:bg-neutral-900'>
                   <span>✅</span>
-                  <span className='text-foreground'>Creators Vibe</span>
+                  <span className='text-foreground'>{t("Creators Vibe")}</span>
                 </div>
                 <div className='border-border absolute top-10 -right-[115px] z-10 flex h-16 w-[350px] items-center gap-4 rounded-lg border bg-white px-5 shadow-[0px_4px_8px_0px_#0000001a,0px_15px_15px_0px_#00000017,0px_34px_20px_0px_#0000000d,0px_60px_24px_0px_#00000003,0px_93px_26px_0px_#00000000] dark:border-neutral-800 dark:bg-neutral-900' />
               </div>
@@ -158,7 +162,7 @@ const LandingCreator = () => {
                       </div>
                       <div className='flex items-center justify-center gap-1'>
                         <div className='font-heading-h5-semibold text-foreground mt-[-1.00px] w-fit text-xl leading-[var(--heading-h5-semibold-line-height)] font-normal whitespace-nowrap [font-style:var(--heading-h5-semibold-font-style)]'>
-                          Referral Tracker
+                          {t("Referral Tracker")}
                         </div>
                         <div className='ml-1 w-10'>
                           <svg
@@ -188,37 +192,37 @@ const LandingCreator = () => {
                   <div className='absolute top-[237px] left-[42px] flex w-[416px] items-center gap-0.5'>
                     <div className='relative flex flex-1 grow items-center justify-center gap-1 px-1 py-2'>
                       <div className='font-label-l2-medium text-muted-foreground relative mt-[-1.00px] w-fit text-center leading-4 font-medium tracking-normal whitespace-nowrap'>
-                        Mon
+                        {t("Mon")}
                       </div>
                     </div>
                     <div className='relative flex flex-1 grow items-center justify-center gap-1 px-1 py-2'>
                       <div className='font-label-l2-medium text-muted-foreground relative mt-[-1.00px] w-fit text-center leading-4 font-medium tracking-normal whitespace-nowrap'>
-                        Tue
+                        {t("Tue")}
                       </div>
                     </div>
                     <div className='relative flex flex-1 grow items-center justify-center gap-1 px-1 py-2'>
                       <div className='font-label-l2-medium text-muted-foreground relative mt-[-1.00px] w-fit text-center leading-4 font-medium tracking-normal whitespace-nowrap'>
-                        Wed
+                        {t("Wed")}
                       </div>
                     </div>
                     <div className='relative flex flex-1 grow items-center justify-center gap-1 px-1 py-2'>
                       <div className='font-label-l2-medium text-muted-foreground relative mt-[-1.00px] w-fit text-center leading-4 font-medium tracking-normal whitespace-nowrap'>
-                        Thu
+                        {t("Thu")}
                       </div>
                     </div>
                     <div className='relative flex flex-1 grow items-center justify-center gap-1 px-1 py-2'>
                       <div className='font-label-l2-medium text-muted-foreground relative mt-[-1.00px] w-fit text-center leading-4 font-medium tracking-normal whitespace-nowrap'>
-                        Fri
+                        {t("Fri")}
                       </div>
                     </div>
                     <div className='relative flex flex-1 grow items-center justify-center gap-1 px-1 py-2'>
                       <div className='font-label-l2-medium text-muted-foreground relative mt-[-1.00px] w-fit text-center leading-4 font-medium tracking-normal whitespace-nowrap'>
-                        Sat
+                        {t("Sat")}
                       </div>
                     </div>
                     <div className='relative flex flex-1 grow items-center justify-center gap-1 px-1 py-2'>
                       <div className='font-label-l2-medium text-muted-foreground relative mt-[-1.00px] w-fit text-center leading-4 font-medium tracking-normal whitespace-nowrap'>
-                        Sun
+                        {t("Sun")}
                       </div>
                     </div>
                   </div>
@@ -291,13 +295,13 @@ const LandingCreator = () => {
                       </div>
                       <div className='absolute top-0 left-[435px] inline-flex flex-col items-start gap-[27px]'>
                         <div className='font-label-l2-medium text-muted-foreground relative mt-[-1.00px] w-fit text-right leading-4 font-medium tracking-normal whitespace-nowrap'>
-                          8h
+                          {t("8h")}
                         </div>
                         <div className='font-label-l2-medium text-muted-foreground relative mt-[-1.00px] w-fit text-right leading-4 font-medium tracking-normal whitespace-nowrap'>
-                          4h
+                          {t("4h")}
                         </div>
                         <div className='font-label-l2-medium text-muted-foreground relative mt-[-1.00px] w-fit text-right leading-4 font-medium tracking-normal whitespace-nowrap'>
-                          2h
+                          {t("2h")}
                         </div>
                         <div className='font-label-l2-medium text-muted-foreground relative mt-[-1.00px] w-fit text-right leading-4 font-medium tracking-normal whitespace-nowrap'>
                           0
@@ -318,7 +322,7 @@ const LandingCreator = () => {
                     <div className='absolute top-[57px] left-[407px] ml-1 inline-flex h-[22px] rotate-180 items-start overflow-hidden'>
                       <div className='bg-foreground relative inline-flex flex-[0_0_auto] items-start gap-2.5 overflow-hidden rounded-[4px_0px_0px_4px] py-px pr-0.5 pl-1 dark:bg-neutral-800'>
                         <div className="text-background relative mt-[-1.00px] h-[21px] w-fit rotate-180 [font-family:'SF_Pro_Text-Regular',Helvetica] text-sm leading-5 font-normal tracking-[0] whitespace-nowrap dark:text-white">
-                          Avg
+                          {t("Avg")}
                         </div>
                       </div>
                       <div className='relative h-[22px] w-[9.65px] -rotate-180'>
@@ -341,13 +345,14 @@ const LandingCreator = () => {
               </div>
               <div className='mt-4 flex flex-col items-start'>
                 <h1 className='text-foreground text-start text-xl font-semibold tracking-tight md:text-4xl'>
-                  <span className='inline-block'>Track</span>{" "}
-                  <span className='inline-block'>referrals,</span>{" "}
-                  <span className='inline-block'>effortlessly</span>
+                  <span className='inline-block'>{t("Track")}</span>{" "}
+                  <span className='inline-block'>{t("referrals,")}</span>{" "}
+                  <span className='inline-block'>{t("effortlessly")}</span>
                 </h1>
                 <p className='text-muted-foreground mt-2 w-[90%] text-start text-sm md:mt-4 md:w-[70%]'>
-                  Visualize your referral performance with detailed analytics
-                  and insights
+                  {t(
+                    "Visualize your referral performance with detailed analytics and insights"
+                  )}
                 </p>
               </div>
             </div>
@@ -369,7 +374,9 @@ const LandingCreator = () => {
                     height={32}
                     className='h-8 w-8 rounded-full border-2 border-white'
                   />
-                  <span className='text-sm font-medium text-white'>_jason</span>
+                  <span className='text-sm font-medium text-white'>
+                    {t("_jason")}
+                  </span>
                   <Image
                     src='https://ext.same-assets.com/3322540528/871220803.png'
                     alt='Verified'
@@ -389,7 +396,7 @@ const LandingCreator = () => {
                   <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z' />
                 </svg>
                 <span className='text-foreground text-sm font-medium'>
-                  200k
+                  {t("200k")}
                 </span>
               </div>
 
@@ -407,7 +414,7 @@ const LandingCreator = () => {
                   <path d='M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662' />
                 </svg>
                 <span className='text-foreground text-sm font-medium'>
-                  1.9k video views
+                  {t("1.9k video views")}
                 </span>
               </div>
             </div>

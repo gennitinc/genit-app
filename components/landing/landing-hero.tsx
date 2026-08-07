@@ -28,6 +28,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { useLanguage } from "@/context/LanguageContext";
 import Loading from "@/utils/Loading";
 import { ArrowRightIcon, ChevronRight, Play, SendIcon, X } from "lucide-react";
 import Image from "next/image";
@@ -134,13 +135,14 @@ const messages = [
 ];
 
 export function InputLandingMediaChat() {
+  const { t } = useLanguage();
   const placeholders = [
     "Create a product image for wireless headphones",
     "Generate a promotional video for my brand",
     "Design a social media post with AI",
     "Make an animated logo for my startup",
     "Create product images with different backgrounds",
-  ];
+  ].map(t);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -159,6 +161,7 @@ export function InputLandingMediaChat() {
 
 // Reels Carousel Component
 const ReelsCarousel = () => {
+  const { t } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -223,7 +226,7 @@ const ReelsCarousel = () => {
   return (
     <div className='flex h-full flex-col items-center justify-center bg-neutral-50 p-4 dark:bg-neutral-900'>
       <h3 className='mb-6 font-sans text-sm font-medium tracking-tight text-neutral-700 dark:text-neutral-100'>
-        Run targeted ads to Meta, Google, and TikTok via chat
+        {t("Run targeted ads to Meta, Google, and TikTok via chat")}
       </h3>
       <div className='w-full max-w-md overflow-hidden rounded-sm border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800'>
         {/* Header */}
@@ -244,7 +247,7 @@ const ReelsCarousel = () => {
               {reelsVideos[currentIndex].verified && (
                 <Image
                   src='https://ext.same-assets.com/3322540528/871220803.png'
-                  alt='Verified'
+                  alt={t("Verified")}
                   width={14}
                   height={14}
                   className='flex-shrink-0'
@@ -252,7 +255,7 @@ const ReelsCarousel = () => {
               )}
             </div>
             <span className='text-muted-foreground block text-xs'>
-              {reelsVideos[currentIndex].location}
+              {t(reelsVideos[currentIndex].location)}
             </span>
           </div>
           <div className='ml-auto flex items-center justify-center'>
@@ -372,7 +375,7 @@ const ReelsCarousel = () => {
           </div>
         </div>
         <div className='text-foreground mx-4 mt-2 mb-4 text-sm font-semibold'>
-          {reelsVideos[currentIndex].likes.toLocaleString("en-US")} likes
+          {reelsVideos[currentIndex].likes.toLocaleString()} {t("likes")}
         </div>
       </div>
     </div>
@@ -381,6 +384,11 @@ const ReelsCarousel = () => {
 
 const LandingHero = () => {
   const { user } = useUserContext();
+  const { language, t } = useLanguage();
+  const localizedMessages = messages.map((message) => ({
+    ...message,
+    text: t(message.text),
+  }));
   const [visibleMessages, setVisibleMessages] = useState<number>(0);
   const [isTyping, setIsTyping] = useState(false);
   const [streamingText, setStreamingText] = useState<{ [key: number]: string }>(
@@ -397,7 +405,7 @@ const LandingHero = () => {
   }, [visibleMessages, streamingText, isTyping]);
 
   useEffect(() => {
-    const totalMessages = messages.length;
+    const totalMessages = localizedMessages.length;
     let currentIndex = 0;
     let timeoutIds: NodeJS.Timeout[] = [];
     let streamingInterval: NodeJS.Timeout | null = null;
@@ -445,7 +453,7 @@ const LandingHero = () => {
         return;
       }
 
-      const currentMessage = messages[currentIndex];
+      const currentMessage = localizedMessages[currentIndex];
 
       // Show typing indicator for AI messages
       if (currentMessage.type === "ai") {
@@ -488,11 +496,10 @@ const LandingHero = () => {
         clearInterval(streamingInterval);
       }
     };
-  }, []);
+  }, [language]);
   return (
     <section className='relative w-full overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
       <div className='relative flex w-full flex-col items-center justify-center'>
-        
         <IdeaSection />
         {/* <div className='mt-6 grid w-full grid-cols-1 items-center gap-16 px-2 md:px-4 lg:grid-cols-2 lg:px-0'>
           <div className='w-full max-w-2xl'>
@@ -822,11 +829,12 @@ const LandingHero = () => {
           ></div>
           <div className='p-6'>
             <h3 className='font-sans text-sm font-medium tracking-tight text-neutral-700 dark:text-neutral-100'>
-              Generate brand tailored visuals
+              {t("Generate brand tailored visuals")}
             </h3>
             <h3 className='mt-2 max-w-xs font-sans text-sm font-normal tracking-tight text-neutral-500 dark:text-neutral-400'>
-              Chat with AI to create stunning visuals that match your brand.
-              Describe your vision and get professional images instantly.
+              {t(
+                "Chat with AI to create stunning visuals that match your brand. Describe your vision and get professional images instantly."
+              )}
             </h3>
           </div>
           <div className=''>
@@ -849,7 +857,7 @@ const LandingHero = () => {
                     generated <span className='font-bold'>2.4k</span>
                   </span> */}
                   <img
-                    alt='product image'
+                    alt={t("product image")}
                     width={100}
                     height={140}
                     className='h-[200px] w-full rounded-lg object-cover object-center'
@@ -858,7 +866,7 @@ const LandingHero = () => {
                 </div>
                 <div className='relative'>
                   <img
-                    alt='product image'
+                    alt={t("product image")}
                     width={100}
                     height={140}
                     className='h-[200px] w-full rounded-lg object-cover object-center'
@@ -867,7 +875,7 @@ const LandingHero = () => {
                 </div>
                 <div className='relative'>
                   <img
-                    alt='product image'
+                    alt={t("product image")}
                     width={100}
                     height={140}
                     className='h-[200px] w-full rounded-lg object-cover object-center'
@@ -883,7 +891,7 @@ const LandingHero = () => {
                   }}
                 >
                   <img
-                    alt='product image'
+                    alt={t("product image")}
                     width={100}
                     height={140}
                     className='h-[200px] w-full rounded-lg object-cover object-center'
@@ -972,11 +980,12 @@ const LandingHero = () => {
           ></div>
           <div className='p-6'>
             <h3 className='font-sans text-sm font-medium tracking-tight text-neutral-700 dark:text-neutral-100'>
-              Autonomous marketing agents in your chat
+              {t("Autonomous marketing agents in your chat")}
             </h3>
             <h3 className='mt-2 max-w-xs font-sans text-sm font-normal tracking-tight text-neutral-500 dark:text-neutral-400'>
-              Unleash your brand&apos;s full potential with AI agents without
-              lifting a finger.
+              {t(
+                "Unleash your brand's full potential with AI agents without lifting a finger."
+              )}
             </h3>
           </div>
           <div className='flex h-full max-h-[500px] flex-col overflow-hidden'>
@@ -990,7 +999,7 @@ const LandingHero = () => {
                   <Loading size={24} />
                 </div>
               )}
-              {messages.map((message, index) => {
+              {localizedMessages.map((message, index) => {
                 const isVisible = index < visibleMessages;
                 const isUser = message.type === "user";
                 const streamedText = streamingText[index];
@@ -1062,7 +1071,7 @@ const LandingHero = () => {
                           <div className='animate-in fade-in zoom-in overflow-hidden rounded-lg border border-neutral-200 bg-white duration-500 dark:border-neutral-700'>
                             <img
                               src={message.image}
-                              alt='Product image'
+                              alt={t("Product image")}
                               className='h-auto w-full object-cover'
                             />
                           </div>
@@ -1102,7 +1111,7 @@ const LandingHero = () => {
                 <div className='relative flex-1'>
                   <input
                     type='text'
-                    placeholder='Describe your product image...'
+                    placeholder={t("Describe your product image...")}
                     className='focus:ring-primary/20 focus:border-primary w-full rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm focus:ring-2 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800'
                     disabled
                   />

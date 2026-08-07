@@ -1,7 +1,11 @@
-import React from "react";
+"use client";
+
+import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
+import React from "react";
 
 const ContactCtaLanding = () => {
+  const { t } = useLanguage();
   return (
     <div className='relative overflow-hidden'>
       <section className='relative z-20 mx-auto my-20 grid w-full max-w-7xl grid-cols-1 justify-start bg-gradient-to-br from-gray-100 to-white md:my-20 md:grid-cols-3 dark:from-neutral-900 dark:to-neutral-950'>
@@ -84,21 +88,25 @@ const ContactCtaLanding = () => {
         {/* Hero/main left-side content */}
         <div className='p-8 md:col-span-2 md:p-14'>
           <h2 className='text-left text-xl font-medium tracking-tight text-neutral-500 md:text-3xl dark:text-neutral-200'>
-            Ready to up you brand Marketing?{" "} <br />
+            {t("Ready to up you brand Marketing?")} <br />
             <span className='font-bold text-black dark:text-white'>
-              Get started today
+              {t("Get started today")}
             </span>
           </h2>
           <p className='mt-4 max-w-lg text-left text-base font-medium tracking-tight text-neutral-500 md:text-base dark:text-neutral-200'>
-            We've helped thousands of{" "}
-            <span className='text-sky-700'>creators and businesses</span>{" "}
-            generate professional media content with AI, and we can help you
-            too.
+            {t("We've helped thousands of")}{" "}
+            <span className='text-sky-700'>{t("creators and businesses")}</span>{" "}
+            {t(
+              "generate professional media content with AI, and we can help you too."
+            )}
           </p>
           <div className='flex flex-col items-start sm:flex-row sm:items-center sm:gap-4'>
             <div className='mt-6 flex justify-center'>
-              <Link href='/signup' className='group relative z-20 flex h-10 w-full cursor-pointer items-center justify-center space-x-2 rounded-lg bg-black p-px px-4 py-2 text-center text-sm font-semibold text-white no-underline transition duration-200 sm:w-44 dark:bg-white dark:text-black'>
-                Start creating
+              <Link
+                href='/signup'
+                className='group relative z-20 flex h-10 w-full cursor-pointer items-center justify-center space-x-2 rounded-lg bg-black p-px px-4 py-2 text-center text-sm font-semibold text-white no-underline transition duration-200 sm:w-44 dark:bg-white dark:text-black'
+              >
+                {t("Start creating")}
               </Link>
             </div>
           </div>
@@ -107,16 +115,16 @@ const ContactCtaLanding = () => {
         {/* Right-side testimonial */}
         <div className='border-t border-dashed p-8 md:border-t-0 md:border-l md:p-14'>
           <p className='text-base text-neutral-700 dark:text-neutral-200'>
-            genit transformed how we create content. The AI-generated images and
-            videos are incredibly professional, and we've cut our design time by
-            80%. It's like having a design team at your fingertips.
+            {t(
+              "genit transformed how we create content. The AI-generated images and videos are incredibly professional, and we've cut our design time by 80%. It's like having a design team at your fingertips."
+            )}
           </p>
           <div className='mt-4 flex flex-col items-start gap-1 text-sm'>
             <p className='font-bold text-neutral-800 dark:text-neutral-200'>
-              Chris Xael
+              {t("Chris Xael")}
             </p>
             <p className='text-neutral-500 dark:text-neutral-400'>
-              Advisory Board Member
+              {t("Advisory Board Member")}
             </p>
           </div>
         </div>

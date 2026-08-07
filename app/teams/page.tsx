@@ -1,6 +1,7 @@
 import { HoverVideoPlayer } from "@/components/features/hover-video-player";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   ArrowUpRight,
@@ -46,14 +47,17 @@ export default function About2() {
           <div className='relative mx-auto flex w-full max-w-5xl flex-col items-center justify-between overflow-hidden rounded-3xl bg-linear-to-b from-violet-100 to-[#FFE8E9] px-6 pt-20 md:flex-row md:items-center md:p-18'>
             <div className='mb-8 flex-1 px-2 text-center md:mt-4 md:mb-0 md:pl-5 md:text-left'>
               <h1 className='text-3xl font-medium text-balance text-gray-900 md:text-4xl/12'>
-                Meet the team Shaping the future.
+                <LocalizedText text={"Meet the team Shaping the future."} />
               </h1>
               <p className='mx-auto mt-3 max-w-full text-sm/6 text-gray-700 md:mx-0 md:max-w-sm'>
-                Our diverse team of engineers and designers are dedicated to
-                building AI agents that simplify work and empower businesses.
+                <LocalizedText
+                  text={
+                    "Our diverse team of engineers and designers are dedicated to building AI agents that simplify work and empower businesses."
+                  }
+                />
               </p>
               <button className='mt-6 cursor-pointer rounded-full bg-white px-6 py-2.5 text-sm text-gray-700 hover:bg-gray-50 md:mt-8 md:px-8 md:py-3'>
-                Join our team
+                <LocalizedText text={"Join our team"} />
               </button>
             </div>
 
@@ -73,9 +77,11 @@ export default function About2() {
             {/* Title */}
             <div className='mx-auto mb-10 max-w-2xl text-center lg:mb-14'>
               <h2 className='text-foreground text-2xl font-bold md:text-4xl md:leading-tight'>
-                Our team
+                <LocalizedText text={"Our team"} />
               </h2>
-              <p className='text-muted-foreground-2 mt-1'>Creative people</p>
+              <p className='text-muted-foreground-2 mt-1'>
+                <LocalizedText text={"Creative people"} />
+              </p>
             </div>
             {/* End Title */}
             {/* Grid */}
@@ -87,9 +93,11 @@ export default function About2() {
                   alt='Avatar'
                 />
                 <div className='mt-2 sm:mt-4'>
-                  <h3 className='text-foreground font-medium'>David Forren</h3>
+                  <h3 className='text-foreground font-medium'>
+                    <LocalizedText text={"David Forren"} />
+                  </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    Founder / CEO
+                    <LocalizedText text={"Founder / CEO"} />
                   </p>
                 </div>
               </div>
@@ -101,9 +109,11 @@ export default function About2() {
                   alt='Avatar'
                 />
                 <div className='mt-2 sm:mt-4'>
-                  <h3 className='text-foreground font-medium'>Amil Evara</h3>
+                  <h3 className='text-foreground font-medium'>
+                    <LocalizedText text={"Amil Evara"} />
+                  </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    UI/UX Designer
+                    <LocalizedText text={"UI/UX Designer"} />
                   </p>
                 </div>
               </div>
@@ -115,9 +125,11 @@ export default function About2() {
                   alt='Avatar'
                 />
                 <div className='mt-2 sm:mt-4'>
-                  <h3 className='text-foreground font-medium'>Ebele Egbuna</h3>
+                  <h3 className='text-foreground font-medium'>
+                    <LocalizedText text={"Ebele Egbuna"} />
+                  </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    Support Consultant
+                    <LocalizedText text={"Support Consultant"} />
                   </p>
                 </div>
               </div>
@@ -129,9 +141,11 @@ export default function About2() {
                   alt='Avatar'
                 />
                 <div className='mt-2 sm:mt-4'>
-                  <h3 className='text-foreground font-medium'>Maria Powers</h3>
+                  <h3 className='text-foreground font-medium'>
+                    <LocalizedText text={"Maria Powers"} />
+                  </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    Director of sales
+                    <LocalizedText text={"Director of sales"} />
                   </p>
                 </div>
               </div>
@@ -143,9 +157,11 @@ export default function About2() {
                   alt='Avatar'
                 />
                 <div className='mt-2 sm:mt-4'>
-                  <h3 className='text-foreground font-medium'>Delia Pawelke</h3>
+                  <h3 className='text-foreground font-medium'>
+                    <LocalizedText text={"Delia Pawelke"} />
+                  </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    Front-end Developer
+                    <LocalizedText text={"Front-end Developer"} />
                   </p>
                 </div>
               </div>
@@ -157,9 +173,11 @@ export default function About2() {
                   alt='Avatar'
                 />
                 <div className='mt-2 sm:mt-4'>
-                  <h3 className='text-foreground font-medium'>Tom Lowry</h3>
+                  <h3 className='text-foreground font-medium'>
+                    <LocalizedText text={"Tom Lowry"} />
+                  </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    UI/UX Designer
+                    <LocalizedText text={"UI/UX Designer"} />
                   </p>
                 </div>
               </div>
@@ -172,10 +190,10 @@ export default function About2() {
                 />
                 <div className='mt-2 sm:mt-4'>
                   <h3 className='text-foreground font-medium'>
-                    Louise Donadieu
+                    <LocalizedText text={"Louise Donadieu"} />
                   </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    Support Consultant
+                    <LocalizedText text={"Support Consultant"} />
                   </p>
                 </div>
               </div>
@@ -187,9 +205,11 @@ export default function About2() {
                   alt='Avatar'
                 />
                 <div className='mt-2 sm:mt-4'>
-                  <h3 className='text-foreground font-medium'>Jeff Fisher</h3>
+                  <h3 className='text-foreground font-medium'>
+                    <LocalizedText text={"Jeff Fisher"} />
+                  </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    Project Manager
+                    <LocalizedText text={"Project Manager"} />
                   </p>
                 </div>
               </div>
@@ -202,10 +222,10 @@ export default function About2() {
                 />
                 <div className='mt-2 sm:mt-4'>
                   <h3 className='text-foreground font-medium'>
-                    Sophia Harrington
+                    <LocalizedText text={"Sophia Harrington"} />
                   </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    Project Manager
+                    <LocalizedText text={"Project Manager"} />
                   </p>
                 </div>
               </div>
@@ -218,10 +238,10 @@ export default function About2() {
                 />
                 <div className='mt-2 sm:mt-4'>
                   <h3 className='text-foreground font-medium'>
-                    Christina Kray
+                    <LocalizedText text={"Christina Kray"} />
                   </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    Support Consultant
+                    <LocalizedText text={"Support Consultant"} />
                   </p>
                 </div>
               </div>
@@ -233,9 +253,11 @@ export default function About2() {
                   alt='Avatar'
                 />
                 <div className='mt-2 sm:mt-4'>
-                  <h3 className='text-foreground font-medium'>Amy Forren</h3>
+                  <h3 className='text-foreground font-medium'>
+                    <LocalizedText text={"Amy Forren"} />
+                  </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    Product Designer
+                    <LocalizedText text={"Product Designer"} />
                   </p>
                 </div>
               </div>
@@ -248,10 +270,10 @@ export default function About2() {
                 />
                 <div className='mt-2 sm:mt-4'>
                   <h3 className='text-foreground font-medium'>
-                    Philip Williams
+                    <LocalizedText text={"Philip Williams"} />
                   </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    Support Consultant
+                    <LocalizedText text={"Support Consultant"} />
                   </p>
                 </div>
               </div>
@@ -263,9 +285,11 @@ export default function About2() {
                   alt='Avatar'
                 />
                 <div className='mt-2 sm:mt-4'>
-                  <h3 className='text-foreground font-medium'>Brian Lofoten</h3>
+                  <h3 className='text-foreground font-medium'>
+                    <LocalizedText text={"Brian Lofoten"} />
+                  </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    UI/UX Designer
+                    <LocalizedText text={"UI/UX Designer"} />
                   </p>
                 </div>
               </div>
@@ -278,10 +302,10 @@ export default function About2() {
                 />
                 <div className='mt-2 sm:mt-4'>
                   <h3 className='text-foreground font-medium'>
-                    Jessica Dorsey
+                    <LocalizedText text={"Jessica Dorsey"} />
                   </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    Director of sales
+                    <LocalizedText text={"Director of sales"} />
                   </p>
                 </div>
               </div>
@@ -293,9 +317,11 @@ export default function About2() {
                   alt='Avatar'
                 />
                 <div className='mt-2 sm:mt-4'>
-                  <h3 className='text-foreground font-medium'>Nick Jackson</h3>
+                  <h3 className='text-foreground font-medium'>
+                    <LocalizedText text={"Nick Jackson"} />
+                  </h3>
                   <p className='text-muted-foreground-2 text-sm'>
-                    UI/UX Designer
+                    <LocalizedText text={"UI/UX Designer"} />
                   </p>
                 </div>
               </div>
@@ -307,13 +333,13 @@ export default function About2() {
               <div className='bg-layer border-layer-line rounded-full border px-3 py-2'>
                 <div className='flex items-center gap-x-3'>
                   <span className='text-muted-foreground-1 text-sm'>
-                    Want to work with us?
+                    <LocalizedText text={"Want to work with us?"} />
                   </span>
                   <a
                     className='text-primary hover:text-primary-hover focus:text-primary-focus inline-flex items-center gap-x-2 text-sm font-medium focus:outline-hidden'
                     href='#'
                   >
-                    We are hiring
+                    <LocalizedText text={"We are hiring"} />
                     <svg
                       className='size-4 shrink-0'
                       xmlns='http://www.w3.org/2000/svg'

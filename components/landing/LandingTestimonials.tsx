@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import React, { useState } from "react";
 
 const testimonials = [
   {
@@ -56,17 +57,19 @@ const testimonials = [
 ];
 
 const LandingTestimonials = () => {
+  const { t } = useLanguage();
   const [stopScroll, setStopScroll] = useState(false);
 
   return (
     <div className='mt-20 overflow-hidden py-16'>
       <div className='mr-auto ml-auto max-w-6xl px-6'>
         <h2 className='text-foreground mt-6 text-center text-4xl font-semibold tracking-tight md:text-6xl dark:text-white'>
-          Testimonials
+          {t("Testimonials")}
         </h2>
         <p className='text-muted-foreground mx-auto mt-5 max-w-2xl text-center text-base font-normal md:text-lg dark:text-white/70'>
-          Real teams, real results. See how Genit is transforming modern
-          marketing.
+          {t(
+            "Real teams, real results. See how Genit is transforming modern marketing."
+          )}
         </p>
       </div>
 
@@ -101,7 +104,7 @@ const LandingTestimonials = () => {
           }}
         >
           <div className='flex items-stretch'>
-            {[...testimonials, ...testimonials].map((t, i) => (
+            {[...testimonials, ...testimonials].map((testimonial, i) => (
               <div
                 key={i}
                 className='group text-foreground mx-4 flex w-[300px] shrink-0 flex-col overflow-hidden rounded-3xl border border-black/5 bg-black/[0.02] shadow-sm transition-all duration-500 hover:border-black/10 hover:bg-black/5 md:w-[400px] dark:border-white/10 dark:bg-white/5 dark:text-white dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] dark:hover:border-white/20 dark:hover:bg-white/10'
@@ -113,7 +116,7 @@ const LandingTestimonials = () => {
                       “
                     </span>
                     <p className='text-muted-foreground mt-2 text-sm leading-relaxed font-normal md:text-base dark:font-light dark:text-zinc-200'>
-                      {t.quote}
+                      {t(testimonial.quote)}
                     </p>
                   </div>
                 </div>
@@ -121,18 +124,18 @@ const LandingTestimonials = () => {
                 <div className='grid grid-cols-2 border-t border-black/5 bg-black/5 backdrop-blur-md dark:border-white/10 dark:bg-black/20'>
                   <div className='relative overflow-hidden border-r border-black/5 p-4 md:p-5 dark:border-white/10'>
                     <div className='text-foreground mb-1 text-[22px] font-bold drop-shadow-sm dark:text-white dark:drop-shadow-md'>
-                      {t.stat1}
+                      {testimonial.stat1}
                     </div>
                     <div className='text-muted-foreground text-[10px] font-medium tracking-wide uppercase dark:text-zinc-400'>
-                      {t.stat1Label}
+                      {t(testimonial.stat1Label)}
                     </div>
                   </div>
                   <div className='relative overflow-hidden p-4 md:p-5'>
                     <div className='text-foreground mb-1 text-[22px] font-bold drop-shadow-sm dark:text-white dark:drop-shadow-md'>
-                      {t.stat2}
+                      {testimonial.stat2}
                     </div>
                     <div className='text-muted-foreground text-[10px] font-medium tracking-wide uppercase dark:text-zinc-400'>
-                      {t.stat2Label}
+                      {t(testimonial.stat2Label)}
                     </div>
                   </div>
                 </div>
@@ -141,17 +144,17 @@ const LandingTestimonials = () => {
                   <div className='relative'>
                     <div className='absolute inset-0 rounded-full border border-black/10 shadow-sm dark:border-white/20 dark:shadow-[0_0_10px_rgba(255,255,255,0.1)]'></div>
                     <img
-                      src={t.avatar}
-                      alt={t.authorName}
+                      src={testimonial.avatar}
+                      alt={testimonial.authorName}
                       className='h-10 w-10 rounded-full border-[2px] border-transparent object-cover brightness-100 dark:brightness-90 dark:grayscale'
                     />
                   </div>
                   <div className='flex flex-col'>
                     <span className='text-foreground text-sm font-semibold tracking-tight drop-shadow-sm dark:text-white'>
-                      {t.authorName}
+                      {testimonial.authorName}
                     </span>
                     <span className='text-muted-foreground mt-0.5 text-[11px] dark:text-zinc-400'>
-                      {t.authorRole}
+                      {t(testimonial.authorRole)}
                     </span>
                   </div>
                 </div>
@@ -162,13 +165,13 @@ const LandingTestimonials = () => {
       </div>
 
       {/* Call to Action */}
-      <div className="flex justify-center mt-12">
+      <div className='mt-12 flex justify-center'>
         <Link
-          href="/signup"
-          className="relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all duration-200 active:scale-95 shadow-md"
+          href='/signup'
+          className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
-          <span>Start for free today</span>
-          <ArrowRight className="h-4 w-4" />
+          <span>{t("Start for free today")}</span>
+          <ArrowRight className='h-4 w-4' />
         </Link>
       </div>
     </div>

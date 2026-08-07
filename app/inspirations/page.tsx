@@ -5,6 +5,7 @@ import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { IdeaSection } from "@/components/layout/idea-section";
+import { LocalizedText } from "@/components/localized-text";
 // import Communityproject from "../layout/community-project";
 import { motion } from "framer-motion";
 import type { Metadata } from "next";
@@ -57,11 +58,10 @@ export default function TemplatePage() {
           <div className='flex w-full flex-col items-center space-y-2 md:flex-row md:justify-center md:space-y-0 md:space-x-1'>
             <div className='flex items-center space-x-2'>
               <p className='hidden text-center text-sm font-medium md:block'>
-                We release updates swiftly. Be sure to check out the changelogs
-                page!
+                <LocalizedText text='We release updates swiftly. Be sure to check out the changelogs page!' />
               </p>
               <p className='text-center text-sm font-medium md:hidden'>
-                We release updates swiftly.
+                <LocalizedText text='We release updates swiftly.' />
               </p>
             </div>
             <a
@@ -70,8 +70,12 @@ export default function TemplatePage() {
               rel='noreferrer'
               className='underline hover:text-pink-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700'
             >
-              <p className='hidden text-sm md:block'>View Details</p>
-              <p className='text-sm md:hidden'>View changelogs</p>
+              <p className='hidden text-sm md:block'>
+                <LocalizedText text='View Details' />
+              </p>
+              <p className='text-sm md:hidden'>
+                <LocalizedText text='View changelogs' />
+              </p>
             </a>
           </div>
           <div className='absolute top-0 right-6 bottom-0 flex items-center'>
@@ -103,9 +107,9 @@ export default function TemplatePage() {
           <div className='mx-auto mt-20 w-full px-4 py-8 sm:px-6'>
             <div className='ml-2 flex flex-col space-y-4 md:mx-4 lg:mx-8'>
               <h1 className='max-w-xl text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl'>
-                Browse variety of inspirations,{" "}
+                <LocalizedText text='Browse variety of inspirations,' />{" "}
                 <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
-                  fliers and ideas
+                  <LocalizedText text='fliers and ideas' />
                 </span>
               </h1>
               {/* <p className="text-base md:text-lg text-center max-w-xl text-muted-foreground leading-relaxed">

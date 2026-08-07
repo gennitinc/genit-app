@@ -84,7 +84,7 @@ export function LandingNavbar() {
             <span
               className={`text-foreground text-xl font-semibold transition-colors duration-300`}
             >
-              Genit
+              {t("Genit")}
             </span>
           </Link>
 

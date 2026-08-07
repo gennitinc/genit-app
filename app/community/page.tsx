@@ -5,8 +5,10 @@ import CommunityComp from "@/components/landing/CommunityComp";
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function CommunityPage() {
+  const { t } = useLanguage();
   return (
     <div className='flex min-h-screen w-full flex-col bg-white dark:bg-black'>
       <LandingPageBanner />
@@ -16,11 +18,12 @@ export default function CommunityPage() {
         <div className='mx-auto w-full px-4 py-8 sm:px-6 lg:mt-10'>
           <div className='ml-2 flex flex-col items-center justify-center space-y-4 md:mx-4 lg:mx-8'>
             <h1 className='max-w-xl text-center text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl'>
-              Explore community creations,{" "}
+              {t("Explore community creations,")}{" "}
             </h1>
             <p className='text-normal text-muted-foreground max-w-2xl text-center text-sm leading-relaxed'>
-              Discover amazing AI-generated videos and images created by our
-              community.
+              {t(
+                "Discover amazing AI-generated videos and images created by our community."
+              )}
             </p>
             <CategoryAndSearch
               destination='/community'

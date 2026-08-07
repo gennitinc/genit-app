@@ -1,28 +1,31 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import React from "react";
 
 export function LandingVoiceClone() {
+  const { t } = useLanguage();
   return (
     <div className='mt-20'>
       <div className='mb-12 space-y-4 text-center md:mb-16'>
         <h2 className='text-foreground text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl'>
-          Tired of typing? Voice it
+          {t("Tired of typing? Voice it")}
         </h2>
         <p className='text-muted-foreground mx-auto max-w-2xl text-base md:text-base'>
-          Skip the keyboard. Speak your ideas naturally and let Genit instantly
-          turn your voice into perfectly formatted prompt.
+          {t(
+            "Skip the keyboard. Speak your ideas naturally and let Genit instantly turn your voice into perfectly formatted prompt."
+          )}
         </p>
       </div>
-      <div className="flex justify-center mt-6 mb-8">
+      <div className='mt-6 mb-8 flex justify-center'>
         <Link
-          href="/signup"
-          className="relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all duration-200 active:scale-95 shadow-md"
+          href='/signup'
+          className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
-          <span>Voice your prompt</span>
-          <ArrowRight className="h-4 w-4" />
+          <span>{t("Voice your prompt")}</span>
+          <ArrowRight className='h-4 w-4' />
         </Link>
       </div>
       <div className='relative flex min-h-[300px] items-center justify-center'>
@@ -136,7 +139,6 @@ export function LandingVoiceClone() {
       </div>
 
       {/* Call to Action */}
-      
     </div>
   );
 }
